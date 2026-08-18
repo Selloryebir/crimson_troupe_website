@@ -31,10 +31,27 @@ npm run quality
 | `npm run lint:styles:fix` | 自动修复 Stylelint 明确支持的样式问题 |
 | `npm run format`          | 格式化 Astro、TypeScript、配置和文档  |
 | `npm run format:check`    | 只检查格式，不写入文件                |
-| `npm run quality`         | 汇总类型、代码、样式与格式检查        |
+| `npm run blueprint:check` | 检查蓝图 ID、依赖、路径和源码覆盖关系 |
+| `npm run quality`         | 汇总蓝图、类型、代码、样式与格式检查  |
 | `npm run build`           | 先通过完整质量门禁，再生成 `dist/`    |
 
 现有分层 CSS 保留按视觉责任组织的手工分组，不由 Prettier 整库重排；CSS 的语法、无效值、重复规则和高置信缺陷由 Stylelint 负责。自动修复后仍需检查 diff，不能把工具输出直接视为人工验收。
+
+## 蓝图定位
+
+修改功能源码前，从路径反查其主要和相关蓝图：
+
+```bash
+npm run blueprint:where -- src/scripts/search.ts
+```
+
+修改蓝图时，列出直接及传递依赖的候选影响范围：
+
+```bash
+npm run blueprint:impact -- BP-MOD-SEARCH
+```
+
+候选范围只表示“需要判断”，不表示每个文件都必须修改。新增、删除或重命名功能源码时更新 `docs/blueprint/traceability.json`；蓝图内容和字段说明见 `docs/blueprint/README.md`。
 
 ## 新增剧目
 

@@ -18,12 +18,13 @@ npm install
 npm run dev
 ```
 
-然后访问终端给出的本地地址。提交前运行 `npm run quality`；生产构建使用 `npm run build`，该命令会先执行完整质量门禁，再将静态产物输出到 `dist/`。用 `npm run preview` 验收构建结果。
+然后访问终端给出的本地地址。提交前运行 `npm run quality`，统一检查蓝图追踪、Astro/TypeScript、代码、样式和格式；生产构建使用 `npm run build`，该命令会先执行完整质量门禁，再将静态产物输出到 `dist/`。用 `npm run preview` 验收构建结果。
 
 ## 仓库结构
 
 ```text
 ├── docs/           # 架构、蓝图、创意、指南和外部参考
+├── scripts/        # 仓库维护和蓝图追踪工具，不进入浏览器产物
 ├── src/
 │   ├── components/ # 表站、里站、浮层和共享 Astro 组件
 │   ├── layouts/    # 页面外壳与公共元数据
@@ -43,6 +44,8 @@ npm run dev
 ```
 
 详细职责和依赖方向见 [`docs/architecture/repository-structure.md`](docs/architecture/repository-structure.md)，文档入口见 [`docs/README.md`](docs/README.md)。
+
+功能开发前应通过 [`docs/blueprint/README.md`](docs/blueprint/README.md) 定位对应蓝图。`npm run blueprint:where -- <源码路径>` 可从源码反查蓝图，`npm run blueprint:impact -- <蓝图 ID>` 可列出蓝图变化的候选影响范围；两者都只提供定位，不替代实现判断。
 
 ## 找到里站
 

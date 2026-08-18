@@ -21,9 +21,17 @@ crimson_troupe_website/
 │   ├── README.md
 │   ├── architecture/
 │   ├── blueprint/
+│   │   ├── foundation/
+│   │   ├── modules/
+│   │   ├── content/
+│   │   ├── i18n/
+│   │   ├── quality/
+│   │   └── traceability.json
 │   ├── creative/
 │   ├── guides/
 │   └── references/
+├── scripts/
+│   └── blueprint.mjs
 └── src/
     ├── pages/
     │   └── index.astro
@@ -63,6 +71,7 @@ crimson_troupe_website/
 
 ## 工程质量边界
 
+- `blueprint:check` 负责检查蓝图 ID、依赖、文档路径和功能源码映射是否漂移；
 - `astro check` 负责 Astro 模板和 TypeScript 类型检查；
 - ESLint 使用类型信息检查 `.ts`，并通过 Astro 解析器检查组件模板与 frontmatter；
 - Stylelint 检查分层 CSS 的语法、无效属性、重复声明和重复选择器等高置信缺陷；
@@ -71,6 +80,12 @@ crimson_troupe_website/
 - `npm run quality` 是日常质量门禁，`npm run build` 会先执行同一门禁再生成静态产物。
 
 依赖版本由 `package-lock.json` 固定；锁文件未变化时应使用 `npm ci` 获得可复现安装。`.npmrc` 强制 Node 引擎范围并让未来新增依赖默认精确记录。
+
+## 蓝图追踪层
+
+`docs/blueprint/` 描述目标、契约、边界和阶段标准，不直接参与网站构建。`traceability.json` 以稳定蓝图 ID 维护蓝图之间以及蓝图与功能源码之间的关系；同一源码有一个主要蓝图，也可以关联多个辅助蓝图。
+
+`scripts/blueprint.mjs` 只提供三项轻量能力：检查路径与 ID 是否漂移、从源码反查蓝图、从蓝图列出候选影响范围。它不理解蓝图语义，不自动修改源码，也不要求候选文件必须产生变更。完整使用规则见 `docs/blueprint/README.md`。
 
 ## 构建与页面层
 
