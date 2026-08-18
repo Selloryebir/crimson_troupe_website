@@ -1,0 +1,10 @@
+@import url("./foundations.css");
+@import url("./front.css");
+@import url("./archive.css");
+@import url("./overlays.css");
+@import url("./responsive.css");
+
+:is(a, button, input, select, textarea):focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}

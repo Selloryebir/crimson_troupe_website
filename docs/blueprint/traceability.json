@@ -1,0 +1,232 @@
+{
+  "version": 1,
+  "blueprints": [
+    {
+      "id": "BP-FND-CORE",
+      "document": "docs/blueprint/foundation/core.md",
+      "status": "active",
+      "stage": "demo",
+      "dependsOn": []
+    },
+    {
+      "id": "BP-FND-EXPERIENCE",
+      "document": "docs/blueprint/foundation/experience-system.md",
+      "status": "active",
+      "stage": "demo",
+      "dependsOn": ["BP-FND-CORE"]
+    },
+    {
+      "id": "BP-FND-NARRATIVE",
+      "document": "docs/blueprint/foundation/narrative-state.md",
+      "status": "active",
+      "stage": "demo",
+      "dependsOn": ["BP-FND-CORE", "BP-FND-EXPERIENCE"]
+    },
+    {
+      "id": "BP-FND-EXTENSION",
+      "document": "docs/blueprint/foundation/extension-contract.md",
+      "status": "active",
+      "stage": "demo",
+      "dependsOn": ["BP-FND-CORE"]
+    },
+    {
+      "id": "BP-MOD-SEARCH",
+      "document": "docs/blueprint/modules/search.md",
+      "status": "active",
+      "stage": "demo",
+      "dependsOn": [
+        "BP-FND-CORE",
+        "BP-FND-EXPERIENCE",
+        "BP-FND-NARRATIVE",
+        "BP-CNT-CORE",
+        "BP-I18N-CORE",
+        "BP-I18N-TERMS"
+      ]
+    },
+    {
+      "id": "BP-MOD-PROGRAMS",
+      "document": "docs/blueprint/modules/programs.md",
+      "status": "active",
+      "stage": "demo",
+      "dependsOn": ["BP-FND-CORE", "BP-FND-EXPERIENCE", "BP-CNT-CORE", "BP-I18N-CORE"]
+    },
+    {
+      "id": "BP-MOD-ARCHIVE",
+      "document": "docs/blueprint/modules/archive.md",
+      "status": "active",
+      "stage": "demo",
+      "dependsOn": [
+        "BP-FND-CORE",
+        "BP-FND-EXPERIENCE",
+        "BP-FND-NARRATIVE",
+        "BP-CNT-CORE",
+        "BP-I18N-CORE"
+      ]
+    },
+    {
+      "id": "BP-CNT-CORE",
+      "document": "docs/blueprint/content/content-contract.md",
+      "status": "active",
+      "stage": "demo",
+      "dependsOn": ["BP-FND-CORE"]
+    },
+    {
+      "id": "BP-I18N-CORE",
+      "document": "docs/blueprint/i18n/localization-contract.md",
+      "status": "active",
+      "stage": "planned",
+      "dependsOn": ["BP-FND-CORE", "BP-CNT-CORE"]
+    },
+    {
+      "id": "BP-I18N-TERMS",
+      "document": "docs/blueprint/i18n/terminology-contract.md",
+      "status": "active",
+      "stage": "planned",
+      "dependsOn": ["BP-I18N-CORE", "BP-CNT-CORE"]
+    },
+    {
+      "id": "BP-QLT-STAGES",
+      "document": "docs/blueprint/quality/stage-gates.md",
+      "status": "active",
+      "stage": "demo",
+      "dependsOn": []
+    }
+  ],
+  "mappings": [
+    {
+      "path": "src/components/archive/ArchiveWorld.astro",
+      "primary": "BP-MOD-ARCHIVE",
+      "related": ["BP-FND-NARRATIVE", "BP-FND-EXPERIENCE", "BP-CNT-CORE"]
+    },
+    {
+      "path": "src/components/front/FrontWorld.astro",
+      "primary": "BP-FND-EXPERIENCE",
+      "related": ["BP-MOD-PROGRAMS", "BP-CNT-CORE"]
+    },
+    {
+      "path": "src/components/front/ProgramCard.astro",
+      "primary": "BP-MOD-PROGRAMS",
+      "related": ["BP-FND-EXPERIENCE", "BP-CNT-CORE"]
+    },
+    {
+      "path": "src/components/front/Season.astro",
+      "primary": "BP-MOD-PROGRAMS",
+      "related": ["BP-FND-EXPERIENCE", "BP-CNT-CORE"]
+    },
+    {
+      "path": "src/components/overlays/SiteDialogs.astro",
+      "primary": "BP-MOD-PROGRAMS",
+      "related": ["BP-MOD-SEARCH", "BP-FND-EXPERIENCE"]
+    },
+    {
+      "path": "src/components/shared/WorldTransition.astro",
+      "primary": "BP-FND-NARRATIVE",
+      "related": ["BP-FND-EXPERIENCE"]
+    },
+    {
+      "path": "src/data/archive-records.ts",
+      "primary": "BP-MOD-ARCHIVE",
+      "related": ["BP-CNT-CORE"]
+    },
+    {
+      "path": "src/data/search-index.ts",
+      "primary": "BP-MOD-SEARCH",
+      "related": ["BP-CNT-CORE", "BP-I18N-CORE", "BP-I18N-TERMS"]
+    },
+    {
+      "path": "src/data/shows.ts",
+      "primary": "BP-MOD-PROGRAMS",
+      "related": ["BP-CNT-CORE", "BP-I18N-CORE"]
+    },
+    {
+      "path": "src/layouts/BaseLayout.astro",
+      "primary": "BP-FND-CORE",
+      "related": ["BP-FND-EXPERIENCE", "BP-I18N-CORE"]
+    },
+    {
+      "path": "src/pages/index.astro",
+      "primary": "BP-FND-CORE",
+      "related": ["BP-FND-EXPERIENCE", "BP-FND-NARRATIVE"]
+    },
+    {
+      "path": "src/scripts/archive.ts",
+      "primary": "BP-MOD-ARCHIVE",
+      "related": ["BP-FND-NARRATIVE"]
+    },
+    {
+      "path": "src/scripts/dialogs.ts",
+      "primary": "BP-MOD-PROGRAMS",
+      "related": ["BP-FND-EXPERIENCE"]
+    },
+    {
+      "path": "src/scripts/dom.ts",
+      "primary": "BP-FND-CORE",
+      "related": []
+    },
+    {
+      "path": "src/scripts/forms.ts",
+      "primary": "BP-FND-EXPERIENCE",
+      "related": ["BP-MOD-PROGRAMS", "BP-CNT-CORE"]
+    },
+    {
+      "path": "src/scripts/main.ts",
+      "primary": "BP-FND-EXTENSION",
+      "related": ["BP-FND-CORE"]
+    },
+    {
+      "path": "src/scripts/navigation.ts",
+      "primary": "BP-FND-EXPERIENCE",
+      "related": ["BP-FND-CORE"]
+    },
+    {
+      "path": "src/scripts/presentation.ts",
+      "primary": "BP-FND-EXPERIENCE",
+      "related": ["BP-FND-NARRATIVE"]
+    },
+    {
+      "path": "src/scripts/programs.ts",
+      "primary": "BP-MOD-PROGRAMS",
+      "related": []
+    },
+    {
+      "path": "src/scripts/search.ts",
+      "primary": "BP-MOD-SEARCH",
+      "related": ["BP-FND-NARRATIVE", "BP-I18N-CORE", "BP-I18N-TERMS"]
+    },
+    {
+      "path": "src/scripts/world.ts",
+      "primary": "BP-FND-NARRATIVE",
+      "related": ["BP-FND-CORE"]
+    },
+    {
+      "path": "src/styles/archive.css",
+      "primary": "BP-MOD-ARCHIVE",
+      "related": ["BP-FND-EXPERIENCE", "BP-FND-NARRATIVE"]
+    },
+    {
+      "path": "src/styles/foundations.css",
+      "primary": "BP-FND-EXPERIENCE",
+      "related": ["BP-FND-CORE"]
+    },
+    {
+      "path": "src/styles/front.css",
+      "primary": "BP-FND-EXPERIENCE",
+      "related": ["BP-MOD-PROGRAMS"]
+    },
+    {
+      "path": "src/styles/main.css",
+      "primary": "BP-FND-CORE",
+      "related": ["BP-FND-EXPERIENCE"]
+    },
+    {
+      "path": "src/styles/overlays.css",
+      "primary": "BP-FND-EXPERIENCE",
+      "related": ["BP-MOD-PROGRAMS", "BP-MOD-SEARCH", "BP-MOD-ARCHIVE"]
+    },
+    {
+      "path": "src/styles/responsive.css",
+      "primary": "BP-FND-EXPERIENCE",
+      "related": ["BP-FND-CORE"]
+    }
+  ]
+}

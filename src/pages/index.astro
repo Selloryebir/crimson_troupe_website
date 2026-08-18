@@ -1,0 +1,15 @@
+---
+import ArchiveWorld from '../components/archive/ArchiveWorld.astro';
+import FrontWorld from '../components/front/FrontWorld.astro';
+import SiteDialogs from '../components/overlays/SiteDialogs.astro';
+import WorldTransition from '../components/shared/WorldTransition.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout>
+  <a class="skip-link" href="#main-content">跳至正文</a>
+  <WorldTransition />
+  <FrontWorld />
+  <ArchiveWorld />
+  <SiteDialogs />
+</BaseLayout>
