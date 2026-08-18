@@ -11,13 +11,29 @@
 
 ## 运行
 
-项目没有构建依赖，直接打开 `index.html` 即可。为了获得完整的 History API 与本地资源体验，也可以在项目目录启动一个静态服务器：
+项目没有构建依赖。在仓库根目录启动静态服务器：
 
 ```bash
-python -m http.server 4173
+python3 -m http.server 4173 --directory src
 ```
 
-然后访问 <http://localhost:4173>。
+然后访问 <http://localhost:4173>。源码使用 ES modules，不建议通过 `file://` 直接打开。
+
+## 仓库结构
+
+```text
+├── docs/          # 架构、蓝图、创意、指南和外部参考
+├── src/           # 可直接部署的网站源码
+│   ├── assets/    # 拥有使用权的运行时静态资产
+│   ├── data/      # 剧目与搜索等结构化内容
+│   ├── scripts/   # 按用户能力拆分的交互模块
+│   ├── styles/    # 按基础、时间层、浮层和响应式拆分的样式
+│   └── index.html # 页面装配入口
+├── AGENTS.md      # Agent 工作与验证规范
+└── README.md
+```
+
+详细职责和依赖方向见 [`docs/architecture/repository-structure.md`](docs/architecture/repository-structure.md)，文档入口见 [`docs/README.md`](docs/README.md)。
 
 ## 找到里站
 
@@ -32,7 +48,7 @@ python -m http.server 4173
 - 预约席位和序幕弹窗、档案记录展开、邀请反馈
 - 键盘可达、减少动态效果支持、语义化结构
 
-参考网站与具体转译方式记录在 [`docs/design-reference.md`](docs/design-reference.md)。
+参考网站与具体转译方式记录在 [`docs/references/design-reference.md`](docs/references/design-reference.md)。
 
 ## 版权说明
 
