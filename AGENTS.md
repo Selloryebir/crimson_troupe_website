@@ -36,17 +36,19 @@
 
 ## 4. 当前架构与文件职责
 
-当前项目是无构建依赖的静态站点。完整目录与依赖规则以 `docs/architecture/repository-structure.md` 为准：
+当前项目是使用 Astro 7、TypeScript 6 和 Node.js 24 LTS 的静态生成站点。完整目录与依赖规则以 `docs/architecture/repository-structure.md` 为准：
 
-- `src/index.html`：唯一页面装配入口；
-- `src/data/`：不依赖 DOM 的结构化内容；
-- `src/scripts/main.js`：交互装配入口，功能按模块拆分；
+- `src/pages/`：文件路由和页面装配入口；
+- `src/layouts/`：页面外壳、元数据和全局资源入口；
+- `src/components/`：按表站、里站、浮层与共享职责拆分的 Astro 组件；
+- `src/data/`：不依赖 DOM 的类型化结构内容；
+- `src/scripts/main.ts`：原生客户端交互装配入口，功能按模块拆分；
 - `src/styles/main.css`：样式装配入口，按基础、表站、里站、浮层和响应式分层；
 - `src/assets/`：拥有使用权的运行时静态资产；
 - `docs/`：架构、蓝图、创意、指南和参考，不作为运行时输入；
 - `README.md`：面向人员的仓库入口。
 
-模块通过显式 import/export 协作，不使用隐式全局状态，不复制稳定数据。若内容规模、路由或部署需求尚未成立，不引入框架或构建系统。
+Astro 只负责构建期组件化和静态生成；客户端默认使用原生 TypeScript，不因局部交互引入 React、Vue 等运行时。模块通过显式 import/export 协作，不使用隐式全局状态，不复制稳定数据。
 
 ## 5. 体验与工程要求
 
@@ -71,17 +73,17 @@
 
 ## 7. 验证基线
 
-当前没有包管理器或自动化测试套件。每次交付至少执行与改动相关的以下检查：
+每次交付至少执行与改动相关的以下检查：
 
 1. `git diff --check`，并对新增未跟踪文本文件检查空白错误；
-2. HTML 标签闭合、ID 唯一、站内锚点有效、本地资源存在；
-3. CSS 括号完整，JavaScript 无语法错误或浏览器控制台异常；
-4. 使用 `python3 -m http.server 4173 --directory src` 启动本地服务器并确认页面、CSS、JavaScript 模块返回成功；
+2. `npm run quality`，确保 Astro/TypeScript、ESLint、Stylelint 与 Prettier 检查通过；
+3. `npm run build`，确认完整质量门禁后能够生成静态产物，并检查生成 HTML 的 ID、站内锚点和本地资源；
+4. 使用 `npm run preview -- --host 0.0.0.0` 启动构建预览并确认页面、CSS、JavaScript 返回成功；
 5. 视觉改动至少检查一个桌面视口和一个不大于 500px 的窄屏视口；
 6. 交互改动按范围验证筛选、搜索、对话框、预约衔接、表里世界切换和可靠退出；
 7. 无障碍相关改动验证键盘焦点、ARIA 状态和减少动态效果。
 
-若环境缺少浏览器或 JavaScript 运行时，应完成仍可执行的检查，并在交付中明确说明未验证部分，不以人工推断代替运行结果。未来引入正式工具链时，应在本节和 `README.md` 同步记录唯一推荐命令。
+自动修复只使用仓库定义的 `npm run lint:code:fix`、`npm run lint:styles:fix` 或 `npm run format`，执行后必须检查 diff 并重新运行 `npm run quality`。若环境缺少浏览器或 JavaScript 运行时，应完成仍可执行的检查，并在交付中明确说明未验证部分，不以人工推断代替运行结果。未来调整正式工具链时，应在本节、`README.md` 与 `docs/guides/development.md` 同步记录唯一推荐命令。
 
 ## 8. Git 与提交规范
 
@@ -93,7 +95,7 @@
 
 ## 9. 多智能体协作
 
-- 只有任务可以独立完成、依赖清楚且写入范围不重叠时才并行；共享的导航、`foundations.css`、`main.js` 装配顺序和同一文档应串行修改。
+- 只有任务可以独立完成、依赖清楚且写入范围不重叠时才并行；共享的页面布局、`foundations.css`、`main.ts` 装配顺序和同一文档应串行修改。
 - 委派必须包含目标、精确文件范围、允许的写操作、验收条件和返回证据。实现智能体不得自行扩大范围或修改中央 Git 状态。
 - 主智能体负责复核子任务 diff、整合冲突并重新运行关键验证；不得以子智能体的“完成”声明代替仓库级复验。
 - Reviewer 应独立报告高置信问题及定位；若同一智能体直接修复了候选，则不得把自己的修复冒充独立审查结论。

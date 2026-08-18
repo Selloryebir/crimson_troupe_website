@@ -1,0 +1,15 @@
+.astro/
+.cache/
+.eslintcache
+.git/
+.stylelintcache
+build/
+coverage/
+dist/
+node_modules/
+package-lock.json
+playwright-report/
+test-results/
+
+# Existing layered CSS keeps its hand-authored grouping; Stylelint validates it.
+src/styles/**/*.css

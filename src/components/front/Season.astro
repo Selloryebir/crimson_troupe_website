@@ -1,0 +1,45 @@
+---
+import { cities, showEntries } from '../../data/shows';
+import ProgramCard from './ProgramCard.astro';
+---
+
+<section class="season section" id="season" aria-labelledby="season-title">
+  <div class="section-heading reveal">
+    <div>
+      <p class="eyebrow"><span></span> 1098 / 秋季节目</p>
+      <h2 id="season-title">今夜上演</h2>
+    </div>
+    <p>
+      三部新作，一次跨越六座移动城市的巡演。<br />
+      每场演出仅此一夜。
+    </p>
+  </div>
+
+  <div class="season-tools reveal" aria-label="筛选本季演出">
+    <div class="season-tools__months" role="group" aria-label="按月份筛选">
+      <button class="is-active" type="button" data-month-filter="all" aria-pressed="true"
+        >全部</button
+      >
+      <button type="button" data-month-filter="09" aria-pressed="false">九月</button>
+      <button type="button" data-month-filter="10" aria-pressed="false">十月</button>
+    </div>
+    <label class="season-tools__city">
+      <span>巡演城市</span>
+      <select data-city-filter>
+        <option value="all">全部城市</option>
+        {cities.map((city) => <option value={city.value}>{city.label}</option>)}
+      </select>
+    </label>
+    <p class="season-tools__result" data-filter-result aria-live="polite">
+      {showEntries.length} 场演出
+    </p>
+  </div>
+
+  <div class="program-list">
+    {showEntries.map(([id, show]) => <ProgramCard id={id} show={show} />)}
+  </div>
+  <div class="program-empty" data-program-empty hidden>
+    <span>本次巡演中没有符合条件的演出。</span>
+    <button type="button" data-clear-filters>清除筛选</button>
+  </div>
+</section>

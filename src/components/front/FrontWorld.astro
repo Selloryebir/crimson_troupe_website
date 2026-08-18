@@ -1,0 +1,244 @@
+---
+import Season from './Season.astro';
+---
+
+<div class="front-world world" data-world-panel="front">
+  <header class="site-header" data-header>
+    <a class="brand" href="#top" aria-label="猩红剧团首页">
+      <span class="brand__mark" aria-hidden="true">
+        <i></i><b></b>
+      </span>
+      <span class="brand__name">
+        <strong>猩红剧团</strong>
+        <small>CRIMSON TROUPE</small>
+      </span>
+    </a>
+
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="main-nav">
+      <span></span><span></span>
+      <span class="sr-only">打开导航</span>
+    </button>
+
+    <nav class="main-nav" id="main-nav" aria-label="主导航">
+      <a href="#season">本季演出</a>
+      <a href="#experience">观看方式</a>
+      <a href="#company">剧团</a>
+      <a href="#journal">手记</a>
+      <button class="nav-search" type="button" data-open-search aria-label="搜索网站">
+        <span aria-hidden="true"></span> 搜索
+      </button>
+      <button class="nav-ticket" type="button" data-open-ticket>预约席位</button>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="hero__copy reveal is-visible">
+        <p class="eyebrow"><span></span> 哥伦比亚巡演季 · 1098 秋</p>
+        <h1 id="hero-title">当帷幕升起，<br /><em>世界屏住呼吸。</em></h1>
+        <p class="hero__intro">
+          猩红剧团以古典文本为骨，以当代舞台为形。我们穿过移动城市，
+          为每一位仍愿凝视的人，献上一场不可复刻的夜晚。
+        </p>
+        <div class="hero__actions">
+          <a class="button button--dark" href="#season">
+            <span>探索本季</span><i aria-hidden="true">↘</i>
+          </a>
+          <button class="text-link" type="button" data-open-film>
+            <span class="play" aria-hidden="true">▶</span> 观看序幕
+          </button>
+        </div>
+      </div>
+
+      <div
+        class="hero__art reveal is-visible"
+        data-parallax
+        aria-label="本季主视觉：红色帷幕中的无面舞者"
+      >
+        <div class="poster-tag">
+          <span>SEASON</span>
+          <b>01</b>
+        </div>
+        <div class="stage-art" aria-hidden="true">
+          <div class="stage-art__halo"></div>
+          <div class="stage-art__arch"></div>
+          <div class="stage-art__figure">
+            <i class="figure__head"></i>
+            <i class="figure__body"></i>
+            <i class="figure__arm figure__arm--left"></i>
+            <i class="figure__arm figure__arm--right"></i>
+          </div>
+          <span class="stage-art__line stage-art__line--one"></span>
+          <span class="stage-art__line stage-art__line--two"></span>
+          <span class="stage-art__caption">THE UNNAMED · ACT I</span>
+        </div>
+        <p class="vertical-type">有限的生命 · 无限的舞台</p>
+      </div>
+
+      <div class="hero__index" aria-hidden="true">
+        <span>01</span><i></i><span>04</span>
+      </div>
+    </section>
+
+    <div class="notice-strip" aria-label="巡演公告">
+      <div class="notice-strip__track">
+        <span>◆ 1098 秋季巡演现已开放预约</span>
+        <span>莱塔尼亚 · 维谢海姆</span>
+        <span>哥伦比亚 · 特里蒙</span>
+        <span>维多利亚 · 诺伯特郡</span>
+        <span>◆ 1098 秋季巡演现已开放预约</span>
+        <span>莱塔尼亚 · 维谢海姆</span>
+        <span>哥伦比亚 · 特里蒙</span>
+        <span>维多利亚 · 诺伯特郡</span>
+      </div>
+    </div>
+
+    <Season />
+
+    <section class="experience section" id="experience" aria-labelledby="experience-title">
+      <div class="experience__head reveal">
+        <p class="eyebrow eyebrow--light"><span></span> 三种抵达舞台的方式</p>
+        <h2 id="experience-title">剧场不只存在于<br />一座城市里。</h2>
+        <p>无论剧团今晚停靠何处，演出都可以通过正式舞台、城市转播与延时讯道抵达观众。</p>
+      </div>
+      <div class="experience-grid">
+        <article class="experience-card experience-card--stage reveal">
+          <div class="experience-card__number">01 / LIVE</div>
+          <div class="experience-card__symbol" aria-hidden="true"><i></i></div>
+          <div>
+            <p>巡演剧场</p>
+            <h3>亲临现场</h3>
+            <span>完整舞台与现场乐团 · 座席预约制</span>
+          </div>
+          <button type="button" data-open-ticket>预约席位 <i>↗</i></button>
+        </article>
+        <article class="experience-card experience-card--relay reveal">
+          <div class="experience-card__number">02 / RELAY</div>
+          <div class="experience-card__symbol" aria-hidden="true"><i></i></div>
+          <div>
+            <p>城市放映厅</p>
+            <h3>同步转播</h3>
+            <span>四城同步讯号 · 提供字幕与听觉辅助</span>
+          </div>
+          <button type="button" data-open-film>查看本期转播 <i>↗</i></button>
+        </article>
+        <article class="experience-card experience-card--signal reveal">
+          <div class="experience-card__number">03 / DELAYED</div>
+          <div class="experience-card__symbol" aria-hidden="true"><i></i></div>
+          <div>
+            <p>源石讯道</p>
+            <h3>延时观看</h3>
+            <span>演出结束七日后开放 · 档案保存 30 日</span>
+          </div>
+          <a href="#journal">浏览影像手记 <i>↘</i></a>
+        </article>
+      </div>
+      <p class="experience__warning reveal">
+        <span>访问提示</span> 所有放映均经过城市文化事务局备案；不明来源讯号不属于本剧团服务。
+      </p>
+    </section>
+
+    <section class="manifesto section" id="company" aria-labelledby="manifesto-title">
+      <div class="manifesto__seal reveal" aria-hidden="true">
+        <span>CT</span>
+        <p>ART IS<br />WITNESS</p>
+      </div>
+      <div class="manifesto__copy reveal">
+        <p class="eyebrow eyebrow--light"><span></span> 关于剧团</p>
+        <h2 id="manifesto-title">我们相信，<br />舞台不是逃离现实的地方。</h2>
+        <p class="manifesto__lead">它是现实终于无法说谎的地方。</p>
+        <div class="manifesto__body">
+          <p>
+            新猩红剧团由来自泰拉各地的演员、作曲家、舞美师与技术人员共同组成。
+            我们追求克制而准确的表达，并将每一座到访的城市写进舞台。
+          </p>
+          <a href="#journal">阅读剧团故事 <span>→</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="journal section" id="journal" aria-labelledby="journal-title">
+      <div class="section-heading reveal">
+        <div>
+          <p class="eyebrow"><span></span> 排练厅内外</p>
+          <h2 id="journal-title">剧团手记</h2>
+        </div>
+        <a class="small-link" href="#journal-grid">查看全部 <span>↗</span></a>
+      </div>
+
+      <div class="journal-grid" id="journal-grid">
+        <article class="journal-card journal-card--feature reveal">
+          <div class="journal-card__image journal-image--hall" aria-hidden="true">
+            <span></span><i></i><b></b>
+          </div>
+          <div class="journal-card__copy">
+            <p>幕后 · 1098.08.24</p>
+            <h3>一座空剧场，如何成为另一座城市</h3>
+            <span>阅读手记 →</span>
+          </div>
+        </article>
+        <article class="journal-card reveal">
+          <div class="journal-card__image journal-image--fabric" aria-hidden="true">
+            <span></span><i></i>
+          </div>
+          <div class="journal-card__copy">
+            <p>工艺 · 1098.08.11</p>
+            <h3>猩红并不只有一种颜色</h3>
+            <span>阅读手记 →</span>
+          </div>
+        </article>
+        <article class="journal-card reveal">
+          <div class="journal-card__image journal-image--score" aria-hidden="true">
+            <span>♩</span><i></i><b></b>
+          </div>
+          <div class="journal-card__copy">
+            <p>访谈 · 1098.07.30</p>
+            <h3>在静默里寻找下一句台词</h3>
+            <span>阅读手记 →</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="invitation section reveal" aria-label="订阅演出通讯">
+      <p class="eyebrow eyebrow--light"><span></span> 来自剧团的信</p>
+      <h2>下一次帷幕升起时，<br />希望你仍在座。</h2>
+      <div class="mail-form" data-newsletter-form role="group" aria-label="演出通讯概念交互">
+        <label class="sr-only" for="email">信使地址</label>
+        <input id="email" name="email" type="email" placeholder="留下您的信使地址" required />
+        <button type="button">订阅演出通讯 <span>→</span></button>
+      </div>
+      <p class="form-note" data-form-note>概念交互：不会发送或保存信使地址。</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer__brand">
+      <span class="brand__mark brand__mark--light" aria-hidden="true"><i></i><b></b></span>
+      <p><strong>猩红剧团</strong><small>CRIMSON TROUPE</small></p>
+    </div>
+    <div class="footer__columns">
+      <div>
+        <b>巡演事务</b><a href="mailto:tour@crimson-troupe.terra">tour@crimson-troupe.terra</a><span
+          >+1098 04 170 091</span
+        >
+      </div>
+      <div><b>关注</b><a href="#journal">剧团手记</a><a href="#season">演出档案</a></div>
+      <div>
+        <b>当前时间</b><span data-terra-clock>TRIMOUNT 20:48:11</span><span>天气 / 微雨 12℃</span>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 1098 CRIMSON TROUPE</span>
+      <button
+        class="archive-key"
+        type="button"
+        data-enter-archive
+        aria-label="访问已封存的旧剧团档案"
+      >
+        馆藏编号 CT–091–██
+      </button>
+      <span>非官方同人概念站</span>
+    </div>
+  </footer>
+</div>

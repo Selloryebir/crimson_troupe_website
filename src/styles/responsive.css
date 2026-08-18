@@ -132,7 +132,7 @@
   .show-overview > button { width: 100%; }
   .show-story, .show-team { grid-template-columns: 1fr; gap: 35px; padding: 50px 0; }
   .ticket-dialog__head { padding: 40px 28px 27px; }
-  .ticket-dialog form { padding: 30px 28px 35px; }
+  .ticket-dialog__form { padding: 30px 28px 35px; }
 }
 
 @media (max-width: 460px) {
@@ -152,5 +152,5 @@
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-  .reveal { opacity: 1; transform: none; }
+  .js .reveal { opacity: 1; transform: none; }
 }

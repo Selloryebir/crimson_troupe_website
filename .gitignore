@@ -6,6 +6,10 @@ Desktop.ini
 # Editors and local workspace settings
 .vscode/
 .idea/
+.fleet/
+.history/
+.zed/
+*.code-workspace
 *.swp
 *.swo
 *~
@@ -20,18 +24,24 @@ venv/
 
 # Dependencies and future build outputs
 node_modules/
+.astro/
 dist/
 build/
 coverage/
+.nyc_output/
 .cache/
+.npm/
 .parcel-cache/
 .vite/
+*.tsbuildinfo
 
 # Test and browser automation artifacts
 playwright-report/
 test-results/
 blob-report/
 .lighthouseci/
+.eslintcache
+.stylelintcache
 
 # Logs and runtime noise
 *.log
@@ -41,9 +51,16 @@ yarn-error.log*
 pnpm-debug.log*
 __pycache__/
 *.py[cod]
+*.orig
+*.rej
+*:Zone.Identifier
 
 # Agent and local preview scratch space
 .agent-work/
 .tmp/
 tmp/
 .visual-*.png
+
+# Local deployment provider state
+.netlify/
+.vercel/

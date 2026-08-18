@@ -11,25 +11,34 @@
 
 ## 运行
 
-项目没有构建依赖。在仓库根目录启动静态服务器：
+项目使用 Astro 7、TypeScript 6 和 Node.js 24 LTS。首次运行先安装依赖：
 
 ```bash
-python3 -m http.server 4173 --directory src
+npm install
+npm run dev
 ```
 
-然后访问 <http://localhost:4173>。源码使用 ES modules，不建议通过 `file://` 直接打开。
+然后访问终端给出的本地地址。提交前运行 `npm run quality`；生产构建使用 `npm run build`，该命令会先执行完整质量门禁，再将静态产物输出到 `dist/`。用 `npm run preview` 验收构建结果。
 
 ## 仓库结构
 
 ```text
-├── docs/          # 架构、蓝图、创意、指南和外部参考
-├── src/           # 可直接部署的网站源码
-│   ├── assets/    # 拥有使用权的运行时静态资产
-│   ├── data/      # 剧目与搜索等结构化内容
-│   ├── scripts/   # 按用户能力拆分的交互模块
-│   ├── styles/    # 按基础、时间层、浮层和响应式拆分的样式
-│   └── index.html # 页面装配入口
-├── AGENTS.md      # Agent 工作与验证规范
+├── docs/           # 架构、蓝图、创意、指南和外部参考
+├── src/
+│   ├── components/ # 表站、里站、浮层和共享 Astro 组件
+│   ├── layouts/    # 页面外壳与公共元数据
+│   ├── pages/      # Astro 文件路由入口
+│   ├── assets/     # 拥有使用权的运行时静态资产
+│   ├── data/       # 类型化剧目、搜索和档案内容
+│   ├── scripts/    # 原生 TypeScript 交互模块
+│   └── styles/     # 基础、时间层、浮层和响应式样式
+├── astro.config.ts # Astro 静态输出配置
+├── eslint.config.mjs
+├── prettier.config.mjs
+├── stylelint.config.mjs
+├── package.json    # 唯一推荐的开发、质量检查和构建命令
+├── tsconfig.json   # 严格 TypeScript 配置
+├── AGENTS.md       # Agent 工作与验证规范
 └── README.md
 ```
 

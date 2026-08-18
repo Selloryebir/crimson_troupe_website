@@ -449,7 +449,7 @@ dialog::backdrop {
 .ticket-dialog__head h2 { margin: 0 0 10px; font: 400 42px var(--serif); }
 .ticket-dialog__head > span { color: rgba(255,255,255,.62); font: 11px var(--serif); }
 
-.ticket-dialog form {
+.ticket-dialog__form {
   display: grid;
   gap: 21px;
   padding: 35px 50px 42px;
@@ -474,7 +474,7 @@ dialog::backdrop {
 }
 
 .ticket-dialog .button { width: 100%; margin-top: 8px; }
-.ticket-dialog form > p { margin: -10px 0 0; color: #9b9389; font-size: 8px; text-align: center; }
+.ticket-dialog__form > p { margin: -10px 0 0; color: #9b9389; font-size: 8px; text-align: center; }
 
 .film-dialog {
   width: min(1050px, calc(100% - 30px));

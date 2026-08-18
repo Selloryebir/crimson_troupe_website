@@ -2,7 +2,7 @@
 
 ## 目标
 
-仓库结构应让人员和智能体能快速回答三个问题：信息在哪里、谁负责它、修改会影响什么。当前项目保持零构建依赖，不为了拆分而引入框架。
+仓库结构应让人员和智能体能快速回答三个问题：信息在哪里、谁负责它、修改会影响什么。Astro 用于构建期静态生成和组件化，浏览器端保持原生 TypeScript，不引入不必要的 UI 框架运行时。
 
 ## 目录树
 
@@ -10,6 +10,13 @@
 crimson_troupe_website/
 ├── AGENTS.md
 ├── README.md
+├── astro.config.ts
+├── eslint.config.mjs
+├── package.json
+├── package-lock.json
+├── prettier.config.mjs
+├── stylelint.config.mjs
+├── tsconfig.json
 ├── docs/
 │   ├── README.md
 │   ├── architecture/
@@ -18,21 +25,31 @@ crimson_troupe_website/
 │   ├── guides/
 │   └── references/
 └── src/
-    ├── index.html
+    ├── pages/
+    │   └── index.astro
+    ├── layouts/
+    │   └── BaseLayout.astro
+    ├── components/
+    │   ├── archive/
+    │   ├── front/
+    │   ├── overlays/
+    │   └── shared/
     ├── assets/
     ├── data/
-    │   ├── search-index.js
-    │   └── shows.js
+    │   ├── archive-records.ts
+    │   ├── search-index.ts
+    │   └── shows.ts
     ├── scripts/
-    │   ├── archive.js
-    │   ├── dialogs.js
-    │   ├── forms.js
-    │   ├── main.js
-    │   ├── navigation.js
-    │   ├── presentation.js
-    │   ├── programs.js
-    │   ├── search.js
-    │   └── world.js
+    │   ├── archive.ts
+    │   ├── dialogs.ts
+    │   ├── dom.ts
+    │   ├── forms.ts
+    │   ├── main.ts
+    │   ├── navigation.ts
+    │   ├── presentation.ts
+    │   ├── programs.ts
+    │   ├── search.ts
+    │   └── world.ts
     └── styles/
         ├── archive.css
         ├── foundations.css
@@ -42,68 +59,88 @@ crimson_troupe_website/
         └── responsive.css
 ```
 
-## 源码职责
+`.astro/`、`dist/`、`node_modules/`、工具缓存、测试报告和部署平台本地状态都是生成内容，不进入版本控制。`dist/` 是唯一部署产物，不直接部署 `src/`。根目录 `.gitignore` 只排除可重建产物、本地环境与编辑器噪声，不排除源码、锁文件或共享配置。
 
-### HTML 装配层
+## 工程质量边界
 
-`src/index.html` 是当前唯一页面入口，负责语义结构、基础内容和可访问名称。它只加载 `styles/main.css` 与 `scripts/main.js`，不感知各子模块的内部依赖。
+- `astro check` 负责 Astro 模板和 TypeScript 类型检查；
+- ESLint 使用类型信息检查 `.ts`，并通过 Astro 解析器检查组件模板与 frontmatter；
+- Stylelint 检查分层 CSS 的语法、无效属性、重复声明和重复选择器等高置信缺陷；
+- Prettier 统一 Astro、TypeScript、配置和文档格式，现有分层 CSS 则保留手工组织方式；
+- `.editorconfig` 与 `.gitattributes` 固定 UTF-8、LF、末尾换行和基础缩进，降低跨系统无意义 diff；
+- `npm run quality` 是日常质量门禁，`npm run build` 会先执行同一门禁再生成静态产物。
 
-在没有构建工具之前，不把 HTML 拆成需要运行时抓取的碎片，以免核心内容依赖 JavaScript 才能显示。
+依赖版本由 `package-lock.json` 固定；锁文件未变化时应使用 `npm ci` 获得可复现安装。`.npmrc` 强制 Node 引擎范围并让未来新增依赖默认精确记录。
 
-### 内容数据层
+## 构建与页面层
 
-`src/data/` 保存可复用的结构化内容，不直接读取或修改 DOM：
+`astro.config.ts` 明确使用静态输出。`src/pages/` 按文件路径生成页面；当前 `index.astro` 是唯一公开路由，只负责装配布局和领域组件。
 
-- `shows.js` 是剧目详情、搜索元数据和主创信息的唯一事实源；
-- `search-index.js` 从剧目数据生成演出条目，再组合非剧目页面条目。
+`src/layouts/BaseLayout.astro` 负责文档外壳、元数据、全局样式和客户端入口。页面组件不重复声明 `<html>`、`<head>` 或全局脚本。
 
-新增数据文件应按稳定实体或业务领域划分，不按某个组件的临时形状命名。
+## Astro 组件层
 
-### 交互模块层
+`src/components/` 按叙事和界面责任划分：
 
-`src/scripts/main.js` 是唯一装配入口，只负责按顺序初始化模块。其他文件按用户能力划分：
+- `front/`：新剧团官网及节目组件；
+- `archive/`：旧剧团档案结构；
+- `overlays/`：搜索、剧目详情、预约和影像浮层；
+- `shared/`：真正被两个时间层共享的结构。
 
-- `world.js`：表里世界状态、URL、标题和可访问隐藏状态；
-- `presentation.js`：滚动揭示、视差和时钟等非业务表现；
-- `navigation.js`：移动导航开合；
-- `programs.js`：节目筛选；
-- `dialogs.js`：通用弹窗绑定及剧目详情；
-- `search.js`：搜索、键盘浏览及搜索结果路由；
-- `forms.js`：概念表单反馈；
-- `archive.js`：里站档案与邀请交互。
+Astro 组件只负责构建期结构和内容装配，不在组件之间建立隐式客户端状态。表站与里站保持独立组件树，但继续生成在同一个 HTML 文档中，以保留“当前网站被旧档案侵入”的叙事连续性。
 
-模块不得通过隐式全局变量通信。需要跨模块调用时使用显式 `export`/`import`，数据优先放在 `data/`，不要复制常量。
+## 内容数据层
 
-### 样式层
+`src/data/` 保存不依赖 DOM 的 TypeScript 内容：
 
-`src/styles/main.css` 只声明按顺序加载的样式层：
+- `shows.ts` 是剧目卡、详情、筛选元数据、搜索和预约选项的唯一事实源；
+- `search-index.ts` 从剧目数据生成演出搜索条目，再组合页面与档案入口；
+- `archive-records.ts` 保存里站恢复记录正文，并提供记录 ID 类型守卫。
+
+新增稳定实体时先定义清晰类型。只有当同构内容扩展到多文件、需要 Markdown 正文或编辑流程时，再迁移到 Astro Content Collections；不同时维护 TypeScript 数据与内容集合两个事实源。
+
+## 客户端交互层
+
+`src/scripts/main.ts` 是唯一浏览器装配入口，只负责按顺序初始化模块。其他文件按用户能力划分：
+
+- `world.ts`：表里世界状态、URL、标题和可访问隐藏状态；
+- `presentation.ts`：滚动揭示、视差和时钟；
+- `navigation.ts`：移动导航；
+- `programs.ts`：节目筛选；
+- `dialogs.ts`：弹窗与剧目详情；
+- `search.ts`：搜索、键盘浏览和结果路由；
+- `forms.ts`：概念表单反馈；
+- `archive.ts`：里站档案与邀请交互；
+- `dom.ts`：必需 DOM 查询及失败提示。
+
+模块通过显式 `export`/`import` 协作，不访问其他模块的私有状态。Astro 会在构建时处理、打包并输出这些 TypeScript 模块。
+
+## 样式层
+
+`src/styles/main.css` 按顺序装配现有视觉层：
 
 1. `foundations.css`：变量、重置、通用辅助类和世界容器；
-2. `front.css`：表站页面及其业务区块；
-3. `archive.css`：里站专属页面；
-4. `overlays.css`：搜索、剧目、预约、影像及通知浮层；
-5. `responsive.css`：集中管理断点和减少动态效果。
+2. `front.css`：表站页面及业务区块；
+3. `archive.css`：里站页面；
+4. `overlays.css`：搜索、剧目、预约、影像和通知浮层；
+5. `responsive.css`：断点与减少动态效果。
 
-表站和里站样式不应互相覆盖内部组件。真正共享的规则上移到 `foundations.css`；只服务浮层的规则不回流到页面样式。
-
-### 资产层
-
-`src/assets/` 只存放拥有使用权且由运行页面直接消费的静态资产。来源说明和许可记录放入 `docs/references/`，不与二进制文件混放。
+当前视觉系统跨多个页面区块共享，因此保留集中分层 CSS。只有规则完全属于单个可复用组件时，才迁入组件作用域，避免把整体视觉语言碎片化。
 
 ## 允许的依赖方向
 
 ```text
-index.html
-  ├─> styles/main.css ─> foundations/front/archive/overlays/responsive
-  └─> scripts/main.js ─> feature modules ─> data modules
+pages -> layouts + components -> data
+layouts -> styles + scripts/main
+scripts/main -> feature scripts -> data + scripts/dom
 ```
 
-- `data/` 不依赖 `scripts/` 或 DOM；
-- 功能模块不反向初始化 `main.js`；
+- `data/` 不依赖组件、脚本或 DOM；
+- 组件可以消费数据，但不依赖客户端模块的内部状态；
+- 功能模块不反向初始化 `main.ts`；
 - 文档不成为运行时输入；
-- `assets/` 不包含业务逻辑；
-- 表站和里站只通过 `world.js` 定义的世界状态发生切换。
+- 表站和里站只通过 `world.ts` 定义的世界状态切换。
 
 ## 何时继续拆分
 
-仅在出现可观察收益时拆分：文件包含多个独立职责、同一数据被多处复制、多人修改频繁冲突，或某个模块可以被独立测试。不要为每个小函数创建文件，也不要在没有路由和构建需求时迁移到框架。
+仅在出现可观察收益时拆分：同一组件包含多个独立职责、同构内容大量增加、多人修改频繁冲突，或模块可以被独立测试。不要为每个小函数创建文件，也不要为了“使用 Astro”引入 React、Vue 或服务器渲染。

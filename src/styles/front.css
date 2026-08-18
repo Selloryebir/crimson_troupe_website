@@ -1425,7 +1425,7 @@
   text-shadow: 0 0 12px #80131d;
 }
 
-.reveal {
+.js .reveal {
   opacity: 0;
   transform: translateY(38px);
   transition: opacity .9s var(--ease), transform .9s var(--ease);

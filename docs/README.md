@@ -4,13 +4,13 @@
 
 ## 目录导航
 
-| 目录 | 责任 | 典型内容 |
-| --- | --- | --- |
-| [`architecture/`](architecture/repository-structure.md) | 工程结构与依赖边界 | 目录规范、模块职责、数据流 |
-| [`blueprint/`](blueprint/README.md) | 产品目标与体验蓝图 | 双时间层、用户旅程、扩展点 |
-| [`creative/`](creative/README.md) | 原创内容与叙事工作区 | 文案原则、角色或剧目草案、创意约束 |
-| [`guides/`](guides/development.md) | 可重复执行的操作说明 | 本地运行、扩展剧目、验证流程 |
-| [`references/`](references/README.md) | 外部参考及来源边界 | 设计参考、来源、许可与转译记录 |
+| 目录                                                    | 责任                 | 典型内容                           |
+| ------------------------------------------------------- | -------------------- | ---------------------------------- |
+| [`architecture/`](architecture/repository-structure.md) | 工程结构与依赖边界   | 目录规范、模块职责、数据流         |
+| [`blueprint/`](blueprint/README.md)                     | 产品目标与体验蓝图   | 双时间层、用户旅程、扩展点         |
+| [`creative/`](creative/README.md)                       | 原创内容与叙事工作区 | 文案原则、角色或剧目草案、创意约束 |
+| [`guides/`](guides/development.md)                      | 可重复执行的操作说明 | 本地运行、扩展剧目、验证流程       |
+| [`references/`](references/README.md)                   | 外部参考及来源边界   | 设计参考、来源、许可与转译记录     |
 
 ## 归档原则
 

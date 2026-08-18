@@ -1,15 +1,21 @@
-import { reducedMotion } from './world.js';
+import { query, queryAll } from './dom';
+import { reducedMotion } from './world';
 
 function initReveals() {
-  const revealItems = document.querySelectorAll('.reveal');
+  const revealItems = queryAll<HTMLElement>('.reveal');
   if ('IntersectionObserver' in window && !reducedMotion) {
-    const revealObserver = new IntersectionObserver((entries, observer) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add('is-visible');
-        observer.unobserve(entry.target);
-      });
-    }, { threshold: 0.13 });
+    const revealObserver = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            return;
+          }
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.13 },
+    );
     revealItems.forEach((item) => revealObserver.observe(item));
   } else {
     revealItems.forEach((item) => item.classList.add('is-visible'));
@@ -17,8 +23,10 @@ function initReveals() {
 }
 
 function initParallax() {
-  const stage = document.querySelector('[data-parallax]');
-  if (!stage || reducedMotion || !window.matchMedia('(pointer: fine)').matches) return;
+  const stage = document.querySelector<HTMLElement>('[data-parallax]');
+  if (!stage || reducedMotion || !window.matchMedia('(pointer: fine)').matches) {
+    return;
+  }
 
   stage.addEventListener('pointermove', (event) => {
     const bounds = stage.getBoundingClientRect();
@@ -34,9 +42,7 @@ function initParallax() {
 }
 
 function initClock() {
-  const clock = document.querySelector('[data-terra-clock]');
-  if (!clock) return;
-
+  const clock = query<HTMLElement>('[data-terra-clock]');
   const formatter = new Intl.DateTimeFormat('zh-CN', {
     timeZone: 'Asia/Shanghai',
     hour: '2-digit',

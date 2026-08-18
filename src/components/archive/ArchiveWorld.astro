@@ -1,0 +1,103 @@
+<div class="archive-world world" data-world-panel="archive" aria-hidden="true">
+  <header class="archive-header">
+    <a class="archive-brand" href="#archive-top" aria-label="旧猩红剧团档案首页">
+      <span class="archive-brand__sigil" aria-hidden="true">✦</span>
+      <span><b>猩红剧团</b><small>THE CRIMSON TROUPE</small></span>
+    </a>
+    <p class="archive-status"><i></i> 信号来源：未知 / 091</p>
+    <button type="button" class="archive-exit" data-exit-archive>返回当前时间 <span>↗</span></button
+    >
+  </header>
+
+  <main id="archive-content">
+    <section class="archive-hero" id="archive-top" aria-labelledby="archive-title">
+      <div class="archive-hero__ornament" aria-hidden="true">
+        <span>THE</span><span>SHOW</span><span>GOES</span><span>ON</span>
+      </div>
+      <div class="archive-hero__copy">
+        <p class="archive-kicker">一封迟到了七年的邀请函</p>
+        <h1 id="archive-title">欢迎回来，<br /><em>亲爱的观众。</em></h1>
+        <p>你比约定的时间晚了一点。没有关系。你的座位始终空着， 你的名字一直写在节目单上。</p>
+        <button class="blood-button" type="button" data-accept-invitation>
+          <span>接受邀请</span><i>↓</i>
+        </button>
+      </div>
+      <div class="archive-hero__stage" aria-hidden="true">
+        <div class="old-curtain old-curtain--left"></div>
+        <div class="old-curtain old-curtain--right"></div>
+        <div class="old-stage__eye"><i></i></div>
+        <p>CURTAIN CALL<br /><span>NO. 091</span></p>
+      </div>
+      <p class="archive-side-note">档案恢复度 61% · 请勿直视演员</p>
+    </section>
+
+    <section class="archive-records" id="recovered">
+      <div class="archive-section-title">
+        <p>RECOVERED / 恢复记录</p>
+        <h2>他们从未离开舞台</h2>
+        <span>以下内容未被当前剧团承认</span>
+      </div>
+
+      <div class="record-grid">
+        <button class="record-card" type="button" data-record="01" aria-expanded="false">
+          <span class="record-card__top"><i>录音</i><b>091–01</b></span>
+          <strong>第一声掌声</strong>
+          <p>“观众在演员登台以前就开始鼓掌。”</p>
+          <span class="record-card__meta">时长 00:47 / 来源损坏</span>
+          <i class="record-card__plus">＋</i>
+        </button>
+        <button class="record-card" type="button" data-record="02" aria-expanded="false">
+          <span class="record-card__top"><i>剧照</i><b>091–17</b></span>
+          <strong>没有脸的主演</strong>
+          <p>冲洗完成后，照片里多出了第十三个人。</p>
+          <span class="record-card__meta">摄于 1091 / 拍摄者未知</span>
+          <i class="record-card__plus">＋</i>
+        </button>
+        <button class="record-card" type="button" data-record="03" aria-expanded="false">
+          <span class="record-card__top"><i>手稿</i><b>091–██</b></span>
+          <strong>最后一幕之后</strong>
+          <p>所有版本都在同一句台词处戛然而止。</p>
+          <span class="record-card__meta">禁止传阅 / 墨迹未干</span>
+          <i class="record-card__plus">＋</i>
+        </button>
+      </div>
+
+      <div class="record-transcript" data-transcript aria-live="polite">
+        <button type="button" data-close-transcript aria-label="关闭记录">×</button>
+        <p data-transcript-code>RECORD 091–01</p>
+        <blockquote data-transcript-text>
+          我听见掌声从空座位里升起来。不是一双手，是许多双。指挥叫我们继续，
+          可那一晚，台上根本没有指挥。
+        </blockquote>
+        <span>誊录员注：说话者在完成本段陈述后要求加入剧团。</span>
+      </div>
+    </section>
+
+    <section class="archive-cast" aria-labelledby="cast-title">
+      <div class="cast-copy">
+        <p>CAST / 永不谢幕的演员</p>
+        <h2 id="cast-title">每一个角色，<br />都在等待新的名字。</h2>
+      </div>
+      <ol class="cast-list">
+        <li><span>01</span><b>报幕人</b><i>THE HERALD</i><em>空缺</em></li>
+        <li><span>02</span><b>烛骑士</b><i>THE CANDLE</i><em>仍在燃烧</em></li>
+        <li><span>03</span><b>无面者</b><i>THE UNNAMED</i><em>由你出演</em></li>
+        <li><span>04</span><b>最后的观众</b><i>THE WITNESS</i><em>已入席</em></li>
+      </ol>
+    </section>
+
+    <section class="final-invitation">
+      <div class="final-invitation__rings" aria-hidden="true"><i></i><i></i><i></i></div>
+      <p>今晚 / 无具体地点 / 帷幕永不落下</p>
+      <h2>我们只缺<br /><em>最后一位演员。</em></h2>
+      <button type="button" data-accept-final>在节目单上留下名字</button>
+      <span data-final-note>座位号：第十三排 · 第十三席</span>
+    </section>
+  </main>
+
+  <footer class="archive-footer">
+    <span>CT ARCHIVE / 1091–∞</span>
+    <p>你以为这里是档案。<br />他们以为这里是入口。</p>
+    <button type="button" data-exit-archive>醒来</button>
+  </footer>
+</div>

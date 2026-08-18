@@ -1,0 +1,28 @@
+---
+import type { Show, ShowId } from '../../data/shows';
+
+interface Props {
+  id: ShowId;
+  show: Show;
+}
+
+const { id, show } = Astro.props;
+---
+
+<article class="program reveal" data-program data-month={show.month} data-city={show.city}>
+  <div class="program__number">{show.index}</div>
+  <div class={`program__visual program__visual--${show.visual}`} aria-hidden="true">
+    <span></span><i></i>{show.visual !== 'moon' && <b />}
+  </div>
+  <div class="program__info">
+    <p>{show.kind}</p>
+    <h3>{show.title}</h3>
+    <dl>
+      <div><dt>首演</dt><dd>{show.premiere}</dd></div>
+      <div><dt>时长</dt><dd>{show.durationShort}</dd></div>
+    </dl>
+  </div>
+  <button type="button" class="circle-link" data-open-show={id} aria-label={`查看${show.title}详情`}
+    >↗</button
+  >
+</article>

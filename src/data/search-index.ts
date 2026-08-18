@@ -1,16 +1,42 @@
-import { shows } from './shows.js';
+import { showEntries, type ShowId } from './shows';
 
-const showEntries = Object.entries(shows).map(([value, show]) => ({
+export type SearchEntry =
+  | {
+      category: string;
+      title: string;
+      detail: string;
+      keywords: string;
+      action: 'show';
+      value: ShowId;
+    }
+  | {
+      category: string;
+      title: string;
+      detail: string;
+      keywords: string;
+      action: 'target';
+      value: `#${string}`;
+    }
+  | {
+      category: string;
+      title: string;
+      detail: string;
+      keywords: string;
+      action: 'archive';
+      value: 'archive';
+    };
+
+const showSearchEntries = showEntries.map(([value, show]) => ({
   category: '本季演出',
   title: show.title,
   detail: show.searchDetail,
   keywords: show.searchKeywords,
-  action: 'show',
+  action: 'show' as const,
   value,
 }));
 
 export const searchIndex = [
-  ...showEntries,
+  ...showSearchEntries,
   {
     category: '观演服务',
     title: '无障碍观演服务',
@@ -43,4 +69,4 @@ export const searchIndex = [
     action: 'archive',
     value: 'archive',
   },
-];
+] satisfies SearchEntry[];
