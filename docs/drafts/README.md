@@ -32,6 +32,7 @@ docs/drafts/
 | 文件                                                                                       | 类型     | 当前效力                                   |
 | ------------------------------------------------------------------------------------------ | -------- | ------------------------------------------ |
 | [`blueprint/scope-alignment.md`](blueprint/scope-alignment.md)                             | 蓝图草稿 | 已确认的临时规划，等待人工决定何时正式迁移 |
+| [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md)       | 创意草稿 | 延期的里站异常购票构想，等待未来独立规划   |
 | [`recommendations/project-recommendations.md`](recommendations/project-recommendations.md) | 建议草稿 | 候选建议，等待人工采纳、修订、暂缓或拒绝   |
 
 ## 固定文档骨架
