@@ -68,8 +68,8 @@ export function getFrontSearchIndex(edition: ReleasedEdition): SiteSearchEntry[]
       type: 'page',
       typeLabel: '页面',
       title: '票务',
-      summary: '查看当前巡演季的票务开放状态。',
-      keywords: '票务 席位 购票 暂未开票',
+      summary: '选择当前巡演季场次与分区，进入模拟购票体验。',
+      keywords: '票务 席位 购票 分区 纪念票',
       href: sitePath(edition, 'front', 'tickets'),
     },
   ];

@@ -152,6 +152,11 @@
       "related": ["BP-MOD-PROGRAMS", "BP-CNT-CORE"]
     },
     {
+      "path": "src/components/front/TicketingExperience.astro",
+      "primary": "BP-MOD-TICKETING",
+      "related": ["BP-FND-EXPERIENCE", "BP-FND-DOMAIN", "BP-CNT-CORE"]
+    },
+    {
       "path": "src/components/shared/PerformanceList.astro",
       "primary": "BP-MOD-PROGRAMS",
       "related": ["BP-FND-DOMAIN", "BP-FND-EXPERIENCE", "BP-CNT-CORE"]
@@ -210,6 +215,11 @@
       "path": "src/data/site-search-index.ts",
       "primary": "BP-MOD-SEARCH",
       "related": ["BP-FND-DOMAIN", "BP-CNT-CORE", "BP-I18N-CORE"]
+    },
+    {
+      "path": "src/data/ticketing.ts",
+      "primary": "BP-MOD-TICKETING",
+      "related": ["BP-FND-DOMAIN", "BP-MOD-PROGRAMS", "BP-CNT-CORE"]
     },
     {
       "path": "src/layouts/ArchiveLayout.astro",
@@ -330,6 +340,21 @@
       "path": "src/scripts/site-search.ts",
       "primary": "BP-MOD-SEARCH",
       "related": ["BP-FND-EXPERIENCE", "BP-I18N-CORE"]
+    },
+    {
+      "path": "src/scripts/ticket-artifact.ts",
+      "primary": "BP-MOD-TICKETING",
+      "related": ["BP-CNT-CORE", "BP-FND-EXPERIENCE", "BP-I18N-CORE"]
+    },
+    {
+      "path": "src/scripts/ticketing-controller.ts",
+      "primary": "BP-MOD-TICKETING",
+      "related": ["BP-FND-EXPERIENCE", "BP-FND-EXTENSION"]
+    },
+    {
+      "path": "src/scripts/ticketing-state.ts",
+      "primary": "BP-MOD-TICKETING",
+      "related": ["BP-FND-DOMAIN", "BP-QLT-STAGES"]
     },
     {
       "path": "src/styles/main.css",

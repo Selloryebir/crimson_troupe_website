@@ -51,7 +51,9 @@ const canonicalPath = performancePath(edition, 'front', performance.performanceI
       <div><dt>泰拉日期与时间</dt><dd>{performance.dateTime.display}</dd></div><div>
         <dt>地点</dt><dd>{performance.place}</dd>
       </div><div><dt>场次状态</dt><dd>计划演出</dd></div><div>
-        <dt>票务状态</dt><dd>暂未开票</dd>
+        <dt>票务状态</dt><dd>
+          {performance.ticketAvailability.state === 'on-sale' ? '开放选择' : '暂未开票'}
+        </dd>
       </div>
     </dl>
     <section class="detail-section prose" aria-labelledby="performance-introduction">
@@ -85,7 +87,7 @@ const canonicalPath = performancePath(edition, 'front', performance.performanceI
       </ol>
     </section>
     <div class="actions">
-      <a class="button" href={sitePath(edition, 'front', 'tickets')}>查看票务状态</a>
+      <a class="button" href={sitePath(edition, 'front', 'tickets')}>选择场次与分区</a>
     </div>
   </article>
 </FrontLayout>

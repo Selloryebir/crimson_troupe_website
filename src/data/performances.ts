@@ -13,8 +13,26 @@ export interface TerraDateTime {
 export type PerformanceCollection = 'current' | 'history';
 export type PerformanceStatus = 'scheduled' | 'completed';
 
+export type TicketZone = 'C' | 'B' | 'A' | 'S' | 'BOX';
+
+export interface TicketOffer {
+  zone: TicketZone;
+  label: string;
+  basePrice: number;
+}
+
 export type TicketAvailability =
-  { state: 'not-on-sale' } | { state: 'unavailable'; reason: 'historic-snapshot' };
+  | { state: 'not-on-sale' }
+  | { state: 'on-sale'; offers: readonly TicketOffer[] }
+  | { state: 'unavailable'; reason: 'historic-snapshot' };
+
+const createFrontTicketOffers = (): readonly TicketOffer[] => [
+  { zone: 'C', label: 'C 区', basePrice: 180 },
+  { zone: 'B', label: 'B 区', basePrice: 280 },
+  { zone: 'A', label: 'A 区', basePrice: 420 },
+  { zone: 'S', label: 'S 区', basePrice: 680 },
+  { zone: 'BOX', label: '包厢', basePrice: 1280 },
+];
 
 export interface Performance {
   performanceId: string;
@@ -51,7 +69,7 @@ export const performances = {
     },
     place: '特里蒙大剧院 · 主舞台',
     productionIds: ['uncrowned'],
-    ticketAvailability: { state: 'not-on-sale' },
+    ticketAvailability: { state: 'on-sale', offers: createFrontTicketOffers() },
     searchDetail: '9月17日 · 特里蒙 · 现代悲剧',
     searchKeywords: '九月 9月 特里蒙 悲剧 王冠',
   },
@@ -73,7 +91,7 @@ export const performances = {
     },
     place: '维谢海姆宫廷剧院 · 镜厅',
     productionIds: ['caged-fire'],
-    ticketAvailability: { state: 'not-on-sale' },
+    ticketAvailability: { state: 'on-sale', offers: createFrontTicketOffers() },
     searchDetail: '10月3日 · 维谢海姆 · 室内歌剧',
     searchKeywords: '十月 10月 维谢海姆 歌剧 火',
   },
@@ -95,7 +113,7 @@ export const performances = {
     },
     place: '诺伯特郡旧车站 · 临时舞台',
     productionIds: ['second-snow'],
-    ticketAvailability: { state: 'not-on-sale' },
+    ticketAvailability: { state: 'on-sale', offers: createFrontTicketOffers() },
     searchDetail: '10月29日 · 诺伯特郡 · 实验舞剧',
     searchKeywords: '十月 10月 诺伯特 舞剧 雪',
   },
