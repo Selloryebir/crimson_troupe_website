@@ -29,11 +29,10 @@ docs/drafts/
 
 当前内容草稿入口：
 
-| 文件                                                                                       | 类型     | 当前效力                                 |
-| ------------------------------------------------------------------------------------------ | -------- | ---------------------------------------- |
-| [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md)       | 创意草稿 | 延期的里站异常购票构想，等待未来独立规划 |
-| [`plans/s5-front-ticketing-game.md`](plans/s5-front-ticketing-game.md)                     | 开发计划 | S5 已批准；等待同步至代码分支执行        |
-| [`recommendations/project-recommendations.md`](recommendations/project-recommendations.md) | 建议草稿 | S5 已转入计划；仅保留 S6 候选建议        |
+| 文件                                                                                 | 类型     | 当前效力                                 |
+| ------------------------------------------------------------------------------------ | -------- | ---------------------------------------- |
+| [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md) | 创意草稿 | 延期的里站异常购票构想，等待未来独立规划 |
+| [`plans/s6-release-candidate-hardening.md`](plans/s6-release-candidate-hardening.md) | 开发计划 | S6 已批准；等待同步至代码分支执行        |
 
 ## 固定文档骨架
 
