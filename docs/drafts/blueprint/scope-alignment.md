@@ -326,7 +326,7 @@
 - 规划结果：表站票务以可独立启停的模拟模组承载完整购票体验；未启用时由同一稳定地址提供“暂未开票”的有效降级页。
 - 适用范围：表站票务入口、购票篮、模拟流程、结局、价格语义、成功存单和纪念票。
 - 不包含：浏览者身份、真实交易、长期保存、账号、远端票务请求和真实兑换责任。
-- 正式迁入目标：`docs/blueprint/foundation/extension-contract.md`、`docs/blueprint/modules/programs.md`、建议新增的 `docs/blueprint/modules/ticketing.md`、`docs/blueprint/content/content-contract.md`、`docs/blueprint/i18n/localization-contract.md`、`docs/blueprint/quality/stage-gates.md`、`docs/architecture/repository-structure.md`、仓库根目录 `README.md`。
+- 正式迁入目标：新增 `BP-MOD-TICKETING`（`docs/blueprint/modules/ticketing.md`），并更新 `docs/blueprint/foundation/extension-contract.md`、`docs/blueprint/modules/programs.md`、`docs/blueprint/content/content-contract.md`、`docs/blueprint/i18n/localization-contract.md`、`docs/blueprint/quality/stage-gates.md`、`docs/architecture/repository-structure.md` 与仓库根目录 `README.md`。
 
 #### SET-11 规划正文
 
@@ -387,7 +387,7 @@
 - 规划结果：项目使用一份小型规范术语表统一跨蓝图概念、内部英文名、允许别名和消歧规则，并明确 `Performance` 与 `Production` 的关系和字段归属。
 - 适用范围：表站、里站、演出领域实体、票篮、泰拉时间、本季演出、历史演出，以及人员、智能体、蓝图和源码之间的术语解释。
 - 不包含：逐字 UI 文案、各语言标准译名、搜索别名、普通实现细节，以及为没有歧义的词语建立审批流程。
-- 正式迁入目标：建议新增的 `docs/blueprint/foundation/domain-language.md`、`docs/blueprint/modules/programs.md`、`docs/blueprint/content/content-contract.md`、`docs/blueprint/i18n/terminology-contract.md`、`docs/blueprint/README.md`、仓库根目录 `README.md`。
+- 正式迁入目标：新增 `BP-FND-DOMAIN`（`docs/blueprint/foundation/domain-language.md`），并更新 `docs/blueprint/modules/programs.md`、`docs/blueprint/content/content-contract.md`、`docs/blueprint/i18n/terminology-contract.md`、`docs/blueprint/README.md` 与仓库根目录 `README.md`。
 
 #### SET-12 规划正文
 
@@ -431,21 +431,23 @@
 
 ### 正式蓝图定位
 
-| 正式位置                                                   | 来源 SET                               | 迁入边界                                                   |
-| ---------------------------------------------------------- | -------------------------------------- | ---------------------------------------------------------- |
-| `docs/blueprint/foundation/domain-language.md`（建议新增） | SET-12                                 | 规范术语、时间语义、演出实体关系与字段归属的唯一来源       |
-| `docs/blueprint/foundation/core.md`                        | SET-03、SET-05、SET-06、SET-07         | 静态路由外壳、版本参数、根跳转及无 JavaScript 的结构性降级 |
-| `docs/blueprint/foundation/experience-system.md`           | SET-01、SET-02、SET-03、SET-04、SET-05 | 产品身份、文案语气、双站体验、表站层级与跨视口体验不变量   |
-| `docs/blueprint/foundation/extension-contract.md`          | SET-10、SET-11                         | 污染与票务模组的独立装配、启停和失败降级                   |
-| `docs/blueprint/foundation/narrative-state.md`             | SET-04、SET-07、SET-10                 | 双时间层、世界切换、浏览器历史与标签页污染状态             |
-| `docs/blueprint/modules/archive.md`                        | SET-04、SET-07、SET-10                 | 1091 等级 0 基线、独立档案路由、污染触发与呈现             |
-| `docs/blueprint/modules/programs.md`                       | SET-03、SET-04、SET-07、SET-11、SET-12 | 场次与剧目页面、季别集合、详情路由及票务衔接               |
-| `docs/blueprint/modules/search.md`                         | SET-09、SET-10                         | 国家版本、世界与快照年份隔离，以及污染仅作用于结果呈现     |
-| `docs/blueprint/modules/ticketing.md`（建议新增）          | SET-11                                 | 表站票篮、模拟流程、结局、价格、存单与纪念票的完整能力     |
-| `docs/blueprint/content/content-contract.md`               | SET-01、SET-02、SET-04、SET-11、SET-12 | 内容来源与口吻边界、时间状态、领域实体及票务产物数据       |
-| `docs/blueprint/i18n/localization-contract.md`             | SET-06、SET-08、SET-11                 | 国家版本矩阵、开发期 fallback、发布集合及票务产物本地化    |
-| `docs/blueprint/i18n/terminology-contract.md`              | SET-02、SET-06、SET-08、SET-12         | 多语言显示与搜索别名；引用领域定义，不复制其产品或数据语义 |
-| `docs/blueprint/quality/stage-gates.md`                    | SET-05、SET-08、SET-10、SET-11         | 跨视口和无障碍不变量、语言发布门禁、污染概率与票务产物验收 |
+| 正式位置                                               | 来源 SET                               | 迁入边界                                                   |
+| ------------------------------------------------------ | -------------------------------------- | ---------------------------------------------------------- |
+| `docs/blueprint/foundation/domain-language.md`（新增） | SET-12                                 | 规范术语、时间语义、演出实体关系与字段归属的唯一来源       |
+| `docs/blueprint/foundation/core.md`                    | SET-03、SET-05、SET-06、SET-07         | 静态路由外壳、版本参数、根跳转及无 JavaScript 的结构性降级 |
+| `docs/blueprint/foundation/experience-system.md`       | SET-01、SET-02、SET-03、SET-04、SET-05 | 产品身份、文案语气、双站体验、表站层级与跨视口体验不变量   |
+| `docs/blueprint/foundation/extension-contract.md`      | SET-10、SET-11                         | 污染与票务模组的独立装配、启停和失败降级                   |
+| `docs/blueprint/foundation/narrative-state.md`         | SET-04、SET-07、SET-10                 | 双时间层、世界切换、浏览器历史与标签页污染状态             |
+| `docs/blueprint/modules/archive.md`                    | SET-04、SET-07、SET-10                 | 1091 等级 0 基线、独立档案路由、污染触发与呈现             |
+| `docs/blueprint/modules/programs.md`                   | SET-03、SET-04、SET-07、SET-11、SET-12 | 场次与剧目页面、季别集合、详情路由及票务衔接               |
+| `docs/blueprint/modules/search.md`                     | SET-09、SET-10                         | 国家版本、世界与快照年份隔离，以及污染仅作用于结果呈现     |
+| `docs/blueprint/modules/ticketing.md`（新增）          | SET-11                                 | 表站票篮、模拟流程、结局、价格、存单与纪念票的完整能力     |
+| `docs/blueprint/content/content-contract.md`           | SET-01、SET-02、SET-04、SET-11、SET-12 | 内容来源与口吻边界、时间状态、领域实体及票务产物数据       |
+| `docs/blueprint/i18n/localization-contract.md`         | SET-06、SET-08、SET-11                 | 国家版本矩阵、开发期 fallback、发布集合及票务产物本地化    |
+| `docs/blueprint/i18n/terminology-contract.md`          | SET-02、SET-06、SET-08、SET-12         | 多语言显示与搜索别名；引用领域定义，不复制其产品或数据语义 |
+| `docs/blueprint/quality/stage-gates.md`                | SET-05、SET-08、SET-10、SET-11         | 跨视口和无障碍不变量、语言发布门禁、污染概率与票务产物验收 |
+
+新增的 `BP-FND-DOMAIN` 与 `BP-MOD-TICKETING` 在迁移时均以 `active / planned` 注册。`BP-FND-DOMAIN` 不依赖其他蓝图，实际引用领域定义的正式蓝图依赖它；`BP-MOD-TICKETING` 依赖 `BP-FND-CORE`、`BP-FND-EXPERIENCE`、`BP-FND-EXTENSION`、`BP-FND-DOMAIN`、`BP-MOD-PROGRAMS`、`BP-CNT-CORE`、`BP-I18N-CORE` 与 `BP-I18N-TERMS`。其他依赖只按正式正文的实际引用写入，且在源码尚不存在时不预填源码映射。
 
 ### 支持文档定位
 
