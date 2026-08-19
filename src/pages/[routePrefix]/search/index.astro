@@ -1,5 +1,7 @@
 ---
+import FrontSearch from '../../../components/front/FrontSearch.astro';
 import { releasedEditions, type ReleasedEdition } from '../../../data/editions';
+import { getFrontSearchIndex } from '../../../data/front-search-index';
 import { sitePath } from '../../../data/site-routes';
 import FrontLayout from '../../../layouts/FrontLayout.astro';
 export function getStaticPaths() {
@@ -26,9 +28,5 @@ const canonicalPath = sitePath(edition, 'front', 'search');
   <section class="page-intro page-width">
     <p class="eyebrow">SITE SEARCH</p><h1>搜索</h1><p>搜索范围仅限当前炎国版表站。</p>
   </section>
-  <section class="status-panel page-width" role="status">
-    <h2>搜索服务正在整理</h2><p>
-      当前阶段尚未建立搜索索引，不会显示伪造结果。您仍可通过主导航浏览演出与剧团信息。
-    </p><a class="button" href={sitePath(edition, 'front', 'performances')}>浏览本季演出</a>
-  </section>
+  <FrontSearch entries={getFrontSearchIndex(edition)} />
 </FrontLayout>

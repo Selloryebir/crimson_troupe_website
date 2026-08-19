@@ -1,5 +1,5 @@
 ---
-import PerformanceList from '../../../../components/shared/PerformanceList.astro';
+import FrontPerformanceList from '../../../../components/front/FrontPerformanceList.astro';
 import { releasedEditions, type ReleasedEdition } from '../../../../data/editions';
 import { getPerformances } from '../../../../data/performances';
 import { sitePath } from '../../../../data/site-routes';
@@ -32,9 +32,8 @@ const canonicalPath = sitePath(edition, 'front', 'performances/history');
     </p>
   </section>
   <section class="content-section page-width" aria-label="历史演出场次">
-    <PerformanceList
+    <FrontPerformanceList
       edition={edition}
-      world="front"
       performances={getPerformances('front', 'history')}
       emptyMessage="当前没有已发布的历史场次记录。"
     />

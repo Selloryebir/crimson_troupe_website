@@ -1,4 +1,5 @@
 ---
+import ProductionVisual from '../../../components/front/ProductionVisual.astro';
 import { releasedEditions, type ReleasedEdition } from '../../../data/editions';
 import { performanceEntries, type Performance } from '../../../data/performances';
 import { productions } from '../../../data/productions';
@@ -34,10 +35,17 @@ const canonicalPath = performancePath(edition, 'front', performance.performanceI
 >
   <article class="detail page-width">
     <a class="back-link" href={sitePath(edition, 'front', 'performances')}>← 返回本季演出</a>
-    <header class="detail-header">
-      <p class="eyebrow">PERFORMANCE {performance.index}</p><h1>{leadProduction.title}</h1><p>
-        {leadProduction.tagline}
-      </p>
+    <header class="detail-header detail-header--visual">
+      <div>
+        <p class="eyebrow">PERFORMANCE {performance.index}</p><h1>{leadProduction.title}</h1><p>
+          {leadProduction.tagline}
+        </p>
+      </div>
+      <ProductionVisual
+        visual={leadProduction.visual}
+        title={leadProduction.title}
+        index={`PERFORMANCE / ${performance.index}`}
+      />
     </header>
     <dl class="fact-grid">
       <div><dt>泰拉日期与时间</dt><dd>{performance.dateTime.display}</dd></div><div>
@@ -46,6 +54,12 @@ const canonicalPath = performancePath(edition, 'front', performance.performanceI
         <dt>票务状态</dt><dd>暂未开票</dd>
       </div>
     </dl>
+    <section class="detail-section prose" aria-labelledby="performance-introduction">
+      <p class="eyebrow">ABOUT THIS PERFORMANCE</p>
+      <h2 id="performance-introduction">本场演出</h2>
+      <p>{leadProduction.heading}</p>
+      <p>{leadProduction.guidance}</p>
+    </section>
     <section class="detail-section" aria-labelledby="program-title">
       <h2 id="program-title">剧目编排</h2><ol class="program-order">
         {

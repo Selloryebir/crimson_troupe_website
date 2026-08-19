@@ -1,5 +1,5 @@
 ---
-import PerformanceList from '../../../components/shared/PerformanceList.astro';
+import FrontPerformanceList from '../../../components/front/FrontPerformanceList.astro';
 import { releasedEditions, type ReleasedEdition } from '../../../data/editions';
 import { getPerformances } from '../../../data/performances';
 import { sitePath } from '../../../data/site-routes';
@@ -17,6 +17,7 @@ interface Props {
 }
 const { edition } = Astro.props;
 const canonicalPath = sitePath(edition, 'front', 'performances');
+const currentPerformances = getPerformances('front', 'current');
 ---
 
 <FrontLayout
@@ -33,11 +34,11 @@ const canonicalPath = sitePath(edition, 'front', 'performances');
     </p>
   </section>
   <section class="content-section page-width" aria-label="本季演出场次">
-    <PerformanceList
+    <FrontPerformanceList
       edition={edition}
-      world="front"
-      performances={getPerformances('front', 'current')}
+      performances={currentPerformances}
       emptyMessage="本季暂无已公布场次。"
+      filterable
     />
   </section>
 </FrontLayout>

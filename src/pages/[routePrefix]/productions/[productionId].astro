@@ -1,4 +1,5 @@
 ---
+import ProductionVisual from '../../../components/front/ProductionVisual.astro';
 import { releasedEditions, type ReleasedEdition } from '../../../data/editions';
 import { performanceEntries } from '../../../data/performances';
 import { productionEntries, type Production } from '../../../data/productions';
@@ -38,8 +39,13 @@ const canonicalPath = productionPath(edition, 'front', production.productionId);
 >
   <article class="detail page-width">
     <a class="back-link" href={sitePath(edition, 'front', 'performances')}>← 返回本季演出</a>
-    <header class="detail-header">
-      <p class="eyebrow">{production.kind}</p><h1>{production.title}</h1><p>{production.heading}</p>
+    <header class="detail-header detail-header--visual">
+      <div>
+        <p class="eyebrow">{production.kind}</p><h1>{production.title}</h1><p>
+          {production.heading}
+        </p>
+      </div>
+      <ProductionVisual visual={production.visual} title={production.title} index="PRODUCTION" />
     </header>
     <section class="detail-section prose">
       <h2>剧目简介</h2><p>{production.synopsis}</p><p>{production.guidance}</p>

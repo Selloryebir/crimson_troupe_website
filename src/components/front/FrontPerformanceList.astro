@@ -1,0 +1,101 @@
+---
+import type { ReleasedEdition } from '../../data/editions';
+import type { Performance } from '../../data/performances';
+import { productions } from '../../data/productions';
+import { performancePath } from '../../data/site-routes';
+import ProductionVisual from './ProductionVisual.astro';
+
+interface Props {
+  edition: ReleasedEdition;
+  performances: Performance[];
+  emptyMessage: string;
+  filterable?: boolean;
+}
+
+const { edition, performances, emptyMessage, filterable = false } = Astro.props;
+const cities = [...new Map(performances.map((item) => [item.cityId, item.cityLabel])).entries()];
+const months = [...new Set(performances.map((item) => item.dateTime.month))];
+---
+
+{
+  performances.length > 0 ? (
+    <div class="performance-browser" data-performance-browser={filterable ? '' : undefined}>
+      {filterable && (
+        <div class="performance-filters" data-performance-filters hidden>
+          <div>
+            <label for="performance-city">城市</label>
+            <select id="performance-city" data-performance-city>
+              <option value="all">全部城市</option>
+              {cities.map(([value, label]) => (
+                <option value={value}>{label}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label for="performance-month">月份</label>
+            <select id="performance-month" data-performance-month>
+              <option value="all">全部月份</option>
+              {months.map((month) => (
+                <option value={String(month)}>{month} 月</option>
+              ))}
+            </select>
+          </div>
+          <button type="button" class="filter-reset" data-performance-reset>
+            重置筛选
+          </button>
+          <p class="filter-count" aria-live="polite" data-performance-count>
+            共 {performances.length} 个场次
+          </p>
+        </div>
+      )}
+      <ol class="front-performance-grid" data-performance-list>
+        {performances.map((performance) => {
+          const leadProduction = productions[performance.productionIds[0]];
+          return (
+            <li
+              data-performance-item
+              data-city={performance.cityId}
+              data-month={String(performance.dateTime.month)}
+            >
+              <a href={performancePath(edition, 'front', performance.performanceId)}>
+                <ProductionVisual
+                  visual={leadProduction.visual}
+                  title={leadProduction.title}
+                  index={performance.index}
+                  compact
+                />
+                <span class="front-performance-card__copy">
+                  <small>{leadProduction.kind}</small>
+                  <strong>{leadProduction.title}</strong>
+                  <span>{leadProduction.tagline}</span>
+                </span>
+                <span class="front-performance-card__meta">
+                  <time>{performance.dateTime.display}</time>
+                  <span>{performance.place}</span>
+                </span>
+              </a>
+            </li>
+          );
+        })}
+      </ol>
+      {filterable && (
+        <p class="filter-empty" data-performance-empty hidden>
+          当前筛选条件下没有场次。请调整城市或月份。
+        </p>
+      )}
+    </div>
+  ) : (
+    <div class="empty-state" role="status">
+      <p>{emptyMessage}</p>
+    </div>
+  )
+}
+
+{
+  filterable && performances.length > 0 && (
+    <script>
+      import {initPerformanceFilters} from '../../scripts/performance-filters';
+      initPerformanceFilters();
+    </script>
+  )
+}

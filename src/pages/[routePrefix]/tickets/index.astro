@@ -24,11 +24,19 @@ const canonicalPath = sitePath(edition, 'front', 'tickets');
   canonicalPath={canonicalPath}
 >
   <section class="page-intro page-width">
-    <p class="eyebrow">TICKETING</p><h1>票务</h1><p>当前巡演季的票务入口。</p>
+    <p class="eyebrow">TICKETING</p><h1>票务</h1><p>当前巡演季场次的统一票务入口。</p>
   </section>
-  <section class="status-panel page-width" role="status">
-    <h2>暂未开票</h2><p>
-      已公布场次尚未开放席位。票务功能启用后仍将在本页面提供，不会改变现有入口。
-    </p><a class="button" href={sitePath(edition, 'front', 'performances')}>返回本季演出</a>
+  <section class="ticket-status page-width" role="status">
+    <div class="ticket-status__mark" aria-hidden="true"><span>STATUS</span><strong>—</strong></div>
+    <div>
+      <p class="eyebrow">SALES STATUS</p>
+      <h2>暂未开票</h2>
+      <p>已公布场次尚未开放席位。票务功能启用后仍将在本页面提供，不会改变现有入口。</p>
+      <p class="ticket-status__note">本页面目前不收集个人信息，也不会进行付款或远端预约。</p>
+      <div class="actions">
+        <a class="button" href={sitePath(edition, 'front', 'performances')}>返回本季演出</a>
+        <a class="text-link" href={sitePath(edition, 'front', 'troupe')}>了解剧团</a>
+      </div>
+    </div>
   </section>
 </FrontLayout>
