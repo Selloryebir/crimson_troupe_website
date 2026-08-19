@@ -1,0 +1,20 @@
+---
+const destination = '/yan/';
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex,follow" />
+    <meta http-equiv="refresh" content={`0; url=${destination}`} />
+    <title>正在前往猩红剧团</title>
+    <script is:inline define:vars={{ destination }}>
+      window.location.replace(destination);
+    </script>
+  </head>
+  <body>
+    <p>正在前往<a href={destination}>炎国版猩红剧团网站</a>。</p>
+  </body>
+</html>

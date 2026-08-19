@@ -1,0 +1,114 @@
+---
+import type { ReleasedEdition } from '../../data/editions';
+import type { TicketingPerformanceOption } from '../../data/ticketing';
+import { sitePath } from '../../data/site-routes';
+import ProductionVisual from './ProductionVisual.astro';
+
+interface Props {
+  edition: ReleasedEdition;
+  options: readonly TicketingPerformanceOption[];
+}
+
+const { edition, options } = Astro.props;
+---
+
+<section class="ticket-fallback page-width" data-ticket-fallback role="status">
+  <div class="ticket-status__mark" aria-hidden="true"><span>STATUS</span><strong>—</strong></div>
+  <div>
+    <p class="eyebrow">SALES STATUS</p>
+    <h2>暂未开票</h2>
+    <p>当前浏览环境未能启用席位选择服务。您仍可浏览已公布场次，稍后从本地址重试。</p>
+    <div class="actions">
+      <a class="button" href={sitePath(edition, 'front', 'performances')}>返回本季演出</a>
+      <a class="text-link" href={sitePath(edition, 'front', 'troupe')}>了解剧团</a>
+    </div>
+  </div>
+</section>
+
+<section
+  class="ticketing-app page-width"
+  data-ticketing-app
+  data-ticketing-options={JSON.stringify(options)}
+  hidden
+>
+  <header class="ticketing-app__header">
+    <div><p class="eyebrow">SEAT OFFICE</p><h2>选择场次与分区</h2></div>
+    <p>每个场次限选一张；本轮最多选择 {options.length} 个场次。</p>
+  </header>
+
+  <form class="ticket-basket" data-ticket-basket tabindex="-1" novalidate>
+    <ol class="ticket-basket__performances">
+      {
+        options.map((option, index) => (
+          <li data-ticket-option={option.performanceId}>
+            <ProductionVisual
+              visual={option.visual}
+              title={option.title}
+              index={String(index + 1).padStart(2, '0')}
+              compact
+            />
+            <div class="ticket-basket__copy">
+              <div>
+                <input
+                  id={`ticket-${option.performanceId}`}
+                  type="checkbox"
+                  value={option.performanceId}
+                  data-ticket-select
+                />
+                <label for={`ticket-${option.performanceId}`}>
+                  <>
+                    <strong>{option.title}</strong>
+                    <span>{option.kind}</span>
+                  </>
+                </label>
+              </div>
+              <>
+                <p>{option.dateTime}</p>
+                <p>{option.place}</p>
+              </>
+              <label for={`zone-${option.performanceId}`}>席位分区</label>
+              <select id={`zone-${option.performanceId}`} data-ticket-zone disabled>
+                {option.offers.map((offer) => (
+                  <option value={offer.zone}>
+                    {offer.label} · {offer.basePrice} LMD
+                  </option>
+                ))}
+              </select>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+    <aside class="ticket-basket__summary">
+      <p class="eyebrow">CURRENT BASKET</p>
+      <h3>本次票篮</h3>
+      <p data-ticket-count aria-live="polite">尚未选择场次</p>
+      <dl><div><dt>基础总额</dt><dd data-ticket-base-total>0 LMD</dd></div></dl>
+      <button class="button" type="submit" data-ticket-start disabled>进入购票流程</button>
+      <p data-ticket-selection-feedback>至少选择一个场次后方可继续。</p>
+    </aside>
+  </form>
+
+  <section class="ticket-flow" data-ticket-flow tabindex="-1" hidden>
+    <p class="eyebrow" data-ticket-flow-label>QUEUE STATUS</p>
+    <h3 data-ticket-flow-title></h3>
+    <p data-ticket-flow-copy></p>
+    <div class="actions" data-ticket-flow-actions></div>
+  </section>
+
+  <section class="ticket-result" data-ticket-result tabindex="-1" hidden>
+    <div data-ticket-receipt></div>
+    <div class="issued-tickets" data-issued-tickets></div>
+    <div class="actions">
+      <button class="text-button" type="button" data-ticket-new-round>开始新一轮</button>
+    </div>
+  </section>
+
+  <p class="ticketing-live" data-ticketing-live aria-live="polite"></p>
+</section>
+
+<script>
+  import { initTicketingExperience } from '../../scripts/ticketing-controller';
+
+  initTicketingExperience();
+</script>

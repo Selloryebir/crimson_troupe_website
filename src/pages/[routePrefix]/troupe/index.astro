@@ -1,0 +1,57 @@
+---
+import { releasedEditions, type ReleasedEdition } from '../../../data/editions';
+import { frontContent } from '../../../data/front-content';
+import { sitePath } from '../../../data/site-routes';
+import FrontLayout from '../../../layouts/FrontLayout.astro';
+export function getStaticPaths() {
+  return releasedEditions.map((edition) => ({
+    params: { routePrefix: edition.routePrefix },
+    props: { edition },
+  }));
+}
+interface Props {
+  edition: ReleasedEdition;
+}
+const { edition } = Astro.props;
+const canonicalPath = sitePath(edition, 'front', 'troupe');
+---
+
+<FrontLayout
+  edition={edition}
+  pageType="troupe"
+  currentSection="troupe"
+  title="剧团｜猩红剧团"
+  description="猩红剧团的创作方式与巡演理念。"
+  canonicalPath={canonicalPath}
+>
+  <section class="page-intro page-width">
+    <p class="eyebrow">THE COMPANY</p><h1>剧团</h1><p>
+      {frontContent.troupe.title}
+      {frontContent.troupe.lead}
+    </p>
+  </section>
+  <section class="troupe-profile page-width">
+    <div class="troupe-profile__intro">
+      <p class="eyebrow">ABOUT US</p>
+      <h2>关于我们</h2>
+      <p>{frontContent.troupe.introduction}</p>
+      <p>{frontContent.troupe.method}</p>
+      <a class="button" href={sitePath(edition, 'front', 'performances')}>浏览本季演出</a>
+    </div>
+    <ol class="principle-list">
+      {
+        frontContent.troupe.principles.map(([title, description], index) => (
+          <li>
+            <span>{String(index + 1).padStart(2, '0')}</span>
+            <div>
+              <>
+                <h3>{title}</h3>
+                <p>{description}</p>
+              </>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+</FrontLayout>

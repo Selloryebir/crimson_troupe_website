@@ -1,0 +1,58 @@
+{
+  "name": "crimson-troupe-website",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "npm@11.17.0",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "dev": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "blueprint:check": "node scripts/blueprint.mjs check",
+    "blueprint:where": "node scripts/blueprint.mjs where",
+    "blueprint:impact": "node scripts/blueprint.mjs impact",
+    "check": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro check",
+    "lint": "npm run lint:code && npm run lint:styles",
+    "lint:code": "eslint \"src/**/*.{ts,astro}\" \"scripts/**/*.mjs\" \"*.{js,mjs,ts}\" --max-warnings 0",
+    "lint:code:files": "eslint --max-warnings 0",
+    "lint:code:fix": "npm run lint:code -- --fix",
+    "lint:styles": "stylelint \"src/**/*.css\" --max-warnings 0",
+    "lint:styles:files": "stylelint --max-warnings 0",
+    "lint:styles:fix": "npm run lint:styles -- --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "format:check:files": "prettier --check",
+    "format:check:docs": "prettier --check \"docs/**/*.md\" \"docs/**/*.json\" README.md AGENTS.md",
+    "format:check:code": "prettier --check \"src/**/*.{ts,astro}\"",
+    "quality": "node scripts/quality.mjs",
+    "quality:docs": "npm run format:check:docs",
+    "quality:blueprint": "npm run blueprint:check && prettier --check \"docs/blueprint/**/*.md\" docs/blueprint/traceability.json",
+    "quality:code": "npm run check && npm run lint:code && npm run format:check:code",
+    "quality:styles": "npm run lint:styles",
+    "quality:full": "npm run blueprint:check && npm run check && npm run lint && npm run format:check",
+    "validate:states": "node scripts/validate-states.mjs",
+    "validate:build": "node scripts/validate-build.mjs",
+    "build": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "verify": "npm run quality:full && npm run validate:states && npm run build && npm run validate:build",
+    "preview": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro preview"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.10",
+    "@eslint/js": "10.0.1",
+    "astro": "7.2.3",
+    "cross-env": "10.1.0",
+    "eslint": "10.8.1",
+    "eslint-plugin-astro": "3.1.0",
+    "globals": "17.11.0",
+    "prettier": "3.9.6",
+    "prettier-plugin-astro": "0.14.1",
+    "stylelint": "17.14.1",
+    "stylelint-config-recommended": "18.0.0",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.67.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true
+  }
+}

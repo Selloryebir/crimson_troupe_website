@@ -1,0 +1,39 @@
+---
+import SiteSearch from '../../../../../../components/shared/SiteSearch.astro';
+import { releasedEditions, type ReleasedEdition } from '../../../../../../data/editions';
+import { getArchiveSearchIndex } from '../../../../../../data/site-search-index';
+import { sitePath } from '../../../../../../data/site-routes';
+import ArchiveLayout from '../../../../../../layouts/ArchiveLayout.astro';
+export function getStaticPaths() {
+  return releasedEditions.map((edition) => ({
+    params: { routePrefix: edition.routePrefix },
+    props: { edition },
+  }));
+}
+interface Props {
+  edition: ReleasedEdition;
+}
+const { edition } = Astro.props;
+const canonicalPath = sitePath(edition, 'archive', 'search');
+---
+
+<ArchiveLayout
+  edition={edition}
+  pageType="search"
+  currentSection="search"
+  title="搜索｜猩红剧团 1091 存档"
+  description="搜索炎国版 1091 年旧剧团网站存档。"
+  canonicalPath={canonicalPath}
+>
+  <section class="page-intro page-width">
+    <p class="eyebrow">ARCHIVE SEARCH / 1091</p><h1>搜索</h1><p>
+      搜索范围仅限炎国版 1091 年存档，不会连接当前网站。
+    </p>
+  </section>
+  <SiteSearch
+    entries={getArchiveSearchIndex(edition)}
+    world="archive"
+    scopeLabel="炎国版 · 泰拉历 1091 年网站"
+    placeholder="查找剧目、场次、城市或栏目"
+  />
+</ArchiveLayout>

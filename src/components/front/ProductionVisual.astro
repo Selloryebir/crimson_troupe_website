@@ -1,0 +1,18 @@
+---
+import type { ProductionVisual } from '../../data/productions';
+
+interface Props {
+  visual: ProductionVisual;
+  title: string;
+  index?: string;
+  compact?: boolean;
+}
+
+const { visual, title, index, compact = false } = Astro.props;
+---
+
+<div class:list={['production-visual', `production-visual--${visual}`, { 'is-compact': compact }]}>
+  <span class="production-visual__index" aria-hidden="true">{index ?? 'CT'}</span>
+  <div class="production-visual__art" aria-hidden="true"><i></i><b></b><em></em></div>
+  <p>{title}</p>
+</div>

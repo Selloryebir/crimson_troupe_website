@@ -1,0 +1,52 @@
+---
+import type { SiteSearchEntry } from '../../data/site-search-index';
+import type { SiteWorld } from '../../data/site-routes';
+
+interface Props {
+  entries: SiteSearchEntry[];
+  world: SiteWorld;
+  scopeLabel: string;
+  placeholder: string;
+}
+
+const { entries, world, scopeLabel, placeholder } = Astro.props;
+---
+
+<section
+  class:list={['search-workspace', 'page-width', `search-workspace--${world}`]}
+  data-site-search
+  data-search-index={JSON.stringify(entries)}
+  data-pollution-slot={world === 'archive' ? 'search' : undefined}
+>
+  <form class="search-form" action="" method="get" role="search" data-search-form>
+    <label for="site-search">搜索当前网站</label>
+    <div>
+      <input
+        id="site-search"
+        name="q"
+        type="search"
+        autocomplete="off"
+        placeholder={placeholder}
+        data-search-input
+      />
+      <button type="submit">搜索</button>
+    </div>
+    <p>搜索范围：{scopeLabel}</p>
+  </form>
+  <div class="search-feedback" data-search-feedback aria-live="polite">
+    <p>输入关键词以查找场次、剧目与网站栏目。</p>
+  </div>
+  <ol class="search-results" data-search-results></ol>
+  <noscript>
+    <div class="search-noscript" role="status">
+      <h2>搜索需要启用 JavaScript</h2>
+      <p>当前页面不会发送查询或加载远端服务。您仍可使用主导航浏览演出与剧团信息。</p>
+    </div>
+  </noscript>
+</section>
+
+<script>
+  import { initSiteSearch } from '../../scripts/site-search';
+
+  initSiteSearch();
+</script>
