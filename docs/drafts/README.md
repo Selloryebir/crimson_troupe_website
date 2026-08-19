@@ -29,10 +29,11 @@ docs/drafts/
 
 当前内容草稿入口：
 
-| 文件                                                                                 | 类型     | 当前效力                                 |
-| ------------------------------------------------------------------------------------ | -------- | ---------------------------------------- |
-| [`blueprint/dual-era-art-direction.md`](blueprint/dual-era-art-direction.md)         | 蓝图草稿 | 正文已获人工确认，等待正式迁移           |
-| [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md) | 创意草稿 | 延期的里站异常购票构想，等待未来独立规划 |
+| 文件                                                                                                                   | 类型     | 当前效力                                 |
+| ---------------------------------------------------------------------------------------------------------------------- | -------- | ---------------------------------------- |
+| [`blueprint/dual-era-art-direction.md`](blueprint/dual-era-art-direction.md)                                           | 蓝图草稿 | 正文已获人工确认，等待正式迁移           |
+| [`blueprint/performance-locations-and-language-selector.md`](blueprint/performance-locations-and-language-selector.md) | 蓝图草稿 | 候选，等待人工审核                       |
+| [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md)                                   | 创意草稿 | 延期的里站异常购票构想，等待未来独立规划 |
 
 ## 固定文档骨架
 

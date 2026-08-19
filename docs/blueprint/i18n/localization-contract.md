@@ -13,26 +13,25 @@
 
 ## 国家版本矩阵
 
-本表是当前国家实体与语言信息的唯一事实源。`editionId` 是内容、状态及跨国家版本对应关系的内部稳定标识；`routePrefix` 是公开 URL 使用的独立 ASCII 路径段；技术 locale 用于浏览器、格式化、翻译与辅助技术。
+本表是当前具备演出及站点发布规划的国家版本与语言信息的唯一事实源，不是泰拉国家实体清单。`editionId` 是内容、状态及跨国家版本对应关系的内部稳定标识；`routePrefix` 是公开 URL 使用的独立 ASCII 路径段；技术 locale 用于浏览器、格式化、翻译与辅助技术。
 
-| `editionId`  | `routePrefix` | 国家中文名 | 国家英文名 | 国家日文名     | 语言中文名 | 语言英文名   | 语言本国语   | 对标现实语言 | 技术 locale |
-| ------------ | ------------- | ---------- | ---------- | -------------- | ---------- | ------------ | ------------ | ------------ | ----------- |
-| `yan`        | `yan`         | 炎         | Yan        | 炎国           | 炎语       | Yanese       | 炎语         | 简体中文     | `zh-CN`     |
-| `victoria`   | `vic`         | 维多利亚   | Victoria   | ヴィクトリア   | 维多利亚语 | Victorian    | Victorian    | 英式英语     | `en-GB`     |
-| `ursus`      | `urs`         | 乌萨斯     | Ursus      | ウルサス       | 乌萨斯语   | Ursine       | Урсусский    | 俄语         | `ru`        |
-| `siracusa`   | `sir`         | 叙拉古     | Siracusa   | シラクーザ     | 叙拉古语   | Siracusan    | Siracusano   | 意大利语     | `it`        |
-| `minos`      | `min`         | 米诺斯     | Minos      | ミノス         | 米诺斯语   | Minoan       | Μινωικά      | 现代希腊语   | `el`        |
-| `leithanien` | `lei`         | 莱塔尼亚   | Leithanien | リターニア     | 莱塔尼亚语 | Leithanian   | Leithanisch  | 德语         | `de`        |
-| `kazimierz`  | `kaz`         | 卡西米尔   | Kazimierz  | カジミエーシュ | 卡西米尔语 | Kazimierzian | Kazimierski  | 波兰语       | `pl`        |
-| `higashi`    | `hig`         | 东         | Higashi    | 極東           | 东国语     | Higashinese  | 極東語       | 日语         | `ja-JP`     |
-| `columbia`   | `col`         | 哥伦比亚   | Columbia   | クルビア       | 哥伦比亚语 | Columbian    | Columbian    | 美式英语     | `en-US`     |
-| `laterano`   | `lat`         | 拉特兰     | Laterano   | ラテラーノ     | 拉特兰语   | Lateran      | Lateranensis | 拉丁语       | `la`        |
+| `editionId`  | `routePrefix` | 国家中文名 | 国家英文名 | 国家日文名     | 语言中文名 | 语言英文名   | 语言本国语  | 对标现实语言 | 技术 locale |
+| ------------ | ------------- | ---------- | ---------- | -------------- | ---------- | ------------ | ----------- | ------------ | ----------- |
+| `yan`        | `yan`         | 炎         | Yan        | 炎国           | 炎语       | Yanese       | 炎语        | 简体中文     | `zh-CN`     |
+| `victoria`   | `vic`         | 维多利亚   | Victoria   | ヴィクトリア   | 维多利亚语 | Victorian    | Victorian   | 英式英语     | `en-GB`     |
+| `ursus`      | `urs`         | 乌萨斯     | Ursus      | ウルサス       | 乌萨斯语   | Ursine       | Урсусский   | 俄语         | `ru`        |
+| `siracusa`   | `sir`         | 叙拉古     | Siracusa   | シラクーザ     | 叙拉古语   | Siracusan    | Siracusano  | 意大利语     | `it`        |
+| `minos`      | `min`         | 米诺斯     | Minos      | ミノス         | 米诺斯语   | Minoan       | Μινωικά     | 现代希腊语   | `el`        |
+| `leithanien` | `lei`         | 莱塔尼亚   | Leithanien | リターニア     | 莱塔尼亚语 | Leithanian   | Leithanisch | 德语         | `de`        |
+| `kazimierz`  | `kaz`         | 卡西米尔   | Kazimierz  | カジミエーシュ | 卡西米尔语 | Kazimierzian | Kazimierski | 波兰语       | `pl`        |
+| `higashi`    | `hig`         | 东         | Higashi    | 極東           | 东国语     | Higashinese  | 極東語      | 日语         | `ja-JP`     |
+| `columbia`   | `col`         | 哥伦比亚   | Columbia   | クルビア       | 哥伦比亚语 | Columbian    | Columbian   | 美式英语     | `en-US`     |
 
 ## 注册与路由协作
 
 - `editionId` 与 `routePrefix` 必须显式存储，不能根据英文名、显示名或彼此拼接推导；显示名称也不得反向参与 URL 生成；
 - 所有公开 URL、切换链接、canonical、搜索结果链接和静态生成路径使用对应 `routePrefix`；页面 `html lang`、日期、数字、分词和搜索归一化使用技术 locale；
-- 技术 locale 只描述现实语言处理规则，不表示泰拉实体属于对应现实国家；拉特兰直接使用标准拉丁语 `la`，不增加项目私用 locale；
+- 技术 locale 只描述现实语言处理规则，不表示泰拉实体属于对应现实国家；
 - 国家版本共享网站能力、稳定内容 ID 和主要结构；必要地区差异使用显式内容字段，不复制整套页面；
 - 本矩阵已由人工确认完整、正确且不存在已知问题。除非人工明确要求修改具体值，否则不恢复并行 CSV，也不重复审计实体内容；实现仍需机械检查 ID 唯一性、路径格式和必填字段。
 
