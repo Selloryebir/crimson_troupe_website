@@ -7,7 +7,8 @@
 ## 边界
 
 - 规定运行时内容的稳定 ID、类型、状态、来源和权利字段；
-- 创意草案留在 `docs/creative/`，外部依据留在 `docs/references/`；
+- 尚未采纳的文案与叙事蓝本留在 `docs/drafts/creative/`，外部依据留在 `docs/references/`；
+- 已采纳的内容结构、叙事规则和文案边界进入 `docs/blueprint/content/`，实际展示文案进入唯一运行时内容源；
 - `docs/` 不直接成为网站运行时输入；
 - 不同时维护 TypeScript 数据和 Content Collections 两个事实源。
 

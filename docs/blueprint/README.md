@@ -1,6 +1,6 @@
 # 构建蓝图
 
-蓝图是源码之上的构建框架：它记录稳定的用户目标、行为契约、边界、状态和阶段标准，但不复制实现代码，不充当任务列表，也不保存审查流水账。
+蓝图是源码之上的正式构建框架：它记录稳定的用户目标、行为契约、边界、状态和阶段标准，但不复制实现代码，不充当任务列表，也不保存审查流水账。尚在讨论的蓝图草稿和候选建议统一位于 [`docs/drafts/`](../drafts/README.md)，不属于本目录的有效契约。
 
 ## 开发前的读取顺序
 
@@ -26,7 +26,9 @@ docs/blueprint/
 └── quality/                  # Demo 到 Formal 的统一阶段标准
 ```
 
-实际创意草案位于 `docs/creative/`，外部依据位于 `docs/references/`，运行时数据位于 `src/data/`。实施计划、测试输出、审核记录和翻译覆盖率报告不属于蓝图。
+临时规划、建议、创意草案和一次性开发计划位于 `docs/drafts/`，外部依据位于 `docs/references/`，运行时内容位于 `src/data/` 或未来唯一的 `src/content/`。实施计划、测试输出、审核记录和翻译覆盖率报告不属于蓝图。
+
+普通功能开发只以本目录和 `traceability.json` 为产品依据。只有任务涉及规划讨论、草稿评审、已获授权的一次性开发计划或人工明确要求正式迁移时，才读取 `docs/drafts/`；一次性计划只补充执行顺序，其他草稿内容不得自行覆盖正式蓝图。
 
 ## 蓝图的最小内容
 
@@ -56,13 +58,15 @@ ID 使用 `BP-<领域>-<能力>`：
 {
   "id": "BP-MOD-SEARCH", // 稳定 ID；文件改名时不改变
   "document": "docs/blueprint/modules/search.md",
-  "status": "active", // 蓝图状态：draft、active、superseded
+  "status": "active", // 蓝图状态：active、retired
   "stage": "demo", // 实现成熟度：planned、demo、candidate、formal
   "dependsOn": ["BP-FND-CORE"],
 }
 ```
 
 源码映射中的 `primary` 表示主要设计责任，`related` 只列出会实际约束该文件的其他蓝图。不要为了“显得完整”关联所有基础蓝图。
+
+`active` 是当前有效的正式约束；`retired` 表示蓝图已经终止，不再约束开发。`docs/blueprint/` 中不使用 `draft` 状态：尚未采纳的新蓝图和修改稿统一留在 `docs/drafts/blueprint/`。草稿获人工采纳后默认以 `active` 进入或修正正式蓝图，除非人工明确要求终止。`retired` 蓝图不得继续被启用蓝图依赖，也不得出现在源码的 `primary` 或 `related` 映射中。
 
 ## 双向工作流
 

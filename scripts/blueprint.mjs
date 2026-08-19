@@ -7,7 +7,7 @@ const repositoryRoot = path.resolve(import.meta.dirname, '..');
 const registryPath = path.join(repositoryRoot, 'docs/blueprint/traceability.json');
 const blueprintDirectories = ['foundation', 'modules', 'content', 'i18n', 'quality'];
 const functionalExtensions = new Set(['.astro', '.css', '.ts']);
-const validStatuses = new Set(['draft', 'active', 'superseded']);
+const validStatuses = new Set(['active', 'retired']);
 const validStages = new Set(['planned', 'demo', 'candidate', 'formal']);
 
 function toRepositoryPath(filePath) {
@@ -144,6 +144,11 @@ async function checkRegistry(registry) {
     for (const dependency of blueprint.dependsOn) {
       if (!blueprintsById.has(dependency)) {
         issues.push(`${blueprint.id} 依赖未知蓝图：${String(dependency)}。`);
+      } else if (
+        blueprint.status === 'active' &&
+        blueprintsById.get(dependency)?.status === 'retired'
+      ) {
+        issues.push(`${blueprint.id} 不能依赖已终止蓝图 ${String(dependency)}。`);
       }
       if (dependency === blueprint.id) {
         issues.push(`${blueprint.id} 不能依赖自身。`);
@@ -175,6 +180,8 @@ async function checkRegistry(registry) {
     }
     if (!blueprintsById.has(mapping.primary)) {
       issues.push(`${mapping.path} 的主要蓝图不存在：${String(mapping.primary)}。`);
+    } else if (blueprintsById.get(mapping.primary)?.status !== 'active') {
+      issues.push(`${mapping.path} 的主要蓝图必须处于 active 状态：${String(mapping.primary)}。`);
     }
     if (!Array.isArray(mapping.related)) {
       issues.push(`${mapping.path} 的 related 必须是数组。`);
@@ -185,6 +192,8 @@ async function checkRegistry(registry) {
     for (const relatedId of mapping.related) {
       if (!blueprintsById.has(relatedId)) {
         issues.push(`${mapping.path} 关联未知蓝图：${String(relatedId)}。`);
+      } else if (blueprintsById.get(relatedId)?.status !== 'active') {
+        issues.push(`${mapping.path} 的相关蓝图必须处于 active 状态：${String(relatedId)}。`);
       }
       if (relatedId === mapping.primary) {
         issues.push(`${mapping.path} 不应在 related 中重复主要蓝图 ${relatedId}。`);
@@ -236,7 +245,7 @@ function showBlueprint(role, id, blueprintsById) {
     return;
   }
 
-  console.log(`  ${role}: ${id} [${blueprint.stage}] ${blueprint.document}`);
+  console.log(`  ${role}: ${id} [${blueprint.status}/${blueprint.stage}] ${blueprint.document}`);
 }
 
 function findBlueprintsForPaths(registry, inputPaths) {
@@ -273,6 +282,9 @@ function showImpact(registry, requestedIds) {
     if (!blueprintsById.has(id)) {
       console.error(`未知蓝图 ID：${id}。`);
       process.exitCode = 1;
+    } else if (blueprintsById.get(id)?.status !== 'active') {
+      console.error(`蓝图 ${id} 已终止，不再提供实现影响范围。`);
+      process.exitCode = 1;
     } else {
       impactedIds.add(id);
     }
@@ -286,6 +298,7 @@ function showImpact(registry, requestedIds) {
     changed = false;
     for (const blueprint of registry.blueprints) {
       if (
+        blueprint.status === 'active' &&
         !impactedIds.has(blueprint.id) &&
         blueprint.dependsOn.some((dependency) => impactedIds.has(dependency))
       ) {
@@ -299,7 +312,9 @@ function showImpact(registry, requestedIds) {
   for (const blueprint of registry.blueprints) {
     if (impactedIds.has(blueprint.id)) {
       const relation = requestedIds.includes(blueprint.id) ? '直接' : '传递';
-      console.log(`- [${relation}] ${blueprint.id} [${blueprint.stage}] ${blueprint.document}`);
+      console.log(
+        `- [${relation}] ${blueprint.id} [${blueprint.status}/${blueprint.stage}] ${blueprint.document}`,
+      );
     }
   }
 

@@ -27,7 +27,12 @@ crimson_troupe_website/
 │   │   ├── i18n/
 │   │   ├── quality/
 │   │   └── traceability.json
-│   ├── creative/
+│   ├── drafts/
+│   │   ├── README.md
+│   │   ├── blueprint/
+│   │   ├── recommendations/
+│   │   ├── creative/
+│   │   └── plans/
 │   ├── guides/
 │   └── references/
 ├── scripts/
@@ -83,9 +88,15 @@ crimson_troupe_website/
 
 ## 蓝图追踪层
 
-`docs/blueprint/` 描述目标、契约、边界和阶段标准，不直接参与网站构建。`traceability.json` 以稳定蓝图 ID 维护蓝图之间以及蓝图与功能源码之间的关系；同一源码有一个主要蓝图，也可以关联多个辅助蓝图。
+`docs/blueprint/` 只描述正式目标、契约、边界和阶段标准，不直接参与网站构建。`traceability.json` 以稳定蓝图 ID 维护蓝图之间以及蓝图与功能源码之间的关系；同一源码有一个主要蓝图，也可以关联多个辅助蓝图。
 
 `scripts/blueprint.mjs` 只提供三项轻量能力：检查路径与 ID 是否漂移、从源码反查蓝图、从蓝图列出候选影响范围。它不理解蓝图语义，不自动修改源码，也不要求候选文件必须产生变更。完整使用规则见 `docs/blueprint/README.md`。
+
+## 草稿规划层
+
+`docs/drafts/` 集中保存蓝图、建议与创意草稿，以及一次性开发计划。内容草稿统一使用“正文、待解决问题、正式拆分与影响定位”三个顶层部分，并通过人工门禁单向迁入正式责任目录。草稿不直接约束产品或源码、不加入 `traceability.json`，也不在完成迁移后保留正文副本；已获人工授权的一次性计划只约束执行顺序，不得覆盖正式蓝图。完整生命周期见 `docs/drafts/README.md`。
+
+普通功能开发只读取正式蓝图。规划讨论、草稿评审、已获授权的一次性计划和正式迁移任务才读取草稿；接受的稳定契约进入 `docs/blueprint/`，正式内容规则进入 `docs/blueprint/content/`，实际运行内容进入 `src/data/` 或未来唯一的 `src/content/`，外部依据进入 `docs/references/`。
 
 ## 构建与页面层
 
