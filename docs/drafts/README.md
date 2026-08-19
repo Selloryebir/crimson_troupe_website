@@ -32,8 +32,8 @@ docs/drafts/
 | 文件                                                                                       | 类型     | 当前效力                                 |
 | ------------------------------------------------------------------------------------------ | -------- | ---------------------------------------- |
 | [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md)       | 创意草稿 | 延期的里站异常购票构想，等待未来独立规划 |
-| [`plans/s4-pollution-narrative-loop.md`](plans/s4-pollution-narrative-loop.md)             | 开发计划 | S4 已批准；等待同步至代码分支执行        |
-| [`recommendations/project-recommendations.md`](recommendations/project-recommendations.md) | 建议草稿 | S4 已转入计划；仅保留 S5～S6 候选建议    |
+| [`plans/s5-front-ticketing-game.md`](plans/s5-front-ticketing-game.md)                     | 开发计划 | S5 已批准；等待同步至代码分支执行        |
+| [`recommendations/project-recommendations.md`](recommendations/project-recommendations.md) | 建议草稿 | S5 已转入计划；仅保留 S6 候选建议        |
 
 ## 固定文档骨架
 
