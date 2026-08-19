@@ -96,7 +96,7 @@ npm run blueprint:check
 - Git 已经保存历史，不在蓝图重复撰写变更日志；
 - 普通、可逆的局部实现决定留在代码中，不创建额外决策记录；
 - 纯内部重构和等价修复不需要为了留下痕迹而改蓝图；
-- 同一检查只通过 `npm run quality` 运行一次，不增加重复审计门禁；
+- 日常验证通过 `npm run quality -- <本次改动路径...>` 只调度受影响检查；达到完整门禁条件时只运行一次 `npm run verify`，不在其前后重复运行 `quality:full` 或 `build`；
 - 只有现有边界造成真实冲突或重复修改时才继续拆分。
 
 当前体验基线见 [`foundation/experience-system.md`](foundation/experience-system.md)，可复制的写法见 [`blueprint-template.md`](blueprint-template.md)，真实模组示例见 [`modules/search.md`](modules/search.md)。

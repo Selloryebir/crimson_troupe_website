@@ -36,7 +36,8 @@ crimson_troupe_website/
 │   ├── guides/
 │   └── references/
 ├── scripts/
-│   └── blueprint.mjs
+│   ├── blueprint.mjs
+│   └── quality.mjs
 └── src/
     ├── pages/
     │   └── index.astro
@@ -82,7 +83,9 @@ crimson_troupe_website/
 - Stylelint 检查分层 CSS 的语法、无效属性、重复声明和重复选择器等高置信缺陷；
 - Prettier 统一 Astro、TypeScript、配置和文档格式，现有分层 CSS 则保留手工组织方式；
 - `.editorconfig` 与 `.gitattributes` 固定 UTF-8、LF、末尾换行和基础缩进，降低跨系统无意义 diff；
-- `npm run quality` 是日常质量门禁，`npm run build` 会先执行同一门禁再生成静态产物。
+- `scripts/quality.mjs` 根据显式路径或当前工作区变更选择补丁空白、蓝图、类型、代码、样式和格式检查，并说明每项检查的触发原因；
+- `npm run quality` 是日常最小检查入口，`quality:docs`、`quality:blueprint`、`quality:code`、`quality:styles` 和 `quality:full` 分别拥有明确范围；
+- `npm run build` 只生成静态产物，不调用任何质量命令；`npm run verify` 只编排一次 `quality:full` 和一次 `build`，用于工具链变更、跨层集成、合并、发布及正式候选阶段。
 
 依赖版本由 `package-lock.json` 固定；锁文件未变化时应使用 `npm ci` 获得可复现安装。`.npmrc` 强制 Node 引擎范围并让未来新增依赖默认精确记录。
 

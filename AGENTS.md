@@ -89,17 +89,21 @@ Astro 只负责构建期组件化和静态生成；客户端默认使用原生 T
 
 ## 8. 验证基线
 
-每次交付至少执行与改动相关的以下检查：
+验证强度必须与实际改动风险相称。日常开发优先显式运行 `npm run quality -- <本次改动路径...>`；未提供路径时，该命令检查当前工作区相对 `HEAD` 的已暂存、未暂存和未跟踪文件，并只调度相关检查。不得为了统一形式对纯文档改动运行 Astro、ESLint、Stylelint、构建或浏览器验收。
 
-1. `git diff --check`，并对新增未跟踪文本文件检查空白错误；
-2. `npm run quality`，确保 Astro/TypeScript、ESLint、Stylelint 与 Prettier 检查通过；
-3. `npm run build`，确认完整质量门禁后能够生成静态产物，并检查生成 HTML 的 ID、站内锚点和本地资源；
-4. 使用 `npm run preview -- --host 0.0.0.0` 启动构建预览并确认页面、CSS、JavaScript 返回成功；
-5. 视觉改动至少检查一个桌面视口和一个不大于 500px 的窄屏视口；
-6. 交互改动按范围验证筛选、搜索、对话框、预约衔接、表里世界切换和可靠退出；
-7. 无障碍相关改动验证键盘焦点、ARIA 状态和减少动态效果。
+- 草稿和普通说明文档：补丁空白与相关文件格式检查；
+- 正式蓝图或追踪表：文档检查及一次 `blueprint:check`，契约变化时另按第 5 节运行一次 `blueprint:impact`；
+- Astro/TypeScript：项目级类型检查、变更文件 ESLint 与格式检查；类型依赖图不能缩小为单文件检查；
+- CSS：变更文件 Stylelint，以及与视觉风险相称的浏览器检查；
+- 新增、删除或重命名功能源码：在对应源码检查之外增加一次 `blueprint:check`；
+- 运行时源码影响构建产物时，在相关质量检查通过后运行一次 `npm run build`；该命令只构建，不隐式重复质量门禁；
+- 工具链或质量配置变更、正式蓝图与运行时实现同时变更、运行时跨层集成、准备合并或发布、进入正式候选阶段：只运行一次 `npm run verify`。它依次执行一次 `quality:full` 和一次 `build`，不得在同一轮前后重复运行 `quality:full`、`quality` 或 `build`。
 
-自动修复只使用仓库定义的 `npm run lint:code:fix`、`npm run lint:styles:fix` 或 `npm run format`，执行后必须检查 diff 并重新运行 `npm run quality`。若环境缺少浏览器或 JavaScript 运行时，应完成仍可执行的检查，并在交付中明确说明未验证部分，不以人工推断代替运行结果。未来调整正式工具链时，应在本节、`README.md` 与 `docs/guides/development.md` 同步记录唯一推荐命令。
+`npm run quality -- --plan <路径...>` 只显示检查计划，可用于确认没有无关全局检查。`quality:docs`、`quality:blueprint`、`quality:code`、`quality:styles` 和 `quality:full` 是需要显式扩大范围时使用的责任命令；日常检查不默认调用它们的合集。
+
+构建后仅在运行时输出或用户体验可能变化时使用 `npm run preview -- --host 0.0.0.0`。视觉改动至少检查一个桌面视口和一个不大于 500px 的窄屏视口；交互改动按范围验证相关流程和可靠退出；无障碍改动验证键盘焦点、ARIA 状态与减少动态效果。纯文档任务不启动预览。
+
+自动修复只使用仓库定义的 `npm run lint:code:fix`、`npm run lint:styles:fix` 或 `npm run format`，执行后必须检查 diff，并针对实际改动路径重新运行最小相关检查；只有达到上述完整门禁条件时才运行 `npm run verify`。若环境缺少浏览器或 JavaScript 运行时，应完成仍可执行的检查，并在交付中明确说明未验证部分，不以人工推断代替运行结果。未来调整正式工具链时，应在本节、`README.md` 与 `docs/guides/development.md` 同步记录唯一推荐命令。
 
 ## 9. Git 与提交规范
 

@@ -18,7 +18,7 @@ npm install
 npm run dev
 ```
 
-然后访问终端给出的本地地址。提交前运行 `npm run quality`，统一检查蓝图追踪、Astro/TypeScript、代码、样式和格式；生产构建使用 `npm run build`，该命令会先执行完整质量门禁，再将静态产物输出到 `dist/`。用 `npm run preview` 验收构建结果。
+然后访问终端给出的本地地址。日常开发使用 `npm run quality -- <本次改动路径...>`，只执行与实际变更有关的检查；不提供路径时自动读取当前工作区变更。`npm run build` 只生成 `dist/`，不重复运行质量门禁。工具链变更、跨层集成、合并、发布和正式候选阶段使用 `npm run verify`，由它执行一次完整检查和一次构建。运行时输出发生变化后再用 `npm run preview` 验收构建结果。
 
 ## 仓库结构
 

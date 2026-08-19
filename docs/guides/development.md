@@ -15,25 +15,57 @@ npm run dev
 
 ## 质量命令
 
-提交前执行统一质量门禁：
+日常开发只检查本次实际修改的路径：
 
 ```bash
-npm run quality
+npm run quality -- docs/drafts/blueprint/scope-alignment.md
+npm run quality -- src/scripts/search.ts src/data/search-index.ts
 ```
 
-它依次执行 Astro/TypeScript 类型检查、ESLint、Stylelint 和 Prettier 格式检查。各命令的职责如下：
+不提供路径时，`quality` 自动读取当前工作区相对 `HEAD` 的已暂存、未暂存和未跟踪文件。它先输出文件数量、检查原因和具体命令，再执行最小相关检查。只需确认调度结果时使用：
 
-| 命令                      | 职责                                  |
-| ------------------------- | ------------------------------------- |
-| `npm run check`           | 检查 Astro 模板与 TypeScript 类型     |
-| `npm run lint`            | 检查 TypeScript、Astro 与分层 CSS     |
-| `npm run lint:code:fix`   | 自动修复 ESLint 明确支持的代码问题    |
-| `npm run lint:styles:fix` | 自动修复 Stylelint 明确支持的样式问题 |
-| `npm run format`          | 格式化 Astro、TypeScript、配置和文档  |
-| `npm run format:check`    | 只检查格式，不写入文件                |
-| `npm run blueprint:check` | 检查蓝图 ID、依赖、路径和源码覆盖关系 |
-| `npm run quality`         | 汇总蓝图、类型、代码、样式与格式检查  |
-| `npm run build`           | 先通过完整质量门禁，再生成 `dist/`    |
+```bash
+npm run quality -- --plan docs/drafts/blueprint/scope-alignment.md
+```
+
+各命令的职责如下：
+
+| 命令                        | 职责                                                     |
+| --------------------------- | -------------------------------------------------------- |
+| `npm run quality -- <路径>` | 按实际改动调度最小必要检查                               |
+| `npm run quality:docs`      | 显式检查全部受管文档格式                                 |
+| `npm run quality:blueprint` | 显式检查正式蓝图格式及追踪关系                           |
+| `npm run quality:code`      | 显式检查全部 Astro/TypeScript、ESLint 与源码格式         |
+| `npm run quality:styles`    | 显式检查全部 CSS                                         |
+| `npm run quality:full`      | 执行一次蓝图、类型、代码、样式与全仓格式检查，不执行构建 |
+| `npm run build`             | 只生成 `dist/`，不调用质量命令                           |
+| `npm run verify`            | 依次执行一次 `quality:full` 与一次 `build`               |
+| `npm run lint:code:fix`     | 自动修复 ESLint 明确支持的代码问题                       |
+| `npm run lint:styles:fix`   | 自动修复 Stylelint 明确支持的样式问题                    |
+| `npm run format`            | 格式化 Astro、TypeScript、配置和文档，不改手工组织的 CSS |
+| `npm run blueprint:check`   | 检查蓝图 ID、依赖、路径和源码覆盖关系                    |
+
+`quality` 的最小调度规则如下：
+
+| 变更范围                       | 自动检查                                             |
+| ------------------------------ | ---------------------------------------------------- |
+| 草稿或普通说明文档             | 补丁空白、变更文件 Prettier                          |
+| `docs/blueprint/`              | 文档检查、`blueprint:check`                          |
+| 现有 `.ts`、`.astro`           | 项目级 Astro/TypeScript、变更文件 ESLint 与 Prettier |
+| 现有 `.css`                    | 变更文件 Stylelint                                   |
+| 功能源码新增、删除或重命名     | 对应源码检查、`blueprint:check`                      |
+| 工具链或质量配置               | `verify`                                             |
+| 多个运行时层，或蓝图与实现同步 | `verify`                                             |
+
+Astro/TypeScript 类型关系可能跨文件，因此代码变更仍使用项目级 `astro check`；ESLint、Stylelint 和 Prettier 可以安全地限制为变更文件。`quality` 不负责运行普通构建或浏览器验收；运行时源码完成一个可交付切片后，先通过相关质量检查，再单独运行一次 `npm run build`。
+
+只有工具链变更、跨层集成、准备合并或发布、进入正式候选阶段才执行完整门禁：
+
+```bash
+npm run verify
+```
+
+`verify` 已经包含完整质量检查和构建。同一轮不得先运行 `quality:full` 再运行 `verify`，也不得在 `verify` 后重复运行 `build`。
 
 现有分层 CSS 保留按视觉责任组织的手工分组，不由 Prettier 整库重排；CSS 的语法、无效值、重复规则和高置信缺陷由 Stylelint 负责。自动修复后仍需检查 diff，不能把工具输出直接视为人工验收。
 
@@ -70,10 +102,9 @@ npm run blueprint:impact -- BP-MOD-SEARCH
 
 ## 最小验证
 
-1. `git diff --check`，并检查新增文件没有尾随空白；
-2. `npm run quality`；
-3. `npm run build`；
-4. 检查生成 HTML 的 ID、锚点和本地资源；
-5. 使用 `npm run preview` 在桌面与不大于 500px 的视口检查页面；
-6. 检查浏览器控制台无模块加载或运行错误；
-7. 按改动范围验证筛选、搜索、详情、预约、档案和世界切换。
+1. 对本次改动路径运行 `npm run quality -- <路径...>`；该命令包含作用域内的补丁空白检查；
+2. 纯文档变更到此结束，不执行构建或预览；
+3. 运行时源码影响产物时，相关质量检查通过后运行一次 `npm run build`；
+4. 检查受影响的生成 HTML、ID、锚点和本地资源；
+5. 视觉或交互发生变化时使用 `npm run preview`，按风险检查桌面、窄屏、控制台和相关用户流程；
+6. 达到完整门禁条件时，以一次 `npm run verify` 取代前述独立质量与构建命令，不重复相同步骤。
