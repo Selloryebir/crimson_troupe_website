@@ -28,7 +28,7 @@ const { edition, performances, emptyMessage } = Astro.props;
                 number={`NO. ${performance.index}`}
                 compact
               />
-              <span class="archive-performance-list__register">
+              <span class="archive-performance-list__register" data-pollution-slot="register">
                 <small>巡演簿号 {performance.index}</small>
                 <strong>{leadProduction.title}</strong>
                 <span>{leadProduction.tagline}</span>

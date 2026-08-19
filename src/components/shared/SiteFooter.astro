@@ -18,7 +18,12 @@ const switchLabel = world === 'front' ? '馆藏记录：1091 年历史快照' : 
       <strong>猩红剧团</strong>
       <p>{world === 'front' ? '巡演、剧目与观演事务' : '泰拉历 1091 年网站存档'}</p>
     </div>
-    <a class="world-switch" href={siteRoot(edition, otherWorld)}>{switchLabel}</a>
+    <a
+      class="world-switch"
+      href={siteRoot(edition, otherWorld)}
+      data-world-switch={otherWorld}
+      data-pollution-safe>{switchLabel}</a
+    >
   </div>
   <div class="footer-legal">
     <span>当前版本：{edition.countryName.zh} · 简体中文</span>

@@ -2,7 +2,7 @@ import type { SiteSearchEntry } from '../data/site-search-index';
 
 const normalize = (value: string) => value.normalize('NFKC').trim().toLocaleLowerCase('zh-CN');
 
-function createResult(entry: SiteSearchEntry): HTMLLIElement {
+function createResult(entry: SiteSearchEntry, canBePolluted: boolean): HTMLLIElement {
   const item = document.createElement('li');
   const link = document.createElement('a');
   const type = document.createElement('span');
@@ -15,6 +15,9 @@ function createResult(entry: SiteSearchEntry): HTMLLIElement {
   summary.textContent = entry.summary;
   link.append(type, title, summary);
   item.append(link);
+  if (canBePolluted) {
+    item.dataset.pollutionSlot = 'search-result';
+  }
   return item;
 }
 
@@ -51,11 +54,15 @@ export function initSiteSearch(): void {
 
       feedback.textContent =
         matches.length > 0 ? `找到 ${matches.length} 条结果。` : '没有找到匹配内容。';
-      results.append(...matches.map(createResult));
+      const canBePolluted = root.classList.contains('search-workspace--archive');
+      results.append(...matches.map((entry) => createResult(entry, canBePolluted)));
     };
 
     form.addEventListener('submit', (event) => {
       event.preventDefault();
+      if (root.classList.contains('search-workspace--archive')) {
+        document.dispatchEvent(new CustomEvent('crimson:archive-search-submit'));
+      }
       const query = input.value.trim();
       const url = new URL(window.location.href);
       if (query) {

@@ -157,6 +157,11 @@
       "related": ["BP-FND-DOMAIN", "BP-FND-EXPERIENCE", "BP-CNT-CORE"]
     },
     {
+      "path": "src/components/shared/PollutionController.astro",
+      "primary": "BP-FND-NARRATIVE",
+      "related": ["BP-MOD-ARCHIVE", "BP-FND-EXPERIENCE"]
+    },
+    {
       "path": "src/components/shared/SiteFooter.astro",
       "primary": "BP-FND-CORE",
       "related": ["BP-FND-NARRATIVE", "BP-FND-EXPERIENCE", "BP-I18N-CORE"]
@@ -310,6 +315,16 @@
       "path": "src/scripts/performance-filters.ts",
       "primary": "BP-MOD-PROGRAMS",
       "related": ["BP-FND-EXPERIENCE"]
+    },
+    {
+      "path": "src/scripts/pollution-controller.ts",
+      "primary": "BP-FND-NARRATIVE",
+      "related": ["BP-MOD-ARCHIVE", "BP-MOD-SEARCH", "BP-I18N-CORE"]
+    },
+    {
+      "path": "src/scripts/pollution-state.ts",
+      "primary": "BP-FND-NARRATIVE",
+      "related": ["BP-MOD-ARCHIVE", "BP-QLT-STAGES"]
     },
     {
       "path": "src/scripts/site-search.ts",

@@ -1,4 +1,5 @@
 ---
+import PollutionController from '../components/shared/PollutionController.astro';
 import SiteFooter from '../components/shared/SiteFooter.astro';
 import SiteHeader from '../components/shared/SiteHeader.astro';
 import type { ReleasedEdition } from '../data/editions';
@@ -30,4 +31,5 @@ const { edition, pageType, currentSection, title, description, canonicalPath } =
   <SiteHeader edition={edition} world="archive" currentSection={currentSection} />
   <main id="main-content" class="site-main"><slot /></main>
   <SiteFooter edition={edition} world="archive" />
+  <PollutionController />
 </BaseLayout>

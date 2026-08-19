@@ -16,6 +16,7 @@ const { entries, world, scopeLabel, placeholder } = Astro.props;
   class:list={['search-workspace', 'page-width', `search-workspace--${world}`]}
   data-site-search
   data-search-index={JSON.stringify(entries)}
+  data-pollution-slot={world === 'archive' ? 'search' : undefined}
 >
   <form class="search-form" action="" method="get" role="search" data-search-form>
     <label for="site-search">搜索当前网站</label>

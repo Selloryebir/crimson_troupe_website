@@ -12,7 +12,10 @@ interface Props {
 const { visual, title, subtitle, number = 'CT / 1091', compact = false } = Astro.props;
 ---
 
-<div class:list={['archive-poster', `archive-poster--${visual}`, { 'is-compact': compact }]}>
+<div
+  class:list={['archive-poster', `archive-poster--${visual}`, { 'is-compact': compact }]}
+  data-pollution-slot="poster"
+>
   <div class="archive-poster__frame" aria-hidden="true"><i></i><b></b><em></em></div><span
     class="archive-poster__number">{number}</span
   ><div class="archive-poster__title">
