@@ -29,11 +29,10 @@ docs/drafts/
 
 当前内容草稿入口：
 
-| 文件                                                                                 | 类型           | 当前效力                                 |
-| ------------------------------------------------------------------------------------ | -------------- | ---------------------------------------- |
-| [`blueprint/production-title-catalog.md`](blueprint/production-title-catalog.md)     | 蓝图草稿       | 候选，等待人工审核                       |
-| [`plans/dual-language-dual-era-preview.md`](plans/dual-language-dual-era-preview.md) | 一次性开发计划 | 已获人工授权，执行至 STAGE-01            |
-| [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md) | 创意草稿       | 延期的里站异常购票构想，等待未来独立规划 |
+| 文件                                                                                 | 类型     | 当前效力                                 |
+| ------------------------------------------------------------------------------------ | -------- | ---------------------------------------- |
+| [`blueprint/production-title-catalog.md`](blueprint/production-title-catalog.md)     | 蓝图草稿 | 候选，等待人工审核                       |
+| [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md) | 创意草稿 | 延期的里站异常购票构想，等待未来独立规划 |
 
 ## 固定文档骨架
 
