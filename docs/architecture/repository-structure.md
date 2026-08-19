@@ -33,7 +33,9 @@ crimson_troupe_website/
 │   └── references/
 ├── scripts/
 │   ├── blueprint.mjs
-│   └── quality.mjs
+│   ├── quality.mjs
+│   ├── validate-build.mjs
+│   └── validate-states.mjs
 └── src/
     ├── pages/
     │   ├── index.astro
@@ -72,7 +74,7 @@ crimson_troupe_website/
 - ESLint 使用类型信息检查 TypeScript，并通过 Astro 解析器检查组件；Stylelint 检查分层 CSS 的高置信缺陷；Prettier 统一 Astro、TypeScript、配置和文档格式；
 - `.editorconfig` 与 `.gitattributes` 固定 UTF-8、LF、末尾换行和基础缩进；
 - `scripts/quality.mjs` 根据显式路径或当前变更选择补丁空白、蓝图、类型、代码、样式和格式检查，并说明触发原因；
-- `npm run quality` 是日常最小检查入口；`npm run build` 只生成静态产物；`npm run verify` 只编排一次完整质量检查和一次构建，用于工具链变更、跨层集成、合并、发布和正式候选阶段。
+- `npm run quality` 是日常最小检查入口；`npm run build` 只生成静态产物；`npm run verify` 只编排一次完整质量检查、关键状态验证、一次构建和静态产物验证，用于工具链变更、跨层集成、合并、发布和正式候选阶段。
 
 依赖版本由 `package-lock.json` 固定；锁文件未变化时使用 `npm ci` 获得可复现安装。`.npmrc` 强制 Node 引擎范围，并让未来新增依赖默认精确记录。
 

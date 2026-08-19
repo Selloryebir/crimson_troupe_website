@@ -186,6 +186,12 @@ export function initPollutionController(): void {
       : readState(storage);
   applyState(initialState);
 
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+      applyState(readState(storage));
+    }
+  });
+
   document.addEventListener(
     'click',
     (event) => {

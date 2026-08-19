@@ -157,11 +157,6 @@
       "related": ["BP-FND-EXPERIENCE", "BP-FND-DOMAIN", "BP-CNT-CORE"]
     },
     {
-      "path": "src/components/shared/PerformanceList.astro",
-      "primary": "BP-MOD-PROGRAMS",
-      "related": ["BP-FND-DOMAIN", "BP-FND-EXPERIENCE", "BP-CNT-CORE"]
-    },
-    {
       "path": "src/components/shared/PollutionController.astro",
       "primary": "BP-FND-NARRATIVE",
       "related": ["BP-MOD-ARCHIVE", "BP-FND-EXPERIENCE"]

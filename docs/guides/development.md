@@ -41,7 +41,9 @@ npm run quality -- --plan docs/blueprint/modules/search.md
 | `npm run quality:styles`    | 显式检查全部 CSS                                         |
 | `npm run quality:full`      | 执行一次蓝图、类型、代码、样式与全仓格式检查，不执行构建 |
 | `npm run build`             | 只生成 `dist/`，不调用质量命令                           |
-| `npm run verify`            | 依次执行一次 `quality:full` 与一次 `build`               |
+| `npm run validate:states`   | 确定性检查污染、票务状态与纪念票字段                     |
+| `npm run validate:build`    | 检查已生成页面的路由、元数据、链接、资源与发布范围       |
+| `npm run verify`            | 依次执行完整质量、状态、一次构建与静态产物门禁           |
 | `npm run lint:code:fix`     | 自动修复 ESLint 明确支持的代码问题                       |
 | `npm run lint:styles:fix`   | 自动修复 Stylelint 明确支持的样式问题                    |
 | `npm run format`            | 格式化 Astro、TypeScript、配置和文档，不改手工组织的 CSS |
@@ -67,7 +69,7 @@ Astro/TypeScript 类型关系可能跨文件，因此代码变更仍使用项目
 npm run verify
 ```
 
-`verify` 已经包含完整质量检查和构建。同一轮不得先运行 `quality:full` 再运行 `verify`，也不得在 `verify` 后重复运行 `build`。
+`verify` 已经包含完整质量检查、状态验证、一次构建和静态产物验证。同一轮不得先运行这些子门禁再运行 `verify`，也不得在 `verify` 后重复运行 `build` 或产物验证。
 
 现有分层 CSS 保留按视觉责任组织的手工分组，不由 Prettier 整库重排；CSS 的语法、无效值、重复规则和高置信缺陷由 Stylelint 负责。自动修复后仍需检查 diff，不能把工具输出直接视为人工验收。
 

@@ -31,8 +31,10 @@
     "quality:code": "npm run check && npm run lint:code && npm run format:check:code",
     "quality:styles": "npm run lint:styles",
     "quality:full": "npm run blueprint:check && npm run check && npm run lint && npm run format:check",
+    "validate:states": "node scripts/validate-states.mjs",
+    "validate:build": "node scripts/validate-build.mjs",
     "build": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro build",
-    "verify": "npm run quality:full && npm run build",
+    "verify": "npm run quality:full && npm run validate:states && npm run build && npm run validate:build",
     "preview": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro preview"
   },
   "devDependencies": {
