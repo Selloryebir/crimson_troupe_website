@@ -1,0 +1,111 @@
+---
+import FrontPerformanceList from '../../components/front/FrontPerformanceList.astro';
+import ProductionVisual from '../../components/front/ProductionVisual.astro';
+import { releasedEditions, type ReleasedEdition } from '../../data/editions';
+import { frontContent } from '../../data/front-content';
+import { getPerformances } from '../../data/performances';
+import { productions } from '../../data/productions';
+import { sitePath, siteRoot } from '../../data/site-routes';
+import FrontLayout from '../../layouts/FrontLayout.astro';
+
+export function getStaticPaths() {
+  return releasedEditions.map((edition) => ({
+    params: { routePrefix: edition.routePrefix },
+    props: { edition },
+  }));
+}
+
+interface Props {
+  edition: ReleasedEdition;
+}
+
+const { edition } = Astro.props;
+const canonicalPath = siteRoot(edition, 'front');
+const currentPerformances = getPerformances('front', 'current');
+const featuredPerformance = currentPerformances[0];
+const featuredProduction = featuredPerformance
+  ? productions[featuredPerformance.productionIds[0]]
+  : undefined;
+---
+
+<FrontLayout
+  edition={edition}
+  pageType="home"
+  currentSection="home"
+  title="猩红剧团｜当前巡演季"
+  description="猩红剧团当前巡演季、剧目与观演信息。"
+  canonicalPath={canonicalPath}
+  robots="index,follow"
+>
+  <section class="front-hero page-width" aria-labelledby="home-title">
+    <div class="hero-copy">
+      <p class="eyebrow">{frontContent.home.seasonLabel}</p>
+      <h1 id="home-title">当帷幕升起，<br /><em>世界屏住呼吸。</em></h1>
+      <p>{frontContent.home.introduction}</p>
+      <div class="actions">
+        <a class="button" href={sitePath(edition, 'front', 'performances')}>浏览本季演出</a>
+        <a class="text-link" href={sitePath(edition, 'front', 'troupe')}>了解剧团</a>
+      </div>
+    </div>
+    {
+      featuredPerformance && featuredProduction && (
+        <a
+          class="hero-feature"
+          href={sitePath(edition, 'front', `performances/${featuredPerformance.performanceId}`)}
+          aria-label={`重点场次：${featuredProduction.title}，${featuredPerformance.cityLabel}`}
+        >
+          <ProductionVisual
+            visual={featuredProduction.visual}
+            title={featuredProduction.title}
+            index="CURRENT / 01"
+          />
+          <span>
+            <small>{featuredPerformance.dateTime.display}</small>
+            <strong>{featuredPerformance.cityLabel}</strong>
+            <span>查看场次</span>
+          </span>
+        </a>
+      )
+    }
+  </section>
+  <section class="season-statement" aria-label="本季说明">
+    <div class="page-width">
+      <p>1098 / AUTUMN TOUR</p>
+      <strong>{frontContent.home.seasonNote}</strong>
+    </div>
+  </section>
+  <section class="content-section page-width" aria-labelledby="season-title">
+    <div class="section-heading">
+      <div><p class="eyebrow">巡演日程</p><h2 id="season-title">本季演出</h2></div>
+      <a href={sitePath(edition, 'front', 'performances')}>查看全部</a>
+    </div>
+    <FrontPerformanceList
+      edition={edition}
+      performances={currentPerformances}
+      emptyMessage="本季暂无已公布场次。"
+    />
+  </section>
+  <section class="service-grid page-width" aria-labelledby="services-title">
+    <header>
+      <p class="eyebrow">VISIT & DISCOVER</p>
+      <h2 id="services-title">从这里开始</h2>
+    </header>
+    <div>
+      {
+        frontContent.services.map((service) => (
+          <article>
+            <small>{service.label}</small>
+            <h3>{service.title}</h3>
+            <p>{service.detail}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+  <section class="troupe-callout page-width" aria-labelledby="troupe-callout-title">
+    <p class="eyebrow">THE COMPANY</p>
+    <h2 id="troupe-callout-title">{frontContent.troupe.title}</h2>
+    <p>{frontContent.troupe.lead}</p>
+    <a class="text-link" href={sitePath(edition, 'front', 'troupe')}>阅读剧团介绍</a>
+  </section>
+</FrontLayout>

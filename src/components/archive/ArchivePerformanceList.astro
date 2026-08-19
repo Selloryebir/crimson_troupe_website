@@ -1,0 +1,51 @@
+---
+import type { ReleasedEdition } from '../../data/editions';
+import type { Performance } from '../../data/performances';
+import { productions } from '../../data/productions';
+import { performancePath } from '../../data/site-routes';
+import ArchivePoster from './ArchivePoster.astro';
+
+interface Props {
+  edition: ReleasedEdition;
+  performances: Performance[];
+  emptyMessage: string;
+}
+
+const { edition, performances, emptyMessage } = Astro.props;
+---
+
+{
+  performances.length > 0 ? (
+    <ol class="archive-performance-list">
+      {performances.map((performance) => {
+        const leadProduction = productions[performance.productionIds[0]];
+        return (
+          <li>
+            <a href={performancePath(edition, 'archive', performance.performanceId)}>
+              <ArchivePoster
+                visual={leadProduction.visual}
+                title={leadProduction.title}
+                number={`NO. ${performance.index}`}
+                compact
+              />
+              <span class="archive-performance-list__register" data-pollution-slot="register">
+                <small>巡演簿号 {performance.index}</small>
+                <strong>{leadProduction.title}</strong>
+                <span>{leadProduction.tagline}</span>
+              </span>
+              <span class="archive-performance-list__date">
+                <time>{performance.dateTime.display}</time>
+                <span>{performance.place}</span>
+                <small>{performance.productionIds.length} 项剧目</small>
+              </span>
+            </a>
+          </li>
+        );
+      })}
+    </ol>
+  ) : (
+    <div class="empty-state" role="status">
+      <p>{emptyMessage}</p>
+    </div>
+  )
+}

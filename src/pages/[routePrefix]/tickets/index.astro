@@ -1,0 +1,32 @@
+---
+import TicketingExperience from '../../../components/front/TicketingExperience.astro';
+import { releasedEditions, type ReleasedEdition } from '../../../data/editions';
+import { getTicketingOptions } from '../../../data/ticketing';
+import { sitePath } from '../../../data/site-routes';
+import FrontLayout from '../../../layouts/FrontLayout.astro';
+export function getStaticPaths() {
+  return releasedEditions.map((edition) => ({
+    params: { routePrefix: edition.routePrefix },
+    props: { edition },
+  }));
+}
+interface Props {
+  edition: ReleasedEdition;
+}
+const { edition } = Astro.props;
+const canonicalPath = sitePath(edition, 'front', 'tickets');
+---
+
+<FrontLayout
+  edition={edition}
+  pageType="tickets"
+  currentSection="tickets"
+  title="票务｜猩红剧团"
+  description="猩红剧团当前巡演季票务状态。"
+  canonicalPath={canonicalPath}
+>
+  <section class="page-intro page-width">
+    <p class="eyebrow">TICKETING</p><h1>票务</h1><p>当前巡演季场次的统一票务入口。</p>
+  </section>
+  <TicketingExperience edition={edition} options={getTicketingOptions()} />
+</FrontLayout>

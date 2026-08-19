@@ -1,0 +1,35 @@
+---
+import PollutionController from '../components/shared/PollutionController.astro';
+import SiteFooter from '../components/shared/SiteFooter.astro';
+import SiteHeader from '../components/shared/SiteHeader.astro';
+import type { ReleasedEdition } from '../data/editions';
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  edition: ReleasedEdition;
+  pageType: string;
+  currentSection: 'home' | 'current' | 'history' | 'troupe' | 'search' | 'tickets' | 'detail';
+  title: string;
+  description: string;
+  canonicalPath: string;
+}
+
+const { edition, pageType, currentSection, title, description, canonicalPath } = Astro.props;
+---
+
+<BaseLayout
+  edition={edition}
+  world="archive"
+  pageType={pageType}
+  title={title}
+  description={description}
+  canonicalPath={canonicalPath}
+  robots="noindex,follow"
+>
+  <a class="skip-link" href="#main-content">跳至正文</a>
+  <div class="archive-register" aria-hidden="true">CT / SITE REGISTER / 1091</div>
+  <SiteHeader edition={edition} world="archive" currentSection={currentSection} />
+  <main id="main-content" class="site-main"><slot /></main>
+  <SiteFooter edition={edition} world="archive" />
+  <PollutionController />
+</BaseLayout>

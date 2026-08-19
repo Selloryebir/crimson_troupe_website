@@ -1,0 +1,93 @@
+---
+import ProductionVisual from '../../../components/front/ProductionVisual.astro';
+import { releasedEditions, type ReleasedEdition } from '../../../data/editions';
+import { performanceEntries } from '../../../data/performances';
+import { productionEntries, type Production } from '../../../data/productions';
+import { performancePath, productionPath, sitePath } from '../../../data/site-routes';
+import FrontLayout from '../../../layouts/FrontLayout.astro';
+
+export function getStaticPaths() {
+  return releasedEditions.flatMap((edition) => {
+    const frontProductionIds = new Set(
+      performanceEntries
+        .filter(([, performance]) => performance.world === 'front')
+        .flatMap(([, performance]) => performance.productionIds),
+    );
+    return productionEntries
+      .filter(([productionId]) => frontProductionIds.has(productionId))
+      .map(([productionId, production]) => ({
+        params: { routePrefix: edition.routePrefix, productionId },
+        props: { edition, production },
+      }));
+  });
+}
+interface Props {
+  edition: ReleasedEdition;
+  production: Production;
+}
+const { edition, production } = Astro.props as Props;
+const relatedPerformances = performanceEntries
+  .map(([, item]) => item)
+  .filter(
+    (item) =>
+      item.world === 'front' &&
+      item.productionIds.some((productionId) => productionId === production.productionId),
+  );
+const canonicalPath = productionPath(edition, 'front', production.productionId);
+---
+
+<FrontLayout
+  edition={edition}
+  pageType="production-detail"
+  currentSection="detail"
+  title={`${production.title}｜猩红剧团`}
+  description={production.heading}
+  canonicalPath={canonicalPath}
+>
+  <article class="detail page-width">
+    <a class="back-link" href={sitePath(edition, 'front', 'performances')}>← 返回本季演出</a>
+    <header class="detail-header detail-header--visual">
+      <div>
+        <p class="eyebrow">{production.kind}</p><h1>{production.title}</h1><p>
+          {production.heading}
+        </p>
+      </div>
+      <ProductionVisual visual={production.visual} title={production.title} index="PRODUCTION" />
+    </header>
+    <section class="detail-section prose">
+      <h2>剧目简介</h2><p>{production.synopsis}</p><p>{production.guidance}</p>
+    </section>
+    <dl class="fact-grid">
+      <div><dt>时长</dt><dd>{production.duration}</dd></div><div>
+        <dt>演出语言</dt><dd>{production.language}</dd>
+      </div>
+    </dl>
+    <section class="detail-section">
+      <h2>主创</h2><dl class="credits">
+        {
+          production.creatives.map(([role, name]) => (
+            <div>
+              <>
+                <dt>{role}</dt>
+                <dd>{name}</dd>
+              </>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+    <section class="detail-section">
+      <h2>相关场次</h2><ul class="related-links">
+        {
+          relatedPerformances.map((performance) => (
+            <li>
+              <a href={performancePath(edition, 'front', performance.performanceId)}>
+                {performance.dateTime.display} · {performance.place}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </article>
+</FrontLayout>

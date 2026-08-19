@@ -1,0 +1,93 @@
+---
+import ProductionVisual from '../../../components/front/ProductionVisual.astro';
+import { releasedEditions, type ReleasedEdition } from '../../../data/editions';
+import { performanceEntries, type Performance } from '../../../data/performances';
+import { productions } from '../../../data/productions';
+import { performancePath, productionPath, sitePath } from '../../../data/site-routes';
+import FrontLayout from '../../../layouts/FrontLayout.astro';
+
+export function getStaticPaths() {
+  return releasedEditions.flatMap((edition) =>
+    performanceEntries
+      .filter(([, performance]) => performance.world === 'front')
+      .map(([performanceId, performance]) => ({
+        params: { routePrefix: edition.routePrefix, performanceId },
+        props: { edition, performance },
+      })),
+  );
+}
+interface Props {
+  edition: ReleasedEdition;
+  performance: Performance;
+}
+const { edition, performance } = Astro.props;
+const leadProduction = productions[performance.productionIds[0]];
+const canonicalPath = performancePath(edition, 'front', performance.performanceId);
+---
+
+<FrontLayout
+  edition={edition}
+  pageType="performance-detail"
+  currentSection="detail"
+  title={`${leadProduction.title}场次｜猩红剧团`}
+  description={`${leadProduction.title}的场次时间、地点与剧目编排。`}
+  canonicalPath={canonicalPath}
+>
+  <article class="detail page-width">
+    <a class="back-link" href={sitePath(edition, 'front', 'performances')}>← 返回本季演出</a>
+    <header class="detail-header detail-header--visual">
+      <div>
+        <p class="eyebrow">PERFORMANCE {performance.index}</p><h1>{leadProduction.title}</h1><p>
+          {leadProduction.tagline}
+        </p>
+      </div>
+      <ProductionVisual
+        visual={leadProduction.visual}
+        title={leadProduction.title}
+        index={`PERFORMANCE / ${performance.index}`}
+      />
+    </header>
+    <dl class="fact-grid">
+      <div><dt>泰拉日期与时间</dt><dd>{performance.dateTime.display}</dd></div><div>
+        <dt>地点</dt><dd>{performance.place}</dd>
+      </div><div><dt>场次状态</dt><dd>计划演出</dd></div><div>
+        <dt>票务状态</dt><dd>
+          {performance.ticketAvailability.state === 'on-sale' ? '开放选择' : '暂未开票'}
+        </dd>
+      </div>
+    </dl>
+    <section class="detail-section prose" aria-labelledby="performance-introduction">
+      <p class="eyebrow">ABOUT THIS PERFORMANCE</p>
+      <h2 id="performance-introduction">本场演出</h2>
+      <p>{leadProduction.heading}</p>
+      <p>{leadProduction.guidance}</p>
+    </section>
+    <section class="detail-section" aria-labelledby="program-title">
+      <h2 id="program-title">剧目编排</h2><ol class="program-order">
+        {
+          performance.productionIds.map((productionId, index) => {
+            const production = productions[productionId];
+            return (
+              <li>
+                <>
+                  <span>{String(index + 1).padStart(2, '0')}</span>
+                  <a href={productionPath(edition, 'front', productionId)}>
+                    <>
+                      <strong>{production.title}</strong>
+                      <small>
+                        {production.kind} · {production.duration}
+                      </small>
+                    </>
+                  </a>
+                </>
+              </li>
+            );
+          })
+        }
+      </ol>
+    </section>
+    <div class="actions">
+      <a class="button" href={sitePath(edition, 'front', 'tickets')}>选择场次与分区</a>
+    </div>
+  </article>
+</FrontLayout>

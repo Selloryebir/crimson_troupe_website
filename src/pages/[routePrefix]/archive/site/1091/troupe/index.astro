@@ -1,0 +1,52 @@
+---
+import { archiveContent } from '../../../../../../data/archive-content';
+import { releasedEditions, type ReleasedEdition } from '../../../../../../data/editions';
+import { sitePath } from '../../../../../../data/site-routes';
+import ArchiveLayout from '../../../../../../layouts/ArchiveLayout.astro';
+export function getStaticPaths() {
+  return releasedEditions.map((edition) => ({
+    params: { routePrefix: edition.routePrefix },
+    props: { edition },
+  }));
+}
+interface Props {
+  edition: ReleasedEdition;
+}
+const { edition } = Astro.props;
+const canonicalPath = sitePath(edition, 'archive', 'troupe');
+---
+
+<ArchiveLayout
+  edition={edition}
+  pageType="troupe"
+  currentSection="troupe"
+  title="剧团｜猩红剧团 1091 存档"
+  description="泰拉历 1091 年旧猩红剧团公开名册。"
+  canonicalPath={canonicalPath}
+>
+  <section class="page-intro page-width">
+    <p class="eyebrow">COMPANY REGISTER / 1091</p><h1>剧团</h1><p>{archiveContent.troupe.title}</p>
+  </section>
+  <section class="archive-company page-width">
+    <div>
+      <p class="archive-kicker">致诸位观众</p>
+      <h2>关于本团</h2>
+      <p>{archiveContent.troupe.introduction}</p>
+      <p>{archiveContent.troupe.invitation}</p>
+      <a class="button" href={sitePath(edition, 'archive', 'performances')}>查阅巡演名录</a>
+    </div>
+    <dl>
+      {
+        archiveContent.troupe.offices.map(([title, description], index) => (
+          <div>
+            <dt>
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              {title}
+            </dt>
+            <dd>{description}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+</ArchiveLayout>

@@ -1,15 +1,20 @@
 ---
-import ArchiveWorld from '../components/archive/ArchiveWorld.astro';
-import FrontWorld from '../components/front/FrontWorld.astro';
-import SiteDialogs from '../components/overlays/SiteDialogs.astro';
-import WorldTransition from '../components/shared/WorldTransition.astro';
-import BaseLayout from '../layouts/BaseLayout.astro';
+const destination = '/yan/';
 ---
 
-<BaseLayout>
-  <a class="skip-link" href="#main-content">跳至正文</a>
-  <WorldTransition />
-  <FrontWorld />
-  <ArchiveWorld />
-  <SiteDialogs />
-</BaseLayout>
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex,follow" />
+    <meta http-equiv="refresh" content={`0; url=${destination}`} />
+    <title>正在前往猩红剧团</title>
+    <script is:inline define:vars={{ destination }}>
+      window.location.replace(destination);
+    </script>
+  </head>
+  <body>
+    <p>正在前往<a href={destination}>炎国版猩红剧团网站</a>。</p>
+  </body>
+</html>
