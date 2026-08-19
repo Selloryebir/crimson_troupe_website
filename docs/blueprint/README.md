@@ -6,9 +6,10 @@
 
 1. 阅读根目录 `AGENTS.md`；
 2. 阅读本文件；
-3. 对准备修改的功能源码运行 `npm run blueprint:where -- <路径...>`；
-4. 阅读命令返回的主要及相关蓝图，再检查源码调用关系；
-5. 实施满足需求的最小完整改动。
+3. 阅读 [`foundation/domain-language.md`](foundation/domain-language.md)，统一表站、里站、场次、剧目、票篮和泰拉时间的含义；
+4. 对准备修改的功能源码运行 `npm run blueprint:where -- <路径...>`；
+5. 阅读命令返回的主要及相关蓝图，再检查源码调用关系；
+6. 实施满足需求的最小完整改动。
 
 对尚未存在的新功能，先从下方目录找到最接近的基础契约。只有它确实拥有独立用户目标、状态或演进方向时，才从 `blueprint-template.md` 创建新蓝图。
 
@@ -19,7 +20,7 @@ docs/blueprint/
 ├── README.md                  # 使用入口与维护原则
 ├── blueprint-template.md     # 新蓝图的最小示例
 ├── traceability.json         # 蓝图、依赖与功能源码的唯一映射
-├── foundation/               # 平台、体验、叙事状态与扩展机制
+├── foundation/               # 平台、领域语言、体验、叙事状态与扩展机制
 ├── modules/                  # 可独立演进的用户能力
 ├── content/                  # 上线内容的数据与发布边界
 ├── i18n/                     # 本地化和术语契约

@@ -9,7 +9,7 @@
 | [`architecture/`](architecture/repository-structure.md) | 工程结构与依赖边界     | 目录规范、模块职责、数据流           |
 | [`blueprint/`](blueprint/README.md)                     | 正式构建蓝图与源码追踪 | 体验契约、模组边界、阶段标准         |
 | [`drafts/`](drafts/README.md)                           | 临时且非正式的工作区   | 蓝图、建议、创意草稿与一次性开发计划 |
-| [`guides/`](guides/development.md)                      | 可重复执行的操作说明   | 本地运行、扩展剧目、验证流程         |
+| [`guides/`](guides/development.md)                      | 可重复执行的操作说明   | 本地运行、Git 分支、开发与验证流程   |
 | [`references/`](references/README.md)                   | 外部参考及来源边界     | 设计参考、来源、许可与转译记录       |
 
 ## 归档原则
@@ -21,3 +21,5 @@
 - 影响运行方式、目录结构或 Agent 行为的变化，应同步更新根目录 `README.md`、本索引和 `AGENTS.md`。
 - 蓝图只保存稳定的构建约束；一次性开发计划、测试日志、审查记录和实际运行内容继续归入各自责任区域。
 - 草稿通过人工门禁单向迁入正式责任目录；迁移成功后删除草稿来源，具体生命周期以 `drafts/README.md` 为准。
+
+开发命令见 [`guides/development.md`](guides/development.md)，长期分支职责、允许的同步方向与人工门禁见 [`guides/git-branch-workflow.md`](guides/git-branch-workflow.md)。

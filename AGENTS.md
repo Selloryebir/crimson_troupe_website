@@ -107,7 +107,13 @@ Astro 只负责构建期组件化和静态生成；客户端默认使用原生 T
 
 ## 9. Git 与提交规范
 
-- 不修改现有分支跟踪关系，除非用户明确要求。当前存在 `main` 与 `dev` 时，也不得自行推定合并目标或发布流程。
+- 完整分支职责、同步方向与人工门禁以 `docs/guides/git-branch-workflow.md` 为准；执行任何 commit、push、创建合并请求或合并前必须先核对当前分支和该指南。
+- `main` 是人工控制的稳定主线，只接受 `dev -> main`；未获明确要求不得 checkout 后操作或执行任何写入。创建 `dev -> main` 合并请求不授权批准或合并，最终必须等待人工审核确认。
+- `dev` 只接收达到可部署、可浏览阶段里程碑的 `dev_code`，不承担日常功能开发；进入 `dev` 仍需人工明确授权。
+- `dev_blueprint` 主动产生蓝图、设计、规划和文档治理改动，不主动修改 `src/` 的功能、设计或格式；可以运行只读源码检查，也可以通过合并接收 `dev_code` 的实现结果。
+- `dev_code` 主动产生源码实现和非功能性源码修正；开发前同步已确认的 `dev_blueprint`，实现完成后按阶段同步回 `dev_blueprint`，形成候选里程碑前再吸收最新蓝图。
+- 长期分支间使用 fast-forward 或正常 merge commit 保持共同祖先；不得使用 squash、历史重写或反复 cherry-pick 进行 `dev_blueprint`、`dev_code`、`dev` 与 `main` 的同步。
+- 不修改现有分支跟踪关系，除非用户明确要求；不得仅凭当前分支名、无冲突或检查通过推定 push、合并或发布权限。
 - 获得提交授权后，提交前重新检查完整 diff、未跟踪文件和验证结果，只纳入与任务有关的内容。
 - 新提交使用 Conventional Commits 1.0.0：`<type>[optional scope][optional !]: <description>`。
 - 功能使用 `feat`，缺陷修复使用 `fix`，仅文档使用 `docs`，构建或工具配置使用 `chore`；破坏性变更使用 `!` 或 `BREAKING CHANGE:` footer。

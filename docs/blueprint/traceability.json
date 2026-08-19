@@ -9,18 +9,25 @@
       "dependsOn": []
     },
     {
+      "id": "BP-FND-DOMAIN",
+      "document": "docs/blueprint/foundation/domain-language.md",
+      "status": "active",
+      "stage": "planned",
+      "dependsOn": []
+    },
+    {
       "id": "BP-FND-EXPERIENCE",
       "document": "docs/blueprint/foundation/experience-system.md",
       "status": "active",
       "stage": "demo",
-      "dependsOn": ["BP-FND-CORE"]
+      "dependsOn": ["BP-FND-CORE", "BP-FND-DOMAIN"]
     },
     {
       "id": "BP-FND-NARRATIVE",
       "document": "docs/blueprint/foundation/narrative-state.md",
       "status": "active",
       "stage": "demo",
-      "dependsOn": ["BP-FND-CORE", "BP-FND-EXPERIENCE"]
+      "dependsOn": ["BP-FND-CORE", "BP-FND-DOMAIN", "BP-FND-EXPERIENCE"]
     },
     {
       "id": "BP-FND-EXTENSION",
@@ -36,6 +43,7 @@
       "stage": "demo",
       "dependsOn": [
         "BP-FND-CORE",
+        "BP-FND-DOMAIN",
         "BP-FND-EXPERIENCE",
         "BP-FND-NARRATIVE",
         "BP-CNT-CORE",
@@ -48,7 +56,13 @@
       "document": "docs/blueprint/modules/programs.md",
       "status": "active",
       "stage": "demo",
-      "dependsOn": ["BP-FND-CORE", "BP-FND-EXPERIENCE", "BP-CNT-CORE", "BP-I18N-CORE"]
+      "dependsOn": [
+        "BP-FND-CORE",
+        "BP-FND-DOMAIN",
+        "BP-FND-EXPERIENCE",
+        "BP-CNT-CORE",
+        "BP-I18N-CORE"
+      ]
     },
     {
       "id": "BP-MOD-ARCHIVE",
@@ -57,6 +71,7 @@
       "stage": "demo",
       "dependsOn": [
         "BP-FND-CORE",
+        "BP-FND-DOMAIN",
         "BP-FND-EXPERIENCE",
         "BP-FND-NARRATIVE",
         "BP-CNT-CORE",
@@ -64,11 +79,27 @@
       ]
     },
     {
+      "id": "BP-MOD-TICKETING",
+      "document": "docs/blueprint/modules/ticketing.md",
+      "status": "active",
+      "stage": "planned",
+      "dependsOn": [
+        "BP-FND-CORE",
+        "BP-FND-EXPERIENCE",
+        "BP-FND-EXTENSION",
+        "BP-FND-DOMAIN",
+        "BP-MOD-PROGRAMS",
+        "BP-CNT-CORE",
+        "BP-I18N-CORE",
+        "BP-I18N-TERMS"
+      ]
+    },
+    {
       "id": "BP-CNT-CORE",
       "document": "docs/blueprint/content/content-contract.md",
       "status": "active",
       "stage": "demo",
-      "dependsOn": ["BP-FND-CORE"]
+      "dependsOn": ["BP-FND-CORE", "BP-FND-DOMAIN"]
     },
     {
       "id": "BP-I18N-CORE",
@@ -82,14 +113,21 @@
       "document": "docs/blueprint/i18n/terminology-contract.md",
       "status": "active",
       "stage": "planned",
-      "dependsOn": ["BP-I18N-CORE", "BP-CNT-CORE"]
+      "dependsOn": ["BP-FND-DOMAIN", "BP-I18N-CORE", "BP-CNT-CORE"]
     },
     {
       "id": "BP-QLT-STAGES",
       "document": "docs/blueprint/quality/stage-gates.md",
       "status": "active",
       "stage": "demo",
-      "dependsOn": []
+      "dependsOn": [
+        "BP-FND-CORE",
+        "BP-FND-EXPERIENCE",
+        "BP-FND-NARRATIVE",
+        "BP-MOD-ARCHIVE",
+        "BP-MOD-TICKETING",
+        "BP-I18N-CORE"
+      ]
     }
   ],
   "mappings": [

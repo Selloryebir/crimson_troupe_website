@@ -1,5 +1,7 @@
 # 开发指南
 
+执行 Git 写操作或开始新的蓝图、源码阶段前，先阅读 [`git-branch-workflow.md`](git-branch-workflow.md)，确认当前分支职责和允许的同步方向。
+
 ## 本地运行
 
 项目要求 Node.js 24 LTS 和 npm。在仓库根目录首次执行：
@@ -18,14 +20,14 @@ npm run dev
 日常开发只检查本次实际修改的路径：
 
 ```bash
-npm run quality -- docs/drafts/blueprint/scope-alignment.md
+npm run quality -- docs/blueprint/modules/search.md
 npm run quality -- src/scripts/search.ts src/data/search-index.ts
 ```
 
 不提供路径时，`quality` 自动读取当前工作区相对 `HEAD` 的已暂存、未暂存和未跟踪文件。它先输出文件数量、检查原因和具体命令，再执行最小相关检查。只需确认调度结果时使用：
 
 ```bash
-npm run quality -- --plan docs/drafts/blueprint/scope-alignment.md
+npm run quality -- --plan docs/blueprint/modules/search.md
 ```
 
 各命令的职责如下：
@@ -85,17 +87,20 @@ npm run blueprint:impact -- BP-MOD-SEARCH
 
 候选范围只表示“需要判断”，不表示每个文件都必须修改。新增、删除或重命名功能源码时更新 `docs/blueprint/traceability.json`；蓝图内容和字段说明见 `docs/blueprint/README.md`。
 
-## 新增剧目
+## 扩展演出内容
 
-1. 在 `src/data/shows.ts` 添加完整剧目数据；TypeScript 会约束月份、城市、视觉类型和必填内容；
-2. 节目卡、详情初始内容、搜索结果和预约选项由同一数据源生成，不在组件中复制剧目正文；
-3. 如需新的主视觉类型，扩展 `ShowVisual`，并在 `ProgramCard.astro`、`front.css` 与 `overlays.css` 中补充表现；
-4. 执行类型检查，并验证筛选数量、搜索结果、详情内容及预约衔接。
+当前 `src/data/shows.ts` 的 `Show` 是单页 Demo 的混合模型，不再作为新增正式内容的目标结构。正式开发先按 `BP-FND-DOMAIN` 与 `BP-MOD-PROGRAMS` 建立 `Production`、`Performance` 及其有序关联，再扩展内容：
+
+1. 为剧目和场次分别使用稳定 ID，把日期、地点、场次状态、票务可用性、分区与基础价格保留在 `Performance`；
+2. 让列表、详情、搜索和票务输入从同一类型化来源派生，不在页面或模组中复制正文；
+3. 本季与历史归属使用明确世界视角和内容状态，不读取浏览器现实时间；
+4. 新视觉同时核对相关列表、详情、表站或里站样式和窄屏表现；
+5. 在领域迁移完成前，只对旧 `Show` 做维持当前 Demo 所必需的修复，不并行建立第二套内容源。
 
 ## 新增交互
 
 - 将稳定内容放入 `data/`，构建期结构放入 `components/`，DOM 行为放入最接近用户能力的 `scripts/` 模块；
-- 新模块只导出其他模块真正需要的接口，并由 `main.ts` 初始化；
+- 新模块只导出其他模块真正需要的接口，并由当前页面的明确客户端入口初始化；页面没有该能力的根节点时安全跳过；
 - 不使用未声明的全局变量，不从一个功能模块直接修改另一个模块的私有状态；
 - 新增浮层样式放入 `overlays.css`，页面业务样式按时间层归属；
 - 同时处理键盘操作、焦点、减少动态效果和 JavaScript 失败路径。
