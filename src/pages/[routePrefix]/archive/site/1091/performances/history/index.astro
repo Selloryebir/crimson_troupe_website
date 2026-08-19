@@ -1,19 +1,24 @@
 ---
 import ArchivePerformanceList from '../../../../../../../components/archive/ArchivePerformanceList.astro';
-import { releasedEditions, type ReleasedEdition } from '../../../../../../../data/editions';
-import { getPerformances } from '../../../../../../../data/performances';
+import { builtEditions, type BuiltEdition } from '../../../../../../../data/editions';
+import {
+  getLocalization,
+  getLocalizedPerformances,
+} from '../../../../../../../data/localized/resolve';
 import { sitePath } from '../../../../../../../data/site-routes';
 import ArchiveLayout from '../../../../../../../layouts/ArchiveLayout.astro';
 export function getStaticPaths() {
-  return releasedEditions.map((edition) => ({
+  return builtEditions.map((edition) => ({
     params: { routePrefix: edition.routePrefix },
     props: { edition },
   }));
 }
 interface Props {
-  edition: ReleasedEdition;
+  edition: BuiltEdition;
 }
 const { edition } = Astro.props;
+const localization = getLocalization(edition);
+const copy = localization.site.archive.historyPerformances;
 const canonicalPath = sitePath(edition, 'archive', 'performances/history');
 ---
 
@@ -21,20 +26,18 @@ const canonicalPath = sitePath(edition, 'archive', 'performances/history');
   edition={edition}
   pageType="performance-history"
   currentSection="history"
-  title="历史演出｜猩红剧团 1091 存档"
-  description="泰拉历 1091 年旧猩红剧团历史演出名录。"
+  title={copy.metaTitle}
+  description={copy.metaDescription}
   canonicalPath={canonicalPath}
 >
   <section class="page-intro page-width">
-    <p class="eyebrow">PAST REGISTER / 1091</p><h1>历史演出</h1><p>
-      已经闭幕的场次依照巡演簿号收录于此，供贵客查阅节目与到访城市。
-    </p>
+    <p class="eyebrow">{copy.eyebrow}</p><h1>{copy.title}</h1><p>{copy.introduction}</p>
   </section>
-  <section class="content-section page-width" aria-label="1091 年历史演出">
+  <section class="content-section page-width" aria-label={copy.ariaLabel}>
     <ArchivePerformanceList
-      edition={edition}
-      performances={getPerformances('archive', 'history')}
-      emptyMessage="当前没有已收入巡演簿的历史场次。"
+      localization={localization}
+      performances={getLocalizedPerformances(localization, 'archive', 'history')}
+      emptyMessage={copy.empty}
     />
   </section>
 </ArchiveLayout>

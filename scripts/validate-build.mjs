@@ -5,23 +5,58 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { buildProfile, builtEditions } from '../src/data/editions.ts';
+import { getLocalization } from '../src/data/localized/resolve.ts';
+import { performanceEntries } from '../src/data/performances.ts';
+import { productionEntries } from '../src/data/productions.ts';
+import { performancePath, productionPath, sitePath, siteRoot } from '../src/data/site-routes.ts';
+
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outputRoot = path.join(repositoryRoot, 'dist');
-const requiredRoutes = new Set([
-  '/',
-  '/yan/',
-  '/yan/performances/',
-  '/yan/performances/history/',
-  '/yan/troupe/',
-  '/yan/search/',
-  '/yan/tickets/',
-  '/yan/archive/site/1091/',
-  '/yan/archive/site/1091/performances/',
-  '/yan/archive/site/1091/performances/history/',
-  '/yan/archive/site/1091/troupe/',
-  '/yan/archive/site/1091/search/',
-  '/yan/archive/site/1091/tickets/',
-]);
+
+function requiredRoutesForEdition(edition) {
+  const routes = new Set([
+    siteRoot(edition, 'front'),
+    sitePath(edition, 'front', 'performances'),
+    sitePath(edition, 'front', 'performances/history'),
+    sitePath(edition, 'front', 'troupe'),
+    sitePath(edition, 'front', 'search'),
+    sitePath(edition, 'front', 'tickets'),
+    siteRoot(edition, 'archive'),
+    sitePath(edition, 'archive', 'performances'),
+    sitePath(edition, 'archive', 'performances/history'),
+    sitePath(edition, 'archive', 'troupe'),
+    sitePath(edition, 'archive', 'search'),
+    sitePath(edition, 'archive', 'tickets'),
+  ]);
+  for (const [performanceId, performance] of performanceEntries) {
+    routes.add(performancePath(edition, performance.world, performanceId));
+  }
+  for (const [productionId] of productionEntries) {
+    const frontUsesProduction = performanceEntries.some(
+      ([, performance]) =>
+        performance.world === 'front' && performance.productionIds.includes(productionId),
+    );
+    const archiveUsesProduction = performanceEntries.some(
+      ([, performance]) =>
+        performance.world === 'archive' && performance.productionIds.includes(productionId),
+    );
+    if (frontUsesProduction) {
+      routes.add(productionPath(edition, 'front', productionId));
+    }
+    if (archiveUsesProduction) {
+      routes.add(productionPath(edition, 'archive', productionId));
+    }
+  }
+  return routes;
+}
+
+const requiredRoutes = new Set(['/']);
+for (const edition of builtEditions) {
+  for (const route of requiredRoutesForEdition(edition)) {
+    requiredRoutes.add(route);
+  }
+}
 
 function walk(directory) {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
@@ -59,19 +94,29 @@ function decodeHtmlAttribute(value) {
     .replaceAll('&amp;', '&');
 }
 
-assert.ok(existsSync(outputRoot), 'dist/ 不存在；请先运行构建');
+function editionForRoute(route) {
+  return builtEditions.find((edition) => route.startsWith(`/${edition.routePrefix}/`));
+}
+
+assert.ok(existsSync(outputRoot), 'dist/ 不存在；请先运行同模式构建');
 const outputFiles = walk(outputRoot);
 const htmlFiles = outputFiles.filter((filePath) => filePath.endsWith('.html'));
 const routes = new Map(htmlFiles.map((filePath) => [routeForHtml(filePath), filePath]));
+assert.equal(routes.size, requiredRoutes.size, 'HTML 页面数量与当前构建集合不一致');
 for (const route of requiredRoutes) {
   assert.ok(routes.has(route), `缺少必需路由：${route}`);
 }
-assert.ok([...routes].every(([route]) => route === '/' || route.startsWith('/yan/')));
 
 let linkCount = 0;
 for (const [route, filePath] of routes) {
   const html = readFileSync(filePath, 'utf8');
-  assert.match(html, /<html\s[^>]*lang="zh-CN"/u, `${route} 的 lang 不正确`);
+  const edition = editionForRoute(route);
+  const expectedLocale = edition?.locale ?? 'zh-CN';
+  assert.match(
+    html,
+    new RegExp(`<html\\s[^>]*lang="${expectedLocale}"`, 'u'),
+    `${route} 的 lang 不正确`,
+  );
 
   const robots = html.match(/<meta\s+name="robots"\s+content="([^"]+)"/u)?.[1];
   const expectedRobots = route === '/yan/' ? 'index,follow' : 'noindex,follow';
@@ -87,8 +132,18 @@ for (const [route, filePath] of routes) {
     const canonical = html.match(/<link\s+rel="canonical"\s+href="([^"]+)"/u)?.[1];
     assert.equal(canonical, route, `${route} 的 canonical 不正确`);
     assert.ok(html.includes('id="main-content"'), `${route} 缺少正文入口`);
-    assert.ok(html.includes('aria-label="主导航"'), `${route} 缺少主导航`);
-    assert.ok(html.includes('非官方同人概念站'), `${route} 缺少统一页脚声明`);
+    assert.match(html, /<nav\s+class="main-nav"/u, `${route} 缺少主导航`);
+    const localization = getLocalization(edition);
+    assert.ok(html.includes(localization.site.shared.fanNotice), `${route} 缺少统一页脚声明`);
+    if (builtEditions.length > 1) {
+      assert.match(html, /<details[^>]*data-edition-selector/u, `${route} 缺少国家版本选择器`);
+      for (const targetEdition of builtEditions) {
+        const equivalent = `/${targetEdition.routePrefix}/${route.split('/').slice(2).join('/')}`;
+        assert.ok(html.includes(`href="${equivalent}"`), `${route} 缺少等价版本链接 ${equivalent}`);
+      }
+    } else {
+      assert.doesNotMatch(html, /<details[^>]*data-edition-selector/u, `${route} 不应显示空选择器`);
+    }
   }
 
   for (const match of html.matchAll(/\shref="([^"]+)"/gu)) {
@@ -133,27 +188,37 @@ function readSearchIndex(route) {
   return JSON.parse(decodeHtmlAttribute(encoded));
 }
 
-const frontSearch = readSearchIndex('/yan/search/');
-const archiveSearch = readSearchIndex('/yan/archive/site/1091/search/');
-assert.ok(frontSearch.length > 0 && archiveSearch.length > 0);
-assert.ok(
-  frontSearch.every(
-    (entry) => entry.href.startsWith('/yan/') && !entry.href.includes('/archive/site/1091/'),
-  ),
-  '表站搜索索引发生跨世界泄漏',
-);
-assert.ok(
-  archiveSearch.every((entry) => entry.href.startsWith('/yan/archive/site/1091/')),
-  '里站搜索索引发生跨世界泄漏',
-);
+for (const edition of builtEditions) {
+  const frontRoute = sitePath(edition, 'front', 'search');
+  const archiveRoute = sitePath(edition, 'archive', 'search');
+  const frontSearch = readSearchIndex(frontRoute);
+  const archiveSearch = readSearchIndex(archiveRoute);
+  assert.ok(frontSearch.length > 0 && archiveSearch.length > 0);
+  assert.ok(
+    frontSearch.every(
+      (entry) =>
+        entry.href.startsWith(`/${edition.routePrefix}/`) &&
+        !entry.href.includes('/archive/site/1091/'),
+    ),
+    `${edition.editionId} 表站搜索索引发生跨范围泄漏`,
+  );
+  assert.ok(
+    archiveSearch.every((entry) =>
+      entry.href.startsWith(`/${edition.routePrefix}/archive/site/1091/`),
+    ),
+    `${edition.editionId} 里站搜索索引发生跨范围泄漏`,
+  );
 
-const ticketPage = readFileSync(routes.get('/yan/tickets/'), 'utf8');
-assert.match(ticketPage, /data-ticket-fallback/u);
-assert.match(ticketPage, /data-ticketing-app[^>]*hidden/u);
-const archiveTicketPage = readFileSync(routes.get('/yan/archive/site/1091/tickets/'), 'utf8');
-assert.ok(archiveTicketPage.includes('原席位登记已经终止'));
-assert.ok(archiveTicketPage.includes('不会建立票篮'));
-assert.doesNotMatch(archiveTicketPage, /data-ticketing-app/u);
+  const ticketPage = readFileSync(routes.get(sitePath(edition, 'front', 'tickets')), 'utf8');
+  assert.match(ticketPage, /data-ticket-fallback/u);
+  assert.match(ticketPage, /data-ticketing-app[^>]*hidden/u);
+  assert.match(ticketPage, /data-ticketing-messages/u);
+  const archiveTicketPage = readFileSync(
+    routes.get(sitePath(edition, 'archive', 'tickets')),
+    'utf8',
+  );
+  assert.doesNotMatch(archiveTicketPage, /data-ticketing-app/u);
+}
 
 for (const filePath of outputFiles.filter((entry) => entry.endsWith('.js'))) {
   const source = readFileSync(filePath, 'utf8');
@@ -162,5 +227,5 @@ for (const filePath of outputFiles.filter((entry) => entry.endsWith('.js'))) {
 }
 
 console.log(
-  `build validation passed: html=${htmlFiles.length}, links=${linkCount}, frontSearch=${frontSearch.length}, archiveSearch=${archiveSearch.length}`,
+  `build validation passed: profile=${buildProfile}, html=${htmlFiles.length}, links=${linkCount}, editions=${builtEditions.length}`,
 );

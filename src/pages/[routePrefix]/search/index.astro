@@ -1,19 +1,22 @@
 ---
 import SiteSearch from '../../../components/shared/SiteSearch.astro';
-import { releasedEditions, type ReleasedEdition } from '../../../data/editions';
+import { builtEditions, type BuiltEdition } from '../../../data/editions';
+import { getLocalization } from '../../../data/localized/resolve';
 import { getFrontSearchIndex } from '../../../data/site-search-index';
 import { sitePath } from '../../../data/site-routes';
 import FrontLayout from '../../../layouts/FrontLayout.astro';
 export function getStaticPaths() {
-  return releasedEditions.map((edition) => ({
+  return builtEditions.map((edition) => ({
     params: { routePrefix: edition.routePrefix },
     props: { edition },
   }));
 }
 interface Props {
-  edition: ReleasedEdition;
+  edition: BuiltEdition;
 }
 const { edition } = Astro.props;
+const localization = getLocalization(edition);
+const copy = localization.site.front.search;
 const canonicalPath = sitePath(edition, 'front', 'search');
 ---
 
@@ -21,17 +24,19 @@ const canonicalPath = sitePath(edition, 'front', 'search');
   edition={edition}
   pageType="search"
   currentSection="search"
-  title="搜索｜猩红剧团"
-  description="搜索当前炎国版剧团网站。"
+  title={copy.metaTitle}
+  description={copy.metaDescription}
   canonicalPath={canonicalPath}
 >
   <section class="page-intro page-width">
-    <p class="eyebrow">SITE SEARCH</p><h1>搜索</h1><p>搜索范围仅限当前炎国版表站。</p>
+    <p class="eyebrow">{copy.eyebrow}</p><h1>{copy.title}</h1><p>{copy.introduction}</p>
   </section>
   <SiteSearch
     entries={getFrontSearchIndex(edition)}
     world="front"
-    scopeLabel="炎国版表站 · 不包含 1091 历史快照"
-    placeholder="输入剧目、城市或页面名称"
+    scopeLabel={copy.scope}
+    placeholder={copy.placeholder}
+    locale={edition.locale}
+    messages={localization.messages.search}
   />
 </FrontLayout>

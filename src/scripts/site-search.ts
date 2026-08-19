@@ -1,6 +1,9 @@
 import type { SiteSearchEntry } from '../data/site-search-index';
+import { formatMessage } from '../data/localized/format';
+import type { SearchMessages } from '../data/localized/schema';
 
-const normalize = (value: string) => value.normalize('NFKC').trim().toLocaleLowerCase('zh-CN');
+const normalize = (value: string, locale: string) =>
+  value.normalize('NFKC').trim().toLocaleLowerCase(locale);
 
 function createResult(entry: SiteSearchEntry, canBePolluted: boolean): HTMLLIElement {
   const item = document.createElement('li');
@@ -32,28 +35,35 @@ export function initSiteSearch(): void {
     }
 
     let entries: SiteSearchEntry[];
+    let messages: SearchMessages;
     try {
       entries = JSON.parse(root.dataset.searchIndex ?? '[]') as SiteSearchEntry[];
+      messages = JSON.parse(root.dataset.searchMessages ?? '{}') as SearchMessages;
     } catch {
-      feedback.textContent = '搜索索引暂时不可用。请使用主导航继续浏览。';
       return;
     }
+    if (typeof messages.unavailable !== 'string' || typeof messages.prompt !== 'string') {
+      return;
+    }
+    const locale = root.dataset.searchLocale ?? document.documentElement.lang;
 
     const search = (rawQuery: string) => {
-      const query = normalize(rawQuery);
+      const query = normalize(rawQuery, locale);
       results.replaceChildren();
 
       if (!query) {
-        feedback.textContent = '输入关键词以查找场次、剧目与网站栏目。';
+        feedback.textContent = messages.prompt;
         return;
       }
 
       const matches = entries.filter((entry) =>
-        normalize(`${entry.title} ${entry.summary} ${entry.keywords}`).includes(query),
+        normalize(`${entry.title} ${entry.summary} ${entry.keywords}`, locale).includes(query),
       );
 
       feedback.textContent =
-        matches.length > 0 ? `找到 ${matches.length} 条结果。` : '没有找到匹配内容。';
+        matches.length > 0
+          ? formatMessage(messages.resultCount, { count: matches.length })
+          : messages.noResults;
       const canBePolluted = root.classList.contains('search-workspace--archive');
       results.append(...matches.map((entry) => createResult(entry, canBePolluted)));
     };

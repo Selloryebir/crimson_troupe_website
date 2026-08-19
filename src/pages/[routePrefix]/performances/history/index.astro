@@ -1,20 +1,22 @@
 ---
 import FrontPerformanceList from '../../../../components/front/FrontPerformanceList.astro';
-import { releasedEditions, type ReleasedEdition } from '../../../../data/editions';
-import { getPerformances } from '../../../../data/performances';
+import { builtEditions, type BuiltEdition } from '../../../../data/editions';
+import { getLocalization, getLocalizedPerformances } from '../../../../data/localized/resolve';
 import { sitePath } from '../../../../data/site-routes';
 import FrontLayout from '../../../../layouts/FrontLayout.astro';
 
 export function getStaticPaths() {
-  return releasedEditions.map((edition) => ({
+  return builtEditions.map((edition) => ({
     params: { routePrefix: edition.routePrefix },
     props: { edition },
   }));
 }
 interface Props {
-  edition: ReleasedEdition;
+  edition: BuiltEdition;
 }
 const { edition } = Astro.props;
+const localization = getLocalization(edition);
+const copy = localization.site.front.historyPerformances;
 const canonicalPath = sitePath(edition, 'front', 'performances/history');
 ---
 
@@ -22,20 +24,18 @@ const canonicalPath = sitePath(edition, 'front', 'performances/history');
   edition={edition}
   pageType="performance-history"
   currentSection="history"
-  title="历史演出｜猩红剧团"
-  description="猩红剧团已经完成的演出场次。"
+  title={copy.metaTitle}
+  description={copy.metaDescription}
   canonicalPath={canonicalPath}
 >
   <section class="page-intro page-width">
-    <p class="eyebrow">PAST PERFORMANCES</p><h1>历史演出</h1><p>
-      已经完成的巡演场次将在校录后收入本页。
-    </p>
+    <p class="eyebrow">{copy.eyebrow}</p><h1>{copy.title}</h1><p>{copy.introduction}</p>
   </section>
-  <section class="content-section page-width" aria-label="历史演出场次">
+  <section class="content-section page-width" aria-label={copy.ariaLabel}>
     <FrontPerformanceList
-      edition={edition}
-      performances={getPerformances('front', 'history')}
-      emptyMessage="当前没有已发布的历史场次记录。"
+      localization={localization}
+      performances={getLocalizedPerformances(localization, 'front', 'history')}
+      emptyMessage={copy.empty}
     />
   </section>
 </FrontLayout>

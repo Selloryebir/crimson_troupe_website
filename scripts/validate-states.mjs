@@ -2,6 +2,9 @@
 
 import assert from 'node:assert/strict';
 
+import { editions } from '../src/data/editions.ts';
+import { getLocalization } from '../src/data/localized/resolve.ts';
+import { getTicketingOptions } from '../src/data/ticketing.ts';
 import {
   MAX_POLLUTION_LEVEL,
   POLLUTION_PROBABILITY,
@@ -71,17 +74,17 @@ const catalog = [
   {
     performanceId: 'performance-a',
     offers: [
-      { zone: 'C', label: 'C 区', basePrice: 180 },
-      { zone: 'A', label: 'A 区', basePrice: 420 },
+      { zone: 'C', basePrice: 180 },
+      { zone: 'A', basePrice: 420 },
     ],
   },
   {
     performanceId: 'performance-b',
-    offers: [{ zone: 'S', label: 'S 区', basePrice: 680 }],
+    offers: [{ zone: 'S', basePrice: 680 }],
   },
 ];
-const basketA = { performanceId: 'performance-a', zone: 'A', zoneLabel: 'A 区', basePrice: 420 };
-const basketB = { performanceId: 'performance-b', zone: 'S', zoneLabel: 'S 区', basePrice: 680 };
+const basketA = { performanceId: 'performance-a', zone: 'A', basePrice: 420 };
+const basketB = { performanceId: 'performance-b', zone: 'S', basePrice: 680 };
 
 let selection = createTicketingState();
 selection = updateBasket(selection, basketA, basketA.performanceId);
@@ -151,6 +154,27 @@ assert.equal(restored.phase, 'success');
 assert.deepEqual(restored.result?.tickets, premiumSuccess.result?.tickets);
 assert.deepEqual(restoreTicketingState('{"version":999}', catalog), createTicketingState());
 
+const yanLocalization = getLocalization(editions.yan);
+const columbiaLocalization = getLocalization(editions.columbia);
+const yanOptions = getTicketingOptions(yanLocalization);
+const columbiaOptions = getTicketingOptions(columbiaLocalization);
+const crossLocaleItem = {
+  performanceId: yanOptions[0].performanceId,
+  zone: yanOptions[0].offers[0].zone,
+  basePrice: yanOptions[0].offers[0].basePrice,
+};
+const crossLocaleState = updateBasket(
+  createTicketingState(),
+  crossLocaleItem,
+  crossLocaleItem.performanceId,
+);
+const crossLocaleRestored = restoreTicketingState(
+  JSON.stringify(crossLocaleState),
+  columbiaOptions.map((option) => ({ performanceId: option.performanceId, offers: option.offers })),
+);
+assert.deepEqual(crossLocaleRestored, crossLocaleState);
+assert.notEqual(yanOptions[0].offers[0].label, columbiaOptions[0].offers[0].label);
+
 const artifactPerformance = {
   performanceId: 'performance-a',
   title: '《候选验收》',
@@ -164,15 +188,18 @@ const matrix = createTicketMatrix('123456789012');
 const svg = createTicketSvg({
   performance: artifactPerformance,
   basketItem: basketA,
+  zoneLabel: 'A 区',
   number: '123456789012',
   stamps: ['确认入场', '优先线路'],
+  messages: yanLocalization.messages.ticketing.artifact,
+  locale: 'zh-CN',
 });
 assert.equal(matrix.length, 21 * 21);
 for (const requiredText of [
   artifactPerformance.title,
   artifactPerformance.dateTime,
   artifactPerformance.place,
-  basketA.zoneLabel,
+  'A 区',
   `${basketA.basePrice} LMD`,
   '123456789012',
   '确认入场',

@@ -1,19 +1,22 @@
 ---
 import SiteSearch from '../../../../../../components/shared/SiteSearch.astro';
-import { releasedEditions, type ReleasedEdition } from '../../../../../../data/editions';
+import { builtEditions, type BuiltEdition } from '../../../../../../data/editions';
+import { getLocalization } from '../../../../../../data/localized/resolve';
 import { getArchiveSearchIndex } from '../../../../../../data/site-search-index';
 import { sitePath } from '../../../../../../data/site-routes';
 import ArchiveLayout from '../../../../../../layouts/ArchiveLayout.astro';
 export function getStaticPaths() {
-  return releasedEditions.map((edition) => ({
+  return builtEditions.map((edition) => ({
     params: { routePrefix: edition.routePrefix },
     props: { edition },
   }));
 }
 interface Props {
-  edition: ReleasedEdition;
+  edition: BuiltEdition;
 }
 const { edition } = Astro.props;
+const localization = getLocalization(edition);
+const copy = localization.site.archive.search;
 const canonicalPath = sitePath(edition, 'archive', 'search');
 ---
 
@@ -21,19 +24,19 @@ const canonicalPath = sitePath(edition, 'archive', 'search');
   edition={edition}
   pageType="search"
   currentSection="search"
-  title="搜索｜猩红剧团 1091 存档"
-  description="搜索炎国版 1091 年旧剧团网站存档。"
+  title={copy.metaTitle}
+  description={copy.metaDescription}
   canonicalPath={canonicalPath}
 >
   <section class="page-intro page-width">
-    <p class="eyebrow">ARCHIVE SEARCH / 1091</p><h1>搜索</h1><p>
-      搜索范围仅限炎国版 1091 年存档，不会连接当前网站。
-    </p>
+    <p class="eyebrow">{copy.eyebrow}</p><h1>{copy.title}</h1><p>{copy.introduction}</p>
   </section>
   <SiteSearch
     entries={getArchiveSearchIndex(edition)}
     world="archive"
-    scopeLabel="炎国版 · 泰拉历 1091 年网站"
-    placeholder="查找剧目、场次、城市或栏目"
+    scopeLabel={copy.scope}
+    placeholder={copy.placeholder}
+    locale={edition.locale}
+    messages={localization.messages.search}
   />
 </ArchiveLayout>

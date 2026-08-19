@@ -1,30 +1,35 @@
 ---
 import FrontPerformanceList from '../../components/front/FrontPerformanceList.astro';
 import ProductionVisual from '../../components/front/ProductionVisual.astro';
-import { releasedEditions, type ReleasedEdition } from '../../data/editions';
-import { frontContent } from '../../data/front-content';
-import { getPerformances } from '../../data/performances';
-import { productions } from '../../data/productions';
+import { builtEditions, type BuiltEdition } from '../../data/editions';
+import { formatMessage } from '../../data/localized/format';
+import {
+  getLocalization,
+  getLocalizedPerformances,
+  getLocalizedProduction,
+} from '../../data/localized/resolve';
 import { sitePath, siteRoot } from '../../data/site-routes';
 import FrontLayout from '../../layouts/FrontLayout.astro';
 
 export function getStaticPaths() {
-  return releasedEditions.map((edition) => ({
+  return builtEditions.map((edition) => ({
     params: { routePrefix: edition.routePrefix },
     props: { edition },
   }));
 }
 
 interface Props {
-  edition: ReleasedEdition;
+  edition: BuiltEdition;
 }
 
 const { edition } = Astro.props;
+const localization = getLocalization(edition);
+const copy = localization.site.front.home;
 const canonicalPath = siteRoot(edition, 'front');
-const currentPerformances = getPerformances('front', 'current');
+const currentPerformances = getLocalizedPerformances(localization, 'front', 'current');
 const featuredPerformance = currentPerformances[0];
 const featuredProduction = featuredPerformance
-  ? productions[featuredPerformance.productionIds[0]]
+  ? getLocalizedProduction(localization, featuredPerformance.productionIds[0])
   : undefined;
 ---
 
@@ -32,19 +37,21 @@ const featuredProduction = featuredPerformance
   edition={edition}
   pageType="home"
   currentSection="home"
-  title="猩红剧团｜当前巡演季"
-  description="猩红剧团当前巡演季、剧目与观演信息。"
+  title={copy.metaTitle}
+  description={copy.metaDescription}
   canonicalPath={canonicalPath}
-  robots="index,follow"
+  robots={edition.editionId === 'yan' ? 'index,follow' : 'noindex,follow'}
 >
   <section class="front-hero page-width" aria-labelledby="home-title">
     <div class="hero-copy">
-      <p class="eyebrow">{frontContent.home.seasonLabel}</p>
-      <h1 id="home-title">当帷幕升起，<br /><em>世界屏住呼吸。</em></h1>
-      <p>{frontContent.home.introduction}</p>
+      <p class="eyebrow">{copy.seasonLabel}</p>
+      <h1 id="home-title">{copy.titleLead}<br /><em>{copy.titleEmphasis}</em></h1>
+      <p>{copy.introduction}</p>
       <div class="actions">
-        <a class="button" href={sitePath(edition, 'front', 'performances')}>浏览本季演出</a>
-        <a class="text-link" href={sitePath(edition, 'front', 'troupe')}>了解剧团</a>
+        <a class="button" href={sitePath(edition, 'front', 'performances')}
+          >{copy.browsePerformances}</a
+        >
+        <a class="text-link" href={sitePath(edition, 'front', 'troupe')}>{copy.learnAboutTroupe}</a>
       </div>
     </div>
     {
@@ -52,7 +59,10 @@ const featuredProduction = featuredPerformance
         <a
           class="hero-feature"
           href={sitePath(edition, 'front', `performances/${featuredPerformance.performanceId}`)}
-          aria-label={`重点场次：${featuredProduction.title}，${featuredPerformance.cityLabel}`}
+          aria-label={formatMessage(copy.featuredPerformance, {
+            title: featuredProduction.title,
+            city: featuredPerformance.cityLabel,
+          })}
         >
           <ProductionVisual
             visual={featuredProduction.visual}
@@ -62,37 +72,39 @@ const featuredProduction = featuredPerformance
           <span>
             <small>{featuredPerformance.dateTime.display}</small>
             <strong>{featuredPerformance.cityLabel}</strong>
-            <span>查看场次</span>
+            <span>{copy.viewPerformance}</span>
           </span>
         </a>
       )
     }
   </section>
-  <section class="season-statement" aria-label="本季说明">
+  <section class="season-statement" aria-label={copy.seasonStatementLabel}>
     <div class="page-width">
-      <p>1098 / AUTUMN TOUR</p>
-      <strong>{frontContent.home.seasonNote}</strong>
+      <p>{copy.seasonCode}</p>
+      <strong>{copy.seasonNote}</strong>
     </div>
   </section>
   <section class="content-section page-width" aria-labelledby="season-title">
     <div class="section-heading">
-      <div><p class="eyebrow">巡演日程</p><h2 id="season-title">本季演出</h2></div>
-      <a href={sitePath(edition, 'front', 'performances')}>查看全部</a>
+      <div>
+        <p class="eyebrow">{copy.scheduleEyebrow}</p><h2 id="season-title">{copy.seasonTitle}</h2>
+      </div>
+      <a href={sitePath(edition, 'front', 'performances')}>{copy.viewAll}</a>
     </div>
     <FrontPerformanceList
-      edition={edition}
+      localization={localization}
       performances={currentPerformances}
-      emptyMessage="本季暂无已公布场次。"
+      emptyMessage={copy.empty}
     />
   </section>
   <section class="service-grid page-width" aria-labelledby="services-title">
     <header>
-      <p class="eyebrow">VISIT & DISCOVER</p>
-      <h2 id="services-title">从这里开始</h2>
+      <p class="eyebrow">{copy.servicesEyebrow}</p>
+      <h2 id="services-title">{copy.servicesTitle}</h2>
     </header>
     <div>
       {
-        frontContent.services.map((service) => (
+        copy.services.map((service) => (
           <article>
             <small>{service.label}</small>
             <h3>{service.title}</h3>
@@ -103,9 +115,9 @@ const featuredProduction = featuredPerformance
     </div>
   </section>
   <section class="troupe-callout page-width" aria-labelledby="troupe-callout-title">
-    <p class="eyebrow">THE COMPANY</p>
-    <h2 id="troupe-callout-title">{frontContent.troupe.title}</h2>
-    <p>{frontContent.troupe.lead}</p>
-    <a class="text-link" href={sitePath(edition, 'front', 'troupe')}>阅读剧团介绍</a>
+    <p class="eyebrow">{copy.troupeEyebrow}</p>
+    <h2 id="troupe-callout-title">{copy.troupeTitle}</h2>
+    <p>{copy.troupeLead}</p>
+    <a class="text-link" href={sitePath(edition, 'front', 'troupe')}>{copy.readTroupe}</a>
   </section>
 </FrontLayout>

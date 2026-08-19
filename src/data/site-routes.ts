@@ -21,3 +21,15 @@ export function performancePath(edition: Edition, world: SiteWorld, performanceI
 export function productionPath(edition: Edition, world: SiteWorld, productionId: string): string {
   return sitePath(edition, world, `productions/${productionId}`);
 }
+
+export function equivalentEditionPath(
+  currentPath: string,
+  currentEdition: Edition,
+  targetEdition: Edition,
+): string {
+  const sourcePrefix = `/${currentEdition.routePrefix}/`;
+  if (!currentPath.startsWith(sourcePrefix)) {
+    return siteRoot(targetEdition, 'front');
+  }
+  return `/${targetEdition.routePrefix}/${currentPath.slice(sourcePrefix.length)}`;
+}

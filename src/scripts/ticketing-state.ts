@@ -1,4 +1,5 @@
-import type { TicketOffer, TicketZone } from '../data/performances';
+import type { TicketOffer, TicketZone } from '../data/performances.ts';
+import type { TicketAdjustmentId, TicketStampId } from '../data/localized/schema.ts';
 
 export const STANDARD_SUCCESS_THRESHOLD = 0.32;
 export const STANDARD_FAILURE_THRESHOLD = 0.68;
@@ -11,13 +12,11 @@ export type TicketingRoute = 'standard' | 'premium';
 export interface TicketBasketItem {
   performanceId: string;
   zone: TicketZone;
-  zoneLabel: string;
   basePrice: number;
 }
 
 export interface TicketAdjustment {
-  id: 'premium-service';
-  label: string;
+  id: TicketAdjustmentId;
   amount: number;
 }
 
@@ -32,12 +31,12 @@ export interface TicketingResult {
   baseTotal: number;
   adjustments: readonly TicketAdjustment[];
   settledTotal: number;
-  stamps: readonly string[];
+  stampIds: readonly TicketStampId[];
   tickets: readonly IssuedTicket[];
 }
 
 export interface TicketingState {
-  version: 1;
+  version: 2;
   phase: TicketingPhase;
   route: TicketingRoute;
   basket: readonly TicketBasketItem[];
@@ -50,7 +49,7 @@ export interface TicketCatalogEntry {
 }
 
 export function createTicketingState(): TicketingState {
-  return { version: 1, phase: 'selection', route: 'standard', basket: [], result: null };
+  return { version: 2, phase: 'selection', route: 'standard', basket: [], result: null };
 }
 
 export function calculateBaseTotal(basket: readonly TicketBasketItem[]): number {
@@ -85,18 +84,20 @@ function createResult(state: TicketingState, ticketNumberFactory: () => string):
       ? [
           {
             id: 'premium-service',
-            label: '优先线路服务差额',
             amount: Math.ceil(baseTotal * PREMIUM_RATE),
           },
         ]
       : [];
   const settledTotal = baseTotal + adjustments.reduce((total, item) => total + item.amount, 0);
-  const stamps = state.route === 'premium' ? ['确认入场', '优先线路'] : ['确认入场', '常规线路'];
+  const stampIds: readonly TicketStampId[] =
+    state.route === 'premium'
+      ? ['admission-confirmed', 'priority-route']
+      : ['admission-confirmed', 'standard-route'];
   const tickets = basket.map((item) => ({
     performanceId: item.performanceId,
     number: ticketNumberFactory(),
   }));
-  return { route: state.route, basket, baseTotal, adjustments, settledTotal, stamps, tickets };
+  return { route: state.route, basket, baseTotal, adjustments, settledTotal, stampIds, tickets };
 }
 
 export function resolveTicketingAttempt(
@@ -178,7 +179,6 @@ function restoreBasket(
     basket.push({
       performanceId: catalogEntry.performanceId,
       zone: offer.zone,
-      zoneLabel: offer.label,
       basePrice: offer.basePrice,
     });
   }
@@ -202,7 +202,7 @@ export function restoreTicketingState(
       'success',
     ];
     if (
-      value.version !== 1 ||
+      value.version !== 2 ||
       !phases.includes(value.phase as TicketingPhase) ||
       (value.route !== 'standard' && value.route !== 'premium')
     ) {
@@ -217,7 +217,7 @@ export function restoreTicketingState(
       return createTicketingState();
     }
     if (phase !== 'success') {
-      return { version: 1, phase, route: value.route, basket, result: null };
+      return { version: 2, phase, route: value.route, basket, result: null };
     }
 
     const rawResult = value.result as Partial<TicketingResult> | null;
@@ -249,10 +249,10 @@ export function restoreTicketingState(
     }
     const orderedNumbers = basket.map((item) => numbers.get(item.performanceId) ?? '000000000000');
     const result = createResult(
-      { version: 1, phase: 'attempt', route: value.route, basket, result: null },
+      { version: 2, phase: 'attempt', route: value.route, basket, result: null },
       () => orderedNumbers.shift() ?? '000000000000',
     );
-    return { version: 1, phase: 'success', route: value.route, basket, result };
+    return { version: 2, phase: 'success', route: value.route, basket, result };
   } catch {
     return createTicketingState();
   }

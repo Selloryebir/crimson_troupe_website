@@ -1,19 +1,24 @@
 ---
 import ArchivePerformanceList from '../../../../../../components/archive/ArchivePerformanceList.astro';
-import { releasedEditions, type ReleasedEdition } from '../../../../../../data/editions';
-import { getPerformances } from '../../../../../../data/performances';
+import { builtEditions, type BuiltEdition } from '../../../../../../data/editions';
+import {
+  getLocalization,
+  getLocalizedPerformances,
+} from '../../../../../../data/localized/resolve';
 import { sitePath } from '../../../../../../data/site-routes';
 import ArchiveLayout from '../../../../../../layouts/ArchiveLayout.astro';
 export function getStaticPaths() {
-  return releasedEditions.map((edition) => ({
+  return builtEditions.map((edition) => ({
     params: { routePrefix: edition.routePrefix },
     props: { edition },
   }));
 }
 interface Props {
-  edition: ReleasedEdition;
+  edition: BuiltEdition;
 }
 const { edition } = Astro.props;
+const localization = getLocalization(edition);
+const copy = localization.site.archive.currentPerformances;
 const canonicalPath = sitePath(edition, 'archive', 'performances');
 ---
 
@@ -21,20 +26,18 @@ const canonicalPath = sitePath(edition, 'archive', 'performances');
   edition={edition}
   pageType="performance-list"
   currentSection="current"
-  title="本季演出｜猩红剧团 1091 存档"
-  description="泰拉历 1091 年旧猩红剧团本季演出名录。"
+  title={copy.metaTitle}
+  description={copy.metaDescription}
   canonicalPath={canonicalPath}
 >
   <section class="page-intro page-width">
-    <p class="eyebrow">SEASON REGISTER / 1091</p><h1>本季演出</h1><p>
-      以下场次依照本团泰拉历 1091 年秋季巡演簿誊录，入场时刻以各场告示为准。
-    </p>
+    <p class="eyebrow">{copy.eyebrow}</p><h1>{copy.title}</h1><p>{copy.introduction}</p>
   </section>
-  <section class="content-section page-width" aria-label="1091 年本季演出">
+  <section class="content-section page-width" aria-label={copy.ariaLabel}>
     <ArchivePerformanceList
-      edition={edition}
-      performances={getPerformances('archive', 'current')}
-      emptyMessage="本季暂无已列入巡演簿的场次。"
+      localization={localization}
+      performances={getLocalizedPerformances(localization, 'archive', 'current')}
+      emptyMessage={copy.empty}
     />
   </section>
 </ArchiveLayout>
