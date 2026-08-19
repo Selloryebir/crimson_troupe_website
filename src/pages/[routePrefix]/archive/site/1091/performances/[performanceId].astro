@@ -1,4 +1,5 @@
 ---
+import ArchivePoster from '../../../../../../components/archive/ArchivePoster.astro';
 import { releasedEditions, type ReleasedEdition } from '../../../../../../data/editions';
 import { performanceEntries, type Performance } from '../../../../../../data/performances';
 import { productions } from '../../../../../../data/productions';
@@ -21,6 +22,9 @@ interface Props {
 const { edition, performance } = Astro.props;
 const leadProduction = productions[performance.productionIds[0]];
 const canonicalPath = performancePath(edition, 'archive', performance.performanceId);
+const collectionPath =
+  performance.collection === 'history' ? 'performances/history' : 'performances';
+const collectionLabel = performance.collection === 'history' ? '历史演出' : '本季演出';
 ---
 
 <ArchiveLayout
@@ -32,15 +36,26 @@ const canonicalPath = performancePath(edition, 'archive', performance.performanc
   canonicalPath={canonicalPath}
 >
   <article class="detail page-width">
-    <a class="back-link" href={sitePath(edition, 'archive', 'performances')}>← 返回本季演出</a
-    ><header class="detail-header">
-      <p class="eyebrow">PERFORMANCE REGISTER</p><h1>{leadProduction.title}</h1><p>
-        {leadProduction.tagline}
-      </p>
+    <a class="back-link" href={sitePath(edition, 'archive', collectionPath)}
+      >← 返回{collectionLabel}</a
+    ><header class="detail-header archive-detail-header">
+      <div>
+        <p class="eyebrow">巡演簿号 {performance.index}</p><h1>{leadProduction.title}</h1><p>
+          {leadProduction.tagline}
+        </p>
+      </div>
+      <ArchivePoster
+        visual={leadProduction.visual}
+        title={leadProduction.title}
+        subtitle={leadProduction.kind}
+        number={`REGISTER / ${performance.index}`}
+      />
     </header><dl class="fact-grid">
       <div><dt>泰拉日期与时间</dt><dd>{performance.dateTime.display}</dd></div><div>
         <dt>地点</dt><dd>{performance.place}</dd>
-      </div><div><dt>票务状态</dt><dd>存档场次不可购买</dd></div>
+      </div><div>
+        <dt>场次状态</dt><dd>{performance.status === 'scheduled' ? '列入本季' : '已经闭幕'}</dd>
+      </div><div><dt>席位状态</dt><dd>历史快照 · 不可登记</dd></div>
     </dl><section class="detail-section">
       <h2>剧目编排</h2><ol class="program-order">
         {
@@ -63,5 +78,8 @@ const canonicalPath = performancePath(edition, 'archive', performance.performanc
         }
       </ol>
     </section>
+    <div class="actions">
+      <a class="button" href={sitePath(edition, 'archive', 'tickets')}>查阅席位告示</a>
+    </div>
   </article>
 </ArchiveLayout>

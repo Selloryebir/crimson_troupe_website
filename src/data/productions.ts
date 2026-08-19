@@ -1,4 +1,4 @@
-export type ProductionVisual = 'moon' | 'flame' | 'snow';
+export type ProductionVisual = 'moon' | 'flame' | 'snow' | 'banquet' | 'lantern' | 'masks';
 export type CreativeCredit = readonly [role: string, name: string];
 
 export interface Production {
@@ -76,6 +76,66 @@ export const productions = {
       ['音乐', '白原三重奏'],
       ['灯光设计', '露西·巴赫'],
       ['装置', '诺伯特工坊'],
+    ],
+  },
+  'red-banquet': {
+    productionId: 'red-banquet',
+    title: '《猩红宴》',
+    kind: '典礼剧 · 四折',
+    tagline: '请将姓名留在门外，宴席只认得赴约的人。',
+    duration: '约 140 分钟，设两次休止',
+    durationShort: '约140分钟',
+    language: '炎语演出 · 备有手抄节目册',
+    heading: '为长夜、空席与一位迟到主宾举行的典礼剧。',
+    synopsis:
+      '十二位侍宴人依照一份没有落款的席次簿准备盛宴。每当钟声响起，桌边便会多出一副餐具；他们必须在最后一盏灯熄灭以前，决定谁有资格坐上主位。',
+    guidance: '演出包含焚香、低照度场景与近距离巡行。迟到观众须待第二折结束后入场。',
+    visual: 'banquet',
+    creatives: [
+      ['总执事', '洛弥欧'],
+      ['仪典编排', '白榆夫人'],
+      ['乐章', '无弦室内乐社'],
+      ['服装与面具', '绛纱作坊'],
+    ],
+  },
+  'seventh-lantern': {
+    productionId: 'seventh-lantern',
+    title: '《第七盏灯》',
+    kind: '灯影剧 · 七景',
+    tagline: '六盏照见归路，第七盏只照见你。',
+    duration: '约 75 分钟，无休止',
+    durationShort: '约75分钟',
+    language: '炎语演出 · 无字幕',
+    heading: '一出只在日落以后开演的灯影剧。',
+    synopsis:
+      '送灯人沿旧道寻回六位迷途旅客，却发现队伍末尾始终跟着第七道影子。为在天亮前关上城门，他必须请观众辨认谁从未真正踏上归途。',
+    guidance: '全场低照度，包含移动灯火与短暂静默。建议八岁以上观众观看。',
+    visual: 'lantern',
+    creatives: [
+      ['灯影执导', '晦明'],
+      ['唱词', '折枝'],
+      ['影偶', '百目工房'],
+      ['击乐', '渡鸦三人组'],
+    ],
+  },
+  'procession-of-masks': {
+    productionId: 'procession-of-masks',
+    title: '《无声巡游》',
+    kind: '假面默剧 · 五场',
+    tagline: '巡游经过以后，请不要数还剩多少张脸。',
+    duration: '约 60 分钟，无休止',
+    durationShort: '约60分钟',
+    language: '无对白 · 入场时提供场序单',
+    heading: '由假面、鼓点与一条不断折返的街道组成的默剧。',
+    synopsis:
+      '一支没有领队的巡游队伍在城中寻找庆典广场。每次经过同一道门，他们都会换上一副更像观众的面具，直到鼓手再也无法分辨队伍与看客。',
+    guidance: '演出包含演员进入观众通道、突然鼓点与纸屑。前排观众可能被邀请举起巡游旗帜。',
+    visual: 'masks',
+    creatives: [
+      ['巡游执导', '阿尔特罗'],
+      ['假面设计', '绛纱作坊'],
+      ['鼓乐', '赫默与无名鼓手'],
+      ['场序', '旧剧团编演室'],
     ],
   },
 } as const satisfies Record<string, Production>;

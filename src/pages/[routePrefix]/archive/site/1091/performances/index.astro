@@ -1,5 +1,5 @@
 ---
-import PerformanceList from '../../../../../../components/shared/PerformanceList.astro';
+import ArchivePerformanceList from '../../../../../../components/archive/ArchivePerformanceList.astro';
 import { releasedEditions, type ReleasedEdition } from '../../../../../../data/editions';
 import { getPerformances } from '../../../../../../data/performances';
 import { sitePath } from '../../../../../../data/site-routes';
@@ -27,15 +27,14 @@ const canonicalPath = sitePath(edition, 'archive', 'performances');
 >
   <section class="page-intro page-width">
     <p class="eyebrow">SEASON REGISTER / 1091</p><h1>本季演出</h1><p>
-      本栏目记录 1091 年网站当时列入本季、尚待举行的场次。
+      以下场次依照本团泰拉历 1091 年秋季巡演簿誊录，入场时刻以各场告示为准。
     </p>
   </section>
   <section class="content-section page-width" aria-label="1091 年本季演出">
-    <PerformanceList
+    <ArchivePerformanceList
       edition={edition}
-      world="archive"
       performances={getPerformances('archive', 'current')}
-      emptyMessage="本季场次名录尚未完成数字化校录。"
+      emptyMessage="本季暂无已列入巡演簿的场次。"
     />
   </section>
 </ArchiveLayout>

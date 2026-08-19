@@ -7,12 +7,19 @@ import { performancePath, productionPath, sitePath } from '../../../data/site-ro
 import FrontLayout from '../../../layouts/FrontLayout.astro';
 
 export function getStaticPaths() {
-  return releasedEditions.flatMap((edition) =>
-    productionEntries.map(([productionId, production]) => ({
-      params: { routePrefix: edition.routePrefix, productionId },
-      props: { edition, production },
-    })),
-  );
+  return releasedEditions.flatMap((edition) => {
+    const frontProductionIds = new Set(
+      performanceEntries
+        .filter(([, performance]) => performance.world === 'front')
+        .flatMap(([, performance]) => performance.productionIds),
+    );
+    return productionEntries
+      .filter(([productionId]) => frontProductionIds.has(productionId))
+      .map(([productionId, production]) => ({
+        params: { routePrefix: edition.routePrefix, productionId },
+        props: { edition, production },
+      }));
+  });
 }
 interface Props {
   edition: ReleasedEdition;

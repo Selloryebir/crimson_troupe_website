@@ -1,0 +1,21 @@
+---
+import type { ProductionVisual } from '../../data/productions';
+
+interface Props {
+  visual: ProductionVisual;
+  title: string;
+  subtitle?: string;
+  number?: string;
+  compact?: boolean;
+}
+
+const { visual, title, subtitle, number = 'CT / 1091', compact = false } = Astro.props;
+---
+
+<div class:list={['archive-poster', `archive-poster--${visual}`, { 'is-compact': compact }]}>
+  <div class="archive-poster__frame" aria-hidden="true"><i></i><b></b><em></em></div><span
+    class="archive-poster__number">{number}</span
+  ><div class="archive-poster__title">
+    <strong>{title}</strong>{subtitle && <small>{subtitle}</small>}
+  </div>
+</div>

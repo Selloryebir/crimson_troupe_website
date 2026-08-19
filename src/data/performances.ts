@@ -22,7 +22,7 @@ export interface Performance {
   collection: PerformanceCollection;
   status: PerformanceStatus;
   index: string;
-  cityId: 'trimount' | 'wiesheim' | 'norport';
+  cityId: 'trimount' | 'wiesheim' | 'norport' | 'linqu' | 'qingsui' | 'jiangdu';
   cityLabel: string;
   dateTime: TerraDateTime;
   place: string;
@@ -98,6 +98,94 @@ export const performances = {
     ticketAvailability: { state: 'not-on-sale' },
     searchDetail: '10月29日 · 诺伯特郡 · 实验舞剧',
     searchKeywords: '十月 10月 诺伯特 舞剧 雪',
+  },
+  'red-banquet-linqu-1091': {
+    performanceId: 'red-banquet-linqu-1091',
+    world: 'archive',
+    collection: 'current',
+    status: 'scheduled',
+    index: '壹',
+    cityId: 'linqu',
+    cityLabel: '临渠',
+    dateTime: {
+      calendar: 'terra',
+      year: 1091,
+      month: 8,
+      day: 24,
+      time: '19:00',
+      display: '泰拉历 1091 年八月廿四 · 入夜七时',
+    },
+    place: '临渠旧宫剧场 · 宴会厅',
+    productionIds: ['red-banquet', 'procession-of-masks'],
+    ticketAvailability: { state: 'unavailable', reason: 'historic-snapshot' },
+    searchDetail: '八月廿四 · 临渠 · 典礼剧与假面默剧',
+    searchKeywords: '临渠 宴会 猩红宴 无声巡游 八月',
+  },
+  'seventh-lantern-qingsui-1091': {
+    performanceId: 'seventh-lantern-qingsui-1091',
+    world: 'archive',
+    collection: 'current',
+    status: 'scheduled',
+    index: '贰',
+    cityId: 'qingsui',
+    cityLabel: '青隧',
+    dateTime: {
+      calendar: 'terra',
+      year: 1091,
+      month: 9,
+      day: 11,
+      time: '18:30',
+      display: '泰拉历 1091 年九月十一 · 日落后',
+    },
+    place: '青隧驿馆 · 内庭',
+    productionIds: ['seventh-lantern'],
+    ticketAvailability: { state: 'unavailable', reason: 'historic-snapshot' },
+    searchDetail: '九月十一 · 青隧 · 灯影剧',
+    searchKeywords: '青隧 灯影 第七盏灯 九月 驿馆',
+  },
+  'mask-procession-jiangdu-1091': {
+    performanceId: 'mask-procession-jiangdu-1091',
+    world: 'archive',
+    collection: 'history',
+    status: 'completed',
+    index: '拾柒',
+    cityId: 'jiangdu',
+    cityLabel: '江渡',
+    dateTime: {
+      calendar: 'terra',
+      year: 1091,
+      month: 4,
+      day: 6,
+      time: '20:00',
+      display: '泰拉历 1091 年四月初六 · 晚钟后',
+    },
+    place: '江渡公会礼堂 · 西厅',
+    productionIds: ['procession-of-masks'],
+    ticketAvailability: { state: 'unavailable', reason: 'historic-snapshot' },
+    searchDetail: '四月初六 · 江渡 · 假面默剧',
+    searchKeywords: '江渡 无声巡游 假面 四月 礼堂',
+  },
+  'red-banquet-qingsui-1091': {
+    performanceId: 'red-banquet-qingsui-1091',
+    world: 'archive',
+    collection: 'history',
+    status: 'completed',
+    index: '拾捌',
+    cityId: 'qingsui',
+    cityLabel: '青隧',
+    dateTime: {
+      calendar: 'terra',
+      year: 1091,
+      month: 5,
+      day: 19,
+      time: '19:00',
+      display: '泰拉历 1091 年五月十九 · 入夜七时',
+    },
+    place: '青隧驿馆 · 大礼厅',
+    productionIds: ['red-banquet'],
+    ticketAvailability: { state: 'unavailable', reason: 'historic-snapshot' },
+    searchDetail: '五月十九 · 青隧 · 典礼剧',
+    searchKeywords: '青隧 猩红宴 五月 宴席 驿馆',
   },
 } as const satisfies Record<string, Performance>;
 

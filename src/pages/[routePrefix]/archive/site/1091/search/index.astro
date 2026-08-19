@@ -1,5 +1,7 @@
 ---
+import SiteSearch from '../../../../../../components/shared/SiteSearch.astro';
 import { releasedEditions, type ReleasedEdition } from '../../../../../../data/editions';
+import { getArchiveSearchIndex } from '../../../../../../data/site-search-index';
 import { sitePath } from '../../../../../../data/site-routes';
 import ArchiveLayout from '../../../../../../layouts/ArchiveLayout.astro';
 export function getStaticPaths() {
@@ -28,9 +30,10 @@ const canonicalPath = sitePath(edition, 'archive', 'search');
       搜索范围仅限炎国版 1091 年存档，不会连接当前网站。
     </p>
   </section>
-  <section class="status-panel page-width" role="status">
-    <h2>索引尚未恢复</h2><p>
-      当前阶段尚未建立存档搜索索引，不会显示来自当前网站或其他范围的结果。
-    </p><a class="button" href={sitePath(edition, 'archive', 'performances')}>查阅演出名录</a>
-  </section>
+  <SiteSearch
+    entries={getArchiveSearchIndex(edition)}
+    world="archive"
+    scopeLabel="炎国版 · 泰拉历 1091 年网站"
+    placeholder="查找剧目、场次、城市或栏目"
+  />
 </ArchiveLayout>

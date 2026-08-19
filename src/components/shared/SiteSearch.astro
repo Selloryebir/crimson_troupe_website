@@ -1,16 +1,20 @@
 ---
-import type { FrontSearchEntry } from '../../data/front-search-index';
+import type { SiteSearchEntry } from '../../data/site-search-index';
+import type { SiteWorld } from '../../data/site-routes';
 
 interface Props {
-  entries: FrontSearchEntry[];
+  entries: SiteSearchEntry[];
+  world: SiteWorld;
+  scopeLabel: string;
+  placeholder: string;
 }
 
-const { entries } = Astro.props;
+const { entries, world, scopeLabel, placeholder } = Astro.props;
 ---
 
 <section
-  class="search-workspace page-width"
-  data-front-search
+  class:list={['search-workspace', 'page-width', `search-workspace--${world}`]}
+  data-site-search
   data-search-index={JSON.stringify(entries)}
 >
   <form class="search-form" action="" method="get" role="search" data-search-form>
@@ -21,27 +25,27 @@ const { entries } = Astro.props;
         name="q"
         type="search"
         autocomplete="off"
-        placeholder="输入剧目、城市或页面名称"
+        placeholder={placeholder}
         data-search-input
       />
       <button type="submit">搜索</button>
     </div>
-    <p>搜索范围：炎国版表站 · 不包含 1091 历史快照</p>
+    <p>搜索范围：{scopeLabel}</p>
   </form>
   <div class="search-feedback" data-search-feedback aria-live="polite">
-    <p>输入关键词以查找场次、剧目与网站页面。</p>
+    <p>输入关键词以查找场次、剧目与网站栏目。</p>
   </div>
   <ol class="search-results" data-search-results></ol>
   <noscript>
     <div class="search-noscript" role="status">
       <h2>搜索需要启用 JavaScript</h2>
-      <p>当前页面不会发送查询或加载远端服务。您仍可使用主导航浏览本季演出、历史演出与剧团信息。</p>
+      <p>当前页面不会发送查询或加载远端服务。您仍可使用主导航浏览演出与剧团信息。</p>
     </div>
   </noscript>
 </section>
 
 <script>
-  import { initFrontSearch } from '../../scripts/front-search';
+  import { initSiteSearch } from '../../scripts/site-search';
 
-  initFrontSearch();
+  initSiteSearch();
 </script>

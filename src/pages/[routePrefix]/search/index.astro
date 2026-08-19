@@ -1,7 +1,7 @@
 ---
-import FrontSearch from '../../../components/front/FrontSearch.astro';
+import SiteSearch from '../../../components/shared/SiteSearch.astro';
 import { releasedEditions, type ReleasedEdition } from '../../../data/editions';
-import { getFrontSearchIndex } from '../../../data/front-search-index';
+import { getFrontSearchIndex } from '../../../data/site-search-index';
 import { sitePath } from '../../../data/site-routes';
 import FrontLayout from '../../../layouts/FrontLayout.astro';
 export function getStaticPaths() {
@@ -28,5 +28,10 @@ const canonicalPath = sitePath(edition, 'front', 'search');
   <section class="page-intro page-width">
     <p class="eyebrow">SITE SEARCH</p><h1>搜索</h1><p>搜索范围仅限当前炎国版表站。</p>
   </section>
-  <FrontSearch entries={getFrontSearchIndex(edition)} />
+  <SiteSearch
+    entries={getFrontSearchIndex(edition)}
+    world="front"
+    scopeLabel="炎国版表站 · 不包含 1091 历史快照"
+    placeholder="输入剧目、城市或页面名称"
+  />
 </FrontLayout>

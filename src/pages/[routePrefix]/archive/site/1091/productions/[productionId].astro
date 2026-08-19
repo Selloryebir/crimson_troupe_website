@@ -1,4 +1,5 @@
 ---
+import ArchivePoster from '../../../../../../components/archive/ArchivePoster.astro';
 import { releasedEditions, type ReleasedEdition } from '../../../../../../data/editions';
 import { performanceEntries } from '../../../../../../data/performances';
 import { productionEntries, type Production } from '../../../../../../data/productions';
@@ -44,11 +45,32 @@ const canonicalPath = productionPath(edition, 'archive', production.productionId
 >
   <article class="detail page-width">
     <a class="back-link" href={sitePath(edition, 'archive', 'performances')}>← 返回本季演出</a
-    ><header class="detail-header">
-      <p class="eyebrow">{production.kind}</p><h1>{production.title}</h1><p>{production.heading}</p>
+    ><header class="detail-header archive-detail-header">
+      <div>
+        <p class="eyebrow">{production.kind}</p><h1>{production.title}</h1><p>
+          {production.heading}
+        </p>
+      </div>
+      <ArchivePoster
+        visual={production.visual}
+        title={production.title}
+        subtitle={production.kind}
+        number="PLAYBILL / 1091"
+      />
     </header><section class="detail-section prose">
       <h2>剧目简介</h2><p>{production.synopsis}</p><p>{production.guidance}</p>
-    </section><section class="detail-section">
+    </section><dl class="archive-credit-list">
+      {
+        production.creatives.map(([role, name]) => (
+          <div>
+            <>
+              <dt>{role}</dt>
+              <dd>{name}</dd>
+            </>
+          </div>
+        ))
+      }
+    </dl><section class="detail-section">
       <h2>存档场次</h2><ul class="related-links">
         {
           relatedPerformances.map((performance) => (

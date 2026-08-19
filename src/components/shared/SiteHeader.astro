@@ -9,6 +9,7 @@ interface Props {
 }
 
 const { edition, world, currentSection } = Astro.props;
+const ticketLabel = world === 'archive' ? '席位' : '票务';
 const links = [
   { id: 'current', label: '本季演出', href: sitePath(edition, world, 'performances') },
   { id: 'history', label: '历史演出', href: sitePath(edition, world, 'performances/history') },
@@ -36,7 +37,7 @@ const links = [
       <span class="current-language" aria-label="当前国家版本与语言">
         {edition.countryName.zh} · 简体中文
       </span>
-      <a class="ticket-link" href={sitePath(edition, world, 'tickets')}>票务</a>
+      <a class="ticket-link" href={sitePath(edition, world, 'tickets')}>{ticketLabel}</a>
     </div>
   </div>
 </header>

@@ -1,4 +1,5 @@
 ---
+import { archiveContent } from '../../../../../../data/archive-content';
 import { releasedEditions, type ReleasedEdition } from '../../../../../../data/editions';
 import { sitePath } from '../../../../../../data/site-routes';
 import ArchiveLayout from '../../../../../../layouts/ArchiveLayout.astro';
@@ -24,13 +25,28 @@ const canonicalPath = sitePath(edition, 'archive', 'troupe');
   canonicalPath={canonicalPath}
 >
   <section class="page-intro page-width">
-    <p class="eyebrow">COMPANY REGISTER / 1091</p><h1>剧团</h1><p>
-      献给仍愿凝视帷幕的人。名册依照存档页面的原有栏目保留。
-    </p>
+    <p class="eyebrow">COMPANY REGISTER / 1091</p><h1>剧团</h1><p>{archiveContent.troupe.title}</p>
   </section>
-  <section class="content-section page-width prose">
-    <h2>旧剧团名册</h2><p>
-      现存页面只保留剧团的公开说明。人员条目与巡演记录尚在校录，不以推测内容填补缺页。
-    </p><p>如需离开存档，可使用每页页脚的“返回当前剧团网站”。</p>
+  <section class="archive-company page-width">
+    <div>
+      <p class="archive-kicker">致诸位观众</p>
+      <h2>关于本团</h2>
+      <p>{archiveContent.troupe.introduction}</p>
+      <p>{archiveContent.troupe.invitation}</p>
+      <a class="button" href={sitePath(edition, 'archive', 'performances')}>查阅巡演名录</a>
+    </div>
+    <dl>
+      {
+        archiveContent.troupe.offices.map(([title, description], index) => (
+          <div>
+            <dt>
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              {title}
+            </dt>
+            <dd>{description}</dd>
+          </div>
+        ))
+      }
+    </dl>
   </section>
 </ArchiveLayout>
