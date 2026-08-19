@@ -5,42 +5,42 @@
       "id": "BP-FND-CORE",
       "document": "docs/blueprint/foundation/core.md",
       "status": "active",
-      "stage": "demo",
+      "stage": "candidate",
       "dependsOn": []
     },
     {
       "id": "BP-FND-DOMAIN",
       "document": "docs/blueprint/foundation/domain-language.md",
       "status": "active",
-      "stage": "planned",
+      "stage": "candidate",
       "dependsOn": []
     },
     {
       "id": "BP-FND-EXPERIENCE",
       "document": "docs/blueprint/foundation/experience-system.md",
       "status": "active",
-      "stage": "demo",
+      "stage": "candidate",
       "dependsOn": ["BP-FND-CORE", "BP-FND-DOMAIN"]
     },
     {
       "id": "BP-FND-NARRATIVE",
       "document": "docs/blueprint/foundation/narrative-state.md",
       "status": "active",
-      "stage": "demo",
+      "stage": "candidate",
       "dependsOn": ["BP-FND-CORE", "BP-FND-DOMAIN", "BP-FND-EXPERIENCE"]
     },
     {
       "id": "BP-FND-EXTENSION",
       "document": "docs/blueprint/foundation/extension-contract.md",
       "status": "active",
-      "stage": "demo",
+      "stage": "candidate",
       "dependsOn": ["BP-FND-CORE"]
     },
     {
       "id": "BP-MOD-SEARCH",
       "document": "docs/blueprint/modules/search.md",
       "status": "active",
-      "stage": "demo",
+      "stage": "candidate",
       "dependsOn": [
         "BP-FND-CORE",
         "BP-FND-DOMAIN",
@@ -55,7 +55,7 @@
       "id": "BP-MOD-PROGRAMS",
       "document": "docs/blueprint/modules/programs.md",
       "status": "active",
-      "stage": "demo",
+      "stage": "candidate",
       "dependsOn": [
         "BP-FND-CORE",
         "BP-FND-DOMAIN",
@@ -68,7 +68,7 @@
       "id": "BP-MOD-ARCHIVE",
       "document": "docs/blueprint/modules/archive.md",
       "status": "active",
-      "stage": "demo",
+      "stage": "candidate",
       "dependsOn": [
         "BP-FND-CORE",
         "BP-FND-DOMAIN",
@@ -82,7 +82,7 @@
       "id": "BP-MOD-TICKETING",
       "document": "docs/blueprint/modules/ticketing.md",
       "status": "active",
-      "stage": "planned",
+      "stage": "candidate",
       "dependsOn": [
         "BP-FND-CORE",
         "BP-FND-EXPERIENCE",
@@ -98,14 +98,14 @@
       "id": "BP-CNT-CORE",
       "document": "docs/blueprint/content/content-contract.md",
       "status": "active",
-      "stage": "demo",
+      "stage": "candidate",
       "dependsOn": ["BP-FND-CORE", "BP-FND-DOMAIN"]
     },
     {
       "id": "BP-I18N-CORE",
       "document": "docs/blueprint/i18n/localization-contract.md",
       "status": "active",
-      "stage": "planned",
+      "stage": "candidate",
       "dependsOn": ["BP-FND-CORE", "BP-CNT-CORE"]
     },
     {
@@ -119,7 +119,7 @@
       "id": "BP-QLT-STAGES",
       "document": "docs/blueprint/quality/stage-gates.md",
       "status": "active",
-      "stage": "demo",
+      "stage": "candidate",
       "dependsOn": [
         "BP-FND-CORE",
         "BP-FND-EXPERIENCE",

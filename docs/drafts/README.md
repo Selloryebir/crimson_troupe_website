@@ -32,7 +32,6 @@ docs/drafts/
 | 文件                                                                                 | 类型     | 当前效力                                 |
 | ------------------------------------------------------------------------------------ | -------- | ---------------------------------------- |
 | [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md) | 创意草稿 | 延期的里站异常购票构想，等待未来独立规划 |
-| [`plans/s6-release-candidate-hardening.md`](plans/s6-release-candidate-hardening.md) | 开发计划 | S6 已批准；等待同步至代码分支执行        |
 
 ## 固定文档骨架
 
