@@ -1,0 +1,41 @@
+---
+import PerformanceList from '../../../../../../../components/shared/PerformanceList.astro';
+import { releasedEditions, type ReleasedEdition } from '../../../../../../../data/editions';
+import { getPerformances } from '../../../../../../../data/performances';
+import { sitePath } from '../../../../../../../data/site-routes';
+import ArchiveLayout from '../../../../../../../layouts/ArchiveLayout.astro';
+export function getStaticPaths() {
+  return releasedEditions.map((edition) => ({
+    params: { routePrefix: edition.routePrefix },
+    props: { edition },
+  }));
+}
+interface Props {
+  edition: ReleasedEdition;
+}
+const { edition } = Astro.props;
+const canonicalPath = sitePath(edition, 'archive', 'performances/history');
+---
+
+<ArchiveLayout
+  edition={edition}
+  pageType="performance-history"
+  currentSection="history"
+  title="历史演出｜猩红剧团 1091 存档"
+  description="泰拉历 1091 年旧猩红剧团历史演出名录。"
+  canonicalPath={canonicalPath}
+>
+  <section class="page-intro page-width">
+    <p class="eyebrow">PAST REGISTER / 1091</p><h1>历史演出</h1><p>
+      本栏目记录 1091 年网站当时已经举行的场次，不等同于整个存档网站。
+    </p>
+  </section>
+  <section class="content-section page-width" aria-label="1091 年历史演出">
+    <PerformanceList
+      edition={edition}
+      world="archive"
+      performances={getPerformances('archive', 'history')}
+      emptyMessage="历史场次名录尚未完成数字化校录。"
+    />
+  </section>
+</ArchiveLayout>

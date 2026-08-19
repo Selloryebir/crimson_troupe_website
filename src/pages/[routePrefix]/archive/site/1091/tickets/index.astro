@@ -1,0 +1,36 @@
+---
+import { releasedEditions, type ReleasedEdition } from '../../../../../../data/editions';
+import { sitePath } from '../../../../../../data/site-routes';
+import ArchiveLayout from '../../../../../../layouts/ArchiveLayout.astro';
+export function getStaticPaths() {
+  return releasedEditions.map((edition) => ({
+    params: { routePrefix: edition.routePrefix },
+    props: { edition },
+  }));
+}
+interface Props {
+  edition: ReleasedEdition;
+}
+const { edition } = Astro.props;
+const canonicalPath = sitePath(edition, 'archive', 'tickets');
+---
+
+<ArchiveLayout
+  edition={edition}
+  pageType="tickets"
+  currentSection="tickets"
+  title="席位登记｜猩红剧团 1091 存档"
+  description="泰拉历 1091 年旧剧团网站的历史票务页面。"
+  canonicalPath={canonicalPath}
+>
+  <section class="page-intro page-width">
+    <p class="eyebrow">SEAT OFFICE / CLOSED</p><h1>席位登记</h1><p>
+      此页来自泰拉历 1091 年网站存档。
+    </p>
+  </section>
+  <section class="status-panel page-width" role="status">
+    <h2>存档场次不可购买</h2><p>
+      所有相关日期均已过去，原席位登记服务已经终止。本页面不会建立票篮或接受任何购买信息。
+    </p><a class="button" href={sitePath(edition, 'archive', 'performances')}>返回本季演出</a>
+  </section>
+</ArchiveLayout>

@@ -1,0 +1,34 @@
+---
+import { releasedEditions, type ReleasedEdition } from '../../../data/editions';
+import { sitePath } from '../../../data/site-routes';
+import FrontLayout from '../../../layouts/FrontLayout.astro';
+export function getStaticPaths() {
+  return releasedEditions.map((edition) => ({
+    params: { routePrefix: edition.routePrefix },
+    props: { edition },
+  }));
+}
+interface Props {
+  edition: ReleasedEdition;
+}
+const { edition } = Astro.props;
+const canonicalPath = sitePath(edition, 'front', 'tickets');
+---
+
+<FrontLayout
+  edition={edition}
+  pageType="tickets"
+  currentSection="tickets"
+  title="票务｜猩红剧团"
+  description="猩红剧团当前巡演季票务状态。"
+  canonicalPath={canonicalPath}
+>
+  <section class="page-intro page-width">
+    <p class="eyebrow">TICKETING</p><h1>票务</h1><p>当前巡演季的票务入口。</p>
+  </section>
+  <section class="status-panel page-width" role="status">
+    <h2>暂未开票</h2><p>
+      已公布场次尚未开放席位。票务功能启用后仍将在本页面提供，不会改变现有入口。
+    </p><a class="button" href={sitePath(edition, 'front', 'performances')}>返回本季演出</a>
+  </section>
+</FrontLayout>

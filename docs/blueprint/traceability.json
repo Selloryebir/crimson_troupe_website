@@ -132,49 +132,44 @@
   ],
   "mappings": [
     {
-      "path": "src/components/archive/ArchiveWorld.astro",
+      "path": "src/components/shared/PerformanceList.astro",
+      "primary": "BP-MOD-PROGRAMS",
+      "related": ["BP-FND-DOMAIN", "BP-FND-EXPERIENCE", "BP-CNT-CORE"]
+    },
+    {
+      "path": "src/components/shared/SiteFooter.astro",
+      "primary": "BP-FND-CORE",
+      "related": ["BP-FND-NARRATIVE", "BP-FND-EXPERIENCE", "BP-I18N-CORE"]
+    },
+    {
+      "path": "src/components/shared/SiteHeader.astro",
+      "primary": "BP-FND-CORE",
+      "related": ["BP-FND-EXPERIENCE", "BP-I18N-CORE", "BP-MOD-PROGRAMS"]
+    },
+    {
+      "path": "src/data/editions.ts",
+      "primary": "BP-I18N-CORE",
+      "related": ["BP-FND-CORE"]
+    },
+    {
+      "path": "src/data/performances.ts",
+      "primary": "BP-FND-DOMAIN",
+      "related": ["BP-MOD-PROGRAMS", "BP-MOD-TICKETING", "BP-CNT-CORE"]
+    },
+    {
+      "path": "src/data/productions.ts",
+      "primary": "BP-FND-DOMAIN",
+      "related": ["BP-MOD-PROGRAMS", "BP-CNT-CORE", "BP-I18N-CORE"]
+    },
+    {
+      "path": "src/data/site-routes.ts",
+      "primary": "BP-FND-CORE",
+      "related": ["BP-FND-DOMAIN", "BP-I18N-CORE"]
+    },
+    {
+      "path": "src/layouts/ArchiveLayout.astro",
       "primary": "BP-MOD-ARCHIVE",
-      "related": ["BP-FND-NARRATIVE", "BP-FND-EXPERIENCE", "BP-CNT-CORE"]
-    },
-    {
-      "path": "src/components/front/FrontWorld.astro",
-      "primary": "BP-FND-EXPERIENCE",
-      "related": ["BP-MOD-PROGRAMS", "BP-CNT-CORE"]
-    },
-    {
-      "path": "src/components/front/ProgramCard.astro",
-      "primary": "BP-MOD-PROGRAMS",
-      "related": ["BP-FND-EXPERIENCE", "BP-CNT-CORE"]
-    },
-    {
-      "path": "src/components/front/Season.astro",
-      "primary": "BP-MOD-PROGRAMS",
-      "related": ["BP-FND-EXPERIENCE", "BP-CNT-CORE"]
-    },
-    {
-      "path": "src/components/overlays/SiteDialogs.astro",
-      "primary": "BP-MOD-PROGRAMS",
-      "related": ["BP-MOD-SEARCH", "BP-FND-EXPERIENCE"]
-    },
-    {
-      "path": "src/components/shared/WorldTransition.astro",
-      "primary": "BP-FND-NARRATIVE",
-      "related": ["BP-FND-EXPERIENCE"]
-    },
-    {
-      "path": "src/data/archive-records.ts",
-      "primary": "BP-MOD-ARCHIVE",
-      "related": ["BP-CNT-CORE"]
-    },
-    {
-      "path": "src/data/search-index.ts",
-      "primary": "BP-MOD-SEARCH",
-      "related": ["BP-CNT-CORE", "BP-I18N-CORE", "BP-I18N-TERMS"]
-    },
-    {
-      "path": "src/data/shows.ts",
-      "primary": "BP-MOD-PROGRAMS",
-      "related": ["BP-CNT-CORE", "BP-I18N-CORE"]
+      "related": ["BP-FND-CORE", "BP-FND-EXPERIENCE", "BP-I18N-CORE"]
     },
     {
       "path": "src/layouts/BaseLayout.astro",
@@ -182,89 +177,99 @@
       "related": ["BP-FND-EXPERIENCE", "BP-I18N-CORE"]
     },
     {
+      "path": "src/layouts/FrontLayout.astro",
+      "primary": "BP-FND-CORE",
+      "related": ["BP-FND-EXPERIENCE", "BP-I18N-CORE"]
+    },
+    {
+      "path": "src/pages/[routePrefix]/archive/site/1091/index.astro",
+      "primary": "BP-MOD-ARCHIVE",
+      "related": ["BP-FND-CORE", "BP-FND-EXPERIENCE", "BP-CNT-CORE"]
+    },
+    {
+      "path": "src/pages/[routePrefix]/archive/site/1091/performances/[performanceId].astro",
+      "primary": "BP-MOD-PROGRAMS",
+      "related": ["BP-MOD-ARCHIVE", "BP-FND-DOMAIN", "BP-FND-CORE"]
+    },
+    {
+      "path": "src/pages/[routePrefix]/archive/site/1091/performances/history/index.astro",
+      "primary": "BP-MOD-PROGRAMS",
+      "related": ["BP-MOD-ARCHIVE", "BP-FND-DOMAIN", "BP-FND-CORE"]
+    },
+    {
+      "path": "src/pages/[routePrefix]/archive/site/1091/performances/index.astro",
+      "primary": "BP-MOD-PROGRAMS",
+      "related": ["BP-MOD-ARCHIVE", "BP-FND-DOMAIN", "BP-FND-CORE"]
+    },
+    {
+      "path": "src/pages/[routePrefix]/archive/site/1091/productions/[productionId].astro",
+      "primary": "BP-MOD-PROGRAMS",
+      "related": ["BP-MOD-ARCHIVE", "BP-FND-DOMAIN", "BP-FND-CORE"]
+    },
+    {
+      "path": "src/pages/[routePrefix]/archive/site/1091/search/index.astro",
+      "primary": "BP-MOD-SEARCH",
+      "related": ["BP-MOD-ARCHIVE", "BP-FND-CORE", "BP-I18N-CORE"]
+    },
+    {
+      "path": "src/pages/[routePrefix]/archive/site/1091/tickets/index.astro",
+      "primary": "BP-MOD-TICKETING",
+      "related": ["BP-MOD-ARCHIVE", "BP-FND-CORE", "BP-MOD-PROGRAMS"]
+    },
+    {
+      "path": "src/pages/[routePrefix]/archive/site/1091/troupe/index.astro",
+      "primary": "BP-MOD-ARCHIVE",
+      "related": ["BP-FND-CORE", "BP-CNT-CORE"]
+    },
+    {
+      "path": "src/pages/[routePrefix]/index.astro",
+      "primary": "BP-FND-CORE",
+      "related": ["BP-FND-EXPERIENCE", "BP-MOD-PROGRAMS", "BP-CNT-CORE"]
+    },
+    {
+      "path": "src/pages/[routePrefix]/performances/[performanceId].astro",
+      "primary": "BP-MOD-PROGRAMS",
+      "related": ["BP-FND-DOMAIN", "BP-FND-CORE", "BP-MOD-TICKETING"]
+    },
+    {
+      "path": "src/pages/[routePrefix]/performances/history/index.astro",
+      "primary": "BP-MOD-PROGRAMS",
+      "related": ["BP-FND-DOMAIN", "BP-FND-CORE"]
+    },
+    {
+      "path": "src/pages/[routePrefix]/performances/index.astro",
+      "primary": "BP-MOD-PROGRAMS",
+      "related": ["BP-FND-DOMAIN", "BP-FND-CORE"]
+    },
+    {
+      "path": "src/pages/[routePrefix]/productions/[productionId].astro",
+      "primary": "BP-MOD-PROGRAMS",
+      "related": ["BP-FND-DOMAIN", "BP-FND-CORE", "BP-CNT-CORE"]
+    },
+    {
+      "path": "src/pages/[routePrefix]/search/index.astro",
+      "primary": "BP-MOD-SEARCH",
+      "related": ["BP-FND-CORE", "BP-I18N-CORE"]
+    },
+    {
+      "path": "src/pages/[routePrefix]/tickets/index.astro",
+      "primary": "BP-MOD-TICKETING",
+      "related": ["BP-FND-CORE", "BP-MOD-PROGRAMS"]
+    },
+    {
+      "path": "src/pages/[routePrefix]/troupe/index.astro",
+      "primary": "BP-CNT-CORE",
+      "related": ["BP-FND-CORE", "BP-FND-EXPERIENCE"]
+    },
+    {
       "path": "src/pages/index.astro",
       "primary": "BP-FND-CORE",
-      "related": ["BP-FND-EXPERIENCE", "BP-FND-NARRATIVE"]
-    },
-    {
-      "path": "src/scripts/archive.ts",
-      "primary": "BP-MOD-ARCHIVE",
-      "related": ["BP-FND-NARRATIVE"]
-    },
-    {
-      "path": "src/scripts/dialogs.ts",
-      "primary": "BP-MOD-PROGRAMS",
-      "related": ["BP-FND-EXPERIENCE"]
-    },
-    {
-      "path": "src/scripts/dom.ts",
-      "primary": "BP-FND-CORE",
-      "related": []
-    },
-    {
-      "path": "src/scripts/forms.ts",
-      "primary": "BP-FND-EXPERIENCE",
-      "related": ["BP-MOD-PROGRAMS", "BP-CNT-CORE"]
-    },
-    {
-      "path": "src/scripts/main.ts",
-      "primary": "BP-FND-EXTENSION",
-      "related": ["BP-FND-CORE"]
-    },
-    {
-      "path": "src/scripts/navigation.ts",
-      "primary": "BP-FND-EXPERIENCE",
-      "related": ["BP-FND-CORE"]
-    },
-    {
-      "path": "src/scripts/presentation.ts",
-      "primary": "BP-FND-EXPERIENCE",
-      "related": ["BP-FND-NARRATIVE"]
-    },
-    {
-      "path": "src/scripts/programs.ts",
-      "primary": "BP-MOD-PROGRAMS",
-      "related": []
-    },
-    {
-      "path": "src/scripts/search.ts",
-      "primary": "BP-MOD-SEARCH",
-      "related": ["BP-FND-NARRATIVE", "BP-I18N-CORE", "BP-I18N-TERMS"]
-    },
-    {
-      "path": "src/scripts/world.ts",
-      "primary": "BP-FND-NARRATIVE",
-      "related": ["BP-FND-CORE"]
-    },
-    {
-      "path": "src/styles/archive.css",
-      "primary": "BP-MOD-ARCHIVE",
-      "related": ["BP-FND-EXPERIENCE", "BP-FND-NARRATIVE"]
-    },
-    {
-      "path": "src/styles/foundations.css",
-      "primary": "BP-FND-EXPERIENCE",
-      "related": ["BP-FND-CORE"]
-    },
-    {
-      "path": "src/styles/front.css",
-      "primary": "BP-FND-EXPERIENCE",
-      "related": ["BP-MOD-PROGRAMS"]
+      "related": ["BP-I18N-CORE"]
     },
     {
       "path": "src/styles/main.css",
-      "primary": "BP-FND-CORE",
-      "related": ["BP-FND-EXPERIENCE"]
-    },
-    {
-      "path": "src/styles/overlays.css",
       "primary": "BP-FND-EXPERIENCE",
-      "related": ["BP-MOD-PROGRAMS", "BP-MOD-SEARCH", "BP-MOD-ARCHIVE"]
-    },
-    {
-      "path": "src/styles/responsive.css",
-      "primary": "BP-FND-EXPERIENCE",
-      "related": ["BP-FND-CORE"]
+      "related": ["BP-FND-CORE", "BP-MOD-ARCHIVE", "BP-MOD-PROGRAMS"]
     }
   ]
 }

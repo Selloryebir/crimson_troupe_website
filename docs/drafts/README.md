@@ -32,8 +32,7 @@ docs/drafts/
 | 文件                                                                                       | 类型     | 当前效力                                 |
 | ------------------------------------------------------------------------------------------ | -------- | ---------------------------------------- |
 | [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md)       | 创意草稿 | 延期的里站异常购票构想，等待未来独立规划 |
-| [`plans/s1-yan-routing-domain-foundation.md`](plans/s1-yan-routing-domain-foundation.md)   | 开发计划 | 已批准；等待人工授权源码开发             |
-| [`recommendations/project-recommendations.md`](recommendations/project-recommendations.md) | 建议草稿 | S1 已转入计划；仅保留后续候选建议        |
+| [`recommendations/project-recommendations.md`](recommendations/project-recommendations.md) | 建议草稿 | S1 已完成；仅保留 S2～S6 候选建议        |
 
 ## 固定文档骨架
 

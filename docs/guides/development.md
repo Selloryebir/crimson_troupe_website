@@ -21,7 +21,7 @@ npm run dev
 
 ```bash
 npm run quality -- docs/blueprint/modules/search.md
-npm run quality -- src/scripts/search.ts src/data/search-index.ts
+npm run quality -- src/data/performances.ts src/pages/[routePrefix]/performances/index.astro
 ```
 
 不提供路径时，`quality` 自动读取当前工作区相对 `HEAD` 的已暂存、未暂存和未跟踪文件。它先输出文件数量、检查原因和具体命令，再执行最小相关检查。只需确认调度结果时使用：
@@ -76,7 +76,7 @@ npm run verify
 修改功能源码前，从路径反查其主要和相关蓝图：
 
 ```bash
-npm run blueprint:where -- src/scripts/search.ts
+npm run blueprint:where -- src/pages/[routePrefix]/search/index.astro
 ```
 
 修改蓝图时，列出直接及传递依赖的候选影响范围：
@@ -89,20 +89,20 @@ npm run blueprint:impact -- BP-MOD-SEARCH
 
 ## 扩展演出内容
 
-当前 `src/data/shows.ts` 的 `Show` 是单页 Demo 的混合模型，不再作为新增正式内容的目标结构。正式开发先按 `BP-FND-DOMAIN` 与 `BP-MOD-PROGRAMS` 建立 `Production`、`Performance` 及其有序关联，再扩展内容：
+当前演出内容分别位于 `src/data/productions.ts` 与 `src/data/performances.ts`。扩展内容时遵守 `BP-FND-DOMAIN` 与 `BP-MOD-PROGRAMS`：
 
 1. 为剧目和场次分别使用稳定 ID，把日期、地点、场次状态、票务可用性、分区与基础价格保留在 `Performance`；
 2. 让列表、详情、搜索和票务输入从同一类型化来源派生，不在页面或模组中复制正文；
 3. 本季与历史归属使用明确世界视角和内容状态，不读取浏览器现实时间；
 4. 新视觉同时核对相关列表、详情、表站或里站样式和窄屏表现；
-5. 在领域迁移完成前，只对旧 `Show` 做维持当前 Demo 所必需的修复，不并行建立第二套内容源。
+5. 不恢复旧混合 `Show`，也不在页面、搜索或票务中建立第二套可编辑内容源。
 
 ## 新增交互
 
 - 将稳定内容放入 `data/`，构建期结构放入 `components/`，DOM 行为放入最接近用户能力的 `scripts/` 模块；
 - 新模块只导出其他模块真正需要的接口，并由当前页面的明确客户端入口初始化；页面没有该能力的根节点时安全跳过；
 - 不使用未声明的全局变量，不从一个功能模块直接修改另一个模块的私有状态；
-- 新增浮层样式放入 `overlays.css`，页面业务样式按时间层归属；
+- 样式规模产生实际拆分收益前继续使用 `main.css`；拆分后按共享基础、时间层和具体能力归属；
 - 同时处理键盘操作、焦点、减少动态效果和 JavaScript 失败路径。
 
 ## 最小验证

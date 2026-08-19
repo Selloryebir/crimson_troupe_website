@@ -1,0 +1,36 @@
+---
+import { releasedEditions, type ReleasedEdition } from '../../../data/editions';
+import { sitePath } from '../../../data/site-routes';
+import FrontLayout from '../../../layouts/FrontLayout.astro';
+export function getStaticPaths() {
+  return releasedEditions.map((edition) => ({
+    params: { routePrefix: edition.routePrefix },
+    props: { edition },
+  }));
+}
+interface Props {
+  edition: ReleasedEdition;
+}
+const { edition } = Astro.props;
+const canonicalPath = sitePath(edition, 'front', 'troupe');
+---
+
+<FrontLayout
+  edition={edition}
+  pageType="troupe"
+  currentSection="troupe"
+  title="剧团｜猩红剧团"
+  description="猩红剧团的创作方式与巡演理念。"
+  canonicalPath={canonicalPath}
+>
+  <section class="page-intro page-width">
+    <p class="eyebrow">THE COMPANY</p><h1>剧团</h1><p>
+      舞台不是逃离现实的地方。它是现实终于无法说谎的地方。
+    </p>
+  </section>
+  <section class="content-section page-width prose">
+    <h2>关于我们</h2><p>
+      新猩红剧团由来自泰拉各地的演员、作曲家、舞美师与技术人员共同组成。我们追求克制而准确的表达，并将每一座到访的城市写进舞台。
+    </p><p>本页目前提供剧团的最小公开介绍；成员、巡演事务与创作档案将在后续内容阶段逐步补充。</p>
+  </section>
+</FrontLayout>

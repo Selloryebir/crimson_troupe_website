@@ -1,0 +1,36 @@
+---
+import { releasedEditions, type ReleasedEdition } from '../../../../../../data/editions';
+import { sitePath } from '../../../../../../data/site-routes';
+import ArchiveLayout from '../../../../../../layouts/ArchiveLayout.astro';
+export function getStaticPaths() {
+  return releasedEditions.map((edition) => ({
+    params: { routePrefix: edition.routePrefix },
+    props: { edition },
+  }));
+}
+interface Props {
+  edition: ReleasedEdition;
+}
+const { edition } = Astro.props;
+const canonicalPath = sitePath(edition, 'archive', 'troupe');
+---
+
+<ArchiveLayout
+  edition={edition}
+  pageType="troupe"
+  currentSection="troupe"
+  title="剧团｜猩红剧团 1091 存档"
+  description="泰拉历 1091 年旧猩红剧团公开名册。"
+  canonicalPath={canonicalPath}
+>
+  <section class="page-intro page-width">
+    <p class="eyebrow">COMPANY REGISTER / 1091</p><h1>剧团</h1><p>
+      献给仍愿凝视帷幕的人。名册依照存档页面的原有栏目保留。
+    </p>
+  </section>
+  <section class="content-section page-width prose">
+    <h2>旧剧团名册</h2><p>
+      现存页面只保留剧团的公开说明。人员条目与巡演记录尚在校录，不以推测内容填补缺页。
+    </p><p>如需离开存档，可使用每页页脚的“返回当前剧团网站”。</p>
+  </section>
+</ArchiveLayout>

@@ -1,0 +1,45 @@
+---
+import { releasedEditions, type ReleasedEdition } from '../../../../../data/editions';
+import { sitePath, siteRoot } from '../../../../../data/site-routes';
+import ArchiveLayout from '../../../../../layouts/ArchiveLayout.astro';
+
+export function getStaticPaths() {
+  return releasedEditions.map((edition) => ({
+    params: { routePrefix: edition.routePrefix },
+    props: { edition },
+  }));
+}
+interface Props {
+  edition: ReleasedEdition;
+}
+const { edition } = Astro.props;
+const canonicalPath = siteRoot(edition, 'archive');
+---
+
+<ArchiveLayout
+  edition={edition}
+  pageType="home"
+  currentSection="home"
+  title="猩红剧团｜1091 年网站存档"
+  description="猩红剧团泰拉历 1091 年网站存档。"
+  canonicalPath={canonicalPath}
+>
+  <section class="archive-hero page-width" aria-labelledby="archive-title">
+    <p class="eyebrow">泰拉历 1091 年 · 网站存档</p>
+    <h1 id="archive-title">欢迎，<br /><em>尊贵的观众。</em></h1>
+    <p>
+      此处保存旧猩红剧团在泰拉历 1091 年公开的网站页面。部分名录仍在校录，页面内容以存档状态为准。
+    </p>
+    <div class="actions">
+      <a class="button" href={sitePath(edition, 'archive', 'performances')}>查阅本季演出</a><a
+        class="text-link"
+        href={sitePath(edition, 'archive', 'troupe')}>剧团名册</a
+      >
+    </div>
+  </section>
+  <section class="archive-notice page-width" aria-labelledby="notice-title">
+    <p>PUBLIC NOTICE / 091</p><h2 id="notice-title">本季席位登记已经终止</h2><p>
+      存档中的所有场次均不再接受购买或预约。旧票务入口仅保留原网站结构与返回路径。
+    </p>
+  </section>
+</ArchiveLayout>
