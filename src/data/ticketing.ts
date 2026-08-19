@@ -1,5 +1,14 @@
-import { performanceEntries, type TicketOffer } from './performances';
-import { productions, type ProductionVisual } from './productions';
+import {
+  getLocalizedPerformanceEntries,
+  getLocalizedProduction,
+  type ResolvedLocalization,
+} from './localized/resolve.ts';
+import type { TicketOffer } from './performances.ts';
+import type { ProductionVisual } from './productions.ts';
+
+export interface LocalizedTicketOffer extends TicketOffer {
+  label: string;
+}
 
 export interface TicketingPerformanceOption {
   performanceId: string;
@@ -8,15 +17,17 @@ export interface TicketingPerformanceOption {
   dateTime: string;
   place: string;
   visual: ProductionVisual;
-  offers: readonly TicketOffer[];
+  offers: readonly LocalizedTicketOffer[];
 }
 
-export function getTicketingOptions(): readonly TicketingPerformanceOption[] {
-  return performanceEntries.flatMap(([, performance]) => {
+export function getTicketingOptions(
+  localization: ResolvedLocalization,
+): readonly TicketingPerformanceOption[] {
+  return getLocalizedPerformanceEntries(localization).flatMap(([, performance]) => {
     if (performance.world !== 'front' || performance.ticketAvailability.state !== 'on-sale') {
       return [];
     }
-    const leadProduction = productions[performance.productionIds[0]];
+    const leadProduction = getLocalizedProduction(localization, performance.productionIds[0]);
     return [
       {
         performanceId: performance.performanceId,
@@ -25,7 +36,10 @@ export function getTicketingOptions(): readonly TicketingPerformanceOption[] {
         dateTime: performance.dateTime.display,
         place: performance.place,
         visual: leadProduction.visual,
-        offers: performance.ticketAvailability.offers,
+        offers: performance.ticketAvailability.offers.map((offer) => ({
+          ...offer,
+          label: localization.programs.ticketZones[offer.zone],
+        })),
       },
     ];
   });

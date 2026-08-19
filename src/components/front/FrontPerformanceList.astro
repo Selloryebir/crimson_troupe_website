@@ -1,60 +1,72 @@
 ---
-import type { ReleasedEdition } from '../../data/editions';
-import type { Performance } from '../../data/performances';
-import { productions } from '../../data/productions';
+import { formatMessage } from '../../data/localized/format';
+import {
+  getLocalizedProduction,
+  type ResolvedLocalization,
+  type ResolvedPerformance,
+} from '../../data/localized/resolve';
 import { performancePath } from '../../data/site-routes';
 import ProductionVisual from './ProductionVisual.astro';
 
 interface Props {
-  edition: ReleasedEdition;
-  performances: Performance[];
+  localization: ResolvedLocalization;
+  performances: ResolvedPerformance[];
   emptyMessage: string;
   filterable?: boolean;
 }
 
-const { edition, performances, emptyMessage, filterable = false } = Astro.props;
-const cities = [...new Map(performances.map((item) => [item.cityId, item.cityLabel])).entries()];
+const { localization, performances, emptyMessage, filterable = false } = Astro.props;
+const { edition, messages } = localization;
+const cities = [
+  ...new Map(performances.map((item) => [item.locationId, item.cityLabel])).entries(),
+];
 const months = [...new Set(performances.map((item) => item.dateTime.month))];
 ---
 
 {
   performances.length > 0 ? (
-    <div class="performance-browser" data-performance-browser={filterable ? '' : undefined}>
+    <div
+      class="performance-browser"
+      data-performance-browser={filterable ? '' : undefined}
+      data-filter-messages={filterable ? JSON.stringify(messages.filters) : undefined}
+    >
       {filterable && (
         <div class="performance-filters" data-performance-filters hidden>
           <div>
-            <label for="performance-city">城市</label>
+            <label for="performance-city">{messages.filters.city}</label>
             <select id="performance-city" data-performance-city>
-              <option value="all">全部城市</option>
+              <option value="all">{messages.filters.allCities}</option>
               {cities.map(([value, label]) => (
                 <option value={value}>{label}</option>
               ))}
             </select>
           </div>
           <div>
-            <label for="performance-month">月份</label>
+            <label for="performance-month">{messages.filters.month}</label>
             <select id="performance-month" data-performance-month>
-              <option value="all">全部月份</option>
+              <option value="all">{messages.filters.allMonths}</option>
               {months.map((month) => (
-                <option value={String(month)}>{month} 月</option>
+                <option value={String(month)}>
+                  {formatMessage(messages.filters.monthOption, { month })}
+                </option>
               ))}
             </select>
           </div>
           <button type="button" class="filter-reset" data-performance-reset>
-            重置筛选
+            {messages.filters.reset}
           </button>
           <p class="filter-count" aria-live="polite" data-performance-count>
-            共 {performances.length} 个场次
+            {formatMessage(messages.filters.count, { count: performances.length })}
           </p>
         </div>
       )}
       <ol class="front-performance-grid" data-performance-list>
         {performances.map((performance) => {
-          const leadProduction = productions[performance.productionIds[0]];
+          const leadProduction = getLocalizedProduction(localization, performance.productionIds[0]);
           return (
             <li
               data-performance-item
-              data-city={performance.cityId}
+              data-city={performance.locationId}
               data-month={String(performance.dateTime.month)}
             >
               <a href={performancePath(edition, 'front', performance.performanceId)}>
@@ -80,7 +92,7 @@ const months = [...new Set(performances.map((item) => item.dateTime.month))];
       </ol>
       {filterable && (
         <p class="filter-empty" data-performance-empty hidden>
-          当前筛选条件下没有场次。请调整城市或月份。
+          {messages.filters.empty}
         </p>
       )}
     </div>

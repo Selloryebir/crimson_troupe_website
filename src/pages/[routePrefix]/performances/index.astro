@@ -1,43 +1,43 @@
 ---
 import FrontPerformanceList from '../../../components/front/FrontPerformanceList.astro';
-import { releasedEditions, type ReleasedEdition } from '../../../data/editions';
-import { getPerformances } from '../../../data/performances';
+import { builtEditions, type BuiltEdition } from '../../../data/editions';
+import { getLocalization, getLocalizedPerformances } from '../../../data/localized/resolve';
 import { sitePath } from '../../../data/site-routes';
 import FrontLayout from '../../../layouts/FrontLayout.astro';
 
 export function getStaticPaths() {
-  return releasedEditions.map((edition) => ({
+  return builtEditions.map((edition) => ({
     params: { routePrefix: edition.routePrefix },
     props: { edition },
   }));
 }
 
 interface Props {
-  edition: ReleasedEdition;
+  edition: BuiltEdition;
 }
 const { edition } = Astro.props;
+const localization = getLocalization(edition);
+const copy = localization.site.front.currentPerformances;
 const canonicalPath = sitePath(edition, 'front', 'performances');
-const currentPerformances = getPerformances('front', 'current');
+const currentPerformances = getLocalizedPerformances(localization, 'front', 'current');
 ---
 
 <FrontLayout
   edition={edition}
   pageType="performance-list"
   currentSection="current"
-  title="本季演出｜猩红剧团"
-  description="猩红剧团当前巡演季已经公布的演出场次。"
+  title={copy.metaTitle}
+  description={copy.metaDescription}
   canonicalPath={canonicalPath}
 >
   <section class="page-intro page-width">
-    <p class="eyebrow">CURRENT SEASON</p><h1>本季演出</h1><p>
-      以下场次按剧团当前巡演计划公布；状态不随浏览器现实时间自动变化。
-    </p>
+    <p class="eyebrow">{copy.eyebrow}</p><h1>{copy.title}</h1><p>{copy.introduction}</p>
   </section>
-  <section class="content-section page-width" aria-label="本季演出场次">
+  <section class="content-section page-width" aria-label={copy.ariaLabel}>
     <FrontPerformanceList
-      edition={edition}
+      localization={localization}
       performances={currentPerformances}
-      emptyMessage="本季暂无已公布场次。"
+      emptyMessage={copy.empty}
       filterable
     />
   </section>

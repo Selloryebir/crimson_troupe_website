@@ -1,0 +1,78 @@
+---
+import { builtEditions } from '../../data/editions';
+import type { ResolvedLocalization } from '../../data/localized/resolve';
+import { equivalentEditionPath, type SiteWorld } from '../../data/site-routes';
+
+interface Props {
+  localization: ResolvedLocalization;
+  world: SiteWorld;
+  currentPath: string;
+}
+
+const { localization, world, currentPath } = Astro.props;
+const { edition } = localization;
+const copy = localization.site.shared;
+---
+
+{
+  builtEditions.length > 1 ? (
+    <details class="edition-selector" data-edition-selector>
+      <summary aria-label={copy.chooseEdition}>
+        <svg class="edition-badge" viewBox="0 0 44 44" aria-hidden="true">
+          <rect x="1" y="1" width="42" height="42" rx="2" />
+          <text x="22" y="26" text-anchor="middle">
+            {edition.badgeCode}
+          </text>
+        </svg>
+        <span lang={edition.locale}>{edition.languageName.native}</span>
+      </summary>
+      <ul>
+        {builtEditions.map((targetEdition) => (
+          <li>
+            <a
+              href={equivalentEditionPath(currentPath, edition, targetEdition)}
+              lang={targetEdition.locale}
+              aria-current={targetEdition.editionId === edition.editionId ? 'page' : undefined}
+              data-locale-switch={world === 'archive' ? '' : undefined}
+            >
+              <svg class="edition-badge" viewBox="0 0 44 44" aria-hidden="true">
+                <rect x="1" y="1" width="42" height="42" rx="2" />
+                <text x="22" y="26" text-anchor="middle">
+                  {targetEdition.badgeCode}
+                </text>
+              </svg>
+              <span>{targetEdition.languageName.native}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </details>
+  ) : (
+    <span class="current-language" aria-label={copy.currentEdition}>
+      <svg class="edition-badge" viewBox="0 0 44 44" aria-hidden="true">
+        <rect x="1" y="1" width="42" height="42" rx="2" />
+        <text x="22" y="26" text-anchor="middle">
+          {edition.badgeCode}
+        </text>
+      </svg>
+      <span lang={edition.locale}>{edition.languageName.native}</span>
+    </span>
+  )
+}
+
+<script>
+  document.querySelectorAll<HTMLDetailsElement>('[data-edition-selector]').forEach((selector) => {
+    selector.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape' || !selector.open) {
+        return;
+      }
+      selector.open = false;
+      selector.querySelector<HTMLElement>('summary')?.focus();
+    });
+    document.addEventListener('pointerdown', (event) => {
+      if (event.target instanceof Node && !selector.contains(event.target)) {
+        selector.open = false;
+      }
+    });
+  });
+</script>

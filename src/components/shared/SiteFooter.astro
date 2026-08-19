@@ -1,22 +1,24 @@
 ---
-import type { ReleasedEdition } from '../../data/editions';
+import type { ResolvedLocalization } from '../../data/localized/resolve';
 import { siteRoot, type SiteWorld } from '../../data/site-routes';
 
 interface Props {
-  edition: ReleasedEdition;
+  localization: ResolvedLocalization;
   world: SiteWorld;
 }
 
-const { edition, world } = Astro.props;
+const { localization, world } = Astro.props;
+const { edition } = localization;
+const copy = localization.site.shared;
 const otherWorld: SiteWorld = world === 'front' ? 'archive' : 'front';
-const switchLabel = world === 'front' ? '馆藏记录：1091 年历史快照' : '返回当前剧团网站';
+const switchLabel = world === 'front' ? copy.frontToArchive : copy.archiveToFront;
 ---
 
 <footer class="site-footer">
   <div class="footer-inner">
     <div>
-      <strong>猩红剧团</strong>
-      <p>{world === 'front' ? '巡演、剧目与观演事务' : '泰拉历 1091 年网站存档'}</p>
+      <strong>{localization.site.brand.name}</strong>
+      <p>{world === 'front' ? copy.frontFooter : copy.archiveFooter}</p>
     </div>
     <a
       class="world-switch"
@@ -26,7 +28,7 @@ const switchLabel = world === 'front' ? '馆藏记录：1091 年历史快照' : 
     >
   </div>
   <div class="footer-legal">
-    <span>当前版本：{edition.countryName.zh} · 简体中文</span>
-    <span>非官方同人概念站</span>
+    <span>{edition.badgeCode}{copy.editionSeparator}{edition.languageName.native}</span>
+    <span>{copy.fanNotice}</span>
   </div>
 </footer>

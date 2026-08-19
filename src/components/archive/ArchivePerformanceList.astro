@@ -1,24 +1,28 @@
 ---
-import type { ReleasedEdition } from '../../data/editions';
-import type { Performance } from '../../data/performances';
-import { productions } from '../../data/productions';
+import { formatMessage } from '../../data/localized/format';
+import {
+  getLocalizedProduction,
+  type ResolvedLocalization,
+  type ResolvedPerformance,
+} from '../../data/localized/resolve';
 import { performancePath } from '../../data/site-routes';
 import ArchivePoster from './ArchivePoster.astro';
 
 interface Props {
-  edition: ReleasedEdition;
-  performances: Performance[];
+  localization: ResolvedLocalization;
+  performances: ResolvedPerformance[];
   emptyMessage: string;
 }
 
-const { edition, performances, emptyMessage } = Astro.props;
+const { localization, performances, emptyMessage } = Astro.props;
+const { edition, messages } = localization;
 ---
 
 {
   performances.length > 0 ? (
     <ol class="archive-performance-list">
       {performances.map((performance) => {
-        const leadProduction = productions[performance.productionIds[0]];
+        const leadProduction = getLocalizedProduction(localization, performance.productionIds[0]);
         return (
           <li>
             <a href={performancePath(edition, 'archive', performance.performanceId)}>
@@ -29,14 +33,20 @@ const { edition, performances, emptyMessage } = Astro.props;
                 compact
               />
               <span class="archive-performance-list__register" data-pollution-slot="register">
-                <small>巡演簿号 {performance.index}</small>
+                <small>
+                  {formatMessage(messages.programs.archiveRegister, { index: performance.index })}
+                </small>
                 <strong>{leadProduction.title}</strong>
                 <span>{leadProduction.tagline}</span>
               </span>
               <span class="archive-performance-list__date">
                 <time>{performance.dateTime.display}</time>
                 <span>{performance.place}</span>
-                <small>{performance.productionIds.length} 项剧目</small>
+                <small>
+                  {formatMessage(messages.programs.productionCount, {
+                    count: performance.productionIds.length,
+                  })}
+                </small>
               </span>
             </a>
           </li>

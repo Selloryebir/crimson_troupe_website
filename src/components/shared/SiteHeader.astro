@@ -1,30 +1,47 @@
 ---
-import type { ReleasedEdition } from '../../data/editions';
+import type { ResolvedLocalization } from '../../data/localized/resolve';
 import { sitePath, siteRoot, type SiteWorld } from '../../data/site-routes';
+import EditionSelector from './EditionSelector.astro';
 
 interface Props {
-  edition: ReleasedEdition;
+  localization: ResolvedLocalization;
   world: SiteWorld;
   currentSection: 'home' | 'current' | 'history' | 'troupe' | 'search' | 'tickets' | 'detail';
+  currentPath: string;
 }
 
-const { edition, world, currentSection } = Astro.props;
-const ticketLabel = world === 'archive' ? '席位' : '票务';
+const { localization, world, currentSection, currentPath } = Astro.props;
+const { edition } = localization;
+const copy = localization.site.shared;
+const ticketLabel = world === 'archive' ? copy.ticketsArchive : copy.ticketsFront;
 const links = [
-  { id: 'current', label: '本季演出', href: sitePath(edition, world, 'performances') },
-  { id: 'history', label: '历史演出', href: sitePath(edition, world, 'performances/history') },
-  { id: 'troupe', label: '剧团', href: sitePath(edition, world, 'troupe') },
-  { id: 'search', label: '搜索', href: sitePath(edition, world, 'search') },
+  {
+    id: 'current',
+    label: copy.currentPerformances,
+    href: sitePath(edition, world, 'performances'),
+  },
+  {
+    id: 'history',
+    label: copy.historyPerformances,
+    href: sitePath(edition, world, 'performances/history'),
+  },
+  { id: 'troupe', label: copy.troupe, href: sitePath(edition, world, 'troupe') },
+  { id: 'search', label: copy.search, href: sitePath(edition, world, 'search') },
 ] as const;
 ---
 
 <header class="site-header">
   <div class="header-inner">
-    <a class="brand" href={siteRoot(edition, world)} aria-label="猩红剧团首页">
-      <span class="brand-mark" aria-hidden="true">CT</span>
-      <span class="brand-name"><strong>猩红剧团</strong><small>CRIMSON TROUPE</small></span>
+    <a class="brand" href={siteRoot(edition, world)} aria-label={copy.brandHome}>
+      <span class="brand-mark" aria-hidden="true"><span class="brand-mark__monogram">CT</span></span
+      >
+      <span class="brand-name"
+        ><strong>{localization.site.brand.name}</strong><small
+          >{localization.site.brand.latinName}</small
+        ></span
+      >
     </a>
-    <nav class="main-nav" aria-label="主导航">
+    <nav class="main-nav" aria-label={copy.mainNavigation}>
       {
         links.map((link) => (
           <a href={link.href} aria-current={currentSection === link.id ? 'page' : undefined}>
@@ -34,9 +51,7 @@ const links = [
       }
     </nav>
     <div class="header-tools">
-      <span class="current-language" aria-label="当前国家版本与语言">
-        {edition.countryName.zh} · 简体中文
-      </span>
+      <EditionSelector localization={localization} world={world} currentPath={currentPath} />
       <a class="ticket-link" href={sitePath(edition, world, 'tickets')}>{ticketLabel}</a>
     </div>
   </div>
