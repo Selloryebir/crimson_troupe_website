@@ -33,7 +33,7 @@ docs/drafts/
 | ------------------------------------------------------------------------------------ | ---------- | ---------------------------------------- |
 | [`blueprint/higashi-trilingual-preview.md`](blueprint/higashi-trilingual-preview.md) | 蓝图草稿   | 仅保留待实现验证的 `TEST-01`             |
 | [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md) | 创意草稿   | 延期的里站异常购票构想，等待未来独立规划 |
-| [`plans/trilingual-folio-preview.md`](plans/trilingual-folio-preview.md)             | 一次性计划 | 候选，等待人工执行授权                   |
+| [`plans/trilingual-folio-preview.md`](plans/trilingual-folio-preview.md)             | 一次性计划 | 已批准执行，`S1` 已批准待同步            |
 
 ## 固定文档骨架
 
