@@ -22,4 +22,4 @@
 - 蓝图只保存稳定的构建约束；一次性开发计划、测试日志、审查记录和实际运行内容继续归入各自责任区域。
 - 草稿通过人工门禁单向迁入正式责任目录；迁移成功后删除草稿来源，具体生命周期以 `drafts/README.md` 为准。
 
-开发命令见 [`guides/development.md`](guides/development.md)，长期分支职责、允许的同步方向与人工门禁见 [`guides/git-branch-workflow.md`](guides/git-branch-workflow.md)。
+开发命令见 [`guides/development.md`](guides/development.md)；一次性计划的自动执行决策边界见 [`drafts/plans/README.md`](drafts/plans/README.md)；长期分支职责、允许的同步方向、逐切片闭环与 Git 人工门禁以 [`guides/git-branch-workflow.md`](guides/git-branch-workflow.md) 为唯一完整说明。

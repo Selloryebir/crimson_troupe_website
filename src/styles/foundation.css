@@ -34,6 +34,17 @@ html:lang(en-US) {
   --sans: Inter, "Helvetica Neue", Arial, sans-serif;
 }
 
+html:lang(ja-JP) {
+  --serif: "Yu Mincho", YuMincho, "Hiragino Mincho ProN", "Hiragino Mincho Pro",
+    "Noto Serif CJK JP", "Noto Serif JP", serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN",
+    "Yu Gothic", YuGothic, "Noto Sans CJK JP", "Noto Sans JP", sans-serif;
+
+  line-break: strict;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
 body {
   min-width: 320px;
   min-height: 100vh;
@@ -205,6 +216,7 @@ a {
 
 .edition-selector {
   position: relative;
+  flex: 0 0 auto;
   color: var(--muted);
   font-size: 0.76rem;
 }
@@ -262,12 +274,13 @@ a {
 }
 
 .ticket-link {
+  flex: 0 0 auto;
   padding: 10px 16px;
   border: 1px solid var(--ink);
   font-size: 0.8rem;
   text-align: center;
   text-decoration: none;
-  overflow-wrap: anywhere;
+  white-space: nowrap;
 }
 
 .eyebrow {
@@ -654,6 +667,11 @@ a {
 
   .header-tools {
     gap: 8px;
+  }
+
+  .ticket-link {
+    padding: 8px 10px;
+    font-size: 0.72rem;
   }
 
   .edition-selector summary {

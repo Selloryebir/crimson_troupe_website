@@ -176,9 +176,11 @@ html[data-world="archive"] .ticket-link:hover {
 .archive-feature {
   position: relative;
   z-index: 1;
+  min-width: 0;
 }
 
 .archive-home__copy {
+  width: 100%;
   max-width: 700px;
   margin-inline: auto;
   padding: clamp(26px, 5vw, 56px);

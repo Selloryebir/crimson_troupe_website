@@ -209,6 +209,7 @@ html[data-world="front"] :is(.text-link, .back-link):hover {
 
   position: relative;
   display: grid;
+  min-width: 0;
   min-height: 490px;
   overflow: hidden;
   border: 1px solid rgb(250 248 243 / 12%);
@@ -798,7 +799,7 @@ html[data-world="front"] .footer-legal {
   html[data-world="front"] .service-grid,
   html[data-world="front"] .page-intro,
   html[data-world="front"] .search-workspace,
-  .detail-header--visual,
+  html[data-world="front"] .detail-header--visual,
   .troupe-profile {
     grid-template-columns: 1fr;
   }
