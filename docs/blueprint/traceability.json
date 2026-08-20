@@ -152,6 +152,11 @@
       "related": ["BP-MOD-ARCHIVE", "BP-FND-EXPERIENCE", "BP-CNT-CORE"]
     },
     {
+      "path": "src/components/archive/ArchiveProjection.astro",
+      "primary": "BP-MOD-ARCHIVE",
+      "related": ["BP-FND-NARRATIVE", "BP-I18N-CORE", "BP-CNT-CORE"]
+    },
+    {
       "path": "src/components/front/FrontPerformanceList.astro",
       "primary": "BP-MOD-PROGRAMS",
       "related": ["BP-FND-DOMAIN", "BP-FND-EXPERIENCE", "BP-CNT-CORE"]
@@ -217,6 +222,11 @@
       "related": ["BP-CNT-CORE"]
     },
     {
+      "path": "src/data/localized/higashi/archive-projection.ts",
+      "primary": "BP-I18N-CORE",
+      "related": ["BP-MOD-ARCHIVE", "BP-FND-NARRATIVE", "BP-CNT-CORE"]
+    },
+    {
       "path": "src/data/localized/higashi/messages.ts",
       "primary": "BP-I18N-CORE",
       "related": ["BP-MOD-SEARCH", "BP-MOD-TICKETING", "BP-FND-NARRATIVE"]
@@ -250,6 +260,11 @@
       "path": "src/data/localized/columbia/index.ts",
       "primary": "BP-I18N-CORE",
       "related": ["BP-CNT-CORE"]
+    },
+    {
+      "path": "src/data/localized/columbia/archive-projection.ts",
+      "primary": "BP-I18N-CORE",
+      "related": ["BP-MOD-ARCHIVE", "BP-FND-NARRATIVE", "BP-CNT-CORE"]
     },
     {
       "path": "src/data/localized/columbia/messages.ts",
@@ -295,6 +310,11 @@
       "path": "src/data/localized/yan/index.ts",
       "primary": "BP-I18N-CORE",
       "related": ["BP-CNT-CORE"]
+    },
+    {
+      "path": "src/data/localized/yan/archive-projection.ts",
+      "primary": "BP-I18N-CORE",
+      "related": ["BP-MOD-ARCHIVE", "BP-FND-NARRATIVE", "BP-CNT-CORE"]
     },
     {
       "path": "src/data/localized/yan/messages.ts",

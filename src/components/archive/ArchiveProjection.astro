@@ -1,0 +1,34 @@
+---
+import type { ArchivePollutionProfile } from '../../data/archive-pollution';
+import type { ArchiveProjectionContent } from '../../data/localized/schema';
+
+interface Props {
+  content: ArchiveProjectionContent;
+  profile: ArchivePollutionProfile;
+}
+
+const { content, profile } = Astro.props;
+const view = content.views[profile];
+---
+
+<section
+  class:list={['archive-projection', `archive-projection--${profile}`]}
+  data-archive-projection
+  data-projection-profile={profile}
+  aria-labelledby="archive-projection-title"
+  aria-live="polite"
+  hidden
+>
+  <div class="archive-projection__copy">
+    <p class="archive-projection__eyebrow">{view.eyebrow}</p>
+    <h2 id="archive-projection-title">{view.title}</h2>
+    <p>{view.summary}</p>
+  </div>
+  <dl class="archive-projection__register" aria-label={content.ariaLabel}>
+    <div><dt>{content.roleLabel}</dt><dd>{content.role}</dd></div>
+    <div><dt>{content.productionLabel}</dt><dd>{content.production}</dd></div>
+    <div><dt>{content.venueLabel}</dt><dd>{content.venue}</dd></div>
+    <div><dt>{content.attendanceLabel}</dt><dd>{content.attendance}</dd></div>
+  </dl>
+  <p class="archive-projection__closing">{content.closing}</p>
+</section>

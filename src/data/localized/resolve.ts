@@ -24,6 +24,7 @@ export interface ResolvedLocalization extends WebsiteLocalizationPackage {
     site: LocalizedRecord<WebsiteLocalizationPackage['site']>;
     programs: LocalizedRecord<WebsiteLocalizationPackage['programs']>;
     messages: LocalizedRecord<WebsiteLocalizationPackage['messages']>;
+    archiveProjection: LocalizedRecord<WebsiteLocalizationPackage['archiveProjection']>;
   };
 }
 
@@ -62,12 +63,18 @@ export function getLocalization(edition: BuiltEdition): ResolvedLocalization {
   const site = resolveLocalizedRecord(target?.site, sourcePackage.site, edition.locale);
   const programs = resolveLocalizedRecord(target?.programs, sourcePackage.programs, edition.locale);
   const messages = resolveLocalizedRecord(target?.messages, sourcePackage.messages, edition.locale);
+  const archiveProjection = resolveLocalizedRecord(
+    target?.archiveProjection,
+    sourcePackage.archiveProjection,
+    edition.locale,
+  );
   return {
     edition,
     site: site.value,
     programs: programs.value,
     messages: messages.value,
-    sources: { site, programs, messages },
+    archiveProjection: archiveProjection.value,
+    sources: { site, programs, messages, archiveProjection },
   };
 }
 

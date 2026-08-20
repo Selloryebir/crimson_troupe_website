@@ -121,9 +121,15 @@ for (const edition of builtEditions) {
     false,
     `${edition.editionId}.messages 发生回退`,
   );
+  assert.equal(
+    localization.sources.archiveProjection.usedFallback,
+    false,
+    `${edition.editionId}.archiveProjection 发生回退`,
+  );
   assertComplete(localization.site, `${edition.editionId}.site`);
   assertComplete(localization.programs, `${edition.editionId}.programs`);
   assertComplete(localization.messages, `${edition.editionId}.messages`);
+  assertComplete(localization.archiveProjection, `${edition.editionId}.archiveProjection`);
   assertExactKeys(localization.programs.locations, locations, `${edition.editionId}.locations`);
   assertExactKeys(
     localization.programs.performances,
@@ -142,6 +148,7 @@ for (const edition of builtEditions) {
         site: localization.site,
         programs: localization.programs,
         messages: localization.messages,
+        archiveProjection: localization.archiveProjection,
       }),
       localeRule.forbiddenPattern,
       localeRule.forbiddenMessage,

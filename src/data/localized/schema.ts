@@ -1,3 +1,4 @@
+import type { ArchivePollutionProfile } from '../archive-pollution.ts';
 import type { LocationId } from '../locations';
 import type { PerformanceId, TicketZone } from '../performances';
 import type { ProductionId } from '../productions/index.ts';
@@ -55,6 +56,27 @@ export interface LocalizationPackage<SiteContent, MessageContent> {
   site: SiteContent;
   programs: ProgramContent;
   messages: MessageContent;
+  archiveProjection: ArchiveProjectionContent;
+}
+
+export interface ArchiveProjectionView {
+  eyebrow: string;
+  title: string;
+  summary: string;
+}
+
+export interface ArchiveProjectionContent {
+  ariaLabel: string;
+  roleLabel: string;
+  productionLabel: string;
+  venueLabel: string;
+  attendanceLabel: string;
+  role: string;
+  production: string;
+  venue: string;
+  attendance: string;
+  closing: string;
+  views: Record<ArchivePollutionProfile, ArchiveProjectionView>;
 }
 
 export interface SearchMessages {

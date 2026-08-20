@@ -9,14 +9,20 @@ export type ArchivePageType =
   | 'tickets';
 
 export type ArchivePollutionProfile =
-  'invitation' | 'register' | 'record' | 'company' | 'inquiry' | 'office';
+  | 'invitation'
+  | 'register'
+  | 'performance-record'
+  | 'production-record'
+  | 'company'
+  | 'inquiry'
+  | 'office';
 
 const archivePollutionProfiles = {
   home: 'invitation',
   'performance-list': 'register',
   'performance-history': 'register',
-  'performance-detail': 'record',
-  'production-detail': 'record',
+  'performance-detail': 'performance-record',
+  'production-detail': 'production-record',
   troupe: 'company',
   search: 'inquiry',
   tickets: 'office',

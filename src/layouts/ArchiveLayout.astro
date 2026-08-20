@@ -1,5 +1,6 @@
 ---
 import PollutionController from '../components/shared/PollutionController.astro';
+import ArchiveProjection from '../components/archive/ArchiveProjection.astro';
 import SiteFooter from '../components/shared/SiteFooter.astro';
 import SiteHeader from '../components/shared/SiteHeader.astro';
 import { getArchivePollutionProfile, type ArchivePageType } from '../data/archive-pollution';
@@ -39,6 +40,7 @@ const pollutionProfile = getArchivePollutionProfile(pageType);
     currentPath={canonicalPath}
   />
   <main id="main-content" class="site-main" data-pollution-profile={pollutionProfile}>
+    <ArchiveProjection content={localization.archiveProjection} profile={pollutionProfile} />
     <slot />
   </main>
   <SiteFooter localization={localization} world="archive" />
