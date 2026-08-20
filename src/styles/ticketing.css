@@ -356,7 +356,7 @@ html[data-world="front"] .ticketing-app {
 
 html[data-world="front"] .ticketing-app__header {
   position: relative;
-  margin-inline: calc((100vw - var(--page)) / -2);
+  margin-inline: calc(50% - 50vw);
   padding: clamp(46px, 7vw, 86px) max(calc((100vw - var(--page)) / 2), 24px);
   border: 0;
   color: #f1ede5;
