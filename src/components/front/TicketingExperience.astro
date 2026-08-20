@@ -49,6 +49,7 @@ const copy = localization.site.front.tickets;
         options.map((option, index) => (
           <li data-ticket-option={option.performanceId}>
             <ProductionVisual
+              productionId={option.productionId}
               visual={option.visual}
               title={option.title}
               index={String(index + 1).padStart(2, '0')}

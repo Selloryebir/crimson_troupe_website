@@ -52,6 +52,7 @@ const canonicalPath = performancePath(edition, 'front', performance.performanceI
         </p>
       </div>
       <ProductionVisual
+        productionId={leadProduction.productionId}
         visual={leadProduction.visual}
         title={leadProduction.title}
         index={formatMessage(copy.visualIndex, { index: performance.index })}

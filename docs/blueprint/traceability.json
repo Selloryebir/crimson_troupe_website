@@ -192,6 +192,11 @@
       "related": ["BP-FND-CORE", "BP-FND-EXPERIENCE", "BP-I18N-CORE"]
     },
     {
+      "path": "src/components/shared/TroupeMark.astro",
+      "primary": "BP-CNT-PRODUCTION-VISUAL",
+      "related": ["BP-FND-CORE", "BP-FND-EXPERIENCE"]
+    },
+    {
       "path": "src/data/editions.ts",
       "primary": "BP-I18N-CORE",
       "related": ["BP-FND-CORE"]

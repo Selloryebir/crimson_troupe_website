@@ -1,18 +1,61 @@
 ---
-import type { ProductionVisual } from '../../data/productions/index.ts';
+import { Image } from 'astro:assets';
+import { getProductionArtwork } from '../../data/production-artworks';
+import type { ProductionId, ProductionVisual } from '../../data/productions/index.ts';
+import TroupeMark from '../shared/TroupeMark.astro';
 
 interface Props {
+  productionId: ProductionId;
   visual: ProductionVisual;
   title: string;
   index?: string;
   compact?: boolean;
 }
 
-const { visual, title, index, compact = false } = Astro.props;
+const { productionId, visual, title, index, compact = false } = Astro.props;
+const artwork = getProductionArtwork(productionId, 'front');
+const artworkStyle = artwork
+  ? `--visual-memory: ${artwork.memoryColor}; --visual-focus: ${artwork.focalPoint};`
+  : undefined;
 ---
 
-<div class:list={['production-visual', `production-visual--${visual}`, { 'is-compact': compact }]}>
+<div
+  class:list={[
+    'production-visual',
+    `production-visual--${visual}`,
+    { 'is-compact': compact, 'has-artwork': artwork },
+  ]}
+  style={artworkStyle}
+>
+  {
+    artwork && (
+      <Image
+        class="production-visual__image"
+        src={artwork.source}
+        alt=""
+        widths={[240, 480, 768]}
+        sizes={
+          compact
+            ? '(max-width: 620px) calc(100vw - 28px), (max-width: 960px) 45vw, 30vw'
+            : '(max-width: 620px) calc(100vw - 28px), (max-width: 960px) min(620px, calc(100vw - 36px)), 42vw'
+        }
+        loading={compact ? 'lazy' : 'eager'}
+        decoding="async"
+      />
+    )
+  }
   <span class="production-visual__index" aria-hidden="true">{index ?? 'CT'}</span>
-  <div class="production-visual__art" aria-hidden="true"><i></i><b></b><em></em></div>
+  {
+    !artwork && (
+      <div class="production-visual__art" aria-hidden="true">
+        <>
+          <i />
+          <b />
+          <em />
+        </>
+      </div>
+    )
+  }
   <p>{title}</p>
+  {artwork && <TroupeMark class="production-visual__mark" />}
 </div>
