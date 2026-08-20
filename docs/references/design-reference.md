@@ -69,6 +69,12 @@ RBO 的剧目详情集中呈现观看方式、日期、地点、时长、语言�
 - [W3C：在 HTML 中声明语言](https://www.w3.org/International/questions/qa-html-language-declarations.html) 与 [WHATWG HTML Standard](https://html.spec.whatwg.org/multipage/semantics.html)：用于页面及局部 `lang` 和 UTF-8 边界；
 - [W3C CSS Fonts Module Level 4](https://www.w3.org/TR/css-fonts-4/)：用于系统字体顺序匹配与缺字回退。当前阶段不因此引入远端字体或通用字体平台。
 
+### 9. 剧目出版物与猩红印版的抽象证据
+
+人工提供的成组剧目物料只用于归纳跨样本反复出现的制度：稳定题签与外围出版边界、彼此不同的中央隐喻、深墨轮廓与色块、旧金细线、剧目记忆色，以及猩红版本中外围煤黑、半透明焦红烟版、重复裂口和不规则物件轮廓的协作。普通与猩红物料在本站被转译为“同一剧目身份、两个时间层各自装帧”，不被解释为损坏、修复、升级或污染前后。
+
+运行时创作只使用 [`BP-CNT-PRODUCTION-VISUAL`](../blueprint/content/production-visual-language.md) 与作者指南提炼出的文字原则。原始样本不进入仓库、不作为网页资产或图生图输入，也不复制其中的角色、徽记、题签字形、边框、内部图形或独特构图。生成或绘制后的资产还需检查构图近似、伪文字、官方标识残留和权利风险。
+
 ## 明确没有借鉴的内容
 
 - 没有下载或使用参考站的图片、视频、图标、字体、Logo 或其他品牌资产；

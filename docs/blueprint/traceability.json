@@ -61,6 +61,7 @@
         "BP-FND-DOMAIN",
         "BP-FND-EXPERIENCE",
         "BP-CNT-CORE",
+        "BP-CNT-PRODUCTION-VISUAL",
         "BP-I18N-CORE"
       ]
     },
@@ -75,6 +76,7 @@
         "BP-FND-EXPERIENCE",
         "BP-FND-NARRATIVE",
         "BP-CNT-CORE",
+        "BP-CNT-PRODUCTION-VISUAL",
         "BP-I18N-CORE"
       ]
     },
@@ -102,6 +104,13 @@
       "dependsOn": ["BP-FND-CORE", "BP-FND-DOMAIN"]
     },
     {
+      "id": "BP-CNT-PRODUCTION-VISUAL",
+      "document": "docs/blueprint/content/production-visual-language.md",
+      "status": "active",
+      "stage": "planned",
+      "dependsOn": ["BP-FND-DOMAIN", "BP-FND-EXPERIENCE", "BP-FND-NARRATIVE", "BP-CNT-CORE"]
+    },
+    {
       "id": "BP-I18N-CORE",
       "document": "docs/blueprint/i18n/localization-contract.md",
       "status": "active",
@@ -126,6 +135,7 @@
         "BP-FND-NARRATIVE",
         "BP-MOD-ARCHIVE",
         "BP-MOD-TICKETING",
+        "BP-CNT-PRODUCTION-VISUAL",
         "BP-I18N-CORE"
       ]
     }
@@ -138,8 +148,8 @@
     },
     {
       "path": "src/components/archive/ArchivePoster.astro",
-      "primary": "BP-MOD-ARCHIVE",
-      "related": ["BP-FND-EXPERIENCE", "BP-CNT-CORE"]
+      "primary": "BP-CNT-PRODUCTION-VISUAL",
+      "related": ["BP-MOD-ARCHIVE", "BP-FND-EXPERIENCE", "BP-CNT-CORE"]
     },
     {
       "path": "src/components/front/FrontPerformanceList.astro",
@@ -148,8 +158,8 @@
     },
     {
       "path": "src/components/front/ProductionVisual.astro",
-      "primary": "BP-FND-EXPERIENCE",
-      "related": ["BP-MOD-PROGRAMS", "BP-CNT-CORE"]
+      "primary": "BP-CNT-PRODUCTION-VISUAL",
+      "related": ["BP-FND-EXPERIENCE", "BP-MOD-PROGRAMS", "BP-CNT-CORE"]
     },
     {
       "path": "src/components/front/TicketingExperience.astro",
@@ -319,7 +329,13 @@
     {
       "path": "src/data/productions/folio.ts",
       "primary": "BP-FND-DOMAIN",
-      "related": ["BP-MOD-PROGRAMS", "BP-CNT-CORE", "BP-I18N-CORE", "BP-I18N-TERMS"]
+      "related": [
+        "BP-MOD-PROGRAMS",
+        "BP-CNT-CORE",
+        "BP-CNT-PRODUCTION-VISUAL",
+        "BP-I18N-CORE",
+        "BP-I18N-TERMS"
+      ]
     },
     {
       "path": "src/data/productions/index.ts",
@@ -329,7 +345,7 @@
     {
       "path": "src/data/productions/original.ts",
       "primary": "BP-FND-DOMAIN",
-      "related": ["BP-MOD-PROGRAMS", "BP-CNT-CORE", "BP-I18N-TERMS"]
+      "related": ["BP-MOD-PROGRAMS", "BP-CNT-CORE", "BP-CNT-PRODUCTION-VISUAL", "BP-I18N-TERMS"]
     },
     {
       "path": "src/data/site-routes.ts",
@@ -484,7 +500,7 @@
     {
       "path": "src/styles/archive.css",
       "primary": "BP-MOD-ARCHIVE",
-      "related": ["BP-FND-EXPERIENCE", "BP-FND-NARRATIVE"]
+      "related": ["BP-FND-EXPERIENCE", "BP-FND-NARRATIVE", "BP-CNT-PRODUCTION-VISUAL"]
     },
     {
       "path": "src/styles/foundation.css",
@@ -494,7 +510,7 @@
     {
       "path": "src/styles/front.css",
       "primary": "BP-FND-EXPERIENCE",
-      "related": ["BP-MOD-PROGRAMS", "BP-I18N-CORE"]
+      "related": ["BP-MOD-PROGRAMS", "BP-CNT-PRODUCTION-VISUAL", "BP-I18N-CORE"]
     },
     {
       "path": "src/styles/main.css",
@@ -504,7 +520,7 @@
     {
       "path": "src/styles/pollution.css",
       "primary": "BP-FND-NARRATIVE",
-      "related": ["BP-MOD-ARCHIVE", "BP-FND-EXPERIENCE"]
+      "related": ["BP-MOD-ARCHIVE", "BP-FND-EXPERIENCE", "BP-CNT-PRODUCTION-VISUAL"]
     },
     {
       "path": "src/styles/ticketing.css",

@@ -27,6 +27,8 @@ docs/blueprint/
 └── quality/                  # Demo 到 Formal 的统一阶段标准
 ```
 
+剧目视觉的长期艺术契约位于 [`content/production-visual-language.md`](content/production-visual-language.md)，具体创作流程与交付模板位于 [`../guides/production-art-authoring.md`](../guides/production-art-authoring.md)。前者约束运行时结果和职责，后者只指导单次资产制作，不形成第二套蓝图。
+
 临时规划、建议、创意草案和一次性开发计划位于 `docs/drafts/`，外部依据位于 `docs/references/`，运行时内容位于 `src/data/` 或未来唯一的 `src/content/`。实施计划、测试输出、审核记录和翻译覆盖率报告不属于蓝图。
 
 普通功能开发只以本目录和 `traceability.json` 为产品依据。只有任务涉及规划讨论、草稿评审、已获授权的一次性开发计划或人工明确要求正式迁移时，才读取 `docs/drafts/`；一次性计划只补充执行顺序，其他草稿内容不得自行覆盖正式蓝图。
