@@ -212,7 +212,8 @@ export const yanSite = {
       featuredNumber: 'AUTUMN / 1091',
       noticeEyebrow: '巡演告示 · 第九十一号',
       noticeTitle: '秋季巡演名录已经誊清',
-      notice: '临渠与青隧两地场次现列于本季名录。请以场次页面所记日期与入场时刻为准。',
+      notice:
+        '崔林特尔梅、伦蒂尼姆与蒙特卢佩场次现列于本季名录。请以场次页面所记日期与入场时刻为准。',
       registerEyebrow: 'SEASONAL REGISTER',
       seasonTitle: '本季演出',
       fullRegister: '查阅完整名录',

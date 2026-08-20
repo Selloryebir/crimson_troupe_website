@@ -1,4 +1,5 @@
-import type { ProgramContent } from '../schema';
+import type { OriginalProductionId } from '../../productions/original.ts';
+import type { ProductionContent, ProgramContentBase } from '../schema';
 
 export const columbiaPrograms = {
   locations: {
@@ -8,6 +9,11 @@ export const columbiaPrograms = {
     linqu: { cityLabel: 'Linqu' },
     qingsui: { cityLabel: 'Qingsui' },
     jiangdu: { cityLabel: 'Jiangdu' },
+    zwillingsturme: { cityLabel: 'Zwillingstürme' },
+    londinium: { cityLabel: 'Londinium' },
+    'calais-blason': { cityLabel: 'Calais-Blason' },
+    montelupe: { cityLabel: 'Montelupe' },
+    'nuova-volsinii': { cityLabel: 'Nuova Volsinii' },
   },
   performances: {
     'uncrowned-trimount-1098': {
@@ -31,33 +37,68 @@ export const columbiaPrograms = {
       searchDetail: 'October 29 · Norport County · Experimental dance theater',
       searchKeywords: 'October Norport dance snow',
     },
-    'red-banquet-linqu-1091': {
+    'der-ring-calais-blason-1091-0308': {
       index: 'I',
-      dateTimeDisplay: 'Terra Year 1091 · August 24 · Seventh Hour of Night',
-      venue: 'Linqu Old Palace Theater · Banquet Hall',
-      searchDetail: 'August 24 · Linqu · Ceremonial play and masked mime',
-      searchKeywords: 'Linqu banquet crimson silent procession August',
+      dateTimeDisplay: 'Terra Year 1091 · March 8 · 7:00 PM',
+      venue: 'Calais-Blason Forest Castle · Lake Hall',
+      searchDetail: 'March 8 · Calais-Blason · Der Ring',
+      searchKeywords: 'Calais-Blason Der Ring lake hall March',
     },
-    'seventh-lantern-qingsui-1091': {
+    'one-hundred-and-one-days-calais-blason-1091-0419': {
       index: 'II',
-      dateTimeDisplay: 'Terra Year 1091 · September 11 · After Sundown',
-      venue: 'Qingsui Wayhouse · Inner Court',
-      searchDetail: 'September 11 · Qingsui · Shadow-lantern play',
-      searchKeywords: 'Qingsui shadow seventh lantern September wayhouse',
+      dateTimeDisplay: 'Terra Year 1091 · April 19 · 6:30 PM',
+      venue: 'Calais-Blason Forest Castle · Gallery Theater',
+      searchDetail: 'April 19 · Calais-Blason · One Hundred and One Days',
+      searchKeywords: 'Calais-Blason One Hundred and One Days gallery April',
     },
-    'mask-procession-jiangdu-1091': {
-      index: 'XVII',
-      dateTimeDisplay: 'Terra Year 1091 · April 6 · After the Evening Bell',
-      venue: 'Jiangdu Guild Hall · West Room',
-      searchDetail: 'April 6 · Jiangdu · Masked mime',
-      searchKeywords: 'Jiangdu silent procession masks April guild hall',
+    'the-carnival-wiesheim-1091-0511': {
+      index: 'III',
+      dateTimeDisplay: 'Terra Year 1091 · May 11 · 8:00 PM',
+      venue: 'Vyseheim Sunset Hall · Grand Stage',
+      searchDetail: 'May 11 · Vyseheim · The Carnival',
+      searchKeywords: 'Vyseheim The Carnival Sunset Hall May',
     },
-    'red-banquet-qingsui-1091': {
-      index: 'XVIII',
-      dateTimeDisplay: 'Terra Year 1091 · May 19 · Seventh Hour of Night',
-      venue: 'Qingsui Wayhouse · Great Hall',
-      searchDetail: 'May 19 · Qingsui · Ceremonial play',
-      searchKeywords: 'Qingsui crimson banquet May feast wayhouse',
+    'ode-au-triomphe-nuova-volsinii-1091-0623': {
+      index: 'IV',
+      dateTimeDisplay: 'Terra Year 1091 · June 23 · 7:30 PM',
+      venue: 'Nuova Volsinii Civic Opera · Main Hall',
+      searchDetail: 'June 23 · Nuova Volsinii · Ode au Triomphe',
+      searchKeywords: 'Nuova Volsinii Ode au Triomphe civic opera June',
+    },
+    'der-ring-zwillingsturme-1091-0817': {
+      index: 'V',
+      dateTimeDisplay: 'Terra Year 1091 · August 17 · 8:00 PM',
+      venue: 'Zwillingstürme Twin-Tower Theater · Mirror Lake Hall',
+      searchDetail: 'August 17 · Zwillingstürme · Der Ring',
+      searchKeywords: 'Zwillingstürme Der Ring Mirror Lake August',
+    },
+    'one-hundred-and-one-days-londinium-1091-0903': {
+      index: 'VI',
+      dateTimeDisplay: 'Terra Year 1091 · September 3 · 7:30 PM',
+      venue: 'Londinium Old Royal Theater · Bell Hall',
+      searchDetail: 'September 3 · Londinium · One Hundred and One Days',
+      searchKeywords: 'Londinium One Hundred and One Days Royal Theater September',
+    },
+    'the-carnival-montelupe-1091-0921': {
+      index: 'VII',
+      dateTimeDisplay: 'Terra Year 1091 · September 21 · 8:00 PM',
+      venue: 'Montelupe Central Theater · Banquet Hall',
+      searchDetail: 'September 21 · Montelupe · The Carnival',
+      searchKeywords: 'Montelupe The Carnival banquet September',
+    },
+    'the-carnival-londinium-1091-1009': {
+      index: 'VIII',
+      dateTimeDisplay: 'Terra Year 1091 · October 9 · 7:00 PM',
+      venue: 'Londinium Old Royal Theater · Main Stage',
+      searchDetail: 'October 9 · Londinium · The Carnival',
+      searchKeywords: 'Londinium The Carnival Royal Theater October',
+    },
+    'ode-au-triomphe-zwillingsturme-1091-1028': {
+      index: 'IX',
+      dateTimeDisplay: 'Terra Year 1091 · October 28 · 6:45 PM',
+      venue: 'Zwillingstürme Twin-Tower Theater · Golden Measure Hall',
+      searchDetail: 'October 28 · Zwillingstürme · Ode au Triomphe',
+      searchKeywords: 'Zwillingstürme Ode au Triomphe Golden Measure October',
     },
   },
   productions: {
@@ -177,4 +218,6 @@ export const columbiaPrograms = {
     },
   },
   ticketZones: { C: 'Zone C', B: 'Zone B', A: 'Zone A', S: 'Zone S', BOX: 'Box' },
-} as const satisfies ProgramContent;
+} as const satisfies ProgramContentBase & {
+  productions: Record<OriginalProductionId, ProductionContent>;
+};

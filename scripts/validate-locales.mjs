@@ -15,6 +15,26 @@ const localeValidationRules = {
   },
 };
 
+const expectedArchiveMatrix = {
+  'der-ring-calais-blason-1091-0308': ['der-ring', 'calais-blason', 'history'],
+  'one-hundred-and-one-days-calais-blason-1091-0419': [
+    'one-hundred-and-one-days',
+    'calais-blason',
+    'history',
+  ],
+  'the-carnival-wiesheim-1091-0511': ['the-carnival', 'wiesheim', 'history'],
+  'ode-au-triomphe-nuova-volsinii-1091-0623': ['ode-au-triomphe', 'nuova-volsinii', 'history'],
+  'der-ring-zwillingsturme-1091-0817': ['der-ring', 'zwillingsturme', 'current'],
+  'one-hundred-and-one-days-londinium-1091-0903': [
+    'one-hundred-and-one-days',
+    'londinium',
+    'current',
+  ],
+  'the-carnival-montelupe-1091-0921': ['the-carnival', 'montelupe', 'current'],
+  'the-carnival-londinium-1091-1009': ['the-carnival', 'londinium', 'current'],
+  'ode-au-triomphe-zwillingsturme-1091-1028': ['ode-au-triomphe', 'zwillingsturme', 'current'],
+};
+
 function assertComplete(value, path = 'content') {
   if (typeof value === 'string') {
     assert.notEqual(value.trim(), '', `${path} 不能为空`);
@@ -43,6 +63,50 @@ function assertExactKeys(actual, expected, label) {
 assert.equal(Object.keys(editions).length, 9, '国家版本注册应包含当前九个实体');
 assert.equal(new Set(Object.values(editions).map((edition) => edition.routePrefix)).size, 9);
 assert.equal(new Set(Object.values(editions).map((edition) => edition.badgeCode)).size, 9);
+
+const productionSourceCounts = Object.values(productions).reduce(
+  (counts, production) => ({
+    ...counts,
+    [production.sourceKind]: counts[production.sourceKind] + 1,
+  }),
+  { folio: 0, original: 0 },
+);
+assert.deepEqual(productionSourceCounts, { folio: 4, original: 6 });
+
+const archivePerformances = Object.values(performances).filter(
+  (performance) => performance.world === 'archive',
+);
+assert.equal(archivePerformances.length, 9, '1091 里站应包含九个场次');
+assert.deepEqual(
+  Object.fromEntries(
+    archivePerformances.map((performance) => [
+      performance.performanceId,
+      [performance.productionIds[0], performance.locationId, performance.collection],
+    ]),
+  ),
+  expectedArchiveMatrix,
+  '1091 里站剧目、地点或集合矩阵发生偏移',
+);
+assert.ok(
+  archivePerformances.every(
+    (performance) =>
+      performance.productionIds.every(
+        (productionId) => productions[productionId].sourceKind === 'folio',
+      ) &&
+      performance.ticketAvailability.state === 'unavailable' &&
+      performance.ticketAvailability.reason === 'historic-snapshot',
+  ),
+  '1091 里站只能引用活页剧目且必须保持历史快照不可购票',
+);
+assert.deepEqual(
+  archivePerformances.reduce((counts, performance) => {
+    const countryEditionId = locations[performance.locationId].countryEditionId;
+    counts[countryEditionId] = (counts[countryEditionId] ?? 0) + 1;
+    return counts;
+  }, {}),
+  { victoria: 4, leithanien: 3, siracusa: 2 },
+  '1091 里站国家分布发生偏移',
+);
 
 for (const edition of builtEditions) {
   const localization = getLocalization(edition);

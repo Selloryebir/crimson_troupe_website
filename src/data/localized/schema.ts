@@ -41,11 +41,14 @@ export interface ProductionContent {
   creatives: readonly (readonly [role: string, name: string])[];
 }
 
-export interface ProgramContent {
+export interface ProgramContentBase {
   locations: Record<LocationId, LocationContent>;
   performances: Record<PerformanceId, PerformanceContent>;
-  productions: Record<ProductionId, ProductionContent>;
   ticketZones: Record<TicketZone, string>;
+}
+
+export interface ProgramContent extends ProgramContentBase {
+  productions: Record<ProductionId, ProductionContent>;
 }
 
 export interface LocalizationPackage<SiteContent, MessageContent> {
