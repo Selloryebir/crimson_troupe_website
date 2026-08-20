@@ -52,7 +52,7 @@ const canonicalPath = productionPath(edition, 'archive', production.productionId
   description={production.heading}
   canonicalPath={canonicalPath}
 >
-  <article class="detail page-width">
+  <article class="detail page-width" data-pollution-slot="record">
     <a class="back-link" href={sitePath(edition, 'archive', 'performances')}>{copy.back}</a><header
       class="detail-header archive-detail-header"
     >

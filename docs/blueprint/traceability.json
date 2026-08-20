@@ -202,6 +202,11 @@
       "related": ["BP-FND-CORE"]
     },
     {
+      "path": "src/data/archive-pollution.ts",
+      "primary": "BP-MOD-ARCHIVE",
+      "related": ["BP-FND-NARRATIVE", "BP-FND-EXPERIENCE", "BP-CNT-PRODUCTION-VISUAL"]
+    },
+    {
       "path": "src/data/localized/format.ts",
       "primary": "BP-I18N-CORE",
       "related": ["BP-CNT-CORE"]

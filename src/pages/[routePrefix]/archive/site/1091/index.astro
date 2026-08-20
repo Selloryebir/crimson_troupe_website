@@ -71,7 +71,7 @@ const featuredProduction = featuredPerformance
       )
     }
   </section>
-  <section class="archive-notice-strip" aria-labelledby="notice-title">
+  <section class="archive-notice-strip" aria-labelledby="notice-title" data-pollution-slot="notice">
     <div class="page-width">
       <p>{copy.noticeEyebrow}</p>
       <div>
@@ -81,7 +81,11 @@ const featuredProduction = featuredPerformance
       </div>
     </div>
   </section>
-  <section class="archive-register-section page-width" aria-labelledby="archive-season-title">
+  <section
+    class="archive-register-section page-width"
+    aria-labelledby="archive-season-title"
+    data-pollution-slot="record-list"
+  >
     <header>
       <p>{copy.registerEyebrow}</p>
       <h2 id="archive-season-title">{copy.seasonTitle}</h2>
