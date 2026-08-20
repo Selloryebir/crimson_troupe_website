@@ -15,6 +15,7 @@ import {
 import type { SiteWorld } from '../site-routes';
 import type { LocalizedRecord, PerformanceContent, ProductionContent } from './schema';
 import { columbiaLocalizationPackage } from './columbia/index.ts';
+import { higashiLocalizationPackage } from './higashi/index.ts';
 import { yanLocalizationPackage, type WebsiteLocalizationPackage } from './yan/index.ts';
 
 export interface ResolvedLocalization extends WebsiteLocalizationPackage {
@@ -40,6 +41,7 @@ const sourcePackage = yanLocalizationPackage;
 
 const localePackages: Record<BuildEditionId, PartialLocalizationPackage> = {
   yan: yanLocalizationPackage,
+  higashi: higashiLocalizationPackage,
   columbia: columbiaLocalizationPackage,
 };
 

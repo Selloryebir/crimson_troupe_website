@@ -192,6 +192,41 @@
       "related": ["BP-CNT-CORE"]
     },
     {
+      "path": "src/data/localized/higashi/index.ts",
+      "primary": "BP-I18N-CORE",
+      "related": ["BP-CNT-CORE"]
+    },
+    {
+      "path": "src/data/localized/higashi/messages.ts",
+      "primary": "BP-I18N-CORE",
+      "related": ["BP-MOD-SEARCH", "BP-MOD-TICKETING", "BP-FND-NARRATIVE"]
+    },
+    {
+      "path": "src/data/localized/higashi/productions/folio.ts",
+      "primary": "BP-CNT-CORE",
+      "related": ["BP-I18N-CORE", "BP-I18N-TERMS", "BP-FND-DOMAIN", "BP-MOD-PROGRAMS"]
+    },
+    {
+      "path": "src/data/localized/higashi/productions/index.ts",
+      "primary": "BP-I18N-CORE",
+      "related": ["BP-CNT-CORE", "BP-I18N-TERMS", "BP-FND-DOMAIN"]
+    },
+    {
+      "path": "src/data/localized/higashi/productions/original.ts",
+      "primary": "BP-CNT-CORE",
+      "related": ["BP-I18N-CORE", "BP-FND-DOMAIN"]
+    },
+    {
+      "path": "src/data/localized/higashi/programs.ts",
+      "primary": "BP-CNT-CORE",
+      "related": ["BP-I18N-CORE", "BP-I18N-TERMS", "BP-FND-DOMAIN", "BP-MOD-PROGRAMS"]
+    },
+    {
+      "path": "src/data/localized/higashi/site.ts",
+      "primary": "BP-CNT-CORE",
+      "related": ["BP-I18N-CORE", "BP-FND-CORE", "BP-FND-EXPERIENCE"]
+    },
+    {
       "path": "src/data/localized/columbia/index.ts",
       "primary": "BP-I18N-CORE",
       "related": ["BP-CNT-CORE"]

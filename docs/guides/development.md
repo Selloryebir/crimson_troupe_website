@@ -41,12 +41,12 @@ npm run quality -- --plan docs/blueprint/modules/search.md
 | `npm run quality:styles`           | 显式检查全部 CSS                                         |
 | `npm run quality:full`             | 执行一次蓝图、类型、代码、样式与全仓格式检查，不执行构建 |
 | `npm run build`                    | 只生成 `dist/`，不调用质量命令                           |
-| `npm run build:preview`            | 生成炎国与哥伦比亚双语言预览产物                         |
+| `npm run build:preview`            | 生成炎国、东国与哥伦比亚三语言预览产物                   |
 | `npm run validate:states`          | 确定性检查污染、票务状态与纪念票字段                     |
 | `npm run validate:locales`         | 检查正式构建国家版本的本地化覆盖                         |
-| `npm run validate:locales:preview` | 检查双语言预览构建的本地化覆盖                           |
+| `npm run validate:locales:preview` | 检查三语言预览构建的本地化覆盖                           |
 | `npm run validate:build`           | 检查已生成页面的路由、元数据、链接、资源与发布范围       |
-| `npm run validate:build:preview`   | 检查双语言预览产物的路由、元数据、链接与隔离范围         |
+| `npm run validate:build:preview`   | 检查三语言预览产物的路由、元数据、链接与隔离范围         |
 | `npm run verify`                   | 依次执行完整质量、状态、一次构建与静态产物门禁           |
 | `npm run lint:code:fix`            | 自动修复 ESLint 明确支持的代码问题                       |
 | `npm run lint:styles:fix`          | 自动修复 Stylelint 明确支持的样式问题                    |

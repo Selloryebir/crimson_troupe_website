@@ -9,6 +9,10 @@ import { performances } from '../src/data/performances.ts';
 import { productions } from '../src/data/productions/index.ts';
 
 const localeValidationRules = {
+  higashi: {
+    forbiddenPattern: /[剧团场张购页网观现这应开关选时东语历档还无为与从仅个后]/u,
+    forbiddenMessage: '東国語プレビューに簡体字中国語の残留が含まれています',
+  },
   columbia: {
     forbiddenPattern: /\p{Script=Han}/u,
     forbiddenMessage: '哥伦比亚预览内容包含意外汉字',
