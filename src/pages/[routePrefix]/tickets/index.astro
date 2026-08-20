@@ -1,19 +1,22 @@
 ---
 import TicketingExperience from '../../../components/front/TicketingExperience.astro';
-import { releasedEditions, type ReleasedEdition } from '../../../data/editions';
+import { builtEditions, type BuiltEdition } from '../../../data/editions';
+import { getLocalization } from '../../../data/localized/resolve';
 import { getTicketingOptions } from '../../../data/ticketing';
 import { sitePath } from '../../../data/site-routes';
 import FrontLayout from '../../../layouts/FrontLayout.astro';
 export function getStaticPaths() {
-  return releasedEditions.map((edition) => ({
+  return builtEditions.map((edition) => ({
     params: { routePrefix: edition.routePrefix },
     props: { edition },
   }));
 }
 interface Props {
-  edition: ReleasedEdition;
+  edition: BuiltEdition;
 }
 const { edition } = Astro.props;
+const localization = getLocalization(edition);
+const copy = localization.site.front.tickets;
 const canonicalPath = sitePath(edition, 'front', 'tickets');
 ---
 
@@ -21,12 +24,12 @@ const canonicalPath = sitePath(edition, 'front', 'tickets');
   edition={edition}
   pageType="tickets"
   currentSection="tickets"
-  title="票务｜猩红剧团"
-  description="猩红剧团当前巡演季票务状态。"
+  title={copy.metaTitle}
+  description={copy.metaDescription}
   canonicalPath={canonicalPath}
 >
   <section class="page-intro page-width">
-    <p class="eyebrow">TICKETING</p><h1>票务</h1><p>当前巡演季场次的统一票务入口。</p>
+    <p class="eyebrow">{copy.eyebrow}</p><h1>{copy.title}</h1><p>{copy.introduction}</p>
   </section>
-  <TicketingExperience edition={edition} options={getTicketingOptions()} />
+  <TicketingExperience localization={localization} options={getTicketingOptions(localization)} />
 </FrontLayout>

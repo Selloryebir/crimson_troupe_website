@@ -1,5 +1,7 @@
 ---
 import type { SiteSearchEntry } from '../../data/site-search-index';
+import { formatMessage } from '../../data/localized/format';
+import type { SearchMessages } from '../../data/localized/schema';
 import type { SiteWorld } from '../../data/site-routes';
 
 interface Props {
@@ -7,19 +9,23 @@ interface Props {
   world: SiteWorld;
   scopeLabel: string;
   placeholder: string;
+  locale: string;
+  messages: SearchMessages;
 }
 
-const { entries, world, scopeLabel, placeholder } = Astro.props;
+const { entries, world, scopeLabel, placeholder, locale, messages } = Astro.props;
 ---
 
 <section
   class:list={['search-workspace', 'page-width', `search-workspace--${world}`]}
   data-site-search
   data-search-index={JSON.stringify(entries)}
+  data-search-locale={locale}
+  data-search-messages={JSON.stringify(messages)}
   data-pollution-slot={world === 'archive' ? 'search' : undefined}
 >
   <form class="search-form" action="" method="get" role="search" data-search-form>
-    <label for="site-search">搜索当前网站</label>
+    <label for="site-search">{messages.label}</label>
     <div>
       <input
         id="site-search"
@@ -29,18 +35,18 @@ const { entries, world, scopeLabel, placeholder } = Astro.props;
         placeholder={placeholder}
         data-search-input
       />
-      <button type="submit">搜索</button>
+      <button type="submit">{messages.submit}</button>
     </div>
-    <p>搜索范围：{scopeLabel}</p>
+    <p>{formatMessage(messages.scope, { scope: scopeLabel })}</p>
   </form>
   <div class="search-feedback" data-search-feedback aria-live="polite">
-    <p>输入关键词以查找场次、剧目与网站栏目。</p>
+    <p>{messages.prompt}</p>
   </div>
   <ol class="search-results" data-search-results></ol>
   <noscript>
     <div class="search-noscript" role="status">
-      <h2>搜索需要启用 JavaScript</h2>
-      <p>当前页面不会发送查询或加载远端服务。您仍可使用主导航浏览演出与剧团信息。</p>
+      <h2>{messages.noscriptTitle}</h2>
+      <p>{messages.noscriptCopy}</p>
     </div>
   </noscript>
 </section>

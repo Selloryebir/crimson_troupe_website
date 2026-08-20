@@ -2,11 +2,12 @@
 import PollutionController from '../components/shared/PollutionController.astro';
 import SiteFooter from '../components/shared/SiteFooter.astro';
 import SiteHeader from '../components/shared/SiteHeader.astro';
-import type { ReleasedEdition } from '../data/editions';
+import type { BuiltEdition } from '../data/editions';
+import { getLocalization } from '../data/localized/resolve';
 import BaseLayout from './BaseLayout.astro';
 
 interface Props {
-  edition: ReleasedEdition;
+  edition: BuiltEdition;
   pageType: string;
   currentSection: 'home' | 'current' | 'history' | 'troupe' | 'search' | 'tickets' | 'detail';
   title: string;
@@ -15,6 +16,7 @@ interface Props {
 }
 
 const { edition, pageType, currentSection, title, description, canonicalPath } = Astro.props;
+const localization = getLocalization(edition);
 ---
 
 <BaseLayout
@@ -26,10 +28,15 @@ const { edition, pageType, currentSection, title, description, canonicalPath } =
   canonicalPath={canonicalPath}
   robots="noindex,follow"
 >
-  <a class="skip-link" href="#main-content">跳至正文</a>
+  <a class="skip-link" href="#main-content">{localization.site.shared.skipToContent}</a>
   <div class="archive-register" aria-hidden="true">CT / SITE REGISTER / 1091</div>
-  <SiteHeader edition={edition} world="archive" currentSection={currentSection} />
+  <SiteHeader
+    localization={localization}
+    world="archive"
+    currentSection={currentSection}
+    currentPath={canonicalPath}
+  />
   <main id="main-content" class="site-main"><slot /></main>
-  <SiteFooter edition={edition} world="archive" />
-  <PollutionController />
+  <SiteFooter localization={localization} world="archive" />
+  <PollutionController warning={localization.messages.pollution.warning} />
 </BaseLayout>

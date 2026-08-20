@@ -32,22 +32,26 @@ npm run quality -- --plan docs/blueprint/modules/search.md
 
 各命令的职责如下：
 
-| 命令                        | 职责                                                     |
-| --------------------------- | -------------------------------------------------------- |
-| `npm run quality -- <路径>` | 按实际改动调度最小必要检查                               |
-| `npm run quality:docs`      | 显式检查全部受管文档格式                                 |
-| `npm run quality:blueprint` | 显式检查正式蓝图格式及追踪关系                           |
-| `npm run quality:code`      | 显式检查全部 Astro/TypeScript、ESLint 与源码格式         |
-| `npm run quality:styles`    | 显式检查全部 CSS                                         |
-| `npm run quality:full`      | 执行一次蓝图、类型、代码、样式与全仓格式检查，不执行构建 |
-| `npm run build`             | 只生成 `dist/`，不调用质量命令                           |
-| `npm run validate:states`   | 确定性检查污染、票务状态与纪念票字段                     |
-| `npm run validate:build`    | 检查已生成页面的路由、元数据、链接、资源与发布范围       |
-| `npm run verify`            | 依次执行完整质量、状态、一次构建与静态产物门禁           |
-| `npm run lint:code:fix`     | 自动修复 ESLint 明确支持的代码问题                       |
-| `npm run lint:styles:fix`   | 自动修复 Stylelint 明确支持的样式问题                    |
-| `npm run format`            | 格式化 Astro、TypeScript、配置和文档，不改手工组织的 CSS |
-| `npm run blueprint:check`   | 检查蓝图 ID、依赖、路径和源码覆盖关系                    |
+| 命令                               | 职责                                                     |
+| ---------------------------------- | -------------------------------------------------------- |
+| `npm run quality -- <路径>`        | 按实际改动调度最小必要检查                               |
+| `npm run quality:docs`             | 显式检查全部受管文档格式                                 |
+| `npm run quality:blueprint`        | 显式检查正式蓝图格式及追踪关系                           |
+| `npm run quality:code`             | 显式检查全部 Astro/TypeScript、ESLint 与源码格式         |
+| `npm run quality:styles`           | 显式检查全部 CSS                                         |
+| `npm run quality:full`             | 执行一次蓝图、类型、代码、样式与全仓格式检查，不执行构建 |
+| `npm run build`                    | 只生成 `dist/`，不调用质量命令                           |
+| `npm run build:preview`            | 生成炎国与哥伦比亚双语言预览产物                         |
+| `npm run validate:states`          | 确定性检查污染、票务状态与纪念票字段                     |
+| `npm run validate:locales`         | 检查正式构建国家版本的本地化覆盖                         |
+| `npm run validate:locales:preview` | 检查双语言预览构建的本地化覆盖                           |
+| `npm run validate:build`           | 检查已生成页面的路由、元数据、链接、资源与发布范围       |
+| `npm run validate:build:preview`   | 检查双语言预览产物的路由、元数据、链接与隔离范围         |
+| `npm run verify`                   | 依次执行完整质量、状态、一次构建与静态产物门禁           |
+| `npm run lint:code:fix`            | 自动修复 ESLint 明确支持的代码问题                       |
+| `npm run lint:styles:fix`          | 自动修复 Stylelint 明确支持的样式问题                    |
+| `npm run format`                   | 格式化 Astro、TypeScript、配置和文档，不改手工组织的 CSS |
+| `npm run blueprint:check`          | 检查蓝图 ID、依赖、路径和源码覆盖关系                    |
 
 `quality` 的最小调度规则如下：
 
@@ -71,7 +75,7 @@ npm run verify
 
 `verify` 已经包含完整质量检查、状态验证、一次构建和静态产物验证。同一轮不得先运行这些子门禁再运行 `verify`，也不得在 `verify` 后重复运行 `build` 或产物验证。
 
-现有分层 CSS 保留按视觉责任组织的手工分组，不由 Prettier 整库重排；CSS 的语法、无效值、重复规则和高置信缺陷由 Stylelint 负责。自动修复后仍需检查 diff，不能把工具输出直接视为人工验收。
+现有分层 CSS 按共享基础、表站、里站、票务和污染组织；CSS 的语法、无效值、重复规则和高置信缺陷由 Stylelint 负责。自动修复后仍需检查 diff，不能把工具输出直接视为人工验收。
 
 ## 蓝图定位
 
@@ -91,10 +95,10 @@ npm run blueprint:impact -- BP-MOD-SEARCH
 
 ## 扩展演出内容
 
-当前演出内容分别位于 `src/data/productions.ts` 与 `src/data/performances.ts`。扩展内容时遵守 `BP-FND-DOMAIN` 与 `BP-MOD-PROGRAMS`：
+稳定演出事实分别位于 `src/data/productions.ts` 与 `src/data/performances.ts`，地点事实位于 `src/data/locations.ts`；面向访客的名称与正文位于 `src/data/localized/<editionId>/`。扩展内容时遵守 `BP-FND-DOMAIN`、`BP-I18N-CORE` 与 `BP-MOD-PROGRAMS`：
 
 1. 为剧目和场次分别使用稳定 ID，把日期、地点、场次状态、票务可用性、分区与基础价格保留在 `Performance`；
-2. 让列表、详情、搜索和票务输入从同一类型化来源派生，不在页面或模组中复制正文；
+2. 使用稳定 ID 在本地化内容包中补齐名称和正文，让列表、详情、搜索和票务输入从同一解析结果派生，不在页面或模组中复制正文；
 3. 本季与历史归属使用明确世界视角和内容状态，不读取浏览器现实时间；
 4. 新视觉同时核对相关列表、详情、表站或里站样式和窄屏表现；
 5. 不恢复旧混合 `Show`，也不在页面、搜索或票务中建立第二套可编辑内容源。
@@ -104,7 +108,7 @@ npm run blueprint:impact -- BP-MOD-SEARCH
 - 将稳定内容放入 `data/`，构建期结构放入 `components/`，DOM 行为放入最接近用户能力的 `scripts/` 模块；
 - 新模块只导出其他模块真正需要的接口，并由当前页面的明确客户端入口初始化；页面没有该能力的根节点时安全跳过；
 - 不使用未声明的全局变量，不从一个功能模块直接修改另一个模块的私有状态；
-- 样式规模产生实际拆分收益前继续使用 `main.css`；拆分后按共享基础、时间层和具体能力归属；
+- `main.css` 只装配样式；共享基础、表站、里站、票务和污染规则分别进入同名职责文件，不跨文件保存平行令牌事实；
 - 同时处理键盘操作、焦点、减少动态效果和 JavaScript 失败路径。
 
 ## 最小验证

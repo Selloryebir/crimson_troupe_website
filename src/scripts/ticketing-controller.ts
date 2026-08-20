@@ -1,4 +1,6 @@
 import type { TicketingPerformanceOption } from '../data/ticketing';
+import { formatMessage } from '../data/localized/format';
+import type { TicketingMessages } from '../data/localized/schema';
 import { createTicketSvg } from './ticket-artifact';
 import {
   calculateBaseTotal,
@@ -14,7 +16,7 @@ import {
   type TicketBasketItem,
 } from './ticketing-state';
 
-const STORAGE_KEY = 'crimson-troupe:ticketing:v1';
+const STORAGE_KEY = 'crimson-troupe:ticketing:v2';
 
 function getSessionStorage(): Storage | null {
   try {
@@ -78,6 +80,20 @@ function parseOptions(rawValue: string | undefined): readonly TicketingPerforman
   return options;
 }
 
+function parseMessages(rawValue: string | undefined): TicketingMessages {
+  const messages = JSON.parse(rawValue ?? '{}') as Partial<TicketingMessages>;
+  if (
+    typeof messages.selectedCount !== 'string' ||
+    typeof messages.success !== 'string' ||
+    !messages.adjustments ||
+    !messages.stamps ||
+    !messages.artifact
+  ) {
+    throw new Error('Ticketing messages are unavailable');
+  }
+  return messages as TicketingMessages;
+}
+
 export function initTicketingExperience(): void {
   const app = document.querySelector<HTMLElement>('[data-ticketing-app]');
   const fallback = document.querySelector<HTMLElement>('[data-ticket-fallback]');
@@ -121,11 +137,14 @@ export function initTicketingExperience(): void {
   }
 
   let options: readonly TicketingPerformanceOption[];
+  let messages: TicketingMessages;
   try {
     options = parseOptions(app.dataset.ticketingOptions);
+    messages = parseMessages(app.dataset.ticketingMessages);
   } catch {
     return;
   }
+  const locale = app.dataset.ticketingLocale ?? document.documentElement.lang;
 
   const storage = getSessionStorage();
   let state = restoreTicketingState(
@@ -147,6 +166,12 @@ export function initTicketingExperience(): void {
   const optionFor = (performanceId: string) =>
     options.find((option) => option.performanceId === performanceId);
 
+  const zoneLabelFor = (item: TicketBasketItem): string =>
+    optionFor(item.performanceId)?.offers.find((offer) => offer.zone === item.zone)?.label ??
+    item.zone;
+
+  const stampLabels = () => state.result?.stampIds.map((stampId) => messages.stamps[stampId]) ?? [];
+
   const syncBasketControls = () => {
     form.querySelectorAll<HTMLElement>('[data-ticket-option]').forEach((row) => {
       const performanceId = row.dataset.ticketOption;
@@ -164,11 +189,13 @@ export function initTicketingExperience(): void {
     });
     const total = calculateBaseTotal(state.basket);
     count.textContent =
-      state.basket.length > 0 ? `已选择 ${state.basket.length} 个场次` : '尚未选择场次';
+      state.basket.length > 0
+        ? formatMessage(messages.selectedCount, { count: state.basket.length })
+        : messages.emptyBasket;
     baseTotal.textContent = `${total} LMD`;
     start.disabled = state.basket.length === 0;
     selectionFeedback.textContent =
-      state.basket.length > 0 ? '场次与分区已加入本次票篮。' : '至少选择一个场次后方可继续。';
+      state.basket.length > 0 ? messages.selectionReady : messages.selectionRequired;
   };
 
   const basketItemFromRow = (row: HTMLElement): TicketBasketItem | null => {
@@ -183,7 +210,6 @@ export function initTicketingExperience(): void {
     return {
       performanceId,
       zone: offer.zone,
-      zoneLabel: offer.label,
       basePrice: offer.basePrice,
     };
   };
@@ -199,11 +225,11 @@ export function initTicketingExperience(): void {
     heading.className = 'ticket-receipt__heading';
     const eyebrow = document.createElement('p');
     eyebrow.className = 'eyebrow';
-    eyebrow.textContent = 'SIMULATED RECEIPT';
+    eyebrow.textContent = messages.receiptEyebrow;
     const title = document.createElement('h3');
-    title.textContent = '席位登记存单';
+    title.textContent = messages.receiptTitle;
     const copy = document.createElement('p');
-    copy.textContent = '本次请求已经得到确认。以下金额与席位仅属于当前模拟体验。';
+    copy.textContent = messages.receiptCopy;
     heading.append(eyebrow, title, copy);
 
     const lines = document.createElement('ol');
@@ -216,7 +242,7 @@ export function initTicketingExperience(): void {
       const line = document.createElement('li');
       const name = document.createElement('span');
       const price = document.createElement('strong');
-      name.textContent = `${option.title} · ${item.zoneLabel}`;
+      name.textContent = `${option.title} · ${zoneLabelFor(item)}`;
       price.textContent = `${item.basePrice} LMD`;
       line.append(name, price);
       lines.append(line);
@@ -224,17 +250,17 @@ export function initTicketingExperience(): void {
 
     const totals = document.createElement('dl');
     totals.className = 'ticket-receipt__totals';
-    addDefinition(totals, '基础总额', `${state.result.baseTotal} LMD`);
+    addDefinition(totals, messages.baseTotal, `${state.result.baseTotal} LMD`);
     if (state.result.adjustments.length === 0) {
-      addDefinition(totals, '差额', '无');
+      addDefinition(totals, messages.adjustments['premium-service'], messages.adjustmentNone);
     } else {
       for (const adjustment of state.result.adjustments) {
-        addDefinition(totals, adjustment.label, `+ ${adjustment.amount} LMD`);
+        addDefinition(totals, messages.adjustments[adjustment.id], `+ ${adjustment.amount} LMD`);
       }
     }
-    addDefinition(totals, '模拟结算总额', `${state.result.settledTotal} LMD`);
+    addDefinition(totals, messages.settledTotal, `${state.result.settledTotal} LMD`);
     const disclaimer = document.createElement('small');
-    disclaimer.textContent = '仅为小游戏内容，不产生任何兑换责任。';
+    disclaimer.textContent = messages.disclaimer;
     receipt.append(heading, lines, totals, disclaimer);
 
     for (const issued of state.result.tickets) {
@@ -248,31 +274,41 @@ export function initTicketingExperience(): void {
       const artifact = {
         performance: option,
         basketItem,
+        zoneLabel: zoneLabelFor(basketItem),
         number: issued.number,
-        stamps: state.result.stamps,
+        stamps: stampLabels(),
+        messages: messages.artifact,
+        locale,
       };
       const article = document.createElement('article');
       article.className = 'issued-ticket';
       article.dataset.issuedTicket = issued.performanceId;
       const image = document.createElement('img');
       image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(createTicketSvg(artifact))}`;
-      image.alt = `${option.title}纪念票：${option.dateTime}，${option.place}，${basketItem.zoneLabel}，${basketItem.basePrice} LMD，票号与二维码数值 ${issued.number}`;
+      image.alt = formatMessage(messages.artifact.alt, {
+        title: option.title,
+        dateTime: option.dateTime,
+        place: option.place,
+        zone: zoneLabelFor(basketItem),
+        price: basketItem.basePrice,
+        number: issued.number,
+      });
       const caption = document.createElement('div');
       caption.className = 'issued-ticket__caption';
       const ticketTitle = document.createElement('h4');
       ticketTitle.textContent = option.title;
       const ticketMeta = document.createElement('p');
-      ticketMeta.textContent = `${option.dateTime} · ${option.place} · ${basketItem.zoneLabel} · ${basketItem.basePrice} LMD`;
+      ticketMeta.textContent = `${option.dateTime} · ${option.place} · ${zoneLabelFor(basketItem)} · ${basketItem.basePrice} LMD`;
       const ticketNumber = document.createElement('p');
-      ticketNumber.textContent = `票面数值 ${issued.number}`;
+      ticketNumber.textContent = formatMessage(messages.ticketNumber, { number: issued.number });
       const stamps = document.createElement('p');
       stamps.className = 'issued-ticket__stamps';
-      stamps.textContent = state.result.stamps.join(' · ');
+      stamps.textContent = stampLabels().join(' · ');
       const controls = document.createElement('div');
       controls.className = 'issued-ticket__controls';
       controls.append(
-        createButton(`download:${issued.performanceId}`, '下载 SVG'),
-        createButton(`print:${issued.performanceId}`, '打印此票'),
+        createButton(`download:${issued.performanceId}`, messages.downloadSvg),
+        createButton(`print:${issued.performanceId}`, messages.printTicket),
       );
       caption.append(ticketTitle, ticketMeta, ticketNumber, stamps, controls);
       article.append(image, caption);
@@ -282,46 +318,43 @@ export function initTicketingExperience(): void {
 
   const renderFlow = () => {
     flowActions.replaceChildren();
-    flowLabel.textContent = state.route === 'premium' ? 'PRIORITY CHANNEL' : 'STANDARD CHANNEL';
+    flowLabel.textContent =
+      state.route === 'premium' ? messages.priorityChannel : messages.standardChannel;
     if (state.phase === 'attempt') {
       flowTitle.textContent =
-        state.route === 'premium' ? '优先线路正在重新检索席位' : '当前购票人数较多';
+        state.route === 'premium' ? messages.premiumAttemptTitle : messages.standardAttemptTitle;
       flowCopy.textContent =
-        state.route === 'premium'
-          ? '线路声称可以提高请求顺序，并将在成功时加入服务差额。结果仍可能失败。'
-          : '系统要求再次确认您仍然需要票篮中的全部场次。库存数字可能在提交后发生变化。';
+        state.route === 'premium' ? messages.premiumAttemptCopy : messages.standardAttemptCopy;
       flowActions.append(
-        createButton('resolve', '确认并提交请求', true),
-        createButton('back', '返回票篮'),
+        createButton('resolve', messages.submitRequest, true),
+        createButton('back', messages.backToBasket),
       );
       return;
     }
     if (state.phase === 'network') {
-      flowTitle.textContent = '网络在确认席位前失去响应';
-      flowCopy.textContent = '请求没有形成结算结果，当前票篮已经保留。您可以按原线路重试。';
+      flowTitle.textContent = messages.networkTitle;
+      flowCopy.textContent = messages.networkCopy;
       flowActions.append(
-        createButton('retry', '保留票篮并重试', true),
-        createButton('back', '返回票篮'),
+        createButton('retry', messages.retryBasket, true),
+        createButton('back', messages.backToBasket),
       );
       return;
     }
     flowTitle.textContent =
-      state.route === 'premium' ? '优先线路仍未取得席位' : '当前购票人数较多，抢票失败';
+      state.route === 'premium' ? messages.premiumFailureTitle : messages.standardFailureTitle;
     flowCopy.textContent =
-      state.route === 'premium'
-        ? '本次请求没有形成结算，票篮和基础价格保持不变。'
-        : '您可以保留当前票篮重新提交，或尝试会在成功时增加费用的优先线路。';
+      state.route === 'premium' ? messages.premiumFailureCopy : messages.standardFailureCopy;
     if (state.route === 'standard') {
       flowActions.append(
-        createButton('retry', '按原线路重试', true),
-        createButton('premium', '尝试加价线路'),
-        createButton('back', '返回票篮'),
+        createButton('retry', messages.retryStandard, true),
+        createButton('premium', messages.tryPremium),
+        createButton('back', messages.backToBasket),
       );
     } else {
       flowActions.append(
-        createButton('retry', '重试优先线路', true),
-        createButton('standard', '取消加价并返回普通线路'),
-        createButton('back', '返回票篮'),
+        createButton('retry', messages.retryPremium, true),
+        createButton('standard', messages.returnStandard),
+        createButton('back', messages.backToBasket),
       );
     }
   };
@@ -362,12 +395,12 @@ export function initTicketingExperience(): void {
     event.preventDefault();
     const next = startTicketingAttempt(state);
     if (next === state) {
-      selectionFeedback.textContent = '请先选择至少一个场次。';
+      selectionFeedback.textContent = messages.startRequired;
       return;
     }
     state = next;
     save();
-    live.textContent = '票篮已提交，进入模拟购票流程。';
+    live.textContent = messages.submitted;
     render(true);
   });
 
@@ -390,8 +423,7 @@ export function initTicketingExperience(): void {
       state = returnToSelection(state);
     }
     save();
-    live.textContent =
-      state.phase === 'success' ? '购票成功，纪念票已经生成。' : '购票流程状态已更新。';
+    live.textContent = state.phase === 'success' ? messages.success : messages.stateUpdated;
     render(true);
   });
 
@@ -416,8 +448,11 @@ export function initTicketingExperience(): void {
       const svg = createTicketSvg({
         performance: option,
         basketItem,
+        zoneLabel: zoneLabelFor(basketItem),
         number: issued.number,
-        stamps: state.result.stamps,
+        stamps: stampLabels(),
+        messages: messages.artifact,
+        locale,
       });
       const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml;charset=utf-8' }));
       const link = document.createElement('a');
@@ -425,7 +460,7 @@ export function initTicketingExperience(): void {
       link.download = `crimson-troupe-${performanceId}-${issued.number}.svg`;
       link.click();
       window.setTimeout(() => URL.revokeObjectURL(url), 0);
-      live.textContent = `${option.title}纪念票下载已开始。`;
+      live.textContent = formatMessage(messages.downloadStarted, { title: option.title });
     } else if (kind === 'print') {
       document.body.classList.add('is-printing-ticket');
       article.classList.add('is-print-target');
@@ -447,7 +482,7 @@ export function initTicketingExperience(): void {
         // In-memory reset still succeeds.
       }
     }
-    live.textContent = '上一轮体验已经结束，可以重新选择场次。';
+    live.textContent = messages.newRound;
     render(true);
   });
 

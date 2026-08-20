@@ -41,9 +41,9 @@
 - `src/pages/`：文件路由和页面装配入口；
 - `src/layouts/`：页面外壳、元数据和全局资源入口；
 - `src/components/`：当前存放双站真正共享的 Astro 组件，后续按真实页面或能力边界拆分；
-- `src/data/`：不依赖 DOM 的类型化结构内容；
-- `src/scripts/`：出现客户端交互后再建立原生 TypeScript 装配入口与功能模块，当前 S1 不加载空入口；
-- `src/styles/main.css`：当前 S1 的共享基础、表站、里站与响应式样式入口；
+- `src/data/`：不依赖 DOM 的稳定领域事实、国家版本注册与类型化本地化内容；
+- `src/scripts/`：搜索、筛选、污染与票务等原生 TypeScript 渐进增强模块；
+- `src/styles/main.css`：只按顺序装配 `foundation.css`、`front.css`、`ticketing.css`、`archive.css` 与 `pollution.css`；
 - `src/assets/`：拥有使用权的运行时静态资产；
 - `docs/`：架构、正式蓝图、临时草稿、指南和参考，不作为运行时输入；
 - `README.md`：面向人员的仓库入口。
@@ -112,7 +112,9 @@ Astro 只负责构建期组件化和静态生成；客户端默认使用原生 T
 - `dev` 只接收达到可部署、可浏览阶段里程碑的 `dev_code`，不承担日常功能开发；进入 `dev` 仍需人工明确授权。
 - `dev_blueprint` 主动产生蓝图、设计、规划和文档治理改动，不主动修改 `src/` 的功能、设计或格式；可以运行只读源码检查，也可以通过合并接收 `dev_code` 的实现结果。
 - `dev_code` 主动产生源码实现和非功能性源码修正；开发前同步已确认的 `dev_blueprint`，实现完成后按阶段同步回 `dev_blueprint`，形成候选里程碑前再吸收最新蓝图。
-- 长期分支间使用 fast-forward 或正常 merge commit 保持共同祖先；不得使用 squash、历史重写或反复 cherry-pick 进行 `dev_blueprint`、`dev_code`、`dev` 与 `main` 的同步。
+- 长期分支之间默认通过 Pull Request 合并；`dev_code -> dev` 与 `dev -> main` 始终使用 Pull Request，不设直接 fast-forward 例外。
+- 只有 `dev_blueprint` 与 `dev_code` 在同一开发周期内同步已经确认并验证的成果，且目标分支是来源分支的严格祖先时，才可以在人工明确授权后直接 fast-forward。是否适用由职责方向、祖先关系、审查需求与风险决定，不以提交数量单独判断。
+- 长期分支使用 fast-forward 或正常 merge commit 保持共同祖先；不得使用 squash、历史重写或反复 cherry-pick 进行 `dev_blueprint`、`dev_code`、`dev` 与 `main` 的同步。
 - 不修改现有分支跟踪关系，除非用户明确要求；不得仅凭当前分支名、无冲突或检查通过推定 push、合并或发布权限。
 - 获得提交授权后，提交前重新检查完整 diff、未跟踪文件和验证结果，只纳入与任务有关的内容。
 - 新提交使用 Conventional Commits 1.0.0：`<type>[optional scope][optional !]: <description>`。
@@ -121,7 +123,7 @@ Astro 只负责构建期组件化和静态生成；客户端默认使用原生 T
 
 ## 10. 多智能体协作
 
-- 只有任务可以独立完成、依赖清楚且写入范围不重叠时才并行；共享页面布局、`main.css`、未来客户端装配入口和同一文档应串行修改。
+- 只有任务可以独立完成、依赖清楚且写入范围不重叠时才并行；共享页面布局、样式装配入口、同一职责样式文件、客户端装配入口和同一文档应串行修改。
 - 委派必须包含目标、精确文件范围、允许的写操作、验收条件和返回证据。实现智能体不得自行扩大范围或修改中央 Git 状态。
 - 主智能体负责复核子任务 diff、整合冲突并重新运行关键验证；不得以子智能体的“完成”声明代替仓库级复验。
 - Reviewer 应独立报告高置信问题及定位；若同一智能体直接修复了候选，则不得把自己的修复冒充独立审查结论。

@@ -1,12 +1,18 @@
 ---
 import ArchivePoster from '../../../../../../components/archive/ArchivePoster.astro';
-import { releasedEditions, type ReleasedEdition } from '../../../../../../data/editions';
+import { builtEditions, type BuiltEdition } from '../../../../../../data/editions';
+import { formatMessage } from '../../../../../../data/localized/format';
+import {
+  getLocalization,
+  getLocalizedPerformanceEntries,
+  getLocalizedProduction,
+} from '../../../../../../data/localized/resolve';
 import { performanceEntries } from '../../../../../../data/performances';
-import { productionEntries, type Production } from '../../../../../../data/productions';
+import { productionEntries, type ProductionId } from '../../../../../../data/productions';
 import { performancePath, productionPath, sitePath } from '../../../../../../data/site-routes';
 import ArchiveLayout from '../../../../../../layouts/ArchiveLayout.astro';
 export function getStaticPaths() {
-  return releasedEditions.flatMap((edition) => {
+  return builtEditions.flatMap((edition) => {
     const archiveProductionIds = new Set(
       performanceEntries
         .filter(([, performance]) => performance.world === 'archive')
@@ -14,18 +20,21 @@ export function getStaticPaths() {
     );
     return productionEntries
       .filter(([productionId]) => archiveProductionIds.has(productionId))
-      .map(([productionId, production]) => ({
+      .map(([productionId]) => ({
         params: { routePrefix: edition.routePrefix, productionId },
-        props: { edition, production },
+        props: { edition, productionId },
       }));
   });
 }
 interface Props {
-  edition: ReleasedEdition;
-  production: Production;
+  edition: BuiltEdition;
+  productionId: ProductionId;
 }
-const { edition, production } = Astro.props as Props;
-const relatedPerformances = performanceEntries
+const { edition, productionId } = Astro.props as Props;
+const localization = getLocalization(edition);
+const copy = localization.site.archive.productionDetail;
+const production = getLocalizedProduction(localization, productionId);
+const relatedPerformances = getLocalizedPerformanceEntries(localization)
   .map(([, item]) => item)
   .filter(
     (item) =>
@@ -39,13 +48,14 @@ const canonicalPath = productionPath(edition, 'archive', production.productionId
   edition={edition}
   pageType="production-detail"
   currentSection="detail"
-  title={`${production.title}｜猩红剧团 1091 存档`}
+  title={formatMessage(copy.metaTitle, { title: production.title })}
   description={production.heading}
   canonicalPath={canonicalPath}
 >
   <article class="detail page-width">
-    <a class="back-link" href={sitePath(edition, 'archive', 'performances')}>← 返回本季演出</a
-    ><header class="detail-header archive-detail-header">
+    <a class="back-link" href={sitePath(edition, 'archive', 'performances')}>{copy.back}</a><header
+      class="detail-header archive-detail-header"
+    >
       <div>
         <p class="eyebrow">{production.kind}</p><h1>{production.title}</h1><p>
           {production.heading}
@@ -55,10 +65,10 @@ const canonicalPath = productionPath(edition, 'archive', production.productionId
         visual={production.visual}
         title={production.title}
         subtitle={production.kind}
-        number="PLAYBILL / 1091"
+        number={copy.visualNumber}
       />
     </header><section class="detail-section prose">
-      <h2>剧目简介</h2><p>{production.synopsis}</p><p>{production.guidance}</p>
+      <h2>{copy.introduction}</h2><p>{production.synopsis}</p><p>{production.guidance}</p>
     </section><dl class="archive-credit-list">
       {
         production.creatives.map(([role, name]) => (
@@ -71,7 +81,7 @@ const canonicalPath = productionPath(edition, 'archive', production.productionId
         ))
       }
     </dl><section class="detail-section">
-      <h2>存档场次</h2><ul class="related-links">
+      <h2>{copy.archivedPerformances}</h2><ul class="related-links">
         {
           relatedPerformances.map((performance) => (
             <li>

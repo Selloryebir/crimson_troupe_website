@@ -1,18 +1,20 @@
 ---
-import { archiveContent } from '../../../../../../data/archive-content';
-import { releasedEditions, type ReleasedEdition } from '../../../../../../data/editions';
+import { builtEditions, type BuiltEdition } from '../../../../../../data/editions';
+import { getLocalization } from '../../../../../../data/localized/resolve';
 import { sitePath } from '../../../../../../data/site-routes';
 import ArchiveLayout from '../../../../../../layouts/ArchiveLayout.astro';
 export function getStaticPaths() {
-  return releasedEditions.map((edition) => ({
+  return builtEditions.map((edition) => ({
     params: { routePrefix: edition.routePrefix },
     props: { edition },
   }));
 }
 interface Props {
-  edition: ReleasedEdition;
+  edition: BuiltEdition;
 }
 const { edition } = Astro.props;
+const localization = getLocalization(edition);
+const copy = localization.site.archive.tickets;
 const canonicalPath = sitePath(edition, 'archive', 'tickets');
 ---
 
@@ -20,25 +22,27 @@ const canonicalPath = sitePath(edition, 'archive', 'tickets');
   edition={edition}
   pageType="tickets"
   currentSection="tickets"
-  title="席位登记｜猩红剧团 1091 存档"
-  description="泰拉历 1091 年旧剧团网站的历史票务页面。"
+  title={copy.metaTitle}
+  description={copy.metaDescription}
   canonicalPath={canonicalPath}
 >
   <section class="page-intro page-width">
-    <p class="eyebrow">SEAT OFFICE / CLOSED</p><h1>席位登记</h1><p>
-      此页来自泰拉历 1091 年网站存档。
-    </p>
+    <p class="eyebrow">{copy.eyebrow}</p><h1>{copy.title}</h1><p>{copy.introduction}</p>
   </section>
   <section class="archive-ticket-office page-width" role="status">
-    <div aria-hidden="true"><span>席位事务所</span><strong>停</strong><small>1091</small></div>
+    <div aria-hidden="true">
+      <span>{copy.office}</span><strong>{copy.closedMark}</strong><small>1091</small>
+    </div>
     <div>
-      <p class="archive-kicker">SEAT OFFICE / CLOSED</p>
-      <h2>原席位登记已经终止</h2>
-      <p>{archiveContent.archiveBanner}</p>
-      <p>本页面不会建立票篮，也不会接受姓名、付款或任何购买信息。</p>
+      <p class="archive-kicker">{copy.eyebrow}</p>
+      <h2>{copy.closedTitle}</h2>
+      <p>{localization.site.archive.banner}</p>
+      <p>{copy.privacy}</p>
       <div class="actions">
-        <a class="button" href={sitePath(edition, 'archive', 'performances')}>返回本季演出</a>
-        <a class="text-link" href={sitePath(edition, 'front')}>返回当前剧团网站</a>
+        <a class="button" href={sitePath(edition, 'archive', 'performances')}
+          >{copy.backToPerformances}</a
+        >
+        <a class="text-link" href={sitePath(edition, 'front')}>{copy.backToFront}</a>
       </div>
     </div>
   </section>

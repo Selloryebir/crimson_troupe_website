@@ -1,18 +1,20 @@
 ---
-import { archiveContent } from '../../../../../../data/archive-content';
-import { releasedEditions, type ReleasedEdition } from '../../../../../../data/editions';
+import { builtEditions, type BuiltEdition } from '../../../../../../data/editions';
+import { getLocalization } from '../../../../../../data/localized/resolve';
 import { sitePath } from '../../../../../../data/site-routes';
 import ArchiveLayout from '../../../../../../layouts/ArchiveLayout.astro';
 export function getStaticPaths() {
-  return releasedEditions.map((edition) => ({
+  return builtEditions.map((edition) => ({
     params: { routePrefix: edition.routePrefix },
     props: { edition },
   }));
 }
 interface Props {
-  edition: ReleasedEdition;
+  edition: BuiltEdition;
 }
 const { edition } = Astro.props;
+const localization = getLocalization(edition);
+const copy = localization.site.archive.troupe;
 const canonicalPath = sitePath(edition, 'archive', 'troupe');
 ---
 
@@ -20,24 +22,25 @@ const canonicalPath = sitePath(edition, 'archive', 'troupe');
   edition={edition}
   pageType="troupe"
   currentSection="troupe"
-  title="剧团｜猩红剧团 1091 存档"
-  description="泰拉历 1091 年旧猩红剧团公开名册。"
+  title={copy.metaTitle}
+  description={copy.metaDescription}
   canonicalPath={canonicalPath}
 >
   <section class="page-intro page-width">
-    <p class="eyebrow">COMPANY REGISTER / 1091</p><h1>剧团</h1><p>{archiveContent.troupe.title}</p>
+    <p class="eyebrow">{copy.eyebrow}</p><h1>{copy.title}</h1><p>{copy.statement}</p>
   </section>
   <section class="archive-company page-width">
     <div>
-      <p class="archive-kicker">致诸位观众</p>
-      <h2>关于本团</h2>
-      <p>{archiveContent.troupe.introduction}</p>
-      <p>{archiveContent.troupe.invitation}</p>
-      <a class="button" href={sitePath(edition, 'archive', 'performances')}>查阅巡演名录</a>
+      <p class="archive-kicker">{copy.kicker}</p>
+      <h2>{copy.aboutTitle}</h2>
+      <p>{copy.introduction}</p>
+      <p>{copy.invitation}</p>
+      <a class="button" href={sitePath(edition, 'archive', 'performances')}>{copy.browseRegister}</a
+      >
     </div>
     <dl>
       {
-        archiveContent.troupe.offices.map(([title, description], index) => (
+        copy.offices.map(([title, description], index) => (
           <div>
             <dt>
               <span>{String(index + 1).padStart(2, '0')}</span>
