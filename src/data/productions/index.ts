@@ -1,3 +1,5 @@
+import { originalProductions } from './original.ts';
+
 export type ProductionVisual = 'moon' | 'flame' | 'snow' | 'banquet' | 'lantern' | 'masks';
 
 export interface Production {
@@ -5,13 +7,9 @@ export interface Production {
   visual: ProductionVisual;
 }
 
+// Consumers read one registry; source-specific modules remain independently maintainable.
 export const productions = {
-  uncrowned: { productionId: 'uncrowned', visual: 'moon' },
-  'caged-fire': { productionId: 'caged-fire', visual: 'flame' },
-  'second-snow': { productionId: 'second-snow', visual: 'snow' },
-  'red-banquet': { productionId: 'red-banquet', visual: 'banquet' },
-  'seventh-lantern': { productionId: 'seventh-lantern', visual: 'lantern' },
-  'procession-of-masks': { productionId: 'procession-of-masks', visual: 'masks' },
+  ...originalProductions,
 } as const satisfies Record<string, Production>;
 
 export type ProductionId = keyof typeof productions;

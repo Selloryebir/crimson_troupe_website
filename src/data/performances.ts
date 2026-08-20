@@ -1,5 +1,5 @@
 import type { LocationId } from './locations';
-import type { ProductionId } from './productions';
+import type { ProductionId } from './productions/index.ts';
 import type { SiteWorld } from './site-routes';
 
 export interface TerraDateTime {

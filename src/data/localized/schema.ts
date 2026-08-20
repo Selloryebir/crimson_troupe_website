@@ -1,6 +1,6 @@
 import type { LocationId } from '../locations';
 import type { PerformanceId, TicketZone } from '../performances';
-import type { ProductionId } from '../productions';
+import type { ProductionId } from '../productions/index.ts';
 
 export type LocalizedShape<T> = T extends string
   ? string
@@ -46,6 +46,12 @@ export interface ProgramContent {
   performances: Record<PerformanceId, PerformanceContent>;
   productions: Record<ProductionId, ProductionContent>;
   ticketZones: Record<TicketZone, string>;
+}
+
+export interface LocalizationPackage<SiteContent, MessageContent> {
+  site: SiteContent;
+  programs: ProgramContent;
+  messages: MessageContent;
 }
 
 export interface SearchMessages {

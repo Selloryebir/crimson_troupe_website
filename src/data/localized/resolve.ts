@@ -11,34 +11,18 @@ import {
   productions,
   type Production,
   type ProductionId,
-} from '../productions.ts';
+} from '../productions/index.ts';
 import type { SiteWorld } from '../site-routes';
-import type {
-  LocalizedRecord,
-  LocalizedShape,
-  PerformanceContent,
-  ProductionContent,
-  ProgramContent,
-} from './schema';
-import { columbiaMessages } from './columbia/messages.ts';
-import { columbiaPrograms } from './columbia/programs.ts';
-import { columbiaSite } from './columbia/site.ts';
-import { yanMessages } from './yan/messages.ts';
-import { yanPrograms } from './yan/programs.ts';
-import { yanSite } from './yan/site.ts';
+import type { LocalizedRecord, PerformanceContent, ProductionContent } from './schema';
+import { columbiaLocalizationPackage } from './columbia/index.ts';
+import { yanLocalizationPackage, type WebsiteLocalizationPackage } from './yan/index.ts';
 
-export interface LocalizationPackage {
-  site: LocalizedShape<typeof yanSite>;
-  programs: ProgramContent;
-  messages: LocalizedShape<typeof yanMessages>;
-}
-
-export interface ResolvedLocalization extends LocalizationPackage {
+export interface ResolvedLocalization extends WebsiteLocalizationPackage {
   edition: BuiltEdition;
   sources: {
-    site: LocalizedRecord<LocalizationPackage['site']>;
-    programs: LocalizedRecord<LocalizationPackage['programs']>;
-    messages: LocalizedRecord<LocalizationPackage['messages']>;
+    site: LocalizedRecord<WebsiteLocalizationPackage['site']>;
+    programs: LocalizedRecord<WebsiteLocalizationPackage['programs']>;
+    messages: LocalizedRecord<WebsiteLocalizationPackage['messages']>;
   };
 }
 
@@ -50,19 +34,13 @@ export interface ResolvedPerformance extends Omit<Performance, 'dateTime'>, Perf
   place: string;
 }
 
-const sourcePackage: LocalizationPackage = {
-  site: yanSite,
-  programs: yanPrograms,
-  messages: yanMessages,
-};
+type PartialLocalizationPackage = Partial<WebsiteLocalizationPackage>;
 
-const localePackages: Partial<Record<BuildEditionId, Partial<LocalizationPackage>>> = {
-  yan: sourcePackage,
-  columbia: {
-    site: columbiaSite,
-    programs: columbiaPrograms,
-    messages: columbiaMessages,
-  },
+const sourcePackage = yanLocalizationPackage;
+
+const localePackages: Record<BuildEditionId, PartialLocalizationPackage> = {
+  yan: yanLocalizationPackage,
+  columbia: columbiaLocalizationPackage,
 };
 
 export function resolveLocalizedRecord<T>(

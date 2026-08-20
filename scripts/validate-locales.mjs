@@ -6,7 +6,14 @@ import { buildEditionIds, buildProfile, builtEditions, editions } from '../src/d
 import { locations } from '../src/data/locations.ts';
 import { getLocalization } from '../src/data/localized/resolve.ts';
 import { performances } from '../src/data/performances.ts';
-import { productions } from '../src/data/productions.ts';
+import { productions } from '../src/data/productions/index.ts';
+
+const localeValidationRules = {
+  columbia: {
+    forbiddenPattern: /\p{Script=Han}/u,
+    forbiddenMessage: '哥伦比亚预览内容包含意外汉字',
+  },
+};
 
 function assertComplete(value, path = 'content') {
   if (typeof value === 'string') {
@@ -64,15 +71,16 @@ for (const edition of builtEditions) {
     productions,
     `${edition.editionId}.productions`,
   );
-  if (edition.editionId === 'columbia') {
+  const localeRule = localeValidationRules[edition.editionId];
+  if (localeRule) {
     assert.doesNotMatch(
       JSON.stringify({
         site: localization.site,
         programs: localization.programs,
         messages: localization.messages,
       }),
-      /\p{Script=Han}/u,
-      '哥伦比亚预览内容包含意外汉字',
+      localeRule.forbiddenPattern,
+      localeRule.forbiddenMessage,
     );
   }
 }

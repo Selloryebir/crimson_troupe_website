@@ -192,6 +192,11 @@
       "related": ["BP-CNT-CORE"]
     },
     {
+      "path": "src/data/localized/columbia/index.ts",
+      "primary": "BP-I18N-CORE",
+      "related": ["BP-CNT-CORE"]
+    },
+    {
       "path": "src/data/localized/columbia/messages.ts",
       "primary": "BP-I18N-CORE",
       "related": ["BP-MOD-SEARCH", "BP-MOD-TICKETING", "BP-FND-NARRATIVE"]
@@ -215,6 +220,11 @@
       "path": "src/data/localized/schema.ts",
       "primary": "BP-I18N-CORE",
       "related": ["BP-CNT-CORE", "BP-FND-DOMAIN"]
+    },
+    {
+      "path": "src/data/localized/yan/index.ts",
+      "primary": "BP-I18N-CORE",
+      "related": ["BP-CNT-CORE"]
     },
     {
       "path": "src/data/localized/yan/messages.ts",
@@ -242,9 +252,14 @@
       "related": ["BP-MOD-PROGRAMS", "BP-MOD-TICKETING", "BP-CNT-CORE"]
     },
     {
-      "path": "src/data/productions.ts",
+      "path": "src/data/productions/index.ts",
       "primary": "BP-FND-DOMAIN",
       "related": ["BP-MOD-PROGRAMS", "BP-CNT-CORE", "BP-I18N-CORE", "BP-I18N-TERMS"]
+    },
+    {
+      "path": "src/data/productions/original.ts",
+      "primary": "BP-FND-DOMAIN",
+      "related": ["BP-MOD-PROGRAMS", "BP-CNT-CORE", "BP-I18N-TERMS"]
     },
     {
       "path": "src/data/site-routes.ts",

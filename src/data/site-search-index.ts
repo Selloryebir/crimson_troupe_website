@@ -6,7 +6,7 @@ import {
   getLocalizedProductionEntries,
   type ResolvedLocalization,
 } from './localized/resolve';
-import type { ProductionId } from './productions';
+import type { ProductionId } from './productions/index.ts';
 import { performancePath, productionPath, sitePath, siteRoot, type SiteWorld } from './site-routes';
 
 export type SiteSearchEntryType = 'page' | 'performance' | 'production';
