@@ -27,6 +27,7 @@ const { edition, messages } = localization;
           <li>
             <a href={performancePath(edition, 'archive', performance.performanceId)}>
               <ArchivePoster
+                productionId={leadProduction.productionId}
                 visual={leadProduction.visual}
                 title={leadProduction.title}
                 number={`NO. ${performance.index}`}

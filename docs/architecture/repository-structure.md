@@ -25,10 +25,10 @@ crimson_troupe_website/
 │   │   └── traceability.json
 │   ├── drafts/
 │   │   ├── README.md
-│   │   ├── blueprint/
-│   │   ├── recommendations/
-│   │   ├── creative/
-│   │   └── plans/
+│   │   ├── blueprint/README.md
+│   │   ├── recommendations/README.md
+│   │   ├── creative/README.md
+│   │   └── plans/README.md
 │   ├── guides/
 │   └── references/
 ├── scripts/
@@ -51,7 +51,17 @@ crimson_troupe_website/
     │   └── shared/
     ├── assets/
     ├── data/
-    │   └── localized/
+    │   ├── editions.ts
+    │   ├── locations.ts
+    │   ├── performances.ts
+    │   ├── productions/
+    │   │   ├── folio.ts
+    │   │   ├── original.ts
+    │   │   └── index.ts
+    │   ├── localized/
+    │   ├── site-routes.ts
+    │   ├── site-search-index.ts
+    │   └── ticketing.ts
     ├── scripts/
     └── styles/
         ├── main.css
@@ -62,20 +72,15 @@ crimson_troupe_website/
         └── pollution.css
 ```
 
+目录树只展开需要长期识别的职责边界；参数化页面、本地化国家版本包和组件内文件以实际目录为准，不在此复制完整文件清单。
+
 `.astro/`、`dist/`、`node_modules/`、工具缓存、测试报告和部署平台本地状态都是生成内容，不进入版本控制。`dist/` 是唯一部署产物，不直接部署 `src/`。根目录 `.gitignore` 只排除可重建产物、本地环境与编辑器噪声，不排除源码、锁文件或共享配置。
 
-## 当前实现与后续目标
+## 当前实现快照
 
-当前源码以 `release` 与 `preview` 两种构建画像生成同一套页面：`src/pages/index.astro` 只负责进入 `/yan/`，表站与 1091 里站使用独立页面树；`src/data/performances.ts` 与 `src/data/productions.ts` 保存不含显示语言的场次和剧目事实，`src/data/localized/` 保存类型化国家版本内容包；搜索、污染和票务作为原生 TypeScript 渐进增强按页面装配。
+当前源码以 `release` 与 `preview` 两种构建画像生成同一套页面。`src/pages/index.astro` 只负责进入 `/yan/`，表站与 1091 里站使用独立页面树；`src/data/editions.ts` 拥有注册、构建与发布集合，`src/data/locations.ts`、`src/data/performances.ts` 和 `src/data/productions/` 保存语言无关事实，`src/data/localized/` 保存类型化国家版本内容包。路由、搜索索引和票务输入从这些来源派生，浏览器交互由 `src/scripts/` 中的原生 TypeScript 按页面装配。
 
-已经成立并须继续保持的边界包括：
-
-- `/` 只负责跳转 `/yan/`，已发布国家版本按 `routePrefix` 静态生成页面；
-- 表站与 `/archive/site/1091/` 里站使用独立页面树、布局、导航、内容入口、视觉资源和客户端状态；
-- `Performance`、`Production` 及其有序关联替代混合 `Show`，列表、详情、搜索与票务从同一数据源派生；
-- 搜索页按国家版本、世界和快照年份隔离，并从同一类型化内容源生成各自的构建期索引；
-- 表站稳定票务页启用模拟购票模组，并保留“暂未开票”无脚本降级；里站票务页保持历史不可购买状态；
-- 正式发布集合只包含 `yan / zh-CN`，生成 32 个静态页面；三语言预览额外包含 `higashi / ja-JP` 与 `columbia / en-US` 等价页面，共生成 94 个页面。东国和哥伦比亚内容只用于技术与视觉预览，不代表翻译已通过人工审核。
+正式发布集合只包含 `yan / zh-CN`，当前生成 32 个静态页面；三语言预览额外包含 `higashi / ja-JP` 与 `columbia / en-US` 等价页面，共生成 94 个页面。东国和哥伦比亚内容只用于技术与视觉预览，不代表翻译已通过人工审核。具体行为契约由 active 蓝图拥有，下文只解释源码职责与依赖方向。
 
 当前实现处于 `candidate`，正式发布仍需人工内容与发布审核。未来语言或创意模组只有经过独立规划后才进入实现；不得恢复单页锚点、混合模型或双世界同页 DOM 作为第二套正式架构。
 
@@ -98,7 +103,7 @@ crimson_troupe_website/
 
 ## 草稿规划层
 
-`docs/drafts/` 保存没有正式产品效力的蓝图、建议与创意草稿，以及一次性开发计划。草稿通过人工门禁单向迁入正式责任目录，不加入追踪表，也不在迁移后保留正文副本。已获批准的一次性计划只编排工作，不能覆盖正式蓝图。完整生命周期见 `docs/drafts/README.md`。
+`docs/drafts/` 保存没有正式产品效力的蓝图、建议与创意草稿，以及一次性开发计划。草稿通过人工门禁单向迁入正式责任目录，不加入追踪表，也不在迁移后保留正文副本。已获批准的一次性计划只编排工作，不能覆盖正式蓝图。四个类型子目录各自保留稳定 README 作为职责与格式入口，清理最后一份实际草稿时不得连同目录入口删除。完整生命周期见 `docs/drafts/README.md`。
 
 普通功能开发只读取正式蓝图。规划讨论、草稿评审、已批准计划和正式迁移任务才读取草稿；正式内容规则进入 `docs/blueprint/content/`，实际运行内容进入 `src/data/` 或未来唯一的 `src/content/`，外部依据进入 `docs/references/`。
 
@@ -124,14 +129,11 @@ Astro 组件只负责构建期结构和内容装配，不在组件之间建立�
 
 `src/data/` 保存不依赖 DOM 的稳定事实与本地化内容。正式领域模型遵守 `BP-FND-DOMAIN`，国家版本内容遵守 `BP-I18N-CORE`：
 
-- `Production` 保存可复用剧目的稳定 ID 与视觉事实；
-- `Performance` 保存泰拉日期时间、地点 ID、状态、票务可用性、分区与基础价格，并按顺序引用一个或多个剧目；
-- 表站和里站的本季、历史集合由显式世界视角与内容状态生成，不读取浏览器现实时间；
-- 搜索索引、场次和剧目详情、票务输入均从相同稳定 ID 派生；
-- 国家版本注册显式保存 `editionId`、`routePrefix` 与 locale，不从显示名推导；
-- `localized/<editionId>/` 以相同类型契约保存网站文案、消息、地点、场次和剧目显示内容；页面与客户端只消费解析后的当前国家版本记录，语义状态不保存显示文字。
+- `Production`、`Performance` 与 `Location` 保存稳定 ID、世界视角、泰拉日期、编排、票务及必要视觉事实；本季与历史归属不读取浏览器现实时间；
+- 国家版本注册显式保存 `editionId`、`routePrefix` 与 locale；`localized/<editionId>/` 保存网站文案、消息及领域实体显示内容，页面和客户端只消费解析后的当前版本；
+- 列表、详情、搜索与票务从相同稳定 ID 派生，客户端语义状态不保存显示文字。
 
-`performances.ts`、`productions.ts` 与 `locations.ts` 是当前演出领域事实源，本地化目录是显示内容源；两者通过稳定 ID 关联，不得恢复混合 `Show`、在页面中保存可编辑副本，或让翻译复制日期、票价和状态。只有当同构内容扩展到多文件、需要 Markdown 正文或编辑流程时，才整体迁移到 Astro Content Collections。
+`locations.ts` 与 `performances.ts` 分别拥有地点和场次事实；`productions/folio.ts`、`productions/original.ts` 按来源维护剧目，并由 `productions/index.ts` 合并为唯一消费入口。`localized/<editionId>/` 是显示内容源；各层通过稳定 ID 关联，不得恢复混合 `Show`、在页面中保存可编辑副本，或让翻译复制日期、票价和状态。只有当同构内容扩展到多文件、需要 Markdown 正文或编辑流程时，才整体迁移到 Astro Content Collections。
 
 ## 客户端交互层
 

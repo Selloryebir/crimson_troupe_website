@@ -1,6 +1,7 @@
 import {
   advancePollution,
   createPollutionState,
+  MAX_POLLUTION_LEVEL,
   parsePollutionState,
   type PollutionState,
   type PollutionTrigger,
@@ -72,6 +73,9 @@ function clearState(storage: Storage | null): void {
 function applyState(state: PollutionState): void {
   document.documentElement.dataset.pollutionLevel = String(state.level);
   document.documentElement.dataset.pollutionVariant = String(state.variant);
+  document.querySelectorAll<HTMLElement>('[data-archive-projection]').forEach((projection) => {
+    projection.hidden = state.level !== MAX_POLLUTION_LEVEL;
+  });
 }
 
 function requestTransition(storage: Storage | null, trigger: PollutionTrigger): PollutionState {

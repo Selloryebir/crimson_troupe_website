@@ -26,10 +26,14 @@ const canonicalPath = sitePath(edition, 'archive', 'tickets');
   description={copy.metaDescription}
   canonicalPath={canonicalPath}
 >
-  <section class="page-intro page-width">
+  <section class="page-intro page-width" data-pollution-slot="heading">
     <p class="eyebrow">{copy.eyebrow}</p><h1>{copy.title}</h1><p>{copy.introduction}</p>
   </section>
-  <section class="archive-ticket-office page-width" role="status">
+  <section
+    class="archive-ticket-office page-width"
+    role="status"
+    data-pollution-slot="ticket-record"
+  >
     <div aria-hidden="true">
       <span>{copy.office}</span><strong>{copy.closedMark}</strong><small>1091</small>
     </div>

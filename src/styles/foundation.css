@@ -118,28 +118,16 @@ a {
 }
 
 .brand-mark {
-  position: relative;
-  display: grid;
-  width: 42px;
-  height: 42px;
-  place-items: center;
-  border: 1px solid currentcolor;
-  color: var(--crimson);
-  font-family: var(--serif);
-  font-size: 0.75rem;
-  transform: rotate(45deg);
+  display: block;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
 }
 
-.brand-mark::before {
-  position: absolute;
-  inset: 4px;
-  border: 1px solid currentcolor;
-  content: "";
-  opacity: 0.36;
-}
-
-.brand-mark__monogram {
-  transform: rotate(-45deg);
+.troupe-mark {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .brand-name {
@@ -587,6 +575,21 @@ a {
 
 .footer-inner {
   padding-block: 46px;
+}
+
+.footer-brand {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+.footer-brand__mark {
+  width: 54px;
+  flex: 0 0 54px;
+}
+
+.footer-brand p {
+  margin: 8px 0 0;
 }
 
 .footer-inner strong {

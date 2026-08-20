@@ -1,6 +1,7 @@
 ---
 import type { ResolvedLocalization } from '../../data/localized/resolve';
 import { siteRoot, type SiteWorld } from '../../data/site-routes';
+import TroupeMark from './TroupeMark.astro';
 
 interface Props {
   localization: ResolvedLocalization;
@@ -16,9 +17,12 @@ const switchLabel = world === 'front' ? copy.frontToArchive : copy.archiveToFron
 
 <footer class="site-footer">
   <div class="footer-inner">
-    <div>
-      <strong>{localization.site.brand.name}</strong>
-      <p>{world === 'front' ? copy.frontFooter : copy.archiveFooter}</p>
+    <div class="footer-brand">
+      <TroupeMark class="footer-brand__mark" />
+      <div>
+        <strong>{localization.site.brand.name}</strong>
+        <p>{world === 'front' ? copy.frontFooter : copy.archiveFooter}</p>
+      </div>
     </div>
     <a
       class="world-switch"

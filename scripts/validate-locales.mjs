@@ -20,12 +20,8 @@ const localeValidationRules = {
 };
 
 const expectedArchiveMatrix = {
-  'der-ring-calais-blason-1091-0308': ['der-ring', 'calais-blason', 'history'],
-  'one-hundred-and-one-days-calais-blason-1091-0419': [
-    'one-hundred-and-one-days',
-    'calais-blason',
-    'history',
-  ],
+  'der-ring-londinium-1091-0308': ['der-ring', 'londinium', 'history'],
+  'one-hundred-and-one-days-norport-1091-0419': ['one-hundred-and-one-days', 'norport', 'history'],
   'the-carnival-wiesheim-1091-0511': ['the-carnival', 'wiesheim', 'history'],
   'ode-au-triomphe-nuova-volsinii-1091-0623': ['ode-au-triomphe', 'nuova-volsinii', 'history'],
   'der-ring-zwillingsturme-1091-0817': ['der-ring', 'zwillingsturme', 'current'],
@@ -125,9 +121,15 @@ for (const edition of builtEditions) {
     false,
     `${edition.editionId}.messages 发生回退`,
   );
+  assert.equal(
+    localization.sources.archiveProjection.usedFallback,
+    false,
+    `${edition.editionId}.archiveProjection 发生回退`,
+  );
   assertComplete(localization.site, `${edition.editionId}.site`);
   assertComplete(localization.programs, `${edition.editionId}.programs`);
   assertComplete(localization.messages, `${edition.editionId}.messages`);
+  assertComplete(localization.archiveProjection, `${edition.editionId}.archiveProjection`);
   assertExactKeys(localization.programs.locations, locations, `${edition.editionId}.locations`);
   assertExactKeys(
     localization.programs.performances,
@@ -146,6 +148,7 @@ for (const edition of builtEditions) {
         site: localization.site,
         programs: localization.programs,
         messages: localization.messages,
+        archiveProjection: localization.archiveProjection,
       }),
       localeRule.forbiddenPattern,
       localeRule.forbiddenMessage,

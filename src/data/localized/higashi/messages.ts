@@ -88,5 +88,4 @@ export const higashiMessages = {
     archiveRegister: '巡演簿番号 {index}',
     productionCount: '{count}演目',
   },
-  pollution: { warning: '振り返らないでください' },
 } as const satisfies LocalizedShape<typeof yanMessages>;

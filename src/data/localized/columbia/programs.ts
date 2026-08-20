@@ -37,19 +37,19 @@ export const columbiaPrograms = {
       searchDetail: 'October 29 · Norport County · Experimental dance theater',
       searchKeywords: 'October Norport dance snow',
     },
-    'der-ring-calais-blason-1091-0308': {
+    'der-ring-londinium-1091-0308': {
       index: 'I',
       dateTimeDisplay: 'Terra Year 1091 · March 8 · 7:00 PM',
-      venue: 'Calais-Blason Forest Castle · Lake Hall',
-      searchDetail: 'March 8 · Calais-Blason · Der Ring',
-      searchKeywords: 'Calais-Blason Der Ring lake hall March',
+      venue: 'Old Royal Theatre of Londinium · Mirror Lake Hall',
+      searchDetail: 'March 8 · Londinium · Der Ring',
+      searchKeywords: 'Londinium Der Ring Mirror Lake Hall March',
     },
-    'one-hundred-and-one-days-calais-blason-1091-0419': {
+    'one-hundred-and-one-days-norport-1091-0419': {
       index: 'II',
       dateTimeDisplay: 'Terra Year 1091 · April 19 · 6:30 PM',
-      venue: 'Calais-Blason Forest Castle · Gallery Theater',
-      searchDetail: 'April 19 · Calais-Blason · One Hundred and One Days',
-      searchKeywords: 'Calais-Blason One Hundred and One Days gallery April',
+      venue: 'Norport County Clocktower Theatre · West Gallery',
+      searchDetail: 'April 19 · Norport County · One Hundred and One Days',
+      searchKeywords: 'Norport County One Hundred and One Days clocktower gallery April',
     },
     'the-carnival-wiesheim-1091-0511': {
       index: 'III',

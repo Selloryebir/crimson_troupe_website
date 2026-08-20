@@ -1,13 +1,7 @@
----
-interface Props {
-  warning: string;
-}
-
-const { warning } = Astro.props;
----
-
-<div class="archive-anomaly-layer" aria-hidden="true">
-  <span></span><span></span><span></span><strong>{warning}</strong>
+<div class="archive-pollution-stage" aria-hidden="true">
+  <span class="archive-pollution-stage__plate"></span>
+  <span class="archive-pollution-stage__folio"></span>
+  <span class="archive-pollution-stage__threshold"></span>
 </div>
 
 <script>

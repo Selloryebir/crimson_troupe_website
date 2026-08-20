@@ -26,10 +26,10 @@ const canonicalPath = sitePath(edition, 'archive', 'troupe');
   description={copy.metaDescription}
   canonicalPath={canonicalPath}
 >
-  <section class="page-intro page-width">
+  <section class="page-intro page-width" data-pollution-slot="heading">
     <p class="eyebrow">{copy.eyebrow}</p><h1>{copy.title}</h1><p>{copy.statement}</p>
   </section>
-  <section class="archive-company page-width">
+  <section class="archive-company page-width" data-pollution-slot="company-record">
     <div>
       <p class="archive-kicker">{copy.kicker}</p>
       <h2>{copy.aboutTitle}</h2>

@@ -74,22 +74,22 @@ export const performances = {
     productionIds: ['second-snow'],
     ticketAvailability: { state: 'on-sale', offers: createFrontTicketOffers() },
   },
-  'der-ring-calais-blason-1091-0308': {
-    performanceId: 'der-ring-calais-blason-1091-0308',
+  'der-ring-londinium-1091-0308': {
+    performanceId: 'der-ring-londinium-1091-0308',
     world: 'archive',
     collection: 'history',
     status: 'completed',
-    locationId: 'calais-blason',
+    locationId: 'londinium',
     dateTime: { calendar: 'terra', year: 1091, month: 3, day: 8, time: '19:00' },
     productionIds: ['der-ring'],
     ticketAvailability: { state: 'unavailable', reason: 'historic-snapshot' },
   },
-  'one-hundred-and-one-days-calais-blason-1091-0419': {
-    performanceId: 'one-hundred-and-one-days-calais-blason-1091-0419',
+  'one-hundred-and-one-days-norport-1091-0419': {
+    performanceId: 'one-hundred-and-one-days-norport-1091-0419',
     world: 'archive',
     collection: 'history',
     status: 'completed',
-    locationId: 'calais-blason',
+    locationId: 'norport',
     dateTime: { calendar: 'terra', year: 1091, month: 4, day: 19, time: '18:30' },
     productionIds: ['one-hundred-and-one-days'],
     ticketAvailability: { state: 'unavailable', reason: 'historic-snapshot' },
