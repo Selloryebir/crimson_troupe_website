@@ -39,6 +39,12 @@ html[data-world="archive"] body {
   font-family: var(--serif);
 }
 
+html[data-world="archive"] .site-main {
+  background:
+    linear-gradient(90deg, transparent 6%, rgb(154 106 50 / 7%) 6.1%, transparent 6.2% 93.8%, rgb(154 106 50 / 7%) 93.9%, transparent 94%),
+    radial-gradient(ellipse at 50% 12%, rgb(208 154 85 / 5%), transparent 34rem);
+}
+
 html[data-world="archive"] .site-header,
 html[data-world="archive"] .site-footer {
   color: var(--archive-paper);
@@ -61,14 +67,7 @@ html[data-world="archive"] .footer-legal {
 }
 
 html[data-world="archive"] .brand-mark {
-  border: 3px double var(--archive-gold);
-  color: var(--archive-candle);
-  background: var(--archive-lacquer);
-}
-
-html[data-world="archive"] .brand-mark::before {
-  border-color: var(--archive-curtain);
-  opacity: 0.7;
+  filter: sepia(0.15) drop-shadow(0 8px 12px rgb(0 0 0 / 32%));
 }
 
 html[data-world="archive"] .main-nav a {
@@ -201,14 +200,10 @@ html[data-world="archive"] .eyebrow {
 
 .archive-ornament {
   display: block;
-  width: 42px;
-  height: 42px;
+  width: 66px;
+  height: 66px;
   margin: 0 auto 22px;
-  border: 3px double var(--archive-gold);
-  color: var(--archive-candle);
-  font-size: 1.1rem;
-  line-height: 35px;
-  transform: rotate(45deg);
+  filter: drop-shadow(0 12px 18px rgb(0 0 0 / 38%));
 }
 
 .archive-home h1 {
@@ -273,7 +268,8 @@ html[data-world="archive"] :is(.text-link, .back-link):hover {
 
   position: relative;
   display: grid;
-  min-height: 540px;
+  aspect-ratio: 2 / 3;
+  min-height: 0;
   overflow: hidden;
   border: 1px solid var(--poster-paper);
   color: var(--archive-ink);
@@ -285,7 +281,8 @@ html[data-world="archive"] :is(.text-link, .back-link):hover {
 }
 
 .archive-poster.is-compact {
-  min-height: 230px;
+  aspect-ratio: 4 / 5;
+  min-height: 0;
 }
 
 .archive-poster__image {
@@ -307,9 +304,18 @@ html[data-world="archive"] :is(.text-link, .back-link):hover {
 }
 
 .archive-poster.has-artwork .archive-poster__title {
-  background: linear-gradient(0deg, rgb(18 11 10 / 88%), transparent 78%);
-  color: var(--archive-paper);
+  background: linear-gradient(180deg, rgb(18 11 10 / 76%), transparent 100%);
   text-shadow: 0 2px 18px rgb(0 0 0 / 80%);
+}
+
+.archive-poster.has-artwork[data-title-tone="light"] .archive-poster__title {
+  color: #f1e2c5;
+}
+
+.archive-poster.has-artwork[data-title-tone="dark"] .archive-poster__title {
+  color: #2d211a;
+  background: linear-gradient(180deg, rgb(226 207 172 / 82%), transparent 100%);
+  text-shadow: 0 1px 12px rgb(239 218 181 / 40%);
 }
 
 .archive-poster.has-artwork .archive-poster__number {
@@ -330,6 +336,14 @@ html[data-world="archive"] :is(.text-link, .back-link):hover {
 .archive-poster::after {
   inset: 18px;
   border: 3px double rgb(125 23 34 / 62%);
+}
+
+.archive-poster.has-artwork::before {
+  border-color: color-mix(in srgb, var(--poster-memory, var(--archive-gold)) 54%, #20120f);
+}
+
+.archive-poster.has-artwork::after {
+  display: none;
 }
 
 .archive-poster--lantern {
@@ -423,11 +437,14 @@ html[data-world="archive"] :is(.text-link, .back-link):hover {
 }
 
 .archive-poster__title {
+  position: absolute;
+  top: 0;
+  left: 0;
   z-index: 3;
   display: grid;
   gap: 6px;
-  align-self: end;
-  padding: 36px;
+  max-width: min(84%, 22rem);
+  padding: 62px 36px 48px;
   text-align: left;
 }
 
@@ -443,11 +460,21 @@ html[data-world="archive"] :is(.text-link, .back-link):hover {
 }
 
 .archive-poster.is-compact .archive-poster__title {
-  padding: 27px;
+  padding: 56px 27px 34px;
 }
 
 .archive-poster.is-compact .archive-poster__title strong {
   font-size: 1.4rem;
+}
+
+.archive-poster__mark {
+  position: absolute;
+  z-index: 3;
+  bottom: 20px;
+  left: 50%;
+  width: clamp(50px, 15%, 76px);
+  filter: drop-shadow(0 8px 16px rgb(0 0 0 / 48%));
+  transform: translateX(-50%);
 }
 
 .archive-notice-strip {
@@ -610,7 +637,7 @@ html[data-world="archive"] .detail {
 }
 
 .archive-detail-header .archive-poster {
-  min-height: 440px;
+  min-height: 0;
 }
 
 html[data-world="archive"] :is(.fact-grid, .archive-credit-list) {
@@ -841,7 +868,7 @@ html[data-world="archive"] :is(a, button, input, select, textarea):focus-visible
   }
 
   .archive-poster {
-    min-height: 420px;
+    min-height: 0;
   }
 
   .archive-notice-strip > div,
@@ -862,7 +889,7 @@ html[data-world="archive"] :is(a, button, input, select, textarea):focus-visible
   }
 
   .archive-performance-list .archive-poster {
-    min-height: 270px;
+    min-height: 0;
   }
 
   .archive-performance-list__date {

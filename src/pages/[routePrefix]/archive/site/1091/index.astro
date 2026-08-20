@@ -1,6 +1,7 @@
 ---
 import ArchivePerformanceList from '../../../../../components/archive/ArchivePerformanceList.astro';
 import ArchivePoster from '../../../../../components/archive/ArchivePoster.astro';
+import TroupeMark from '../../../../../components/shared/TroupeMark.astro';
 import { builtEditions, type BuiltEdition } from '../../../../../data/editions';
 import { formatMessage } from '../../../../../data/localized/format';
 import {
@@ -42,7 +43,7 @@ const featuredProduction = featuredPerformance
   <section class="archive-home page-width" aria-labelledby="archive-title">
     <div class="archive-home__copy" data-pollution-slot="invitation">
       <p class="archive-kicker">{localization.site.archive.register}</p>
-      <span class="archive-ornament" aria-hidden="true">✦</span>
+      <TroupeMark class="archive-ornament" />
       <h1 id="archive-title">{copy.title}</h1>
       <p>{copy.introduction}</p>
       <div class="actions">

@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import { getProductionArtwork } from '../../data/production-artworks.ts';
 import type { ProductionId, ProductionVisual } from '../../data/productions/index.ts';
+import TroupeMark from '../shared/TroupeMark.astro';
 
 interface Props {
   productionId: ProductionId;
@@ -30,7 +31,10 @@ const artwork = getProductionArtwork(productionId, 'archive');
     { 'is-compact': compact, 'has-artwork': artwork },
   ]}
   data-pollution-slot="poster"
-  style={artwork ? `--art-focus: ${artwork.focalPoint}` : undefined}
+  data-title-tone={artwork?.titleTone}
+  style={artwork
+    ? `--art-focus: ${artwork.focalPoint}; --poster-memory: ${artwork.memoryColor}`
+    : undefined}
 >
   {
     artwork && (
@@ -39,7 +43,11 @@ const artwork = getProductionArtwork(productionId, 'archive');
         src={artwork.source}
         alt=""
         widths={[240, 480, 768]}
-        sizes={compact ? '180px' : '(max-width: 720px) 100vw, 590px'}
+        sizes={
+          compact
+            ? '(max-width: 620px) calc(100vw - 28px), (max-width: 960px) 160px, 180px'
+            : '(max-width: 620px) calc(100vw - 48px), (max-width: 960px) min(590px, calc(100vw - 36px)), 590px'
+        }
         loading={compact ? 'lazy' : 'eager'}
         decoding="async"
       />
@@ -50,4 +58,5 @@ const artwork = getProductionArtwork(productionId, 'archive');
   ><div class="archive-poster__title">
     <strong>{title}</strong>{subtitle && <small>{subtitle}</small>}
   </div>
+  {artwork && <TroupeMark class="archive-poster__mark" />}
 </div>
