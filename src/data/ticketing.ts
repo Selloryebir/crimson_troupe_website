@@ -4,7 +4,7 @@ import {
   type ResolvedLocalization,
 } from './localized/resolve.ts';
 import type { TicketOffer } from './performances.ts';
-import type { ProductionVisual } from './productions/index.ts';
+import type { ProductionId, ProductionVisual } from './productions/index.ts';
 
 export interface LocalizedTicketOffer extends TicketOffer {
   label: string;
@@ -12,6 +12,7 @@ export interface LocalizedTicketOffer extends TicketOffer {
 
 export interface TicketingPerformanceOption {
   performanceId: string;
+  productionId: ProductionId;
   title: string;
   kind: string;
   dateTime: string;
@@ -31,6 +32,7 @@ export function getTicketingOptions(
     return [
       {
         performanceId: performance.performanceId,
+        productionId: leadProduction.productionId,
         title: leadProduction.title,
         kind: leadProduction.kind,
         dateTime: performance.dateTime.display,

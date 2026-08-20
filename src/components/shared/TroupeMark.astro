@@ -1,0 +1,20 @@
+---
+import seal from '../../assets/brand/troupe-publication-seal.svg';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<img
+  class:list={['troupe-mark', className]}
+  src={seal.src}
+  width="128"
+  height="128"
+  alt=""
+  aria-hidden="true"
+  loading="eager"
+  decoding="async"
+/>

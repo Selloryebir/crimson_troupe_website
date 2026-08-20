@@ -30,10 +30,14 @@ const canonicalPath = sitePath(edition, 'archive', 'performances/history');
   description={copy.metaDescription}
   canonicalPath={canonicalPath}
 >
-  <section class="page-intro page-width">
+  <section class="page-intro page-width" data-pollution-slot="heading">
     <p class="eyebrow">{copy.eyebrow}</p><h1>{copy.title}</h1><p>{copy.introduction}</p>
   </section>
-  <section class="content-section page-width" aria-label={copy.ariaLabel}>
+  <section
+    class="content-section page-width"
+    aria-label={copy.ariaLabel}
+    data-pollution-slot="record-list"
+  >
     <ArchivePerformanceList
       localization={localization}
       performances={getLocalizedPerformances(localization, 'archive', 'history')}

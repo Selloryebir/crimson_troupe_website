@@ -90,5 +90,4 @@ export const columbiaMessages = {
     archiveRegister: 'Touring Register No. {index}',
     productionCount: '{count} productions',
   },
-  pollution: { warning: 'DO NOT LOOK BACK' },
 } as const satisfies LocalizedShape<typeof yanMessages>;

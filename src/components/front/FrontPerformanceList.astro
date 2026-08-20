@@ -71,6 +71,7 @@ const months = [...new Set(performances.map((item) => item.dateTime.month))];
             >
               <a href={performancePath(edition, 'front', performance.performanceId)}>
                 <ProductionVisual
+                  productionId={leadProduction.productionId}
                   visual={leadProduction.visual}
                   title={leadProduction.title}
                   index={performance.index}

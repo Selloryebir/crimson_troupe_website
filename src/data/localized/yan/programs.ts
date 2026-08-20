@@ -37,19 +37,19 @@ export const yanPrograms = {
       searchDetail: '10月29日 · 诺伯特郡 · 实验舞剧',
       searchKeywords: '十月 10月 诺伯特 舞剧 雪',
     },
-    'der-ring-calais-blason-1091-0308': {
+    'der-ring-londinium-1091-0308': {
       index: '壹',
       dateTimeDisplay: '泰拉历 1091 年三月初八 · 入夜七时',
-      venue: '克莱布拉松林中城堡 · 湖厅',
-      searchDetail: '三月初八 · 克莱布拉松 · 湖中至宝',
-      searchKeywords: '克莱布拉松 湖中至宝 湖厅 三月',
+      venue: '伦蒂尼姆旧王家剧院 · 镜湖厅',
+      searchDetail: '三月初八 · 伦蒂尼姆 · 湖中至宝',
+      searchKeywords: '伦蒂尼姆 湖中至宝 镜湖厅 三月',
     },
-    'one-hundred-and-one-days-calais-blason-1091-0419': {
+    'one-hundred-and-one-days-norport-1091-0419': {
       index: '贰',
       dateTimeDisplay: '泰拉历 1091 年四月十九 · 入夜六时半',
-      venue: '克莱布拉松林中城堡 · 长廊剧场',
-      searchDetail: '四月十九 · 克莱布拉松 · 一百零一日',
-      searchKeywords: '克莱布拉松 一百零一日 长廊 四月',
+      venue: '诺伯特郡钟楼剧场 · 西廊',
+      searchDetail: '四月十九 · 诺伯特郡 · 一百零一日',
+      searchKeywords: '诺伯特郡 一百零一日 钟楼 西廊 四月',
     },
     'the-carnival-wiesheim-1091-0511': {
       index: '叁',

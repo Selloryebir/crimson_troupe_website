@@ -1,4 +1,5 @@
 import type { WebsiteLocalizationPackage } from '../yan/index.ts';
+import { columbiaArchiveProjection } from './archive-projection.ts';
 import { columbiaMessages } from './messages.ts';
 import { columbiaPrograms } from './programs.ts';
 import { columbiaProductions } from './productions/index.ts';
@@ -8,4 +9,5 @@ export const columbiaLocalizationPackage = {
   site: columbiaSite,
   programs: { ...columbiaPrograms, productions: columbiaProductions },
   messages: columbiaMessages,
+  archiveProjection: columbiaArchiveProjection,
 } satisfies WebsiteLocalizationPackage;

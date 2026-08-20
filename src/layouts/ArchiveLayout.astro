@@ -1,14 +1,16 @@
 ---
 import PollutionController from '../components/shared/PollutionController.astro';
+import ArchiveProjection from '../components/archive/ArchiveProjection.astro';
 import SiteFooter from '../components/shared/SiteFooter.astro';
 import SiteHeader from '../components/shared/SiteHeader.astro';
+import { getArchivePollutionProfile, type ArchivePageType } from '../data/archive-pollution';
 import type { BuiltEdition } from '../data/editions';
 import { getLocalization } from '../data/localized/resolve';
 import BaseLayout from './BaseLayout.astro';
 
 interface Props {
   edition: BuiltEdition;
-  pageType: string;
+  pageType: ArchivePageType;
   currentSection: 'home' | 'current' | 'history' | 'troupe' | 'search' | 'tickets' | 'detail';
   title: string;
   description: string;
@@ -17,6 +19,7 @@ interface Props {
 
 const { edition, pageType, currentSection, title, description, canonicalPath } = Astro.props;
 const localization = getLocalization(edition);
+const pollutionProfile = getArchivePollutionProfile(pageType);
 ---
 
 <BaseLayout
@@ -36,7 +39,10 @@ const localization = getLocalization(edition);
     currentSection={currentSection}
     currentPath={canonicalPath}
   />
-  <main id="main-content" class="site-main"><slot /></main>
+  <main id="main-content" class="site-main" data-pollution-profile={pollutionProfile}>
+    <ArchiveProjection content={localization.archiveProjection} profile={pollutionProfile} />
+    <slot />
+  </main>
   <SiteFooter localization={localization} world="archive" />
-  <PollutionController warning={localization.messages.pollution.warning} />
+  <PollutionController />
 </BaseLayout>

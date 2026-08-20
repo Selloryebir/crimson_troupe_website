@@ -84,5 +84,4 @@ export const yanMessages = {
     archiveRegister: '巡演簿号 {index}',
     productionCount: '{count} 项剧目',
   },
-  pollution: { warning: '请不要回头' },
 } as const;

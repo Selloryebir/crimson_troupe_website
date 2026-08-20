@@ -36,19 +36,19 @@ export const higashiPrograms = {
       searchDetail: '10月29日・ノーポート郡・実験舞踊劇',
       searchKeywords: '10月 ノーポート 舞踊 雪',
     },
-    'der-ring-calais-blason-1091-0308': {
+    'der-ring-londinium-1091-0308': {
       index: '一',
       dateTimeDisplay: 'テラ歴1091年3月8日・19:00',
-      venue: 'カレー＝ブラゾン森の城・湖の間',
-      searchDetail: '3月8日・カレー＝ブラゾン・湖中の至宝',
-      searchKeywords: 'カレー＝ブラゾン 湖中の至宝 湖 3月',
+      venue: 'ロンディニウム旧王立劇場・鏡湖の間',
+      searchDetail: '3月8日・ロンディニウム・湖中の至宝',
+      searchKeywords: 'ロンディニウム 湖中の至宝 鏡湖 3月',
     },
-    'one-hundred-and-one-days-calais-blason-1091-0419': {
+    'one-hundred-and-one-days-norport-1091-0419': {
       index: '二',
       dateTimeDisplay: 'テラ歴1091年4月19日・18:30',
-      venue: 'カレー＝ブラゾン森の城・回廊劇場',
-      searchDetail: '4月19日・カレー＝ブラゾン・百日一日物語',
-      searchKeywords: 'カレー＝ブラゾン 百日一日物語 回廊 4月',
+      venue: 'ノーポート郡時計塔劇場・西回廊',
+      searchDetail: '4月19日・ノーポート郡・百日一日物語',
+      searchKeywords: 'ノーポート郡 百日一日物語 時計塔 回廊 4月',
     },
     'the-carnival-wiesheim-1091-0511': {
       index: '三',

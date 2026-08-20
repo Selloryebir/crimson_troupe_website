@@ -2,6 +2,7 @@
 import type { ResolvedLocalization } from '../../data/localized/resolve';
 import { sitePath, siteRoot, type SiteWorld } from '../../data/site-routes';
 import EditionSelector from './EditionSelector.astro';
+import TroupeMark from './TroupeMark.astro';
 
 interface Props {
   localization: ResolvedLocalization;
@@ -33,8 +34,7 @@ const links = [
 <header class="site-header">
   <div class="header-inner">
     <a class="brand" href={siteRoot(edition, world)} aria-label={copy.brandHome}>
-      <span class="brand-mark" aria-hidden="true"><span class="brand-mark__monogram">CT</span></span
-      >
+      <span class="brand-mark" aria-hidden="true"><TroupeMark /></span>
       <span class="brand-name"
         ><strong>{localization.site.brand.name}</strong><small
           >{localization.site.brand.latinName}</small

@@ -24,8 +24,20 @@ html[data-world="front"] {
 
 html[data-world="front"] body {
   background:
-    linear-gradient(90deg, transparent calc(50% - 0.5px), rgb(23 19 16 / 3%) 50%, transparent calc(50% + 0.5px)),
+    linear-gradient(
+      90deg,
+      transparent calc(50% - 0.5px),
+      rgb(23 19 16 / 3%) 50%,
+      transparent calc(50% + 0.5px)
+    ),
     var(--surface-environment);
+}
+
+html[data-world="front"] .site-main {
+  background:
+    linear-gradient(90deg, rgb(129 27 40 / 3%) 1px, transparent 1px) center top / min(10vw, 112px)
+      100% no-repeat,
+    linear-gradient(180deg, rgb(250 248 243 / 72%), transparent 28rem);
 }
 
 html[data-world="front"] .site-header {
@@ -37,8 +49,7 @@ html[data-world="front"] .site-header {
 }
 
 html[data-world="front"] .brand-mark {
-  background: var(--surface-content);
-  box-shadow: 8px 8px 0 rgb(129 27 40 / 8%);
+  filter: drop-shadow(6px 7px 0 rgb(129 27 40 / 9%));
 }
 
 html[data-world="front"] .main-nav a {
@@ -209,8 +220,9 @@ html[data-world="front"] :is(.text-link, .back-link):hover {
 
   position: relative;
   display: grid;
+  aspect-ratio: 4 / 5;
   min-width: 0;
-  min-height: 490px;
+  min-height: 0;
   overflow: hidden;
   border: 1px solid rgb(250 248 243 / 12%);
   color: #faf8f3;
@@ -224,29 +236,42 @@ html[data-world="front"] :is(.text-link, .back-link):hover {
 .production-visual::before,
 .production-visual::after {
   position: absolute;
-  z-index: -1;
-  inset: 0;
+  z-index: 1;
   content: "";
   pointer-events: none;
 }
 
 .production-visual::before {
-  background:
-    linear-gradient(90deg, rgb(255 255 255 / 8%) 1px, transparent 1px),
-    linear-gradient(rgb(255 255 255 / 5%) 1px, transparent 1px);
-  background-size: 25% 100%, 100% 25%;
-  mask-image: linear-gradient(135deg, #000, transparent 64%);
+  inset: 11px;
+  border: 1px solid color-mix(in srgb, var(--visual-memory, #faf8f3) 58%, transparent);
+  box-shadow: inset 0 0 0 1px rgb(12 13 14 / 28%);
 }
 
 .production-visual::after {
+  inset: 0;
   background:
-    linear-gradient(112deg, transparent 26%, rgb(255 255 255 / 13%) 26.2% 26.8%, transparent 27%),
-    linear-gradient(115deg, transparent 42%, rgb(255 255 255 / 8%) 42.3% 62%, transparent 62.3%);
+    linear-gradient(180deg, rgb(8 10 11 / 70%), transparent 36%),
+    linear-gradient(0deg, rgb(8 10 11 / 76%), transparent 28%);
 }
 
 .production-visual.is-compact {
-  min-height: 340px;
+  aspect-ratio: 4 / 5;
+  min-height: 0;
   box-shadow: none;
+}
+
+.production-visual__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--visual-focus, 50% 50%);
+  transition: transform 500ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+a:hover .production-visual__image {
+  transform: scale(1.025);
 }
 
 .production-visual--flame {
@@ -328,12 +353,13 @@ html[data-world="front"] :is(.text-link, .back-link):hover {
 }
 
 .production-visual > p {
-  position: relative;
-  z-index: 1;
-  align-self: end;
-  max-width: 82%;
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  max-width: min(82%, 18ch);
   margin: 0;
-  padding: 30px;
+  padding: 60px 30px 30px;
   font: 400 clamp(1.55rem, 3vw, 3.3rem) / 1.1 var(--serif);
   text-shadow: 0 2px 22px rgb(0 0 0 / 44%);
   overflow-wrap: anywhere;
@@ -341,6 +367,16 @@ html[data-world="front"] :is(.text-link, .back-link):hover {
 
 .production-visual.is-compact > p {
   font-size: clamp(1.3rem, 2vw, 2.05rem);
+}
+
+.production-visual__mark {
+  position: absolute;
+  z-index: 2;
+  bottom: 18px;
+  left: 50%;
+  width: clamp(48px, 13%, 70px);
+  filter: drop-shadow(0 7px 14px rgb(0 0 0 / 36%));
+  transform: translateX(-50%);
 }
 
 .season-statement {
@@ -632,8 +668,12 @@ html[data-world="front"] .front-performance-grid > li:first-child {
   grid-column: span 2;
 }
 
-html[data-world="front"] .front-performance-grid > li:first-child .production-visual {
-  min-height: 430px;
+html[data-world="front"] .front-performance-grid > li:nth-child(3) {
+  grid-column: 2 / -1;
+}
+
+html[data-world="front"] .front-performance-grid > li:is(:first-child, :nth-child(3)) .production-visual {
+  aspect-ratio: 16 / 9;
 }
 
 html[data-world="front"] .front-performance-card__copy {
@@ -833,7 +873,7 @@ html[data-world="front"] .footer-legal {
   .production-visual.is-compact,
   .detail-header--visual .production-visual,
   html[data-world="front"] .front-performance-grid > li:first-child .production-visual {
-    min-height: 300px;
+    min-height: 0;
   }
 
   .season-statement > div {
@@ -864,6 +904,15 @@ html[data-world="front"] .footer-legal {
 
   html[data-world="front"] .front-performance-grid > li:first-child {
     grid-column: auto;
+  }
+
+  html[data-world="front"] .front-performance-grid > li:nth-child(3) {
+    grid-column: auto;
+  }
+
+  html[data-world="front"] .front-performance-grid > li:is(:first-child, :nth-child(3))
+    .production-visual {
+    aspect-ratio: 4 / 5;
   }
 
   html[data-world="front"] .service-grid > div {
