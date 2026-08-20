@@ -35,6 +35,7 @@ crimson_troupe_website/
 │   ├── blueprint.mjs
 │   ├── quality.mjs
 │   ├── validate-build.mjs
+│   ├── validate-locales.mjs
 │   └── validate-states.mjs
 └── src/
     ├── pages/
@@ -50,15 +51,22 @@ crimson_troupe_website/
     │   └── shared/
     ├── assets/
     ├── data/
+    │   └── localized/
     ├── scripts/
     └── styles/
+        ├── main.css
+        ├── foundation.css
+        ├── front.css
+        ├── ticketing.css
+        ├── archive.css
+        └── pollution.css
 ```
 
 `.astro/`、`dist/`、`node_modules/`、工具缓存、测试报告和部署平台本地状态都是生成内容，不进入版本控制。`dist/` 是唯一部署产物，不直接部署 `src/`。根目录 `.gitignore` 只排除可重建产物、本地环境与编辑器噪声，不排除源码、锁文件或共享配置。
 
 ## 当前实现与后续目标
 
-当前源码已经完成 S1—S6 简体中文双站候选：`src/pages/index.astro` 只负责进入 `/yan/`，表站与 1091 里站使用独立页面树；`src/data/performances.ts` 与 `src/data/productions.ts` 分别保存场次和剧目事实；搜索、污染和票务作为原生 TypeScript 渐进增强按页面装配。
+当前源码以 `release` 与 `preview` 两种构建画像生成同一套页面：`src/pages/index.astro` 只负责进入 `/yan/`，表站与 1091 里站使用独立页面树；`src/data/performances.ts` 与 `src/data/productions.ts` 保存不含显示语言的场次和剧目事实，`src/data/localized/` 保存类型化国家版本内容包；搜索、污染和票务作为原生 TypeScript 渐进增强按页面装配。
 
 已经成立并须继续保持的边界包括：
 
@@ -67,7 +75,7 @@ crimson_troupe_website/
 - `Performance`、`Production` 及其有序关联替代混合 `Show`，列表、详情、搜索与票务从同一数据源派生；
 - 搜索页按国家版本、世界和快照年份隔离，并从同一类型化内容源生成各自的构建期索引；
 - 表站稳定票务页启用模拟购票模组，并保留“暂未开票”无脚本降级；里站票务页保持历史不可购买状态；
-- 当前发布集合只包含 `yan / zh-CN`，构建共生成 26 个静态页面，其中包括根路径入口和双站页面树。
+- 正式发布集合只包含 `yan / zh-CN`，生成 26 个静态页面；双语言预览额外包含 `columbia / en-US` 等价页面，共生成 51 个页面。哥伦比亚内容只用于技术与视觉预览，不代表翻译已通过人工审核。
 
 当前实现处于 `candidate`，正式发布仍需人工内容与发布审核。未来语言或创意模组只有经过独立规划后才进入实现；不得恢复单页锚点、混合模型或双世界同页 DOM 作为第二套正式架构。
 
@@ -114,15 +122,16 @@ Astro 组件只负责构建期结构和内容装配，不在组件之间建立�
 
 ## 内容数据层
 
-`src/data/` 保存不依赖 DOM 的 TypeScript 内容。正式领域模型遵守 `BP-FND-DOMAIN`：
+`src/data/` 保存不依赖 DOM 的稳定事实与本地化内容。正式领域模型遵守 `BP-FND-DOMAIN`，国家版本内容遵守 `BP-I18N-CORE`：
 
-- `Production` 保存可复用剧目内容；
-- `Performance` 保存泰拉日期时间、地点、状态、票务可用性、分区与基础价格，并按顺序引用一个或多个剧目；
+- `Production` 保存可复用剧目的稳定 ID 与视觉事实；
+- `Performance` 保存泰拉日期时间、地点 ID、状态、票务可用性、分区与基础价格，并按顺序引用一个或多个剧目；
 - 表站和里站的本季、历史集合由显式世界视角与内容状态生成，不读取浏览器现实时间；
 - 搜索索引、场次和剧目详情、票务输入均从相同稳定 ID 派生；
-- 国家版本注册显式保存 `editionId`、`routePrefix` 与 locale，不从显示名推导。
+- 国家版本注册显式保存 `editionId`、`routePrefix` 与 locale，不从显示名推导；
+- `localized/<editionId>/` 以相同类型契约保存网站文案、消息、地点、场次和剧目显示内容；页面与客户端只消费解析后的当前国家版本记录，语义状态不保存显示文字。
 
-`performances.ts` 与 `productions.ts` 是当前演出领域的唯一事实源，不得恢复混合 `Show` 或在页面中保存可编辑副本。只有当同构内容扩展到多文件、需要 Markdown 正文或编辑流程时，才整体迁移到 Astro Content Collections。
+`performances.ts`、`productions.ts` 与 `locations.ts` 是当前演出领域事实源，本地化目录是显示内容源；两者通过稳定 ID 关联，不得恢复混合 `Show`、在页面中保存可编辑副本，或让翻译复制日期、票价和状态。只有当同构内容扩展到多文件、需要 Markdown 正文或编辑流程时，才整体迁移到 Astro Content Collections。
 
 ## 客户端交互层
 
@@ -140,16 +149,15 @@ Astro 组件只负责构建期结构和内容装配，不在组件之间建立�
 
 ## 样式层
 
-`src/styles/main.css` 当前装配共享基础、表站、里站、污染、票务和响应式样式。规则规模或加载边界产生实际收益时再按页面或能力拆分，并继续保持以下责任：
+`src/styles/main.css` 是唯一装配入口，按固定顺序导入以下职责文件：
 
-1. 共享基础令牌、重置和无障碍辅助类；
-2. 表站独立的现代、明亮和权威视觉；
-3. 里站等级 `0` 的年代视觉；
-4. 污染模组的受控等级变体；
-5. 票务流程、屏幕票面与打印表现；
-6. 响应式和减少动态效果覆盖。
+1. `foundation.css`：共享尺度、重置、外壳、任务基础、无障碍和全局响应式；
+2. `front.css`：表站令牌、当代编辑系统、电影舞台、页面族和表站响应式；
+3. `ticketing.css`：票务流程、存单、纪念票、票务响应式和打印；
+4. `archive.css`：里站令牌、等级 `0` 仪式档案剧场、页面族和里站响应式；
+5. `pollution.css`：污染等级、变体、装饰层及其窄屏与减少动态效果约束。
 
-只有规则完全属于单个可复用组件时才迁入组件作用域。污染样式不得随机删除或移动语义 DOM；打印样式不得裁切票面必要信息。
+真正共享的基础才进入 `foundation.css`，世界视觉不能以共享之名收敛为同一布局换色。只有规则完全属于单个可复用组件时才迁入组件作用域。污染样式不得随机删除或移动语义 DOM；打印样式不得裁切票面必要信息。
 
 ## 允许的依赖方向
 

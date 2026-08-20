@@ -1,6 +1,6 @@
 # 设计参考与转译记录
 
-记录日期：2026-08-18
+记录日期：2026-08-20
 
 本文件用于说明猩红剧团概念站参考了哪些公开网站能力、它们被如何转译，以及哪些内容被明确排除。目的不是证明视觉相似，而是让设计决策可追踪。
 
@@ -8,6 +8,7 @@
 
 - [Vienna Philharmonic / 维也纳爱乐乐团](https://www.wienerphilharmoniker.at/)
 - [Royal Ballet and Opera / 英国皇家芭蕾舞团与歌剧院](https://www.rbo.org.uk/)
+- 人工提供并指定时期归属的《明日方舟》官方视觉材料：新剧团侧参考《红丝绒》支线剧情插图，旧剧团侧参考《傀影与猩红孤钻》集成战略插图；临时分析素材不进入仓库或运行时
 
 ## 借鉴并转译的内容
 
@@ -58,6 +59,20 @@ RBO 的剧目详情集中呈现观看方式、日期、地点、时长、语言�
 ### 6. 视觉层面的抽象原则
 
 两个参考站都把演出内容置于视觉中心，使用明确的标题层级、克制的机构导航、充足留白，以及编辑内容与事务信息之间的节奏变化。本站吸收了这些抽象原则，并继续使用自身既有的猩红、纸色、黑色系统和 CSS 舞台装置语言。
+
+### 7. 双时期官方视觉材料的抽象转译
+
+人工指定的新、旧剧团时期材料只用于识别多张图反复出现的艺术规律：两站共享剧场、帷幕、面具、聚光、猩红和框景母题；表站材料以宽银幕裁切、近远景遮挡、斜向运动、猩红轨迹、冷色轮廓光和电影制作图形支持“当代编辑系统 + 受控电影舞台”，里站材料以正面轴线、门廊、画框、舞会、旧金、烛光和深色帷幕支持“仪式档案剧场 + 逐级受控污染”。
+
+第二次材料复核专门纠正了两种表面化理解：表站的明亮不等于全页浅色极简，里站的古老不等于通用暗色复古或预先损坏。两站都需要页面环境、内容表面和舞台或档案焦点三层空间，但分别通过电影化裁切与礼仪化框景实现。
+
+这些结论不授予素材使用权，也不要求网站复刻角色、场景、标题字形、活动包装或独特构图。具体行为边界以 `BP-FND-EXPERIENCE` 和 `BP-MOD-ARCHIVE` 为准，运行时继续优先使用项目自有 HTML/CSS 图形和权利清晰的素材。
+
+### 8. 国家版本选择与语言技术参考
+
+- [MediaWiki Universal Language Selector](https://www.mediawiki.org/wiki/Extension%3AUniversalLanguageSelector) 与 [ULS Specification](https://www.mediawiki.org/wiki/Universal_Language_Selector/Specification)：只借鉴以本国语言称谓帮助识别语言、保持浏览上下文以及提供关闭和键盘路径的原则，不复制其大规模语言搜索、布局、字体或代码；
+- [W3C：在 HTML 中声明语言](https://www.w3.org/International/questions/qa-html-language-declarations.html) 与 [WHATWG HTML Standard](https://html.spec.whatwg.org/multipage/semantics.html)：用于页面及局部 `lang` 和 UTF-8 边界；
+- [W3C CSS Fonts Module Level 4](https://www.w3.org/TR/css-fonts-4/)：用于系统字体顺序匹配与缺字回退。当前阶段不因此引入远端字体或通用字体平台。
 
 ## 明确没有借鉴的内容
 

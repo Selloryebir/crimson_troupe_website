@@ -1,5 +1,13 @@
+---
+interface Props {
+  warning: string;
+}
+
+const { warning } = Astro.props;
+---
+
 <div class="archive-anomaly-layer" aria-hidden="true">
-  <span></span><span></span><span></span><strong>请不要回头</strong>
+  <span></span><span></span><span></span><strong>{warning}</strong>
 </div>
 
 <script>

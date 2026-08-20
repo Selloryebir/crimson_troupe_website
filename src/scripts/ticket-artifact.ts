@@ -1,11 +1,16 @@
-import type { TicketingPerformanceOption } from '../data/ticketing';
-import type { TicketBasketItem } from './ticketing-state';
+import type { TicketingPerformanceOption } from '../data/ticketing.ts';
+import { formatMessage } from '../data/localized/format.ts';
+import type { TicketArtifactMessages } from '../data/localized/schema.ts';
+import type { TicketBasketItem } from './ticketing-state.ts';
 
 export interface TicketArtifactInput {
   performance: TicketingPerformanceOption;
   basketItem: TicketBasketItem;
+  zoneLabel: string;
   number: string;
   stamps: readonly string[];
+  messages: TicketArtifactMessages;
+  locale: string;
 }
 
 const visualColors: Record<TicketingPerformanceOption['visual'], string> = {
@@ -56,7 +61,7 @@ export function createTicketMatrix(number: string): readonly boolean[] {
 }
 
 export function createTicketSvg(input: TicketArtifactInput): string {
-  const { performance, basketItem, number, stamps } = input;
+  const { performance, basketItem, zoneLabel, number, stamps, messages, locale } = input;
   const accent = visualColors[performance.visual];
   const matrix = createTicketMatrix(number);
   const modules = matrix
@@ -77,25 +82,25 @@ export function createTicketSvg(input: TicketArtifactInput): string {
     .join('');
 
   return `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 540" width="1200" height="540" role="img" aria-labelledby="title description">
-  <title id="title">${escapeXml(performance.title)}纪念票</title>
-  <desc id="description">${escapeXml(performance.dateTime)}，${escapeXml(performance.place)}，${escapeXml(basketItem.zoneLabel)}，${basketItem.basePrice} LMD，票号 ${number}</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 540" width="1200" height="540" role="img" lang="${escapeXml(locale)}" aria-labelledby="title description">
+  <title id="title">${escapeXml(formatMessage(messages.title, { title: performance.title }))}</title>
+  <desc id="description">${escapeXml(formatMessage(messages.description, { dateTime: performance.dateTime, place: performance.place, zone: zoneLabel, price: basketItem.basePrice, number }))}</desc>
   <rect width="1200" height="540" fill="#f2ede3"/>
   <rect width="28" height="540" fill="${accent}"/>
   <rect x="42" y="32" width="1126" height="476" fill="none" stroke="#251a16" stroke-width="2"/>
   <path d="M880 32V508" stroke="#9a8e82" stroke-dasharray="8 8"/>
-  <text x="70" y="72" font-family="sans-serif" font-size="18" letter-spacing="5" fill="${accent}">CRIMSON TROUPE · COMMEMORATIVE ADMISSION</text>
+  <text x="70" y="72" font-family="sans-serif" font-size="18" letter-spacing="5" fill="${accent}">${escapeXml(messages.header)}</text>
   <text x="70" y="146" font-family="serif" font-size="54" font-weight="600" fill="#211713">${escapeXml(performance.title)}</text>
   <text x="70" y="184" font-family="sans-serif" font-size="22" fill="#6d625b">${escapeXml(performance.kind)}</text>
-  <text x="70" y="262" font-family="sans-serif" font-size="20" fill="#6d625b">泰拉日期与时间</text>
+  <text x="70" y="262" font-family="sans-serif" font-size="20" fill="#6d625b">${escapeXml(messages.dateTime)}</text>
   <text x="70" y="298" font-family="serif" font-size="29" fill="#211713">${escapeXml(performance.dateTime)}</text>
   <text x="70" y="350" font-family="sans-serif" font-size="20" fill="#6d625b">${escapeXml(performance.place)}</text>
-  <text x="70" y="440" font-family="sans-serif" font-size="20" fill="#6d625b">分区</text>
-  <text x="150" y="440" font-family="serif" font-size="31" fill="#211713">${escapeXml(basketItem.zoneLabel)}</text>
-  <text x="350" y="440" font-family="sans-serif" font-size="20" fill="#6d625b">票面基础价</text>
+  <text x="70" y="440" font-family="sans-serif" font-size="20" fill="#6d625b">${escapeXml(messages.zone)}</text>
+  <text x="150" y="440" font-family="serif" font-size="31" fill="#211713">${escapeXml(zoneLabel)}</text>
+  <text x="350" y="440" font-family="sans-serif" font-size="20" fill="#6d625b">${escapeXml(messages.faceValue)}</text>
   <text x="490" y="440" font-family="serif" font-size="31" fill="#211713">${basketItem.basePrice} LMD</text>
   <g fill="#171310">${modules}</g>
-  <text x="920" y="354" font-family="sans-serif" font-size="14" letter-spacing="2" fill="#6d625b">TICKET NUMBER</text>
+  <text x="920" y="354" font-family="sans-serif" font-size="14" letter-spacing="2" fill="#6d625b">${escapeXml(messages.ticketNumber)}</text>
   <text x="920" y="382" font-family="monospace" font-size="22" fill="#211713">${number}</text>
   <g fill="none" stroke="${accent}" stroke-width="3" font-family="sans-serif" font-size="15" text-anchor="middle">${stampMarkup}</g>
 </svg>`;
