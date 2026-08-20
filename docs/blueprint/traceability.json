@@ -107,7 +107,7 @@
       "id": "BP-CNT-PRODUCTION-VISUAL",
       "document": "docs/blueprint/content/production-visual-language.md",
       "status": "active",
-      "stage": "planned",
+      "stage": "candidate",
       "dependsOn": ["BP-FND-DOMAIN", "BP-FND-EXPERIENCE", "BP-FND-NARRATIVE", "BP-CNT-CORE"]
     },
     {
