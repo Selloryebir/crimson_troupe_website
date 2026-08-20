@@ -95,7 +95,7 @@ npm run blueprint:impact -- BP-MOD-SEARCH
 
 ## 扩展演出内容
 
-稳定演出事实分别位于 `src/data/productions.ts` 与 `src/data/performances.ts`，地点事实位于 `src/data/locations.ts`；面向访客的名称与正文位于 `src/data/localized/<editionId>/`。扩展内容时遵守 `BP-FND-DOMAIN`、`BP-I18N-CORE` 与 `BP-MOD-PROGRAMS`：
+剧目事实按来源位于 `src/data/productions/folio.ts` 与 `src/data/productions/original.ts`，并由 `src/data/productions/index.ts` 提供统一入口；场次和地点事实分别位于 `src/data/performances.ts` 与 `src/data/locations.ts`，面向访客的名称与正文位于 `src/data/localized/<editionId>/`。扩展内容时遵守 `BP-FND-DOMAIN`、`BP-I18N-CORE` 与 `BP-MOD-PROGRAMS`：
 
 1. 为剧目和场次分别使用稳定 ID，把日期、地点、场次状态、票务可用性、分区与基础价格保留在 `Performance`；
 2. 使用稳定 ID 在本地化内容包中补齐名称和正文，让列表、详情、搜索和票务输入从同一解析结果派生，不在页面或模组中复制正文；

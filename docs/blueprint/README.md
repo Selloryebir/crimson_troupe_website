@@ -74,7 +74,7 @@ ID 使用 `BP-<领域>-<能力>`：
 从源码反查蓝图：
 
 ```bash
-npm run blueprint:where -- src/scripts/search.ts src/data/search-index.ts
+npm run blueprint:where -- src/scripts/site-search.ts src/data/site-search-index.ts
 ```
 
 从蓝图检查候选影响范围：
