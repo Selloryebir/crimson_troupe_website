@@ -31,10 +31,9 @@ docs/drafts/
 
 | 文件                                                                                 | 类型       | 当前效力                                 |
 | ------------------------------------------------------------------------------------ | ---------- | ---------------------------------------- |
-| [`blueprint/higashi-trilingual-preview.md`](blueprint/higashi-trilingual-preview.md) | 蓝图草稿   | 候选，等待人工审核                       |
-| [`blueprint/production-title-catalog.md`](blueprint/production-title-catalog.md)     | 蓝图草稿   | 候选，等待人工审核                       |
+| [`blueprint/higashi-trilingual-preview.md`](blueprint/higashi-trilingual-preview.md) | 蓝图草稿   | 仅保留待实现验证的 `TEST-01`             |
 | [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md) | 创意草稿   | 延期的里站异常购票构想，等待未来独立规划 |
-| [`plans/trilingual-folio-preview.md`](plans/trilingual-folio-preview.md)             | 一次性计划 | 候选，等待正式迁移与人工执行授权         |
+| [`plans/trilingual-folio-preview.md`](plans/trilingual-folio-preview.md)             | 一次性计划 | 候选，等待人工执行授权                   |
 
 ## 固定文档骨架
 
