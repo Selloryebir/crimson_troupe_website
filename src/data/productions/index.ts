@@ -1,17 +1,19 @@
+import { originalProductions } from './original.ts';
+import { folioProductions } from './folio.ts';
+
 export type ProductionVisual = 'moon' | 'flame' | 'snow' | 'banquet' | 'lantern' | 'masks';
+export type ProductionSourceKind = 'folio' | 'original';
 
 export interface Production {
   productionId: string;
+  sourceKind: ProductionSourceKind;
   visual: ProductionVisual;
 }
 
+// 消费端只读取统一注册表，各来源模块仍可独立维护。
 export const productions = {
-  uncrowned: { productionId: 'uncrowned', visual: 'moon' },
-  'caged-fire': { productionId: 'caged-fire', visual: 'flame' },
-  'second-snow': { productionId: 'second-snow', visual: 'snow' },
-  'red-banquet': { productionId: 'red-banquet', visual: 'banquet' },
-  'seventh-lantern': { productionId: 'seventh-lantern', visual: 'lantern' },
-  'procession-of-masks': { productionId: 'procession-of-masks', visual: 'masks' },
+  ...folioProductions,
+  ...originalProductions,
 } as const satisfies Record<string, Production>;
 
 export type ProductionId = keyof typeof productions;

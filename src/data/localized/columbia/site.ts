@@ -231,7 +231,7 @@ export const columbiaSite = {
       noticeEyebrow: 'Touring Notice · No. 91',
       noticeTitle: 'The autumn touring register is complete',
       notice:
-        'Dates in Linqu and Qingsui now appear in the seasonal register. Refer to each performance notice for its date and admission hour.',
+        'Dates in Zwillingstürme, Londinium, and Montelupe now appear in the seasonal register. Refer to each performance notice for its date and admission hour.',
       registerEyebrow: 'SEASONAL REGISTER',
       seasonTitle: 'This Season',
       fullRegister: 'Consult the Full Register',

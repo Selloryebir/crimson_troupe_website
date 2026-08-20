@@ -2,7 +2,7 @@
 
 import assert from 'node:assert/strict';
 
-import { editions } from '../src/data/editions.ts';
+import { editions, previewEditionIds } from '../src/data/editions.ts';
 import { getLocalization } from '../src/data/localized/resolve.ts';
 import { getTicketingOptions } from '../src/data/ticketing.ts';
 import {
@@ -154,10 +154,11 @@ assert.equal(restored.phase, 'success');
 assert.deepEqual(restored.result?.tickets, premiumSuccess.result?.tickets);
 assert.deepEqual(restoreTicketingState('{"version":999}', catalog), createTicketingState());
 
-const yanLocalization = getLocalization(editions.yan);
-const columbiaLocalization = getLocalization(editions.columbia);
+const previewLocalizations = previewEditionIds.map((editionId) =>
+  getLocalization(editions[editionId]),
+);
+const yanLocalization = previewLocalizations[0];
 const yanOptions = getTicketingOptions(yanLocalization);
-const columbiaOptions = getTicketingOptions(columbiaLocalization);
 const crossLocaleItem = {
   performanceId: yanOptions[0].performanceId,
   zone: yanOptions[0].offers[0].zone,
@@ -168,12 +169,15 @@ const crossLocaleState = updateBasket(
   crossLocaleItem,
   crossLocaleItem.performanceId,
 );
-const crossLocaleRestored = restoreTicketingState(
-  JSON.stringify(crossLocaleState),
-  columbiaOptions.map((option) => ({ performanceId: option.performanceId, offers: option.offers })),
-);
-assert.deepEqual(crossLocaleRestored, crossLocaleState);
-assert.notEqual(yanOptions[0].offers[0].label, columbiaOptions[0].offers[0].label);
+for (const localization of previewLocalizations.slice(1)) {
+  const targetOptions = getTicketingOptions(localization);
+  const crossLocaleRestored = restoreTicketingState(
+    JSON.stringify(crossLocaleState),
+    targetOptions.map((option) => ({ performanceId: option.performanceId, offers: option.offers })),
+  );
+  assert.deepEqual(crossLocaleRestored, crossLocaleState);
+  assert.notEqual(yanOptions[0].offers[0].label, targetOptions[0].offers[0].label);
+}
 
 const artifactPerformance = {
   performanceId: 'performance-a',

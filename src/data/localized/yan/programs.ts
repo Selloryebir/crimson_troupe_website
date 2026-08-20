@@ -1,4 +1,5 @@
-import type { ProgramContent } from '../schema';
+import type { OriginalProductionId } from '../../productions/original.ts';
+import type { ProductionContent, ProgramContentBase } from '../schema';
 
 export const yanPrograms = {
   locations: {
@@ -8,6 +9,11 @@ export const yanPrograms = {
     linqu: { cityLabel: '临渠' },
     qingsui: { cityLabel: '青隧' },
     jiangdu: { cityLabel: '江渡' },
+    zwillingsturme: { cityLabel: '崔林特尔梅' },
+    londinium: { cityLabel: '伦蒂尼姆' },
+    'calais-blason': { cityLabel: '克莱布拉松' },
+    montelupe: { cityLabel: '蒙特卢佩' },
+    'nuova-volsinii': { cityLabel: '新沃尔西尼' },
   },
   performances: {
     'uncrowned-trimount-1098': {
@@ -31,33 +37,68 @@ export const yanPrograms = {
       searchDetail: '10月29日 · 诺伯特郡 · 实验舞剧',
       searchKeywords: '十月 10月 诺伯特 舞剧 雪',
     },
-    'red-banquet-linqu-1091': {
+    'der-ring-calais-blason-1091-0308': {
       index: '壹',
-      dateTimeDisplay: '泰拉历 1091 年八月廿四 · 入夜七时',
-      venue: '临渠旧宫剧场 · 宴会厅',
-      searchDetail: '八月廿四 · 临渠 · 典礼剧与假面默剧',
-      searchKeywords: '临渠 宴会 猩红宴 无声巡游 八月',
+      dateTimeDisplay: '泰拉历 1091 年三月初八 · 入夜七时',
+      venue: '克莱布拉松林中城堡 · 湖厅',
+      searchDetail: '三月初八 · 克莱布拉松 · 湖中至宝',
+      searchKeywords: '克莱布拉松 湖中至宝 湖厅 三月',
     },
-    'seventh-lantern-qingsui-1091': {
+    'one-hundred-and-one-days-calais-blason-1091-0419': {
       index: '贰',
-      dateTimeDisplay: '泰拉历 1091 年九月十一 · 日落后',
-      venue: '青隧驿馆 · 内庭',
-      searchDetail: '九月十一 · 青隧 · 灯影剧',
-      searchKeywords: '青隧 灯影 第七盏灯 九月 驿馆',
+      dateTimeDisplay: '泰拉历 1091 年四月十九 · 入夜六时半',
+      venue: '克莱布拉松林中城堡 · 长廊剧场',
+      searchDetail: '四月十九 · 克莱布拉松 · 一百零一日',
+      searchKeywords: '克莱布拉松 一百零一日 长廊 四月',
     },
-    'mask-procession-jiangdu-1091': {
-      index: '拾柒',
-      dateTimeDisplay: '泰拉历 1091 年四月初六 · 晚钟后',
-      venue: '江渡公会礼堂 · 西厅',
-      searchDetail: '四月初六 · 江渡 · 假面默剧',
-      searchKeywords: '江渡 无声巡游 假面 四月 礼堂',
+    'the-carnival-wiesheim-1091-0511': {
+      index: '叁',
+      dateTimeDisplay: '泰拉历 1091 年五月十一 · 入夜八时',
+      venue: '维谢海姆夕照厅 · 大舞台',
+      searchDetail: '五月十一 · 维谢海姆 · 欢欣鼓舞',
+      searchKeywords: '维谢海姆 欢欣鼓舞 夕照厅 五月',
     },
-    'red-banquet-qingsui-1091': {
-      index: '拾捌',
-      dateTimeDisplay: '泰拉历 1091 年五月十九 · 入夜七时',
-      venue: '青隧驿馆 · 大礼厅',
-      searchDetail: '五月十九 · 青隧 · 典礼剧',
-      searchKeywords: '青隧 猩红宴 五月 宴席 驿馆',
+    'ode-au-triomphe-nuova-volsinii-1091-0623': {
+      index: '肆',
+      dateTimeDisplay: '泰拉历 1091 年六月廿三 · 入夜七时半',
+      venue: '新沃尔西尼市政歌剧院 · 主厅',
+      searchDetail: '六月廿三 · 新沃尔西尼 · 凯旋颂',
+      searchKeywords: '新沃尔西尼 凯旋颂 歌剧院 六月',
+    },
+    'der-ring-zwillingsturme-1091-0817': {
+      index: '伍',
+      dateTimeDisplay: '泰拉历 1091 年八月十七 · 入夜八时',
+      venue: '崔林特尔梅双塔剧院 · 镜湖厅',
+      searchDetail: '八月十七 · 崔林特尔梅 · 湖中至宝',
+      searchKeywords: '崔林特尔梅 Zwillingstürme 湖中至宝 八月',
+    },
+    'one-hundred-and-one-days-londinium-1091-0903': {
+      index: '陆',
+      dateTimeDisplay: '泰拉历 1091 年九月初三 · 入夜七时半',
+      venue: '伦蒂尼姆旧王立剧院 · 钟厅',
+      searchDetail: '九月初三 · 伦蒂尼姆 · 一百零一日',
+      searchKeywords: '伦蒂尼姆 一百零一日 王立剧院 九月',
+    },
+    'the-carnival-montelupe-1091-0921': {
+      index: '柒',
+      dateTimeDisplay: '泰拉历 1091 年九月廿一 · 入夜八时',
+      venue: '蒙特卢佩中央剧场 · 宴会厅',
+      searchDetail: '九月廿一 · 蒙特卢佩 · 欢欣鼓舞',
+      searchKeywords: '蒙特卢佩 欢欣鼓舞 宴会厅 九月',
+    },
+    'the-carnival-londinium-1091-1009': {
+      index: '捌',
+      dateTimeDisplay: '泰拉历 1091 年十月初九 · 入夜七时',
+      venue: '伦蒂尼姆旧王立剧院 · 主舞台',
+      searchDetail: '十月初九 · 伦蒂尼姆 · 欢欣鼓舞',
+      searchKeywords: '伦蒂尼姆 欢欣鼓舞 王立剧院 十月',
+    },
+    'ode-au-triomphe-zwillingsturme-1091-1028': {
+      index: '玖',
+      dateTimeDisplay: '泰拉历 1091 年十月廿八 · 入夜六时三刻',
+      venue: '崔林特尔梅双塔剧院 · 金律厅',
+      searchDetail: '十月廿八 · 崔林特尔梅 · 凯旋颂',
+      searchKeywords: '崔林特尔梅 Zwillingstürme 凯旋颂 十月',
     },
   },
   productions: {
@@ -172,4 +213,6 @@ export const yanPrograms = {
     },
   },
   ticketZones: { C: 'C 区', B: 'B 区', A: 'A 区', S: 'S 区', BOX: '包厢' },
-} as const satisfies ProgramContent;
+} as const satisfies ProgramContentBase & {
+  productions: Record<OriginalProductionId, ProductionContent>;
+};

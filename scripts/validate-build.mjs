@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { buildProfile, builtEditions } from '../src/data/editions.ts';
 import { getLocalization } from '../src/data/localized/resolve.ts';
 import { performanceEntries } from '../src/data/performances.ts';
-import { productionEntries } from '../src/data/productions.ts';
+import { productionEntries } from '../src/data/productions/index.ts';
 import { performancePath, productionPath, sitePath, siteRoot } from '../src/data/site-routes.ts';
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');

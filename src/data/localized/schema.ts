@@ -1,6 +1,6 @@
 import type { LocationId } from '../locations';
 import type { PerformanceId, TicketZone } from '../performances';
-import type { ProductionId } from '../productions';
+import type { ProductionId } from '../productions/index.ts';
 
 export type LocalizedShape<T> = T extends string
   ? string
@@ -41,11 +41,20 @@ export interface ProductionContent {
   creatives: readonly (readonly [role: string, name: string])[];
 }
 
-export interface ProgramContent {
+export interface ProgramContentBase {
   locations: Record<LocationId, LocationContent>;
   performances: Record<PerformanceId, PerformanceContent>;
-  productions: Record<ProductionId, ProductionContent>;
   ticketZones: Record<TicketZone, string>;
+}
+
+export interface ProgramContent extends ProgramContentBase {
+  productions: Record<ProductionId, ProductionContent>;
+}
+
+export interface LocalizationPackage<SiteContent, MessageContent> {
+  site: SiteContent;
+  programs: ProgramContent;
+  messages: MessageContent;
 }
 
 export interface SearchMessages {

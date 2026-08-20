@@ -4,7 +4,7 @@ import {
   type ResolvedLocalization,
 } from './localized/resolve.ts';
 import type { TicketOffer } from './performances.ts';
-import type { ProductionVisual } from './productions.ts';
+import type { ProductionVisual } from './productions/index.ts';
 
 export interface LocalizedTicketOffer extends TicketOffer {
   label: string;
