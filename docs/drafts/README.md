@@ -29,11 +29,11 @@ docs/drafts/
 
 当前内容草稿入口：
 
-| 文件                                                                                 | 类型       | 当前效力                                        |
-| ------------------------------------------------------------------------------------ | ---------- | ----------------------------------------------- |
-| [`blueprint/higashi-trilingual-preview.md`](blueprint/higashi-trilingual-preview.md) | 蓝图草稿   | 仅保留待实现验证的 `TEST-01`                    |
-| [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md) | 创意草稿   | 延期的里站异常购票构想，等待未来独立规划        |
-| [`plans/trilingual-folio-preview.md`](plans/trilingual-folio-preview.md)             | 一次性计划 | 已批准执行，`S1`—`S3` 已完成，`S4` 已批准待同步 |
+| 文件                                                                                 | 类型       | 当前效力                                 |
+| ------------------------------------------------------------------------------------ | ---------- | ---------------------------------------- |
+| [`blueprint/higashi-trilingual-preview.md`](blueprint/higashi-trilingual-preview.md) | 蓝图草稿   | `TEST-01` 已验证，等待按生命周期删除     |
+| [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md) | 创意草稿   | 延期的里站异常购票构想，等待未来独立规划 |
+| [`plans/trilingual-folio-preview.md`](plans/trilingual-folio-preview.md)             | 一次性计划 | `S1`—`S4` 已完成，等待按生命周期删除     |
 
 ## 固定文档骨架
 

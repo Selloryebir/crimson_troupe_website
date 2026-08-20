@@ -1,7 +1,7 @@
 # 三语言活页节目预览一次性开发计划
 
 - 文档类型：一次性开发计划
-- 状态：已批准执行
+- 状态：已完成，待清理
 - 规划效力：只约束本计划的切片顺序、分支往返和阶段验收，不覆盖正式蓝图
 - 分析基线：已经接收本阶段正式契约的 `BP-FND-CORE`、`BP-FND-DOMAIN`、`BP-FND-EXPERIENCE`、`BP-CNT-CORE`、`BP-MOD-PROGRAMS`、`BP-I18N-CORE`、`BP-I18N-TERMS`、`BP-QLT-STAGES`，`docs/references/production-title-reference.md`，当前双语言源码，以及只保留 `TEST-01` 的 `docs/drafts/blueprint/higashi-trilingual-preview.md`
 - 目的：以四个独立、可构建、可回滚定位的源码切片完成剧目来源解耦、1091 里站活页节目替换、东国语第三语言接入和日文响应式验收，并保证每个切片在 `dev_code` 独立提交后同步回 `dev_blueprint`
@@ -31,12 +31,12 @@
 
 #### PLAN-01 执行切片
 
-| 切片 ID | 状态         | 可观察交付结果                                                                                       | 前置依赖     | 候选影响路径                                                                                                                                                                                                                                                                 | 验收方式                                                                                              |
-| ------- | ------------ | ---------------------------------------------------------------------------------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `S1`    | 已完成       | 现有双语言行为不变，但剧目事实、国家版本包和验证注册具备单入口与后续来源分区能力                     | 人工批准执行 | `src/data/productions.ts`、候选 `src/data/productions/`、`src/data/localized/schema.ts`、`src/data/localized/resolve.ts`、候选 `src/data/localized/yan/index.ts`、候选 `src/data/localized/columbia/index.ts`、`scripts/validate-locales.mjs`、追踪表                        | 变更路径质量检查；炎国正式 locale/状态/构建门禁；既有炎国+哥伦比亚预览 locale、构建与产物门禁全部通过 |
-| `S2`    | 已完成       | 六项原创内容保留，四项活页剧目和六地点九场里站节目在炎国与哥伦比亚预览中完整可浏览、可搜索且不可购票 | `S1` 已完成  | 候选剧目来源模块、`src/data/locations.ts`、`src/data/performances.ts`、候选 `src/data/localized/{yan,columbia}/productions/`、`src/data/localized/{yan,columbia}/programs.ts`、`src/data/site-search-index.ts`、`scripts/validate-locales.mjs`、`scripts/validate-build.mjs` | 变更路径质量检查；来源类别、九场次数和国家分布断言；正式与双语言预览 locale、状态、构建和产物验证通过 |
-| `S3`    | 已完成       | `hig / ja-JP` 完整加入开发预览，三语言选择器与双时间层全部页面、内容、搜索、票务和污染状态实现等价   | `S2` 已完成  | `src/data/editions.ts`、候选 `src/data/localized/higashi/`、`src/data/localized/resolve.ts`、`src/components/shared/EditionSelector.astro`、`scripts/validate-locales.mjs`、`scripts/validate-states.mjs`、`scripts/validate-build.mjs`、开发命令和相关说明                  | 变更路径质量检查；正式炎国构建不变；三语言预览零回退、页面/链接/搜索隔离、跨语言票篮与污染状态通过    |
-| `S4`    | 已批准待同步 | 日文系统字体、换行与共享响应式模式经真实页面修正；三语言双时间层功能矩阵和 `TEST-01` 完成最终验收    | `S3` 已完成  | `src/styles/foundation.css` 及实测证明必要的 `front.css`、`archive.css`、`ticketing.css`、`pollution.css`，必要的共享组件与验证脚本                                                                                                                                          | 一次完整 `verify`；预览独有 locale、构建和产物门禁；代表视口、键盘、无脚本、减少动态效果和打印验收    |
+| 切片 ID | 状态   | 可观察交付结果                                                                                       | 前置依赖     | 候选影响路径                                                                                                                                                                                                                                                                 | 验收方式                                                                                              |
+| ------- | ------ | ---------------------------------------------------------------------------------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `S1`    | 已完成 | 现有双语言行为不变，但剧目事实、国家版本包和验证注册具备单入口与后续来源分区能力                     | 人工批准执行 | `src/data/productions.ts`、候选 `src/data/productions/`、`src/data/localized/schema.ts`、`src/data/localized/resolve.ts`、候选 `src/data/localized/yan/index.ts`、候选 `src/data/localized/columbia/index.ts`、`scripts/validate-locales.mjs`、追踪表                        | 变更路径质量检查；炎国正式 locale/状态/构建门禁；既有炎国+哥伦比亚预览 locale、构建与产物门禁全部通过 |
+| `S2`    | 已完成 | 六项原创内容保留，四项活页剧目和六地点九场里站节目在炎国与哥伦比亚预览中完整可浏览、可搜索且不可购票 | `S1` 已完成  | 候选剧目来源模块、`src/data/locations.ts`、`src/data/performances.ts`、候选 `src/data/localized/{yan,columbia}/productions/`、`src/data/localized/{yan,columbia}/programs.ts`、`src/data/site-search-index.ts`、`scripts/validate-locales.mjs`、`scripts/validate-build.mjs` | 变更路径质量检查；来源类别、九场次数和国家分布断言；正式与双语言预览 locale、状态、构建和产物验证通过 |
+| `S3`    | 已完成 | `hig / ja-JP` 完整加入开发预览，三语言选择器与双时间层全部页面、内容、搜索、票务和污染状态实现等价   | `S2` 已完成  | `src/data/editions.ts`、候选 `src/data/localized/higashi/`、`src/data/localized/resolve.ts`、`src/components/shared/EditionSelector.astro`、`scripts/validate-locales.mjs`、`scripts/validate-states.mjs`、`scripts/validate-build.mjs`、开发命令和相关说明                  | 变更路径质量检查；正式炎国构建不变；三语言预览零回退、页面/链接/搜索隔离、跨语言票篮与污染状态通过    |
+| `S4`    | 已完成 | 日文系统字体、换行与共享响应式模式经真实页面修正；三语言双时间层功能矩阵和 `TEST-01` 完成最终验收    | `S3` 已完成  | `src/styles/foundation.css` 及实测证明必要的 `front.css`、`archive.css`、`ticketing.css`、`pollution.css`，必要的共享组件与验证脚本                                                                                                                                          | 一次完整 `verify`；预览独有 locale、构建和产物门禁；代表视口、键盘、无脚本、减少动态效果和打印验收    |
 
 #### PLAN-01 执行证据
 
@@ -45,6 +45,7 @@
 | `S1`    | `89417c2`       | 双向严格祖先 `--ff-only` 同步 | 完整质量、正式 locale/状态/构建/产物及双语言预览 locale/构建/产物均通过；26/51 页保持不变，新增源码已登记追踪关系 | 无       |
 | `S2`    | `ef5310f`       | 双向严格祖先 `--ff-only` 同步 | 完整质量、正式与双语言预览 locale/构建/产物均通过；4 项活页、9 场里站和 4/3/2 国家分布断言通过，输出 32/63 页     | 无       |
 | `S3`    | `8a1f09e`       | 双向严格祖先 `--ff-only` 同步 | 完整质量、正式及三语言预览 locale/构建/产物通过；YAN/HIG/COL 零回退、状态等价与选择器顺序通过，输出 32/94 页      | 无       |
+| `S4`    | `52ea8af`       | 双向严格祖先 `--ff-only` 同步 | 完整门禁、三语言预览增量门禁及 320/390/768/1280 代表视口、键盘、无脚本、减少动态效果和打印检查通过                | 无       |
 
 #### PLAN-01 S1｜索引与本地化包边界
 
