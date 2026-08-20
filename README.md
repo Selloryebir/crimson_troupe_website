@@ -57,9 +57,9 @@ npm run dev
 
 功能开发前应先阅读 [`docs/blueprint/README.md`](docs/blueprint/README.md) 与领域语言蓝图。`npm run blueprint:where -- <源码路径>` 可从源码反查蓝图，`npm run blueprint:impact -- <蓝图 ID>` 可列出候选影响范围；两者只提供定位，不替代实现判断。
 
-规划讨论、候选建议、创意草稿和一次性开发计划集中位于 [`docs/drafts/`](docs/drafts/README.md)。草稿不直接约束产品或源码；只有人工明确提出正式迁移后，才按影响定位拆入正式责任文件并删除已经迁移的草稿来源。
+规划讨论、候选建议、创意草稿和一次性开发计划集中位于 [`docs/drafts/`](docs/drafts/README.md)。草稿不直接约束产品或源码；只有人工明确提出正式迁移后，才按影响定位拆入正式责任文件并删除已经迁移的草稿来源。一次性计划获得端到端自动执行授权后，技术决策由智能体在正式契约内完成，影响产品方向的选择仍由人工决定，具体边界见 [`docs/drafts/plans/README.md`](docs/drafts/plans/README.md)。
 
-Git 长期分支的职责、同步方向和人工门禁见 [`docs/guides/git-branch-workflow.md`](docs/guides/git-branch-workflow.md)。`main` 只接受经过人工审核的 `dev -> main`，`dev_blueprint` 负责规划，`dev_code` 负责源码实现。
+Git 长期分支的职责、同步方向、逐切片双分支闭环和人工门禁见 [`docs/guides/git-branch-workflow.md`](docs/guides/git-branch-workflow.md)。`main` 只接受经过人工审核的 `dev -> main`；`dev_blueprint` 负责规划，`dev_code` 负责源码实现，多个计划切片不得压缩为同一个代码提交。
 
 ## 当前实现阶段
 
