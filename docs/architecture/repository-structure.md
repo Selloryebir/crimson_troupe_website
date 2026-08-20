@@ -25,10 +25,10 @@ crimson_troupe_website/
 │   │   └── traceability.json
 │   ├── drafts/
 │   │   ├── README.md
-│   │   ├── blueprint/
-│   │   ├── recommendations/
-│   │   ├── creative/
-│   │   └── plans/
+│   │   ├── blueprint/README.md
+│   │   ├── recommendations/README.md
+│   │   ├── creative/README.md
+│   │   └── plans/README.md
 │   ├── guides/
 │   └── references/
 ├── scripts/
@@ -98,7 +98,7 @@ crimson_troupe_website/
 
 ## 草稿规划层
 
-`docs/drafts/` 保存没有正式产品效力的蓝图、建议与创意草稿，以及一次性开发计划。草稿通过人工门禁单向迁入正式责任目录，不加入追踪表，也不在迁移后保留正文副本。已获批准的一次性计划只编排工作，不能覆盖正式蓝图。完整生命周期见 `docs/drafts/README.md`。
+`docs/drafts/` 保存没有正式产品效力的蓝图、建议与创意草稿，以及一次性开发计划。草稿通过人工门禁单向迁入正式责任目录，不加入追踪表，也不在迁移后保留正文副本。已获批准的一次性计划只编排工作，不能覆盖正式蓝图。四个类型子目录各自保留稳定 README 作为职责与格式入口，清理最后一份实际草稿时不得连同目录入口删除。完整生命周期见 `docs/drafts/README.md`。
 
 普通功能开发只读取正式蓝图。规划讨论、草稿评审、已批准计划和正式迁移任务才读取草稿；正式内容规则进入 `docs/blueprint/content/`，实际运行内容进入 `src/data/` 或未来唯一的 `src/content/`，外部依据进入 `docs/references/`。
 
