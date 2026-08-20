@@ -1,7 +1,10 @@
 ---
-import type { ProductionVisual } from '../../data/productions/index.ts';
+import { Image } from 'astro:assets';
+import { getProductionArtwork } from '../../data/production-artworks.ts';
+import type { ProductionId, ProductionVisual } from '../../data/productions/index.ts';
 
 interface Props {
+  productionId: ProductionId;
   visual: ProductionVisual;
   title: string;
   subtitle?: string;
@@ -9,13 +12,39 @@ interface Props {
   compact?: boolean;
 }
 
-const { visual, title, subtitle, number = 'CT / 1091', compact = false } = Astro.props;
+const {
+  productionId,
+  visual,
+  title,
+  subtitle,
+  number = 'CT / 1091',
+  compact = false,
+} = Astro.props;
+const artwork = getProductionArtwork(productionId, 'archive');
 ---
 
 <div
-  class:list={['archive-poster', `archive-poster--${visual}`, { 'is-compact': compact }]}
+  class:list={[
+    'archive-poster',
+    `archive-poster--${visual}`,
+    { 'is-compact': compact, 'has-artwork': artwork },
+  ]}
   data-pollution-slot="poster"
+  style={artwork ? `--art-focus: ${artwork.focalPoint}` : undefined}
 >
+  {
+    artwork && (
+      <Image
+        class="archive-poster__image"
+        src={artwork.source}
+        alt=""
+        widths={[240, 480, 768]}
+        sizes={compact ? '180px' : '(max-width: 720px) 100vw, 590px'}
+        loading={compact ? 'lazy' : 'eager'}
+        decoding="async"
+      />
+    )
+  }
   <div class="archive-poster__frame" aria-hidden="true"><i></i><b></b><em></em></div><span
     class="archive-poster__number">{number}</span
   ><div class="archive-poster__title">

@@ -27,7 +27,9 @@ export interface ResolvedLocalization extends WebsiteLocalizationPackage {
   };
 }
 
-export interface ResolvedProduction extends Production, ProductionContent {}
+export interface ResolvedProduction extends Omit<Production, 'productionId'>, ProductionContent {
+  productionId: ProductionId;
+}
 
 export interface ResolvedPerformance extends Omit<Performance, 'dateTime'>, PerformanceContent {
   cityLabel: string;

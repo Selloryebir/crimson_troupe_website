@@ -60,6 +60,7 @@ const featuredProduction = featuredPerformance
           aria-label={formatMessage(copy.featuredPerformance, { title: featuredProduction.title })}
         >
           <ArchivePoster
+            productionId={featuredProduction.productionId}
             visual={featuredProduction.visual}
             title={featuredProduction.title}
             subtitle={featuredProduction.kind}

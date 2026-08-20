@@ -327,6 +327,11 @@
       "related": ["BP-MOD-PROGRAMS", "BP-MOD-TICKETING", "BP-CNT-CORE"]
     },
     {
+      "path": "src/data/production-artworks.ts",
+      "primary": "BP-CNT-PRODUCTION-VISUAL",
+      "related": ["BP-MOD-PROGRAMS", "BP-MOD-ARCHIVE", "BP-CNT-CORE"]
+    },
+    {
       "path": "src/data/productions/folio.ts",
       "primary": "BP-FND-DOMAIN",
       "related": [
