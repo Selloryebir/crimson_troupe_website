@@ -29,7 +29,12 @@ export function getTicketingOptions(
   snapshot: ContentSnapshot = buildSnapshot,
 ): readonly TicketingPerformanceOption[] {
   return getLocalizedPerformanceEntries(localization, snapshot).flatMap(([, performance]) => {
-    if (performance.world !== 'front' || performance.ticketAvailability.state !== 'on-sale') {
+    if (
+      performance.world !== 'front' ||
+      performance.collection !== 'current' ||
+      performance.status !== 'scheduled' ||
+      performance.ticketAvailability.state !== 'on-sale'
+    ) {
       return [];
     }
     const leadProduction = getLocalizedProduction(

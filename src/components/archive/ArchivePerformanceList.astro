@@ -43,6 +43,10 @@ const { edition, messages } = localization;
               <span class="archive-performance-list__date">
                 <time>{performance.dateTime.display}</time>
                 <span>{performance.place}</span>
+                <small>{localization.site.archive.performanceDetail[performance.status]}</small>
+                {performance.operationalNotice && (
+                  <small>{performance.operationalNotice.text}</small>
+                )}
                 <small>
                   {formatMessage(messages.programs.productionCount, {
                     count: performance.productionIds.length,

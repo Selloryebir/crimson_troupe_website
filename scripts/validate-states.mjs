@@ -16,10 +16,14 @@ import {
   resolveContent,
 } from '../src/data/content/resolve.ts';
 import { currentRootSet, validateContentRootSet } from '../src/data/content/root-sets.ts';
-import { getLocalization, getLocalizedPerformanceEntries } from '../src/data/localized/resolve.ts';
+import {
+  assertPerformanceContentFresh,
+  getLocalization,
+  getLocalizedPerformanceEntries,
+} from '../src/data/localized/resolve.ts';
 import { performances } from '../src/data/performances.ts';
 import { getFrontSearchIndex } from '../src/data/site-search-index.ts';
-import { getSiteTerraNow } from '../src/data/site-time.ts';
+import { derivePerformanceCollection, getSiteTerraNow } from '../src/data/site-time.ts';
 import { getTicketingOptions } from '../src/data/ticketing.ts';
 import {
   MAX_POLLUTION_LEVEL,
@@ -113,6 +117,30 @@ assert.deepEqual(showcaseSnapshot.featuredPerformanceIds, {
 assert.ok(Object.isFrozen(showcaseSnapshot));
 assert.ok(Object.isFrozen(showcaseSnapshot.performanceEntries));
 assert.throws(() => resolveContent(buildContexts.release), /未批准内容/u);
+assert.equal(
+  showcaseSnapshot.performanceEntries.filter(
+    ([, performance]) => performance.world === 'front' && performance.collection === 'current',
+  ).length,
+  3,
+);
+assert.equal(
+  showcaseSnapshot.performanceEntries.filter(
+    ([, performance]) => performance.world === 'front' && performance.collection === 'history',
+  ).length,
+  0,
+);
+assert.equal(
+  showcaseSnapshot.performanceEntries.filter(
+    ([, performance]) => performance.world === 'archive' && performance.collection === 'current',
+  ).length,
+  5,
+);
+assert.equal(
+  showcaseSnapshot.performanceEntries.filter(
+    ([, performance]) => performance.world === 'archive' && performance.collection === 'history',
+  ).length,
+  4,
+);
 
 const reducedRootSet = {
   ...currentRootSet,
@@ -183,6 +211,101 @@ assert.throws(
       siteClockStrategies: { front: 'fixed', archive: 'anchored' },
     }),
   /只允许 fixed/u,
+);
+assert.equal(derivePerformanceCollection(frontNow, frontNow), 'current');
+assert.equal(
+  derivePerformanceCollection({ ...frontNow, day: frontNow.day - 1 }, frontNow),
+  'history',
+);
+
+const collectionFixtures = [
+  {
+    label: '未来取消场次仍属于本季演出',
+    status: 'cancelled',
+    effectiveDateTime: { ...frontNow, day: frontNow.day + 1 },
+    expected: 'current',
+  },
+  {
+    label: '历史取消场次仍属于历史演出',
+    status: 'cancelled',
+    effectiveDateTime: { ...frontNow, day: frontNow.day - 1 },
+    expected: 'history',
+  },
+  {
+    label: '未来待定场次仍属于本季演出',
+    status: 'pending',
+    effectiveDateTime: { ...frontNow, day: frontNow.day + 2 },
+    expected: 'current',
+  },
+  {
+    label: '改期场次按生效日期而非原日期归类',
+    status: 'scheduled',
+    previousDateTime: { ...frontNow, day: frontNow.day - 2 },
+    effectiveDateTime: { ...frontNow, day: frontNow.day + 3 },
+    expected: 'current',
+  },
+];
+for (const fixture of collectionFixtures) {
+  assert.equal(
+    derivePerformanceCollection(fixture.effectiveDateTime, frontNow),
+    fixture.expected,
+    fixture.label,
+  );
+}
+
+const noticeFixturePerformance = {
+  ...performances['second-snow-norport-1098'],
+  status: 'pending',
+  previousDateTime: {
+    calendar: 'terra',
+    year: 1098,
+    month: 10,
+    day: 20,
+    time: '18:45',
+  },
+  notice: { reason: 'catastrophe-route', sourceRevision: 'notice-v2' },
+};
+const noticeFixtureContent = {
+  ...getLocalization(editions.yan).programs.performances['second-snow-norport-1098'],
+  previousDateTimeDisplay: '1098.10.20 / 18:45',
+  operationalNotice: { sourceRevision: 'notice-v2', text: '线路调整，排期等待确认。' },
+};
+assert.doesNotThrow(() =>
+  assertPerformanceContentFresh('notice-fixture', noticeFixturePerformance, noticeFixtureContent),
+);
+assert.throws(
+  () =>
+    assertPerformanceContentFresh('notice-fixture', noticeFixturePerformance, {
+      ...noticeFixtureContent,
+      operationalNotice: undefined,
+    }),
+  /缺少运营公告译文/u,
+);
+assert.throws(
+  () =>
+    assertPerformanceContentFresh('notice-fixture', noticeFixturePerformance, {
+      ...noticeFixtureContent,
+      operationalNotice: { ...noticeFixtureContent.operationalNotice, sourceRevision: 'notice-v1' },
+    }),
+  /运营公告译文已过期/u,
+);
+
+const pendingPerformanceEntries = showcaseSnapshot.performanceEntries.map(
+  ([performanceId, performance]) =>
+    performanceId === 'caged-fire-wiesheim-1098'
+      ? [performanceId, { ...performance, status: 'pending' }]
+      : [performanceId, performance],
+);
+const pendingSnapshot = {
+  ...showcaseSnapshot,
+  performanceEntries: pendingPerformanceEntries,
+  performances: Object.fromEntries(pendingPerformanceEntries),
+};
+assert.ok(
+  getTicketingOptions(getLocalization(editions.yan), pendingSnapshot).every(
+    ({ performanceId }) => performanceId !== 'caged-fire-wiesheim-1098',
+  ),
+  '待定场次不得进入票务候选',
 );
 
 const pollutionTriggers = [

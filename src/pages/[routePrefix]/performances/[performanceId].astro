@@ -30,6 +30,10 @@ const copy = localization.site.front.performanceDetail;
 const performance = getLocalizedPerformance(localization, performanceId);
 const leadProduction = getLocalizedProduction(localization, performance.productionIds[0]);
 const canonicalPath = performancePath(edition, 'front', performance.performanceId);
+const canPurchase =
+  performance.collection === 'current' &&
+  performance.status === 'scheduled' &&
+  performance.ticketAvailability.state === 'on-sale';
 ---
 
 <FrontLayout
@@ -60,12 +64,26 @@ const canonicalPath = performancePath(edition, 'front', performance.performanceI
     <dl class="fact-grid">
       <div><dt>{copy.dateTime}</dt><dd>{performance.dateTime.display}</dd></div><div>
         <dt>{copy.place}</dt><dd>{performance.place}</dd>
-      </div><div><dt>{copy.status}</dt><dd>{copy.scheduled}</dd></div><div>
+      </div><div><dt>{copy.status}</dt><dd>{copy[performance.status]}</dd></div><div>
         <dt>{copy.ticketStatus}</dt><dd>
           {performance.ticketAvailability.state === 'on-sale' ? copy.onSale : copy.notOnSale}
         </dd>
       </div>
     </dl>
+    {
+      (performance.previousDateTimeDisplay || performance.operationalNotice) && (
+        <section class="detail-section prose" aria-labelledby="performance-notice">
+          <h2 id="performance-notice">{copy.operationalNotice}</h2>
+          {performance.previousDateTimeDisplay && (
+            <p>
+              <strong>{copy.previousDateTime}：</strong>
+              {performance.previousDateTimeDisplay}
+            </p>
+          )}
+          {performance.operationalNotice && <p>{performance.operationalNotice.text}</p>}
+        </section>
+      )
+    }
     <section class="detail-section prose" aria-labelledby="performance-introduction">
       <p class="eyebrow">{copy.aboutEyebrow}</p>
       <h2 id="performance-introduction">{copy.aboutTitle}</h2>
@@ -96,8 +114,14 @@ const canonicalPath = performancePath(edition, 'front', performance.performanceI
         }
       </ol>
     </section>
-    <div class="actions">
-      <a class="button" href={sitePath(edition, 'front', 'tickets')}>{copy.chooseTickets}</a>
-    </div>
+    {
+      canPurchase && (
+        <div class="actions">
+          <a class="button" href={sitePath(edition, 'front', 'tickets')}>
+            {copy.chooseTickets}
+          </a>
+        </div>
+      )
+    }
   </article>
 </FrontLayout>

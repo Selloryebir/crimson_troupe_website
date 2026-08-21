@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 
 import { buildSnapshot } from '../src/data/content/resolve.ts';
 import { buildEditionIds, buildProfile, editions } from '../src/data/editions.ts';
-import { getLocalization } from '../src/data/localized/resolve.ts';
+import { getLocalization, getLocalizedPerformanceEntries } from '../src/data/localized/resolve.ts';
 import { ticketSeatingPlans } from '../src/data/ticket-seating-plans.ts';
 
 const { editions: builtEditions, locations, performances, productions } = buildSnapshot;
@@ -85,6 +85,10 @@ for (const performance of frontTicketingPerformances) {
 
 for (const edition of builtEditions) {
   const localization = getLocalization(edition);
+  assert.equal(
+    getLocalizedPerformanceEntries(localization, buildSnapshot).length,
+    buildSnapshot.performanceEntries.length,
+  );
   assert.equal(localization.sources.site.usedFallback, false, `${edition.editionId}.site 发生回退`);
   assert.equal(
     localization.sources.programs.usedFallback,

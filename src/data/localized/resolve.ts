@@ -1,5 +1,9 @@
 import type { BuildEditionId, BuiltEdition } from '../editions';
-import { buildSnapshot, type ContentSnapshot } from '../content/resolve.ts';
+import {
+  buildSnapshot,
+  type ContentSnapshot,
+  type SnapshotPerformance,
+} from '../content/resolve.ts';
 import type { Performance, PerformanceCollection, PerformanceId } from '../performances.ts';
 import type { Production, ProductionId } from '../productions/index.ts';
 import type { SiteWorld } from '../site-routes';
@@ -22,9 +26,10 @@ export interface ResolvedProduction extends Omit<Production, 'productionId'>, Pr
   productionId: ProductionId;
 }
 
-export interface ResolvedPerformance extends Omit<Performance, 'dateTime'>, PerformanceContent {
+export interface ResolvedPerformance
+  extends Omit<SnapshotPerformance, 'effectiveDateTime'>, PerformanceContent {
   cityLabel: string;
-  dateTime: Performance['dateTime'] & { display: string };
+  dateTime: Performance['effectiveDateTime'] & { display: string };
   place: string;
 }
 
@@ -104,13 +109,36 @@ export function getLocalizedPerformance(
     throw new Error(`场次 ${performanceId} 不属于当前内容快照。`);
   }
   const content = localization.programs.performances[performanceId];
+  assertPerformanceContentFresh(performanceId, performance, content);
   return {
     ...performance,
     ...content,
     cityLabel: localization.programs.locations[performance.locationId].cityLabel,
-    dateTime: { ...performance.dateTime, display: content.dateTimeDisplay },
+    dateTime: { ...performance.effectiveDateTime, display: content.dateTimeDisplay },
     place: content.venue,
   };
+}
+
+export function assertPerformanceContentFresh(
+  performanceId: string,
+  performance: Performance,
+  content: PerformanceContent | undefined,
+): asserts content is PerformanceContent {
+  if (!content) {
+    throw new Error(`场次 ${performanceId} 缺少本地化内容。`);
+  }
+  if (performance.previousDateTime && !content.previousDateTimeDisplay?.trim()) {
+    throw new Error(`场次 ${performanceId} 缺少原定排期译文。`);
+  }
+  if (!performance.notice) {
+    return;
+  }
+  if (!content.operationalNotice?.text.trim()) {
+    throw new Error(`场次 ${performanceId} 缺少运营公告译文。`);
+  }
+  if (content.operationalNotice.sourceRevision !== performance.notice.sourceRevision) {
+    throw new Error(`场次 ${performanceId} 的运营公告译文已过期。`);
+  }
 }
 
 export function getLocalizedPerformanceEntries(

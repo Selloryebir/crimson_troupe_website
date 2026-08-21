@@ -3,11 +3,13 @@ import { locations, type Location, type LocationId } from '../locations.ts';
 import {
   performances,
   type Performance,
+  type PerformanceCollection,
   type PerformanceId,
   type TicketAvailability,
 } from '../performances.ts';
 import { productions, type Production, type ProductionId } from '../productions/index.ts';
 import type { SiteWorld } from '../site-routes.ts';
+import { derivePerformanceCollection, getSiteTerraNow } from '../site-time.ts';
 import type { BuildContext } from './build-context.ts';
 import { assertContentContextEligible } from './eligibility.ts';
 import {
@@ -17,14 +19,18 @@ import {
   validateContentRootSet,
 } from './root-sets.ts';
 
+export interface SnapshotPerformance extends Performance {
+  collection: PerformanceCollection;
+}
+
 export interface ContentSnapshot {
   context: BuildContext;
   maturity: 'preview';
   rootSet: ContentRootSet;
   editionIds: readonly BuiltEdition['editionId'][];
   editions: readonly BuiltEdition[];
-  performanceEntries: readonly (readonly [PerformanceId, Readonly<Performance>])[];
-  performances: Readonly<Partial<Record<PerformanceId, Readonly<Performance>>>>;
+  performanceEntries: readonly (readonly [PerformanceId, Readonly<SnapshotPerformance>])[];
+  performances: Readonly<Partial<Record<PerformanceId, Readonly<SnapshotPerformance>>>>;
   productionEntries: readonly (readonly [ProductionId, Readonly<Production>])[];
   productions: Readonly<Partial<Record<ProductionId, Readonly<Production>>>>;
   locationEntries: readonly (readonly [LocationId, Readonly<Location>])[];
@@ -49,7 +55,11 @@ function clonePerformance(value: Performance): Readonly<Performance> {
   ] as const);
   return Object.freeze({
     ...value,
-    dateTime: Object.freeze({ ...value.dateTime }),
+    effectiveDateTime: Object.freeze({ ...value.effectiveDateTime }),
+    previousDateTime: value.previousDateTime
+      ? Object.freeze({ ...value.previousDateTime })
+      : undefined,
+    notice: value.notice ? Object.freeze({ ...value.notice }) : undefined,
     productionIds,
     ticketAvailability: cloneTicketAvailability(value.ticketAvailability),
   });
@@ -71,7 +81,15 @@ export function resolveContent(
 
   const performanceEntries = getRootPerformanceIds(rootSet).map((performanceId) => {
     const performance = performances[performanceId];
-    return Object.freeze([performanceId, clonePerformance(performance)] as const);
+    const clonedPerformance = clonePerformance(performance);
+    const collection = derivePerformanceCollection(
+      clonedPerformance.effectiveDateTime,
+      getSiteTerraNow(clonedPerformance.world, context),
+    );
+    return Object.freeze([
+      performanceId,
+      Object.freeze({ ...clonedPerformance, collection }),
+    ] as const);
   });
   const productionIds = [
     ...new Set(performanceEntries.flatMap(([, performance]) => performance.productionIds)),

@@ -42,13 +42,24 @@ function getPerformanceEntries(
         performance.productionIds[0],
         snapshot,
       );
+      const statusCopy =
+        world === 'front'
+          ? localization.site.front.performanceDetail
+          : localization.site.archive.performanceDetail;
+      const statusLabel = statusCopy[performance.status];
       return {
         id: `${world}-performance-${performance.performanceId}`,
         type: 'performance',
         typeLabel,
         title: `${leadProduction.title}｜${performance.cityLabel}`,
-        summary: `${performance.dateTime.display} · ${performance.place}`,
-        keywords: `${leadProduction.title} ${leadProduction.kind} ${leadProduction.tagline} ${performance.searchKeywords}`,
+        summary: [
+          `${performance.dateTime.display} · ${performance.place}`,
+          statusLabel,
+          performance.operationalNotice?.text,
+        ]
+          .filter(Boolean)
+          .join(' · '),
+        keywords: `${leadProduction.title} ${leadProduction.kind} ${leadProduction.tagline} ${performance.searchKeywords} ${statusLabel} ${performance.operationalNotice?.text ?? ''}`,
         href: performancePath(edition, world, performance.performanceId),
       };
     });

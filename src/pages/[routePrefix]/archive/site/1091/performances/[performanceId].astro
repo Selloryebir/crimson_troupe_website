@@ -68,11 +68,24 @@ const backLabel = performance.collection === 'history' ? copy.backHistory : copy
       <div><dt>{copy.dateTime}</dt><dd>{performance.dateTime.display}</dd></div><div>
         <dt>{copy.place}</dt><dd>{performance.place}</dd>
       </div><div>
-        <dt>{copy.status}</dt><dd>
-          {performance.status === 'scheduled' ? copy.scheduled : copy.completed}
-        </dd>
+        <dt>{copy.status}</dt><dd>{copy[performance.status]}</dd>
       </div><div><dt>{copy.seatStatus}</dt><dd>{copy.unavailable}</dd></div>
-    </dl><section class="detail-section">
+    </dl>
+    {
+      (performance.previousDateTimeDisplay || performance.operationalNotice) && (
+        <section class="detail-section prose" aria-labelledby="archive-performance-notice">
+          <h2 id="archive-performance-notice">{copy.operationalNotice}</h2>
+          {performance.previousDateTimeDisplay && (
+            <p>
+              <strong>{copy.previousDateTime}：</strong>
+              {performance.previousDateTimeDisplay}
+            </p>
+          )}
+          {performance.operationalNotice && <p>{performance.operationalNotice.text}</p>}
+        </section>
+      )
+    }
+    <section class="detail-section">
       <h2>{copy.programTitle}</h2><ol class="program-order">
         {
           performance.productionIds.map((productionId, index) => {

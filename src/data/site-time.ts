@@ -1,5 +1,5 @@
 import type { BuildContext, SiteClockStrategy } from './content/build-context.ts';
-import type { TerraDateTime } from './performances.ts';
+import type { PerformanceCollection, TerraDateTime } from './performances.ts';
 import type { SiteWorld } from './site-routes.ts';
 
 const fixedSiteTimes = Object.freeze({
@@ -41,4 +41,24 @@ export function getSiteTerraNow(
   const strategy = context.siteClockStrategies[world];
   assertSupportedStrategy(world, strategy);
   return resolveFixedSiteTime(world);
+}
+
+function terraDateTimeKey(value: TerraDateTime): string {
+  return [
+    String(value.year).padStart(6, '0'),
+    String(value.month).padStart(2, '0'),
+    String(value.day).padStart(2, '0'),
+    value.time,
+  ].join('-');
+}
+
+export function compareTerraDateTime(left: TerraDateTime, right: TerraDateTime): number {
+  return terraDateTimeKey(left).localeCompare(terraDateTimeKey(right), 'en');
+}
+
+export function derivePerformanceCollection(
+  effectiveDateTime: TerraDateTime,
+  siteTerraNow: TerraDateTime,
+): PerformanceCollection {
+  return compareTerraDateTime(effectiveDateTime, siteTerraNow) >= 0 ? 'current' : 'history';
 }
