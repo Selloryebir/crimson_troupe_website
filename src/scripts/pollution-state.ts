@@ -7,8 +7,9 @@ export type PollutionTrigger =
   'front-entry' | 'direct-entry' | 'archive-navigation' | 'archive-locale' | 'archive-search';
 
 export interface PollutionState {
-  version: 1;
+  version: 2;
   level: PollutionLevel;
+  eventCount: number;
   variant: PollutionVariant;
 }
 
@@ -24,8 +25,11 @@ const isPollutionLevel = (value: unknown): value is PollutionLevel =>
 const isPollutionVariant = (value: unknown): value is PollutionVariant =>
   Number.isInteger(value) && Number(value) >= 0 && Number(value) <= 2;
 
+const isEventCount = (value: unknown): value is number =>
+  Number.isSafeInteger(value) && Number(value) >= 0;
+
 export function createPollutionState(variant: PollutionVariant = 0): PollutionState {
-  return { version: 1, level: 0, variant };
+  return { version: 2, level: 0, eventCount: 0, variant };
 }
 
 export function parsePollutionState(
@@ -39,13 +43,14 @@ export function parsePollutionState(
   try {
     const value = JSON.parse(rawValue) as Partial<PollutionState>;
     if (
-      value.version !== 1 ||
+      value.version !== 2 ||
       !isPollutionLevel(value.level) ||
+      !isEventCount(value.eventCount) ||
       !isPollutionVariant(value.variant)
     ) {
       return createPollutionState(fallbackVariant);
     }
-    return { version: 1, level: value.level, variant: value.variant };
+    return { version: 2, level: value.level, eventCount: value.eventCount, variant: value.variant };
   } catch {
     return createPollutionState(fallbackVariant);
   }
@@ -56,13 +61,18 @@ export function advancePollution(
   trigger: PollutionTrigger,
   random: () => number,
 ): PollutionTransition {
+  const eventCount = Math.min(state.eventCount + 1, Number.MAX_SAFE_INTEGER);
+  if (eventCount <= 2) {
+    return { state: { ...state, eventCount }, trigger, advanced: false };
+  }
+
   if (state.level >= MAX_POLLUTION_LEVEL) {
-    return { state, trigger, advanced: false };
+    return { state: { ...state, eventCount }, trigger, advanced: false };
   }
 
   const randomValue = random();
   const advanced =
     Number.isFinite(randomValue) && randomValue >= 0 && randomValue < POLLUTION_PROBABILITY;
   const level = advanced ? ((state.level + 1) as PollutionLevel) : state.level;
-  return { state: { ...state, level }, trigger, advanced };
+  return { state: { ...state, level, eventCount }, trigger, advanced };
 }

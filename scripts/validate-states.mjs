@@ -25,6 +25,7 @@ import { performances } from '../src/data/performances.ts';
 import { getFrontSearchIndex } from '../src/data/site-search-index.ts';
 import { derivePerformanceCollection, getSiteTerraNow } from '../src/data/site-time.ts';
 import { getTicketingOptions } from '../src/data/ticketing.ts';
+import { shouldRequestArchiveEntry } from '../src/scripts/pollution-controller.ts';
 import {
   MAX_POLLUTION_LEVEL,
   POLLUTION_PROBABILITY,
@@ -317,12 +318,50 @@ const pollutionTriggers = [
 ];
 
 for (const trigger of pollutionTriggers) {
-  const transition = advancePollution(createPollutionState(), trigger, () => 0.99);
+  let randomCalls = 0;
+  const transition = advancePollution(createPollutionState(), trigger, () => {
+    randomCalls += 1;
+    return 0;
+  });
   assert.equal(transition.trigger, trigger);
   assert.equal(transition.advanced, false);
+  assert.equal(transition.state.eventCount, 1);
+  assert.equal(transition.state.level, 0);
+  assert.equal(randomCalls, 0);
 }
 
-let pollution = createPollutionState(2);
+let protectedPollution = advancePollution(createPollutionState(2), 'front-entry', () => 0).state;
+protectedPollution = advancePollution(protectedPollution, 'archive-navigation', () => 0).state;
+assert.deepEqual(protectedPollution, {
+  version: 2,
+  level: 0,
+  eventCount: 2,
+  variant: 2,
+});
+
+let failedRandomCalls = 0;
+const failedThirdEvent = advancePollution(protectedPollution, 'archive-search', () => {
+  failedRandomCalls += 1;
+  return 0.99;
+});
+assert.equal(failedThirdEvent.state.eventCount, 3);
+assert.equal(failedThirdEvent.state.level, 0);
+assert.equal(failedThirdEvent.advanced, false);
+assert.equal(failedRandomCalls, 1);
+
+for (const trigger of pollutionTriggers) {
+  let randomCalls = 0;
+  const transition = advancePollution(protectedPollution, trigger, () => {
+    randomCalls += 1;
+    return 0.1;
+  });
+  assert.equal(transition.advanced, true);
+  assert.equal(transition.state.level, 1);
+  assert.equal(transition.state.eventCount, 3);
+  assert.equal(randomCalls, 1);
+}
+
+let pollution = protectedPollution;
 for (const trigger of pollutionTriggers.slice(0, 3)) {
   const transition = advancePollution(pollution, trigger, () => 0.1);
   assert.equal(transition.trigger, trigger);
@@ -330,27 +369,61 @@ for (const trigger of pollutionTriggers.slice(0, 3)) {
   pollution = transition.state;
 }
 assert.equal(pollution.level, MAX_POLLUTION_LEVEL);
+assert.equal(pollution.eventCount, 5);
 let cappedRandomCalls = 0;
 const capped = advancePollution(pollution, 'archive-search', () => {
   cappedRandomCalls += 1;
   return 0;
 });
-assert.equal(capped.state, pollution);
+assert.equal(capped.state.level, pollution.level);
+assert.equal(capped.state.eventCount, pollution.eventCount + 1);
 assert.equal(cappedRandomCalls, 0);
+assert.deepEqual(parsePollutionState('{"version":2,"level":2,"eventCount":8,"variant":1}'), {
+  version: 2,
+  level: 2,
+  eventCount: 8,
+  variant: 1,
+});
+assert.deepEqual(
+  parsePollutionState('{"version":1,"level":2,"variant":1}'),
+  createPollutionState(),
+);
 assert.deepEqual(parsePollutionState('{"version":2}'), createPollutionState());
 
-const probabilityAtLeastThreeInTen =
-  1 -
-  [0, 1, 2].reduce((total, successes) => {
-    const combinations = successes === 0 ? 1 : successes === 1 ? 10 : 45;
-    return (
-      total +
-      combinations *
-        POLLUTION_PROBABILITY ** successes *
-        (1 - POLLUTION_PROBABILITY) ** (10 - successes)
-    );
-  }, 0);
+const firstTabState = advancePollution(createPollutionState(1), 'direct-entry', () => 0).state;
+const secondTabState = createPollutionState(2);
+assert.equal(firstTabState.eventCount, 1);
+assert.equal(secondTabState.eventCount, 0);
+assert.equal(secondTabState.variant, 2);
+
+assert.equal(shouldRequestArchiveEntry(false, 'navigate', false), true);
+assert.equal(shouldRequestArchiveEntry(true, 'navigate', true), false);
+assert.equal(shouldRequestArchiveEntry(false, 'reload', true), false);
+assert.equal(shouldRequestArchiveEntry(false, 'back_forward', true), false);
+assert.equal(shouldRequestArchiveEntry(false, 'back_forward', false), true);
+
+function probabilityAtLeastThree(trials) {
+  return (
+    1 -
+    [0, 1, 2].reduce((total, successes) => {
+      const combinations =
+        successes === 0 ? 1 : successes === 1 ? trials : (trials * (trials - 1)) / 2;
+      return (
+        total +
+        combinations *
+          POLLUTION_PROBABILITY ** successes *
+          (1 - POLLUTION_PROBABILITY) ** (trials - successes)
+      );
+    }, 0)
+  );
+}
+
+const probabilityAtLeastThreeInTen = probabilityAtLeastThree(10);
+const probabilityAtLeastThreeInFirstTenEvents = probabilityAtLeastThree(8);
 assert.ok(probabilityAtLeastThreeInTen > 0.85);
+assert.ok(
+  probabilityAtLeastThreeInFirstTenEvents > 0.72 && probabilityAtLeastThreeInFirstTenEvents < 0.73,
+);
 
 const catalog = [
   {
@@ -652,7 +725,9 @@ assert.equal(
 );
 
 console.log(
-  `state validation passed: pollution=${pollutionTriggers.length} triggers, p10=${(
+  `state validation passed: pollution=${pollutionTriggers.length} triggers, p12-events=${(
     probabilityAtLeastThreeInTen * 100
-  ).toFixed(4)}%, ticket outcomes=5, matrix=${matrix.length}`,
+  ).toFixed(
+    4,
+  )}%, p10-events=${(probabilityAtLeastThreeInFirstTenEvents * 100).toFixed(4)}%, ticket outcomes=5, matrix=${matrix.length}`,
 );
