@@ -1,5 +1,14 @@
 ---
-import { builtEditions } from '../../data/editions';
+import columbiaBadge from '../../assets/realm-badges/columbia.svg';
+import higashiBadge from '../../assets/realm-badges/higashi.svg';
+import kazimierzBadge from '../../assets/realm-badges/kazimierz.svg';
+import leithanienBadge from '../../assets/realm-badges/leithanien.svg';
+import minosBadge from '../../assets/realm-badges/minos.svg';
+import siracusaBadge from '../../assets/realm-badges/siracusa.svg';
+import ursusBadge from '../../assets/realm-badges/ursus.svg';
+import victoriaBadge from '../../assets/realm-badges/victoria.svg';
+import yanBadge from '../../assets/realm-badges/yan.svg';
+import { builtEditions, type EditionId } from '../../data/editions';
 import type { ResolvedLocalization } from '../../data/localized/resolve';
 import { equivalentEditionPath, type SiteWorld } from '../../data/site-routes';
 
@@ -12,19 +21,32 @@ interface Props {
 const { localization, world, currentPath } = Astro.props;
 const { edition } = localization;
 const copy = localization.site.shared;
+
+const realmBadgeSources = {
+  yan: yanBadge.src,
+  victoria: victoriaBadge.src,
+  ursus: ursusBadge.src,
+  siracusa: siracusaBadge.src,
+  minos: minosBadge.src,
+  leithanien: leithanienBadge.src,
+  kazimierz: kazimierzBadge.src,
+  higashi: higashiBadge.src,
+  columbia: columbiaBadge.src,
+} satisfies Record<EditionId, string>;
+
+function badgeStyle(editionId: EditionId): string {
+  return `--edition-badge-source: url("${realmBadgeSources[editionId]}")`;
+}
 ---
 
 {
   builtEditions.length > 1 ? (
     <details class="edition-selector" data-edition-selector>
       <summary aria-label={copy.chooseEdition}>
-        <svg class="edition-badge" viewBox="0 0 44 44" aria-hidden="true">
-          <rect x="1" y="1" width="42" height="42" rx="2" />
-          <text x="22" y="26" text-anchor="middle">
-            {edition.badgeCode}
-          </text>
-        </svg>
-        <span lang={edition.locale}>{edition.languageName.native}</span>
+        <span class="edition-badge" style={badgeStyle(edition.editionId)} aria-hidden="true" />
+        <span class="edition-selector__label" lang={edition.locale}>
+          {edition.languageName.native}
+        </span>
       </summary>
       <ul>
         {builtEditions.map((targetEdition) => (
@@ -35,12 +57,11 @@ const copy = localization.site.shared;
               aria-current={targetEdition.editionId === edition.editionId ? 'page' : undefined}
               data-locale-switch={world === 'archive' ? '' : undefined}
             >
-              <svg class="edition-badge" viewBox="0 0 44 44" aria-hidden="true">
-                <rect x="1" y="1" width="42" height="42" rx="2" />
-                <text x="22" y="26" text-anchor="middle">
-                  {targetEdition.badgeCode}
-                </text>
-              </svg>
+              <span
+                class="edition-badge"
+                style={badgeStyle(targetEdition.editionId)}
+                aria-hidden="true"
+              />
               <span>{targetEdition.languageName.native}</span>
             </a>
           </li>
@@ -49,12 +70,7 @@ const copy = localization.site.shared;
     </details>
   ) : (
     <span class="current-language" aria-label={copy.currentEdition}>
-      <svg class="edition-badge" viewBox="0 0 44 44" aria-hidden="true">
-        <rect x="1" y="1" width="42" height="42" rx="2" />
-        <text x="22" y="26" text-anchor="middle">
-          {edition.badgeCode}
-        </text>
-      </svg>
+      <span class="edition-badge" style={badgeStyle(edition.editionId)} aria-hidden="true" />
       <span lang={edition.locale}>{edition.languageName.native}</span>
     </span>
   )
