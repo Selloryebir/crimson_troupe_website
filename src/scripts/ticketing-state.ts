@@ -142,6 +142,29 @@ export function calculateFailureServiceFee(baseTotal: number): number {
   return Math.ceil(baseTotal * FAILURE_SERVICE_RATE);
 }
 
+export function deriveTicketStampIds(
+  route: TicketingRoute,
+  tags: readonly JourneyTag[],
+): readonly TicketStampId[] {
+  const stampIds: TicketStampId[] = [
+    'admission-confirmed',
+    route === 'premium' ? 'priority-route' : 'standard-route',
+  ];
+  if (tags.includes('network-retry')) {
+    stampIds.push('network-recovered');
+  }
+  if (tags.includes('returned-seat')) {
+    stampIds.push('returned-seat');
+  }
+  if (tags.includes('retention-accepted')) {
+    stampIds.push('retention-offer');
+  }
+  if (tags.includes('manual-review')) {
+    stampIds.push('manual-review');
+  }
+  return stampIds;
+}
+
 export function updateBasket(
   state: TicketingState,
   item: TicketBasketItem | null,
@@ -175,10 +198,7 @@ function createResult(state: TicketingState, ticketNumberFactory: () => string):
         ]
       : [];
   const settledTotal = baseTotal + adjustments.reduce((total, item) => total + item.amount, 0);
-  const stampIds: readonly TicketStampId[] =
-    state.route === 'premium'
-      ? ['admission-confirmed', 'priority-route']
-      : ['admission-confirmed', 'standard-route'];
+  const stampIds = deriveTicketStampIds(state.route, state.journeyTags);
   const tickets = basket.map((item) => ({
     performanceId: item.performanceId,
     number: ticketNumberFactory(),
@@ -410,6 +430,17 @@ function restoreIssuedNumbers(
 }
 
 function isValidStateCombination(state: TicketingState): boolean {
+  const returnedSeat = state.journeyTags.includes('returned-seat');
+  const manualReview = state.journeyTags.includes('manual-review');
+  if (
+    (returnedSeat && manualReview) ||
+    (returnedSeat && !state.journeyTags.includes('priority-refused')) ||
+    (manualReview && state.journeyTags.includes('priority-refused')) ||
+    ((returnedSeat || manualReview) && state.phase !== 'success') ||
+    (state.journeyTags.includes('retention-accepted') && !state.retentionOffered)
+  ) {
+    return false;
+  }
   if (state.phase === 'network' && state.route !== 'standard') {
     return false;
   }

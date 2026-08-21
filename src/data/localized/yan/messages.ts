@@ -94,6 +94,10 @@ export const yanMessages = {
       'admission-confirmed': '确认入场',
       'standard-route': '常规线路',
       'priority-route': '优先线路',
+      'network-recovered': '网络恢复',
+      'returned-seat': '回流席位',
+      'retention-offer': '挽留报价',
+      'manual-review': '人工复核',
     },
     artifact: {
       title: '{title}纪念票',

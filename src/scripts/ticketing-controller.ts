@@ -179,7 +179,9 @@ export function initTicketingExperience(): void {
     optionFor(item.performanceId)?.offers.find((offer) => offer.zone === item.zone)?.label ??
     item.zone;
 
-  const stampLabels = () => state.result?.stampIds.map((stampId) => messages.stamps[stampId]) ?? [];
+  const artifactStamps = () =>
+    state.result?.stampIds.map((stampId) => ({ id: stampId, label: messages.stamps[stampId] })) ??
+    [];
 
   const syncBasketControls = () => {
     form.querySelectorAll<HTMLElement>('[data-ticket-option]').forEach((row) => {
@@ -296,7 +298,7 @@ export function initTicketingExperience(): void {
         basketItem,
         zoneLabel: zoneLabelFor(basketItem),
         number: issued.number,
-        stamps: stampLabels(),
+        stamps: artifactStamps(),
         messages: messages.artifact,
         locale,
       };
@@ -321,9 +323,14 @@ export function initTicketingExperience(): void {
       ticketMeta.textContent = `${option.dateTime} · ${option.place} · ${zoneLabelFor(basketItem)} · ${basketItem.basePrice} LMD`;
       const ticketNumber = document.createElement('p');
       ticketNumber.textContent = formatMessage(messages.ticketNumber, { number: issued.number });
-      const stamps = document.createElement('p');
+      const stamps = document.createElement('ul');
       stamps.className = 'issued-ticket__stamps';
-      stamps.textContent = stampLabels().join(' · ');
+      for (const stamp of artifactStamps()) {
+        const item = document.createElement('li');
+        item.dataset.ticketStamp = stamp.id;
+        item.textContent = stamp.label;
+        stamps.append(item);
+      }
       const controls = document.createElement('div');
       controls.className = 'issued-ticket__controls';
       controls.append(
@@ -569,7 +576,7 @@ export function initTicketingExperience(): void {
         basketItem,
         zoneLabel: zoneLabelFor(basketItem),
         number: issued.number,
-        stamps: stampLabels(),
+        stamps: artifactStamps(),
         messages: messages.artifact,
         locale,
       });

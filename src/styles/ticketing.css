@@ -519,7 +519,33 @@
 }
 
 .issued-ticket__stamps {
-  color: var(--crimson) !important;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  padding: 0;
+  margin: 14px 0 0;
+  color: var(--crimson);
+  list-style: none;
+}
+
+.issued-ticket__stamps li {
+  padding: 5px 8px;
+  border: 1px solid currentcolor;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.issued-ticket__stamps li[data-ticket-stamp="admission-confirmed"] {
+  border-radius: 999px;
+}
+
+.issued-ticket__stamps li[data-ticket-stamp="network-recovered"] {
+  border-style: double;
+}
+
+.issued-ticket__stamps li[data-ticket-stamp="retention-offer"] {
+  border-style: dashed;
 }
 
 .issued-ticket__controls {

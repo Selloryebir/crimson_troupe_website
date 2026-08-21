@@ -102,6 +102,10 @@ export const columbiaMessages = {
       'admission-confirmed': 'ADMISSION CONFIRMED',
       'standard-route': 'STANDARD ROUTE',
       'priority-route': 'PRIORITY ROUTE',
+      'network-recovered': 'NETWORK RECOVERED',
+      'returned-seat': 'RETURNED SEAT',
+      'retention-offer': 'RETENTION QUOTE',
+      'manual-review': 'MANUAL REVIEW',
     },
     artifact: {
       title: '{title} Commemorative Ticket',

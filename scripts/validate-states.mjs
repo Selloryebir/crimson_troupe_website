@@ -12,7 +12,11 @@ import {
   createPollutionState,
   parsePollutionState,
 } from '../src/scripts/pollution-state.ts';
-import { createTicketMatrix, createTicketSvg } from '../src/scripts/ticket-artifact.ts';
+import {
+  createTicketMatrix,
+  createTicketSvg,
+  createTicketTexture,
+} from '../src/scripts/ticket-artifact.ts';
 import {
   MAX_REQUIRING_RESUBMIT_RESULTS,
   acceptRetentionOffer,
@@ -22,6 +26,7 @@ import {
   createTicketingState,
   declinePremiumOffer,
   declineRetentionOffer,
+  deriveTicketStampIds,
   enterPremiumRoute,
   openPremiumOffer,
   resolveTicketingAttempt,
@@ -151,6 +156,7 @@ assert.equal(premiumFailure.phase, 'failure');
 assert.equal(premiumSuccess.result?.baseTotal, 1100);
 assert.deepEqual(premiumSuccess.result?.adjustments, [{ id: 'priority-service', amount: 550 }]);
 assert.equal(premiumSuccess.result?.settledTotal, 1650);
+assert.deepEqual(premiumSuccess.result?.stampIds, ['admission-confirmed', 'priority-route']);
 assert.equal(returnToStandardRoute(premiumFailure).route, 'standard');
 assert.equal(calculateAdjustmentAmount(1100, 'full'), 550);
 assert.equal(calculateAdjustmentAmount(1100, 'retention'), 528);
@@ -171,6 +177,11 @@ const retainedSuccess = resolveTicketingAttempt(
 );
 assert.deepEqual(retainedSuccess.result?.adjustments, [{ id: 'retention-service', amount: 528 }]);
 assert.equal(retainedSuccess.result?.settledTotal, 1628);
+assert.deepEqual(retainedSuccess.result?.stampIds, [
+  'admission-confirmed',
+  'priority-route',
+  'retention-offer',
+]);
 
 const retentionDeclined = declineRetentionOffer(firstRetentionOffer);
 assert.equal(retentionDeclined.phase, 'selection');
@@ -210,6 +221,7 @@ assert.equal(boundedRandomCalls, MAX_REQUIRING_RESUBMIT_RESULTS);
 assert.equal(forcedManualReview.phase, 'success');
 assert.equal(forcedManualReview.route, 'standard');
 assert.ok(forcedManualReview.journeyTags.includes('manual-review'));
+assert.ok(forcedManualReview.result?.stampIds.includes('manual-review'));
 
 let returnedSeatJourney = declineRetentionOffer(firstRetentionOffer);
 returnedSeatJourney = startTicketingAttempt(returnedSeatJourney);
@@ -232,6 +244,23 @@ assert.equal(forcedReturnedSeat.phase, 'success');
 assert.equal(forcedReturnedSeat.route, 'standard');
 assert.ok(forcedReturnedSeat.journeyTags.includes('returned-seat'));
 assert.ok(forcedReturnedSeat.journeyTags.includes('priority-refused'));
+assert.ok(forcedReturnedSeat.result?.stampIds.includes('returned-seat'));
+
+assert.deepEqual(
+  deriveTicketStampIds('standard', [
+    'network-retry',
+    'priority-refused',
+    'retention-accepted',
+    'returned-seat',
+  ]),
+  [
+    'admission-confirmed',
+    'standard-route',
+    'network-recovered',
+    'returned-seat',
+    'retention-offer',
+  ],
+);
 
 let frozenRandomCalls = 0;
 let frozenNumberCalls = 0;
@@ -254,6 +283,14 @@ const restored = restoreTicketingState(JSON.stringify(premiumSuccess), catalog);
 assert.equal(restored.phase, 'success');
 assert.deepEqual(restored.result?.tickets, premiumSuccess.result?.tickets);
 assert.deepEqual(restored.result?.journeyTags, premiumSuccess.result?.journeyTags);
+const invalidForcedCombination = {
+  ...forcedReturnedSeat,
+  journeyTags: [...forcedReturnedSeat.journeyTags, 'manual-review'],
+};
+assert.deepEqual(
+  restoreTicketingState(JSON.stringify(invalidForcedCombination), catalog),
+  createTicketingState(),
+);
 assert.deepEqual(restoreTicketingState('{"version":2}', catalog), createTicketingState());
 assert.deepEqual(restoreTicketingState('{"version":999}', catalog), createTicketingState());
 
@@ -292,12 +329,22 @@ const artifactPerformance = {
   offers: catalog[0].offers,
 };
 const matrix = createTicketMatrix('123456789012');
+const texture = createTicketTexture('123456789012');
+assert.deepEqual(texture, createTicketTexture('123456789012'));
+assert.notDeepEqual(texture, createTicketTexture('123456789013'));
+const artifactStamps = [
+  { id: 'admission-confirmed', label: '确认入场' },
+  { id: 'priority-route', label: '优先线路' },
+  { id: 'network-recovered', label: '网络恢复' },
+  { id: 'retention-offer', label: '挽留报价' },
+  { id: 'manual-review', label: '人工复核' },
+];
 const svg = createTicketSvg({
   performance: artifactPerformance,
   basketItem: basketA,
   zoneLabel: 'A 区',
   number: '123456789012',
-  stamps: ['确认入场', '优先线路'],
+  stamps: artifactStamps,
   messages: yanLocalization.messages.ticketing.artifact,
   locale: 'zh-CN',
 });
@@ -311,9 +358,28 @@ for (const requiredText of [
   '123456789012',
   '确认入场',
   '优先线路',
+  '网络恢复',
+  '挽留报价',
+  '人工复核',
 ]) {
   assert.ok(svg.includes(requiredText), `票面缺少必要字段：${requiredText}`);
 }
+for (const stamp of artifactStamps) {
+  assert.ok(svg.includes(`data-stamp-id="${stamp.id}"`));
+}
+assert.ok(svg.includes(`data-ticket-pattern="${texture.signature}"`));
+assert.equal(
+  svg,
+  createTicketSvg({
+    performance: artifactPerformance,
+    basketItem: basketA,
+    zoneLabel: 'A 区',
+    number: '123456789012',
+    stamps: artifactStamps,
+    messages: yanLocalization.messages.ticketing.artifact,
+    locale: 'zh-CN',
+  }),
+);
 
 console.log(
   `state validation passed: pollution=${pollutionTriggers.length} triggers, p10=${(
