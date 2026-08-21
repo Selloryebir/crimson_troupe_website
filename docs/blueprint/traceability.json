@@ -167,6 +167,11 @@
       "related": ["BP-FND-EXPERIENCE", "BP-MOD-PROGRAMS", "BP-CNT-CORE"]
     },
     {
+      "path": "src/components/front/TicketSeatingPlan.astro",
+      "primary": "BP-MOD-TICKETING",
+      "related": ["BP-FND-EXPERIENCE", "BP-FND-DOMAIN", "BP-CNT-CORE", "BP-I18N-CORE"]
+    },
+    {
       "path": "src/components/front/TicketingExperience.astro",
       "primary": "BP-MOD-TICKETING",
       "related": ["BP-FND-EXPERIENCE", "BP-FND-DOMAIN", "BP-CNT-CORE"]
@@ -391,6 +396,11 @@
       "path": "src/data/site-search-index.ts",
       "primary": "BP-MOD-SEARCH",
       "related": ["BP-FND-DOMAIN", "BP-CNT-CORE", "BP-I18N-CORE", "BP-I18N-TERMS"]
+    },
+    {
+      "path": "src/data/ticket-seating-plans.ts",
+      "primary": "BP-MOD-TICKETING",
+      "related": ["BP-FND-DOMAIN", "BP-CNT-CORE"]
     },
     {
       "path": "src/data/ticketing.ts",

@@ -102,8 +102,15 @@ export interface FilterMessages {
   empty: string;
 }
 
-export type TicketStampId = 'admission-confirmed' | 'standard-route' | 'priority-route';
-export type TicketAdjustmentId = 'premium-service';
+export type TicketStampId =
+  | 'admission-confirmed'
+  | 'standard-route'
+  | 'priority-route'
+  | 'network-recovered'
+  | 'returned-seat'
+  | 'retention-offer'
+  | 'manual-review';
+export type TicketAdjustmentId = 'priority-service' | 'retention-service';
 
 export interface TicketArtifactMessages {
   title: string;
@@ -121,6 +128,11 @@ export interface TicketingMessages {
   emptyBasket: string;
   selectionReady: string;
   selectionRequired: string;
+  seatingPlanSummary: string;
+  seatingPlanAria: string;
+  stageDirection: string;
+  seatingPlanNotice: string;
+  selectSeatingZone: string;
   receiptEyebrow: string;
   receiptTitle: string;
   receiptCopy: string;
@@ -144,12 +156,27 @@ export interface TicketingMessages {
   retryBasket: string;
   premiumFailureTitle: string;
   premiumFailureCopy: string;
+  premiumOfferTitle: string;
+  premiumOfferCopy: string;
+  retentionOfferTitle: string;
+  retentionOfferCopy: string;
   standardFailureTitle: string;
   standardFailureCopy: string;
   retryStandard: string;
   tryPremium: string;
+  acceptPremium: string;
+  declinePremium: string;
+  acceptRetention: string;
+  declineRetention: string;
   retryPremium: string;
   returnStandard: string;
+  offerBaseTotal: string;
+  offerAdjustment: string;
+  offerFinalTotal: string;
+  failureRecordTitle: string;
+  allocatedSeats: string;
+  failureServiceFee: string;
+  failureRecordDisclaimer: string;
   startRequired: string;
   submitted: string;
   success: string;

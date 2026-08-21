@@ -4,6 +4,7 @@ import type { ResolvedLocalization } from '../../data/localized/resolve';
 import type { TicketingPerformanceOption } from '../../data/ticketing';
 import { sitePath } from '../../data/site-routes';
 import ProductionVisual from './ProductionVisual.astro';
+import TicketSeatingPlan from './TicketSeatingPlan.astro';
 
 interface Props {
   localization: ResolvedLocalization;
@@ -82,6 +83,12 @@ const copy = localization.site.front.tickets;
                   </option>
                 ))}
               </select>
+              <TicketSeatingPlan
+                planId={option.seatingPlanId}
+                performanceTitle={option.title}
+                offers={option.offers}
+                messages={messages.ticketing}
+              />
             </div>
           </li>
         ))
@@ -101,6 +108,7 @@ const copy = localization.site.front.tickets;
     <p class="eyebrow" data-ticket-flow-label>QUEUE STATUS</p>
     <h3 data-ticket-flow-title></h3>
     <p data-ticket-flow-copy></p>
+    <div class="ticket-flow__details" data-ticket-flow-details></div>
     <div class="actions" data-ticket-flow-actions></div>
   </section>
 

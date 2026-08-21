@@ -3,9 +3,15 @@ import { formatMessage } from '../data/localized/format';
 import type { TicketingMessages } from '../data/localized/schema';
 import { createTicketSvg } from './ticket-artifact';
 import {
+  acceptRetentionOffer,
+  calculateAdjustmentAmount,
   calculateBaseTotal,
+  calculateFailureServiceFee,
   createTicketingState,
+  declinePremiumOffer,
+  declineRetentionOffer,
   enterPremiumRoute,
+  openPremiumOffer,
   resolveTicketingAttempt,
   restoreTicketingState,
   retryTicketingAttempt,
@@ -16,7 +22,7 @@ import {
   type TicketBasketItem,
 } from './ticketing-state';
 
-const STORAGE_KEY = 'crimson-troupe:ticketing:v2';
+const STORAGE_KEY = 'crimson-troupe:ticketing:v3';
 
 function getSessionStorage(): Storage | null {
   try {
@@ -71,6 +77,7 @@ function parseOptions(rawValue: string | undefined): readonly TicketingPerforman
       (option) =>
         typeof option.performanceId !== 'string' ||
         typeof option.title !== 'string' ||
+        typeof option.seatingPlanId !== 'string' ||
         !Array.isArray(option.offers) ||
         option.offers.length === 0,
     )
@@ -110,6 +117,7 @@ export function initTicketingExperience(): void {
   const flowLabel = app.querySelector<HTMLElement>('[data-ticket-flow-label]');
   const flowTitle = app.querySelector<HTMLElement>('[data-ticket-flow-title]');
   const flowCopy = app.querySelector<HTMLElement>('[data-ticket-flow-copy]');
+  const flowDetails = app.querySelector<HTMLElement>('[data-ticket-flow-details]');
   const flowActions = app.querySelector<HTMLElement>('[data-ticket-flow-actions]');
   const result = app.querySelector<HTMLElement>('[data-ticket-result]');
   const receipt = app.querySelector<HTMLElement>('[data-ticket-receipt]');
@@ -126,6 +134,7 @@ export function initTicketingExperience(): void {
     !flowLabel ||
     !flowTitle ||
     !flowCopy ||
+    !flowDetails ||
     !flowActions ||
     !result ||
     !receipt ||
@@ -170,22 +179,35 @@ export function initTicketingExperience(): void {
     optionFor(item.performanceId)?.offers.find((offer) => offer.zone === item.zone)?.label ??
     item.zone;
 
-  const stampLabels = () => state.result?.stampIds.map((stampId) => messages.stamps[stampId]) ?? [];
+  const artifactStamps = () =>
+    state.result?.stampIds.map((stampId) => ({ id: stampId, label: messages.stamps[stampId] })) ??
+    [];
 
   const syncBasketControls = () => {
     form.querySelectorAll<HTMLElement>('[data-ticket-option]').forEach((row) => {
       const performanceId = row.dataset.ticketOption;
       const checkbox = row.querySelector<HTMLInputElement>('[data-ticket-select]');
       const select = row.querySelector<HTMLSelectElement>('[data-ticket-zone]');
-      if (!performanceId || !checkbox || !select) {
+      const map = row.querySelector<HTMLElement>('[data-ticket-seating-map]');
+      if (!performanceId || !checkbox || !select || !map) {
         return;
       }
       const basketItem = state.basket.find((item) => item.performanceId === performanceId);
       checkbox.checked = Boolean(basketItem);
       select.disabled = !basketItem;
+      row.classList.toggle('is-selected', Boolean(basketItem));
       if (basketItem) {
         select.value = basketItem.zone;
+        map.dataset.selectedZone = basketItem.zone;
+      } else {
+        delete map.dataset.selectedZone;
       }
+      map.querySelectorAll<HTMLButtonElement>('[data-ticket-zone-map]').forEach((button) => {
+        button.setAttribute(
+          'aria-pressed',
+          String(button.dataset.ticketZoneMap === basketItem?.zone),
+        );
+      });
     });
     const total = calculateBaseTotal(state.basket);
     count.textContent =
@@ -252,7 +274,7 @@ export function initTicketingExperience(): void {
     totals.className = 'ticket-receipt__totals';
     addDefinition(totals, messages.baseTotal, `${state.result.baseTotal} LMD`);
     if (state.result.adjustments.length === 0) {
-      addDefinition(totals, messages.adjustments['premium-service'], messages.adjustmentNone);
+      addDefinition(totals, messages.offerAdjustment, messages.adjustmentNone);
     } else {
       for (const adjustment of state.result.adjustments) {
         addDefinition(totals, messages.adjustments[adjustment.id], `+ ${adjustment.amount} LMD`);
@@ -276,7 +298,7 @@ export function initTicketingExperience(): void {
         basketItem,
         zoneLabel: zoneLabelFor(basketItem),
         number: issued.number,
-        stamps: stampLabels(),
+        stamps: artifactStamps(),
         messages: messages.artifact,
         locale,
       };
@@ -301,9 +323,14 @@ export function initTicketingExperience(): void {
       ticketMeta.textContent = `${option.dateTime} · ${option.place} · ${zoneLabelFor(basketItem)} · ${basketItem.basePrice} LMD`;
       const ticketNumber = document.createElement('p');
       ticketNumber.textContent = formatMessage(messages.ticketNumber, { number: issued.number });
-      const stamps = document.createElement('p');
+      const stamps = document.createElement('ul');
       stamps.className = 'issued-ticket__stamps';
-      stamps.textContent = stampLabels().join(' · ');
+      for (const stamp of artifactStamps()) {
+        const item = document.createElement('li');
+        item.dataset.ticketStamp = stamp.id;
+        item.textContent = stamp.label;
+        stamps.append(item);
+      }
       const controls = document.createElement('div');
       controls.className = 'issued-ticket__controls';
       controls.append(
@@ -317,9 +344,43 @@ export function initTicketingExperience(): void {
   };
 
   const renderFlow = () => {
+    flowDetails.replaceChildren();
     flowActions.replaceChildren();
+    const offerPhase = state.phase === 'premium-offer' || state.phase === 'retention-offer';
     flowLabel.textContent =
-      state.route === 'premium' ? messages.priorityChannel : messages.standardChannel;
+      state.route === 'premium' || offerPhase ? messages.priorityChannel : messages.standardChannel;
+
+    const renderOffer = (offerVariant: 'full' | 'retention') => {
+      const base = calculateBaseTotal(state.basket);
+      const adjustment = calculateAdjustmentAmount(base, offerVariant);
+      const quote = document.createElement('dl');
+      quote.className = 'ticket-flow__ledger';
+      addDefinition(quote, messages.offerBaseTotal, `${base} LMD`);
+      addDefinition(quote, messages.offerAdjustment, `+ ${adjustment} LMD`);
+      addDefinition(quote, messages.offerFinalTotal, `${base + adjustment} LMD`);
+      flowDetails.append(quote);
+    };
+
+    if (state.phase === 'premium-offer') {
+      flowTitle.textContent = messages.premiumOfferTitle;
+      flowCopy.textContent = messages.premiumOfferCopy;
+      renderOffer('full');
+      flowActions.append(
+        createButton('accept-premium', messages.acceptPremium, true),
+        createButton('decline-premium', messages.declinePremium),
+      );
+      return;
+    }
+    if (state.phase === 'retention-offer') {
+      flowTitle.textContent = messages.retentionOfferTitle;
+      flowCopy.textContent = messages.retentionOfferCopy;
+      renderOffer('retention');
+      flowActions.append(
+        createButton('accept-retention', messages.acceptRetention, true),
+        createButton('decline-retention', messages.declineRetention),
+      );
+      return;
+    }
     if (state.phase === 'attempt') {
       flowTitle.textContent =
         state.route === 'premium' ? messages.premiumAttemptTitle : messages.standardAttemptTitle;
@@ -347,10 +408,24 @@ export function initTicketingExperience(): void {
     if (state.route === 'standard') {
       flowActions.append(
         createButton('retry', messages.retryStandard, true),
-        createButton('premium', messages.tryPremium),
+        createButton('offer', messages.tryPremium),
         createButton('back', messages.backToBasket),
       );
     } else {
+      const base = calculateBaseTotal(state.basket);
+      const record = document.createElement('section');
+      record.className = 'ticket-flow__failure-record';
+      const recordTitle = document.createElement('h4');
+      recordTitle.textContent = messages.failureRecordTitle;
+      const ledger = document.createElement('dl');
+      ledger.className = 'ticket-flow__ledger';
+      addDefinition(ledger, messages.allocatedSeats, '0');
+      addDefinition(ledger, messages.offerBaseTotal, `${base} LMD`);
+      addDefinition(ledger, messages.failureServiceFee, `${calculateFailureServiceFee(base)} LMD`);
+      const notice = document.createElement('small');
+      notice.textContent = messages.failureRecordDisclaimer;
+      record.append(recordTitle, ledger, notice);
+      flowDetails.append(record);
       flowActions.append(
         createButton('retry', messages.retryPremium, true),
         createButton('standard', messages.returnStandard),
@@ -391,6 +466,49 @@ export function initTicketingExperience(): void {
     syncBasketControls();
   });
 
+  form.addEventListener('click', (event) => {
+    const button =
+      event.target instanceof Element
+        ? event.target.closest<HTMLButtonElement>('[data-ticket-zone-map]')
+        : null;
+    const row = button?.closest<HTMLElement>('[data-ticket-option]');
+    const performanceId = row?.dataset.ticketOption;
+    const zone = button?.dataset.ticketZoneMap;
+    const checkbox = row?.querySelector<HTMLInputElement>('[data-ticket-select]');
+    const select = row?.querySelector<HTMLSelectElement>('[data-ticket-zone]');
+    const offer = performanceId
+      ? optionFor(performanceId)?.offers.find((entry) => entry.zone === zone)
+      : undefined;
+    if (!row || !performanceId || !checkbox || !select || !offer) {
+      return;
+    }
+    checkbox.checked = true;
+    select.disabled = false;
+    select.value = offer.zone;
+    state = updateBasket(state, basketItemFromRow(row), performanceId);
+    save();
+    live.textContent = messages.selectionReady;
+    syncBasketControls();
+  });
+
+  form.addEventListener(
+    'toggle',
+    (event) => {
+      const opened = event.target;
+      if (!(opened instanceof HTMLDetailsElement) || !opened.open) {
+        return;
+      }
+      form
+        .querySelectorAll<HTMLDetailsElement>('[data-ticket-seating-details][open]')
+        .forEach((details) => {
+          if (details !== opened) {
+            details.open = false;
+          }
+        });
+    },
+    true,
+  );
+
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     const next = startTicketingAttempt(state);
@@ -415,8 +533,16 @@ export function initTicketingExperience(): void {
       state = resolveTicketingAttempt(state, Math.random, createTicketNumber);
     } else if (action === 'retry') {
       state = retryTicketingAttempt(state);
-    } else if (action === 'premium') {
+    } else if (action === 'offer') {
+      state = openPremiumOffer(state);
+    } else if (action === 'accept-premium') {
       state = enterPremiumRoute(state);
+    } else if (action === 'decline-premium') {
+      state = declinePremiumOffer(state);
+    } else if (action === 'accept-retention') {
+      state = acceptRetentionOffer(state);
+    } else if (action === 'decline-retention') {
+      state = declineRetentionOffer(state);
     } else if (action === 'standard') {
       state = returnToStandardRoute(state);
     } else if (action === 'back') {
@@ -450,7 +576,7 @@ export function initTicketingExperience(): void {
         basketItem,
         zoneLabel: zoneLabelFor(basketItem),
         number: issued.number,
-        stamps: stampLabels(),
+        stamps: artifactStamps(),
         messages: messages.artifact,
         locale,
       });

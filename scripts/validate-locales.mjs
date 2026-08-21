@@ -7,6 +7,7 @@ import { locations } from '../src/data/locations.ts';
 import { getLocalization } from '../src/data/localized/resolve.ts';
 import { performances } from '../src/data/performances.ts';
 import { productions } from '../src/data/productions/index.ts';
+import { ticketSeatingPlans } from '../src/data/ticket-seating-plans.ts';
 
 const localeValidationRules = {
   higashi: {
@@ -33,6 +34,12 @@ const expectedArchiveMatrix = {
   'the-carnival-montelupe-1091-0921': ['the-carnival', 'montelupe', 'current'],
   'the-carnival-londinium-1091-1009': ['the-carnival', 'londinium', 'current'],
   'ode-au-triomphe-zwillingsturme-1091-1028': ['ode-au-triomphe', 'zwillingsturme', 'current'],
+};
+
+const expectedFrontTicketingMatrix = {
+  'uncrowned-trimount-1098': ['trimount-grand-fan', ['A', 'B', 'BOX', 'C', 'S']],
+  'caged-fire-wiesheim-1098': ['wiesheim-mirror-horseshoe', ['A', 'B', 'BOX', 'C', 'S']],
+  'second-snow-norport-1098': ['norport-platform-linear', ['A', 'B', 'C', 'S']],
 };
 
 function assertComplete(value, path = 'content') {
@@ -106,6 +113,30 @@ assert.deepEqual(
   }, {}),
   { victoria: 4, leithanien: 3, siracusa: 2 },
   '1091 里站国家分布发生偏移',
+);
+
+const frontTicketingMatrix = Object.fromEntries(
+  Object.values(performances)
+    .filter(
+      (performance) =>
+        performance.world === 'front' && performance.ticketAvailability.state === 'on-sale',
+    )
+    .map((performance) => {
+      const { seatingPlanId, offers } = performance.ticketAvailability;
+      const planZones = ticketSeatingPlans[seatingPlanId].zones.map(({ zone }) => zone).sort();
+      const offerZones = offers.map(({ zone }) => zone).sort();
+      assert.deepEqual(
+        planZones,
+        offerZones,
+        `${performance.performanceId} 的示意分区与报价不一致`,
+      );
+      return [performance.performanceId, [seatingPlanId, offerZones]];
+    }),
+);
+assert.deepEqual(
+  frontTicketingMatrix,
+  expectedFrontTicketingMatrix,
+  '表站场次、分区示意或可售分区发生偏移',
 );
 
 for (const edition of builtEditions) {
