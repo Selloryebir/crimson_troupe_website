@@ -27,7 +27,7 @@ docs/blueprint/
 └── quality/                  # Demo 到 Formal 的统一阶段标准
 ```
 
-剧目视觉的长期艺术契约位于 [`content/production-visual-language.md`](content/production-visual-language.md)，具体创作流程与交付模板位于 [`../guides/production-art-authoring.md`](../guides/production-art-authoring.md)。前者约束运行时结果和职责，后者只指导单次资产制作，不形成第二套蓝图。
+剧目视觉的长期艺术契约位于 [`content/production-visual-language.md`](content/production-visual-language.md)，按 `productionId` 增长的题义资料位于 [`content/production-visual-catalog.md`](content/production-visual-catalog.md)，具体创作流程与交付模板位于 [`../guides/production-art-authoring.md`](../guides/production-art-authoring.md)。三者分别负责系统结果、已采纳档案与单次制作方法，不复制彼此正文。
 
 临时规划、建议、创意草案和一次性开发计划位于 `docs/drafts/`，外部依据位于 `docs/references/`，运行时内容位于 `src/data/` 或未来唯一的 `src/content/`。实施计划、测试输出、审核记录和翻译覆盖率报告不属于蓝图。
 

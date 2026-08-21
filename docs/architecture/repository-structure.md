@@ -78,11 +78,13 @@ crimson_troupe_website/
 
 ## 当前实现快照
 
-当前源码以 `release` 与 `preview` 两种构建画像生成同一套页面。`src/pages/index.astro` 只负责进入 `/yan/`，表站与 1091 里站使用独立页面树；`src/data/editions.ts` 拥有注册、构建与发布集合，`src/data/locations.ts`、`src/data/performances.ts` 和 `src/data/productions/` 保存语言无关事实，`src/data/localized/` 保存类型化国家版本内容包。路由、搜索索引和票务输入从这些来源派生，浏览器交互由 `src/scripts/` 中的原生 TypeScript 按页面装配。
+当前源码以 `release` 与 `preview` 两种构建画像生成同一套页面。`src/pages/index.astro` 只负责进入 `/yan/`，表站与 1091 里站使用独立页面树；`src/data/editions.ts` 拥有注册、构建与发布集合，`src/data/locations.ts`、`src/data/performances.ts` 和 `src/data/productions/` 保存语言无关事实，`src/data/localized/` 保存类型化国家版本内容包。路由、搜索索引和票务目前仍分别从这些注册表派生，浏览器交互由 `src/scripts/` 中的原生 TypeScript 按页面装配。
 
 正式发布集合只包含 `yan / zh-CN`，当前生成 32 个静态页面；三语言预览额外包含 `higashi / ja-JP` 与 `columbia / en-US` 等价页面，共生成 94 个页面。东国和哥伦比亚内容只用于技术与视觉预览，不代表翻译已通过人工审核。具体行为契约由 active 蓝图拥有，下文只解释源码职责与依赖方向。
 
 当前实现处于 `candidate`，正式发布仍需人工内容与发布审核。未来语言或创意模组只有经过独立规划后才进入实现；不得恢复单页锚点、混合模型或双世界同页 DOM 作为第二套正式架构。
+
+已获采纳的下一阶段架构将构建画像迁为默认炎国 `showcase`、三语言 `preview` 与显式炎国 `release` 三个命名预设，并让唯一内容解析器生成不可变构建快照。该段描述目标边界，不宣称当前源码已经完成迁移；实现完成后应合并进上段当前快照并删除本段差距说明。
 
 ## 工程质量边界
 
@@ -127,11 +129,13 @@ Astro 组件只负责构建期结构和内容装配，不在组件之间建立�
 
 ## 内容数据层
 
-`src/data/` 保存不依赖 DOM 的稳定事实与本地化内容。正式领域模型遵守 `BP-FND-DOMAIN`，国家版本内容遵守 `BP-I18N-CORE`：
+`src/data/` 保存不依赖 DOM 的稳定事实与本地化内容。正式领域模型遵守 `BP-FND-DOMAIN`，国家版本内容遵守 `BP-I18N-CORE`，运行时内容成熟度与构建快照遵守 `BP-CNT-CORE`：
 
-- `Production`、`Performance` 与 `Location` 保存稳定 ID、世界视角、泰拉日期、编排、票务及必要视觉事实；本季与历史归属不读取浏览器现实时间；
+- `Production`、`Performance` 与 `Location` 保存稳定 ID、世界视角、泰拉日期、编排、运营状态、票务及必要视觉事实；本季与历史由网站时钟和有效排期在构建快照中派生，不读取浏览器现实时间；
 - 国家版本注册显式保存 `editionId`、`routePrefix` 与 locale；`localized/<editionId>/` 保存网站文案、消息及领域实体显示内容，页面和客户端只消费解析后的当前版本；
 - 列表、详情、搜索与票务从相同稳定 ID 派生，客户端语义状态不保存显示文字。
+
+内容物理目录只服务查找，不表达批准资格。完整基线、可选完整预览变体、有序根集合、批准摘要与命名构建预设由类型化注册和解析边界协作；页面、路由、搜索、票务与验证只能消费同一快照，不直接把 `docs/drafts/` 或目录名作为运行时输入。
 
 `locations.ts` 与 `performances.ts` 分别拥有地点和场次事实；`productions/folio.ts`、`productions/original.ts` 按来源维护剧目，并由 `productions/index.ts` 合并为唯一消费入口。`localized/<editionId>/` 是显示内容源；各层通过稳定 ID 关联，不得恢复混合 `Show`、在页面中保存可编辑副本，或让翻译复制日期、票价和状态。只有当同构内容扩展到多文件、需要 Markdown 正文或编辑流程时，才整体迁移到 Astro Content Collections。
 
@@ -169,6 +173,8 @@ layouts -> metadata + styles + page entry
 page entry -> feature modules -> typed data + shared DOM helpers
 pollution module -> narrative state interface
 ticketing module -> performance data
+content consumers -> immutable build snapshot -> typed registries
+programs + search + ticketing -> site time interface
 ```
 
 - `data/` 不依赖组件、脚本或 DOM；
