@@ -1,6 +1,7 @@
 import type { LocationId } from './locations';
 import type { ProductionId } from './productions/index.ts';
 import type { SiteWorld } from './site-routes';
+import type { SeatingPlanId } from './ticket-seating-plans.ts';
 
 export interface TerraDateTime {
   calendar: 'terra';
@@ -21,16 +22,21 @@ export interface TicketOffer {
 
 export type TicketAvailability =
   | { state: 'not-on-sale' }
-  | { state: 'on-sale'; offers: readonly TicketOffer[] }
+  | { state: 'on-sale'; seatingPlanId: SeatingPlanId; offers: readonly TicketOffer[] }
   | { state: 'unavailable'; reason: 'historic-snapshot' };
 
-const createFrontTicketOffers = (): readonly TicketOffer[] => [
+const standardTheaterOffers = [
   { zone: 'C', basePrice: 180 },
   { zone: 'B', basePrice: 280 },
   { zone: 'A', basePrice: 420 },
   { zone: 'S', basePrice: 680 },
   { zone: 'BOX', basePrice: 1280 },
-];
+] as const satisfies readonly TicketOffer[];
+
+const temporaryStageOffers = standardTheaterOffers.filter(
+  (offer): offer is Exclude<(typeof standardTheaterOffers)[number], { zone: 'BOX' }> =>
+    offer.zone !== 'BOX',
+);
 
 export interface Performance {
   performanceId: string;
@@ -52,7 +58,11 @@ export const performances = {
     locationId: 'trimount',
     dateTime: { calendar: 'terra', year: 1098, month: 9, day: 17, time: '19:30' },
     productionIds: ['uncrowned'],
-    ticketAvailability: { state: 'on-sale', offers: createFrontTicketOffers() },
+    ticketAvailability: {
+      state: 'on-sale',
+      seatingPlanId: 'trimount-grand-fan',
+      offers: standardTheaterOffers,
+    },
   },
   'caged-fire-wiesheim-1098': {
     performanceId: 'caged-fire-wiesheim-1098',
@@ -62,7 +72,11 @@ export const performances = {
     locationId: 'wiesheim',
     dateTime: { calendar: 'terra', year: 1098, month: 10, day: 3, time: '20:00' },
     productionIds: ['caged-fire'],
-    ticketAvailability: { state: 'on-sale', offers: createFrontTicketOffers() },
+    ticketAvailability: {
+      state: 'on-sale',
+      seatingPlanId: 'wiesheim-mirror-horseshoe',
+      offers: standardTheaterOffers,
+    },
   },
   'second-snow-norport-1098': {
     performanceId: 'second-snow-norport-1098',
@@ -72,7 +86,11 @@ export const performances = {
     locationId: 'norport',
     dateTime: { calendar: 'terra', year: 1098, month: 10, day: 29, time: '18:45' },
     productionIds: ['second-snow'],
-    ticketAvailability: { state: 'on-sale', offers: createFrontTicketOffers() },
+    ticketAvailability: {
+      state: 'on-sale',
+      seatingPlanId: 'norport-platform-linear',
+      offers: temporaryStageOffers,
+    },
   },
   'der-ring-londinium-1091-0308': {
     performanceId: 'der-ring-londinium-1091-0308',

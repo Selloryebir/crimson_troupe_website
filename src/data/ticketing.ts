@@ -5,6 +5,7 @@ import {
 } from './localized/resolve.ts';
 import type { TicketOffer } from './performances.ts';
 import type { ProductionId, ProductionVisual } from './productions/index.ts';
+import type { SeatingPlanId } from './ticket-seating-plans.ts';
 
 export interface LocalizedTicketOffer extends TicketOffer {
   label: string;
@@ -18,6 +19,7 @@ export interface TicketingPerformanceOption {
   dateTime: string;
   place: string;
   visual: ProductionVisual;
+  seatingPlanId: SeatingPlanId;
   offers: readonly LocalizedTicketOffer[];
 }
 
@@ -38,6 +40,7 @@ export function getTicketingOptions(
         dateTime: performance.dateTime.display,
         place: performance.place,
         visual: leadProduction.visual,
+        seatingPlanId: performance.ticketAvailability.seatingPlanId,
         offers: performance.ticketAvailability.offers.map((offer) => ({
           ...offer,
           label: localization.programs.ticketZones[offer.zone],
