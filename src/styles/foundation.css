@@ -187,19 +187,13 @@ a {
 }
 
 .edition-badge {
+  display: inline-block;
   width: 28px;
   height: 28px;
   flex: 0 0 28px;
-  fill: transparent;
-  stroke: currentcolor;
-  stroke-width: 1.5;
-}
-
-.edition-badge text {
-  fill: currentcolor;
-  stroke: none;
-  font: 700 9px / 1 var(--sans);
-  letter-spacing: 0.04em;
+  background-color: currentcolor;
+  -webkit-mask: var(--edition-badge-source) center / contain no-repeat;
+  mask: var(--edition-badge-source) center / contain no-repeat;
 }
 
 .edition-selector {
@@ -682,7 +676,7 @@ a {
     justify-content: center;
   }
 
-  .edition-selector summary > span {
+  .edition-selector summary > .edition-selector__label {
     position: absolute;
     width: 1px;
     height: 1px;

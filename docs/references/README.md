@@ -6,6 +6,8 @@
 
 - [`design-reference.md`](design-reference.md)：维也纳爱乐、Royal Ballet and Opera 的能力分析、泰拉化转译与明确排除项。
 - [`production-title-reference.md`](production-title-reference.md)：人工确认的 13 项活页剧目三语标题、稳定 `productionId` 映射及使用边界。
+- [`realm-badge-reference.md`](realm-badge-reference.md)：九个国家版本徽章的本地参考边界、官方设定依据及项目转译限制。
+- [`realm-badge-color-previews/`](realm-badge-color-previews/)：与单色母版共用几何的九枚上色视觉候选，仅供非运行时比较。
 
 ## 新增要求
 
