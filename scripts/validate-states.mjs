@@ -16,7 +16,9 @@ import { createTicketMatrix, createTicketSvg } from '../src/scripts/ticket-artif
 import {
   MAX_REQUIRING_RESUBMIT_RESULTS,
   acceptRetentionOffer,
+  calculateAdjustmentAmount,
   calculateBaseTotal,
+  calculateFailureServiceFee,
   createTicketingState,
   declinePremiumOffer,
   declineRetentionOffer,
@@ -147,9 +149,12 @@ const premiumFailure = resolveTicketingAttempt(
 assert.equal(premiumSuccess.phase, 'success');
 assert.equal(premiumFailure.phase, 'failure');
 assert.equal(premiumSuccess.result?.baseTotal, 1100);
-assert.equal(premiumSuccess.result?.adjustments[0]?.amount, 385);
-assert.equal(premiumSuccess.result?.settledTotal, 1485);
+assert.deepEqual(premiumSuccess.result?.adjustments, [{ id: 'priority-service', amount: 550 }]);
+assert.equal(premiumSuccess.result?.settledTotal, 1650);
 assert.equal(returnToStandardRoute(premiumFailure).route, 'standard');
+assert.equal(calculateAdjustmentAmount(1100, 'full'), 550);
+assert.equal(calculateAdjustmentAmount(1100, 'retention'), 528);
+assert.equal(calculateFailureServiceFee(1100), 275);
 
 const firstRetentionOffer = declinePremiumOffer(premiumOffer);
 assert.equal(firstRetentionOffer.phase, 'retention-offer');
@@ -159,6 +164,13 @@ const retainedAttempt = acceptRetentionOffer(firstRetentionOffer);
 assert.equal(retainedAttempt.route, 'premium');
 assert.equal(retainedAttempt.offerVariant, 'retention');
 assert.ok(retainedAttempt.journeyTags.includes('retention-accepted'));
+const retainedSuccess = resolveTicketingAttempt(
+  retainedAttempt,
+  () => 0.1,
+  () => '555555555555',
+);
+assert.deepEqual(retainedSuccess.result?.adjustments, [{ id: 'retention-service', amount: 528 }]);
+assert.equal(retainedSuccess.result?.settledTotal, 1628);
 
 const retentionDeclined = declineRetentionOffer(firstRetentionOffer);
 assert.equal(retentionDeclined.phase, 'selection');

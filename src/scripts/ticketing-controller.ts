@@ -3,9 +3,15 @@ import { formatMessage } from '../data/localized/format';
 import type { TicketingMessages } from '../data/localized/schema';
 import { createTicketSvg } from './ticket-artifact';
 import {
+  acceptRetentionOffer,
+  calculateAdjustmentAmount,
   calculateBaseTotal,
+  calculateFailureServiceFee,
   createTicketingState,
+  declinePremiumOffer,
+  declineRetentionOffer,
   enterPremiumRoute,
+  openPremiumOffer,
   resolveTicketingAttempt,
   restoreTicketingState,
   retryTicketingAttempt,
@@ -111,6 +117,7 @@ export function initTicketingExperience(): void {
   const flowLabel = app.querySelector<HTMLElement>('[data-ticket-flow-label]');
   const flowTitle = app.querySelector<HTMLElement>('[data-ticket-flow-title]');
   const flowCopy = app.querySelector<HTMLElement>('[data-ticket-flow-copy]');
+  const flowDetails = app.querySelector<HTMLElement>('[data-ticket-flow-details]');
   const flowActions = app.querySelector<HTMLElement>('[data-ticket-flow-actions]');
   const result = app.querySelector<HTMLElement>('[data-ticket-result]');
   const receipt = app.querySelector<HTMLElement>('[data-ticket-receipt]');
@@ -127,6 +134,7 @@ export function initTicketingExperience(): void {
     !flowLabel ||
     !flowTitle ||
     !flowCopy ||
+    !flowDetails ||
     !flowActions ||
     !result ||
     !receipt ||
@@ -264,7 +272,7 @@ export function initTicketingExperience(): void {
     totals.className = 'ticket-receipt__totals';
     addDefinition(totals, messages.baseTotal, `${state.result.baseTotal} LMD`);
     if (state.result.adjustments.length === 0) {
-      addDefinition(totals, messages.adjustments['premium-service'], messages.adjustmentNone);
+      addDefinition(totals, messages.offerAdjustment, messages.adjustmentNone);
     } else {
       for (const adjustment of state.result.adjustments) {
         addDefinition(totals, messages.adjustments[adjustment.id], `+ ${adjustment.amount} LMD`);
@@ -329,9 +337,43 @@ export function initTicketingExperience(): void {
   };
 
   const renderFlow = () => {
+    flowDetails.replaceChildren();
     flowActions.replaceChildren();
+    const offerPhase = state.phase === 'premium-offer' || state.phase === 'retention-offer';
     flowLabel.textContent =
-      state.route === 'premium' ? messages.priorityChannel : messages.standardChannel;
+      state.route === 'premium' || offerPhase ? messages.priorityChannel : messages.standardChannel;
+
+    const renderOffer = (offerVariant: 'full' | 'retention') => {
+      const base = calculateBaseTotal(state.basket);
+      const adjustment = calculateAdjustmentAmount(base, offerVariant);
+      const quote = document.createElement('dl');
+      quote.className = 'ticket-flow__ledger';
+      addDefinition(quote, messages.offerBaseTotal, `${base} LMD`);
+      addDefinition(quote, messages.offerAdjustment, `+ ${adjustment} LMD`);
+      addDefinition(quote, messages.offerFinalTotal, `${base + adjustment} LMD`);
+      flowDetails.append(quote);
+    };
+
+    if (state.phase === 'premium-offer') {
+      flowTitle.textContent = messages.premiumOfferTitle;
+      flowCopy.textContent = messages.premiumOfferCopy;
+      renderOffer('full');
+      flowActions.append(
+        createButton('accept-premium', messages.acceptPremium, true),
+        createButton('decline-premium', messages.declinePremium),
+      );
+      return;
+    }
+    if (state.phase === 'retention-offer') {
+      flowTitle.textContent = messages.retentionOfferTitle;
+      flowCopy.textContent = messages.retentionOfferCopy;
+      renderOffer('retention');
+      flowActions.append(
+        createButton('accept-retention', messages.acceptRetention, true),
+        createButton('decline-retention', messages.declineRetention),
+      );
+      return;
+    }
     if (state.phase === 'attempt') {
       flowTitle.textContent =
         state.route === 'premium' ? messages.premiumAttemptTitle : messages.standardAttemptTitle;
@@ -359,10 +401,24 @@ export function initTicketingExperience(): void {
     if (state.route === 'standard') {
       flowActions.append(
         createButton('retry', messages.retryStandard, true),
-        createButton('premium', messages.tryPremium),
+        createButton('offer', messages.tryPremium),
         createButton('back', messages.backToBasket),
       );
     } else {
+      const base = calculateBaseTotal(state.basket);
+      const record = document.createElement('section');
+      record.className = 'ticket-flow__failure-record';
+      const recordTitle = document.createElement('h4');
+      recordTitle.textContent = messages.failureRecordTitle;
+      const ledger = document.createElement('dl');
+      ledger.className = 'ticket-flow__ledger';
+      addDefinition(ledger, messages.allocatedSeats, '0');
+      addDefinition(ledger, messages.offerBaseTotal, `${base} LMD`);
+      addDefinition(ledger, messages.failureServiceFee, `${calculateFailureServiceFee(base)} LMD`);
+      const notice = document.createElement('small');
+      notice.textContent = messages.failureRecordDisclaimer;
+      record.append(recordTitle, ledger, notice);
+      flowDetails.append(record);
       flowActions.append(
         createButton('retry', messages.retryPremium, true),
         createButton('standard', messages.returnStandard),
@@ -470,8 +526,16 @@ export function initTicketingExperience(): void {
       state = resolveTicketingAttempt(state, Math.random, createTicketNumber);
     } else if (action === 'retry') {
       state = retryTicketingAttempt(state);
-    } else if (action === 'premium') {
+    } else if (action === 'offer') {
+      state = openPremiumOffer(state);
+    } else if (action === 'accept-premium') {
       state = enterPremiumRoute(state);
+    } else if (action === 'decline-premium') {
+      state = declinePremiumOffer(state);
+    } else if (action === 'accept-retention') {
+      state = acceptRetentionOffer(state);
+    } else if (action === 'decline-retention') {
+      state = declineRetentionOffer(state);
     } else if (action === 'standard') {
       state = returnToStandardRoute(state);
     } else if (action === 'back') {

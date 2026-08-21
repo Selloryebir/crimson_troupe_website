@@ -362,6 +362,58 @@
   font-size: clamp(2rem, 4vw, 3.8rem);
 }
 
+.ticket-flow__details {
+  margin-block: 30px;
+}
+
+.ticket-flow__ledger {
+  max-width: 620px;
+  margin: 0;
+  border-top: 1px solid var(--line);
+}
+
+.ticket-flow__ledger > div {
+  display: flex;
+  gap: 24px;
+  justify-content: space-between;
+  padding-block: 13px;
+  border-bottom: 1px solid var(--line);
+}
+
+.ticket-flow__ledger dt {
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.ticket-flow__ledger dd {
+  margin: 0;
+  font-family: var(--serif);
+}
+
+.ticket-flow__ledger > div:last-child dd {
+  color: var(--crimson);
+  font-size: 1.1rem;
+}
+
+.ticket-flow__failure-record {
+  padding: 22px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.ticket-flow__failure-record h4 {
+  margin: 0 0 16px;
+  font: 500 1.35rem / 1.3 var(--serif);
+}
+
+.ticket-flow__failure-record small {
+  display: block;
+  margin-top: 16px;
+  color: var(--muted);
+  font-size: 0.68rem;
+  line-height: 1.6;
+}
+
 .text-button {
   padding: 10px 0;
   border: 0;
@@ -687,7 +739,8 @@ html[data-world="front"] .issued-ticket__caption {
   }
 
   .ticket-receipt__lines li,
-  .ticket-receipt__totals div {
+  .ticket-receipt__totals div,
+  .ticket-flow__ledger > div {
     align-items: flex-start;
     flex-direction: column;
     gap: 7px;

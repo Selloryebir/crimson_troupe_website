@@ -5,7 +5,9 @@ export const TICKETING_STATE_VERSION = 3 as const;
 export const STANDARD_SUCCESS_THRESHOLD = 0.32;
 export const STANDARD_FAILURE_THRESHOLD = 0.68;
 export const PREMIUM_SUCCESS_THRESHOLD = 0.58;
-export const PREMIUM_RATE = 0.35;
+export const PRIORITY_ADJUSTMENT_RATE = 0.5;
+export const RETENTION_ADJUSTMENT_RATE = 0.48;
+export const FAILURE_SERVICE_RATE = 0.25;
 export const MAX_REQUIRING_RESUBMIT_RESULTS = 3;
 
 export type TicketingPhase =
@@ -128,6 +130,18 @@ export function calculateBaseTotal(basket: readonly TicketBasketItem[]): number 
   return basket.reduce((total, item) => total + item.basePrice, 0);
 }
 
+export function calculateAdjustmentAmount(
+  baseTotal: number,
+  offerVariant: TicketOfferVariant,
+): number {
+  const rate = offerVariant === 'retention' ? RETENTION_ADJUSTMENT_RATE : PRIORITY_ADJUSTMENT_RATE;
+  return Math.ceil(baseTotal * rate);
+}
+
+export function calculateFailureServiceFee(baseTotal: number): number {
+  return Math.ceil(baseTotal * FAILURE_SERVICE_RATE);
+}
+
 export function updateBasket(
   state: TicketingState,
   item: TicketBasketItem | null,
@@ -155,8 +169,8 @@ function createResult(state: TicketingState, ticketNumberFactory: () => string):
     state.route === 'premium'
       ? [
           {
-            id: 'premium-service',
-            amount: Math.ceil(baseTotal * PREMIUM_RATE),
+            id: state.offerVariant === 'retention' ? 'retention-service' : 'priority-service',
+            amount: calculateAdjustmentAmount(baseTotal, state.offerVariant),
           },
         ]
       : [];

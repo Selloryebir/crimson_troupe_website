@@ -103,7 +103,7 @@ export interface FilterMessages {
 }
 
 export type TicketStampId = 'admission-confirmed' | 'standard-route' | 'priority-route';
-export type TicketAdjustmentId = 'premium-service';
+export type TicketAdjustmentId = 'priority-service' | 'retention-service';
 
 export interface TicketArtifactMessages {
   title: string;
@@ -149,12 +149,27 @@ export interface TicketingMessages {
   retryBasket: string;
   premiumFailureTitle: string;
   premiumFailureCopy: string;
+  premiumOfferTitle: string;
+  premiumOfferCopy: string;
+  retentionOfferTitle: string;
+  retentionOfferCopy: string;
   standardFailureTitle: string;
   standardFailureCopy: string;
   retryStandard: string;
   tryPremium: string;
+  acceptPremium: string;
+  declinePremium: string;
+  acceptRetention: string;
+  declineRetention: string;
   retryPremium: string;
   returnStandard: string;
+  offerBaseTotal: string;
+  offerAdjustment: string;
+  offerFinalTotal: string;
+  failureRecordTitle: string;
+  allocatedSeats: string;
+  failureServiceFee: string;
+  failureRecordDisclaimer: string;
   startRequired: string;
   submitted: string;
   success: string;
