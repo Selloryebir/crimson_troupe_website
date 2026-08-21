@@ -86,7 +86,7 @@
       "id": "BP-MOD-TERRA-TIME",
       "document": "docs/blueprint/modules/terra-time.md",
       "status": "active",
-      "stage": "planned",
+      "stage": "candidate",
       "dependsOn": ["BP-FND-DOMAIN"]
     },
     {

@@ -78,13 +78,11 @@ crimson_troupe_website/
 
 ## 当前实现快照
 
-当前源码以 `release` 与 `preview` 两种构建画像生成同一套页面。`src/pages/index.astro` 只负责进入 `/yan/`，表站与 1091 里站使用独立页面树；`src/data/editions.ts` 拥有注册、构建与发布集合，`src/data/locations.ts`、`src/data/performances.ts` 和 `src/data/productions/` 保存语言无关事实，`src/data/localized/` 保存类型化国家版本内容包。路由、搜索索引和票务目前仍分别从这些注册表派生，浏览器交互由 `src/scripts/` 中的原生 TypeScript 按页面装配。
+当前源码通过默认炎国 `showcase`、三语言 `preview` 与显式炎国 `release` 三个有限构建预设生成同一套页面。`src/pages/index.astro` 只负责进入 `/yan/`，表站与 1091 里站使用独立页面树；`src/data/editions.ts` 拥有国家版本注册，`src/data/locations.ts`、`src/data/performances.ts` 和 `src/data/productions/` 保存语言无关事实，`src/data/localized/` 保存类型化国家版本内容包。完整基线、有序根集合、构建预设与内容资格经过唯一解析边界形成不可变构建快照，路由、页面、搜索、票务和验证器统一消费该快照；浏览器交互由 `src/scripts/` 中的原生 TypeScript 按页面装配。
 
-正式发布集合只包含 `yan / zh-CN`，当前生成 32 个静态页面；三语言预览额外包含 `higashi / ja-JP` 与 `columbia / en-US` 等价页面，共生成 94 个页面。东国和哥伦比亚内容只用于技术与视觉预览，不代表翻译已通过人工审核。具体行为契约由 active 蓝图拥有，下文只解释源码职责与依赖方向。
+默认 `showcase` 只包含 `yan / zh-CN`，当前生成 32 个静态页面；三语言 `preview` 额外包含 `higashi / ja-JP` 与 `columbia / en-US` 等价页面，共生成 94 个页面。东国和哥伦比亚内容只用于技术与视觉预览，不代表翻译已通过人工审核。当前批准摘要为空，因此 `release` 会在生成页面前列出不合格稳定 ID 并停止，不会把预览内容静默提升为正式内容。具体行为契约由 active 蓝图拥有，下文只解释源码职责与依赖方向。
 
 当前实现处于 `candidate`，正式发布仍需人工内容与发布审核。未来语言或创意模组只有经过独立规划后才进入实现；不得恢复单页锚点、混合模型或双世界同页 DOM 作为第二套正式架构。
-
-已获采纳的下一阶段架构将构建画像迁为默认炎国 `showcase`、三语言 `preview` 与显式炎国 `release` 三个命名预设，并让唯一内容解析器生成不可变构建快照。该段描述目标边界，不宣称当前源码已经完成迁移；实现完成后应合并进上段当前快照并删除本段差距说明。
 
 ## 工程质量边界
 
