@@ -217,7 +217,14 @@ export function initPollutionController(): void {
 
   window.addEventListener('pageshow', (event) => {
     if (event.persisted) {
-      applyState(readState(storage));
+      const restoredState = shouldRequestArchiveEntry(
+        false,
+        'back_forward',
+        hasStoredState(storage),
+      )
+        ? requestTransition(storage, 'direct-entry')
+        : readState(storage);
+      applyState(restoredState);
     }
   });
 
