@@ -8,7 +8,8 @@ import siracusaBadge from '../../assets/realm-badges/siracusa.svg';
 import ursusBadge from '../../assets/realm-badges/ursus.svg';
 import victoriaBadge from '../../assets/realm-badges/victoria.svg';
 import yanBadge from '../../assets/realm-badges/yan.svg';
-import { builtEditions, type EditionId } from '../../data/editions';
+import { buildSnapshot } from '../../data/content/resolve.ts';
+import type { EditionId } from '../../data/editions';
 import type { ResolvedLocalization } from '../../data/localized/resolve';
 import { equivalentEditionPath, type SiteWorld } from '../../data/site-routes';
 
@@ -40,7 +41,7 @@ function badgeStyle(editionId: EditionId): string {
 ---
 
 {
-  builtEditions.length > 1 ? (
+  buildSnapshot.editions.length > 1 ? (
     <details class="edition-selector" data-edition-selector>
       <summary aria-label={copy.chooseEdition}>
         <span class="edition-badge" style={badgeStyle(edition.editionId)} aria-hidden="true" />
@@ -49,7 +50,7 @@ function badgeStyle(editionId: EditionId): string {
         </span>
       </summary>
       <ul>
-        {builtEditions.map((targetEdition) => (
+        {buildSnapshot.editions.map((targetEdition) => (
           <li>
             <a
               href={equivalentEditionPath(currentPath, edition, targetEdition)}

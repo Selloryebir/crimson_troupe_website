@@ -6,6 +6,7 @@ import oneHundredAndOneDaysArchive from '../assets/images/productions/one-hundre
 import secondSnowFront from '../assets/images/productions/second-snow-front.webp';
 import theCarnivalArchive from '../assets/images/productions/the-carnival-archive.webp';
 import uncrownedFront from '../assets/images/productions/uncrowned-front.webp';
+import { buildSnapshot, type ContentSnapshot } from './content/resolve.ts';
 import type { ProductionId } from './productions/index.ts';
 import type { SiteWorld } from './site-routes.ts';
 
@@ -146,6 +147,10 @@ const productionArtworkRegistry: ProductionArtworkRegistry = {
 export function getProductionArtwork(
   productionId: ProductionId,
   world: SiteWorld,
+  snapshot: ContentSnapshot = buildSnapshot,
 ): ProductionArtwork | undefined {
+  if (!snapshot.productions[productionId]) {
+    return undefined;
+  }
   return productionArtworkRegistry[productionId]?.[world];
 }

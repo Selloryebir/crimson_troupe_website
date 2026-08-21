@@ -10,9 +10,13 @@ import {
   previewEditionIds,
 } from '../src/data/editions.ts';
 import { getBuildContext } from '../src/data/content/build-context.ts';
-import { resolveContent } from '../src/data/content/resolve.ts';
+import {
+  getWorldPerformanceEntries,
+  getWorldProductionIds,
+  resolveContent,
+} from '../src/data/content/resolve.ts';
 import { currentRootSet, validateContentRootSet } from '../src/data/content/root-sets.ts';
-import { getLocalization } from '../src/data/localized/resolve.ts';
+import { getLocalization, getLocalizedPerformanceEntries } from '../src/data/localized/resolve.ts';
 import { performances } from '../src/data/performances.ts';
 import { getSiteTerraNow } from '../src/data/site-time.ts';
 import { getTicketingOptions } from '../src/data/ticketing.ts';
@@ -108,6 +112,32 @@ assert.deepEqual(showcaseSnapshot.featuredPerformanceIds, {
 assert.ok(Object.isFrozen(showcaseSnapshot));
 assert.ok(Object.isFrozen(showcaseSnapshot.performanceEntries));
 assert.throws(() => resolveContent(buildContexts.release), /未批准内容/u);
+
+const reducedRootSet = {
+  ...currentRootSet,
+  worlds: {
+    ...currentRootSet.worlds,
+    front: {
+      performanceIds: currentRootSet.worlds.front.performanceIds.slice(1),
+      featuredPerformanceId: currentRootSet.worlds.front.performanceIds[1],
+    },
+  },
+};
+const reducedSnapshot = resolveContent(buildContexts.showcase, reducedRootSet);
+assert.deepEqual(
+  getWorldPerformanceEntries(reducedSnapshot, 'front').map(([performanceId]) => performanceId),
+  currentRootSet.worlds.front.performanceIds.slice(1),
+);
+assert.deepEqual(getWorldProductionIds(reducedSnapshot, 'front'), ['caged-fire', 'second-snow']);
+assert.equal(reducedSnapshot.performances['uncrowned-trimount-1098'], undefined);
+assert.equal(reducedSnapshot.productions.uncrowned, undefined);
+assert.equal(reducedSnapshot.locations.trimount, undefined);
+const reducedLocalization = getLocalization(editions.yan);
+assert.ok(
+  getLocalizedPerformanceEntries(reducedLocalization, reducedSnapshot).every(
+    ([performanceId]) => performanceId !== 'uncrowned-trimount-1098',
+  ),
+);
 
 const frontNow = getSiteTerraNow('front', buildContexts.showcase);
 const archiveNow = getSiteTerraNow('archive', buildContexts.showcase);

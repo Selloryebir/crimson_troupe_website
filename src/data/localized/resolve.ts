@@ -1,17 +1,7 @@
 import type { BuildEditionId, BuiltEdition } from '../editions';
-import {
-  performanceEntries,
-  performances,
-  type Performance,
-  type PerformanceCollection,
-  type PerformanceId,
-} from '../performances.ts';
-import {
-  productionEntries,
-  productions,
-  type Production,
-  type ProductionId,
-} from '../productions/index.ts';
+import { buildSnapshot, type ContentSnapshot } from '../content/resolve.ts';
+import type { Performance, PerformanceCollection, PerformanceId } from '../performances.ts';
+import type { Production, ProductionId } from '../productions/index.ts';
 import type { SiteWorld } from '../site-routes';
 import type { LocalizedRecord, PerformanceContent, ProductionContent } from './schema';
 import { columbiaLocalizationPackage } from './columbia/index.ts';
@@ -81,24 +71,38 @@ export function getLocalization(edition: BuiltEdition): ResolvedLocalization {
 export function getLocalizedProduction(
   localization: ResolvedLocalization,
   productionId: ProductionId,
+  snapshot: ContentSnapshot = buildSnapshot,
 ): ResolvedProduction {
-  return { ...productions[productionId], ...localization.programs.productions[productionId] };
+  const production = snapshot.productions[productionId];
+  if (!production) {
+    throw new Error(`剧目 ${productionId} 不属于当前内容快照。`);
+  }
+  return {
+    ...production,
+    productionId,
+    ...localization.programs.productions[productionId],
+  };
 }
 
 export function getLocalizedProductionEntries(
   localization: ResolvedLocalization,
+  snapshot: ContentSnapshot = buildSnapshot,
 ): Array<[ProductionId, ResolvedProduction]> {
-  return productionEntries.map(([productionId]) => [
+  return snapshot.productionEntries.map(([productionId]) => [
     productionId,
-    getLocalizedProduction(localization, productionId),
+    getLocalizedProduction(localization, productionId, snapshot),
   ]);
 }
 
 export function getLocalizedPerformance(
   localization: ResolvedLocalization,
   performanceId: PerformanceId,
+  snapshot: ContentSnapshot = buildSnapshot,
 ): ResolvedPerformance {
-  const performance = performances[performanceId];
+  const performance = snapshot.performances[performanceId];
+  if (!performance) {
+    throw new Error(`场次 ${performanceId} 不属于当前内容快照。`);
+  }
   const content = localization.programs.performances[performanceId];
   return {
     ...performance,
@@ -111,10 +115,11 @@ export function getLocalizedPerformance(
 
 export function getLocalizedPerformanceEntries(
   localization: ResolvedLocalization,
+  snapshot: ContentSnapshot = buildSnapshot,
 ): Array<[PerformanceId, ResolvedPerformance]> {
-  return performanceEntries.map(([performanceId]) => [
+  return snapshot.performanceEntries.map(([performanceId]) => [
     performanceId,
-    getLocalizedPerformance(localization, performanceId),
+    getLocalizedPerformance(localization, performanceId, snapshot),
   ]);
 }
 
@@ -122,8 +127,9 @@ export function getLocalizedPerformances(
   localization: ResolvedLocalization,
   world: SiteWorld,
   collection: PerformanceCollection,
+  snapshot: ContentSnapshot = buildSnapshot,
 ): ResolvedPerformance[] {
-  return getLocalizedPerformanceEntries(localization)
+  return getLocalizedPerformanceEntries(localization, snapshot)
     .map(([, performance]) => performance)
     .filter((performance) => performance.world === world && performance.collection === collection);
 }

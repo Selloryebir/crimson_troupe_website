@@ -108,6 +108,26 @@ export function resolveContent(
   });
 }
 
+export function getWorldPerformanceEntries(
+  snapshot: ContentSnapshot,
+  world: SiteWorld,
+): ContentSnapshot['performanceEntries'] {
+  return snapshot.performanceEntries.filter(([, performance]) => performance.world === world);
+}
+
+export function getWorldProductionIds(
+  snapshot: ContentSnapshot,
+  world: SiteWorld,
+): readonly ProductionId[] {
+  return Object.freeze([
+    ...new Set(
+      getWorldPerformanceEntries(snapshot, world).flatMap(
+        ([, performance]) => performance.productionIds,
+      ),
+    ),
+  ]);
+}
+
 export const buildSnapshot = resolveContent(buildContext);
 
 if (buildSnapshot.editions.length !== builtEditions.length) {

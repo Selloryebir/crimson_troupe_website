@@ -2,10 +2,12 @@
 import ArchivePerformanceList from '../../../../../components/archive/ArchivePerformanceList.astro';
 import ArchivePoster from '../../../../../components/archive/ArchivePoster.astro';
 import TroupeMark from '../../../../../components/shared/TroupeMark.astro';
-import { builtEditions, type BuiltEdition } from '../../../../../data/editions';
+import { buildSnapshot } from '../../../../../data/content/resolve.ts';
+import type { BuiltEdition } from '../../../../../data/editions';
 import { formatMessage } from '../../../../../data/localized/format';
 import {
   getLocalization,
+  getLocalizedPerformance,
   getLocalizedPerformances,
   getLocalizedProduction,
 } from '../../../../../data/localized/resolve';
@@ -13,7 +15,7 @@ import { sitePath, siteRoot } from '../../../../../data/site-routes';
 import ArchiveLayout from '../../../../../layouts/ArchiveLayout.astro';
 
 export function getStaticPaths() {
-  return builtEditions.map((edition) => ({
+  return buildSnapshot.editions.map((edition) => ({
     params: { routePrefix: edition.routePrefix },
     props: { edition },
   }));
@@ -26,7 +28,10 @@ const localization = getLocalization(edition);
 const copy = localization.site.archive.home;
 const canonicalPath = siteRoot(edition, 'archive');
 const currentPerformances = getLocalizedPerformances(localization, 'archive', 'current');
-const featuredPerformance = currentPerformances[0];
+const featuredPerformance = getLocalizedPerformance(
+  localization,
+  buildSnapshot.featuredPerformanceIds.archive,
+);
 const featuredProduction = featuredPerformance
   ? getLocalizedProduction(localization, featuredPerformance.productionIds[0])
   : undefined;

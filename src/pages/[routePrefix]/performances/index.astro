@@ -1,12 +1,13 @@
 ---
 import FrontPerformanceList from '../../../components/front/FrontPerformanceList.astro';
-import { builtEditions, type BuiltEdition } from '../../../data/editions';
+import { buildSnapshot } from '../../../data/content/resolve.ts';
+import type { BuiltEdition } from '../../../data/editions';
 import { getLocalization, getLocalizedPerformances } from '../../../data/localized/resolve';
 import { sitePath } from '../../../data/site-routes';
 import FrontLayout from '../../../layouts/FrontLayout.astro';
 
 export function getStaticPaths() {
-  return builtEditions.map((edition) => ({
+  return buildSnapshot.editions.map((edition) => ({
     params: { routePrefix: edition.routePrefix },
     props: { edition },
   }));
