@@ -116,7 +116,7 @@ assert.deepEqual(showcaseSnapshot.featuredPerformanceIds, {
 });
 assert.ok(Object.isFrozen(showcaseSnapshot));
 assert.ok(Object.isFrozen(showcaseSnapshot.performanceEntries));
-assert.throws(() => resolveContent(buildContexts.release), /未批准内容/u);
+assert.throws(() => resolveContent(buildContexts.release), /不合格内容.*无批准摘要/u);
 assert.equal(
   showcaseSnapshot.performanceEntries.filter(
     ([, performance]) => performance.world === 'front' && performance.collection === 'current',

@@ -240,9 +240,24 @@
       "related": ["BP-I18N-CORE", "BP-FND-CORE", "BP-MOD-TERRA-TIME"]
     },
     {
+      "path": "src/data/content/approval-digests.ts",
+      "primary": "BP-CNT-CORE",
+      "related": ["BP-I18N-CORE", "BP-CNT-PRODUCTION-VISUAL"]
+    },
+    {
       "path": "src/data/content/eligibility.ts",
       "primary": "BP-CNT-CORE",
       "related": ["BP-I18N-CORE"]
+    },
+    {
+      "path": "src/data/content/fingerprint.ts",
+      "primary": "BP-CNT-CORE",
+      "related": []
+    },
+    {
+      "path": "src/data/content/localization-revisions.ts",
+      "primary": "BP-I18N-CORE",
+      "related": ["BP-CNT-CORE"]
     },
     {
       "path": "src/data/content/resolve.ts",
@@ -255,7 +270,22 @@
       "related": ["BP-FND-DOMAIN", "BP-MOD-PROGRAMS"]
     },
     {
+      "path": "src/data/content/validate.ts",
+      "primary": "BP-CNT-CORE",
+      "related": ["BP-I18N-CORE", "BP-CNT-PRODUCTION-VISUAL"]
+    },
+    {
+      "path": "src/data/content/variants.ts",
+      "primary": "BP-CNT-CORE",
+      "related": []
+    },
+    {
       "path": "src/data/localized/format.ts",
+      "primary": "BP-I18N-CORE",
+      "related": ["BP-CNT-CORE"]
+    },
+    {
+      "path": "src/data/localized/packages.ts",
       "primary": "BP-I18N-CORE",
       "related": ["BP-CNT-CORE"]
     },
@@ -408,6 +438,11 @@
         "BP-MOD-ARCHIVE",
         "BP-CNT-CORE"
       ]
+    },
+    {
+      "path": "src/data/production-artwork-manifest.ts",
+      "primary": "BP-CNT-PRODUCTION-VISUAL",
+      "related": ["BP-CNT-PRODUCTION-VISUAL-CATALOG", "BP-CNT-CORE"]
     },
     {
       "path": "src/data/productions/folio.ts",

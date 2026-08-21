@@ -1,4 +1,4 @@
-import type { BuildEditionId, BuiltEdition } from '../editions';
+import type { BuiltEdition } from '../editions';
 import {
   buildSnapshot,
   type ContentSnapshot,
@@ -8,9 +8,8 @@ import type { Performance, PerformanceCollection, PerformanceId } from '../perfo
 import type { Production, ProductionId } from '../productions/index.ts';
 import type { SiteWorld } from '../site-routes';
 import type { LocalizedRecord, PerformanceContent, ProductionContent } from './schema';
-import { columbiaLocalizationPackage } from './columbia/index.ts';
-import { higashiLocalizationPackage } from './higashi/index.ts';
-import { yanLocalizationPackage, type WebsiteLocalizationPackage } from './yan/index.ts';
+import { localizationPackages, sourceLocalizationPackage } from './packages.ts';
+import type { WebsiteLocalizationPackage } from './yan/index.ts';
 
 export interface ResolvedLocalization extends WebsiteLocalizationPackage {
   edition: BuiltEdition;
@@ -33,16 +32,6 @@ export interface ResolvedPerformance
   place: string;
 }
 
-type PartialLocalizationPackage = Partial<WebsiteLocalizationPackage>;
-
-const sourcePackage = yanLocalizationPackage;
-
-const localePackages: Record<BuildEditionId, PartialLocalizationPackage> = {
-  yan: yanLocalizationPackage,
-  higashi: higashiLocalizationPackage,
-  columbia: columbiaLocalizationPackage,
-};
-
 export function resolveLocalizedRecord<T>(
   target: T | undefined,
   source: T,
@@ -54,13 +43,21 @@ export function resolveLocalizedRecord<T>(
 }
 
 export function getLocalization(edition: BuiltEdition): ResolvedLocalization {
-  const target = localePackages[edition.editionId];
-  const site = resolveLocalizedRecord(target?.site, sourcePackage.site, edition.locale);
-  const programs = resolveLocalizedRecord(target?.programs, sourcePackage.programs, edition.locale);
-  const messages = resolveLocalizedRecord(target?.messages, sourcePackage.messages, edition.locale);
+  const target = localizationPackages[edition.editionId];
+  const site = resolveLocalizedRecord(target?.site, sourceLocalizationPackage.site, edition.locale);
+  const programs = resolveLocalizedRecord(
+    target?.programs,
+    sourceLocalizationPackage.programs,
+    edition.locale,
+  );
+  const messages = resolveLocalizedRecord(
+    target?.messages,
+    sourceLocalizationPackage.messages,
+    edition.locale,
+  );
   const archiveProjection = resolveLocalizedRecord(
     target?.archiveProjection,
-    sourcePackage.archiveProjection,
+    sourceLocalizationPackage.archiveProjection,
     edition.locale,
   );
   return {

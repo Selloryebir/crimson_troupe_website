@@ -158,6 +158,16 @@ function isRuntimeAsset(repositoryPath) {
   );
 }
 
+function isContentSource(repositoryPath) {
+  return (
+    /^src\/data\/(?:content|localized|productions)\//u.test(repositoryPath) ||
+    /^src\/data\/(?:locations|performances|production-artwork-manifest|production-artworks)\.ts$/u.test(
+      repositoryPath,
+    ) ||
+    repositoryPath.startsWith('src/assets/images/productions/')
+  );
+}
+
 function isFormalBlueprint(repositoryPath) {
   return repositoryPath.startsWith('docs/blueprint/');
 }
@@ -196,6 +206,7 @@ function buildPlan(changeSet) {
   const hasBlueprintChanges = paths.some(isFormalBlueprint);
   const hasStructuralSourceChanges = [...changeSet.structural].some(isFunctionalSource);
   const hasToolchainChanges = paths.some(isToolchain);
+  const hasContentChanges = paths.some(isContentSource);
 
   const runtimeLayers = [
     hasCodeChanges ? 'Astro/TypeScript' : null,
@@ -271,6 +282,15 @@ function buildPlan(changeSet) {
       command: commandText('lint:styles:files', styleFiles),
       script: 'lint:styles:files',
       files: styleFiles,
+    });
+  }
+  if (hasContentChanges) {
+    tasks.push({
+      id: 'content',
+      reason: '内容事实、本地化或必要素材发生变化，运行聚焦内容闭包与漂移检查',
+      command: commandText('validate:content'),
+      script: 'validate:content',
+      files: [],
     });
   }
   if (prettierFiles.length > 0) {

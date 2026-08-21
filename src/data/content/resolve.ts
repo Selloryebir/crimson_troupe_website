@@ -18,6 +18,8 @@ import {
   type ContentRootSet,
   validateContentRootSet,
 } from './root-sets.ts';
+import { assertPerformanceVariantComplete } from './validate.ts';
+import { selectCompleteVariant } from './variants.ts';
 
 export interface SnapshotPerformance extends Performance {
   collection: PerformanceCollection;
@@ -80,7 +82,17 @@ export function resolveContent(
   assertContentContextEligible(context, rootSet);
 
   const performanceEntries = getRootPerformanceIds(rootSet).map((performanceId) => {
-    const performance = performances[performanceId];
+    const performance = selectCompleteVariant(
+      {
+        stableId: performanceId,
+        baseline: {
+          variantId: 'baseline',
+          maturity: 'preview',
+          value: performances[performanceId],
+        },
+      },
+      assertPerformanceVariantComplete,
+    ).value;
     const clonedPerformance = clonePerformance(performance);
     const collection = derivePerformanceCollection(
       clonedPerformance.effectiveDateTime,

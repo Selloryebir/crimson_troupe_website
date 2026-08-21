@@ -42,28 +42,32 @@ npm run quality -- --plan docs/blueprint/modules/search.md
 
 各命令的职责如下：
 
-| 命令                               | 职责                                                     |
-| ---------------------------------- | -------------------------------------------------------- |
-| `npm run quality -- <路径>`        | 按实际改动调度最小必要检查                               |
-| `npm run quality:docs`             | 显式检查全部受管文档格式                                 |
-| `npm run quality:blueprint`        | 显式检查正式蓝图格式及追踪关系                           |
-| `npm run quality:code`             | 显式检查全部 Astro/TypeScript、ESLint 与源码格式         |
-| `npm run quality:styles`           | 显式检查全部 CSS                                         |
-| `npm run quality:full`             | 执行一次蓝图、类型、代码、样式与全仓格式检查，不执行构建 |
-| `npm run build`                    | 只生成 `dist/`，不调用质量命令                           |
-| `npm run build:showcase`           | 显式生成炎国未批准展示产物                               |
-| `npm run build:preview`            | 生成炎国、东国与哥伦比亚三语言预览产物                   |
-| `npm run build:release`            | 生成批准内容正式产物；当前应因无批准内容而停止           |
-| `npm run validate:states`          | 确定性检查污染、票务状态与纪念票字段                     |
-| `npm run validate:locales`         | 检查正式构建国家版本的本地化覆盖                         |
-| `npm run validate:locales:preview` | 检查三语言预览构建的本地化覆盖                           |
-| `npm run validate:build`           | 检查已生成页面的路由、元数据、链接、资源与发布范围       |
-| `npm run validate:build:preview`   | 检查三语言预览产物的路由、元数据、链接与隔离范围         |
-| `npm run verify`                   | 依次执行完整质量、状态、一次构建与静态产物门禁           |
-| `npm run lint:code:fix`            | 自动修复 ESLint 明确支持的代码问题                       |
-| `npm run lint:styles:fix`          | 自动修复 Stylelint 明确支持的样式问题                    |
-| `npm run format`                   | 格式化 Astro、TypeScript、配置和文档，不改手工组织的 CSS |
-| `npm run blueprint:check`          | 检查蓝图 ID、依赖、路径和源码覆盖关系                    |
+| 命令                                | 职责                                                     |
+| ----------------------------------- | -------------------------------------------------------- |
+| `npm run quality -- <路径>`         | 按实际改动调度最小必要检查                               |
+| `npm run quality:docs`              | 显式检查全部受管文档格式                                 |
+| `npm run quality:blueprint`         | 显式检查正式蓝图格式及追踪关系                           |
+| `npm run quality:code`              | 显式检查全部 Astro/TypeScript、ESLint 与源码格式         |
+| `npm run quality:styles`            | 显式检查全部 CSS                                         |
+| `npm run quality:full`              | 执行一次蓝图、类型、代码、样式与全仓格式检查，不执行构建 |
+| `npm run build`                     | 只生成 `dist/`，不调用质量命令                           |
+| `npm run build:showcase`            | 显式生成炎国未批准展示产物                               |
+| `npm run build:preview`             | 生成炎国、东国与哥伦比亚三语言预览产物                   |
+| `npm run build:release`             | 生成批准内容正式产物；当前应因无批准内容而停止           |
+| `npm run validate:content`          | 检查三语言内容闭包、源修订、素材摘要与批准漂移           |
+| `npm run validate:content:showcase` | 只对炎国展示集合执行同一聚焦内容门禁                     |
+| `npm run validate:content:preview`  | 显式对三语言预览执行同一聚焦内容门禁                     |
+| `npm run validate:content:release`  | 对正式集合执行内容门禁；当前应列出全部无批准摘要对象     |
+| `npm run validate:states`           | 确定性检查污染、票务状态与纪念票字段                     |
+| `npm run validate:locales`          | 检查正式构建国家版本的本地化覆盖                         |
+| `npm run validate:locales:preview`  | 检查三语言预览构建的本地化覆盖                           |
+| `npm run validate:build`            | 检查已生成页面的路由、元数据、链接、资源与发布范围       |
+| `npm run validate:build:preview`    | 检查三语言预览产物的路由、元数据、链接与隔离范围         |
+| `npm run verify`                    | 依次执行完整质量、状态、一次构建与静态产物门禁           |
+| `npm run lint:code:fix`             | 自动修复 ESLint 明确支持的代码问题                       |
+| `npm run lint:styles:fix`           | 自动修复 Stylelint 明确支持的样式问题                    |
+| `npm run format`                    | 格式化 Astro、TypeScript、配置和文档，不改手工组织的 CSS |
+| `npm run blueprint:check`           | 检查蓝图 ID、依赖、路径和源码覆盖关系                    |
 
 `quality` 的最小调度规则如下：
 
