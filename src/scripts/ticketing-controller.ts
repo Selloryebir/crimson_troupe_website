@@ -71,6 +71,7 @@ function parseOptions(rawValue: string | undefined): readonly TicketingPerforman
       (option) =>
         typeof option.performanceId !== 'string' ||
         typeof option.title !== 'string' ||
+        typeof option.seatingPlanId !== 'string' ||
         !Array.isArray(option.offers) ||
         option.offers.length === 0,
     )
@@ -177,15 +178,26 @@ export function initTicketingExperience(): void {
       const performanceId = row.dataset.ticketOption;
       const checkbox = row.querySelector<HTMLInputElement>('[data-ticket-select]');
       const select = row.querySelector<HTMLSelectElement>('[data-ticket-zone]');
-      if (!performanceId || !checkbox || !select) {
+      const map = row.querySelector<HTMLElement>('[data-ticket-seating-map]');
+      if (!performanceId || !checkbox || !select || !map) {
         return;
       }
       const basketItem = state.basket.find((item) => item.performanceId === performanceId);
       checkbox.checked = Boolean(basketItem);
       select.disabled = !basketItem;
+      row.classList.toggle('is-selected', Boolean(basketItem));
       if (basketItem) {
         select.value = basketItem.zone;
+        map.dataset.selectedZone = basketItem.zone;
+      } else {
+        delete map.dataset.selectedZone;
       }
+      map.querySelectorAll<HTMLButtonElement>('[data-ticket-zone-map]').forEach((button) => {
+        button.setAttribute(
+          'aria-pressed',
+          String(button.dataset.ticketZoneMap === basketItem?.zone),
+        );
+      });
     });
     const total = calculateBaseTotal(state.basket);
     count.textContent =
@@ -390,6 +402,49 @@ export function initTicketingExperience(): void {
     save();
     syncBasketControls();
   });
+
+  form.addEventListener('click', (event) => {
+    const button =
+      event.target instanceof Element
+        ? event.target.closest<HTMLButtonElement>('[data-ticket-zone-map]')
+        : null;
+    const row = button?.closest<HTMLElement>('[data-ticket-option]');
+    const performanceId = row?.dataset.ticketOption;
+    const zone = button?.dataset.ticketZoneMap;
+    const checkbox = row?.querySelector<HTMLInputElement>('[data-ticket-select]');
+    const select = row?.querySelector<HTMLSelectElement>('[data-ticket-zone]');
+    const offer = performanceId
+      ? optionFor(performanceId)?.offers.find((entry) => entry.zone === zone)
+      : undefined;
+    if (!row || !performanceId || !checkbox || !select || !offer) {
+      return;
+    }
+    checkbox.checked = true;
+    select.disabled = false;
+    select.value = offer.zone;
+    state = updateBasket(state, basketItemFromRow(row), performanceId);
+    save();
+    live.textContent = messages.selectionReady;
+    syncBasketControls();
+  });
+
+  form.addEventListener(
+    'toggle',
+    (event) => {
+      const opened = event.target;
+      if (!(opened instanceof HTMLDetailsElement) || !opened.open) {
+        return;
+      }
+      form
+        .querySelectorAll<HTMLDetailsElement>('[data-ticket-seating-details][open]')
+        .forEach((details) => {
+          if (details !== opened) {
+            details.open = false;
+          }
+        });
+    },
+    true,
+  );
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();

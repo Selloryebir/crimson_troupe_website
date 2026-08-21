@@ -29,6 +29,12 @@ export const columbiaMessages = {
     emptyBasket: 'No performances selected',
     selectionReady: 'The performance and seating zone are in this basket.',
     selectionRequired: 'Select at least one performance to continue.',
+    seatingPlanSummary: 'View Stage and Zone Diagram',
+    seatingPlanAria: 'Stage and seating zones for {title}',
+    stageDirection: 'STAGE',
+    seatingPlanNotice:
+      'Zone diagram only, not individual seat selection. The diagram and selector use the same prices.',
+    selectSeatingZone: 'Select {zone}, base price {price} LMD',
     receiptEyebrow: 'SIMULATED RECEIPT',
     receiptTitle: 'Seat Registration Receipt',
     receiptCopy:

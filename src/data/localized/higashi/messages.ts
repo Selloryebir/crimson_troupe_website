@@ -29,6 +29,12 @@ export const higashiMessages = {
     emptyBasket: '公演が選択されていません',
     selectionReady: '公演と座席区分を今回のバスケットへ追加しました。',
     selectionRequired: '続行するには1公演以上を選択してください。',
+    seatingPlanSummary: '舞台と座席区分図を表示',
+    seatingPlanAria: '{title}の舞台・座席区分図',
+    stageDirection: '舞台',
+    seatingPlanNotice:
+      '座席区分の概略図です。個別座席の指定ではありません。図と選択欄は同じ料金を使用します。',
+    selectSeatingZone: '{zone}を選択、基本料金 {price} LMD',
     receiptEyebrow: 'SIMULATED RECEIPT',
     receiptTitle: '座席受付控え',
     receiptCopy: '今回の申請は確認されました。以下の金額と座席は模擬体験内のみで有効です。',

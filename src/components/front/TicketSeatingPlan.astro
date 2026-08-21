@@ -1,0 +1,75 @@
+---
+import { formatMessage } from '../../data/localized/format';
+import type { TicketingMessages } from '../../data/localized/schema';
+import type { LocalizedTicketOffer } from '../../data/ticketing';
+import { getTicketSeatingPlan, type SeatingPlanId } from '../../data/ticket-seating-plans';
+
+interface Props {
+  planId: SeatingPlanId;
+  performanceTitle: string;
+  offers: readonly LocalizedTicketOffer[];
+  messages: TicketingMessages;
+}
+
+const { planId, performanceTitle, offers, messages } = Astro.props;
+const plan = getTicketSeatingPlan(planId);
+const offerByZone = new Map(offers.map((offer) => [offer.zone, offer]));
+const stageStyle = `--stage-x:${plan.stage.x / 6.4}%;--stage-y:${plan.stage.y / 3.6}%;--stage-width:${plan.stage.width / 6.4}%;--stage-height:${plan.stage.height / 3.6}%`;
+---
+
+<details class="ticket-seating" data-ticket-seating-details>
+  <summary>{messages.seatingPlanSummary}</summary>
+  <div class="ticket-seating__content">
+    <div
+      class="ticket-seating__map"
+      data-ticket-seating-map
+      role="group"
+      aria-label={formatMessage(messages.seatingPlanAria, { title: performanceTitle })}
+    >
+      <svg viewBox="0 0 640 360" aria-hidden="true" focusable="false">
+        <rect
+          class="ticket-seating__stage"
+          x={plan.stage.x}
+          y={plan.stage.y}
+          width={plan.stage.width}
+          height={plan.stage.height}></rect>
+        {
+          plan.zones.map((zone) => (
+            <g class="ticket-seating__zone" data-seating-shape={zone.zone}>
+              {zone.paths.map((path) => (
+                <path d={path} fill-rule="evenodd" />
+              ))}
+            </g>
+          ))
+        }
+      </svg>
+      <span class="ticket-seating__stage-label" style={stageStyle}>{messages.stageDirection}</span>
+      {
+        plan.zones.map((zone) => {
+          const offer = offerByZone.get(zone.zone);
+          if (!offer) {
+            return null;
+          }
+          const position = `--zone-x:${zone.labelX / 6.4}%;--zone-y:${zone.labelY / 3.6}%`;
+          return (
+            <button
+              class="ticket-seating__zone-button"
+              type="button"
+              data-ticket-zone-map={offer.zone}
+              style={position}
+              aria-pressed="false"
+              aria-label={formatMessage(messages.selectSeatingZone, {
+                zone: offer.label,
+                price: offer.basePrice,
+              })}
+            >
+              <strong>{offer.label}</strong>
+              <small>{offer.basePrice} LMD</small>
+            </button>
+          );
+        })
+      }
+    </div>
+    <p>{messages.seatingPlanNotice}</p>
+  </div>
+</details>

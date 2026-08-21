@@ -121,6 +121,11 @@ export interface TicketingMessages {
   emptyBasket: string;
   selectionReady: string;
   selectionRequired: string;
+  seatingPlanSummary: string;
+  seatingPlanAria: string;
+  stageDirection: string;
+  seatingPlanNotice: string;
+  selectSeatingZone: string;
   receiptEyebrow: string;
   receiptTitle: string;
   receiptCopy: string;
