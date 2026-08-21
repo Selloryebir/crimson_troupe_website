@@ -1,3 +1,4 @@
+import { buildSnapshot, type ContentSnapshot } from './content/resolve.ts';
 import {
   getLocalizedPerformanceEntries,
   getLocalizedProduction,
@@ -25,12 +26,17 @@ export interface TicketingPerformanceOption {
 
 export function getTicketingOptions(
   localization: ResolvedLocalization,
+  snapshot: ContentSnapshot = buildSnapshot,
 ): readonly TicketingPerformanceOption[] {
-  return getLocalizedPerformanceEntries(localization).flatMap(([, performance]) => {
+  return getLocalizedPerformanceEntries(localization, snapshot).flatMap(([, performance]) => {
     if (performance.world !== 'front' || performance.ticketAvailability.state !== 'on-sale') {
       return [];
     }
-    const leadProduction = getLocalizedProduction(localization, performance.productionIds[0]);
+    const leadProduction = getLocalizedProduction(
+      localization,
+      performance.productionIds[0],
+      snapshot,
+    );
     return [
       {
         performanceId: performance.performanceId,

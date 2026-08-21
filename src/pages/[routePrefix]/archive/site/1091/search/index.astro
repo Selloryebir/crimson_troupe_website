@@ -33,7 +33,7 @@ const canonicalPath = sitePath(edition, 'archive', 'search');
     <p class="eyebrow">{copy.eyebrow}</p><h1>{copy.title}</h1><p>{copy.introduction}</p>
   </section>
   <SiteSearch
-    entries={getArchiveSearchIndex(edition)}
+    entries={getArchiveSearchIndex(edition, buildSnapshot)}
     world="archive"
     scopeLabel={copy.scope}
     placeholder={copy.placeholder}

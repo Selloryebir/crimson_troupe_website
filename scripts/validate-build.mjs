@@ -8,7 +8,9 @@ import { fileURLToPath } from 'node:url';
 import { buildSnapshot } from '../src/data/content/resolve.ts';
 import { buildProfile } from '../src/data/editions.ts';
 import { getLocalization } from '../src/data/localized/resolve.ts';
+import { getArchiveSearchIndex, getFrontSearchIndex } from '../src/data/site-search-index.ts';
 import { performancePath, productionPath, sitePath, siteRoot } from '../src/data/site-routes.ts';
+import { getTicketingOptions } from '../src/data/ticketing.ts';
 
 const { editions: builtEditions, performanceEntries, productionEntries } = buildSnapshot;
 
@@ -194,6 +196,8 @@ for (const edition of builtEditions) {
   const archiveRoute = sitePath(edition, 'archive', 'search');
   const frontSearch = readSearchIndex(frontRoute);
   const archiveSearch = readSearchIndex(archiveRoute);
+  assert.deepEqual(frontSearch, getFrontSearchIndex(edition, buildSnapshot));
+  assert.deepEqual(archiveSearch, getArchiveSearchIndex(edition, buildSnapshot));
   assert.ok(frontSearch.length > 0 && archiveSearch.length > 0);
   assert.ok(
     frontSearch.every(
@@ -214,6 +218,10 @@ for (const edition of builtEditions) {
   assert.match(ticketPage, /data-ticket-fallback/u);
   assert.match(ticketPage, /data-ticketing-app[^>]*hidden/u);
   assert.match(ticketPage, /data-ticketing-messages/u);
+  const encodedTicketOptions = ticketPage.match(/data-ticketing-options="([^"]+)"/u)?.[1];
+  assert.ok(encodedTicketOptions, `${edition.editionId} 票务页缺少构建期候选`);
+  const ticketOptions = JSON.parse(decodeHtmlAttribute(encodedTicketOptions));
+  assert.deepEqual(ticketOptions, getTicketingOptions(getLocalization(edition), buildSnapshot));
   const archiveTicketPage = readFileSync(
     routes.get(sitePath(edition, 'archive', 'tickets')),
     'utf8',

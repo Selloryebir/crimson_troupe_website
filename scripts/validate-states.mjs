@@ -18,6 +18,7 @@ import {
 import { currentRootSet, validateContentRootSet } from '../src/data/content/root-sets.ts';
 import { getLocalization, getLocalizedPerformanceEntries } from '../src/data/localized/resolve.ts';
 import { performances } from '../src/data/performances.ts';
+import { getFrontSearchIndex } from '../src/data/site-search-index.ts';
 import { getSiteTerraNow } from '../src/data/site-time.ts';
 import { getTicketingOptions } from '../src/data/ticketing.ts';
 import {
@@ -137,6 +138,22 @@ assert.ok(
   getLocalizedPerformanceEntries(reducedLocalization, reducedSnapshot).every(
     ([performanceId]) => performanceId !== 'uncrowned-trimount-1098',
   ),
+);
+const reducedSearch = getFrontSearchIndex(editions.yan, reducedSnapshot);
+assert.ok(
+  reducedSearch.every((entry) => !entry.href.includes('uncrowned-trimount-1098')),
+  '集合外场次不得进入搜索索引',
+);
+assert.deepEqual(
+  getTicketingOptions(reducedLocalization, reducedSnapshot).map(
+    ({ performanceId }) => performanceId,
+  ),
+  reducedSnapshot.performanceEntries
+    .filter(
+      ([, performance]) =>
+        performance.world === 'front' && performance.ticketAvailability.state === 'on-sale',
+    )
+    .map(([performanceId]) => performanceId),
 );
 
 const frontNow = getSiteTerraNow('front', buildContexts.showcase);

@@ -32,5 +32,8 @@ const canonicalPath = sitePath(edition, 'front', 'tickets');
   <section class="page-intro page-width">
     <p class="eyebrow">{copy.eyebrow}</p><h1>{copy.title}</h1><p>{copy.introduction}</p>
   </section>
-  <TicketingExperience localization={localization} options={getTicketingOptions(localization)} />
+  <TicketingExperience
+    localization={localization}
+    options={getTicketingOptions(localization, buildSnapshot)}
+  />
 </FrontLayout>
