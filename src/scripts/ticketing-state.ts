@@ -1,13 +1,20 @@
 import type { TicketOffer, TicketZone } from '../data/performances.ts';
 import type { TicketAdjustmentId, TicketStampId } from '../data/localized/schema.ts';
 
+export const TICKETING_STATE_VERSION = 3 as const;
 export const STANDARD_SUCCESS_THRESHOLD = 0.32;
 export const STANDARD_FAILURE_THRESHOLD = 0.68;
 export const PREMIUM_SUCCESS_THRESHOLD = 0.58;
 export const PREMIUM_RATE = 0.35;
+export const MAX_REQUIRING_RESUBMIT_RESULTS = 3;
 
-export type TicketingPhase = 'selection' | 'attempt' | 'failure' | 'network' | 'success';
+export type TicketingPhase =
+  'selection' | 'attempt' | 'failure' | 'network' | 'premium-offer' | 'retention-offer' | 'success';
 export type TicketingRoute = 'standard' | 'premium';
+export type TicketOfferVariant = 'full' | 'retention';
+export type AttemptOutcome = 'success' | 'unavailable' | 'network';
+export type JourneyTag =
+  'network-retry' | 'priority-refused' | 'retention-accepted' | 'returned-seat' | 'manual-review';
 
 export interface TicketBasketItem {
   performanceId: string;
@@ -27,29 +34,94 @@ export interface IssuedTicket {
 
 export interface TicketingResult {
   route: TicketingRoute;
+  offerVariant: TicketOfferVariant | null;
   basket: readonly TicketBasketItem[];
   baseTotal: number;
   adjustments: readonly TicketAdjustment[];
   settledTotal: number;
   stampIds: readonly TicketStampId[];
+  journeyTags: readonly JourneyTag[];
   tickets: readonly IssuedTicket[];
 }
 
-export interface TicketingState {
-  version: 2;
+interface TicketingStateBase {
+  version: typeof TICKETING_STATE_VERSION;
   phase: TicketingPhase;
-  route: TicketingRoute;
   basket: readonly TicketBasketItem[];
+  attemptCount: number;
+  lastOutcome: AttemptOutcome | null;
+  retentionOffered: boolean;
+  journeyTags: readonly JourneyTag[];
   result: TicketingResult | null;
 }
+
+interface StandardRouteState {
+  route: 'standard';
+  offerVariant: null;
+}
+
+interface PremiumRouteState {
+  route: 'premium';
+  offerVariant: TicketOfferVariant;
+}
+
+export type TicketingState = TicketingStateBase & (StandardRouteState | PremiumRouteState);
 
 export interface TicketCatalogEntry {
   performanceId: string;
   offers: readonly TicketOffer[];
 }
 
+const phases: readonly TicketingPhase[] = [
+  'selection',
+  'attempt',
+  'failure',
+  'network',
+  'premium-offer',
+  'retention-offer',
+  'success',
+];
+const outcomes: readonly AttemptOutcome[] = ['success', 'unavailable', 'network'];
+const journeyTags: readonly JourneyTag[] = [
+  'network-retry',
+  'priority-refused',
+  'retention-accepted',
+  'returned-seat',
+  'manual-review',
+];
+
+function withStandardRoute(
+  state: TicketingState,
+  changes: Partial<TicketingStateBase> = {},
+): TicketingState {
+  return { ...state, ...changes, route: 'standard', offerVariant: null };
+}
+
+function withPremiumRoute(
+  state: TicketingState,
+  offerVariant: TicketOfferVariant,
+  changes: Partial<TicketingStateBase> = {},
+): TicketingState {
+  return { ...state, ...changes, route: 'premium', offerVariant };
+}
+
+function appendJourneyTag(tags: readonly JourneyTag[], tag: JourneyTag): readonly JourneyTag[] {
+  return tags.includes(tag) ? tags : [...tags, tag];
+}
+
 export function createTicketingState(): TicketingState {
-  return { version: 2, phase: 'selection', route: 'standard', basket: [], result: null };
+  return {
+    version: TICKETING_STATE_VERSION,
+    phase: 'selection',
+    route: 'standard',
+    offerVariant: null,
+    basket: [],
+    attemptCount: 0,
+    lastOutcome: null,
+    retentionOffered: false,
+    journeyTags: [],
+    result: null,
+  };
 }
 
 export function calculateBaseTotal(basket: readonly TicketBasketItem[]): number {
@@ -73,7 +145,7 @@ export function startTicketingAttempt(state: TicketingState): TicketingState {
   if (state.phase !== 'selection' || state.basket.length === 0) {
     return state;
   }
-  return { ...state, phase: 'attempt', route: 'standard', result: null };
+  return withStandardRoute(state, { phase: 'attempt', result: null });
 }
 
 function createResult(state: TicketingState, ticketNumberFactory: () => string): TicketingResult {
@@ -97,7 +169,37 @@ function createResult(state: TicketingState, ticketNumberFactory: () => string):
     performanceId: item.performanceId,
     number: ticketNumberFactory(),
   }));
-  return { route: state.route, basket, baseTotal, adjustments, settledTotal, stampIds, tickets };
+  return {
+    route: state.route,
+    offerVariant: state.offerVariant,
+    basket,
+    baseTotal,
+    adjustments,
+    settledTotal,
+    stampIds,
+    journeyTags: [...state.journeyTags],
+    tickets,
+  };
+}
+
+function completeAttempt(
+  state: TicketingState,
+  ticketNumberFactory: () => string,
+  forcedTag?: 'returned-seat' | 'manual-review',
+): TicketingState {
+  const journeyTags = forcedTag
+    ? appendJourneyTag(state.journeyTags, forcedTag)
+    : state.journeyTags;
+  const routedState = forcedTag
+    ? withStandardRoute(state, { journeyTags })
+    : ({ ...state, journeyTags } as TicketingState);
+  const completedState = {
+    ...routedState,
+    phase: 'success' as const,
+    lastOutcome: 'success' as const,
+    result: null,
+  };
+  return { ...completedState, result: createResult(completedState, ticketNumberFactory) };
 }
 
 export function resolveTicketingAttempt(
@@ -109,49 +211,117 @@ export function resolveTicketingAttempt(
     return state;
   }
 
-  const value = random();
-  if (state.route === 'premium') {
-    if (Number.isFinite(value) && value >= 0 && value < PREMIUM_SUCCESS_THRESHOLD) {
-      return { ...state, phase: 'success', result: createResult(state, ticketNumberFactory) };
-    }
-    return { ...state, phase: 'failure', result: null };
+  if (state.attemptCount >= MAX_REQUIRING_RESUBMIT_RESULTS) {
+    const forcedTag = state.journeyTags.includes('priority-refused')
+      ? 'returned-seat'
+      : 'manual-review';
+    return completeAttempt(state, ticketNumberFactory, forcedTag);
   }
 
-  if (Number.isFinite(value) && value >= 0 && value < STANDARD_SUCCESS_THRESHOLD) {
-    return { ...state, phase: 'success', result: createResult(state, ticketNumberFactory) };
+  const value = random();
+  let outcome: AttemptOutcome;
+  if (state.route === 'premium') {
+    outcome =
+      Number.isFinite(value) && value >= 0 && value < PREMIUM_SUCCESS_THRESHOLD
+        ? 'success'
+        : 'unavailable';
+  } else if (Number.isFinite(value) && value >= 0 && value < STANDARD_SUCCESS_THRESHOLD) {
+    outcome = 'success';
+  } else if (Number.isFinite(value) && value >= 0 && value < STANDARD_FAILURE_THRESHOLD) {
+    outcome = 'unavailable';
+  } else {
+    outcome = 'network';
   }
-  if (Number.isFinite(value) && value >= 0 && value < STANDARD_FAILURE_THRESHOLD) {
-    return { ...state, phase: 'failure', result: null };
+
+  if (outcome === 'network' && state.lastOutcome === 'network') {
+    outcome = 'unavailable';
   }
-  return { ...state, phase: 'network', result: null };
+  if (outcome === 'success') {
+    return completeAttempt(state, ticketNumberFactory);
+  }
+  return {
+    ...state,
+    phase: outcome === 'network' ? 'network' : 'failure',
+    attemptCount: state.attemptCount + 1,
+    lastOutcome: outcome,
+    result: null,
+  };
 }
 
 export function retryTicketingAttempt(state: TicketingState): TicketingState {
   if (state.phase !== 'failure' && state.phase !== 'network') {
     return state;
   }
-  return { ...state, phase: 'attempt', result: null };
+  const journeyTags =
+    state.phase === 'network'
+      ? appendJourneyTag(state.journeyTags, 'network-retry')
+      : state.journeyTags;
+  return { ...state, phase: 'attempt', journeyTags, result: null };
 }
 
-export function enterPremiumRoute(state: TicketingState): TicketingState {
+export function openPremiumOffer(state: TicketingState): TicketingState {
   if (state.phase !== 'failure' || state.route !== 'standard') {
     return state;
   }
-  return { ...state, phase: 'attempt', route: 'premium', result: null };
+  return withStandardRoute(state, { phase: 'premium-offer', result: null });
+}
+
+export function enterPremiumRoute(state: TicketingState): TicketingState {
+  if (
+    state.route !== 'standard' ||
+    (state.phase !== 'failure' && state.phase !== 'premium-offer')
+  ) {
+    return state;
+  }
+  return withPremiumRoute(state, 'full', { phase: 'attempt', result: null });
+}
+
+export function declinePremiumOffer(state: TicketingState): TicketingState {
+  if (state.phase !== 'premium-offer' || state.route !== 'standard') {
+    return state;
+  }
+  const nextTags = appendJourneyTag(state.journeyTags, 'priority-refused');
+  if (!state.retentionOffered) {
+    return withStandardRoute(state, {
+      phase: 'retention-offer',
+      retentionOffered: true,
+      journeyTags: nextTags,
+      result: null,
+    });
+  }
+  return withStandardRoute(state, { phase: 'selection', journeyTags: nextTags, result: null });
+}
+
+export function acceptRetentionOffer(state: TicketingState): TicketingState {
+  if (state.phase !== 'retention-offer' || state.route !== 'standard') {
+    return state;
+  }
+  return withPremiumRoute(state, 'retention', {
+    phase: 'attempt',
+    journeyTags: appendJourneyTag(state.journeyTags, 'retention-accepted'),
+    result: null,
+  });
+}
+
+export function declineRetentionOffer(state: TicketingState): TicketingState {
+  if (state.phase !== 'retention-offer' || state.route !== 'standard') {
+    return state;
+  }
+  return withStandardRoute(state, { phase: 'selection', result: null });
 }
 
 export function returnToStandardRoute(state: TicketingState): TicketingState {
   if (state.phase !== 'failure' || state.route !== 'premium') {
     return state;
   }
-  return { ...state, phase: 'attempt', route: 'standard', result: null };
+  return withStandardRoute(state, { phase: 'attempt', result: null });
 }
 
 export function returnToSelection(state: TicketingState): TicketingState {
   if (state.phase === 'success') {
     return state;
   }
-  return { ...state, phase: 'selection', route: 'standard', result: null };
+  return withStandardRoute(state, { phase: 'selection', result: null });
 }
 
 function restoreBasket(
@@ -185,6 +355,81 @@ function restoreBasket(
   return basket;
 }
 
+function restoreJourneyTags(rawTags: unknown): readonly JourneyTag[] | null {
+  if (!Array.isArray(rawTags) || rawTags.some((tag) => !journeyTags.includes(tag as JourneyTag))) {
+    return null;
+  }
+  const restored = rawTags as JourneyTag[];
+  return new Set(restored).size === restored.length ? restored : null;
+}
+
+function restoreIssuedNumbers(
+  rawResult: unknown,
+  basket: readonly TicketBasketItem[],
+): readonly string[] | null {
+  if (!rawResult || typeof rawResult !== 'object') {
+    return null;
+  }
+  const tickets = (rawResult as Partial<TicketingResult>).tickets;
+  if (!Array.isArray(tickets) || tickets.length !== basket.length) {
+    return null;
+  }
+  const numbers = new Map<string, string>();
+  for (const rawTicket of tickets) {
+    if (!rawTicket || typeof rawTicket !== 'object') {
+      return null;
+    }
+    const ticket = rawTicket as Partial<IssuedTicket>;
+    if (
+      typeof ticket.performanceId !== 'string' ||
+      typeof ticket.number !== 'string' ||
+      !/^\d{12}$/.test(ticket.number) ||
+      numbers.has(ticket.performanceId)
+    ) {
+      return null;
+    }
+    numbers.set(ticket.performanceId, ticket.number);
+  }
+  return basket.every((item) => numbers.has(item.performanceId))
+    ? basket.map((item) => numbers.get(item.performanceId) ?? '000000000000')
+    : null;
+}
+
+function isValidStateCombination(state: TicketingState): boolean {
+  if (state.phase === 'network' && state.route !== 'standard') {
+    return false;
+  }
+  if (
+    (state.phase === 'premium-offer' || state.phase === 'retention-offer') &&
+    state.route !== 'standard'
+  ) {
+    return false;
+  }
+  if (
+    state.phase === 'retention-offer' &&
+    (!state.retentionOffered || !state.journeyTags.includes('priority-refused'))
+  ) {
+    return false;
+  }
+  if (
+    state.route === 'premium' &&
+    state.offerVariant === 'retention' &&
+    (!state.retentionOffered || !state.journeyTags.includes('retention-accepted'))
+  ) {
+    return false;
+  }
+  if (state.phase === 'network' && state.lastOutcome !== 'network') {
+    return false;
+  }
+  if (state.phase === 'failure' && state.lastOutcome !== 'unavailable') {
+    return false;
+  }
+  if (state.phase === 'success' && state.lastOutcome !== 'success') {
+    return false;
+  }
+  return true;
+}
+
 export function restoreTicketingState(
   rawValue: string | null,
   catalog: readonly TicketCatalogEntry[],
@@ -193,66 +438,55 @@ export function restoreTicketingState(
     return createTicketingState();
   }
   try {
-    const value = JSON.parse(rawValue) as Partial<TicketingState>;
-    const phases: readonly TicketingPhase[] = [
-      'selection',
-      'attempt',
-      'failure',
-      'network',
-      'success',
-    ];
+    const value = JSON.parse(rawValue) as Record<string, unknown>;
     if (
-      value.version !== 2 ||
+      value.version !== TICKETING_STATE_VERSION ||
       !phases.includes(value.phase as TicketingPhase) ||
-      (value.route !== 'standard' && value.route !== 'premium')
+      (value.route !== 'standard' && value.route !== 'premium') ||
+      (value.route === 'standard' && value.offerVariant !== null) ||
+      (value.route === 'premium' &&
+        value.offerVariant !== 'full' &&
+        value.offerVariant !== 'retention') ||
+      !Number.isInteger(value.attemptCount) ||
+      (value.attemptCount as number) < 0 ||
+      (value.attemptCount as number) > MAX_REQUIRING_RESUBMIT_RESULTS ||
+      (value.lastOutcome !== null && !outcomes.includes(value.lastOutcome as AttemptOutcome)) ||
+      typeof value.retentionOffered !== 'boolean'
     ) {
       return createTicketingState();
     }
     const phase = value.phase as TicketingPhase;
     const basket = restoreBasket(value.basket, catalog);
-    if (!basket || (phase !== 'selection' && basket.length === 0)) {
+    const restoredTags = restoreJourneyTags(value.journeyTags);
+    if (!basket || !restoredTags || (phase !== 'selection' && basket.length === 0)) {
       return createTicketingState();
     }
-    if (phase === 'network' && value.route === 'premium') {
+    const state = {
+      version: TICKETING_STATE_VERSION,
+      phase,
+      route: value.route,
+      offerVariant: value.offerVariant,
+      basket,
+      attemptCount: value.attemptCount,
+      lastOutcome: value.lastOutcome,
+      retentionOffered: value.retentionOffered,
+      journeyTags: restoredTags,
+      result: null,
+    } as TicketingState;
+    if (!isValidStateCombination(state)) {
       return createTicketingState();
     }
     if (phase !== 'success') {
-      return { version: 2, phase, route: value.route, basket, result: null };
+      return state;
     }
 
-    const rawResult = value.result as Partial<TicketingResult> | null;
-    if (
-      !rawResult ||
-      !Array.isArray(rawResult.tickets) ||
-      rawResult.tickets.length !== basket.length
-    ) {
+    const issuedNumbers = restoreIssuedNumbers(value.result, basket);
+    if (!issuedNumbers) {
       return createTicketingState();
     }
-    const numbers = new Map<string, string>();
-    for (const rawTicket of rawResult.tickets) {
-      if (!rawTicket || typeof rawTicket !== 'object') {
-        return createTicketingState();
-      }
-      const ticket = rawTicket as Partial<IssuedTicket>;
-      if (
-        typeof ticket.performanceId !== 'string' ||
-        typeof ticket.number !== 'string' ||
-        !/^\d{12}$/.test(ticket.number) ||
-        numbers.has(ticket.performanceId)
-      ) {
-        return createTicketingState();
-      }
-      numbers.set(ticket.performanceId, ticket.number);
-    }
-    if (basket.some((item) => !numbers.has(item.performanceId))) {
-      return createTicketingState();
-    }
-    const orderedNumbers = basket.map((item) => numbers.get(item.performanceId) ?? '000000000000');
-    const result = createResult(
-      { version: 2, phase: 'attempt', route: value.route, basket, result: null },
-      () => orderedNumbers.shift() ?? '000000000000',
-    );
-    return { version: 2, phase: 'success', route: value.route, basket, result };
+    const pendingNumbers = [...issuedNumbers];
+    const result = createResult(state, () => pendingNumbers.shift() ?? '000000000000');
+    return { ...state, result };
   } catch {
     return createTicketingState();
   }

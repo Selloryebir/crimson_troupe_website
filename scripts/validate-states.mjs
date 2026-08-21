@@ -14,9 +14,14 @@ import {
 } from '../src/scripts/pollution-state.ts';
 import { createTicketMatrix, createTicketSvg } from '../src/scripts/ticket-artifact.ts';
 import {
+  MAX_REQUIRING_RESUBMIT_RESULTS,
+  acceptRetentionOffer,
   calculateBaseTotal,
   createTicketingState,
+  declinePremiumOffer,
+  declineRetentionOffer,
   enterPremiumRoute,
+  openPremiumOffer,
   resolveTicketingAttempt,
   restoreTicketingState,
   retryTicketingAttempt,
@@ -110,11 +115,25 @@ const networkFailure = resolveTicketingAttempt(
 );
 assert.equal(standardSuccess.phase, 'success');
 assert.equal(standardFailure.phase, 'failure');
+assert.equal(standardFailure.attemptCount, 1);
+assert.equal(standardFailure.lastOutcome, 'unavailable');
 assert.equal(networkFailure.phase, 'network');
-assert.deepEqual(retryTicketingAttempt(networkFailure).basket, selection.basket);
+assert.equal(networkFailure.attemptCount, 1);
+const networkRetry = retryTicketingAttempt(networkFailure);
+assert.deepEqual(networkRetry.basket, selection.basket);
+assert.deepEqual(networkRetry.journeyTags, ['network-retry']);
+const noConsecutiveNetwork = resolveTicketingAttempt(
+  networkRetry,
+  () => 0.9,
+  () => '000000000000',
+);
+assert.equal(noConsecutiveNetwork.phase, 'failure');
+assert.equal(noConsecutiveNetwork.lastOutcome, 'unavailable');
 assert.deepEqual(returnToSelection(standardFailure).basket, selection.basket);
 
-const premiumAttempt = enterPremiumRoute(standardFailure);
+const premiumOffer = openPremiumOffer(standardFailure);
+assert.equal(premiumOffer.phase, 'premium-offer');
+const premiumAttempt = enterPremiumRoute(premiumOffer);
 const premiumSuccess = resolveTicketingAttempt(
   premiumAttempt,
   () => 0.1,
@@ -131,6 +150,76 @@ assert.equal(premiumSuccess.result?.baseTotal, 1100);
 assert.equal(premiumSuccess.result?.adjustments[0]?.amount, 385);
 assert.equal(premiumSuccess.result?.settledTotal, 1485);
 assert.equal(returnToStandardRoute(premiumFailure).route, 'standard');
+
+const firstRetentionOffer = declinePremiumOffer(premiumOffer);
+assert.equal(firstRetentionOffer.phase, 'retention-offer');
+assert.equal(firstRetentionOffer.retentionOffered, true);
+assert.deepEqual(firstRetentionOffer.journeyTags, ['priority-refused']);
+const retainedAttempt = acceptRetentionOffer(firstRetentionOffer);
+assert.equal(retainedAttempt.route, 'premium');
+assert.equal(retainedAttempt.offerVariant, 'retention');
+assert.ok(retainedAttempt.journeyTags.includes('retention-accepted'));
+
+const retentionDeclined = declineRetentionOffer(firstRetentionOffer);
+assert.equal(retentionDeclined.phase, 'selection');
+const failureAfterRetention = resolveTicketingAttempt(
+  startTicketingAttempt(retentionDeclined),
+  () => 0.5,
+  () => '000000000000',
+);
+const secondPremiumOffer = openPremiumOffer(failureAfterRetention);
+const noSecondRetention = declinePremiumOffer(secondPremiumOffer);
+assert.equal(noSecondRetention.phase, 'selection');
+assert.equal(noSecondRetention.retentionOffered, true);
+
+let bounded = startTicketingAttempt(selection);
+let boundedRandomCalls = 0;
+for (let index = 0; index < MAX_REQUIRING_RESUBMIT_RESULTS; index += 1) {
+  bounded = resolveTicketingAttempt(
+    bounded,
+    () => {
+      boundedRandomCalls += 1;
+      return 0.5;
+    },
+    () => '000000000000',
+  );
+  assert.equal(bounded.phase, 'failure');
+  bounded = retryTicketingAttempt(bounded);
+}
+const forcedManualReview = resolveTicketingAttempt(
+  bounded,
+  () => {
+    boundedRandomCalls += 1;
+    return 0.5;
+  },
+  () => '111111111111',
+);
+assert.equal(boundedRandomCalls, MAX_REQUIRING_RESUBMIT_RESULTS);
+assert.equal(forcedManualReview.phase, 'success');
+assert.equal(forcedManualReview.route, 'standard');
+assert.ok(forcedManualReview.journeyTags.includes('manual-review'));
+
+let returnedSeatJourney = declineRetentionOffer(firstRetentionOffer);
+returnedSeatJourney = startTicketingAttempt(returnedSeatJourney);
+for (let index = returnedSeatJourney.attemptCount; index < 3; index += 1) {
+  returnedSeatJourney = resolveTicketingAttempt(
+    returnedSeatJourney,
+    () => 0.5,
+    () => '000000000000',
+  );
+  returnedSeatJourney = retryTicketingAttempt(returnedSeatJourney);
+}
+const forcedReturnedSeat = resolveTicketingAttempt(
+  returnedSeatJourney,
+  () => {
+    throw new Error('达到上限后不应再次读取随机数');
+  },
+  () => '222222222222',
+);
+assert.equal(forcedReturnedSeat.phase, 'success');
+assert.equal(forcedReturnedSeat.route, 'standard');
+assert.ok(forcedReturnedSeat.journeyTags.includes('returned-seat'));
+assert.ok(forcedReturnedSeat.journeyTags.includes('priority-refused'));
 
 let frozenRandomCalls = 0;
 let frozenNumberCalls = 0;
@@ -152,6 +241,8 @@ assert.equal(frozenNumberCalls, 0);
 const restored = restoreTicketingState(JSON.stringify(premiumSuccess), catalog);
 assert.equal(restored.phase, 'success');
 assert.deepEqual(restored.result?.tickets, premiumSuccess.result?.tickets);
+assert.deepEqual(restored.result?.journeyTags, premiumSuccess.result?.journeyTags);
+assert.deepEqual(restoreTicketingState('{"version":2}', catalog), createTicketingState());
 assert.deepEqual(restoreTicketingState('{"version":999}', catalog), createTicketingState());
 
 const previewLocalizations = previewEditionIds.map((editionId) =>

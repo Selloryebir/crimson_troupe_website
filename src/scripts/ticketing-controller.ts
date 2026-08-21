@@ -16,7 +16,7 @@ import {
   type TicketBasketItem,
 } from './ticketing-state';
 
-const STORAGE_KEY = 'crimson-troupe:ticketing:v2';
+const STORAGE_KEY = 'crimson-troupe:ticketing:v3';
 
 function getSessionStorage(): Storage | null {
   try {
