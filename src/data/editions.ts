@@ -1,3 +1,13 @@
+import {
+  createBuildContexts,
+  getBuildContext,
+  readBuildProfile,
+  type BuildContext,
+  type BuildProfile,
+} from './content/build-context.ts';
+import { assertContentContextEligible } from './content/eligibility.ts';
+import { currentRootSet } from './content/root-sets.ts';
+
 export const editions = {
   yan: {
     editionId: 'yan',
@@ -92,24 +102,16 @@ export const previewEditionIds = [
   'columbia',
 ] as const satisfies readonly EditionId[];
 
-export type BuildProfile = 'release' | 'preview';
 export type BuildEditionId = (typeof previewEditionIds)[number];
 export type BuiltEdition = (typeof editions)[BuildEditionId];
+export type { BuildContext, BuildProfile };
 
-function readBuildProfile(): BuildProfile {
-  const runtime = globalThis as typeof globalThis & {
-    process?: { env?: Record<string, string | undefined> };
-  };
-  const value = runtime.process?.env?.SITE_BUILD_PROFILE ?? 'release';
-  if (value !== 'release' && value !== 'preview') {
-    throw new Error(`未知 SITE_BUILD_PROFILE：${value}。只允许 release 或 preview。`);
-  }
-  return value;
-}
-
+export const buildContexts = createBuildContexts(releaseEditionIds, previewEditionIds);
 export const buildProfile = readBuildProfile();
-export const buildEditionIds: readonly BuildEditionId[] =
-  buildProfile === 'preview' ? previewEditionIds : releaseEditionIds;
+export const buildContext = getBuildContext(buildContexts, buildProfile);
+assertContentContextEligible(buildContext, currentRootSet);
+
+export const buildEditionIds = buildContext.editionIds as readonly BuildEditionId[];
 export const builtEditions: readonly BuiltEdition[] = buildEditionIds.map(
   (editionId) => editions[editionId],
 );

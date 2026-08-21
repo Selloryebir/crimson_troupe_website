@@ -13,6 +13,16 @@ npm run dev
 
 访问终端输出的本地地址。不要直接打开生成前的 `.astro` 文件。
 
+`dev` 与 `build` 默认使用 `showcase`，构建炎国未批准预览。有限构建预设及入口如下：
+
+| 预设       | 开发命令              | 构建命令                | 当前用途                                         |
+| ---------- | --------------------- | ----------------------- | ------------------------------------------------ |
+| `showcase` | `npm run dev`         | `npm run build`         | 默认炎国可部署展示                               |
+| `preview`  | `npm run dev:preview` | `npm run build:preview` | 炎国、东国与哥伦比亚三语言完整预览               |
+| `release`  | `npm run dev:release` | `npm run build:release` | 只接受已批准内容；当前会列出未批准稳定 ID 并停止 |
+
+不得另设自由组合环境变量改变国家版本、根集合或内容资格。`release` 的当前失败是内容资格门禁，不是开发环境故障。
+
 锁文件未变化时，自动化环境和全新工作区应优先使用 `npm ci`，避免安装结果漂移。
 
 ## 质量命令
@@ -41,7 +51,9 @@ npm run quality -- --plan docs/blueprint/modules/search.md
 | `npm run quality:styles`           | 显式检查全部 CSS                                         |
 | `npm run quality:full`             | 执行一次蓝图、类型、代码、样式与全仓格式检查，不执行构建 |
 | `npm run build`                    | 只生成 `dist/`，不调用质量命令                           |
+| `npm run build:showcase`           | 显式生成炎国未批准展示产物                               |
 | `npm run build:preview`            | 生成炎国、东国与哥伦比亚三语言预览产物                   |
+| `npm run build:release`            | 生成批准内容正式产物；当前应因无批准内容而停止           |
 | `npm run validate:states`          | 确定性检查污染、票务状态与纪念票字段                     |
 | `npm run validate:locales`         | 检查正式构建国家版本的本地化覆盖                         |
 | `npm run validate:locales:preview` | 检查三语言预览构建的本地化覆盖                           |

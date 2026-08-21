@@ -2,8 +2,19 @@
 
 import assert from 'node:assert/strict';
 
-import { editions, previewEditionIds } from '../src/data/editions.ts';
+import {
+  buildContext,
+  buildContexts,
+  buildProfile,
+  editions,
+  previewEditionIds,
+} from '../src/data/editions.ts';
+import { getBuildContext } from '../src/data/content/build-context.ts';
+import { resolveContent } from '../src/data/content/resolve.ts';
+import { currentRootSet, validateContentRootSet } from '../src/data/content/root-sets.ts';
 import { getLocalization } from '../src/data/localized/resolve.ts';
+import { performances } from '../src/data/performances.ts';
+import { getSiteTerraNow } from '../src/data/site-time.ts';
 import { getTicketingOptions } from '../src/data/ticketing.ts';
 import {
   MAX_POLLUTION_LEVEL,
@@ -37,6 +48,95 @@ import {
   startTicketingAttempt,
   updateBasket,
 } from '../src/scripts/ticketing-state.ts';
+
+assert.equal(buildProfile, 'showcase');
+assert.equal(buildContext, buildContexts.showcase);
+assert.deepEqual(buildContexts.showcase.editionIds, ['yan']);
+assert.deepEqual(buildContexts.preview.editionIds, ['yan', 'higashi', 'columbia']);
+assert.deepEqual(buildContexts.release.editionIds, ['yan']);
+assert.throws(() => getBuildContext(buildContexts, 'custom'), /未知构建预设/u);
+
+const knownPerformanceIds = new Set(Object.keys(performances));
+assert.doesNotThrow(() => validateContentRootSet(currentRootSet, knownPerformanceIds));
+assert.throws(
+  () =>
+    validateContentRootSet(
+      {
+        ...currentRootSet,
+        worlds: {
+          ...currentRootSet.worlds,
+          front: {
+            performanceIds: [
+              currentRootSet.worlds.front.performanceIds[0],
+              currentRootSet.worlds.front.performanceIds[0],
+            ],
+            featuredPerformanceId: currentRootSet.worlds.front.featuredPerformanceId,
+          },
+        },
+      },
+      knownPerformanceIds,
+    ),
+  /含重复场次/u,
+);
+assert.throws(
+  () =>
+    validateContentRootSet(
+      {
+        ...currentRootSet,
+        worlds: {
+          ...currentRootSet.worlds,
+          front: {
+            performanceIds: [currentRootSet.worlds.front.performanceIds[0]],
+            featuredPerformanceId: currentRootSet.worlds.front.performanceIds[1],
+          },
+        },
+      },
+      knownPerformanceIds,
+    ),
+  /焦点不属于该时间层/u,
+);
+
+const showcaseSnapshot = resolveContent(buildContexts.showcase);
+assert.equal(showcaseSnapshot.maturity, 'preview');
+assert.equal(showcaseSnapshot.performanceEntries.length, 12);
+assert.equal(showcaseSnapshot.productionEntries.length, 7);
+assert.equal(showcaseSnapshot.locationEntries.length, 7);
+assert.deepEqual(showcaseSnapshot.featuredPerformanceIds, {
+  front: 'uncrowned-trimount-1098',
+  archive: 'der-ring-zwillingsturme-1091-0817',
+});
+assert.ok(Object.isFrozen(showcaseSnapshot));
+assert.ok(Object.isFrozen(showcaseSnapshot.performanceEntries));
+assert.throws(() => resolveContent(buildContexts.release), /未批准内容/u);
+
+const frontNow = getSiteTerraNow('front', buildContexts.showcase);
+const archiveNow = getSiteTerraNow('archive', buildContexts.showcase);
+assert.deepEqual(frontNow, {
+  calendar: 'terra',
+  year: 1098,
+  month: 9,
+  day: 1,
+  time: '00:00',
+});
+assert.deepEqual(archiveNow, {
+  calendar: 'terra',
+  year: 1091,
+  month: 7,
+  day: 1,
+  time: '00:00',
+});
+assert.deepEqual(
+  getSiteTerraNow('front', buildContexts.showcase, new Date('2099-01-01T00:00:00Z')),
+  frontNow,
+);
+assert.throws(
+  () =>
+    getSiteTerraNow('archive', {
+      ...buildContexts.showcase,
+      siteClockStrategies: { front: 'fixed', archive: 'anchored' },
+    }),
+  /只允许 fixed/u,
+);
 
 const pollutionTriggers = [
   'front-entry',
