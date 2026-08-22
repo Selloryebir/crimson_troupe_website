@@ -42,6 +42,8 @@ import {
   createTicketMatrix,
   createTicketSvg,
   createTicketTexture,
+  layoutTicketText,
+  segmentTicketGraphemes,
 } from '../src/scripts/ticket-artifact.ts';
 import {
   MAX_REQUIRING_RESUBMIT_RESULTS,
@@ -785,6 +787,56 @@ assert.equal(
     locale: 'zh-CN',
   }),
 );
+
+const unicodeTicketSamples = [
+  {
+    locale: 'ja-JP',
+    value: '星降る夜に名を失った劇場のための長い長い無言劇',
+  },
+  {
+    locale: 'ru',
+    value: 'Сверхнепредставительнейшееархивнотеатральноепредставление',
+  },
+  {
+    locale: 'el',
+    value: 'Η\u0301 τελευταία παράσταση του περιπλανώμενου θεάτρου στο παλιό λιμάνι',
+  },
+];
+for (const sample of unicodeTicketSamples) {
+  const graphemes = segmentTicketGraphemes(sample.value, sample.locale);
+  assert.equal(graphemes.join(''), sample.value);
+  assert.ok(graphemes.every((grapheme) => !/^\p{Mark}/u.test(grapheme)));
+  const layout = layoutTicketText(sample.value, sample.locale, {
+    maxWidth: 770,
+    preferredFontSize: 54,
+    minimumFontSize: 30,
+    maxLines: 3,
+  });
+  assert.ok(layout.fontSize >= 30);
+  assert.ok(layout.lines.length <= 3);
+  assert.equal(layout.lines.join('').replaceAll(/\s/gu, ''), sample.value.replaceAll(/\s/gu, ''));
+}
+
+const unicodeArtifactSvg = createTicketSvg({
+  performance: {
+    ...artifactPerformance,
+    title: unicodeTicketSamples[0].value,
+    kind: 'Особое архивное представление',
+    dateTime: '1098.09.17 / 19:30 — επόμενη είσοδος',
+    place: unicodeTicketSamples[2].value,
+  },
+  basketItem: basketA,
+  zoneLabel: 'Α 区',
+  number: '123456789012',
+  stamps: artifactStamps,
+  messages: yanLocalization.messages.ticketing.artifact,
+  locale: 'el',
+});
+assert.ok(unicodeArtifactSvg.includes('data-ticket-field="title"'));
+assert.ok(unicodeArtifactSvg.includes('data-ticket-field="place"'));
+assert.ok(unicodeArtifactSvg.includes('data-ticket-line="2"'));
+assert.ok(!unicodeArtifactSvg.includes('…'));
+assert.ok(unicodeArtifactSvg.includes('<rect x="920"'));
 
 console.log(
   `state validation passed: pollution=${pollutionTriggers.length} triggers, p12-events=${(

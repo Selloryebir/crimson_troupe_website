@@ -25,6 +25,19 @@ export interface TicketTexture {
   punchXs: readonly number[];
 }
 
+export interface TicketTextLayout {
+  lines: readonly string[];
+  fontSize: number;
+  lineHeight: number;
+}
+
+export interface TicketTextLayoutOptions {
+  maxWidth: number;
+  preferredFontSize: number;
+  minimumFontSize: number;
+  maxLines: number;
+}
+
 const visualColors: Record<TicketingPerformanceOption['visual'], string> = {
   moon: '#7f1724',
   flame: '#a94322',
@@ -41,6 +54,132 @@ const escapeXml = (value: string) =>
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&apos;');
+
+const cjkGrapheme = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]/u;
+const wideGrapheme = /[\p{Extended_Pictographic}]/u;
+const breakPunctuation = /[\s\-‐‑‒–—/\\·・,.;:!?，。；：！？、]/u;
+
+export function segmentTicketGraphemes(value: string, locale: string): readonly string[] {
+  if (typeof Intl.Segmenter === 'function') {
+    return [...new Intl.Segmenter(locale, { granularity: 'grapheme' }).segment(value)].map(
+      ({ segment }) => segment,
+    );
+  }
+
+  const graphemes: string[] = [];
+  let joinsPrevious = false;
+  for (const codePoint of value) {
+    const extendsPrevious =
+      joinsPrevious ||
+      /\p{Mark}/u.test(codePoint) ||
+      /[\u{fe00}-\u{fe0f}\u{1f3fb}-\u{1f3ff}]/u.test(codePoint) ||
+      codePoint === '\u200d';
+    if (extendsPrevious && graphemes.length > 0) {
+      graphemes[graphemes.length - 1] = `${graphemes.at(-1) ?? ''}${codePoint}`;
+    } else {
+      graphemes.push(codePoint);
+    }
+    joinsPrevious = codePoint === '\u200d';
+  }
+  return graphemes;
+}
+
+function graphemeWidth(grapheme: string): number {
+  if (/^\s$/u.test(grapheme)) {
+    return 0.34;
+  }
+  if (cjkGrapheme.test(grapheme) || wideGrapheme.test(grapheme)) {
+    return 1;
+  }
+  if (/^[ilI1'’.,:;|!]$/u.test(grapheme)) {
+    return 0.3;
+  }
+  if (/^[mwMW@#%&]$/u.test(grapheme)) {
+    return 0.85;
+  }
+  if (/^[A-ZА-ЯЁΆ-Ώ]$/u.test(grapheme)) {
+    return 0.68;
+  }
+  return 0.58;
+}
+
+function isBreakOpportunity(grapheme: string): boolean {
+  return cjkGrapheme.test(grapheme) || breakPunctuation.test(grapheme);
+}
+
+function wrapTicketText(value: string, locale: string, maxUnits: number): readonly string[] {
+  const graphemes = segmentTicketGraphemes(value.trim(), locale);
+  if (graphemes.length === 0) {
+    return [''];
+  }
+
+  const lines: string[] = [];
+  let start = 0;
+  while (start < graphemes.length) {
+    let cursor = start;
+    let width = 0;
+    let lastBreak = -1;
+    while (cursor < graphemes.length) {
+      const nextWidth = width + graphemeWidth(graphemes[cursor]);
+      if (nextWidth > maxUnits && cursor > start) {
+        break;
+      }
+      width = nextWidth;
+      cursor += 1;
+      if (isBreakOpportunity(graphemes[cursor - 1])) {
+        lastBreak = cursor;
+      }
+    }
+
+    if (cursor < graphemes.length && lastBreak > start) {
+      cursor = lastBreak;
+    }
+    lines.push(graphemes.slice(start, cursor).join('').trim());
+    start = cursor;
+    while (start < graphemes.length && /^\s$/u.test(graphemes[start])) {
+      start += 1;
+    }
+  }
+  return lines;
+}
+
+export function layoutTicketText(
+  value: string,
+  locale: string,
+  options: TicketTextLayoutOptions,
+): TicketTextLayout {
+  const { maxWidth, preferredFontSize, minimumFontSize, maxLines } = options;
+  for (let fontSize = preferredFontSize; fontSize >= minimumFontSize; fontSize -= 2) {
+    const lines = wrapTicketText(value, locale, maxWidth / fontSize);
+    if (lines.length <= maxLines || fontSize === minimumFontSize) {
+      return {
+        lines,
+        fontSize,
+        lineHeight: Math.round(fontSize * 1.12),
+      };
+    }
+  }
+  throw new Error('无法为票面文字生成布局。');
+}
+
+function createTextMarkup(
+  field: string,
+  value: string,
+  locale: string,
+  x: number,
+  y: number,
+  options: TicketTextLayoutOptions,
+  attributes: string,
+): string {
+  const layout = layoutTicketText(value, locale, options);
+  const lines = layout.lines
+    .map(
+      (line, index) =>
+        `<tspan x="${x}" y="${y + index * layout.lineHeight}" data-ticket-line="${index + 1}">${escapeXml(line)}</tspan>`,
+    )
+    .join('');
+  return `<text data-ticket-field="${field}" font-size="${layout.fontSize}" ${attributes}>${lines}</text>`;
+}
 
 function seedFromNumber(number: string): number {
   return [...number].reduce(
@@ -127,9 +266,10 @@ function createStampMarkup(stamps: readonly TicketArtifactStamp[], accent: strin
       const x = 630 + index * 118;
       const y = 482;
       const rotation = [-4, 2, -2, 3, -3][index] ?? 0;
-      const fontSize = Math.max(9, Math.min(12, 130 / Math.max(stamp.label.length, 1)));
+      const graphemeCount = segmentTicketGraphemes(stamp.label, 'und').length;
+      const fontSize = Math.max(9, Math.min(12, 130 / Math.max(graphemeCount, 1)));
       const fittedText =
-        stamp.label.length > 10 ? ' textLength="96" lengthAdjust="spacingAndGlyphs"' : '';
+        graphemeCount > 10 ? ' textLength="96" lengthAdjust="spacingAndGlyphs"' : '';
       return `<g data-stamp-id="${stamp.id}" transform="translate(${x} ${y}) rotate(${rotation})" fill="none" stroke="${accent}" stroke-width="2.4"><title>${escapeXml(stamp.label)}</title><g transform="scale(.78 1)">${createStampShape(stamp.id)}</g><text x="0" y="4" fill="${accent}" stroke="none" font-family="sans-serif" font-size="${fontSize}" font-weight="700" text-anchor="middle"${fittedText}>${escapeXml(stamp.label)}</text></g>`;
     })
     .join('');
@@ -157,6 +297,42 @@ export function createTicketSvg(input: TicketArtifactInput): string {
     .map((x) => `<circle cx="${x}" cy="32" r="3"/><circle cx="${x}" cy="508" r="3"/>`)
     .join('');
   const stampMarkup = createStampMarkup(stamps, accent);
+  const titleMarkup = createTextMarkup(
+    'title',
+    performance.title,
+    locale,
+    70,
+    128,
+    { maxWidth: 770, preferredFontSize: 54, minimumFontSize: 30, maxLines: 3 },
+    'font-family="serif" font-weight="600" fill="#211713"',
+  );
+  const kindMarkup = createTextMarkup(
+    'kind',
+    performance.kind,
+    locale,
+    70,
+    224,
+    { maxWidth: 770, preferredFontSize: 22, minimumFontSize: 16, maxLines: 2 },
+    'font-family="sans-serif" fill="#6d625b"',
+  );
+  const dateTimeMarkup = createTextMarkup(
+    'date-time',
+    performance.dateTime,
+    locale,
+    70,
+    304,
+    { maxWidth: 770, preferredFontSize: 29, minimumFontSize: 18, maxLines: 2 },
+    'font-family="serif" fill="#211713"',
+  );
+  const placeMarkup = createTextMarkup(
+    'place',
+    performance.place,
+    locale,
+    70,
+    370,
+    { maxWidth: 770, preferredFontSize: 20, minimumFontSize: 16, maxLines: 2 },
+    'font-family="sans-serif" fill="#6d625b"',
+  );
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 540" width="1200" height="540" role="img" lang="${escapeXml(locale)}" aria-labelledby="title description" data-ticket-pattern="${texture.signature}">
@@ -169,11 +345,11 @@ export function createTicketSvg(input: TicketArtifactInput): string {
   <g fill="#f2ede3" stroke="${accent}" stroke-width="1.5">${punches}</g>
   <path d="M880 32V508" stroke="#9a8e82" stroke-dasharray="8 8"/>
   <text x="70" y="72" font-family="sans-serif" font-size="18" letter-spacing="5" fill="${accent}">${escapeXml(messages.header)}</text>
-  <text x="70" y="146" font-family="serif" font-size="54" font-weight="600" fill="#211713">${escapeXml(performance.title)}</text>
-  <text x="70" y="184" font-family="sans-serif" font-size="22" fill="#6d625b">${escapeXml(performance.kind)}</text>
-  <text x="70" y="262" font-family="sans-serif" font-size="20" fill="#6d625b">${escapeXml(messages.dateTime)}</text>
-  <text x="70" y="298" font-family="serif" font-size="29" fill="#211713">${escapeXml(performance.dateTime)}</text>
-  <text x="70" y="350" font-family="sans-serif" font-size="20" fill="#6d625b">${escapeXml(performance.place)}</text>
+  ${titleMarkup}
+  ${kindMarkup}
+  <text x="70" y="274" font-family="sans-serif" font-size="20" fill="#6d625b">${escapeXml(messages.dateTime)}</text>
+  ${dateTimeMarkup}
+  ${placeMarkup}
   <text x="70" y="440" font-family="sans-serif" font-size="20" fill="#6d625b">${escapeXml(messages.zone)}</text>
   <text x="150" y="440" font-family="serif" font-size="31" fill="#211713">${escapeXml(zoneLabel)}</text>
   <text x="350" y="410" font-family="sans-serif" font-size="20" fill="#6d625b">${escapeXml(messages.faceValue)}</text>
