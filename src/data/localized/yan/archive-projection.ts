@@ -1,6 +1,7 @@
 import type { ArchiveProjectionContent } from '../schema.ts';
 
 export const yanArchiveProjection = {
+  statusAnnouncement: '档案显示已收束为一份未结邀请记录。',
   ariaLabel: '克莱布拉松未结档案',
   roleLabel: '登记身份',
   productionLabel: '演出',

@@ -44,14 +44,14 @@ export function createLocalizationSourceRevision(
 // 目标语言记录所依据的炎语修订。新增或修改炎语记录时只更新已完成复核的对应路径。
 const acceptedYanSourceRevision: LocalizationSourceRevision = Object.freeze({
   'site.brand': 'fnv1a64:03d196aa49398779',
-  'site.shared': 'fnv1a64:271988094d028281',
+  'site.shared': 'fnv1a64:a1503cab146d470f',
   'site.front': 'fnv1a64:91964d4831c5ea03',
   'site.archive': 'fnv1a64:5c106a3c54a6ec9e',
   'messages.filters': 'fnv1a64:d98c683356dc4246',
   'messages.search': 'fnv1a64:8db8feaa1a5ea44c',
   'messages.ticketing': 'fnv1a64:992dfae2179cae98',
   'messages.programs': 'fnv1a64:ffc6bbc6b04c00bd',
-  archiveProjection: 'fnv1a64:09c70bcf1901f335',
+  archiveProjection: 'fnv1a64:65f8ddbc32c82f56',
   'locations.trimount': 'fnv1a64:1a2db00bc2ab72c2',
   'locations.wiesheim': 'fnv1a64:c703aa685502941e',
   'locations.norport': 'fnv1a64:e1a39a61d6921382',

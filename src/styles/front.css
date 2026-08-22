@@ -799,7 +799,10 @@ html[data-world="front"] .search-workspace::after {
   content: "";
 }
 
-html[data-world="front"] .search-workspace > :is(.search-form, .search-feedback, .search-results, noscript) {
+html[data-world="front"] .search-workspace
+  > :is(.search-noscript, [data-search-enhanced])
+  > :is(.search-form, .search-feedback, .search-results),
+html[data-world="front"] .search-workspace > .search-noscript {
   grid-column: 1;
 }
 

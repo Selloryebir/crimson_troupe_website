@@ -24,31 +24,31 @@ const { entries, world, scopeLabel, placeholder, locale, messages } = Astro.prop
   data-search-messages={JSON.stringify(messages)}
   data-pollution-slot={world === 'archive' ? 'search' : undefined}
 >
-  <form class="search-form" action="" method="get" role="search" data-search-form>
-    <label for="site-search">{messages.label}</label>
-    <div>
-      <input
-        id="site-search"
-        name="q"
-        type="search"
-        autocomplete="off"
-        placeholder={placeholder}
-        data-search-input
-      />
-      <button type="submit">{messages.submit}</button>
-    </div>
-    <p>{formatMessage(messages.scope, { scope: scopeLabel })}</p>
-  </form>
-  <div class="search-feedback" data-search-feedback aria-live="polite">
-    <p>{messages.prompt}</p>
+  <div class="search-noscript" data-search-fallback role="status">
+    <h2>{messages.noscriptTitle}</h2>
+    <p>{messages.unavailable}</p>
   </div>
-  <ol class="search-results" data-search-results></ol>
-  <noscript>
-    <div class="search-noscript" role="status">
-      <h2>{messages.noscriptTitle}</h2>
-      <p>{messages.noscriptCopy}</p>
+  <div data-search-enhanced hidden>
+    <form class="search-form" action="" method="get" role="search" data-search-form>
+      <label for="site-search">{messages.label}</label>
+      <div>
+        <input
+          id="site-search"
+          name="q"
+          type="search"
+          autocomplete="off"
+          placeholder={placeholder}
+          data-search-input
+        />
+        <button type="submit">{messages.submit}</button>
+      </div>
+      <p>{formatMessage(messages.scope, { scope: scopeLabel })}</p>
+    </form>
+    <div class="search-feedback" data-search-feedback aria-live="polite">
+      <p>{messages.prompt}</p>
     </div>
-  </noscript>
+    <ol class="search-results" data-search-results></ol>
+  </div>
 </section>
 
 <script>

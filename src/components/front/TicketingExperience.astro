@@ -44,7 +44,7 @@ const copy = localization.site.front.tickets;
     <p>{formatMessage(copy.appLimit, { count: options.length })}</p>
   </header>
 
-  <form class="ticket-basket" data-ticket-basket tabindex="-1" novalidate>
+  <form class="ticket-basket" data-ticket-basket aria-labelledby="ticket-basket-title" novalidate>
     <ol class="ticket-basket__performances">
       {
         options.map((option, index) => (
@@ -96,7 +96,7 @@ const copy = localization.site.front.tickets;
     </ol>
     <aside class="ticket-basket__summary">
       <p class="eyebrow">{copy.basketEyebrow}</p>
-      <h3>{copy.basketTitle}</h3>
+      <h3 id="ticket-basket-title" data-ticket-basket-title tabindex="-1">{copy.basketTitle}</h3>
       <p data-ticket-count aria-live="polite">{copy.emptyBasket}</p>
       <dl><div><dt>{copy.baseTotal}</dt><dd data-ticket-base-total>0 LMD</dd></div></dl>
       <button class="button" type="submit" data-ticket-start disabled>{copy.start}</button>
@@ -104,15 +104,15 @@ const copy = localization.site.front.tickets;
     </aside>
   </form>
 
-  <section class="ticket-flow" data-ticket-flow tabindex="-1" hidden>
+  <section class="ticket-flow" data-ticket-flow aria-labelledby="ticket-flow-title" hidden>
     <p class="eyebrow" data-ticket-flow-label>QUEUE STATUS</p>
-    <h3 data-ticket-flow-title></h3>
+    <h3 id="ticket-flow-title" data-ticket-flow-title tabindex="-1"></h3>
     <p data-ticket-flow-copy></p>
     <div class="ticket-flow__details" data-ticket-flow-details></div>
     <div class="actions" data-ticket-flow-actions></div>
   </section>
 
-  <section class="ticket-result" data-ticket-result tabindex="-1" hidden>
+  <section class="ticket-result" data-ticket-result aria-labelledby="ticket-result-title" hidden>
     <div data-ticket-receipt></div>
     <div class="issued-tickets" data-issued-tickets></div>
     <div class="actions">

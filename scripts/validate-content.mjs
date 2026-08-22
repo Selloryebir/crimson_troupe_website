@@ -177,7 +177,7 @@ assert.deepEqual(
 );
 assert.throws(
   () => getLocalization(editions.columbia, missingLocalizationSnapshot),
-  new RegExp(`performances\.${fixtureId}（缺失）`, 'u'),
+  new RegExp(`performances[.]${fixtureId}（缺失）`, 'u'),
 );
 
 const packagesWithStaleSource = structuredClone(localizationPackages);

@@ -85,6 +85,7 @@ export interface ArchiveProjectionView {
 }
 
 export interface ArchiveProjectionContent {
+  statusAnnouncement: string;
   ariaLabel: string;
   roleLabel: string;
   productionLabel: string;

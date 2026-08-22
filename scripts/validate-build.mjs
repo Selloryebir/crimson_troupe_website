@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 
 import { buildSnapshot } from '../src/data/content/resolve.ts';
 import { buildProfile } from '../src/data/editions.ts';
+import { formatMessage } from '../src/data/localized/format.ts';
 import { getLocalization } from '../src/data/localized/resolve.ts';
 import { getArchiveSearchIndex, getFrontSearchIndex } from '../src/data/site-search-index.ts';
 import { performancePath, productionPath, sitePath, siteRoot } from '../src/data/site-routes.ts';
@@ -144,8 +145,33 @@ for (const [route, filePath] of routes) {
         const equivalent = `/${targetEdition.routePrefix}/${route.split('/').slice(2).join('/')}`;
         assert.ok(html.includes(`href="${equivalent}"`), `${route} 缺少等价版本链接 ${equivalent}`);
       }
+      assert.ok(
+        html.includes(
+          formatMessage(localization.site.shared.chooseEdition, {
+            language: edition.languageName.native,
+          }),
+        ),
+        `${route} 的国家版本选择器未读出当前版本与选择动作`,
+      );
     } else {
       assert.doesNotMatch(html, /<details[^>]*data-edition-selector/u, `${route} 不应显示空选择器`);
+    }
+    if (route.includes('/archive/site/1091/')) {
+      assert.ok(
+        html.indexOf('<h1') < html.indexOf('data-archive-projection'),
+        `${route} 的主标题必须先于三级叙事投影`,
+      );
+      assert.match(html, /data-archive-projection-status[^>]*aria-live="polite"/u);
+      assert.doesNotMatch(
+        html,
+        /<section[^>]*data-archive-projection[^>]*aria-live=/u,
+        `${route} 不得把完整投影设为 live region`,
+      );
+    }
+    if (route.endsWith('/search/')) {
+      assert.match(html, /data-search-fallback/u, `${route} 缺少唯一搜索降级内容`);
+      assert.match(html, /data-search-enhanced[^>]*hidden/u, `${route} 搜索不应默认伪启用`);
+      assert.doesNotMatch(html, /<noscript>/u, `${route} 不应重复输出第二份搜索降级内容`);
     }
   }
 
@@ -218,6 +244,9 @@ for (const edition of builtEditions) {
   assert.match(ticketPage, /data-ticket-fallback/u);
   assert.match(ticketPage, /data-ticketing-app[^>]*hidden/u);
   assert.match(ticketPage, /data-ticketing-messages/u);
+  assert.match(ticketPage, /data-ticket-basket[^>]*aria-labelledby="ticket-basket-title"/u);
+  assert.match(ticketPage, /data-ticket-flow[^>]*aria-labelledby="ticket-flow-title"/u);
+  assert.match(ticketPage, /data-ticket-result[^>]*aria-labelledby="ticket-result-title"/u);
   const encodedTicketOptions = ticketPage.match(/data-ticketing-options="([^"]+)"/u)?.[1];
   assert.ok(encodedTicketOptions, `${edition.editionId} 票务页缺少构建期候选`);
   const ticketOptions = JSON.parse(decodeHtmlAttribute(encodedTicketOptions));
