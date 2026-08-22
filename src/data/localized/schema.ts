@@ -57,6 +57,20 @@ export interface ProgramContent extends ProgramContentBase {
   productions: Record<ProductionId, ProductionContent>;
 }
 
+export interface AuthoringProgramContent {
+  locations?: Partial<Record<LocationId, LocationContent>>;
+  performances?: Partial<Record<PerformanceId, PerformanceContent>>;
+  productions?: Partial<Record<ProductionId, ProductionContent>>;
+  ticketZones?: Partial<Record<TicketZone, string>>;
+}
+
+export interface LocalizationAuthoringPackage<SiteContent, MessageContent> {
+  site?: Partial<SiteContent>;
+  programs?: AuthoringProgramContent;
+  messages?: Partial<MessageContent>;
+  archiveProjection?: ArchiveProjectionContent;
+}
+
 export interface LocalizationPackage<SiteContent, MessageContent> {
   site: SiteContent;
   programs: ProgramContent;

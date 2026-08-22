@@ -13,15 +13,17 @@ import {
   createLocalizationSourceRevision,
   localizationSourceRevisions,
 } from '../src/data/content/localization-revisions.ts';
+import { buildSnapshot } from '../src/data/content/resolve.ts';
 import { currentRootSet } from '../src/data/content/root-sets.ts';
 import {
   assertContentBundle,
   assertPerformanceVariantComplete,
 } from '../src/data/content/validate.ts';
 import { getPerformanceVariantUnit, selectCompleteVariant } from '../src/data/content/variants.ts';
-import { buildContext, buildContexts, buildEditionIds } from '../src/data/editions.ts';
+import { buildContext, buildContexts, buildEditionIds, editions } from '../src/data/editions.ts';
 import { locations } from '../src/data/locations.ts';
 import { localizationPackages } from '../src/data/localized/packages.ts';
+import { diagnoseLocalization, getLocalization } from '../src/data/localized/resolve.ts';
 import { performances } from '../src/data/performances.ts';
 import { productionArtworkManifest } from '../src/data/production-artwork-manifest.ts';
 import { productionArtworkRegistry } from '../src/data/production-artworks.ts';
@@ -134,17 +136,76 @@ const staleRevisions = {
   ...localizationSourceRevisions,
   higashi: {
     ...localizationSourceRevisions.higashi,
-    site: 'fnv1a64:0000000000000000',
+    'site.brand': 'fnv1a64:0000000000000000',
   },
 };
 assert.throws(
-  () => assertLocalizationSourceFresh(['yan', 'higashi'], localizationPackages, staleRevisions),
-  /higashi\.site 译文源修订已过期/u,
+  () =>
+    assertLocalizationSourceFresh(
+      ['yan', 'higashi'],
+      localizationPackages,
+      staleRevisions,
+      buildSnapshot,
+    ),
+  /higashi\.site\.brand 译文源修订已过期/u,
 );
 assert.deepEqual(
   localizationSourceRevisions.higashi,
   createLocalizationSourceRevision(localizationPackages.yan),
 );
+
+const packagesWithoutPerformance = structuredClone(localizationPackages);
+delete packagesWithoutPerformance.columbia.programs.performances[fixtureId];
+const missingLocalizationSnapshot = {
+  ...buildSnapshot,
+  localizationPackages: packagesWithoutPerformance,
+};
+const missingDiagnostic = diagnoseLocalization(
+  editions.columbia,
+  missingLocalizationSnapshot,
+  packagesWithoutPerformance,
+);
+assert.deepEqual(
+  missingDiagnostic.entries.find((entry) => entry.path === `performances.${fixtureId}`),
+  {
+    path: `performances.${fixtureId}`,
+    value: localizationPackages.yan.programs.performances[fixtureId],
+    sourceLocale: 'zh-CN',
+    usedFallback: true,
+    reason: 'missing',
+  },
+);
+assert.throws(
+  () => getLocalization(editions.columbia, missingLocalizationSnapshot),
+  new RegExp(`performances\.${fixtureId}（缺失）`, 'u'),
+);
+
+const packagesWithStaleSource = structuredClone(localizationPackages);
+packagesWithStaleSource.yan.programs.locations.trimount.cityLabel += '测试';
+const staleLocalizationSnapshot = {
+  ...buildSnapshot,
+  localizationPackages: packagesWithStaleSource,
+};
+assert.equal(
+  diagnoseLocalization(
+    editions.columbia,
+    staleLocalizationSnapshot,
+    packagesWithStaleSource,
+  ).entries.find((entry) => entry.path === 'locations.trimount')?.reason,
+  'stale',
+);
+assert.throws(
+  () => getLocalization(editions.columbia, staleLocalizationSnapshot),
+  /locations\.trimount（旧译）/u,
+);
+
+const packagesWithOutOfScopeChange = structuredClone(localizationPackages);
+packagesWithOutOfScopeChange.yan.programs.locations['calais-blason'].cityLabel += '测试';
+const outOfScopeSnapshot = {
+  ...buildSnapshot,
+  localizationPackages: packagesWithOutOfScopeChange,
+};
+assert.doesNotThrow(() => getLocalization(editions.columbia, outOfScopeSnapshot));
 
 const manifestWithoutRequiredArtwork = cloneArtworkManifest();
 delete manifestWithoutRequiredArtwork.uncrowned.front;

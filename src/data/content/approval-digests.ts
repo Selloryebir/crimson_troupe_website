@@ -107,12 +107,12 @@ function createPerformanceApprovalDigest(
       return [
         editionId,
         {
-          location: package_?.programs?.locations[performance.locationId],
-          performance: package_?.programs?.performances[performanceId],
+          location: package_?.programs?.locations?.[performance.locationId],
+          performance: package_?.programs?.performances?.[performanceId],
           productions: Object.fromEntries(
             productionIds.map((productionId) => [
               productionId,
-              package_?.programs?.productions[productionId],
+              package_?.programs?.productions?.[productionId],
             ]),
           ),
         },

@@ -108,16 +108,16 @@ export function assertContentBundle(
       assertPresent(package_?.messages, `${editionId}.messages`);
       assertPresent(package_?.archiveProjection, `${editionId}.archiveProjection`);
       assertPresent(
-        package_?.programs?.locations[performance.locationId],
+        package_?.programs?.locations?.[performance.locationId],
         `${editionId}.locations.${performance.locationId}`,
       );
       assertPresent(
-        package_?.programs?.performances[performance.performanceId as PerformanceId],
+        package_?.programs?.performances?.[performance.performanceId as PerformanceId],
         `${editionId}.performances.${performance.performanceId}`,
       );
       for (const productionId of performance.productionIds) {
         assertPresent(
-          package_?.programs?.productions[productionId],
+          package_?.programs?.productions?.[productionId],
           `${editionId}.productions.${productionId}`,
         );
       }
