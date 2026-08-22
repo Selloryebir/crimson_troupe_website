@@ -33,6 +33,7 @@ export const minosMessages = {
     seatingPlanSummary: 'Προβολή Σκηνής και Ζωνών',
     seatingPlanAria: 'Σκηνή και ζώνες θέσεων για το {title}',
     stageDirection: 'ΣΚΗΝΗ',
+    seatingLevelLabel: 'Επίπεδο {level}',
     seatingPlanNotice:
       'Μόνο διάγραμμα ζωνών, όχι επιλογή μεμονωμένης θέσης. Το διάγραμμα και ο επιλογέας χρησιμοποιούν τις ίδιες τιμές.',
     selectSeatingZone: 'Επιλογή {zone}, βασική τιμή {price} LMD',

@@ -151,6 +151,7 @@ export interface TicketingMessages {
   seatingPlanSummary: string;
   seatingPlanAria: string;
   stageDirection: string;
+  seatingLevelLabel: string;
   seatingPlanNotice: string;
   selectSeatingZone: string;
   receiptEyebrow: string;

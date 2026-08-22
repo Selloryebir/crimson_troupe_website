@@ -32,6 +32,7 @@ export const ursusMessages = {
     seatingPlanSummary: 'Схема сцены и зон',
     seatingPlanAria: 'Сцена и зоны мест для спектакля {title}',
     stageDirection: 'СЦЕНА',
+    seatingLevelLabel: 'Уровень {level}',
     seatingPlanNotice:
       'Это схема зон, а не выбор отдельного кресла. На схеме и в списке используются одинаковые значения.',
     selectSeatingZone: 'Выбрать {zone}, базовая цена {price} LMD',

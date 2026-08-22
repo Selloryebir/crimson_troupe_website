@@ -157,11 +157,22 @@ async function assertNoHorizontalLoss(page, label) {
     scrollWidth: document.documentElement.scrollWidth,
     viewportWidth: window.innerWidth,
     main: document.querySelector('main')?.getBoundingClientRect().toJSON(),
+    offenders: [...document.querySelectorAll('body *')]
+      .map((element) => ({
+        element: `${element.tagName.toLowerCase()}${element.id ? `#${element.id}` : ''}${[
+          ...element.classList,
+        ]
+          .map((className) => `.${className}`)
+          .join('')}`,
+        bounds: element.getBoundingClientRect().toJSON(),
+      }))
+      .filter(({ bounds }) => bounds.left < -1 || bounds.right > window.innerWidth + 1)
+      .slice(0, 8),
   }));
   assert.ok(result.main, `${label} 缺少 main`);
   assert.ok(
     result.scrollWidth <= result.viewportWidth + 1,
-    `${label} 横向溢出：${result.scrollWidth} > ${result.viewportWidth}`,
+    `${label} 横向溢出：${result.scrollWidth} > ${result.viewportWidth}；${JSON.stringify(result.offenders)}`,
   );
   assert.ok(result.main.x >= -1, `${label} 的 main 左侧超出视口`);
   assert.ok(result.main.right <= result.viewportWidth + 1, `${label} 的 main 右侧超出视口`);
@@ -293,6 +304,80 @@ try {
   await ticketPage.goto(`${origin}/yan/tickets/`);
   await ticketPage.locator('[data-ticketing-app]:not([hidden])').waitFor();
   await assertNoHorizontalLoss(ticketPage, '320px 炎国票务');
+  const seatingPlans = [
+    { id: 'trimount-grand-fan', levels: 3, zones: ['C', 'B', 'A', 'S', 'BOX'] },
+    { id: 'wiesheim-mirror-horseshoe', levels: 3, zones: ['C', 'B', 'A', 'S', 'BOX'] },
+    { id: 'norport-temporary-stand', levels: 1, zones: ['C', 'B', 'A'] },
+  ];
+  for (const expected of seatingPlans) {
+    const details = ticketPage.locator(`[data-seating-plan="${expected.id}"]`);
+    assert.equal(await details.count(), 1, `${expected.id} 应且只应出现一次`);
+    await details.locator('summary').click();
+    assert.equal(
+      await details.locator('[data-seating-level]').count(),
+      expected.levels,
+      `${expected.id} 的楼层数量不正确`,
+    );
+    const selectorZones = await details
+      .locator('xpath=ancestor::li[1]')
+      .locator('[data-ticket-zone] option')
+      .evaluateAll((options) => options.map((option) => option.value));
+    const mapZones = await details
+      .locator('[data-ticket-zone-map]')
+      .evaluateAll((buttons) => [
+        ...new Set(buttons.map((button) => button.dataset.ticketZoneMap)),
+      ]);
+    assert.deepEqual(selectorZones, expected.zones, `${expected.id} 的表单分区不正确`);
+    assert.deepEqual(
+      mapZones.sort(),
+      [...expected.zones].sort(),
+      `${expected.id} 的图形分区不正确`,
+    );
+    const levelBoxes = await details
+      .locator('[data-seating-level]')
+      .evaluateAll((levels) => levels.map((level) => level.getBoundingClientRect().toJSON()));
+    assert.ok(
+      levelBoxes.every((box) => box.width > 0 && box.height > 0),
+      `${expected.id} 的楼层示意不可见`,
+    );
+    for (let first = 0; first < levelBoxes.length; first += 1) {
+      for (let second = first + 1; second < levelBoxes.length; second += 1) {
+        const a = levelBoxes[first];
+        const b = levelBoxes[second];
+        const overlaps =
+          a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+        assert.equal(overlaps, false, `${expected.id} 的楼层示意发生重叠`);
+      }
+    }
+    const overlappingControls = await details
+      .locator('[data-seating-level]')
+      .evaluateAll((levels) =>
+        levels.flatMap((level) => {
+          const controls = [...level.querySelectorAll('[data-ticket-zone-map]')].map((control) => ({
+            region: control.getAttribute('data-seating-region-control'),
+            bounds: control.getBoundingClientRect().toJSON(),
+          }));
+          return controls.flatMap((first, firstIndex) =>
+            controls.slice(firstIndex + 1).flatMap((second) => {
+              const overlaps =
+                first.bounds.left < second.bounds.right - 1 &&
+                first.bounds.right > second.bounds.left + 1 &&
+                first.bounds.top < second.bounds.bottom - 1 &&
+                first.bounds.bottom > second.bounds.top + 1;
+              return overlaps
+                ? [{ level: level.getAttribute('data-seating-level'), first, second }]
+                : [];
+            }),
+          );
+        }),
+      );
+    assert.deepEqual(
+      overlappingControls,
+      [],
+      `${expected.id} 的分区标签发生重叠：${JSON.stringify(overlappingControls)}`,
+    );
+    await assertNoHorizontalLoss(ticketPage, `320px ${expected.id} 分区示意`);
+  }
   await ticketPage.locator('[data-ticket-select]').first().check();
   await ticketPage.locator('[data-ticket-start]').click();
   await ticketPage.locator('[data-ticket-flow]:not([hidden])').waitFor();
@@ -566,7 +651,7 @@ try {
   await failedSearchContext.close();
 
   console.log(
-    'browser validation passed: editorial home alternation/mobile order, full-list isolation, five-edition selector, long-script 320px headers, ticket focus/artifact, Minos search/download/print, Ursus search isolation/download/five-edition state/archive exit, archive level 3/reduced motion, no-JS fallback/static archive seats, search failure fallback',
+    'browser validation passed: editorial home alternation/mobile order, full-list isolation, three venue level maps/zones, five-edition selector, long-script 320px headers, ticket focus/artifact, Minos search/download/print, Ursus search isolation/download/five-edition state/archive exit, archive level 3/reduced motion, no-JS fallback/static archive seats, search failure fallback',
   );
 } catch (error) {
   const serverOutput = preview.output.join('').trim();

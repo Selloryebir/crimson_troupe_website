@@ -177,11 +177,38 @@
 }
 
 .ticket-seating__map {
-  position: relative;
   width: 100%;
-  overflow: hidden;
-  aspect-ratio: 16 / 9;
+}
+
+.ticket-seating__levels {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.ticket-seating__level {
+  min-width: 0;
   border: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.ticket-seating__level-label {
+  padding: 8px 10px;
+  margin: 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.62rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+}
+
+.ticket-seating__diagram {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 8 / 3;
   background:
     linear-gradient(90deg, rgb(35 30 27 / 3%) 1px, transparent 1px),
     linear-gradient(rgb(35 30 27 / 3%) 1px, transparent 1px),
@@ -189,7 +216,7 @@
   background-size: 24px 24px;
 }
 
-.ticket-seating__map svg {
+.ticket-seating__diagram svg {
   display: block;
   width: 100%;
   height: 100%;
@@ -745,9 +772,12 @@ html[data-world="front"] .issued-ticket__caption {
     min-height: 240px;
   }
 
-  .ticket-seating__map {
-    min-height: 178px;
-    aspect-ratio: 16 / 10;
+  .ticket-seating__levels {
+    grid-template-columns: 1fr;
+  }
+
+  .ticket-seating__diagram {
+    aspect-ratio: 8 / 5;
   }
 
   .ticket-seating__zone-button {

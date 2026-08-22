@@ -30,6 +30,7 @@ export const yanMessages = {
     seatingPlanSummary: '查看舞台与分区示意',
     seatingPlanAria: '{title}舞台与分区示意',
     stageDirection: '舞台',
+    seatingLevelLabel: '第 {level} 层',
     seatingPlanNotice: '分区示意，非逐座位选座。图形与下方分区选择使用同一票价。',
     selectSeatingZone: '选择{zone}，基础票价 {price} LMD',
     receiptEyebrow: 'SIMULATED RECEIPT',

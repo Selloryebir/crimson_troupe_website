@@ -136,10 +136,50 @@ assert.ok(frontTicketingPerformances.length > 0, '表站当前快照没有可售
 for (const performance of frontTicketingPerformances) {
   const { seatingPlanId, offers } = performance.ticketAvailability;
   assert.ok(seatingPlanId, `${performance.performanceId} 缺少表站分区示意`);
-  const planZones = ticketSeatingPlans[seatingPlanId].zones.map(({ zone }) => zone).sort();
+  const plan = ticketSeatingPlans[seatingPlanId];
+  const levelIds = plan.levels.map(({ levelId }) => levelId);
+  const regions = plan.levels.flatMap(({ regions: levelRegions }) => levelRegions);
+  const regionIds = regions.map(({ regionId }) => regionId);
+  const planZones = [...new Set(regions.map(({ zone }) => zone))].sort();
   const offerZones = offers.map(({ zone }) => zone).sort();
+  assert.equal(new Set(levelIds).size, levelIds.length, `${seatingPlanId} 的楼层身份重复`);
+  assert.equal(new Set(regionIds).size, regionIds.length, `${seatingPlanId} 的空间区域身份重复`);
   assert.deepEqual(planZones, offerZones, `${performance.performanceId} 的示意分区与报价不一致`);
+  assert.equal(
+    new Set(offers.map(({ basePrice }) => basePrice)).size,
+    offers.length,
+    `${performance.performanceId} 的候选分区价格应逐级区分`,
+  );
 }
+
+const frontOfferByPerformance = Object.fromEntries(
+  frontTicketingPerformances.map((performance) => [
+    performance.performanceId,
+    performance.ticketAvailability.offers,
+  ]),
+);
+const trimountOffers = frontOfferByPerformance['uncrowned-trimount-1098'];
+const wiesheimOffers = frontOfferByPerformance['caged-fire-wiesheim-1098'];
+const norportOffers = frontOfferByPerformance['second-snow-norport-1098'];
+assert.deepEqual(
+  norportOffers.map(({ zone }) => zone),
+  ['C', 'B', 'A'],
+  '诺伯特郡临时舞台只能提供 C / B / A',
+);
+assert.notDeepEqual(trimountOffers, wiesheimOffers, '两座正式剧院不得复用同一候选报价');
+for (const zone of ['C', 'B', 'A']) {
+  const norportPrice = norportOffers.find((offer) => offer.zone === zone)?.basePrice;
+  const formalPrices = [trimountOffers, wiesheimOffers].map(
+    (offers) => offers.find((offer) => offer.zone === zone)?.basePrice,
+  );
+  assert.ok(
+    formalPrices.every((price) => price !== undefined && norportPrice < price),
+    `诺伯特郡 ${zone} 区应低于两座正式剧院`,
+  );
+}
+assert.equal(ticketSeatingPlans['trimount-grand-fan'].levels.length, 3);
+assert.equal(ticketSeatingPlans['wiesheim-mirror-horseshoe'].levels.length, 3);
+assert.equal(ticketSeatingPlans['norport-temporary-stand'].levels.length, 1);
 
 for (const edition of builtEditions) {
   const localization = getLocalization(edition);

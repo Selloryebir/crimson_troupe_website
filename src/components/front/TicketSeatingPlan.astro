@@ -18,10 +18,9 @@ if (!plan) {
   throw new Error(`座席图 ${planId} 不属于当前内容快照。`);
 }
 const offerByZone = new Map(offers.map((offer) => [offer.zone, offer]));
-const stageStyle = `--stage-x:${plan.stage.x / 6.4}%;--stage-y:${plan.stage.y / 3.6}%;--stage-width:${plan.stage.width / 6.4}%;--stage-height:${plan.stage.height / 3.6}%`;
 ---
 
-<details class="ticket-seating" data-ticket-seating-details>
+<details class="ticket-seating" data-ticket-seating-details data-seating-plan={planId}>
   <summary>{messages.seatingPlanSummary}</summary>
   <div class="ticket-seating__content">
     <div
@@ -30,49 +29,73 @@ const stageStyle = `--stage-x:${plan.stage.x / 6.4}%;--stage-y:${plan.stage.y / 
       role="group"
       aria-label={formatMessage(messages.seatingPlanAria, { title: performanceTitle })}
     >
-      <svg viewBox="0 0 640 360" aria-hidden="true" focusable="false">
-        <rect
-          class="ticket-seating__stage"
-          x={plan.stage.x}
-          y={plan.stage.y}
-          width={plan.stage.width}
-          height={plan.stage.height}></rect>
+      <ol class="ticket-seating__levels">
         {
-          plan.zones.map((zone) => (
-            <g class="ticket-seating__zone" data-seating-shape={zone.zone}>
-              {zone.paths.map((path) => (
-                <path d={path} fill-rule="evenodd" />
-              ))}
-            </g>
-          ))
+          plan.levels.map((level, levelIndex) => {
+            const levelLabel = formatMessage(messages.seatingLevelLabel, {
+              level: levelIndex + 1,
+            });
+            const stageStyle = level.stage
+              ? `--stage-x:${level.stage.x / 6.4}%;--stage-y:${level.stage.y / 2.4}%;--stage-width:${level.stage.width / 6.4}%;--stage-height:${level.stage.height / 2.4}%`
+              : undefined;
+            return (
+              <li class="ticket-seating__level" data-seating-level={level.levelId}>
+                <p class="ticket-seating__level-label">{levelLabel}</p>
+                <div class="ticket-seating__diagram">
+                  <svg viewBox="0 0 640 240" aria-hidden="true" focusable="false">
+                    {level.stage && (
+                      <rect
+                        class="ticket-seating__stage"
+                        x={level.stage.x}
+                        y={level.stage.y}
+                        width={level.stage.width}
+                        height={level.stage.height}
+                      />
+                    )}
+                    {level.regions.map((region) => (
+                      <path
+                        class="ticket-seating__zone"
+                        data-seating-shape={region.zone}
+                        data-seating-region={region.regionId}
+                        d={region.path}
+                      />
+                    ))}
+                  </svg>
+                  {level.stage && (
+                    <span class="ticket-seating__stage-label" style={stageStyle}>
+                      {messages.stageDirection}
+                    </span>
+                  )}
+                  {level.regions.map((region) => {
+                    const offer = offerByZone.get(region.zone);
+                    if (!offer) {
+                      return null;
+                    }
+                    const position = `--zone-x:${region.labelX / 6.4}%;--zone-y:${region.labelY / 2.4}%`;
+                    return (
+                      <button
+                        class="ticket-seating__zone-button"
+                        type="button"
+                        data-ticket-zone-map={offer.zone}
+                        data-seating-region-control={region.regionId}
+                        style={position}
+                        aria-pressed="false"
+                        aria-label={`${levelLabel} · ${formatMessage(messages.selectSeatingZone, {
+                          zone: offer.label,
+                          price: offer.basePrice,
+                        })}`}
+                      >
+                        <strong>{offer.label}</strong>
+                        <small>{offer.basePrice} LMD</small>
+                      </button>
+                    );
+                  })}
+                </div>
+              </li>
+            );
+          })
         }
-      </svg>
-      <span class="ticket-seating__stage-label" style={stageStyle}>{messages.stageDirection}</span>
-      {
-        plan.zones.map((zone) => {
-          const offer = offerByZone.get(zone.zone);
-          if (!offer) {
-            return null;
-          }
-          const position = `--zone-x:${zone.labelX / 6.4}%;--zone-y:${zone.labelY / 3.6}%`;
-          return (
-            <button
-              class="ticket-seating__zone-button"
-              type="button"
-              data-ticket-zone-map={offer.zone}
-              style={position}
-              aria-pressed="false"
-              aria-label={formatMessage(messages.selectSeatingZone, {
-                zone: offer.label,
-                price: offer.basePrice,
-              })}
-            >
-              <strong>{offer.label}</strong>
-              <small>{offer.basePrice} LMD</small>
-            </button>
-          );
-        })
-      }
+      </ol>
     </div>
     <p>{messages.seatingPlanNotice}</p>
   </div>

@@ -32,6 +32,7 @@ export const columbiaMessages = {
     seatingPlanSummary: 'View Stage and Zone Diagram',
     seatingPlanAria: 'Stage and seating zones for {title}',
     stageDirection: 'STAGE',
+    seatingLevelLabel: 'Level {level}',
     seatingPlanNotice:
       'Zone diagram only, not individual seat selection. The diagram and selector use the same prices.',
     selectSeatingZone: 'Select {zone}, base price {price} LMD',

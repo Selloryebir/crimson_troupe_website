@@ -32,6 +32,7 @@ export const higashiMessages = {
     seatingPlanSummary: '舞台と座席区分図を表示',
     seatingPlanAria: '{title}の舞台・座席区分図',
     stageDirection: '舞台',
+    seatingLevelLabel: '第{level}層',
     seatingPlanNotice:
       '座席区分の概略図です。個別座席の指定ではありません。図と選択欄は同じ料金を使用します。',
     selectSeatingZone: '{zone}を選択、基本料金 {price} LMD',
