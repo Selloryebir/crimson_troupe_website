@@ -1,6 +1,7 @@
 import type { ArchiveProjectionContent } from '../schema.ts';
 
 export const higashiArchiveProjection = {
+  statusAnnouncement: '記録表示が一通の未完了招待状へ統合されました。',
   ariaLabel: 'カレー＝ブラゾン未完了記録',
   roleLabel: '登録上の役割',
   productionLabel: '演目',

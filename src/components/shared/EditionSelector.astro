@@ -10,6 +10,7 @@ import victoriaBadge from '../../assets/realm-badges/victoria.svg';
 import yanBadge from '../../assets/realm-badges/yan.svg';
 import { buildSnapshot } from '../../data/content/resolve.ts';
 import type { EditionId } from '../../data/editions';
+import { formatMessage } from '../../data/localized/format.ts';
 import type { ResolvedLocalization } from '../../data/localized/resolve';
 import { equivalentEditionPath, type SiteWorld } from '../../data/site-routes';
 
@@ -43,7 +44,11 @@ function badgeStyle(editionId: EditionId): string {
 {
   buildSnapshot.editions.length > 1 ? (
     <details class="edition-selector" data-edition-selector>
-      <summary aria-label={copy.chooseEdition}>
+      <summary
+        aria-label={formatMessage(copy.chooseEdition, {
+          language: edition.languageName.native,
+        })}
+      >
         <span class="edition-badge" style={badgeStyle(edition.editionId)} aria-hidden="true" />
         <span class="edition-selector__label" lang={edition.locale}>
           {edition.languageName.native}
@@ -70,7 +75,12 @@ function badgeStyle(editionId: EditionId): string {
       </ul>
     </details>
   ) : (
-    <span class="current-language" aria-label={copy.currentEdition}>
+    <span
+      class="current-language"
+      aria-label={formatMessage(copy.currentEdition, {
+        language: edition.languageName.native,
+      })}
+    >
       <span class="edition-badge" style={badgeStyle(edition.editionId)} aria-hidden="true" />
       <span lang={edition.locale}>{edition.languageName.native}</span>
     </span>

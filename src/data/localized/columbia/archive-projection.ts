@@ -1,6 +1,7 @@
 import type { ArchiveProjectionContent } from '../schema.ts';
 
 export const columbiaArchiveProjection = {
+  statusAnnouncement: 'The archive display has converged on one open invitation record.',
   ariaLabel: 'Calais-Blason open archive record',
   roleLabel: 'Recorded capacities',
   productionLabel: 'Production',

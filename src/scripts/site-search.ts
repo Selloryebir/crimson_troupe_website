@@ -26,11 +26,13 @@ function createResult(entry: SiteSearchEntry, canBePolluted: boolean): HTMLLIEle
 
 export function initSiteSearch(): void {
   document.querySelectorAll<HTMLElement>('[data-site-search]').forEach((root) => {
+    const fallback = root.querySelector<HTMLElement>('[data-search-fallback]');
+    const enhanced = root.querySelector<HTMLElement>('[data-search-enhanced]');
     const form = root.querySelector<HTMLFormElement>('[data-search-form]');
     const input = root.querySelector<HTMLInputElement>('[data-search-input]');
     const feedback = root.querySelector<HTMLElement>('[data-search-feedback]');
     const results = root.querySelector<HTMLOListElement>('[data-search-results]');
-    if (!form || !input || !feedback || !results) {
+    if (!fallback || !enhanced || !form || !input || !feedback || !results) {
       return;
     }
 
@@ -87,5 +89,7 @@ export function initSiteSearch(): void {
     const initialQuery = new URL(window.location.href).searchParams.get('q') ?? '';
     input.value = initialQuery;
     search(initialQuery);
+    fallback.hidden = true;
+    enhanced.hidden = false;
   });
 }

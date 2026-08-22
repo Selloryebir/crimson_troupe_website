@@ -40,8 +40,8 @@ const pollutionProfile = getArchivePollutionProfile(pageType);
     currentPath={canonicalPath}
   />
   <main id="main-content" class="site-main" data-pollution-profile={pollutionProfile}>
-    <ArchiveProjection content={localization.archiveProjection} profile={pollutionProfile} />
     <slot />
+    <ArchiveProjection content={localization.archiveProjection} profile={pollutionProfile} />
   </main>
   <SiteFooter localization={localization} world="archive" />
   <PollutionController />

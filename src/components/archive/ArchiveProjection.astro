@@ -15,8 +15,8 @@ const view = content.views[profile];
   class:list={['archive-projection', `archive-projection--${profile}`]}
   data-archive-projection
   data-projection-profile={profile}
+  data-projection-announcement={content.statusAnnouncement}
   aria-labelledby="archive-projection-title"
-  aria-live="polite"
   hidden
 >
   <div class="archive-projection__copy">
@@ -32,3 +32,4 @@ const view = content.views[profile];
   </dl>
   <p class="archive-projection__closing">{content.closing}</p>
 </section>
+<p class="visually-hidden" data-archive-projection-status aria-live="polite"></p>

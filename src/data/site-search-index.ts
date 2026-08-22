@@ -90,7 +90,7 @@ export function getFrontSearchIndex(
   edition: BuiltEdition,
   snapshot: ContentSnapshot = buildSnapshot,
 ): SiteSearchEntry[] {
-  const localization = getLocalization(edition);
+  const localization = getLocalization(edition, snapshot);
   const copy = localization.site.front.searchIndex;
   const pages: SiteSearchEntry[] = [
     {
@@ -150,7 +150,7 @@ export function getArchiveSearchIndex(
   edition: BuiltEdition,
   snapshot: ContentSnapshot = buildSnapshot,
 ): SiteSearchEntry[] {
-  const localization = getLocalization(edition);
+  const localization = getLocalization(edition, snapshot);
   const copy = localization.site.archive.searchIndex;
   const pages: SiteSearchEntry[] = [
     {

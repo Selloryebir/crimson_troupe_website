@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 
 import { buildSnapshot } from '../src/data/content/resolve.ts';
 import { buildProfile } from '../src/data/editions.ts';
+import { formatMessage } from '../src/data/localized/format.ts';
 import { getLocalization } from '../src/data/localized/resolve.ts';
 import { getArchiveSearchIndex, getFrontSearchIndex } from '../src/data/site-search-index.ts';
 import { performancePath, productionPath, sitePath, siteRoot } from '../src/data/site-routes.ts';
@@ -16,6 +17,44 @@ const { editions: builtEditions, performanceEntries, productionEntries } = build
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outputRoot = path.join(repositoryRoot, 'dist');
+const remoteHtmlAutoLoadPatterns = [
+  /<(?:script|img|source|video|audio|iframe|embed)\b[^>]*\b(?:src|srcset)=["'][^"']*https?:\/\//iu,
+  /<object\b[^>]*\bdata=["'][^"']*https?:\/\//iu,
+];
+const remoteCssAutoLoadPatterns = [
+  /url\(\s*["']?https?:\/\//iu,
+  /@import\s+(?:url\(\s*)?["']?https?:\/\//iu,
+];
+const remoteScriptRequestPatterns = [
+  /\bfetch\s*\(/u,
+  /\bnew\s+(?:XMLHttpRequest|WebSocket|EventSource)\s*\(/u,
+  /\b(?:navigator\s*\.\s*)?sendBeacon\s*\(/u,
+];
+
+function assertNoMatchFrom(source, patterns, message) {
+  for (const pattern of patterns) {
+    assert.doesNotMatch(source, pattern, message);
+  }
+}
+
+assertNoMatchFrom(
+  '<a href="https://example.invalid/reference">ordinary external navigation</a>',
+  remoteHtmlAutoLoadPatterns,
+  '普通外部导航不应被识别为远端自动载入',
+);
+assert.throws(
+  () => assertNoMatchFrom('navigator.sendBeacon("/event")', remoteScriptRequestPatterns, 'fixture'),
+  /fixture/u,
+);
+assert.throws(
+  () =>
+    assertNoMatchFrom(
+      'body{background:url(https://example.invalid/a)}',
+      remoteCssAutoLoadPatterns,
+      'fixture',
+    ),
+  /fixture/u,
+);
 
 function requiredRoutesForEdition(edition) {
   const routes = new Set([
@@ -144,8 +183,33 @@ for (const [route, filePath] of routes) {
         const equivalent = `/${targetEdition.routePrefix}/${route.split('/').slice(2).join('/')}`;
         assert.ok(html.includes(`href="${equivalent}"`), `${route} 缺少等价版本链接 ${equivalent}`);
       }
+      assert.ok(
+        html.includes(
+          formatMessage(localization.site.shared.chooseEdition, {
+            language: edition.languageName.native,
+          }),
+        ),
+        `${route} 的国家版本选择器未读出当前版本与选择动作`,
+      );
     } else {
       assert.doesNotMatch(html, /<details[^>]*data-edition-selector/u, `${route} 不应显示空选择器`);
+    }
+    if (route.includes('/archive/site/1091/')) {
+      assert.ok(
+        html.indexOf('<h1') < html.indexOf('data-archive-projection'),
+        `${route} 的主标题必须先于三级叙事投影`,
+      );
+      assert.match(html, /data-archive-projection-status[^>]*aria-live="polite"/u);
+      assert.doesNotMatch(
+        html,
+        /<section[^>]*data-archive-projection[^>]*aria-live=/u,
+        `${route} 不得把完整投影设为 live region`,
+      );
+    }
+    if (route.endsWith('/search/')) {
+      assert.match(html, /data-search-fallback/u, `${route} 缺少唯一搜索降级内容`);
+      assert.match(html, /data-search-enhanced[^>]*hidden/u, `${route} 搜索不应默认伪启用`);
+      assert.doesNotMatch(html, /<noscript>/u, `${route} 不应重复输出第二份搜索降级内容`);
     }
   }
 
@@ -172,16 +236,22 @@ for (const [route, filePath] of routes) {
     assert.ok(existsSync(outputPathForUrl(target.pathname)), `${route} 缺少本地资源：${source}`);
   }
 
-  assert.doesNotMatch(
-    html,
-    /<(?:script|img|source|video|audio)[^>]+\bsrc="https?:\/\//iu,
-    `${route} 加载了远端运行时资源`,
-  );
-  assert.doesNotMatch(
-    html,
-    /<link[^>]+rel="stylesheet"[^>]+href="https?:\/\//iu,
-    `${route} 加载了远端样式`,
-  );
+  assertNoMatchFrom(html, remoteHtmlAutoLoadPatterns, `${route} 加载了远端运行时资源`);
+  assertNoMatchFrom(html, remoteCssAutoLoadPatterns, `${route} 内联样式加载了远端资源`);
+  for (const linkTag of html.matchAll(/<link\b[^>]*>/giu)) {
+    const rel = linkTag[0].match(/\brel=["']([^"']+)["']/iu)?.[1] ?? '';
+    const href = linkTag[0].match(/\bhref=["']([^"']+)["']/iu)?.[1] ?? '';
+    const autoLoadRelation = rel
+      .split(/\s+/u)
+      .find((token) => /^(?:stylesheet|preload|modulepreload|icon|manifest)$/iu.test(token));
+    if (autoLoadRelation) {
+      assert.doesNotMatch(
+        href,
+        /^https?:\/\//iu,
+        `${route} 的 ${autoLoadRelation} 链接自动载入远端资源`,
+      );
+    }
+  }
 }
 
 function readSearchIndex(route) {
@@ -218,6 +288,9 @@ for (const edition of builtEditions) {
   assert.match(ticketPage, /data-ticket-fallback/u);
   assert.match(ticketPage, /data-ticketing-app[^>]*hidden/u);
   assert.match(ticketPage, /data-ticketing-messages/u);
+  assert.match(ticketPage, /data-ticket-basket[^>]*aria-labelledby="ticket-basket-title"/u);
+  assert.match(ticketPage, /data-ticket-flow[^>]*aria-labelledby="ticket-flow-title"/u);
+  assert.match(ticketPage, /data-ticket-result[^>]*aria-labelledby="ticket-result-title"/u);
   const encodedTicketOptions = ticketPage.match(/data-ticketing-options="([^"]+)"/u)?.[1];
   assert.ok(encodedTicketOptions, `${edition.editionId} 票务页缺少构建期候选`);
   const ticketOptions = JSON.parse(decodeHtmlAttribute(encodedTicketOptions));
@@ -229,9 +302,14 @@ for (const edition of builtEditions) {
   assert.doesNotMatch(archiveTicketPage, /data-ticketing-app/u);
 }
 
+for (const filePath of outputFiles.filter((entry) => entry.endsWith('.css'))) {
+  const source = readFileSync(filePath, 'utf8');
+  assertNoMatchFrom(source, remoteCssAutoLoadPatterns, `${filePath} 加载了远端 CSS 资源`);
+}
+
 for (const filePath of outputFiles.filter((entry) => entry.endsWith('.js'))) {
   const source = readFileSync(filePath, 'utf8');
-  assert.doesNotMatch(source, /\b(?:fetch|XMLHttpRequest|WebSocket)\s*\(/u, '产物包含远端请求入口');
+  assertNoMatchFrom(source, remoteScriptRequestPatterns, `${filePath} 包含远端请求入口`);
   assert.doesNotMatch(source, /pollution-debug|data-pollution-debug/u, '产物包含污染调试入口');
 }
 
