@@ -24,6 +24,12 @@ const localeValidationRules = {
     requiredPattern: /\p{Script=Greek}/u,
     requiredMessage: '米诺斯预览的主要内容类别必须包含希腊字母',
   },
+  ursus: {
+    forbiddenPattern: /\p{Script=Han}/u,
+    forbiddenMessage: '乌萨斯预览内容包含意外汉字',
+    requiredPattern: /\p{Script=Cyrillic}/u,
+    requiredMessage: '乌萨斯预览的主要内容类别必须包含西里尔字母',
+  },
 };
 
 function assertComplete(value, path = 'content') {

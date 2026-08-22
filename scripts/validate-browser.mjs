@@ -179,6 +179,8 @@ try {
   await desktopPage.locator('h1').waitFor();
   await assertNoHorizontalLoss(desktopPage, '1280px 炎国表站');
   const selector = desktopPage.locator('[data-edition-selector]');
+  assert.equal(await selector.locator('li').count(), 5, '五语言 preview 应显示五个版本选项');
+  assert.equal(await selector.locator('li .edition-badge').count(), 5, '每个版本选项都应显示徽记');
   const summary = selector.locator('summary');
   await summary.focus();
   await desktopPage.keyboard.press('Enter');
@@ -263,6 +265,90 @@ try {
   assertMinosErrors();
   await minosContext.close();
 
+  for (const [routePrefix, label] of [
+    ['hig', '东国语'],
+    ['min', '米诺斯语'],
+    ['urs', '乌萨斯语'],
+  ]) {
+    const headerContext = await browser.newContext({ viewport: { width: 320, height: 800 } });
+    const headerPage = await headerContext.newPage();
+    const assertHeaderErrors = trackUnexpectedErrors(headerPage);
+    await headerPage.goto(`${origin}/${routePrefix}/`);
+    await headerPage.locator('h1').waitFor();
+    await assertNoHorizontalLoss(headerPage, `320px ${label}表站首页`);
+    assertHeaderErrors();
+    await headerContext.close();
+  }
+
+  const ursusContext = await browser.newContext({
+    viewport: { width: 320, height: 800 },
+    acceptDownloads: true,
+    reducedMotion: 'reduce',
+  });
+  await ursusContext.addInitScript(() => {
+    Math.random = () => 0.1;
+  });
+  const ursusPage = await ursusContext.newPage();
+  const assertUrsusErrors = trackUnexpectedErrors(ursusPage);
+  await ursusPage.goto(`${origin}/urs/search/?q=спектакль`);
+  await ursusPage.locator('[data-search-enhanced]:not([hidden])').waitFor();
+  const ursusFrontResults = ursusPage.locator('[data-search-results] a');
+  assert.ok(await ursusFrontResults.count(), '乌萨斯语表站查询应有结果');
+  assert.equal(
+    await ursusFrontResults.evaluateAll((links) =>
+      links.every((link) => new URL(link.href).pathname.startsWith('/urs/')),
+    ),
+    true,
+    '乌萨斯语表站搜索不得越过国家版本',
+  );
+  await assertNoHorizontalLoss(ursusPage, '320px 乌萨斯语搜索');
+  await ursusPage.goto(`${origin}/urs/tickets/`);
+  await ursusPage.locator('[data-ticketing-app]:not([hidden])').waitFor();
+  await ursusPage.locator('[data-ticket-select]').first().check();
+  await ursusPage.locator('[data-ticket-start]').click();
+  await ursusPage.locator('[data-ticket-action="resolve"]').click();
+  await ursusPage.locator('[data-ticket-result]:not([hidden])').waitFor();
+  const editionRouteSequence = ['yan', 'hig', 'col', 'min', 'urs'];
+  for (const routePrefix of editionRouteSequence) {
+    const editionSelector = ursusPage.locator('[data-edition-selector]');
+    await editionSelector.locator('summary').click();
+    await editionSelector.locator(`a[href^="/${routePrefix}/tickets/"]`).click();
+    await ursusPage.locator('[data-ticket-result]:not([hidden])').waitFor();
+    assert.match(new URL(ursusPage.url()).pathname, new RegExp(`^/${routePrefix}/tickets/$`, 'u'));
+  }
+  const ursusTicketSource = await ursusPage.locator('.issued-ticket > img').getAttribute('src');
+  assert.match(decodeURIComponent(ursusTicketSource ?? ''), /\p{Script=Cyrillic}/u);
+  const ursusDownloadPromise = ursusPage.waitForEvent('download');
+  await ursusPage.locator('[data-ticket-action^="download:"]').click();
+  const ursusDownload = await ursusDownloadPromise;
+  assert.match(ursusDownload.suggestedFilename(), /^crimson-troupe-.+\.svg$/u);
+  await assertNoHorizontalLoss(ursusPage, '320px 乌萨斯语票务结果');
+  await ursusPage.goto(`${origin}/urs/archive/site/1091/search/?q=спектакль`);
+  await ursusPage.locator('[data-search-enhanced]:not([hidden])').waitFor();
+  const ursusArchiveResults = ursusPage.locator('[data-search-results] a');
+  assert.ok(await ursusArchiveResults.count(), '乌萨斯语里站查询应有结果');
+  assert.equal(
+    await ursusArchiveResults.evaluateAll((links) =>
+      links.every((link) => new URL(link.href).pathname.startsWith('/urs/archive/site/1091/')),
+    ),
+    true,
+    '乌萨斯语里站搜索不得越过时间层',
+  );
+  await ursusPage.evaluate(() => {
+    sessionStorage.setItem(
+      'crimson-troupe:archive-pollution:v2',
+      JSON.stringify({ version: 2, level: 3, eventCount: 8, variant: 1 }),
+    );
+  });
+  await ursusPage.goto(`${origin}/urs/archive/site/1091/`);
+  await ursusPage.locator('html[data-pollution-level="3"]').waitFor();
+  await assertNoHorizontalLoss(ursusPage, '320px 乌萨斯语三级污染里站');
+  await ursusPage.locator('[data-world-switch="front"]').click();
+  await ursusPage.locator('html[data-world="front"]').waitFor();
+  assert.match(new URL(ursusPage.url()).pathname, /^\/urs\/$/u);
+  assertUrsusErrors();
+  await ursusContext.close();
+
   const archiveContext = await browser.newContext({
     viewport: { width: 320, height: 800 },
     reducedMotion: 'reduce',
@@ -334,7 +420,7 @@ try {
   await failedSearchContext.close();
 
   console.log(
-    'browser validation passed: desktop selector, 320px ticket focus/artifact, Minos search/ticket/download/print/switch/archive, archive level 3/reduced motion, no-JS fallback, search failure fallback',
+    'browser validation passed: five-edition selector, long-script 320px headers, ticket focus/artifact, Minos search/download/print, Ursus search isolation/download/five-edition state/archive exit, archive level 3/reduced motion, no-JS fallback, search failure fallback',
   );
 } catch (error) {
   const serverOutput = preview.output.join('').trim();

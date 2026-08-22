@@ -92,6 +92,7 @@ export const localizationSourceRevisions: LocalizationSourceRevisionRegistry = O
   higashi: acceptedYanSourceRevision,
   columbia: acceptedYanSourceRevision,
   minos: acceptedYanSourceRevision,
+  ursus: acceptedYanSourceRevision,
 });
 
 export function assertLocalizationSourceFresh(
