@@ -144,10 +144,14 @@ for (const [world, misplacedPerformanceId] of [
 }
 
 const showcaseSnapshot = resolveContent(buildContexts.showcase);
+const previewSnapshot = resolveContent(buildContexts.preview);
 assert.equal(showcaseSnapshot.maturity, 'preview');
 assert.equal(showcaseSnapshot.performanceEntries.length, 12);
 assert.equal(showcaseSnapshot.productionEntries.length, 7);
 assert.equal(showcaseSnapshot.locationEntries.length, 7);
+assert.equal(showcaseSnapshot.artworkEntries.length, 7);
+assert.equal(showcaseSnapshot.seatingPlanEntries.length, 3);
+assert.deepEqual(Object.keys(showcaseSnapshot.localizationPackages), ['yan']);
 assert.deepEqual(showcaseSnapshot.featuredPerformanceIds, {
   front: 'uncrowned-trimount-1098',
   archive: 'der-ring-zwillingsturme-1091-0817',
@@ -201,7 +205,13 @@ assert.deepEqual(getWorldProductionIds(reducedSnapshot, 'front'), ['caged-fire',
 assert.equal(reducedSnapshot.performances['uncrowned-trimount-1098'], undefined);
 assert.equal(reducedSnapshot.productions.uncrowned, undefined);
 assert.equal(reducedSnapshot.locations.trimount, undefined);
-const reducedLocalization = getLocalization(editions.yan);
+assert.equal(reducedSnapshot.artworks.uncrowned, undefined);
+assert.equal(reducedSnapshot.seatingPlans['trimount-grand-fan'], undefined);
+assert.throws(
+  () => getLocalization(editions.higashi, reducedSnapshot),
+  /国家版本 higashi 不属于当前内容快照/u,
+);
+const reducedLocalization = getLocalization(editions.yan, reducedSnapshot);
 assert.ok(
   getLocalizedPerformanceEntries(reducedLocalization, reducedSnapshot).every(
     ([performanceId]) => performanceId !== 'uncrowned-trimount-1098',
@@ -690,10 +700,10 @@ assert.deepEqual(restoreTicketingState('{"version":2}', catalog), createTicketin
 assert.deepEqual(restoreTicketingState('{"version":999}', catalog), createTicketingState());
 
 const previewLocalizations = previewEditionIds.map((editionId) =>
-  getLocalization(editions[editionId]),
+  getLocalization(editions[editionId], previewSnapshot),
 );
 const yanLocalization = previewLocalizations[0];
-const yanOptions = getTicketingOptions(yanLocalization);
+const yanOptions = getTicketingOptions(yanLocalization, previewSnapshot);
 const crossLocaleItem = {
   performanceId: yanOptions[0].performanceId,
   zone: yanOptions[0].offers[0].zone,
@@ -705,7 +715,7 @@ const crossLocaleState = updateBasket(
   crossLocaleItem.performanceId,
 );
 for (const localization of previewLocalizations.slice(1)) {
-  const targetOptions = getTicketingOptions(localization);
+  const targetOptions = getTicketingOptions(localization, previewSnapshot);
   const crossLocaleRestored = restoreTicketingState(
     JSON.stringify(crossLocaleState),
     targetOptions.map((option) => ({ performanceId: option.performanceId, offers: option.offers })),

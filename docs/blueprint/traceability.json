@@ -440,6 +440,16 @@
       ]
     },
     {
+      "path": "src/data/production-artwork-assets.ts",
+      "primary": "BP-CNT-PRODUCTION-VISUAL",
+      "related": [
+        "BP-CNT-PRODUCTION-VISUAL-CATALOG",
+        "BP-MOD-PROGRAMS",
+        "BP-MOD-ARCHIVE",
+        "BP-CNT-CORE"
+      ]
+    },
+    {
       "path": "src/data/production-artwork-manifest.ts",
       "primary": "BP-CNT-PRODUCTION-VISUAL",
       "related": ["BP-CNT-PRODUCTION-VISUAL-CATALOG", "BP-CNT-CORE"]

@@ -25,6 +25,7 @@ import { localizationPackages } from '../src/data/localized/packages.ts';
 import { performances } from '../src/data/performances.ts';
 import { productionArtworkManifest } from '../src/data/production-artwork-manifest.ts';
 import { productions } from '../src/data/productions/index.ts';
+import { ticketSeatingPlans } from '../src/data/ticket-seating-plans.ts';
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -46,6 +47,7 @@ function createValidationSources(overrides = {}) {
     locations,
     localizations: localizationPackages,
     artwork: productionArtworkManifest,
+    seatingPlans: ticketSeatingPlans,
     ...overrides,
   };
 }
@@ -137,6 +139,18 @@ assert.throws(
       createValidationSources({ artwork: manifestWithoutRequiredArtwork }),
     ),
   /artwork\.uncrowned\.front 缺失/u,
+);
+
+const seatingPlansWithoutRequiredPlan = { ...ticketSeatingPlans };
+delete seatingPlansWithoutRequiredPlan['trimount-grand-fan'];
+assert.throws(
+  () =>
+    assertContentBundle(
+      ['yan'],
+      currentRootSet,
+      createValidationSources({ seatingPlans: seatingPlansWithoutRequiredPlan }),
+    ),
+  /seatingPlan\.trimount-grand-fan 缺失/u,
 );
 
 const localizationWithoutPerformance = {

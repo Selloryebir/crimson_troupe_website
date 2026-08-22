@@ -8,7 +8,7 @@ import type { Performance, PerformanceCollection, PerformanceId } from '../perfo
 import type { Production, ProductionId } from '../productions/index.ts';
 import type { SiteWorld } from '../site-routes';
 import type { LocalizedRecord, PerformanceContent, ProductionContent } from './schema';
-import { localizationPackages, sourceLocalizationPackage } from './packages.ts';
+import { sourceLocalizationPackage } from './packages.ts';
 import type { WebsiteLocalizationPackage } from './yan/index.ts';
 
 export interface ResolvedLocalization extends WebsiteLocalizationPackage {
@@ -42,8 +42,14 @@ export function resolveLocalizedRecord<T>(
     : { value: target, sourceLocale: targetLocale, usedFallback: false };
 }
 
-export function getLocalization(edition: BuiltEdition): ResolvedLocalization {
-  const target = localizationPackages[edition.editionId];
+export function getLocalization(
+  edition: BuiltEdition,
+  snapshot: ContentSnapshot = buildSnapshot,
+): ResolvedLocalization {
+  const target = snapshot.localizationPackages[edition.editionId];
+  if (!target) {
+    throw new Error(`国家版本 ${edition.editionId} 不属于当前内容快照。`);
+  }
   const site = resolveLocalizedRecord(target?.site, sourceLocalizationPackage.site, edition.locale);
   const programs = resolveLocalizedRecord(
     target?.programs,

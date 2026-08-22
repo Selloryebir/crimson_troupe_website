@@ -2,7 +2,8 @@
 import { formatMessage } from '../../data/localized/format';
 import type { TicketingMessages } from '../../data/localized/schema';
 import type { LocalizedTicketOffer } from '../../data/ticketing';
-import { getTicketSeatingPlan, type SeatingPlanId } from '../../data/ticket-seating-plans';
+import { buildSnapshot, getSnapshotSeatingPlan } from '../../data/content/resolve.ts';
+import type { SeatingPlanId } from '../../data/ticket-seating-plans';
 
 interface Props {
   planId: SeatingPlanId;
@@ -12,7 +13,10 @@ interface Props {
 }
 
 const { planId, performanceTitle, offers, messages } = Astro.props;
-const plan = getTicketSeatingPlan(planId);
+const plan = getSnapshotSeatingPlan(buildSnapshot, planId);
+if (!plan) {
+  throw new Error(`座席图 ${planId} 不属于当前内容快照。`);
+}
 const offerByZone = new Map(offers.map((offer) => [offer.zone, offer]));
 const stageStyle = `--stage-x:${plan.stage.x / 6.4}%;--stage-y:${plan.stage.y / 3.6}%;--stage-width:${plan.stage.width / 6.4}%;--stage-height:${plan.stage.height / 3.6}%`;
 ---

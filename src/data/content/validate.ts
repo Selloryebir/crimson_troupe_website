@@ -7,6 +7,7 @@ import {
   type ProductionArtworkManifest,
 } from '../production-artwork-manifest.ts';
 import { productions } from '../productions/index.ts';
+import { ticketSeatingPlans, type SeatingPlanDefinition } from '../ticket-seating-plans.ts';
 import { assertLocalizationSourceFresh } from './localization-revisions.ts';
 import { getRootPerformanceIds, type ContentRootSet, validateContentRootSet } from './root-sets.ts';
 import { selectCompleteVariant, type ContentVariantUnit } from './variants.ts';
@@ -18,6 +19,7 @@ export interface ContentValidationSources {
   locations: Readonly<Record<string, unknown>>;
   localizations: Readonly<Record<BuildEditionId, PartialLocalizationPackage>>;
   artwork: ProductionArtworkManifest;
+  seatingPlans: Readonly<Record<string, SeatingPlanDefinition>>;
 }
 
 const defaultSources: ContentValidationSources = {
@@ -26,6 +28,7 @@ const defaultSources: ContentValidationSources = {
   locations,
   localizations: localizationPackages,
   artwork: productionArtworkManifest,
+  seatingPlans: ticketSeatingPlans,
 };
 
 function assertPresent(value: unknown, path: string): void {
@@ -91,6 +94,12 @@ export function assertContentBundle(
       assertPresent(
         sources.artwork[productionId]?.[performance.world],
         `artwork.${productionId}.${performance.world}`,
+      );
+    }
+    if (performance.ticketAvailability.state === 'on-sale') {
+      assertPresent(
+        sources.seatingPlans[performance.ticketAvailability.seatingPlanId],
+        `seatingPlan.${performance.ticketAvailability.seatingPlanId}`,
       );
     }
     for (const editionId of editionIds) {
