@@ -584,6 +584,39 @@ html[data-world="archive"] :is(.text-link, .back-link):hover {
   overflow-wrap: anywhere;
 }
 
+.archive-performance-list--home-editorial > li > a {
+  grid-template-columns: minmax(260px, 0.82fr) minmax(0, 1.18fr);
+  grid-template-areas:
+    "poster register"
+    "poster date";
+  gap: 10px clamp(38px, 7vw, 96px);
+  padding-block: clamp(40px, 6vw, 76px);
+}
+
+.archive-performance-list--home-editorial > li:nth-child(even) > a {
+  grid-template-areas:
+    "register poster"
+    "date poster";
+  grid-template-columns: minmax(0, 1.18fr) minmax(260px, 0.82fr);
+}
+
+.archive-performance-list--home-editorial .archive-poster {
+  grid-area: poster;
+  width: 100%;
+}
+
+.archive-performance-list--home-editorial .archive-performance-list__register {
+  grid-area: register;
+  align-self: end;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--structure);
+}
+
+.archive-performance-list--home-editorial .archive-performance-list__date {
+  grid-area: date;
+  align-self: start;
+}
+
 html[data-world="archive"] .page-intro {
   position: relative;
   max-width: min(860px, calc(100% - 48px));
@@ -895,6 +928,18 @@ html[data-world="archive"] :is(a, button, input, select, textarea):focus-visible
   .archive-performance-list__date {
     grid-column: 2;
   }
+
+  .archive-performance-list--home-editorial > li > a {
+    grid-template-columns: minmax(200px, 0.75fr) minmax(0, 1.25fr);
+  }
+
+  .archive-performance-list--home-editorial > li:nth-child(even) > a {
+    grid-template-columns: minmax(0, 1.25fr) minmax(200px, 0.75fr);
+  }
+
+  .archive-performance-list--home-editorial .archive-performance-list__date {
+    grid-column: auto;
+  }
 }
 
 @media (max-width: 620px) {
@@ -953,6 +998,24 @@ html[data-world="archive"] :is(a, button, input, select, textarea):focus-visible
 
   .archive-performance-list__date {
     grid-column: auto;
+  }
+
+  .archive-performance-list--home-editorial > li > a,
+  .archive-performance-list--home-editorial > li:nth-child(even) > a {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "poster"
+      "register"
+      "date";
+    gap: 0;
+  }
+
+  .archive-performance-list--home-editorial .archive-performance-list__register {
+    padding-block: 24px 18px;
+  }
+
+  .archive-performance-list--home-editorial .archive-performance-list__date {
+    padding-top: 18px;
   }
 
   .archive-credit-list {
