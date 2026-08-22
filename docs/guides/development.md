@@ -18,7 +18,7 @@ npm run dev
 | 预设       | 开发命令              | 构建命令                | 当前用途                                         |
 | ---------- | --------------------- | ----------------------- | ------------------------------------------------ |
 | `showcase` | `npm run dev`         | `npm run build`         | 默认炎国可部署展示                               |
-| `preview`  | `npm run dev:preview` | `npm run build:preview` | 炎国、东国与哥伦比亚三语言完整预览               |
+| `preview`  | `npm run dev:preview` | `npm run build:preview` | 炎国、东国、哥伦比亚、米诺斯与乌萨斯完整预览     |
 | `release`  | `npm run dev:release` | `npm run build:release` | 只接受已批准内容；当前会列出未批准稳定 ID 并停止 |
 
 不得另设自由组合环境变量改变国家版本、根集合或内容资格。`release` 的当前失败是内容资格门禁，不是开发环境故障。
@@ -52,17 +52,17 @@ npm run quality -- --plan docs/blueprint/modules/search.md
 | `npm run quality:full`              | 执行一次蓝图、类型、代码、样式与全仓格式检查，不执行构建 |
 | `npm run build`                     | 只生成 `dist/`，不调用质量命令                           |
 | `npm run build:showcase`            | 显式生成炎国未批准展示产物                               |
-| `npm run build:preview`             | 生成炎国、东国与哥伦比亚三语言预览产物                   |
+| `npm run build:preview`             | 生成当前五国家版本预览产物                               |
 | `npm run build:release`             | 生成批准内容正式产物；当前应因无批准内容而停止           |
-| `npm run validate:content`          | 检查三语言内容闭包、源修订、素材摘要与批准漂移           |
+| `npm run validate:content`          | 检查五国家版本内容闭包、源修订、素材摘要与批准漂移       |
 | `npm run validate:content:showcase` | 只对炎国展示集合执行同一聚焦内容门禁                     |
-| `npm run validate:content:preview`  | 显式对三语言预览执行同一聚焦内容门禁                     |
+| `npm run validate:content:preview`  | 显式对五国家版本预览执行同一聚焦内容门禁                 |
 | `npm run validate:content:release`  | 对正式集合执行内容门禁；当前应列出全部无批准摘要对象     |
 | `npm run validate:states`           | 确定性检查污染、票务状态与纪念票字段                     |
-| `npm run validate:locales`          | 检查正式构建国家版本的本地化覆盖                         |
-| `npm run validate:locales:preview`  | 检查三语言预览构建的本地化覆盖                           |
+| `npm run validate:locales`          | 检查默认炎国 `showcase` 的本地化覆盖                     |
+| `npm run validate:locales:preview`  | 检查五国家版本预览构建的本地化覆盖                       |
 | `npm run validate:build`            | 检查已生成页面的路由、元数据、链接、资源与发布范围       |
-| `npm run validate:build:preview`    | 检查三语言预览产物的路由、元数据、链接与隔离范围         |
+| `npm run validate:build:preview`    | 检查五国家版本预览产物的路由、元数据、链接与隔离范围     |
 | `npm run validate:browser:preview`  | 对已生成 preview 运行单一代表性浏览器冒烟矩阵            |
 | `npm run verify`                    | 依次执行完整质量、状态、一次构建与静态产物门禁           |
 | `npm run lint:code:fix`             | 自动修复 ESLint 明确支持的代码问题                       |
@@ -85,7 +85,7 @@ npm run quality -- --plan docs/blueprint/modules/search.md
 
 Astro/TypeScript 类型关系可能跨文件，因此代码变更仍使用项目级 `astro check`；ESLint、Stylelint 和 Prettier 可以安全地限制为变更文件。`quality` 不负责运行普通构建或浏览器验收；运行时源码完成一个可交付切片后，先通过相关质量检查，再单独运行一次 `npm run build`。
 
-`validate:browser:preview` 不自行构建，也不生成截图或报告；应在一次 preview 构建及产物检查后运行。首次使用 Playwright 的环境可执行 `npx playwright install --with-deps chromium` 安装唯一浏览器驱动。本入口只覆盖桌面选择器、320px 票务焦点与票面、三级污染、减少动态效果、无脚本和搜索初始化失败等代表任务，不替代人工视觉验收。
+`validate:browser:preview` 不自行构建，也不生成截图或报告；应在一次 preview 构建及产物检查后运行。首次使用 Playwright 的环境可执行 `npx playwright install --with-deps chromium` 安装唯一浏览器驱动。本入口只覆盖五项选择器、日/希/俄长文本、320px 票务与里站、搜索隔离、跨国家版本状态、下载与打印、三级污染与退出、减少动态效果、无脚本和搜索初始化失败等代表任务，不替代人工视觉验收。
 
 只有工具链变更、跨层集成、准备合并或发布、进入正式候选阶段才执行完整门禁：
 
@@ -93,7 +93,7 @@ Astro/TypeScript 类型关系可能跨文件，因此代码变更仍使用项目
 npm run verify
 ```
 
-`verify` 已经包含完整质量检查、状态验证、一次构建和静态产物验证。同一轮不得先运行这些子门禁再运行 `verify`，也不得在 `verify` 后重复运行 `build` 或产物验证。
+`verify` 已经包含完整质量检查、状态验证、一次 `showcase` 构建和静态产物验证。同一轮不得先运行这些子门禁再运行 `verify`，也不得重复相同 profile 的构建或产物验证；阶段门禁明确要求完整 `preview` 时，可在 `verify` 后只补一次 `preview` locale、构建、产物与浏览器检查。
 
 现有分层 CSS 按共享基础、表站、里站、票务和污染组织；CSS 的语法、无效值、重复规则和高置信缺陷由 Stylelint 负责。自动修复后仍需检查 diff，不能把工具输出直接视为人工验收。
 
