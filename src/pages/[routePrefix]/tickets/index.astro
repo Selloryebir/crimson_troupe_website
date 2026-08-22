@@ -1,12 +1,13 @@
 ---
 import TicketingExperience from '../../../components/front/TicketingExperience.astro';
-import { builtEditions, type BuiltEdition } from '../../../data/editions';
+import { buildSnapshot } from '../../../data/content/resolve.ts';
+import type { BuiltEdition } from '../../../data/editions';
 import { getLocalization } from '../../../data/localized/resolve';
 import { getTicketingOptions } from '../../../data/ticketing';
 import { sitePath } from '../../../data/site-routes';
 import FrontLayout from '../../../layouts/FrontLayout.astro';
 export function getStaticPaths() {
-  return builtEditions.map((edition) => ({
+  return buildSnapshot.editions.map((edition) => ({
     params: { routePrefix: edition.routePrefix },
     props: { edition },
   }));
@@ -31,5 +32,8 @@ const canonicalPath = sitePath(edition, 'front', 'tickets');
   <section class="page-intro page-width">
     <p class="eyebrow">{copy.eyebrow}</p><h1>{copy.title}</h1><p>{copy.introduction}</p>
   </section>
-  <TicketingExperience localization={localization} options={getTicketingOptions(localization)} />
+  <TicketingExperience
+    localization={localization}
+    options={getTicketingOptions(localization, buildSnapshot)}
+  />
 </FrontLayout>

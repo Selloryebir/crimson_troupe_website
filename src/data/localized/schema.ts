@@ -27,6 +27,11 @@ export interface PerformanceContent {
   venue: string;
   searchDetail: string;
   searchKeywords: string;
+  previousDateTimeDisplay?: string;
+  operationalNotice?: {
+    sourceRevision: string;
+    text: string;
+  };
 }
 
 export interface ProductionContent {

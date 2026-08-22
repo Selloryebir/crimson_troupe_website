@@ -2,9 +2,30 @@
 
 import assert from 'node:assert/strict';
 
-import { editions, previewEditionIds } from '../src/data/editions.ts';
-import { getLocalization } from '../src/data/localized/resolve.ts';
+import {
+  buildContext,
+  buildContexts,
+  buildProfile,
+  editions,
+  previewEditionIds,
+} from '../src/data/editions.ts';
+import { getBuildContext } from '../src/data/content/build-context.ts';
+import {
+  getWorldPerformanceEntries,
+  getWorldProductionIds,
+  resolveContent,
+} from '../src/data/content/resolve.ts';
+import { currentRootSet, validateContentRootSet } from '../src/data/content/root-sets.ts';
+import {
+  assertPerformanceContentFresh,
+  getLocalization,
+  getLocalizedPerformanceEntries,
+} from '../src/data/localized/resolve.ts';
+import { performances } from '../src/data/performances.ts';
+import { getFrontSearchIndex } from '../src/data/site-search-index.ts';
+import { derivePerformanceCollection, getSiteTerraNow } from '../src/data/site-time.ts';
 import { getTicketingOptions } from '../src/data/ticketing.ts';
+import { shouldRequestArchiveEntry } from '../src/scripts/pollution-controller.ts';
 import {
   MAX_POLLUTION_LEVEL,
   POLLUTION_PROBABILITY,
@@ -38,6 +59,256 @@ import {
   updateBasket,
 } from '../src/scripts/ticketing-state.ts';
 
+assert.equal(buildProfile, 'showcase');
+assert.equal(buildContext, buildContexts.showcase);
+assert.deepEqual(buildContexts.showcase.editionIds, ['yan']);
+assert.deepEqual(buildContexts.preview.editionIds, ['yan', 'higashi', 'columbia']);
+assert.deepEqual(buildContexts.release.editionIds, ['yan']);
+assert.throws(() => getBuildContext(buildContexts, 'custom'), /未知构建预设/u);
+
+const knownPerformanceIds = new Set(Object.keys(performances));
+assert.doesNotThrow(() => validateContentRootSet(currentRootSet, knownPerformanceIds));
+assert.throws(
+  () =>
+    validateContentRootSet(
+      {
+        ...currentRootSet,
+        worlds: {
+          ...currentRootSet.worlds,
+          front: {
+            performanceIds: [
+              currentRootSet.worlds.front.performanceIds[0],
+              currentRootSet.worlds.front.performanceIds[0],
+            ],
+            featuredPerformanceId: currentRootSet.worlds.front.featuredPerformanceId,
+          },
+        },
+      },
+      knownPerformanceIds,
+    ),
+  /含重复场次/u,
+);
+assert.throws(
+  () =>
+    validateContentRootSet(
+      {
+        ...currentRootSet,
+        worlds: {
+          ...currentRootSet.worlds,
+          front: {
+            performanceIds: [currentRootSet.worlds.front.performanceIds[0]],
+            featuredPerformanceId: currentRootSet.worlds.front.performanceIds[1],
+          },
+        },
+      },
+      knownPerformanceIds,
+    ),
+  /焦点不属于该时间层/u,
+);
+
+const showcaseSnapshot = resolveContent(buildContexts.showcase);
+assert.equal(showcaseSnapshot.maturity, 'preview');
+assert.equal(showcaseSnapshot.performanceEntries.length, 12);
+assert.equal(showcaseSnapshot.productionEntries.length, 7);
+assert.equal(showcaseSnapshot.locationEntries.length, 7);
+assert.deepEqual(showcaseSnapshot.featuredPerformanceIds, {
+  front: 'uncrowned-trimount-1098',
+  archive: 'der-ring-zwillingsturme-1091-0817',
+});
+assert.ok(Object.isFrozen(showcaseSnapshot));
+assert.ok(Object.isFrozen(showcaseSnapshot.performanceEntries));
+assert.throws(() => resolveContent(buildContexts.release), /不合格内容.*无批准摘要/u);
+assert.equal(
+  showcaseSnapshot.performanceEntries.filter(
+    ([, performance]) => performance.world === 'front' && performance.collection === 'current',
+  ).length,
+  3,
+);
+assert.equal(
+  showcaseSnapshot.performanceEntries.filter(
+    ([, performance]) => performance.world === 'front' && performance.collection === 'history',
+  ).length,
+  0,
+);
+assert.equal(
+  showcaseSnapshot.performanceEntries.filter(
+    ([, performance]) => performance.world === 'archive' && performance.collection === 'current',
+  ).length,
+  5,
+);
+assert.equal(
+  showcaseSnapshot.performanceEntries.filter(
+    ([, performance]) => performance.world === 'archive' && performance.collection === 'history',
+  ).length,
+  4,
+);
+
+const reducedRootSet = {
+  ...currentRootSet,
+  worlds: {
+    ...currentRootSet.worlds,
+    front: {
+      performanceIds: currentRootSet.worlds.front.performanceIds.slice(1),
+      featuredPerformanceId: currentRootSet.worlds.front.performanceIds[1],
+    },
+  },
+};
+const reducedSnapshot = resolveContent(buildContexts.showcase, reducedRootSet);
+assert.deepEqual(
+  getWorldPerformanceEntries(reducedSnapshot, 'front').map(([performanceId]) => performanceId),
+  currentRootSet.worlds.front.performanceIds.slice(1),
+);
+assert.deepEqual(getWorldProductionIds(reducedSnapshot, 'front'), ['caged-fire', 'second-snow']);
+assert.equal(reducedSnapshot.performances['uncrowned-trimount-1098'], undefined);
+assert.equal(reducedSnapshot.productions.uncrowned, undefined);
+assert.equal(reducedSnapshot.locations.trimount, undefined);
+const reducedLocalization = getLocalization(editions.yan);
+assert.ok(
+  getLocalizedPerformanceEntries(reducedLocalization, reducedSnapshot).every(
+    ([performanceId]) => performanceId !== 'uncrowned-trimount-1098',
+  ),
+);
+const reducedSearch = getFrontSearchIndex(editions.yan, reducedSnapshot);
+assert.ok(
+  reducedSearch.every((entry) => !entry.href.includes('uncrowned-trimount-1098')),
+  '集合外场次不得进入搜索索引',
+);
+assert.deepEqual(
+  getTicketingOptions(reducedLocalization, reducedSnapshot).map(
+    ({ performanceId }) => performanceId,
+  ),
+  reducedSnapshot.performanceEntries
+    .filter(
+      ([, performance]) =>
+        performance.world === 'front' && performance.ticketAvailability.state === 'on-sale',
+    )
+    .map(([performanceId]) => performanceId),
+);
+
+const frontNow = getSiteTerraNow('front', buildContexts.showcase);
+const archiveNow = getSiteTerraNow('archive', buildContexts.showcase);
+assert.deepEqual(frontNow, {
+  calendar: 'terra',
+  year: 1098,
+  month: 9,
+  day: 1,
+  time: '00:00',
+});
+assert.deepEqual(archiveNow, {
+  calendar: 'terra',
+  year: 1091,
+  month: 7,
+  day: 1,
+  time: '00:00',
+});
+assert.deepEqual(
+  getSiteTerraNow('front', buildContexts.showcase, new Date('2099-01-01T00:00:00Z')),
+  frontNow,
+);
+assert.throws(
+  () =>
+    getSiteTerraNow('archive', {
+      ...buildContexts.showcase,
+      siteClockStrategies: { front: 'fixed', archive: 'anchored' },
+    }),
+  /只允许 fixed/u,
+);
+assert.equal(derivePerformanceCollection(frontNow, frontNow), 'current');
+assert.equal(
+  derivePerformanceCollection({ ...frontNow, day: frontNow.day - 1 }, frontNow),
+  'history',
+);
+
+const collectionFixtures = [
+  {
+    label: '未来取消场次仍属于本季演出',
+    status: 'cancelled',
+    effectiveDateTime: { ...frontNow, day: frontNow.day + 1 },
+    expected: 'current',
+  },
+  {
+    label: '历史取消场次仍属于历史演出',
+    status: 'cancelled',
+    effectiveDateTime: { ...frontNow, day: frontNow.day - 1 },
+    expected: 'history',
+  },
+  {
+    label: '未来待定场次仍属于本季演出',
+    status: 'pending',
+    effectiveDateTime: { ...frontNow, day: frontNow.day + 2 },
+    expected: 'current',
+  },
+  {
+    label: '改期场次按生效日期而非原日期归类',
+    status: 'scheduled',
+    previousDateTime: { ...frontNow, day: frontNow.day - 2 },
+    effectiveDateTime: { ...frontNow, day: frontNow.day + 3 },
+    expected: 'current',
+  },
+];
+for (const fixture of collectionFixtures) {
+  assert.equal(
+    derivePerformanceCollection(fixture.effectiveDateTime, frontNow),
+    fixture.expected,
+    fixture.label,
+  );
+}
+
+const noticeFixturePerformance = {
+  ...performances['second-snow-norport-1098'],
+  status: 'pending',
+  previousDateTime: {
+    calendar: 'terra',
+    year: 1098,
+    month: 10,
+    day: 20,
+    time: '18:45',
+  },
+  notice: { reason: 'catastrophe-route', sourceRevision: 'notice-v2' },
+};
+const noticeFixtureContent = {
+  ...getLocalization(editions.yan).programs.performances['second-snow-norport-1098'],
+  previousDateTimeDisplay: '1098.10.20 / 18:45',
+  operationalNotice: { sourceRevision: 'notice-v2', text: '线路调整，排期等待确认。' },
+};
+assert.doesNotThrow(() =>
+  assertPerformanceContentFresh('notice-fixture', noticeFixturePerformance, noticeFixtureContent),
+);
+assert.throws(
+  () =>
+    assertPerformanceContentFresh('notice-fixture', noticeFixturePerformance, {
+      ...noticeFixtureContent,
+      operationalNotice: undefined,
+    }),
+  /缺少运营公告译文/u,
+);
+assert.throws(
+  () =>
+    assertPerformanceContentFresh('notice-fixture', noticeFixturePerformance, {
+      ...noticeFixtureContent,
+      operationalNotice: { ...noticeFixtureContent.operationalNotice, sourceRevision: 'notice-v1' },
+    }),
+  /运营公告译文已过期/u,
+);
+
+const pendingPerformanceEntries = showcaseSnapshot.performanceEntries.map(
+  ([performanceId, performance]) =>
+    performanceId === 'caged-fire-wiesheim-1098'
+      ? [performanceId, { ...performance, status: 'pending' }]
+      : [performanceId, performance],
+);
+const pendingSnapshot = {
+  ...showcaseSnapshot,
+  performanceEntries: pendingPerformanceEntries,
+  performances: Object.fromEntries(pendingPerformanceEntries),
+};
+assert.ok(
+  getTicketingOptions(getLocalization(editions.yan), pendingSnapshot).every(
+    ({ performanceId }) => performanceId !== 'caged-fire-wiesheim-1098',
+  ),
+  '待定场次不得进入票务候选',
+);
+
 const pollutionTriggers = [
   'front-entry',
   'direct-entry',
@@ -47,12 +318,50 @@ const pollutionTriggers = [
 ];
 
 for (const trigger of pollutionTriggers) {
-  const transition = advancePollution(createPollutionState(), trigger, () => 0.99);
+  let randomCalls = 0;
+  const transition = advancePollution(createPollutionState(), trigger, () => {
+    randomCalls += 1;
+    return 0;
+  });
   assert.equal(transition.trigger, trigger);
   assert.equal(transition.advanced, false);
+  assert.equal(transition.state.eventCount, 1);
+  assert.equal(transition.state.level, 0);
+  assert.equal(randomCalls, 0);
 }
 
-let pollution = createPollutionState(2);
+let protectedPollution = advancePollution(createPollutionState(2), 'front-entry', () => 0).state;
+protectedPollution = advancePollution(protectedPollution, 'archive-navigation', () => 0).state;
+assert.deepEqual(protectedPollution, {
+  version: 2,
+  level: 0,
+  eventCount: 2,
+  variant: 2,
+});
+
+let failedRandomCalls = 0;
+const failedThirdEvent = advancePollution(protectedPollution, 'archive-search', () => {
+  failedRandomCalls += 1;
+  return 0.99;
+});
+assert.equal(failedThirdEvent.state.eventCount, 3);
+assert.equal(failedThirdEvent.state.level, 0);
+assert.equal(failedThirdEvent.advanced, false);
+assert.equal(failedRandomCalls, 1);
+
+for (const trigger of pollutionTriggers) {
+  let randomCalls = 0;
+  const transition = advancePollution(protectedPollution, trigger, () => {
+    randomCalls += 1;
+    return 0.1;
+  });
+  assert.equal(transition.advanced, true);
+  assert.equal(transition.state.level, 1);
+  assert.equal(transition.state.eventCount, 3);
+  assert.equal(randomCalls, 1);
+}
+
+let pollution = protectedPollution;
 for (const trigger of pollutionTriggers.slice(0, 3)) {
   const transition = advancePollution(pollution, trigger, () => 0.1);
   assert.equal(transition.trigger, trigger);
@@ -60,27 +369,61 @@ for (const trigger of pollutionTriggers.slice(0, 3)) {
   pollution = transition.state;
 }
 assert.equal(pollution.level, MAX_POLLUTION_LEVEL);
+assert.equal(pollution.eventCount, 5);
 let cappedRandomCalls = 0;
 const capped = advancePollution(pollution, 'archive-search', () => {
   cappedRandomCalls += 1;
   return 0;
 });
-assert.equal(capped.state, pollution);
+assert.equal(capped.state.level, pollution.level);
+assert.equal(capped.state.eventCount, pollution.eventCount + 1);
 assert.equal(cappedRandomCalls, 0);
+assert.deepEqual(parsePollutionState('{"version":2,"level":2,"eventCount":8,"variant":1}'), {
+  version: 2,
+  level: 2,
+  eventCount: 8,
+  variant: 1,
+});
+assert.deepEqual(
+  parsePollutionState('{"version":1,"level":2,"variant":1}'),
+  createPollutionState(),
+);
 assert.deepEqual(parsePollutionState('{"version":2}'), createPollutionState());
 
-const probabilityAtLeastThreeInTen =
-  1 -
-  [0, 1, 2].reduce((total, successes) => {
-    const combinations = successes === 0 ? 1 : successes === 1 ? 10 : 45;
-    return (
-      total +
-      combinations *
-        POLLUTION_PROBABILITY ** successes *
-        (1 - POLLUTION_PROBABILITY) ** (10 - successes)
-    );
-  }, 0);
+const firstTabState = advancePollution(createPollutionState(1), 'direct-entry', () => 0).state;
+const secondTabState = createPollutionState(2);
+assert.equal(firstTabState.eventCount, 1);
+assert.equal(secondTabState.eventCount, 0);
+assert.equal(secondTabState.variant, 2);
+
+assert.equal(shouldRequestArchiveEntry(false, 'navigate', false), true);
+assert.equal(shouldRequestArchiveEntry(true, 'navigate', true), false);
+assert.equal(shouldRequestArchiveEntry(false, 'reload', true), false);
+assert.equal(shouldRequestArchiveEntry(false, 'back_forward', true), false);
+assert.equal(shouldRequestArchiveEntry(false, 'back_forward', false), true);
+
+function probabilityAtLeastThree(trials) {
+  return (
+    1 -
+    [0, 1, 2].reduce((total, successes) => {
+      const combinations =
+        successes === 0 ? 1 : successes === 1 ? trials : (trials * (trials - 1)) / 2;
+      return (
+        total +
+        combinations *
+          POLLUTION_PROBABILITY ** successes *
+          (1 - POLLUTION_PROBABILITY) ** (trials - successes)
+      );
+    }, 0)
+  );
+}
+
+const probabilityAtLeastThreeInTen = probabilityAtLeastThree(10);
+const probabilityAtLeastThreeInFirstTenEvents = probabilityAtLeastThree(8);
 assert.ok(probabilityAtLeastThreeInTen > 0.85);
+assert.ok(
+  probabilityAtLeastThreeInFirstTenEvents > 0.72 && probabilityAtLeastThreeInFirstTenEvents < 0.73,
+);
 
 const catalog = [
   {
@@ -382,7 +725,9 @@ assert.equal(
 );
 
 console.log(
-  `state validation passed: pollution=${pollutionTriggers.length} triggers, p10=${(
+  `state validation passed: pollution=${pollutionTriggers.length} triggers, p12-events=${(
     probabilityAtLeastThreeInTen * 100
-  ).toFixed(4)}%, ticket outcomes=5, matrix=${matrix.length}`,
+  ).toFixed(
+    4,
+  )}%, p10-events=${(probabilityAtLeastThreeInFirstTenEvents * 100).toFixed(4)}%, ticket outcomes=5, matrix=${matrix.length}`,
 );

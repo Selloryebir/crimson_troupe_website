@@ -60,6 +60,7 @@
         "BP-FND-CORE",
         "BP-FND-DOMAIN",
         "BP-FND-EXPERIENCE",
+        "BP-MOD-TERRA-TIME",
         "BP-CNT-CORE",
         "BP-CNT-PRODUCTION-VISUAL",
         "BP-I18N-CORE"
@@ -75,10 +76,18 @@
         "BP-FND-DOMAIN",
         "BP-FND-EXPERIENCE",
         "BP-FND-NARRATIVE",
+        "BP-MOD-TERRA-TIME",
         "BP-CNT-CORE",
         "BP-CNT-PRODUCTION-VISUAL",
         "BP-I18N-CORE"
       ]
+    },
+    {
+      "id": "BP-MOD-TERRA-TIME",
+      "document": "docs/blueprint/modules/terra-time.md",
+      "status": "active",
+      "stage": "candidate",
+      "dependsOn": ["BP-FND-DOMAIN"]
     },
     {
       "id": "BP-MOD-TICKETING",
@@ -101,7 +110,7 @@
       "document": "docs/blueprint/content/content-contract.md",
       "status": "active",
       "stage": "candidate",
-      "dependsOn": ["BP-FND-CORE", "BP-FND-DOMAIN"]
+      "dependsOn": ["BP-FND-CORE", "BP-FND-DOMAIN", "BP-MOD-TERRA-TIME"]
     },
     {
       "id": "BP-CNT-PRODUCTION-VISUAL",
@@ -109,6 +118,13 @@
       "status": "active",
       "stage": "candidate",
       "dependsOn": ["BP-FND-DOMAIN", "BP-FND-EXPERIENCE", "BP-FND-NARRATIVE", "BP-CNT-CORE"]
+    },
+    {
+      "id": "BP-CNT-PRODUCTION-VISUAL-CATALOG",
+      "document": "docs/blueprint/content/production-visual-catalog.md",
+      "status": "active",
+      "stage": "candidate",
+      "dependsOn": ["BP-FND-DOMAIN", "BP-CNT-CORE", "BP-CNT-PRODUCTION-VISUAL"]
     },
     {
       "id": "BP-I18N-CORE",
@@ -134,8 +150,10 @@
         "BP-FND-EXPERIENCE",
         "BP-FND-NARRATIVE",
         "BP-MOD-ARCHIVE",
+        "BP-MOD-TERRA-TIME",
         "BP-MOD-TICKETING",
         "BP-CNT-PRODUCTION-VISUAL",
+        "BP-CNT-PRODUCTION-VISUAL-CATALOG",
         "BP-I18N-CORE"
       ]
     }
@@ -209,7 +227,7 @@
     {
       "path": "src/data/editions.ts",
       "primary": "BP-I18N-CORE",
-      "related": ["BP-FND-CORE"]
+      "related": ["BP-FND-CORE", "BP-CNT-CORE"]
     },
     {
       "path": "src/data/archive-pollution.ts",
@@ -217,7 +235,57 @@
       "related": ["BP-FND-NARRATIVE", "BP-FND-EXPERIENCE", "BP-CNT-PRODUCTION-VISUAL"]
     },
     {
+      "path": "src/data/content/build-context.ts",
+      "primary": "BP-CNT-CORE",
+      "related": ["BP-I18N-CORE", "BP-FND-CORE", "BP-MOD-TERRA-TIME"]
+    },
+    {
+      "path": "src/data/content/approval-digests.ts",
+      "primary": "BP-CNT-CORE",
+      "related": ["BP-I18N-CORE", "BP-CNT-PRODUCTION-VISUAL"]
+    },
+    {
+      "path": "src/data/content/eligibility.ts",
+      "primary": "BP-CNT-CORE",
+      "related": ["BP-I18N-CORE"]
+    },
+    {
+      "path": "src/data/content/fingerprint.ts",
+      "primary": "BP-CNT-CORE",
+      "related": []
+    },
+    {
+      "path": "src/data/content/localization-revisions.ts",
+      "primary": "BP-I18N-CORE",
+      "related": ["BP-CNT-CORE"]
+    },
+    {
+      "path": "src/data/content/resolve.ts",
+      "primary": "BP-CNT-CORE",
+      "related": ["BP-FND-DOMAIN", "BP-I18N-CORE", "BP-MOD-PROGRAMS", "BP-MOD-TERRA-TIME"]
+    },
+    {
+      "path": "src/data/content/root-sets.ts",
+      "primary": "BP-CNT-CORE",
+      "related": ["BP-FND-DOMAIN", "BP-MOD-PROGRAMS"]
+    },
+    {
+      "path": "src/data/content/validate.ts",
+      "primary": "BP-CNT-CORE",
+      "related": ["BP-I18N-CORE", "BP-CNT-PRODUCTION-VISUAL"]
+    },
+    {
+      "path": "src/data/content/variants.ts",
+      "primary": "BP-CNT-CORE",
+      "related": []
+    },
+    {
       "path": "src/data/localized/format.ts",
+      "primary": "BP-I18N-CORE",
+      "related": ["BP-CNT-CORE"]
+    },
+    {
+      "path": "src/data/localized/packages.ts",
       "primary": "BP-I18N-CORE",
       "related": ["BP-CNT-CORE"]
     },
@@ -304,7 +372,7 @@
     {
       "path": "src/data/localized/resolve.ts",
       "primary": "BP-I18N-CORE",
-      "related": ["BP-CNT-CORE", "BP-FND-DOMAIN", "BP-MOD-PROGRAMS"]
+      "related": ["BP-CNT-CORE", "BP-FND-DOMAIN", "BP-MOD-PROGRAMS", "BP-MOD-TERRA-TIME"]
     },
     {
       "path": "src/data/localized/schema.ts",
@@ -359,12 +427,22 @@
     {
       "path": "src/data/performances.ts",
       "primary": "BP-FND-DOMAIN",
-      "related": ["BP-MOD-PROGRAMS", "BP-MOD-TICKETING", "BP-CNT-CORE"]
+      "related": ["BP-MOD-PROGRAMS", "BP-MOD-TERRA-TIME", "BP-MOD-TICKETING", "BP-CNT-CORE"]
     },
     {
       "path": "src/data/production-artworks.ts",
       "primary": "BP-CNT-PRODUCTION-VISUAL",
-      "related": ["BP-MOD-PROGRAMS", "BP-MOD-ARCHIVE", "BP-CNT-CORE"]
+      "related": [
+        "BP-CNT-PRODUCTION-VISUAL-CATALOG",
+        "BP-MOD-PROGRAMS",
+        "BP-MOD-ARCHIVE",
+        "BP-CNT-CORE"
+      ]
+    },
+    {
+      "path": "src/data/production-artwork-manifest.ts",
+      "primary": "BP-CNT-PRODUCTION-VISUAL",
+      "related": ["BP-CNT-PRODUCTION-VISUAL-CATALOG", "BP-CNT-CORE"]
     },
     {
       "path": "src/data/productions/folio.ts",
@@ -396,6 +474,11 @@
       "path": "src/data/site-search-index.ts",
       "primary": "BP-MOD-SEARCH",
       "related": ["BP-FND-DOMAIN", "BP-CNT-CORE", "BP-I18N-CORE", "BP-I18N-TERMS"]
+    },
+    {
+      "path": "src/data/site-time.ts",
+      "primary": "BP-MOD-TERRA-TIME",
+      "related": ["BP-FND-DOMAIN", "BP-CNT-CORE"]
     },
     {
       "path": "src/data/ticket-seating-plans.ts",

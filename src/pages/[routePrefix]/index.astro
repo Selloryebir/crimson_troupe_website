@@ -1,10 +1,12 @@
 ---
 import FrontPerformanceList from '../../components/front/FrontPerformanceList.astro';
 import ProductionVisual from '../../components/front/ProductionVisual.astro';
-import { builtEditions, type BuiltEdition } from '../../data/editions';
+import { buildSnapshot } from '../../data/content/resolve.ts';
+import type { BuiltEdition } from '../../data/editions';
 import { formatMessage } from '../../data/localized/format';
 import {
   getLocalization,
+  getLocalizedPerformance,
   getLocalizedPerformances,
   getLocalizedProduction,
 } from '../../data/localized/resolve';
@@ -12,7 +14,7 @@ import { sitePath, siteRoot } from '../../data/site-routes';
 import FrontLayout from '../../layouts/FrontLayout.astro';
 
 export function getStaticPaths() {
-  return builtEditions.map((edition) => ({
+  return buildSnapshot.editions.map((edition) => ({
     params: { routePrefix: edition.routePrefix },
     props: { edition },
   }));
@@ -27,7 +29,10 @@ const localization = getLocalization(edition);
 const copy = localization.site.front.home;
 const canonicalPath = siteRoot(edition, 'front');
 const currentPerformances = getLocalizedPerformances(localization, 'front', 'current');
-const featuredPerformance = currentPerformances[0];
+const featuredPerformance = getLocalizedPerformance(
+  localization,
+  buildSnapshot.featuredPerformanceIds.front,
+);
 const featuredProduction = featuredPerformance
   ? getLocalizedProduction(localization, featuredPerformance.productionIds[0])
   : undefined;
