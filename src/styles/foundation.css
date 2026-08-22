@@ -57,6 +57,14 @@ html:lang(ja-JP) {
   word-break: normal;
 }
 
+html:lang(el) {
+  --serif: Georgia, "Times New Roman", "Noto Serif", "DejaVu Serif", serif;
+  --sans: Inter, "Helvetica Neue", Arial, "Noto Sans", "DejaVu Sans", sans-serif;
+
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
 body {
   min-width: 320px;
   min-height: 100vh;

@@ -69,7 +69,7 @@ import {
 assert.equal(buildProfile, 'showcase');
 assert.equal(buildContext, buildContexts.showcase);
 assert.deepEqual(buildContexts.showcase.editionIds, ['yan']);
-assert.deepEqual(buildContexts.preview.editionIds, ['yan', 'higashi', 'columbia']);
+assert.deepEqual(buildContexts.preview.editionIds, ['yan', 'higashi', 'columbia', 'minos']);
 assert.deepEqual(buildContexts.release.editionIds, ['yan']);
 assert.throws(() => getBuildContext(buildContexts, 'custom'), /未知构建预设/u);
 

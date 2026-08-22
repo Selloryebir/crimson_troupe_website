@@ -222,6 +222,47 @@ try {
   assertTicketErrors();
   await ticketContext.close();
 
+  const minosContext = await browser.newContext({
+    viewport: { width: 320, height: 800 },
+    acceptDownloads: true,
+  });
+  await minosContext.addInitScript(() => {
+    Math.random = () => 0.1;
+    window.print = () => {
+      document.documentElement.dataset.printCalled = 'true';
+      window.setTimeout(() => window.dispatchEvent(new Event('afterprint')), 0);
+    };
+  });
+  const minosPage = await minosContext.newPage();
+  const assertMinosErrors = trackUnexpectedErrors(minosPage);
+  await minosPage.goto(`${origin}/min/search/?q=παράσταση`);
+  await minosPage.locator('[data-search-enhanced]:not([hidden])').waitFor();
+  assert.ok(await minosPage.locator('[data-search-results] li').count(), '米诺斯语查询应有结果');
+  await assertNoHorizontalLoss(minosPage, '320px 米诺斯语搜索');
+  await minosPage.goto(`${origin}/min/tickets/`);
+  await minosPage.locator('[data-ticketing-app]:not([hidden])').waitFor();
+  await minosPage.locator('[data-ticket-select]').first().check();
+  await minosPage.locator('[data-ticket-start]').click();
+  await minosPage.locator('[data-ticket-action="resolve"]').click();
+  await minosPage.locator('[data-ticket-result]:not([hidden])').waitFor();
+  const minosTicketSource = await minosPage.locator('.issued-ticket > img').getAttribute('src');
+  assert.match(decodeURIComponent(minosTicketSource ?? ''), /\p{Script=Greek}/u);
+  const downloadPromise = minosPage.waitForEvent('download');
+  await minosPage.locator('[data-ticket-action^="download:"]').click();
+  const download = await downloadPromise;
+  assert.match(download.suggestedFilename(), /^crimson-troupe-.+\.svg$/u);
+  await minosPage.locator('[data-ticket-action^="print:"]').click();
+  await minosPage.locator('html[data-print-called="true"]').waitFor();
+  await minosPage.locator('body:not(.is-printing-ticket)').waitFor();
+  await assertNoHorizontalLoss(minosPage, '320px 米诺斯语票务结果');
+  const minosSelector = minosPage.locator('[data-edition-selector]');
+  await minosSelector.locator('summary').click();
+  await minosSelector.locator('a[lang="zh-CN"]').click();
+  await minosPage.locator('[data-ticket-result]:not([hidden])').waitFor();
+  assert.match(new URL(minosPage.url()).pathname, /^\/yan\/tickets\/$/u);
+  assertMinosErrors();
+  await minosContext.close();
+
   const archiveContext = await browser.newContext({
     viewport: { width: 320, height: 800 },
     reducedMotion: 'reduce',
@@ -241,6 +282,26 @@ try {
   await assertNoHorizontalLoss(archivePage, '320px 炎国三级污染里站');
   assertArchiveErrors();
   await archiveContext.close();
+
+  const minosArchiveContext = await browser.newContext({
+    viewport: { width: 320, height: 800 },
+    reducedMotion: 'reduce',
+  });
+  await minosArchiveContext.addInitScript(() => {
+    sessionStorage.setItem(
+      'crimson-troupe:archive-pollution:v2',
+      JSON.stringify({ version: 2, level: 3, eventCount: 8, variant: 1 }),
+    );
+  });
+  const minosArchivePage = await minosArchiveContext.newPage();
+  const assertMinosArchiveErrors = trackUnexpectedErrors(minosArchivePage);
+  await minosArchivePage.goto(`${origin}/min/archive/site/1091/`);
+  await minosArchivePage.locator('html[data-pollution-level="3"]').waitFor();
+  await minosArchivePage.locator('[data-archive-projection]:not([hidden])').waitFor();
+  await minosArchivePage.locator('[data-world-switch="front"]').waitFor();
+  await assertNoHorizontalLoss(minosArchivePage, '320px 米诺斯语三级污染里站');
+  assertMinosArchiveErrors();
+  await minosArchiveContext.close();
 
   const noScriptContext = await browser.newContext({
     javaScriptEnabled: false,
@@ -273,7 +334,7 @@ try {
   await failedSearchContext.close();
 
   console.log(
-    'browser validation passed: desktop selector, 320px ticket focus/artifact, archive level 3/reduced motion, no-JS fallback, search failure fallback',
+    'browser validation passed: desktop selector, 320px ticket focus/artifact, Minos search/ticket/download/print/switch/archive, archive level 3/reduced motion, no-JS fallback, search failure fallback',
   );
 } catch (error) {
   const serverOutput = preview.output.join('').trim();

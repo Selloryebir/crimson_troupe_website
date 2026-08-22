@@ -370,6 +370,46 @@
       "related": ["BP-I18N-CORE", "BP-FND-CORE", "BP-FND-EXPERIENCE"]
     },
     {
+      "path": "src/data/localized/minos/index.ts",
+      "primary": "BP-I18N-CORE",
+      "related": ["BP-CNT-CORE"]
+    },
+    {
+      "path": "src/data/localized/minos/archive-projection.ts",
+      "primary": "BP-I18N-CORE",
+      "related": ["BP-MOD-ARCHIVE", "BP-FND-NARRATIVE", "BP-CNT-CORE"]
+    },
+    {
+      "path": "src/data/localized/minos/messages.ts",
+      "primary": "BP-I18N-CORE",
+      "related": ["BP-MOD-SEARCH", "BP-MOD-TICKETING", "BP-FND-NARRATIVE"]
+    },
+    {
+      "path": "src/data/localized/minos/programs.ts",
+      "primary": "BP-CNT-CORE",
+      "related": ["BP-I18N-CORE", "BP-I18N-TERMS", "BP-FND-DOMAIN", "BP-MOD-PROGRAMS"]
+    },
+    {
+      "path": "src/data/localized/minos/productions/folio.ts",
+      "primary": "BP-CNT-CORE",
+      "related": ["BP-I18N-CORE", "BP-I18N-TERMS", "BP-FND-DOMAIN", "BP-MOD-PROGRAMS"]
+    },
+    {
+      "path": "src/data/localized/minos/productions/index.ts",
+      "primary": "BP-I18N-CORE",
+      "related": ["BP-CNT-CORE", "BP-I18N-TERMS", "BP-FND-DOMAIN"]
+    },
+    {
+      "path": "src/data/localized/minos/productions/original.ts",
+      "primary": "BP-CNT-CORE",
+      "related": ["BP-I18N-CORE", "BP-FND-DOMAIN"]
+    },
+    {
+      "path": "src/data/localized/minos/site.ts",
+      "primary": "BP-CNT-CORE",
+      "related": ["BP-I18N-CORE", "BP-FND-CORE", "BP-FND-EXPERIENCE"]
+    },
+    {
       "path": "src/data/localized/resolve.ts",
       "primary": "BP-I18N-CORE",
       "related": ["BP-CNT-CORE", "BP-FND-DOMAIN", "BP-MOD-PROGRAMS", "BP-MOD-TERRA-TIME"]

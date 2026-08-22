@@ -91,6 +91,7 @@ const acceptedYanSourceRevision: LocalizationSourceRevision = Object.freeze({
 export const localizationSourceRevisions: LocalizationSourceRevisionRegistry = Object.freeze({
   higashi: acceptedYanSourceRevision,
   columbia: acceptedYanSourceRevision,
+  minos: acceptedYanSourceRevision,
 });
 
 export function assertLocalizationSourceFresh(

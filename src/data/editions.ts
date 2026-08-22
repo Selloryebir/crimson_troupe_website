@@ -100,6 +100,7 @@ export const previewEditionIds = [
   'yan',
   'higashi',
   'columbia',
+  'minos',
 ] as const satisfies readonly EditionId[];
 
 export type BuildEditionId = (typeof previewEditionIds)[number];
