@@ -191,23 +191,31 @@ export function initTicketingExperience(): void {
       const checkbox = row.querySelector<HTMLInputElement>('[data-ticket-select]');
       const select = row.querySelector<HTMLSelectElement>('[data-ticket-zone]');
       const map = row.querySelector<HTMLElement>('[data-ticket-seating-map]');
-      if (!performanceId || !checkbox || !select || !map) {
+      const feedback = row.querySelector<HTMLElement>('[data-ticket-zone-feedback]');
+      if (!performanceId || !checkbox || !select || !map || !feedback) {
         return;
       }
       const basketItem = state.basket.find((item) => item.performanceId === performanceId);
-      checkbox.checked = Boolean(basketItem);
-      select.disabled = !basketItem;
-      row.classList.toggle('is-selected', Boolean(basketItem));
-      if (basketItem) {
-        select.value = basketItem.zone;
-        map.dataset.selectedZone = basketItem.zone;
-      } else {
-        delete map.dataset.selectedZone;
+      const option = optionFor(performanceId);
+      const selectedOffer =
+        option?.offers.find((offer) => offer.zone === (basketItem?.zone ?? select.value)) ??
+        option?.offers[0];
+      if (!selectedOffer) {
+        return;
       }
+      checkbox.checked = Boolean(basketItem);
+      select.disabled = false;
+      row.classList.toggle('is-selected', Boolean(basketItem));
+      select.value = selectedOffer.zone;
+      map.dataset.selectedZone = selectedOffer.zone;
+      feedback.textContent = formatMessage(
+        basketItem ? messages.zoneInBasket : messages.zonePreview,
+        { zone: selectedOffer.label, price: selectedOffer.basePrice },
+      );
       map.querySelectorAll<HTMLButtonElement>('[data-ticket-zone-map]').forEach((button) => {
         button.setAttribute(
           'aria-pressed',
-          String(button.dataset.ticketZoneMap === basketItem?.zone),
+          String(button.dataset.ticketZoneMap === selectedOffer.zone),
         );
       });
     });
@@ -492,12 +500,13 @@ export function initTicketingExperience(): void {
     if (!row || !performanceId || !checkbox || !select || !offer) {
       return;
     }
-    checkbox.checked = true;
-    select.disabled = false;
     select.value = offer.zone;
     state = updateBasket(state, basketItemFromRow(row), performanceId);
     save();
-    live.textContent = messages.selectionReady;
+    live.textContent = formatMessage(
+      checkbox.checked ? messages.zoneInBasket : messages.zonePreview,
+      { zone: offer.label, price: offer.basePrice },
+    );
     syncBasketControls();
   });
 

@@ -145,8 +145,9 @@
   font: inherit;
 }
 
-.ticket-basket__copy select:disabled {
-  opacity: 0.5;
+.ticket-zone-feedback {
+  min-height: 2.4em;
+  color: var(--muted);
 }
 
 .ticket-seating {

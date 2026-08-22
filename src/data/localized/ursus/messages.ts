@@ -29,6 +29,8 @@ export const ursusMessages = {
     emptyBasket: 'Спектакли не выбраны',
     selectionReady: 'Спектакль и зона мест добавлены в корзину.',
     selectionRequired: 'Чтобы продолжить, выберите хотя бы один спектакль.',
+    zonePreview: 'Просмотр: {zone} · {price} LMD. Ещё не добавлено в корзину.',
+    zoneInBasket: 'В корзине: {zone} · {price} LMD.',
     seatingPlanSummary: 'Схема сцены и зон',
     seatingPlanAria: 'Сцена и зоны мест для спектакля {title}',
     stageDirection: 'СЦЕНА',

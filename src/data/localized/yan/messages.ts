@@ -27,6 +27,8 @@ export const yanMessages = {
     emptyBasket: '尚未选择场次',
     selectionReady: '场次与分区已加入本次票篮。',
     selectionRequired: '至少选择一个场次后方可继续。',
+    zonePreview: '正在查看：{zone} · {price} LMD；尚未加入票篮。',
+    zoneInBasket: '已加入票篮：{zone} · {price} LMD。',
     seatingPlanSummary: '查看舞台与分区示意',
     seatingPlanAria: '{title}舞台与分区示意',
     stageDirection: '舞台',

@@ -378,7 +378,53 @@ try {
     );
     await assertNoHorizontalLoss(ticketPage, `320px ${expected.id} 分区示意`);
   }
-  await ticketPage.locator('[data-ticket-select]').first().check();
+  const ticketRows = ticketPage.locator('[data-ticket-option]');
+  const firstTicketRow = ticketRows.first();
+  const firstTicketSelect = firstTicketRow.locator('[data-ticket-zone]');
+  const firstTicketCheckbox = firstTicketRow.locator('[data-ticket-select]');
+  const firstTicketMap = firstTicketRow.locator('[data-ticket-seating-map]');
+  const ticketStart = ticketPage.locator('[data-ticket-start]');
+  const ticketTotal = ticketPage.locator('[data-ticket-base-total]');
+  assert.equal(
+    await ticketRows.locator('[data-ticket-zone]:disabled').count(),
+    0,
+    '未加入票篮时所有分区选择器仍应可用',
+  );
+  assert.equal(await ticketRows.locator('[data-ticket-select]:checked').count(), 0);
+  assert.equal(await ticketStart.isDisabled(), true, '空票篮不得提交');
+  assert.equal(await firstTicketSelect.inputValue(), 'C', '场次应具有有效默认预选分区');
+  assert.equal(await firstTicketMap.getAttribute('data-selected-zone'), 'C');
+
+  await firstTicketRow.locator('[data-ticket-seating-details] summary').click();
+  const boxZoneButton = firstTicketMap.locator('[data-ticket-zone-map="BOX"]').first();
+  await boxZoneButton.focus();
+  await ticketPage.keyboard.press('Enter');
+  assert.equal(await firstTicketCheckbox.isChecked(), false, '图形预选不得隐式加入票篮');
+  assert.equal(await firstTicketSelect.inputValue(), 'BOX');
+  assert.equal(await firstTicketMap.getAttribute('data-selected-zone'), 'BOX');
+  assert.equal(await ticketTotal.textContent(), '0 LMD');
+  assert.equal(await ticketStart.isDisabled(), true);
+  assert.match(
+    (await firstTicketRow.locator('[data-ticket-zone-feedback]').textContent()) ?? '',
+    /包厢.*1680 LMD.*尚未加入票篮/u,
+  );
+
+  await firstTicketCheckbox.check();
+  assert.equal(await firstTicketSelect.inputValue(), 'BOX', '入篮应沿用当前预选分区');
+  assert.equal(await ticketTotal.textContent(), '1680 LMD');
+  await firstTicketSelect.selectOption('C');
+  assert.equal(await firstTicketMap.getAttribute('data-selected-zone'), 'C');
+  assert.equal(await ticketTotal.textContent(), '260 LMD', '下拉改区应同步票篮报价');
+  await firstTicketMap.locator('[data-ticket-zone-map="A"]').first().click();
+  assert.equal(await firstTicketSelect.inputValue(), 'A');
+  assert.equal(await ticketTotal.textContent(), '680 LMD', '图形改区应同步票篮报价');
+  await firstTicketCheckbox.uncheck();
+  assert.equal(await firstTicketSelect.inputValue(), 'A', '移出票篮不得重置页面预选');
+  assert.equal(await firstTicketMap.getAttribute('data-selected-zone'), 'A');
+  assert.equal(await ticketTotal.textContent(), '0 LMD');
+  assert.equal(await ticketStart.isDisabled(), true);
+
+  await firstTicketCheckbox.check();
   await ticketPage.locator('[data-ticket-start]').click();
   await ticketPage.locator('[data-ticket-flow]:not([hidden])').waitFor();
   assert.equal(

@@ -148,6 +148,8 @@ export interface TicketingMessages {
   emptyBasket: string;
   selectionReady: string;
   selectionRequired: string;
+  zonePreview: string;
+  zoneInBasket: string;
   seatingPlanSummary: string;
   seatingPlanAria: string;
   stageDirection: string;
