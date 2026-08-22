@@ -69,7 +69,11 @@ const backLabel = performance.collection === 'history' ? copy.backHistory : copy
         <dt>{copy.place}</dt><dd>{performance.place}</dd>
       </div><div>
         <dt>{copy.status}</dt><dd>{copy[performance.status]}</dd>
-      </div><div><dt>{copy.seatStatus}</dt><dd>{copy.unavailable}</dd></div>
+      </div><div>
+        <dt>{copy.seatStatus}</dt><dd>
+          {performance.ticketAvailability.state === 'on-sale' ? copy.onSale : copy.notOnSale}
+        </dd>
+      </div>
     </dl>
     {
       (performance.previousDateTimeDisplay || performance.operationalNotice) && (

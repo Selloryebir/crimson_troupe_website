@@ -40,6 +40,14 @@ const forbiddenSearchNarrativePatterns = {
   ursus: /снимок|архив|не связан с текущим сайтом/iu,
 };
 
+const forbiddenArchiveNarrativePatterns = {
+  yan: /网站存档|历史快照|旧剧团|1091[年 ]?存档|泰拉历\s*1091/u,
+  higashi: /保存版|歴史スナップショット|旧劇団|テラ歴1091年|1091年.*保存/u,
+  columbia: /\b(?:website archive|historic(?:al)? snapshot|old troupe|Terra year 1091)\b/iu,
+  minos: /αρχείο ιστοτόπου|ιστορικό στιγμιότυπο|παλιού .*θιάσ|έτος Terra 1091|έτους Terra 1091/iu,
+  ursus: /архив(?:ный|ная)?|историческ(?:ий|ая)|стар(?:ой|ый).*трупп|год Terra 1091|1091 года/iu,
+};
+
 function assertComplete(value, path = 'content') {
   if (typeof value === 'string') {
     assert.notEqual(value.trim(), '', `${path} 不能为空`);
@@ -81,16 +89,45 @@ const archivePerformances = Object.values(performances).filter(
 );
 assert.ok(archivePerformances.length > 0, '1091 里站根集合不能为空');
 assert.ok(
-  archivePerformances.every(
-    (performance) =>
-      performance.productionIds.every(
-        (productionId) => productions[productionId].sourceKind === 'folio',
-      ) &&
-      performance.ticketAvailability.state === 'unavailable' &&
-      performance.ticketAvailability.reason === 'historic-snapshot',
+  archivePerformances.every((performance) =>
+    performance.productionIds.every(
+      (productionId) => productions[productionId].sourceKind === 'folio',
+    ),
   ),
-  '1091 里站只能引用活页剧目且必须保持历史快照不可购票',
+  '1091 里站只能引用活页剧目',
 );
+const archiveCompletedPerformances = archivePerformances.filter(
+  (performance) => performance.status === 'completed',
+);
+const archiveScheduledPerformances = archivePerformances.filter(
+  (performance) => performance.status === 'scheduled',
+);
+assert.ok(archiveCompletedPerformances.length > 0, '1091 里站应保留同期历史场次');
+assert.ok(archiveScheduledPerformances.length > 0, '1091 里站应保留同期本季场次');
+assert.ok(
+  archiveCompletedPerformances.every(
+    (performance) => performance.ticketAvailability.state === 'not-on-sale',
+  ),
+  '1091 已闭幕场次不得保持开放登记',
+);
+for (const performance of archiveScheduledPerformances) {
+  assert.equal(
+    performance.ticketAvailability.state,
+    'on-sale',
+    `${performance.performanceId} 应保留捕获时的开放登记事实`,
+  );
+  assert.equal(
+    performance.ticketAvailability.seatingPlanId,
+    undefined,
+    `${performance.performanceId} 不应为静态登记虚构表站场馆图`,
+  );
+  assert.ok(performance.ticketAvailability.offers.length > 0);
+  assert.equal(
+    new Set(performance.ticketAvailability.offers.map(({ zone }) => zone)).size,
+    performance.ticketAvailability.offers.length,
+    `${performance.performanceId} 的登记分区重复`,
+  );
+}
 const frontTicketingPerformances = Object.values(performances).filter(
   (performance) =>
     performance.world === 'front' && performance.ticketAvailability.state === 'on-sale',
@@ -98,6 +135,7 @@ const frontTicketingPerformances = Object.values(performances).filter(
 assert.ok(frontTicketingPerformances.length > 0, '表站当前快照没有可售场次');
 for (const performance of frontTicketingPerformances) {
   const { seatingPlanId, offers } = performance.ticketAvailability;
+  assert.ok(seatingPlanId, `${performance.performanceId} 缺少表站分区示意`);
   const planZones = ticketSeatingPlans[seatingPlanId].zones.map(({ zone }) => zone).sort();
   const offerZones = offers.map(({ zone }) => zone).sort();
   assert.deepEqual(planZones, offerZones, `${performance.performanceId} 的示意分区与报价不一致`);
@@ -147,13 +185,35 @@ for (const edition of builtEditions) {
   const forbiddenSearchPattern = forbiddenSearchNarrativePatterns[edition.editionId];
   if (forbiddenSearchPattern) {
     assert.doesNotMatch(
-      JSON.stringify({
-        front: localization.site.front.search,
-        archive: localization.site.archive.search,
-        archiveIndex: localization.site.archive.searchIndex,
-      }),
+      JSON.stringify([
+        localization.site.front.search,
+        localization.site.archive.search,
+        localization.site.archive.searchIndex,
+      ]),
       forbiddenSearchPattern,
       `${edition.editionId} 搜索访客文案泄露内部时间层或存档关系`,
+    );
+  }
+  const forbiddenArchivePattern = forbiddenArchiveNarrativePatterns[edition.editionId];
+  if (forbiddenArchivePattern) {
+    const archiveHomeCopy = Object.fromEntries(
+      Object.entries(localization.site.archive.home).filter(([key]) => key !== 'featuredNumber'),
+    );
+    assert.doesNotMatch(
+      JSON.stringify({
+        register: localization.site.archive.register,
+        banner: localization.site.archive.banner,
+        home: archiveHomeCopy,
+        currentPerformances: localization.site.archive.currentPerformances,
+        historyPerformances: localization.site.archive.historyPerformances,
+        performanceDetail: localization.site.archive.performanceDetail,
+        productionDetail: localization.site.archive.productionDetail,
+        search: localization.site.archive.search,
+        tickets: localization.site.archive.tickets,
+        troupe: localization.site.archive.troupe,
+      }),
+      forbiddenArchivePattern,
+      `${edition.editionId} 里站等级 0 主体泄露现代馆藏或旧站视角`,
     );
   }
   const localeRule = localeValidationRules[edition.editionId];

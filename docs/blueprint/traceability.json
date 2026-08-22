@@ -175,6 +175,11 @@
       "related": ["BP-FND-NARRATIVE", "BP-I18N-CORE", "BP-CNT-CORE"]
     },
     {
+      "path": "src/components/archive/ArchiveSeatRegister.astro",
+      "primary": "BP-MOD-ARCHIVE",
+      "related": ["BP-MOD-TICKETING", "BP-FND-DOMAIN", "BP-FND-EXPERIENCE", "BP-I18N-CORE"]
+    },
+    {
       "path": "src/components/front/FrontPerformanceList.astro",
       "primary": "BP-MOD-PROGRAMS",
       "related": ["BP-FND-DOMAIN", "BP-FND-EXPERIENCE", "BP-CNT-CORE"]
@@ -554,6 +559,11 @@
       "path": "src/data/productions/original.ts",
       "primary": "BP-FND-DOMAIN",
       "related": ["BP-MOD-PROGRAMS", "BP-CNT-CORE", "BP-CNT-PRODUCTION-VISUAL", "BP-I18N-TERMS"]
+    },
+    {
+      "path": "src/data/archive-ticketing.ts",
+      "primary": "BP-MOD-ARCHIVE",
+      "related": ["BP-MOD-TICKETING", "BP-MOD-PROGRAMS", "BP-FND-DOMAIN", "BP-I18N-CORE"]
     },
     {
       "path": "src/data/archive-snapshots.ts",

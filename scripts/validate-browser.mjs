@@ -10,10 +10,18 @@ import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 
 import { currentArchiveSnapshot } from '../src/data/archive-snapshots.ts';
+import { buildSnapshot } from '../src/data/content/resolve.ts';
 
 const serverHost = '127.0.0.1';
 const repositoryRoot = fileURLToPath(new URL('..', import.meta.url));
 const astroBin = fileURLToPath(new URL('../node_modules/astro/bin/astro.mjs', import.meta.url));
+const expectedArchiveSeatCount = buildSnapshot.performanceEntries.filter(
+  ([, performance]) =>
+    performance.world === 'archive' &&
+    performance.collection === 'current' &&
+    performance.status === 'scheduled' &&
+    performance.ticketAvailability.state === 'on-sale',
+).length;
 process.env.NO_PROXY = [process.env.NO_PROXY, serverHost, 'localhost'].filter(Boolean).join(',');
 process.env.no_proxy = [process.env.no_proxy, serverHost, 'localhost'].filter(Boolean).join(',');
 
@@ -444,6 +452,18 @@ try {
   await noScriptPage.goto(`${origin}/hig/tickets/`);
   await noScriptPage.locator('[data-ticket-fallback]').waitFor();
   assert.equal(await noScriptPage.locator('[data-ticketing-app]').getAttribute('hidden'), '');
+  await noScriptPage.goto(`${origin}${archivePath('hig', 'tickets')}`);
+  const archiveSeatSelects = noScriptPage.locator('.archive-seat-register select');
+  assert.equal(
+    await archiveSeatSelects.count(),
+    expectedArchiveSeatCount,
+    '东国语里站应显示全部同期可登记场次',
+  );
+  await archiveSeatSelects.first().selectOption({ index: 1 });
+  assert.notEqual(await archiveSeatSelects.first().inputValue(), 'C');
+  assert.equal(await noScriptPage.locator('.archive-settlement button').isDisabled(), true);
+  assert.equal(await noScriptPage.locator('[data-ticketing-app]').count(), 0);
+  await assertNoHorizontalLoss(noScriptPage, '390px 东国语无脚本里站席位登记');
   await noScriptContext.close();
 
   const failedSearchContext = await browser.newContext({ viewport: { width: 390, height: 800 } });
@@ -464,7 +484,7 @@ try {
   await failedSearchContext.close();
 
   console.log(
-    'browser validation passed: five-edition selector, long-script 320px headers, ticket focus/artifact, Minos search/download/print, Ursus search isolation/download/five-edition state/archive exit, archive level 3/reduced motion, no-JS fallback, search failure fallback',
+    'browser validation passed: five-edition selector, long-script 320px headers, ticket focus/artifact, Minos search/download/print, Ursus search isolation/download/five-edition state/archive exit, archive level 3/reduced motion, no-JS fallback/static archive seats, search failure fallback',
   );
 } catch (error) {
   const serverOutput = preview.output.join('').trim();

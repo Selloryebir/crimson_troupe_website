@@ -44,9 +44,9 @@ export function createLocalizationSourceRevision(
 // 目标语言记录所依据的炎语修订。新增或修改炎语记录时只更新已完成复核的对应路径。
 const acceptedYanSourceRevision: LocalizationSourceRevision = Object.freeze({
   'site.brand': 'fnv1a64:03d196aa49398779',
-  'site.shared': 'fnv1a64:e3ee9783907158dd',
+  'site.shared': 'fnv1a64:e8990a94ef6f0f83',
   'site.front': 'fnv1a64:a7687d06da2e196a',
-  'site.archive': 'fnv1a64:5984ba7310296b4e',
+  'site.archive': 'fnv1a64:0f6496f0560b37e7',
   'messages.filters': 'fnv1a64:d98c683356dc4246',
   'messages.search': 'fnv1a64:8db8feaa1a5ea44c',
   'messages.ticketing': 'fnv1a64:992dfae2179cae98',

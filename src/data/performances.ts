@@ -24,8 +24,7 @@ export interface TicketOffer {
 
 export type TicketAvailability =
   | { state: 'not-on-sale' }
-  | { state: 'on-sale'; seatingPlanId: SeatingPlanId; offers: readonly TicketOffer[] }
-  | { state: 'unavailable'; reason: 'historic-snapshot' };
+  | { state: 'on-sale'; seatingPlanId?: SeatingPlanId; offers: readonly TicketOffer[] };
 
 const standardTheaterOffers = [
   { zone: 'C', basePrice: 180 },
@@ -39,6 +38,14 @@ const temporaryStageOffers = standardTheaterOffers.filter(
   (offer): offer is Exclude<(typeof standardTheaterOffers)[number], { zone: 'BOX' }> =>
     offer.zone !== 'BOX',
 );
+
+const archiveRegisterOffers = [
+  { zone: 'C', basePrice: 120 },
+  { zone: 'B', basePrice: 220 },
+  { zone: 'A', basePrice: 360 },
+  { zone: 'S', basePrice: 560 },
+  { zone: 'BOX', basePrice: 980 },
+] as const satisfies readonly TicketOffer[];
 
 export interface Performance {
   performanceId: string;
@@ -102,7 +109,7 @@ export const performances = {
     locationId: 'londinium',
     effectiveDateTime: { calendar: 'terra', year: 1091, month: 3, day: 8, time: '19:00' },
     productionIds: ['der-ring'],
-    ticketAvailability: { state: 'unavailable', reason: 'historic-snapshot' },
+    ticketAvailability: { state: 'not-on-sale' },
   },
   'one-hundred-and-one-days-norport-1091-0419': {
     performanceId: 'one-hundred-and-one-days-norport-1091-0419',
@@ -111,7 +118,7 @@ export const performances = {
     locationId: 'norport',
     effectiveDateTime: { calendar: 'terra', year: 1091, month: 4, day: 19, time: '18:30' },
     productionIds: ['one-hundred-and-one-days'],
-    ticketAvailability: { state: 'unavailable', reason: 'historic-snapshot' },
+    ticketAvailability: { state: 'not-on-sale' },
   },
   'the-carnival-wiesheim-1091-0511': {
     performanceId: 'the-carnival-wiesheim-1091-0511',
@@ -120,7 +127,7 @@ export const performances = {
     locationId: 'wiesheim',
     effectiveDateTime: { calendar: 'terra', year: 1091, month: 5, day: 11, time: '20:00' },
     productionIds: ['the-carnival'],
-    ticketAvailability: { state: 'unavailable', reason: 'historic-snapshot' },
+    ticketAvailability: { state: 'not-on-sale' },
   },
   'ode-au-triomphe-nuova-volsinii-1091-0623': {
     performanceId: 'ode-au-triomphe-nuova-volsinii-1091-0623',
@@ -129,7 +136,7 @@ export const performances = {
     locationId: 'nuova-volsinii',
     effectiveDateTime: { calendar: 'terra', year: 1091, month: 6, day: 23, time: '19:30' },
     productionIds: ['ode-au-triomphe'],
-    ticketAvailability: { state: 'unavailable', reason: 'historic-snapshot' },
+    ticketAvailability: { state: 'not-on-sale' },
   },
   'der-ring-zwillingsturme-1091-0817': {
     performanceId: 'der-ring-zwillingsturme-1091-0817',
@@ -138,7 +145,7 @@ export const performances = {
     locationId: 'zwillingsturme',
     effectiveDateTime: { calendar: 'terra', year: 1091, month: 8, day: 17, time: '20:00' },
     productionIds: ['der-ring'],
-    ticketAvailability: { state: 'unavailable', reason: 'historic-snapshot' },
+    ticketAvailability: { state: 'on-sale', offers: archiveRegisterOffers },
   },
   'one-hundred-and-one-days-londinium-1091-0903': {
     performanceId: 'one-hundred-and-one-days-londinium-1091-0903',
@@ -147,7 +154,7 @@ export const performances = {
     locationId: 'londinium',
     effectiveDateTime: { calendar: 'terra', year: 1091, month: 9, day: 3, time: '19:30' },
     productionIds: ['one-hundred-and-one-days'],
-    ticketAvailability: { state: 'unavailable', reason: 'historic-snapshot' },
+    ticketAvailability: { state: 'on-sale', offers: archiveRegisterOffers },
   },
   'the-carnival-montelupe-1091-0921': {
     performanceId: 'the-carnival-montelupe-1091-0921',
@@ -156,7 +163,7 @@ export const performances = {
     locationId: 'montelupe',
     effectiveDateTime: { calendar: 'terra', year: 1091, month: 9, day: 21, time: '20:00' },
     productionIds: ['the-carnival'],
-    ticketAvailability: { state: 'unavailable', reason: 'historic-snapshot' },
+    ticketAvailability: { state: 'on-sale', offers: archiveRegisterOffers },
   },
   'the-carnival-londinium-1091-1009': {
     performanceId: 'the-carnival-londinium-1091-1009',
@@ -165,7 +172,7 @@ export const performances = {
     locationId: 'londinium',
     effectiveDateTime: { calendar: 'terra', year: 1091, month: 10, day: 9, time: '19:00' },
     productionIds: ['the-carnival'],
-    ticketAvailability: { state: 'unavailable', reason: 'historic-snapshot' },
+    ticketAvailability: { state: 'on-sale', offers: archiveRegisterOffers },
   },
   'ode-au-triomphe-zwillingsturme-1091-1028': {
     performanceId: 'ode-au-triomphe-zwillingsturme-1091-1028',
@@ -174,7 +181,7 @@ export const performances = {
     locationId: 'zwillingsturme',
     effectiveDateTime: { calendar: 'terra', year: 1091, month: 10, day: 28, time: '18:45' },
     productionIds: ['ode-au-triomphe'],
-    ticketAvailability: { state: 'unavailable', reason: 'historic-snapshot' },
+    ticketAvailability: { state: 'on-sale', offers: archiveRegisterOffers },
   },
 } as const satisfies Record<string, Performance>;
 

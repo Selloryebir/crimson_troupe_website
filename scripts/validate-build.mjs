@@ -6,6 +6,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { archiveSnapshots, currentArchiveSnapshot } from '../src/data/archive-snapshots.ts';
+import { getArchiveSeatRegisterEntries } from '../src/data/archive-ticketing.ts';
 import { buildSnapshot, getWorldProductionIds } from '../src/data/content/resolve.ts';
 import { buildProfile } from '../src/data/editions.ts';
 import { formatMessage } from '../src/data/localized/format.ts';
@@ -381,7 +382,24 @@ for (const edition of builtEditions) {
     routes.get(sitePath(edition, 'archive', 'tickets')),
     'utf8',
   );
-  assert.doesNotMatch(archiveTicketPage, /data-ticketing-app/u);
+  const archiveSeatEntries = getArchiveSeatRegisterEntries(getLocalization(edition), buildSnapshot);
+  assert.match(archiveTicketPage, /class="[^"]*\barchive-seat-register\b/u);
+  assert.equal(
+    [...archiveTicketPage.matchAll(/<select\b/gu)].length,
+    archiveSeatEntries.length,
+    `${edition.editionId} 里站静态席位场次数量不正确`,
+  );
+  assert.match(
+    archiveTicketPage,
+    /<button\b[^>]*\bdisabled\b[^>]*aria-describedby="archive-settlement-status"/u,
+    `${edition.editionId} 里站结算控件必须在无脚本产物中真实失活`,
+  );
+  assert.doesNotMatch(
+    archiveTicketPage,
+    /data-ticket(?:ing-app|-basket|-flow|-result|-fallback|-options|-messages)/u,
+    `${edition.editionId} 里站席位页不得接入表站票务状态机`,
+  );
+  assert.doesNotMatch(archiveTicketPage, /class="issued-ticket"|\bdownload=/u);
 }
 
 assert.equal(
