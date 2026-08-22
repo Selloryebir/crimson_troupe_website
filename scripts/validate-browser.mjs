@@ -167,6 +167,45 @@ async function assertNoHorizontalLoss(page, label) {
   assert.ok(result.main.right <= result.viewportWidth + 1, `${label} 的 main 右侧超出视口`);
 }
 
+async function assertEditorialAlternation(page, listSelector, visualSelector, copySelector, label) {
+  const rows = page.locator(`${listSelector} > li`);
+  assert.ok((await rows.count()) >= 2, `${label} 至少需要两行才能验证交替编排`);
+  const positions = await rows.evaluateAll(
+    (items, selectors) =>
+      items.slice(0, 2).map((item) => ({
+        visual: item.querySelector(selectors.visual)?.getBoundingClientRect().toJSON(),
+        copy: item.querySelector(selectors.copy)?.getBoundingClientRect().toJSON(),
+      })),
+    { visual: visualSelector, copy: copySelector },
+  );
+  assert.ok(
+    positions.every(({ visual, copy }) => visual && copy),
+    `${label} 缺少图像或文案区`,
+  );
+  assert.ok(positions[0].visual.x < positions[0].copy.x, `${label} 首行应为图左文右`);
+  assert.ok(positions[1].visual.x > positions[1].copy.x, `${label} 次行应为文左图右`);
+}
+
+async function assertEditorialMobileOrder(page, listSelector, visualSelector, copySelector, label) {
+  const positions = await page.locator(`${listSelector} > li`).evaluateAll(
+    (items, selectors) =>
+      items.map((item) => ({
+        visual: item.querySelector(selectors.visual)?.getBoundingClientRect().toJSON(),
+        copy: item.querySelector(selectors.copy)?.getBoundingClientRect().toJSON(),
+      })),
+    { visual: visualSelector, copy: copySelector },
+  );
+  assert.ok(positions.length > 0, `${label} 缺少演出行`);
+  assert.ok(
+    positions.every(({ visual, copy }) => visual && copy),
+    `${label} 缺少图像或文案区`,
+  );
+  assert.ok(
+    positions.every(({ visual, copy }) => visual.bottom <= copy.top + 1),
+    `${label} 应统一先显示封面再显示文案`,
+  );
+}
+
 function trackUnexpectedErrors(page, allowed = []) {
   const errors = [];
   page.on('pageerror', (error) => {
@@ -193,6 +232,13 @@ try {
   await desktopPage.goto(`${origin}/yan/`);
   await desktopPage.locator('h1').waitFor();
   await assertNoHorizontalLoss(desktopPage, '1280px 炎国表站');
+  await assertEditorialAlternation(
+    desktopPage,
+    '.front-performance-grid--home-editorial',
+    '.production-visual',
+    '.front-performance-card__copy',
+    '1280px 炎国表站首页',
+  );
   const archiveCatalog = desktopPage.locator('.archive-catalog');
   assert.equal(await archiveCatalog.locator('li').count(), 3, '表站页脚应显示三条馆藏记录');
   assert.equal(await archiveCatalog.locator('a').count(), 1, '只有当前快照可以进入');
@@ -215,6 +261,26 @@ try {
   await desktopPage.keyboard.press('Escape');
   assert.equal(await selector.getAttribute('open'), null);
   assert.equal(await summary.evaluate((element) => element === document.activeElement), true);
+  await desktopPage.goto(`${origin}/yan/performances/`);
+  assert.equal(
+    await desktopPage.locator('.front-performance-grid--home-editorial').count(),
+    0,
+    '表站完整本季列表不得套用首页编排',
+  );
+  await desktopPage.goto(`${origin}${archivePath('yan')}`);
+  await assertEditorialAlternation(
+    desktopPage,
+    '.archive-performance-list--home-editorial',
+    '.archive-poster',
+    '.archive-performance-list__register',
+    '1280px 炎国里站首页',
+  );
+  await desktopPage.goto(`${origin}${archivePath('yan', 'performances')}`);
+  assert.equal(
+    await desktopPage.locator('.archive-performance-list--home-editorial').count(),
+    0,
+    '里站完整本季列表不得套用首页编排',
+  );
   assertDesktopErrors();
   await desktop.close();
 
@@ -304,6 +370,13 @@ try {
     await headerPage.locator('h1').waitFor();
     await assertNoHorizontalLoss(headerPage, `320px ${label}表站首页`);
     if (routePrefix === 'hig') {
+      await assertEditorialMobileOrder(
+        headerPage,
+        '.front-performance-grid--home-editorial',
+        '.production-visual',
+        '.front-performance-card__copy',
+        '320px 东国语表站首页',
+      );
       const editionSelector = headerPage.locator('[data-edition-selector]');
       await editionSelector.locator('summary').click();
       const optionStyles = await editionSelector.locator('a').evaluateAll((links) =>
@@ -322,6 +395,15 @@ try {
         assert.doesNotMatch(optionStyles[locale].fontFamily, /Yu Gothic|Hiragino/u);
         assert.equal(optionStyles[locale].letterSpacing, 'normal');
       }
+      await headerPage.goto(`${origin}${archivePath('hig')}`);
+      await assertEditorialMobileOrder(
+        headerPage,
+        '.archive-performance-list--home-editorial',
+        '.archive-poster',
+        '.archive-performance-list__register',
+        '320px 东国语里站首页',
+      );
+      await assertNoHorizontalLoss(headerPage, '320px 东国语里站首页');
     }
     assertHeaderErrors();
     await headerContext.close();
@@ -484,7 +566,7 @@ try {
   await failedSearchContext.close();
 
   console.log(
-    'browser validation passed: five-edition selector, long-script 320px headers, ticket focus/artifact, Minos search/download/print, Ursus search isolation/download/five-edition state/archive exit, archive level 3/reduced motion, no-JS fallback/static archive seats, search failure fallback',
+    'browser validation passed: editorial home alternation/mobile order, full-list isolation, five-edition selector, long-script 320px headers, ticket focus/artifact, Minos search/download/print, Ursus search isolation/download/five-edition state/archive exit, archive level 3/reduced motion, no-JS fallback/static archive seats, search failure fallback',
   );
 } catch (error) {
   const serverOutput = preview.output.join('').trim();
