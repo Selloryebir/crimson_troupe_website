@@ -147,6 +147,10 @@ function isCodeSource(repositoryPath) {
   return /^src\/.+\.(?:astro|ts)$/u.test(repositoryPath);
 }
 
+function isLintableCode(repositoryPath) {
+  return isCodeSource(repositoryPath) || /^scripts\/.+\.mjs$/u.test(repositoryPath);
+}
+
 function isStyleSource(repositoryPath) {
   return /^src\/.+\.css$/u.test(repositoryPath);
 }
@@ -160,11 +164,33 @@ function isRuntimeAsset(repositoryPath) {
 
 function isContentSource(repositoryPath) {
   return (
+    repositoryPath === 'scripts/validate-content.mjs' ||
     /^src\/data\/(?:content|localized|productions)\//u.test(repositoryPath) ||
     /^src\/data\/(?:locations|performances|production-artwork-manifest|production-artworks)\.ts$/u.test(
       repositoryPath,
     ) ||
     repositoryPath.startsWith('src/assets/images/productions/')
+  );
+}
+
+function isLocaleSource(repositoryPath) {
+  return (
+    repositoryPath === 'scripts/validate-locales.mjs' ||
+    repositoryPath === 'src/data/editions.ts' ||
+    repositoryPath === 'src/data/content/localization-revisions.ts' ||
+    repositoryPath.startsWith('src/data/localized/')
+  );
+}
+
+function isStateSource(repositoryPath) {
+  return (
+    repositoryPath === 'scripts/validate-states.mjs' ||
+    repositoryPath === 'src/data/editions.ts' ||
+    repositoryPath === 'src/data/performances.ts' ||
+    /^src\/scripts\/(?:pollution-state|ticketing-state|ticket-artifact)\.ts$/u.test(
+      repositoryPath,
+    ) ||
+    /^src\/data\/(?:site-time|ticketing|ticket-seating-plans)\.ts$/u.test(repositoryPath)
   );
 }
 
@@ -181,9 +207,13 @@ function isToolchain(repositoryPath) {
     repositoryPath === '.editorconfig' ||
     repositoryPath === '.prettierignore' ||
     /^(?:eslint|prettier|stylelint)\.config\.[cm]?[jt]s$/u.test(repositoryPath) ||
+    repositoryPath === 'scripts/quality.mjs' ||
+    repositoryPath === 'scripts/blueprint.mjs' ||
+    repositoryPath === 'scripts/validate-build.mjs' ||
+    repositoryPath === 'scripts/validate-browser.mjs' ||
     repositoryPath.startsWith('.github/') ||
     repositoryPath.startsWith('.husky/') ||
-    repositoryPath.startsWith('scripts/')
+    repositoryPath.startsWith('scripts/fixtures/')
   );
 }
 
@@ -199,7 +229,7 @@ function buildPlan(changeSet) {
   const prettierFiles = existingPaths.filter(
     (entry) => hasExtension(entry, prettierExtensions) && entry !== 'package-lock.json',
   );
-  const codeFiles = existingPaths.filter(isCodeSource);
+  const codeFiles = existingPaths.filter(isLintableCode);
   const styleFiles = existingPaths.filter(isStyleSource);
   const hasCodeChanges = paths.some(isCodeSource);
   const hasStyleChanges = paths.some(isStyleSource);
@@ -207,6 +237,8 @@ function buildPlan(changeSet) {
   const hasStructuralSourceChanges = [...changeSet.structural].some(isFunctionalSource);
   const hasToolchainChanges = paths.some(isToolchain);
   const hasContentChanges = paths.some(isContentSource);
+  const hasLocaleChanges = paths.some(isLocaleSource);
+  const hasStateChanges = paths.some(isStateSource);
 
   const runtimeLayers = [
     hasCodeChanges ? 'Astro/TypeScript' : null,
@@ -265,15 +297,15 @@ function buildPlan(changeSet) {
       script: 'check',
       files: [],
     });
-    if (codeFiles.length > 0) {
-      tasks.push({
-        id: 'eslint',
-        reason: 'ESLint 规则按文件独立执行，只检查本次变更的 Astro/TypeScript 文件',
-        command: commandText('lint:code:files', codeFiles),
-        script: 'lint:code:files',
-        files: codeFiles,
-      });
-    }
+  }
+  if (codeFiles.length > 0) {
+    tasks.push({
+      id: 'eslint',
+      reason: 'ESLint 规则按文件独立执行，只检查本次变更的运行时或验证脚本',
+      command: commandText('lint:code:files', codeFiles),
+      script: 'lint:code:files',
+      files: codeFiles,
+    });
   }
   if (hasStyleChanges && styleFiles.length > 0) {
     tasks.push({
@@ -290,6 +322,24 @@ function buildPlan(changeSet) {
       reason: '内容事实、本地化或必要素材发生变化，运行聚焦内容闭包与漂移检查',
       command: commandText('validate:content'),
       script: 'validate:content',
+      files: [],
+    });
+  }
+  if (hasLocaleChanges) {
+    tasks.push({
+      id: 'locale',
+      reason: '国家版本、本地化记录或源修订发生变化，检查完整 preview 的严格翻译闭包',
+      command: commandText('validate:locales:preview'),
+      script: 'validate:locales:preview',
+      files: [],
+    });
+  }
+  if (hasStateChanges) {
+    tasks.push({
+      id: 'states',
+      reason: '污染、票务、票面或泰拉时间状态能力发生变化，运行确定性状态验证',
+      command: commandText('validate:states'),
+      script: 'validate:states',
       files: [],
     });
   }

@@ -63,6 +63,7 @@ npm run quality -- --plan docs/blueprint/modules/search.md
 | `npm run validate:locales:preview`  | 检查三语言预览构建的本地化覆盖                           |
 | `npm run validate:build`            | 检查已生成页面的路由、元数据、链接、资源与发布范围       |
 | `npm run validate:build:preview`    | 检查三语言预览产物的路由、元数据、链接与隔离范围         |
+| `npm run validate:browser:preview`  | 对已生成 preview 运行单一代表性浏览器冒烟矩阵            |
 | `npm run verify`                    | 依次执行完整质量、状态、一次构建与静态产物门禁           |
 | `npm run lint:code:fix`             | 自动修复 ESLint 明确支持的代码问题                       |
 | `npm run lint:styles:fix`           | 自动修复 Stylelint 明确支持的样式问题                    |
@@ -78,10 +79,13 @@ npm run quality -- --plan docs/blueprint/modules/search.md
 | 现有 `.ts`、`.astro`           | 项目级 Astro/TypeScript、变更文件 ESLint 与 Prettier |
 | 现有 `.css`                    | 变更文件 Stylelint                                   |
 | 功能源码新增、删除或重命名     | 对应源码检查、`blueprint:check`                      |
-| 工具链或质量配置               | `verify`                                             |
+| 内容验证脚本                   | 对应 content、locale 或 state 能力检查               |
+| 工具链或静态/浏览器门禁本身    | `verify`                                             |
 | 多个运行时层，或蓝图与实现同步 | `verify`                                             |
 
 Astro/TypeScript 类型关系可能跨文件，因此代码变更仍使用项目级 `astro check`；ESLint、Stylelint 和 Prettier 可以安全地限制为变更文件。`quality` 不负责运行普通构建或浏览器验收；运行时源码完成一个可交付切片后，先通过相关质量检查，再单独运行一次 `npm run build`。
+
+`validate:browser:preview` 不自行构建，也不生成截图或报告；应在一次 preview 构建及产物检查后运行。首次使用 Playwright 的环境可执行 `npx playwright install --with-deps chromium` 安装唯一浏览器驱动。本入口只覆盖桌面选择器、320px 票务焦点与票面、三级污染、减少动态效果、无脚本和搜索初始化失败等代表任务，不替代人工视觉验收。
 
 只有工具链变更、跨层集成、准备合并或发布、进入正式候选阶段才执行完整门禁：
 
