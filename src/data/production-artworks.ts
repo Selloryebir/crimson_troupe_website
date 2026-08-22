@@ -33,7 +33,7 @@ function requireArtworkManifest(
   return entry;
 }
 
-const productionArtworkRegistry: ProductionArtworkRegistry = {
+export const productionArtworkRegistry: ProductionArtworkRegistry = {
   uncrowned: {
     front: {
       ...requireArtworkManifest('uncrowned', 'front'),
