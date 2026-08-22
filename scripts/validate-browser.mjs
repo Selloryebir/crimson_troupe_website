@@ -185,6 +185,18 @@ try {
   await desktopPage.goto(`${origin}/yan/`);
   await desktopPage.locator('h1').waitFor();
   await assertNoHorizontalLoss(desktopPage, '1280px 炎国表站');
+  const archiveCatalog = desktopPage.locator('.archive-catalog');
+  assert.equal(await archiveCatalog.locator('li').count(), 3, '表站页脚应显示三条馆藏记录');
+  assert.equal(await archiveCatalog.locator('a').count(), 1, '只有当前快照可以进入');
+  assert.equal(await archiveCatalog.locator('.archive-catalog__damaged').count(), 2);
+  assert.equal(
+    await archiveCatalog.locator('a').evaluate((link) => window.getComputedStyle(link).cursor),
+    'help',
+  );
+  assert.match(
+    (await archiveCatalog.locator('a').getAttribute('href')) ?? '',
+    new RegExp(`/archive/site/${currentArchiveSnapshot.routeSegment}/$`, 'u'),
+  );
   const selector = desktopPage.locator('[data-edition-selector]');
   assert.equal(await selector.locator('li').count(), 5, '五语言 preview 应显示五个版本选项');
   assert.equal(await selector.locator('li .edition-badge').count(), 5, '每个版本选项都应显示徽记');
@@ -283,6 +295,26 @@ try {
     await headerPage.goto(`${origin}/${routePrefix}/`);
     await headerPage.locator('h1').waitFor();
     await assertNoHorizontalLoss(headerPage, `320px ${label}表站首页`);
+    if (routePrefix === 'hig') {
+      const editionSelector = headerPage.locator('[data-edition-selector]');
+      await editionSelector.locator('summary').click();
+      const optionStyles = await editionSelector.locator('a').evaluateAll((links) =>
+        Object.fromEntries(
+          links.map((link) => [
+            link.lang,
+            {
+              fontFamily: window.getComputedStyle(link).fontFamily,
+              letterSpacing: window.getComputedStyle(link).letterSpacing,
+            },
+          ]),
+        ),
+      );
+      for (const locale of ['en-US', 'el', 'ru']) {
+        assert.match(optionStyles[locale].fontFamily, /Arial|Noto Sans|DejaVu Sans/u);
+        assert.doesNotMatch(optionStyles[locale].fontFamily, /Yu Gothic|Hiragino/u);
+        assert.equal(optionStyles[locale].letterSpacing, 'normal');
+      }
+    }
     assertHeaderErrors();
     await headerContext.close();
   }

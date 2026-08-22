@@ -246,7 +246,30 @@ for (const [route, filePath] of routes) {
     } else {
       assert.doesNotMatch(html, /<details[^>]*data-edition-selector/u, `${route} 不应显示空选择器`);
     }
-    if (edition && route.startsWith(siteRoot(edition, 'archive'))) {
+    const isArchiveRoute = route.startsWith(siteRoot(edition, 'archive'));
+    if (isArchiveRoute) {
+      assert.doesNotMatch(html, /class="archive-catalog"/u, `${route} 不应重复显示表站馆藏索引`);
+      assert.match(html, /data-world-switch="front"/u, `${route} 缺少可靠的表站返回入口`);
+    } else {
+      assert.match(html, /class="archive-catalog"/u, `${route} 缺少低干扰馆藏索引`);
+      assert.match(
+        html,
+        new RegExp(`href="${siteRoot(edition, 'archive').replaceAll('/', '\\/')}"`, 'u'),
+        `${route} 缺少当前快照入口`,
+      );
+      for (const snapshot of archiveSnapshots) {
+        assert.ok(
+          html.includes(snapshot.displayCapturedAt),
+          `${route} 缺少馆藏记录 ${snapshot.snapshotId}`,
+        );
+      }
+      assert.doesNotMatch(
+        html,
+        /href="[^"]*\/archive\/site\/(?:1093|1096)/u,
+        `${route} 不得把损坏快照渲染为链接`,
+      );
+    }
+    if (isArchiveRoute) {
       assert.ok(
         html.indexOf('<h1') < html.indexOf('data-archive-projection'),
         `${route} 的主标题必须先于三级叙事投影`,

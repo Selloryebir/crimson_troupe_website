@@ -1,4 +1,5 @@
 ---
+import { archiveSnapshots } from '../../data/archive-snapshots.ts';
 import type { ResolvedLocalization } from '../../data/localized/resolve';
 import { siteRoot, type SiteWorld } from '../../data/site-routes';
 import TroupeMark from './TroupeMark.astro';
@@ -11,8 +12,6 @@ interface Props {
 const { localization, world } = Astro.props;
 const { edition } = localization;
 const copy = localization.site.shared;
-const otherWorld: SiteWorld = world === 'front' ? 'archive' : 'front';
-const switchLabel = world === 'front' ? copy.frontToArchive : copy.archiveToFront;
 ---
 
 <footer class="site-footer">
@@ -24,15 +23,49 @@ const switchLabel = world === 'front' ? copy.frontToArchive : copy.archiveToFron
         <p>{world === 'front' ? copy.frontFooter : copy.archiveFooter}</p>
       </div>
     </div>
-    <a
-      class="world-switch"
-      href={siteRoot(edition, otherWorld)}
-      data-world-switch={otherWorld}
-      data-pollution-safe>{switchLabel}</a
-    >
+    {
+      world === 'archive' && (
+        <a
+          class="world-switch"
+          href={siteRoot(edition, 'front')}
+          data-world-switch="front"
+          data-pollution-safe
+        >
+          {copy.archiveToFront}
+        </a>
+      )
+    }
   </div>
   <div class="footer-legal">
     <span>{edition.badgeCode}{copy.editionSeparator}{edition.languageName.native}</span>
     <span>{copy.fanNotice}</span>
   </div>
+  {
+    world === 'front' && (
+      <nav class="archive-catalog" aria-label={copy.archiveCatalog}>
+        <span class="archive-catalog__title">{copy.archiveCatalog}</span>
+        <ul>
+          {archiveSnapshots.map((snapshot) => (
+            <li>
+              {snapshot.state === 'available' ? (
+                <a
+                  href={siteRoot(edition, 'archive')}
+                  data-world-switch="archive"
+                  data-pollution-safe
+                >
+                  <span>{snapshot.displayCapturedAt}</span>
+                  <small>{copy.frontToArchive}</small>
+                </a>
+              ) : (
+                <span class="archive-catalog__damaged">
+                  <span>{snapshot.displayCapturedAt}</span>
+                  <small>{copy.archiveDamaged}</small>
+                </span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </nav>
+    )
+  }
 </footer>

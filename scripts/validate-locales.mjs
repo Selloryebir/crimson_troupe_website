@@ -32,6 +32,14 @@ const localeValidationRules = {
   },
 };
 
+const forbiddenSearchNarrativePatterns = {
+  yan: /表站|里站|不包含|不会连接|网站存档/u,
+  higashi: /表サイト|保存版|現在のサイトには接続|スナップショット/u,
+  columbia: /front site|snapshot|archive|does not connect/iu,
+  minos: /στιγμιότυπο|αρχείο|δεν συνδέεται/iu,
+  ursus: /снимок|архив|не связан с текущим сайтом/iu,
+};
+
 function assertComplete(value, path = 'content') {
   if (typeof value === 'string') {
     assert.notEqual(value.trim(), '', `${path} 不能为空`);
@@ -136,6 +144,18 @@ for (const edition of builtEditions) {
     productions,
     `${edition.editionId}.productions`,
   );
+  const forbiddenSearchPattern = forbiddenSearchNarrativePatterns[edition.editionId];
+  if (forbiddenSearchPattern) {
+    assert.doesNotMatch(
+      JSON.stringify({
+        front: localization.site.front.search,
+        archive: localization.site.archive.search,
+        archiveIndex: localization.site.archive.searchIndex,
+      }),
+      forbiddenSearchPattern,
+      `${edition.editionId} 搜索访客文案泄露内部时间层或存档关系`,
+    );
+  }
   const localeRule = localeValidationRules[edition.editionId];
   if (localeRule) {
     const visitorContent = {
