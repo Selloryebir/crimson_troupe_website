@@ -6,10 +6,14 @@ export interface WorldPerformanceRoots {
   featuredPerformanceId: PerformanceId;
 }
 
+export type ContentRootSetId = 'current-showcase';
+
 export interface ContentRootSet {
-  rootSetId: 'current-showcase';
+  rootSetId: ContentRootSetId;
   worlds: Readonly<Record<SiteWorld, WorldPerformanceRoots>>;
 }
+
+export type ContentRootSetRegistry = Readonly<Record<ContentRootSetId, ContentRootSet>>;
 
 export const currentRootSet = Object.freeze({
   rootSetId: 'current-showcase',
@@ -39,17 +43,32 @@ export const currentRootSet = Object.freeze({
   }),
 } as const satisfies ContentRootSet);
 
+export const contentRootSets = Object.freeze({
+  [currentRootSet.rootSetId]: currentRootSet,
+}) satisfies ContentRootSetRegistry;
+
+export function getContentRootSet(
+  rootSetId: ContentRootSetId,
+  registry: ContentRootSetRegistry = contentRootSets,
+): ContentRootSet {
+  const rootSet = registry[rootSetId];
+  if (!rootSet || rootSet.rootSetId !== rootSetId) {
+    throw new Error(`未知或不匹配的内容根集合：${rootSetId}`);
+  }
+  return rootSet;
+}
+
 export function getRootPerformanceIds(rootSet: ContentRootSet): readonly PerformanceId[] {
   return [...rootSet.worlds.front.performanceIds, ...rootSet.worlds.archive.performanceIds];
 }
 
 export function validateContentRootSet(
   rootSet: ContentRootSet,
-  knownPerformanceIds: ReadonlySet<string>,
+  knownPerformances: Readonly<Record<string, { world: SiteWorld }>>,
 ): void {
   const allIds = getRootPerformanceIds(rootSet);
   const duplicates = allIds.filter((id, index) => allIds.indexOf(id) !== index);
-  const unknown = allIds.filter((id) => !knownPerformanceIds.has(id));
+  const unknown = allIds.filter((id) => !Object.hasOwn(knownPerformances, id));
 
   if (duplicates.length > 0) {
     throw new Error(
@@ -62,6 +81,14 @@ export function validateContentRootSet(
 
   for (const world of ['front', 'archive'] as const) {
     const roots = rootSet.worlds[world];
+    const misplaced = roots.performanceIds.filter(
+      (performanceId) => knownPerformances[performanceId]?.world !== world,
+    );
+    if (misplaced.length > 0) {
+      throw new Error(
+        `根集合 ${rootSet.rootSetId} 的 ${world} 含跨时间层场次：${misplaced.join('、')}`,
+      );
+    }
     if (!roots.performanceIds.includes(roots.featuredPerformanceId)) {
       throw new Error(
         `根集合 ${rootSet.rootSetId} 的 ${world} 焦点不属于该时间层：${roots.featuredPerformanceId}`,

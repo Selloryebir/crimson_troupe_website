@@ -23,7 +23,12 @@ import {
 } from '../src/data/localized/resolve.ts';
 import { performances } from '../src/data/performances.ts';
 import { getFrontSearchIndex } from '../src/data/site-search-index.ts';
-import { derivePerformanceCollection, getSiteTerraNow } from '../src/data/site-time.ts';
+import {
+  assertTerraDateTime,
+  compareTerraDateTime,
+  derivePerformanceCollection,
+  getSiteTerraNow,
+} from '../src/data/site-time.ts';
 import { getTicketingOptions } from '../src/data/ticketing.ts';
 import { shouldRequestArchiveEntry } from '../src/scripts/pollution-controller.ts';
 import {
@@ -37,6 +42,8 @@ import {
   createTicketMatrix,
   createTicketSvg,
   createTicketTexture,
+  layoutTicketText,
+  segmentTicketGraphemes,
 } from '../src/scripts/ticket-artifact.ts';
 import {
   MAX_REQUIRING_RESUBMIT_RESULTS,
@@ -62,12 +69,17 @@ import {
 assert.equal(buildProfile, 'showcase');
 assert.equal(buildContext, buildContexts.showcase);
 assert.deepEqual(buildContexts.showcase.editionIds, ['yan']);
-assert.deepEqual(buildContexts.preview.editionIds, ['yan', 'higashi', 'columbia']);
+assert.deepEqual(buildContexts.preview.editionIds, [
+  'yan',
+  'higashi',
+  'columbia',
+  'minos',
+  'ursus',
+]);
 assert.deepEqual(buildContexts.release.editionIds, ['yan']);
 assert.throws(() => getBuildContext(buildContexts, 'custom'), /未知构建预设/u);
 
-const knownPerformanceIds = new Set(Object.keys(performances));
-assert.doesNotThrow(() => validateContentRootSet(currentRootSet, knownPerformanceIds));
+assert.doesNotThrow(() => validateContentRootSet(currentRootSet, performances));
 assert.throws(
   () =>
     validateContentRootSet(
@@ -84,7 +96,7 @@ assert.throws(
           },
         },
       },
-      knownPerformanceIds,
+      performances,
     ),
   /含重复场次/u,
 );
@@ -101,16 +113,53 @@ assert.throws(
           },
         },
       },
-      knownPerformanceIds,
+      performances,
     ),
   /焦点不属于该时间层/u,
 );
+for (const [world, misplacedPerformanceId] of [
+  ['front', currentRootSet.worlds.archive.performanceIds[0]],
+  ['archive', currentRootSet.worlds.front.performanceIds[0]],
+]) {
+  const sourceWorld = performances[misplacedPerformanceId].world;
+  const sourcePerformanceIds = currentRootSet.worlds[sourceWorld].performanceIds.filter(
+    (performanceId) => performanceId !== misplacedPerformanceId,
+  );
+  assert.throws(
+    () =>
+      validateContentRootSet(
+        {
+          ...currentRootSet,
+          worlds: {
+            ...currentRootSet.worlds,
+            [sourceWorld]: {
+              performanceIds: sourcePerformanceIds,
+              featuredPerformanceId:
+                currentRootSet.worlds[sourceWorld].featuredPerformanceId === misplacedPerformanceId
+                  ? sourcePerformanceIds[0]
+                  : currentRootSet.worlds[sourceWorld].featuredPerformanceId,
+            },
+            [world]: {
+              performanceIds: [misplacedPerformanceId],
+              featuredPerformanceId: misplacedPerformanceId,
+            },
+          },
+        },
+        performances,
+      ),
+    /跨时间层场次/u,
+  );
+}
 
 const showcaseSnapshot = resolveContent(buildContexts.showcase);
+const previewSnapshot = resolveContent(buildContexts.preview);
 assert.equal(showcaseSnapshot.maturity, 'preview');
 assert.equal(showcaseSnapshot.performanceEntries.length, 12);
 assert.equal(showcaseSnapshot.productionEntries.length, 7);
 assert.equal(showcaseSnapshot.locationEntries.length, 7);
+assert.equal(showcaseSnapshot.artworkEntries.length, 7);
+assert.equal(showcaseSnapshot.seatingPlanEntries.length, 3);
+assert.deepEqual(Object.keys(showcaseSnapshot.localizationPackages), ['yan']);
 assert.deepEqual(showcaseSnapshot.featuredPerformanceIds, {
   front: 'uncrowned-trimount-1098',
   archive: 'der-ring-zwillingsturme-1091-0817',
@@ -153,7 +202,9 @@ const reducedRootSet = {
     },
   },
 };
-const reducedSnapshot = resolveContent(buildContexts.showcase, reducedRootSet);
+const reducedSnapshot = resolveContent(buildContexts.showcase, {
+  [reducedRootSet.rootSetId]: reducedRootSet,
+});
 assert.deepEqual(
   getWorldPerformanceEntries(reducedSnapshot, 'front').map(([performanceId]) => performanceId),
   currentRootSet.worlds.front.performanceIds.slice(1),
@@ -162,7 +213,13 @@ assert.deepEqual(getWorldProductionIds(reducedSnapshot, 'front'), ['caged-fire',
 assert.equal(reducedSnapshot.performances['uncrowned-trimount-1098'], undefined);
 assert.equal(reducedSnapshot.productions.uncrowned, undefined);
 assert.equal(reducedSnapshot.locations.trimount, undefined);
-const reducedLocalization = getLocalization(editions.yan);
+assert.equal(reducedSnapshot.artworks.uncrowned, undefined);
+assert.equal(reducedSnapshot.seatingPlans['trimount-grand-fan'], undefined);
+assert.throws(
+  () => getLocalization(editions.higashi, reducedSnapshot),
+  /国家版本 higashi 不属于当前内容快照/u,
+);
+const reducedLocalization = getLocalization(editions.yan, reducedSnapshot);
 assert.ok(
   getLocalizedPerformanceEntries(reducedLocalization, reducedSnapshot).every(
     ([performanceId]) => performanceId !== 'uncrowned-trimount-1098',
@@ -213,11 +270,24 @@ assert.throws(
     }),
   /只允许 fixed/u,
 );
-assert.equal(derivePerformanceCollection(frontNow, frontNow), 'current');
-assert.equal(
-  derivePerformanceCollection({ ...frontNow, day: frontNow.day - 1 }, frontNow),
-  'history',
+assert.throws(
+  () => resolveContent({ ...buildContexts.showcase, rootSetId: 'missing-root-set' }),
+  /未知或不匹配的内容根集合/u,
 );
+for (const invalidDateTime of [
+  { ...frontNow, year: 1098.5 },
+  { ...frontNow, month: 0 },
+  { ...frontNow, month: 13 },
+  { ...frontNow, day: 0 },
+  { ...frontNow, day: 32 },
+  { ...frontNow, time: '24:00' },
+  { ...frontNow, time: 'banana' },
+]) {
+  assert.throws(() => assertTerraDateTime(invalidDateTime), /不是有效的泰拉时间结构/u);
+  assert.throws(() => compareTerraDateTime(invalidDateTime, frontNow), /不是有效的泰拉时间结构/u);
+}
+assert.equal(derivePerformanceCollection(frontNow, frontNow), 'current');
+assert.equal(derivePerformanceCollection({ ...frontNow, month: 8, day: 31 }, frontNow), 'history');
 
 const collectionFixtures = [
   {
@@ -229,7 +299,7 @@ const collectionFixtures = [
   {
     label: '历史取消场次仍属于历史演出',
     status: 'cancelled',
-    effectiveDateTime: { ...frontNow, day: frontNow.day - 1 },
+    effectiveDateTime: { ...frontNow, month: 8, day: 31 },
     expected: 'history',
   },
   {
@@ -241,7 +311,7 @@ const collectionFixtures = [
   {
     label: '改期场次按生效日期而非原日期归类',
     status: 'scheduled',
-    previousDateTime: { ...frontNow, day: frontNow.day - 2 },
+    previousDateTime: { ...frontNow, month: 8, day: 30 },
     effectiveDateTime: { ...frontNow, day: frontNow.day + 3 },
     expected: 'current',
   },
@@ -638,10 +708,10 @@ assert.deepEqual(restoreTicketingState('{"version":2}', catalog), createTicketin
 assert.deepEqual(restoreTicketingState('{"version":999}', catalog), createTicketingState());
 
 const previewLocalizations = previewEditionIds.map((editionId) =>
-  getLocalization(editions[editionId]),
+  getLocalization(editions[editionId], previewSnapshot),
 );
 const yanLocalization = previewLocalizations[0];
-const yanOptions = getTicketingOptions(yanLocalization);
+const yanOptions = getTicketingOptions(yanLocalization, previewSnapshot);
 const crossLocaleItem = {
   performanceId: yanOptions[0].performanceId,
   zone: yanOptions[0].offers[0].zone,
@@ -653,7 +723,7 @@ const crossLocaleState = updateBasket(
   crossLocaleItem.performanceId,
 );
 for (const localization of previewLocalizations.slice(1)) {
-  const targetOptions = getTicketingOptions(localization);
+  const targetOptions = getTicketingOptions(localization, previewSnapshot);
   const crossLocaleRestored = restoreTicketingState(
     JSON.stringify(crossLocaleState),
     targetOptions.map((option) => ({ performanceId: option.performanceId, offers: option.offers })),
@@ -723,6 +793,56 @@ assert.equal(
     locale: 'zh-CN',
   }),
 );
+
+const unicodeTicketSamples = [
+  {
+    locale: 'ja-JP',
+    value: '星降る夜に名を失った劇場のための長い長い無言劇',
+  },
+  {
+    locale: 'ru',
+    value: 'Сверхнепредставительнейшееархивнотеатральноепредставление',
+  },
+  {
+    locale: 'el',
+    value: 'Η\u0301 τελευταία παράσταση του περιπλανώμενου θεάτρου στο παλιό λιμάνι',
+  },
+];
+for (const sample of unicodeTicketSamples) {
+  const graphemes = segmentTicketGraphemes(sample.value, sample.locale);
+  assert.equal(graphemes.join(''), sample.value);
+  assert.ok(graphemes.every((grapheme) => !/^\p{Mark}/u.test(grapheme)));
+  const layout = layoutTicketText(sample.value, sample.locale, {
+    maxWidth: 770,
+    preferredFontSize: 54,
+    minimumFontSize: 30,
+    maxLines: 3,
+  });
+  assert.ok(layout.fontSize >= 30);
+  assert.ok(layout.lines.length <= 3);
+  assert.equal(layout.lines.join('').replaceAll(/\s/gu, ''), sample.value.replaceAll(/\s/gu, ''));
+}
+
+const unicodeArtifactSvg = createTicketSvg({
+  performance: {
+    ...artifactPerformance,
+    title: unicodeTicketSamples[0].value,
+    kind: 'Особое архивное представление',
+    dateTime: '1098.09.17 / 19:30 — επόμενη είσοδος',
+    place: unicodeTicketSamples[2].value,
+  },
+  basketItem: basketA,
+  zoneLabel: 'Α 区',
+  number: '123456789012',
+  stamps: artifactStamps,
+  messages: yanLocalization.messages.ticketing.artifact,
+  locale: 'el',
+});
+assert.ok(unicodeArtifactSvg.includes('data-ticket-field="title"'));
+assert.ok(unicodeArtifactSvg.includes('data-ticket-field="place"'));
+assert.ok(unicodeArtifactSvg.includes('data-ticket-line="2"'));
+assert.ok(!unicodeArtifactSvg.includes('…'));
+assert.ok(unicodeArtifactSvg.includes('<rect x="920"'));
 
 console.log(
   `state validation passed: pollution=${pollutionTriggers.length} triggers, p12-events=${(

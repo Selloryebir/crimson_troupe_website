@@ -105,6 +105,8 @@ export const ticketSeatingPlans = {
   },
 } as const satisfies Record<SeatingPlanId, SeatingPlanDefinition>;
 
-export function getTicketSeatingPlan(seatingPlanId: SeatingPlanId): SeatingPlanDefinition {
+export function getRegisteredTicketSeatingPlan(
+  seatingPlanId: SeatingPlanId,
+): SeatingPlanDefinition {
   return ticketSeatingPlans[seatingPlanId];
 }

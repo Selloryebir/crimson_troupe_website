@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
-import { getProductionArtwork } from '../../data/production-artworks.ts';
+import { buildSnapshot, getSnapshotProductionArtwork } from '../../data/content/resolve.ts';
+import { getSnapshotProductionArtworkAsset } from '../../data/production-artwork-assets.ts';
 import type { ProductionId, ProductionVisual } from '../../data/productions/index.ts';
 import TroupeMark from '../shared/TroupeMark.astro';
 
@@ -21,14 +22,15 @@ const {
   number = 'CT / 1091',
   compact = false,
 } = Astro.props;
-const artwork = getProductionArtwork(productionId, 'archive');
+const artwork = getSnapshotProductionArtwork(buildSnapshot, productionId, 'archive');
+const artworkAsset = getSnapshotProductionArtworkAsset(buildSnapshot, productionId, 'archive');
 ---
 
 <div
   class:list={[
     'archive-poster',
     `archive-poster--${visual}`,
-    { 'is-compact': compact, 'has-artwork': artwork },
+    { 'is-compact': compact, 'has-artwork': artwork && artworkAsset },
   ]}
   data-pollution-slot="poster"
   data-title-tone={artwork?.titleTone}
@@ -37,10 +39,10 @@ const artwork = getProductionArtwork(productionId, 'archive');
     : undefined}
 >
   {
-    artwork && (
+    artwork && artworkAsset && (
       <Image
         class="archive-poster__image"
-        src={artwork.source}
+        src={artworkAsset}
         alt=""
         widths={[240, 480, 768]}
         sizes={
@@ -58,5 +60,5 @@ const artwork = getProductionArtwork(productionId, 'archive');
   ><div class="archive-poster__title">
     <strong>{title}</strong>{subtitle && <small>{subtitle}</small>}
   </div>
-  {artwork && <TroupeMark class="archive-poster__mark" />}
+  {artwork && artworkAsset && <TroupeMark class="archive-poster__mark" />}
 </div>

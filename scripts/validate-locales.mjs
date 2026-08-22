@@ -18,6 +18,18 @@ const localeValidationRules = {
     forbiddenPattern: /\p{Script=Han}/u,
     forbiddenMessage: '哥伦比亚预览内容包含意外汉字',
   },
+  minos: {
+    forbiddenPattern: /\p{Script=Han}/u,
+    forbiddenMessage: '米诺斯预览内容包含意外汉字',
+    requiredPattern: /\p{Script=Greek}/u,
+    requiredMessage: '米诺斯预览的主要内容类别必须包含希腊字母',
+  },
+  ursus: {
+    forbiddenPattern: /\p{Script=Han}/u,
+    forbiddenMessage: '乌萨斯预览内容包含意外汉字',
+    requiredPattern: /\p{Script=Cyrillic}/u,
+    requiredMessage: '乌萨斯预览的主要内容类别必须包含西里尔字母',
+  },
 };
 
 function assertComplete(value, path = 'content') {
@@ -126,16 +138,26 @@ for (const edition of builtEditions) {
   );
   const localeRule = localeValidationRules[edition.editionId];
   if (localeRule) {
+    const visitorContent = {
+      site: localization.site,
+      programs: localization.programs,
+      messages: localization.messages,
+      archiveProjection: localization.archiveProjection,
+    };
     assert.doesNotMatch(
-      JSON.stringify({
-        site: localization.site,
-        programs: localization.programs,
-        messages: localization.messages,
-        archiveProjection: localization.archiveProjection,
-      }),
+      JSON.stringify(visitorContent),
       localeRule.forbiddenPattern,
       localeRule.forbiddenMessage,
     );
+    if (localeRule.requiredPattern) {
+      for (const [category, content] of Object.entries(visitorContent)) {
+        assert.match(
+          JSON.stringify(content),
+          localeRule.requiredPattern,
+          `${localeRule.requiredMessage}：${category}`,
+        );
+      }
+    }
   }
 }
 

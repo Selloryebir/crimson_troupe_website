@@ -1,7 +1,7 @@
 import type { BuildContext } from './build-context.ts';
 import {
   approvedContentDigests,
-  createPerformanceApprovalDigests,
+  createContentApprovalDigests,
   type ApprovedContentDigests,
 } from './approval-digests.ts';
 import type { ContentRootSet } from './root-sets.ts';
@@ -16,16 +16,30 @@ export function assertContentContextEligible(
     return;
   }
 
-  const currentDigests = createPerformanceApprovalDigests(context.editionIds, rootSet);
-  const ineligible = getRootPerformanceIds(rootSet).flatMap((performanceId) => {
-    const approvedDigest = approvals[performanceId];
-    if (!approvedDigest) {
-      return [`${performanceId}（无批准摘要）`];
-    }
-    return approvedDigest === currentDigests[performanceId]
-      ? []
-      : [`${performanceId}（批准摘要已失效）`];
-  });
+  const currentDigests = createContentApprovalDigests(context.editionIds, rootSet);
+  const ineligible: string[] = [];
+  if (!approvals.site) {
+    ineligible.push('site（无批准摘要）');
+  } else if (approvals.site !== currentDigests.site) {
+    ineligible.push('site（批准摘要已失效）');
+  }
+  const approvedRootSetDigest = approvals.rootSets[rootSet.rootSetId];
+  if (!approvedRootSetDigest) {
+    ineligible.push(`${rootSet.rootSetId}（无批准摘要）`);
+  } else if (approvedRootSetDigest !== currentDigests.rootSet) {
+    ineligible.push(`${rootSet.rootSetId}（批准摘要已失效）`);
+  }
+  ineligible.push(
+    ...getRootPerformanceIds(rootSet).flatMap((performanceId) => {
+      const approvedDigest = approvals.performances[performanceId];
+      if (!approvedDigest) {
+        return [`${performanceId}（无批准摘要）`];
+      }
+      return approvedDigest === currentDigests.performances[performanceId]
+        ? []
+        : [`${performanceId}（批准摘要已失效）`];
+    }),
+  );
   if (ineligible.length > 0) {
     throw new Error(
       `构建预设 ${context.profile} 要求 approved-only，但根集合 ${rootSet.rootSetId} 含不合格内容：${ineligible.join('、')}`,

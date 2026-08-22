@@ -86,4 +86,42 @@ export default defineConfig([
       'astro/no-set-html-directive': 'error',
     },
   },
+  {
+    files: [
+      'src/pages/**/*.{astro,ts}',
+      'src/components/**/*.{astro,ts}',
+      'src/layouts/**/*.{astro,ts}',
+      'src/data/site-search-index.ts',
+      'src/data/ticketing.ts',
+    ],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: [
+                '**/data/locations',
+                '**/data/locations.ts',
+                '**/data/performances',
+                '**/data/performances.ts',
+                '**/data/productions',
+                '**/data/productions/**',
+                '**/data/production-artworks',
+                '**/data/production-artworks.ts',
+                '**/data/production-artwork-manifest',
+                '**/data/production-artwork-manifest.ts',
+                '**/data/ticket-seating-plans',
+                '**/data/ticket-seating-plans.ts',
+                '**/data/localized/packages',
+                '**/data/localized/packages.ts',
+              ],
+              allowTypeImports: true,
+              message: '页面消费者必须通过当前 ContentSnapshot 或窄领域 API 读取构建内容。',
+            },
+          ],
+        },
+      ],
+    },
+  },
 ]);

@@ -109,6 +109,7 @@ export function initTicketingExperience(): void {
   }
 
   const form = app.querySelector<HTMLFormElement>('[data-ticket-basket]');
+  const basketTitle = app.querySelector<HTMLElement>('[data-ticket-basket-title]');
   const count = app.querySelector<HTMLElement>('[data-ticket-count]');
   const baseTotal = app.querySelector<HTMLElement>('[data-ticket-base-total]');
   const start = app.querySelector<HTMLButtonElement>('[data-ticket-start]');
@@ -126,6 +127,7 @@ export function initTicketingExperience(): void {
   const live = app.querySelector<HTMLElement>('[data-ticketing-live]');
   if (
     !form ||
+    !basketTitle ||
     !count ||
     !baseTotal ||
     !start ||
@@ -249,6 +251,8 @@ export function initTicketingExperience(): void {
     eyebrow.className = 'eyebrow';
     eyebrow.textContent = messages.receiptEyebrow;
     const title = document.createElement('h3');
+    title.id = 'ticket-result-title';
+    title.tabIndex = -1;
     title.textContent = messages.receiptTitle;
     const copy = document.createElement('p');
     copy.textContent = messages.receiptCopy;
@@ -447,7 +451,13 @@ export function initTicketingExperience(): void {
       renderReceipt();
     }
     if (focusStage) {
-      (state.phase === 'success' ? result : state.phase === 'selection' ? form : flow).focus();
+      const focusTarget =
+        state.phase === 'success'
+          ? result.querySelector<HTMLElement>('#ticket-result-title')
+          : state.phase === 'selection'
+            ? basketTitle
+            : flowTitle;
+      focusTarget?.focus();
     }
   };
 
@@ -518,8 +528,8 @@ export function initTicketingExperience(): void {
     }
     state = next;
     save();
-    live.textContent = messages.submitted;
     render(true);
+    live.textContent = flowTitle.textContent || messages.submitted;
   });
 
   flowActions.addEventListener('click', (event) => {
@@ -549,8 +559,9 @@ export function initTicketingExperience(): void {
       state = returnToSelection(state);
     }
     save();
-    live.textContent = state.phase === 'success' ? messages.success : messages.stateUpdated;
     render(true);
+    live.textContent =
+      state.phase === 'success' ? messages.success : flowTitle.textContent || messages.stateUpdated;
   });
 
   issuedTickets.addEventListener('click', (event) => {
