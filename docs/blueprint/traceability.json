@@ -556,6 +556,11 @@
       "related": ["BP-MOD-PROGRAMS", "BP-CNT-CORE", "BP-CNT-PRODUCTION-VISUAL", "BP-I18N-TERMS"]
     },
     {
+      "path": "src/data/archive-snapshots.ts",
+      "primary": "BP-MOD-ARCHIVE",
+      "related": ["BP-FND-CORE", "BP-MOD-TERRA-TIME", "BP-MOD-SEARCH"]
+    },
+    {
       "path": "src/data/site-routes.ts",
       "primary": "BP-FND-CORE",
       "related": ["BP-FND-DOMAIN", "BP-I18N-CORE"]
@@ -596,44 +601,49 @@
       "related": ["BP-FND-EXPERIENCE", "BP-I18N-CORE"]
     },
     {
-      "path": "src/pages/[routePrefix]/archive/site/1091/index.astro",
+      "path": "src/pages/[routePrefix]/archive/site/1091-07-01/index.astro",
       "primary": "BP-MOD-ARCHIVE",
       "related": ["BP-FND-CORE", "BP-FND-EXPERIENCE", "BP-CNT-CORE"]
     },
     {
-      "path": "src/pages/[routePrefix]/archive/site/1091/performances/[performanceId].astro",
+      "path": "src/pages/[routePrefix]/archive/site/1091-07-01/performances/[performanceId].astro",
       "primary": "BP-MOD-PROGRAMS",
       "related": ["BP-MOD-ARCHIVE", "BP-FND-DOMAIN", "BP-FND-CORE"]
     },
     {
-      "path": "src/pages/[routePrefix]/archive/site/1091/performances/history/index.astro",
+      "path": "src/pages/[routePrefix]/archive/site/1091-07-01/performances/history/index.astro",
       "primary": "BP-MOD-PROGRAMS",
       "related": ["BP-MOD-ARCHIVE", "BP-FND-DOMAIN", "BP-FND-CORE"]
     },
     {
-      "path": "src/pages/[routePrefix]/archive/site/1091/performances/index.astro",
+      "path": "src/pages/[routePrefix]/archive/site/1091-07-01/performances/index.astro",
       "primary": "BP-MOD-PROGRAMS",
       "related": ["BP-MOD-ARCHIVE", "BP-FND-DOMAIN", "BP-FND-CORE"]
     },
     {
-      "path": "src/pages/[routePrefix]/archive/site/1091/productions/[productionId].astro",
+      "path": "src/pages/[routePrefix]/archive/site/1091-07-01/productions/[productionId].astro",
       "primary": "BP-MOD-PROGRAMS",
       "related": ["BP-MOD-ARCHIVE", "BP-FND-DOMAIN", "BP-FND-CORE"]
     },
     {
-      "path": "src/pages/[routePrefix]/archive/site/1091/search/index.astro",
+      "path": "src/pages/[routePrefix]/archive/site/1091-07-01/search/index.astro",
       "primary": "BP-MOD-SEARCH",
       "related": ["BP-MOD-ARCHIVE", "BP-FND-CORE", "BP-I18N-CORE"]
     },
     {
-      "path": "src/pages/[routePrefix]/archive/site/1091/tickets/index.astro",
+      "path": "src/pages/[routePrefix]/archive/site/1091-07-01/tickets/index.astro",
       "primary": "BP-MOD-TICKETING",
       "related": ["BP-MOD-ARCHIVE", "BP-FND-CORE", "BP-MOD-PROGRAMS"]
     },
     {
-      "path": "src/pages/[routePrefix]/archive/site/1091/troupe/index.astro",
+      "path": "src/pages/[routePrefix]/archive/site/1091-07-01/troupe/index.astro",
       "primary": "BP-MOD-ARCHIVE",
       "related": ["BP-FND-CORE", "BP-CNT-CORE"]
+    },
+    {
+      "path": "src/pages/[routePrefix]/archive/site/1091/[...legacy].astro",
+      "primary": "BP-FND-CORE",
+      "related": ["BP-MOD-ARCHIVE", "BP-MOD-PROGRAMS", "BP-MOD-SEARCH", "BP-MOD-TICKETING"]
     },
     {
       "path": "src/pages/[routePrefix]/index.astro",

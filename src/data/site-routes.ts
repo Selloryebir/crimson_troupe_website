@@ -1,13 +1,24 @@
+import { currentArchiveSnapshot } from './archive-snapshots.ts';
 import type { Edition } from './editions';
 
-export const ARCHIVE_YEAR = '1091' as const;
+export const LEGACY_ARCHIVE_ROUTE_SEGMENT = '1091' as const;
 export type SiteWorld = 'front' | 'archive';
 
 const withTrailingSlash = (path: string) => (path.endsWith('/') ? path : `${path}/`);
 
 export function siteRoot(edition: Edition, world: SiteWorld): string {
   const editionRoot = `/${edition.routePrefix}/`;
-  return world === 'front' ? editionRoot : `${editionRoot}archive/site/${ARCHIVE_YEAR}/`;
+  return world === 'front'
+    ? editionRoot
+    : `${editionRoot}archive/site/${currentArchiveSnapshot.routeSegment}/`;
+}
+
+export function legacyArchiveSiteRoot(edition: Edition): string {
+  return `/${edition.routePrefix}/archive/site/${LEGACY_ARCHIVE_ROUTE_SEGMENT}/`;
+}
+
+export function legacyArchiveSitePath(edition: Edition, segment = ''): string {
+  return withTrailingSlash(`${legacyArchiveSiteRoot(edition)}${segment.replace(/^\/+/, '')}`);
 }
 
 export function sitePath(edition: Edition, world: SiteWorld, segment = ''): string {

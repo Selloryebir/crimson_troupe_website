@@ -5,12 +5,24 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { buildSnapshot } from '../src/data/content/resolve.ts';
+import { archiveSnapshots, currentArchiveSnapshot } from '../src/data/archive-snapshots.ts';
+import { buildSnapshot, getWorldProductionIds } from '../src/data/content/resolve.ts';
 import { buildProfile } from '../src/data/editions.ts';
 import { formatMessage } from '../src/data/localized/format.ts';
 import { getLocalization } from '../src/data/localized/resolve.ts';
-import { getArchiveSearchIndex, getFrontSearchIndex } from '../src/data/site-search-index.ts';
-import { performancePath, productionPath, sitePath, siteRoot } from '../src/data/site-routes.ts';
+import {
+  getArchiveSearchIndex,
+  getFrontSearchIndex,
+  getSiteSearchScope,
+} from '../src/data/site-search-index.ts';
+import {
+  legacyArchiveSitePath,
+  legacyArchiveSiteRoot,
+  performancePath,
+  productionPath,
+  sitePath,
+  siteRoot,
+} from '../src/data/site-routes.ts';
 import { getTicketingOptions } from '../src/data/ticketing.ts';
 
 const { editions: builtEditions, performanceEntries, productionEntries } = buildSnapshot;
@@ -94,9 +106,39 @@ function requiredRoutesForEdition(edition) {
 }
 
 const requiredRoutes = new Set(['/']);
+const legacyRedirects = new Map();
 for (const edition of builtEditions) {
   for (const route of requiredRoutesForEdition(edition)) {
     requiredRoutes.add(route);
+  }
+  const editionLegacyRedirects = [
+    [legacyArchiveSiteRoot(edition), siteRoot(edition, 'archive')],
+    [legacyArchiveSitePath(edition, 'performances'), sitePath(edition, 'archive', 'performances')],
+    [
+      legacyArchiveSitePath(edition, 'performances/history'),
+      sitePath(edition, 'archive', 'performances/history'),
+    ],
+    [legacyArchiveSitePath(edition, 'troupe'), sitePath(edition, 'archive', 'troupe')],
+    [legacyArchiveSitePath(edition, 'search'), sitePath(edition, 'archive', 'search')],
+    [legacyArchiveSitePath(edition, 'tickets'), sitePath(edition, 'archive', 'tickets')],
+  ];
+  for (const [performanceId, performance] of performanceEntries) {
+    if (performance.world === 'archive') {
+      editionLegacyRedirects.push([
+        legacyArchiveSitePath(edition, `performances/${performanceId}`),
+        performancePath(edition, 'archive', performanceId),
+      ]);
+    }
+  }
+  for (const productionId of getWorldProductionIds(buildSnapshot, 'archive')) {
+    editionLegacyRedirects.push([
+      legacyArchiveSitePath(edition, `productions/${productionId}`),
+      productionPath(edition, 'archive', productionId),
+    ]);
+  }
+  for (const [legacyRoute, canonicalRoute] of editionLegacyRedirects) {
+    requiredRoutes.add(legacyRoute);
+    legacyRedirects.set(legacyRoute, canonicalRoute);
   }
 }
 
@@ -152,6 +194,16 @@ for (const route of requiredRoutes) {
 let linkCount = 0;
 for (const [route, filePath] of routes) {
   const html = readFileSync(filePath, 'utf8');
+  const redirectTarget = legacyRedirects.get(route);
+  if (redirectTarget) {
+    assert.match(
+      html,
+      new RegExp(`http-equiv=["']refresh["'][^>]+${redirectTarget.replaceAll('/', '\\/')}`, 'iu'),
+      `${route} 没有静态重定向到 ${redirectTarget}`,
+    );
+    assert.doesNotMatch(html, /id="main-content"/u, `${route} 不应保留第二份历史快照正文`);
+    continue;
+  }
   const edition = editionForRoute(route);
   const expectedLocale = edition?.locale ?? 'zh-CN';
   assert.match(
@@ -194,7 +246,7 @@ for (const [route, filePath] of routes) {
     } else {
       assert.doesNotMatch(html, /<details[^>]*data-edition-selector/u, `${route} 不应显示空选择器`);
     }
-    if (route.includes('/archive/site/1091/')) {
+    if (edition && route.startsWith(siteRoot(edition, 'archive'))) {
       assert.ok(
         html.indexOf('<h1') < html.indexOf('data-archive-projection'),
         `${route} 的主标题必须先于三级叙事投影`,
@@ -261,6 +313,13 @@ function readSearchIndex(route) {
   return JSON.parse(decodeHtmlAttribute(encoded));
 }
 
+function readSearchScope(route) {
+  const html = readFileSync(routes.get(route), 'utf8');
+  const scope = html.match(/data-search-scope="([^"]+)"/u)?.[1];
+  assert.ok(scope, `${route} 缺少搜索范围身份`);
+  return decodeHtmlAttribute(scope);
+}
+
 for (const edition of builtEditions) {
   const frontRoute = sitePath(edition, 'front', 'search');
   const archiveRoute = sitePath(edition, 'archive', 'search');
@@ -268,19 +327,19 @@ for (const edition of builtEditions) {
   const archiveSearch = readSearchIndex(archiveRoute);
   assert.deepEqual(frontSearch, getFrontSearchIndex(edition, buildSnapshot));
   assert.deepEqual(archiveSearch, getArchiveSearchIndex(edition, buildSnapshot));
+  assert.equal(readSearchScope(frontRoute), getSiteSearchScope(edition, 'front'));
+  assert.equal(readSearchScope(archiveRoute), getSiteSearchScope(edition, 'archive'));
   assert.ok(frontSearch.length > 0 && archiveSearch.length > 0);
   assert.ok(
     frontSearch.every(
       (entry) =>
         entry.href.startsWith(`/${edition.routePrefix}/`) &&
-        !entry.href.includes('/archive/site/1091/'),
+        !entry.href.startsWith(siteRoot(edition, 'archive')),
     ),
     `${edition.editionId} 表站搜索索引发生跨范围泄漏`,
   );
   assert.ok(
-    archiveSearch.every((entry) =>
-      entry.href.startsWith(`/${edition.routePrefix}/archive/site/1091/`),
-    ),
+    archiveSearch.every((entry) => entry.href.startsWith(siteRoot(edition, 'archive'))),
     `${edition.editionId} 里站搜索索引发生跨范围泄漏`,
   );
 
@@ -300,6 +359,22 @@ for (const edition of builtEditions) {
     'utf8',
   );
   assert.doesNotMatch(archiveTicketPage, /data-ticketing-app/u);
+}
+
+assert.equal(
+  currentArchiveSnapshot.snapshotId,
+  '1091-07-01T00:00:00',
+  '当前可访问快照身份发生漂移',
+);
+for (const snapshot of archiveSnapshots) {
+  if (snapshot.state === 'damaged') {
+    const damagedYear = snapshot.displayCapturedAt.slice(0, 4);
+    assert.equal(
+      [...routes.keys()].some((route) => route.includes(`/archive/site/${damagedYear}`)),
+      false,
+      `损坏快照 ${snapshot.snapshotId} 不得生成页面`,
+    );
+  }
 }
 
 for (const filePath of outputFiles.filter((entry) => entry.endsWith('.css'))) {
