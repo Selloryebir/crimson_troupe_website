@@ -6,10 +6,15 @@ import oneHundredAndOneDaysArchive from '../assets/images/productions/one-hundre
 import secondSnowFront from '../assets/images/productions/second-snow-front.webp';
 import theCarnivalArchive from '../assets/images/productions/the-carnival-archive.webp';
 import uncrownedFront from '../assets/images/productions/uncrowned-front.webp';
+import { buildSnapshot, type ContentSnapshot } from './content/resolve.ts';
+import {
+  productionArtworkManifest,
+  type ProductionArtworkManifestEntry,
+} from './production-artwork-manifest.ts';
 import type { ProductionId } from './productions/index.ts';
 import type { SiteWorld } from './site-routes.ts';
 
-export interface ProductionArtwork {
+export interface ProductionArtwork extends ProductionArtworkManifestEntry {
   source: ImageMetadata;
   focalPoint: `${number}% ${number}%`;
   safeCrop: 'portrait-center';
@@ -21,16 +26,27 @@ export interface ProductionArtwork {
     darkenZones: ReadonlyArray<'top' | 'sides' | 'lower' | 'corners'>;
     breachEdge: 'lower-right' | 'upper-center' | 'side-seam';
   };
-  rights: 'project-generated-art-00' | 'project-generated-code-03' | 'project-generated-code-04';
 }
 
 type ProductionArtworkRegistry = Partial<
   Record<ProductionId, Partial<Record<SiteWorld, ProductionArtwork>>>
 >;
 
+function requireArtworkManifest(
+  productionId: ProductionId,
+  world: SiteWorld,
+): ProductionArtworkManifestEntry {
+  const entry = productionArtworkManifest[productionId]?.[world];
+  if (!entry) {
+    throw new Error(`剧目 ${productionId} 缺少 ${world} 素材清单。`);
+  }
+  return entry;
+}
+
 const productionArtworkRegistry: ProductionArtworkRegistry = {
   uncrowned: {
     front: {
+      ...requireArtworkManifest('uncrowned', 'front'),
       source: uncrownedFront,
       focalPoint: '50% 59%',
       safeCrop: 'portrait-center',
@@ -42,11 +58,11 @@ const productionArtworkRegistry: ProductionArtworkRegistry = {
         darkenZones: ['top', 'sides'],
         breachEdge: 'upper-center',
       },
-      rights: 'project-generated-code-03',
     },
   },
   'caged-fire': {
     front: {
+      ...requireArtworkManifest('caged-fire', 'front'),
       source: cagedFireFront,
       focalPoint: '50% 62%',
       safeCrop: 'portrait-center',
@@ -58,11 +74,11 @@ const productionArtworkRegistry: ProductionArtworkRegistry = {
         darkenZones: ['sides', 'lower'],
         breachEdge: 'upper-center',
       },
-      rights: 'project-generated-code-03',
     },
   },
   'second-snow': {
     front: {
+      ...requireArtworkManifest('second-snow', 'front'),
       source: secondSnowFront,
       focalPoint: '50% 52%',
       safeCrop: 'portrait-center',
@@ -74,11 +90,11 @@ const productionArtworkRegistry: ProductionArtworkRegistry = {
         darkenZones: ['top', 'corners'],
         breachEdge: 'side-seam',
       },
-      rights: 'project-generated-code-03',
     },
   },
   'der-ring': {
     archive: {
+      ...requireArtworkManifest('der-ring', 'archive'),
       source: derRingArchive,
       focalPoint: '50% 64%',
       safeCrop: 'portrait-center',
@@ -90,11 +106,11 @@ const productionArtworkRegistry: ProductionArtworkRegistry = {
         darkenZones: ['top', 'sides'],
         breachEdge: 'lower-right',
       },
-      rights: 'project-generated-code-04',
     },
   },
   'one-hundred-and-one-days': {
     archive: {
+      ...requireArtworkManifest('one-hundred-and-one-days', 'archive'),
       source: oneHundredAndOneDaysArchive,
       focalPoint: '50% 48%',
       safeCrop: 'portrait-center',
@@ -106,11 +122,11 @@ const productionArtworkRegistry: ProductionArtworkRegistry = {
         darkenZones: ['sides', 'lower'],
         breachEdge: 'side-seam',
       },
-      rights: 'project-generated-code-04',
     },
   },
   'the-carnival': {
     archive: {
+      ...requireArtworkManifest('the-carnival', 'archive'),
       source: theCarnivalArchive,
       focalPoint: '50% 51%',
       safeCrop: 'portrait-center',
@@ -122,11 +138,11 @@ const productionArtworkRegistry: ProductionArtworkRegistry = {
         darkenZones: ['top', 'sides'],
         breachEdge: 'upper-center',
       },
-      rights: 'project-generated-code-04',
     },
   },
   'ode-au-triomphe': {
     archive: {
+      ...requireArtworkManifest('ode-au-triomphe', 'archive'),
       source: odeAuTriompheArchive,
       focalPoint: '50% 47%',
       safeCrop: 'portrait-center',
@@ -138,7 +154,6 @@ const productionArtworkRegistry: ProductionArtworkRegistry = {
         darkenZones: ['corners', 'lower'],
         breachEdge: 'upper-center',
       },
-      rights: 'project-generated-code-04',
     },
   },
 };
@@ -146,6 +161,10 @@ const productionArtworkRegistry: ProductionArtworkRegistry = {
 export function getProductionArtwork(
   productionId: ProductionId,
   world: SiteWorld,
+  snapshot: ContentSnapshot = buildSnapshot,
 ): ProductionArtwork | undefined {
+  if (!snapshot.productions[productionId]) {
+    return undefined;
+  }
   return productionArtworkRegistry[productionId]?.[world];
 }

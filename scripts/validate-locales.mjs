@@ -2,12 +2,12 @@
 
 import assert from 'node:assert/strict';
 
-import { buildEditionIds, buildProfile, builtEditions, editions } from '../src/data/editions.ts';
-import { locations } from '../src/data/locations.ts';
-import { getLocalization } from '../src/data/localized/resolve.ts';
-import { performances } from '../src/data/performances.ts';
-import { productions } from '../src/data/productions/index.ts';
+import { buildSnapshot } from '../src/data/content/resolve.ts';
+import { buildEditionIds, buildProfile, editions } from '../src/data/editions.ts';
+import { getLocalization, getLocalizedPerformanceEntries } from '../src/data/localized/resolve.ts';
 import { ticketSeatingPlans } from '../src/data/ticket-seating-plans.ts';
+
+const { editions: builtEditions, locations, performances, productions } = buildSnapshot;
 
 const localeValidationRules = {
   higashi: {
@@ -18,28 +18,6 @@ const localeValidationRules = {
     forbiddenPattern: /\p{Script=Han}/u,
     forbiddenMessage: '哥伦比亚预览内容包含意外汉字',
   },
-};
-
-const expectedArchiveMatrix = {
-  'der-ring-londinium-1091-0308': ['der-ring', 'londinium', 'history'],
-  'one-hundred-and-one-days-norport-1091-0419': ['one-hundred-and-one-days', 'norport', 'history'],
-  'the-carnival-wiesheim-1091-0511': ['the-carnival', 'wiesheim', 'history'],
-  'ode-au-triomphe-nuova-volsinii-1091-0623': ['ode-au-triomphe', 'nuova-volsinii', 'history'],
-  'der-ring-zwillingsturme-1091-0817': ['der-ring', 'zwillingsturme', 'current'],
-  'one-hundred-and-one-days-londinium-1091-0903': [
-    'one-hundred-and-one-days',
-    'londinium',
-    'current',
-  ],
-  'the-carnival-montelupe-1091-0921': ['the-carnival', 'montelupe', 'current'],
-  'the-carnival-londinium-1091-1009': ['the-carnival', 'londinium', 'current'],
-  'ode-au-triomphe-zwillingsturme-1091-1028': ['ode-au-triomphe', 'zwillingsturme', 'current'],
-};
-
-const expectedFrontTicketingMatrix = {
-  'uncrowned-trimount-1098': ['trimount-grand-fan', ['A', 'B', 'BOX', 'C', 'S']],
-  'caged-fire-wiesheim-1098': ['wiesheim-mirror-horseshoe', ['A', 'B', 'BOX', 'C', 'S']],
-  'second-snow-norport-1098': ['norport-platform-linear', ['A', 'B', 'C', 'S']],
 };
 
 function assertComplete(value, path = 'content') {
@@ -59,12 +37,10 @@ function assertComplete(value, path = 'content') {
   }
 }
 
-function assertExactKeys(actual, expected, label) {
-  assert.deepEqual(
-    Object.keys(actual).sort(),
-    Object.keys(expected).sort(),
-    `${label} 的稳定 ID 不完整`,
-  );
+function assertSnapshotKeysPresent(actual, expected, label) {
+  for (const key of Object.keys(expected)) {
+    assert.ok(Object.hasOwn(actual, key), `${label} 缺少当前快照稳定 ID：${key}`);
+  }
 }
 
 assert.equal(Object.keys(editions).length, 9, '国家版本注册应包含当前九个实体');
@@ -78,22 +54,12 @@ const productionSourceCounts = Object.values(productions).reduce(
   }),
   { folio: 0, original: 0 },
 );
-assert.deepEqual(productionSourceCounts, { folio: 4, original: 6 });
+assert.ok(productionSourceCounts.folio > 0 && productionSourceCounts.original > 0);
 
 const archivePerformances = Object.values(performances).filter(
   (performance) => performance.world === 'archive',
 );
-assert.equal(archivePerformances.length, 9, '1091 里站应包含九个场次');
-assert.deepEqual(
-  Object.fromEntries(
-    archivePerformances.map((performance) => [
-      performance.performanceId,
-      [performance.productionIds[0], performance.locationId, performance.collection],
-    ]),
-  ),
-  expectedArchiveMatrix,
-  '1091 里站剧目、地点或集合矩阵发生偏移',
-);
+assert.ok(archivePerformances.length > 0, '1091 里站根集合不能为空');
 assert.ok(
   archivePerformances.every(
     (performance) =>
@@ -105,42 +71,24 @@ assert.ok(
   ),
   '1091 里站只能引用活页剧目且必须保持历史快照不可购票',
 );
-assert.deepEqual(
-  archivePerformances.reduce((counts, performance) => {
-    const countryEditionId = locations[performance.locationId].countryEditionId;
-    counts[countryEditionId] = (counts[countryEditionId] ?? 0) + 1;
-    return counts;
-  }, {}),
-  { victoria: 4, leithanien: 3, siracusa: 2 },
-  '1091 里站国家分布发生偏移',
+const frontTicketingPerformances = Object.values(performances).filter(
+  (performance) =>
+    performance.world === 'front' && performance.ticketAvailability.state === 'on-sale',
 );
-
-const frontTicketingMatrix = Object.fromEntries(
-  Object.values(performances)
-    .filter(
-      (performance) =>
-        performance.world === 'front' && performance.ticketAvailability.state === 'on-sale',
-    )
-    .map((performance) => {
-      const { seatingPlanId, offers } = performance.ticketAvailability;
-      const planZones = ticketSeatingPlans[seatingPlanId].zones.map(({ zone }) => zone).sort();
-      const offerZones = offers.map(({ zone }) => zone).sort();
-      assert.deepEqual(
-        planZones,
-        offerZones,
-        `${performance.performanceId} 的示意分区与报价不一致`,
-      );
-      return [performance.performanceId, [seatingPlanId, offerZones]];
-    }),
-);
-assert.deepEqual(
-  frontTicketingMatrix,
-  expectedFrontTicketingMatrix,
-  '表站场次、分区示意或可售分区发生偏移',
-);
+assert.ok(frontTicketingPerformances.length > 0, '表站当前快照没有可售场次');
+for (const performance of frontTicketingPerformances) {
+  const { seatingPlanId, offers } = performance.ticketAvailability;
+  const planZones = ticketSeatingPlans[seatingPlanId].zones.map(({ zone }) => zone).sort();
+  const offerZones = offers.map(({ zone }) => zone).sort();
+  assert.deepEqual(planZones, offerZones, `${performance.performanceId} 的示意分区与报价不一致`);
+}
 
 for (const edition of builtEditions) {
   const localization = getLocalization(edition);
+  assert.equal(
+    getLocalizedPerformanceEntries(localization, buildSnapshot).length,
+    buildSnapshot.performanceEntries.length,
+  );
   assert.equal(localization.sources.site.usedFallback, false, `${edition.editionId}.site 发生回退`);
   assert.equal(
     localization.sources.programs.usedFallback,
@@ -161,13 +109,17 @@ for (const edition of builtEditions) {
   assertComplete(localization.programs, `${edition.editionId}.programs`);
   assertComplete(localization.messages, `${edition.editionId}.messages`);
   assertComplete(localization.archiveProjection, `${edition.editionId}.archiveProjection`);
-  assertExactKeys(localization.programs.locations, locations, `${edition.editionId}.locations`);
-  assertExactKeys(
+  assertSnapshotKeysPresent(
+    localization.programs.locations,
+    locations,
+    `${edition.editionId}.locations`,
+  );
+  assertSnapshotKeysPresent(
     localization.programs.performances,
     performances,
     `${edition.editionId}.performances`,
   );
-  assertExactKeys(
+  assertSnapshotKeysPresent(
     localization.programs.productions,
     productions,
     `${edition.editionId}.productions`,

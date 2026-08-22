@@ -85,6 +85,10 @@ const months = [...new Set(performances.map((item) => item.dateTime.month))];
                 <span class="front-performance-card__meta">
                   <time>{performance.dateTime.display}</time>
                   <span>{performance.place}</span>
+                  <small>{localization.site.front.performanceDetail[performance.status]}</small>
+                  {performance.operationalNotice && (
+                    <small>{performance.operationalNotice.text}</small>
+                  )}
                 </span>
               </a>
             </li>

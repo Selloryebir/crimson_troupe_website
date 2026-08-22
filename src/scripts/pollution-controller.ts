@@ -6,10 +6,10 @@ import {
   type PollutionState,
   type PollutionTrigger,
   type PollutionVariant,
-} from './pollution-state';
+} from './pollution-state.ts';
 
-const STATE_KEY = 'crimson-troupe:archive-pollution:v1';
-const PENDING_KEY = 'crimson-troupe:archive-navigation:v1';
+const STATE_KEY = 'crimson-troupe:archive-pollution:v2';
+const PENDING_KEY = 'crimson-troupe:archive-navigation:v2';
 const PENDING_LIFETIME_MS = 30_000;
 
 interface PendingNavigation {
@@ -43,6 +43,17 @@ function readState(storage: Storage | null): PollutionState {
     return createPollutionState();
   }
   return parsePollutionState(storage.getItem(STATE_KEY), randomVariant());
+}
+
+function hasStoredState(storage: Storage | null): boolean {
+  if (!storage) {
+    return false;
+  }
+  try {
+    return storage.getItem(STATE_KEY) !== null;
+  } catch {
+    return false;
+  }
 }
 
 function writeState(storage: Storage | null, state: PollutionState): void {
@@ -147,6 +158,17 @@ function getNavigationType(): PerformanceNavigationTiming['type'] | 'navigate' {
   }
 }
 
+export function shouldRequestArchiveEntry(
+  pendingNavigation: boolean,
+  navigationType: PerformanceNavigationTiming['type'] | 'navigate',
+  storedStateExists: boolean,
+): boolean {
+  if (pendingNavigation || navigationType === 'reload') {
+    return false;
+  }
+  return navigationType === 'navigate' || (navigationType === 'back_forward' && !storedStateExists);
+}
+
 export function initPollutionController(): void {
   const root = document.documentElement;
   const world = root.dataset.world;
@@ -184,15 +206,25 @@ export function initPollutionController(): void {
 
   const pendingNavigation = consumePending(storage, window.location.pathname);
   const navigationType = getNavigationType();
-  const initialState =
-    !pendingNavigation && navigationType === 'navigate'
-      ? requestTransition(storage, 'direct-entry')
-      : readState(storage);
+  const initialState = shouldRequestArchiveEntry(
+    pendingNavigation,
+    navigationType,
+    hasStoredState(storage),
+  )
+    ? requestTransition(storage, 'direct-entry')
+    : readState(storage);
   applyState(initialState);
 
   window.addEventListener('pageshow', (event) => {
     if (event.persisted) {
-      applyState(readState(storage));
+      const restoredState = shouldRequestArchiveEntry(
+        false,
+        'back_forward',
+        hasStoredState(storage),
+      )
+        ? requestTransition(storage, 'direct-entry')
+        : readState(storage);
+      applyState(restoredState);
     }
   });
 

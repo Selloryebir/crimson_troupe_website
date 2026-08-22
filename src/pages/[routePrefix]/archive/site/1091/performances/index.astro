@@ -1,6 +1,7 @@
 ---
 import ArchivePerformanceList from '../../../../../../components/archive/ArchivePerformanceList.astro';
-import { builtEditions, type BuiltEdition } from '../../../../../../data/editions';
+import { buildSnapshot } from '../../../../../../data/content/resolve.ts';
+import type { BuiltEdition } from '../../../../../../data/editions';
 import {
   getLocalization,
   getLocalizedPerformances,
@@ -8,7 +9,7 @@ import {
 import { sitePath } from '../../../../../../data/site-routes';
 import ArchiveLayout from '../../../../../../layouts/ArchiveLayout.astro';
 export function getStaticPaths() {
-  return builtEditions.map((edition) => ({
+  return buildSnapshot.editions.map((edition) => ({
     params: { routePrefix: edition.routePrefix },
     props: { edition },
   }));

@@ -1,13 +1,19 @@
-import type { BuiltEdition } from './editions';
+import { buildSnapshot, getWorldProductionIds, type ContentSnapshot } from './content/resolve.ts';
+import type { BuiltEdition } from './editions.ts';
 import {
   getLocalization,
   getLocalizedPerformanceEntries,
   getLocalizedProduction,
   getLocalizedProductionEntries,
   type ResolvedLocalization,
-} from './localized/resolve';
-import type { ProductionId } from './productions/index.ts';
-import { performancePath, productionPath, sitePath, siteRoot, type SiteWorld } from './site-routes';
+} from './localized/resolve.ts';
+import {
+  performancePath,
+  productionPath,
+  sitePath,
+  siteRoot,
+  type SiteWorld,
+} from './site-routes.ts';
 
 export type SiteSearchEntryType = 'page' | 'performance' | 'production';
 
@@ -21,34 +27,39 @@ export interface SiteSearchEntry {
   href: string;
 }
 
-function productionIdsForWorld(
-  localization: ResolvedLocalization,
-  world: SiteWorld,
-): Set<ProductionId> {
-  return new Set(
-    getLocalizedPerformanceEntries(localization)
-      .filter(([, performance]) => performance.world === world)
-      .flatMap(([, performance]) => performance.productionIds),
-  );
-}
-
 function getPerformanceEntries(
   edition: BuiltEdition,
   localization: ResolvedLocalization,
   world: SiteWorld,
   typeLabel: string,
+  snapshot: ContentSnapshot,
 ): SiteSearchEntry[] {
-  return getLocalizedPerformanceEntries(localization)
+  return getLocalizedPerformanceEntries(localization, snapshot)
     .filter(([, performance]) => performance.world === world)
     .map(([, performance]) => {
-      const leadProduction = getLocalizedProduction(localization, performance.productionIds[0]);
+      const leadProduction = getLocalizedProduction(
+        localization,
+        performance.productionIds[0],
+        snapshot,
+      );
+      const statusCopy =
+        world === 'front'
+          ? localization.site.front.performanceDetail
+          : localization.site.archive.performanceDetail;
+      const statusLabel = statusCopy[performance.status];
       return {
         id: `${world}-performance-${performance.performanceId}`,
         type: 'performance',
         typeLabel,
         title: `${leadProduction.title}｜${performance.cityLabel}`,
-        summary: `${performance.dateTime.display} · ${performance.place}`,
-        keywords: `${leadProduction.title} ${leadProduction.kind} ${leadProduction.tagline} ${performance.searchKeywords}`,
+        summary: [
+          `${performance.dateTime.display} · ${performance.place}`,
+          statusLabel,
+          performance.operationalNotice?.text,
+        ]
+          .filter(Boolean)
+          .join(' · '),
+        keywords: `${leadProduction.title} ${leadProduction.kind} ${leadProduction.tagline} ${performance.searchKeywords} ${statusLabel} ${performance.operationalNotice?.text ?? ''}`,
         href: performancePath(edition, world, performance.performanceId),
       };
     });
@@ -59,9 +70,10 @@ function getProductionEntries(
   localization: ResolvedLocalization,
   world: SiteWorld,
   typeLabel: string,
+  snapshot: ContentSnapshot,
 ): SiteSearchEntry[] {
-  const worldProductionIds = productionIdsForWorld(localization, world);
-  return getLocalizedProductionEntries(localization)
+  const worldProductionIds = new Set(getWorldProductionIds(snapshot, world));
+  return getLocalizedProductionEntries(localization, snapshot)
     .filter(([productionId]) => worldProductionIds.has(productionId))
     .map(([productionId, production]) => ({
       id: `${world}-production-${productionId}`,
@@ -74,7 +86,10 @@ function getProductionEntries(
     }));
 }
 
-export function getFrontSearchIndex(edition: BuiltEdition): SiteSearchEntry[] {
+export function getFrontSearchIndex(
+  edition: BuiltEdition,
+  snapshot: ContentSnapshot = buildSnapshot,
+): SiteSearchEntry[] {
   const localization = getLocalization(edition);
   const copy = localization.site.front.searchIndex;
   const pages: SiteSearchEntry[] = [
@@ -126,12 +141,15 @@ export function getFrontSearchIndex(edition: BuiltEdition): SiteSearchEntry[] {
   ];
   return [
     ...pages,
-    ...getPerformanceEntries(edition, localization, 'front', copy.performanceType),
-    ...getProductionEntries(edition, localization, 'front', copy.productionType),
+    ...getPerformanceEntries(edition, localization, 'front', copy.performanceType, snapshot),
+    ...getProductionEntries(edition, localization, 'front', copy.productionType, snapshot),
   ];
 }
 
-export function getArchiveSearchIndex(edition: BuiltEdition): SiteSearchEntry[] {
+export function getArchiveSearchIndex(
+  edition: BuiltEdition,
+  snapshot: ContentSnapshot = buildSnapshot,
+): SiteSearchEntry[] {
   const localization = getLocalization(edition);
   const copy = localization.site.archive.searchIndex;
   const pages: SiteSearchEntry[] = [
@@ -183,7 +201,7 @@ export function getArchiveSearchIndex(edition: BuiltEdition): SiteSearchEntry[] 
   ];
   return [
     ...pages,
-    ...getPerformanceEntries(edition, localization, 'archive', copy.performanceType),
-    ...getProductionEntries(edition, localization, 'archive', copy.productionType),
+    ...getPerformanceEntries(edition, localization, 'archive', copy.performanceType, snapshot),
+    ...getProductionEntries(edition, localization, 'archive', copy.productionType, snapshot),
   ];
 }
