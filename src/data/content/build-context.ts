@@ -1,4 +1,5 @@
 import type { EditionId } from '../editions.ts';
+import type { ContentRootSetId } from './root-sets.ts';
 
 export type BuildProfile = 'showcase' | 'preview' | 'release';
 export type ContentPolicy = 'preview-ok' | 'approved-only';
@@ -8,7 +9,7 @@ export type SiteClockStrategy = 'fixed' | 'anchored';
 export interface BuildContext {
   profile: BuildProfile;
   editionIds: readonly EditionId[];
-  rootSetId: 'current-showcase';
+  rootSetId: ContentRootSetId;
   contentPolicy: ContentPolicy;
   fallbackPolicy: ContentFallbackPolicy;
   siteClockStrategies: Readonly<Record<'front' | 'archive', SiteClockStrategy>>;

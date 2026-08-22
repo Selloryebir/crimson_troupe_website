@@ -10,6 +10,7 @@ import { productions } from '../productions/index.ts';
 import { assertLocalizationSourceFresh } from './localization-revisions.ts';
 import { getRootPerformanceIds, type ContentRootSet, validateContentRootSet } from './root-sets.ts';
 import { selectCompleteVariant, type ContentVariantUnit } from './variants.ts';
+import { assertTerraDateTime } from '../site-time.ts';
 
 export interface ContentValidationSources {
   performances: Readonly<Record<string, Performance>>;
@@ -62,6 +63,10 @@ export function assertPerformanceVariantComplete(stableId: string, value: Perfor
   if (value.performanceId !== stableId) {
     throw new Error(`场次稳定 ID 与记录不一致：${stableId} != ${value.performanceId}`);
   }
+  assertTerraDateTime(value.effectiveDateTime, `performance.${stableId}.effectiveDateTime`);
+  if (value.previousDateTime) {
+    assertTerraDateTime(value.previousDateTime, `performance.${stableId}.previousDateTime`);
+  }
 }
 
 export function assertContentBundle(
@@ -69,7 +74,7 @@ export function assertContentBundle(
   rootSet: ContentRootSet,
   sources: ContentValidationSources = defaultSources,
 ): void {
-  validateContentRootSet(rootSet, new Set(Object.keys(sources.performances)));
+  validateContentRootSet(rootSet, sources.performances);
   const selectedPerformances = getRootPerformanceIds(rootSet).map((performanceId) => {
     const value = sources.performances[performanceId];
     const unit: ContentVariantUnit<Performance> = {

@@ -20,7 +20,26 @@ const fixedSiteTimes = Object.freeze({
 } as const satisfies Record<SiteWorld, TerraDateTime>);
 
 function resolveFixedSiteTime(world: SiteWorld): TerraDateTime {
-  return Object.freeze({ ...fixedSiteTimes[world] });
+  const value = Object.freeze({ ...fixedSiteTimes[world] });
+  assertTerraDateTime(value, `${world} fixed site time`);
+  return value;
+}
+
+export function assertTerraDateTime(value: TerraDateTime, label = 'TerraDateTime'): void {
+  const validTime = /^(?:[01]\d|2[0-3]):[0-5]\d$/u.test(value.time);
+  if (
+    value.calendar !== 'terra' ||
+    !Number.isInteger(value.year) ||
+    !Number.isInteger(value.month) ||
+    value.month < 1 ||
+    value.month > 12 ||
+    !Number.isInteger(value.day) ||
+    value.day < 1 ||
+    value.day > 31 ||
+    !validTime
+  ) {
+    throw new Error(`${label} 不是有效的泰拉时间结构。`);
+  }
 }
 
 function assertSupportedStrategy(world: SiteWorld, strategy: SiteClockStrategy): void {
@@ -53,6 +72,8 @@ function terraDateTimeKey(value: TerraDateTime): string {
 }
 
 export function compareTerraDateTime(left: TerraDateTime, right: TerraDateTime): number {
+  assertTerraDateTime(left, 'left TerraDateTime');
+  assertTerraDateTime(right, 'right TerraDateTime');
   return terraDateTimeKey(left).localeCompare(terraDateTimeKey(right), 'en');
 }
 

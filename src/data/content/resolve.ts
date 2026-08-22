@@ -13,9 +13,11 @@ import { derivePerformanceCollection, getSiteTerraNow } from '../site-time.ts';
 import type { BuildContext } from './build-context.ts';
 import { assertContentContextEligible } from './eligibility.ts';
 import {
-  currentRootSet,
+  contentRootSets,
+  getContentRootSet,
   getRootPerformanceIds,
   type ContentRootSet,
+  type ContentRootSetRegistry,
   validateContentRootSet,
 } from './root-sets.ts';
 import { assertPerformanceVariantComplete } from './validate.ts';
@@ -75,10 +77,10 @@ function toReadonlyRecord<K extends string, V>(
 
 export function resolveContent(
   context: BuildContext,
-  rootSet: ContentRootSet = currentRootSet,
+  rootSetRegistry: ContentRootSetRegistry = contentRootSets,
 ): ContentSnapshot {
-  const knownPerformanceIds = new Set(Object.keys(performances));
-  validateContentRootSet(rootSet, knownPerformanceIds);
+  const rootSet = getContentRootSet(context.rootSetId, rootSetRegistry);
+  validateContentRootSet(rootSet, performances);
   assertContentContextEligible(context, rootSet);
 
   const performanceEntries = getRootPerformanceIds(rootSet).map((performanceId) => {

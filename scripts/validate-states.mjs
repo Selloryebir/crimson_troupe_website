@@ -23,7 +23,12 @@ import {
 } from '../src/data/localized/resolve.ts';
 import { performances } from '../src/data/performances.ts';
 import { getFrontSearchIndex } from '../src/data/site-search-index.ts';
-import { derivePerformanceCollection, getSiteTerraNow } from '../src/data/site-time.ts';
+import {
+  assertTerraDateTime,
+  compareTerraDateTime,
+  derivePerformanceCollection,
+  getSiteTerraNow,
+} from '../src/data/site-time.ts';
 import { getTicketingOptions } from '../src/data/ticketing.ts';
 import { shouldRequestArchiveEntry } from '../src/scripts/pollution-controller.ts';
 import {
@@ -66,8 +71,7 @@ assert.deepEqual(buildContexts.preview.editionIds, ['yan', 'higashi', 'columbia'
 assert.deepEqual(buildContexts.release.editionIds, ['yan']);
 assert.throws(() => getBuildContext(buildContexts, 'custom'), /未知构建预设/u);
 
-const knownPerformanceIds = new Set(Object.keys(performances));
-assert.doesNotThrow(() => validateContentRootSet(currentRootSet, knownPerformanceIds));
+assert.doesNotThrow(() => validateContentRootSet(currentRootSet, performances));
 assert.throws(
   () =>
     validateContentRootSet(
@@ -84,7 +88,7 @@ assert.throws(
           },
         },
       },
-      knownPerformanceIds,
+      performances,
     ),
   /含重复场次/u,
 );
@@ -101,10 +105,43 @@ assert.throws(
           },
         },
       },
-      knownPerformanceIds,
+      performances,
     ),
   /焦点不属于该时间层/u,
 );
+for (const [world, misplacedPerformanceId] of [
+  ['front', currentRootSet.worlds.archive.performanceIds[0]],
+  ['archive', currentRootSet.worlds.front.performanceIds[0]],
+]) {
+  const sourceWorld = performances[misplacedPerformanceId].world;
+  const sourcePerformanceIds = currentRootSet.worlds[sourceWorld].performanceIds.filter(
+    (performanceId) => performanceId !== misplacedPerformanceId,
+  );
+  assert.throws(
+    () =>
+      validateContentRootSet(
+        {
+          ...currentRootSet,
+          worlds: {
+            ...currentRootSet.worlds,
+            [sourceWorld]: {
+              performanceIds: sourcePerformanceIds,
+              featuredPerformanceId:
+                currentRootSet.worlds[sourceWorld].featuredPerformanceId === misplacedPerformanceId
+                  ? sourcePerformanceIds[0]
+                  : currentRootSet.worlds[sourceWorld].featuredPerformanceId,
+            },
+            [world]: {
+              performanceIds: [misplacedPerformanceId],
+              featuredPerformanceId: misplacedPerformanceId,
+            },
+          },
+        },
+        performances,
+      ),
+    /跨时间层场次/u,
+  );
+}
 
 const showcaseSnapshot = resolveContent(buildContexts.showcase);
 assert.equal(showcaseSnapshot.maturity, 'preview');
@@ -153,7 +190,9 @@ const reducedRootSet = {
     },
   },
 };
-const reducedSnapshot = resolveContent(buildContexts.showcase, reducedRootSet);
+const reducedSnapshot = resolveContent(buildContexts.showcase, {
+  [reducedRootSet.rootSetId]: reducedRootSet,
+});
 assert.deepEqual(
   getWorldPerformanceEntries(reducedSnapshot, 'front').map(([performanceId]) => performanceId),
   currentRootSet.worlds.front.performanceIds.slice(1),
@@ -213,11 +252,24 @@ assert.throws(
     }),
   /只允许 fixed/u,
 );
-assert.equal(derivePerformanceCollection(frontNow, frontNow), 'current');
-assert.equal(
-  derivePerformanceCollection({ ...frontNow, day: frontNow.day - 1 }, frontNow),
-  'history',
+assert.throws(
+  () => resolveContent({ ...buildContexts.showcase, rootSetId: 'missing-root-set' }),
+  /未知或不匹配的内容根集合/u,
 );
+for (const invalidDateTime of [
+  { ...frontNow, year: 1098.5 },
+  { ...frontNow, month: 0 },
+  { ...frontNow, month: 13 },
+  { ...frontNow, day: 0 },
+  { ...frontNow, day: 32 },
+  { ...frontNow, time: '24:00' },
+  { ...frontNow, time: 'banana' },
+]) {
+  assert.throws(() => assertTerraDateTime(invalidDateTime), /不是有效的泰拉时间结构/u);
+  assert.throws(() => compareTerraDateTime(invalidDateTime, frontNow), /不是有效的泰拉时间结构/u);
+}
+assert.equal(derivePerformanceCollection(frontNow, frontNow), 'current');
+assert.equal(derivePerformanceCollection({ ...frontNow, month: 8, day: 31 }, frontNow), 'history');
 
 const collectionFixtures = [
   {
@@ -229,7 +281,7 @@ const collectionFixtures = [
   {
     label: '历史取消场次仍属于历史演出',
     status: 'cancelled',
-    effectiveDateTime: { ...frontNow, day: frontNow.day - 1 },
+    effectiveDateTime: { ...frontNow, month: 8, day: 31 },
     expected: 'history',
   },
   {
@@ -241,7 +293,7 @@ const collectionFixtures = [
   {
     label: '改期场次按生效日期而非原日期归类',
     status: 'scheduled',
-    previousDateTime: { ...frontNow, day: frontNow.day - 2 },
+    previousDateTime: { ...frontNow, month: 8, day: 30 },
     effectiveDateTime: { ...frontNow, day: frontNow.day + 3 },
     expected: 'current',
   },
