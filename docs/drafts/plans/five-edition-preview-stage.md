@@ -1,9 +1,9 @@
 # 五国家版本技术预览与内容边界收口一次性开发计划
 
 - 文档类型：一次性开发计划
-- 状态：已批准，等待正式蓝图迁移
-- 规划效力：只约束本计划的切片顺序，不覆盖正式蓝图；正式迁移完成前不得修改源码
-- 分析基线：`dev_blueprint` 的 `08e24e90c63bfeb964d57880104997450dabe849`、当前 active 蓝图、`docs/drafts/blueprint/minos-ursus-localization-preview.md` 与 `docs/drafts/recommendations/stage-code-audit-defense.md`
+- 状态：已批准执行
+- 规划效力：只约束本计划的切片顺序，不覆盖正式蓝图
+- 分析基线：`dev_blueprint` 的已批准来源提交 `e75944d`、当前 active 蓝图及其影响定位
 - 目的：以最小且可回退的源码切片落实两份已采纳草稿的全部决议，收紧内容构建边界，并依次完成米诺斯和乌萨斯双时间层技术预览，形成可部署、可验证的五国家版本网站
 - 非目标：不认可 AI 译文为正式翻译，不修改 `releaseEditionIds = ['yan']`，不开发其他国家版本，不引入 CMS、数据库、自由环境组合、字段级审批、任意版本历史、第二套浏览器测试框架或全站截图审批系统
 
@@ -13,21 +13,20 @@
 
 两份草稿已经由人工整体采纳且没有未解决问题，但旧计划只纳入了与新增语言直接相关的建议子集，遗漏了持久化内容变体、完整 Artwork/Seating 构建闭包、批准摘要分层和页面侧窄导入门禁。修订后的九个切片完整覆盖 `SET-01—05` 与 `REC-01—06`：前四项先收口领域、构建、变体、批准和本地化边界，中间三项修复共享体验、Unicode 票面和质量门禁，最后两项分别交付米诺斯与乌萨斯。每项均有独立运行时结果和验收，不需要执行者推测产品选择。
 
-当前唯一执行前置是把已采纳决议拆入正式蓝图。迁移只保存稳定目标、边界和验收，不复制审计问答、证据表或本计划的执行步骤；完成核对后删除两份来源草稿，再将本计划改为“已批准执行”。
+已采纳决议已经按职责拆入正式蓝图，审计问答、证据表和执行步骤没有进入长期契约；两份来源草稿将在同一迁移提交中删除。下表成为本阶段唯一临时执行编排。
 
 ### PLAN-01｜五国家版本技术预览与内容边界收口
 
-- 状态：已批准，等待正式蓝图迁移
-- 正式依据：当前 active 的 `BP-I18N-CORE`、`BP-I18N-TERMS`、`BP-CNT-CORE`、`BP-FND-CORE`、`BP-FND-EXPERIENCE`、`BP-MOD-SEARCH`、`BP-MOD-TICKETING`、`BP-MOD-ARCHIVE`、`BP-MOD-TERRA-TIME` 与 `BP-QLT-STAGES`；草稿差异必须在执行前正式迁入这些 ID
+- 状态：已批准执行
+- 正式依据：当前 active 的 `BP-I18N-CORE`、`BP-I18N-TERMS`、`BP-CNT-CORE`、`BP-FND-CORE`、`BP-FND-EXPERIENCE`、`BP-MOD-SEARCH`、`BP-MOD-TICKETING`、`BP-MOD-ARCHIVE`、`BP-MOD-TERRA-TIME` 与 `BP-QLT-STAGES`
 - 范围：构建上下文、日期与世界校验、完整构建闭包、持久化内容变体、批准摘要、本地化解析与修订、共享渐进增强、Unicode 票面、最小质量门禁、米诺斯现代希腊语、乌萨斯俄语及最终五语言 preview
 - 完成条件：两份草稿的稳定决议均有正式蓝图归属和可观察实现；`showcase` 仍只生成炎国；四语言中间态和五语言最终态分别严格通过；最终 preview 生成由路由集合推导的 156 个页面，五种语言功能等价、零缺失、零旧译、零 fallback；Node 24 静态门禁、构建产物和代表性浏览器矩阵通过；源码与正式蓝图重新同步
 
-#### PLAN-01 执行前置
+#### PLAN-01 已完成执行前置
 
-1. 将蓝图草稿 `SET-01—05` 与建议草稿 `REC-01—06` 的稳定决议无损拆入对应 active 蓝图；九枚注册徽记常驻作为明确豁免写入正式边界。
-2. 运行一次相关蓝图 `blueprint:impact` 和一次 `blueprint:check`，核对每项已采纳决议均有唯一正式落点；审计证据、问答过程、实现路径和执行日志不迁入蓝图。
-3. 删除已经完整迁移的两份来源草稿并更新草稿索引；将本计划及 `PLAN-01` 状态改为“已批准执行”，只把下一切片标记为“已批准待同步”。
-4. 后续每个源码切片遵循 `docs/guides/git-branch-workflow.md` 的逐切片双分支闭环；同一 `dev_code` 提交不得宣称完成多个切片。
+1. `SET-01—05` 与 `REC-01—06` 的稳定决议已经拆入对应 active 蓝图，九枚注册徽记常驻已作为明确豁免保存。
+2. 正式迁移已经完成相关蓝图影响定位与追踪检查；两份来源草稿随迁移删除，未保留正文副本。
+3. 后续每个源码切片遵循 `docs/guides/git-branch-workflow.md` 的逐切片双分支闭环；同一 `dev_code` 提交不得宣称完成多个切片。
 
 #### PLAN-01 决议覆盖矩阵
 
@@ -49,17 +48,17 @@
 
 #### PLAN-01 执行切片
 
-| 切片 ID    | 状态   | 可观察交付结果                                                                                                                                | 前置依赖                        | 候选影响路径                                                                                                                                                                                                       | 验收方式                                                                                                                                                                  |
-| ---------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SLICE-01` | 待开始 | 构建 context 唯一解析其 `rootSetId`；根集合成员/焦点跨世界及非法 TerraDateTime 在生成页面前失败                                               | 执行前置完成                    | `src/data/content/build-context.ts`、`root-sets.ts`、`resolve.ts`、`validate.ts`、`src/data/site-time.ts`、内容与状态验证器                                                                                        | 负向夹具覆盖 front/archive 双向错置及 effective/previous/fixed/provider 非法输入；现有场次分类不变；相关最小质量、状态/内容检查及一次 showcase 构建通过                   |
-| `SLICE-02` | 待开始 | 构建范围 API 提供当前快照的本地化、规范化 Artwork 元数据和座席拓扑；页面消费者不能绕过快照读取集合外内容                                      | `SLICE-01` 已回到蓝图分支并收口 | `src/data/content/resolve.ts`、`validate.ts`、Artwork/manifest、seating/ticketing、页面数据消费者、`eslint.config.mjs`、内容/构建验证器                                                                            | 集合外剧目、地点、封面和座席不进入消费者或产物闭包；页面层直接导入 raw registries 时 lint 失败；九枚徽记仍可常驻且未构建国家不产生页面或入口                              |
-| `SLICE-03` | 待开始 | 内容单元持久拥有完整 baseline 与至少一个 preview 变体；批准摘要拆为站点公共、根集合和场次闭包，并纳入最终 Artwork、座席及权利状态             | `SLICE-02` 已回到蓝图分支并收口 | `src/data/content/variants.ts`、`approval-digests.ts`、`eligibility.ts`、`fingerprint.ts`、Artwork/manifest、seating/root-set、内容验证器                                                                          | 变体可并存且不复制第二棵全量树；可见依赖变化只失效真实相关批准单元；无关页脚或集合外内容不造成逐场误失效；不伪造当前为空的 formal 批准记录                                |
-| `SLICE-04` | 待开始 | 三个可部署 profile 严格拒绝记录缺失、旧译和 fallback；不可部署作者诊断逐记录报告来源；现有三语言包职责统一；修订只影响快照内相关记录和消息组  | `SLICE-03` 已回到蓝图分支并收口 | `src/data/localized/schema.ts`、`resolve.ts`、`packages.ts`、现有三语言目录、`src/data/content/localization-revisions.ts`、内容/locale 验证器                                                                      | 单条缺失或旧译使 strict 失败而诊断报告来源；集合外记录不使现有语言整包过期；三语言 preview 零 fallback；相关最小质量和一次 preview 构建/产物验证通过                      |
-| `SLICE-05` | 待开始 | 搜索初始化失败只有一个可理解降级；票务阶段焦点具有本地化标题；三级投影不抢 H1 或焦点；选择器读出当前版本和选择动作                            | `SLICE-04` 已回到蓝图分支并收口 | `SiteSearch.astro`、`site-search.ts`、`TicketingExperience.astro`、`ticketing-controller.ts`、`ArchiveProjection.astro`、`ArchiveLayout.astro`、`pollution-controller.ts`、`EditionSelector.astro`、现有三语言消息 | 三语言正常/无 JS/搜索初始化失败、票务主要阶段焦点、等级 3 简短公告、选择器键盘与 Escape 通过；相关最小质量和一次 preview 构建通过                                         |
-| `SLICE-06` | 待开始 | 纪念票使用 Unicode 字素安全的确定性换行与字号下限；长日文、俄文、希腊文测试输入不覆盖二维码或删除关键事实                                     | `SLICE-05` 已回到蓝图分支并收口 | `src/scripts/ticket-artifact.ts`、票面相关 schema/消息、`src/styles/ticketing.css`、状态验证器                                                                                                                     | 日文无空格、俄文长词、希腊文组合符的屏幕 SVG、下载与打印边界通过；票号、二维码和结局语义不变；相关最小质量和一次 preview 构建通过                                         |
-| `SLICE-07` | 待开始 | 质量调度按能力触发 preview locale/内容检查；单一轻量浏览器冒烟入口覆盖代表任务；产物门禁覆盖常见远端自动请求、嵌入和 CSS URL 且不误伤普通链接 | `SLICE-06` 已回到蓝图分支并收口 | `scripts/quality.mjs`、`validate-locales.mjs`、`validate-build.mjs`、`validate-states.mjs`、候选 `scripts/validate-browser.mjs`、`package.json`、`package-lock.json`、必要 ignore/指南                             | `quality -- --plan` 证明纯文档不跑代码、i18n 改动不漏 locale 且不无故双构建；工具链变更只运行一次 `verify`；浏览器冒烟可复现且不生成入库截图/报告                         |
-| `SLICE-08` | 待开始 | 米诺斯完整 AI 现代希腊语包、`el` 系统字体和四语言选择器投入 preview；其他三语言行为不退化                                                     | `SLICE-07` 已回到蓝图分支并收口 | 新增 `src/data/localized/minos/`；`src/data/editions.ts`、`localized/packages.ts`、修订与 locale 验证、`foundation.css`、追踪文件                                                                                  | 四语言 preview 推导并生成 125 页；米诺斯零缺失/旧译/fallback/意外汉字且主要类别含 Greek；希腊文查询、320px 表站票务/里站、切换、下载与打印通过                            |
-| `SLICE-09` | 待开始 | 乌萨斯完整 AI 俄语包、`ru` 系统字体和最终五语言选择器投入 preview，并完成五语言交叉收口                                                       | `SLICE-08` 已回到蓝图分支并收口 | 新增 `src/data/localized/ursus/`；`src/data/editions.ts`、`localized/packages.ts`、修订与 locale 验证、`foundation.css`、README/架构/指南、追踪文件                                                                | 五语言 preview 推导并生成 156 页；乌萨斯零缺失/旧译/fallback/意外汉字且主要类别含 Cyrillic；俄文查询、320px 表站票务/里站及五语言跨版本状态、搜索隔离、下载和污染退出通过 |
+| 切片 ID    | 状态         | 可观察交付结果                                                                                                                                | 前置依赖                        | 候选影响路径                                                                                                                                                                                                       | 验收方式                                                                                                                                                                  |
+| ---------- | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SLICE-01` | 已批准待同步 | 构建 context 唯一解析其 `rootSetId`；根集合成员/焦点跨世界及非法 TerraDateTime 在生成页面前失败                                               | 执行前置完成                    | `src/data/content/build-context.ts`、`root-sets.ts`、`resolve.ts`、`validate.ts`、`src/data/site-time.ts`、内容与状态验证器                                                                                        | 负向夹具覆盖 front/archive 双向错置及 effective/previous/fixed/provider 非法输入；现有场次分类不变；相关最小质量、状态/内容检查及一次 showcase 构建通过                   |
+| `SLICE-02` | 待开始       | 构建范围 API 提供当前快照的本地化、规范化 Artwork 元数据和座席拓扑；页面消费者不能绕过快照读取集合外内容                                      | `SLICE-01` 已回到蓝图分支并收口 | `src/data/content/resolve.ts`、`validate.ts`、Artwork/manifest、seating/ticketing、页面数据消费者、`eslint.config.mjs`、内容/构建验证器                                                                            | 集合外剧目、地点、封面和座席不进入消费者或产物闭包；页面层直接导入 raw registries 时 lint 失败；九枚徽记仍可常驻且未构建国家不产生页面或入口                              |
+| `SLICE-03` | 待开始       | 内容单元持久拥有完整 baseline 与至少一个 preview 变体；批准摘要拆为站点公共、根集合和场次闭包，并纳入最终 Artwork、座席及权利状态             | `SLICE-02` 已回到蓝图分支并收口 | `src/data/content/variants.ts`、`approval-digests.ts`、`eligibility.ts`、`fingerprint.ts`、Artwork/manifest、seating/root-set、内容验证器                                                                          | 变体可并存且不复制第二棵全量树；可见依赖变化只失效真实相关批准单元；无关页脚或集合外内容不造成逐场误失效；不伪造当前为空的 formal 批准记录                                |
+| `SLICE-04` | 待开始       | 三个可部署 profile 严格拒绝记录缺失、旧译和 fallback；不可部署作者诊断逐记录报告来源；现有三语言包职责统一；修订只影响快照内相关记录和消息组  | `SLICE-03` 已回到蓝图分支并收口 | `src/data/localized/schema.ts`、`resolve.ts`、`packages.ts`、现有三语言目录、`src/data/content/localization-revisions.ts`、内容/locale 验证器                                                                      | 单条缺失或旧译使 strict 失败而诊断报告来源；集合外记录不使现有语言整包过期；三语言 preview 零 fallback；相关最小质量和一次 preview 构建/产物验证通过                      |
+| `SLICE-05` | 待开始       | 搜索初始化失败只有一个可理解降级；票务阶段焦点具有本地化标题；三级投影不抢 H1 或焦点；选择器读出当前版本和选择动作                            | `SLICE-04` 已回到蓝图分支并收口 | `SiteSearch.astro`、`site-search.ts`、`TicketingExperience.astro`、`ticketing-controller.ts`、`ArchiveProjection.astro`、`ArchiveLayout.astro`、`pollution-controller.ts`、`EditionSelector.astro`、现有三语言消息 | 三语言正常/无 JS/搜索初始化失败、票务主要阶段焦点、等级 3 简短公告、选择器键盘与 Escape 通过；相关最小质量和一次 preview 构建通过                                         |
+| `SLICE-06` | 待开始       | 纪念票使用 Unicode 字素安全的确定性换行与字号下限；长日文、俄文、希腊文测试输入不覆盖二维码或删除关键事实                                     | `SLICE-05` 已回到蓝图分支并收口 | `src/scripts/ticket-artifact.ts`、票面相关 schema/消息、`src/styles/ticketing.css`、状态验证器                                                                                                                     | 日文无空格、俄文长词、希腊文组合符的屏幕 SVG、下载与打印边界通过；票号、二维码和结局语义不变；相关最小质量和一次 preview 构建通过                                         |
+| `SLICE-07` | 待开始       | 质量调度按能力触发 preview locale/内容检查；单一轻量浏览器冒烟入口覆盖代表任务；产物门禁覆盖常见远端自动请求、嵌入和 CSS URL 且不误伤普通链接 | `SLICE-06` 已回到蓝图分支并收口 | `scripts/quality.mjs`、`validate-locales.mjs`、`validate-build.mjs`、`validate-states.mjs`、候选 `scripts/validate-browser.mjs`、`package.json`、`package-lock.json`、必要 ignore/指南                             | `quality -- --plan` 证明纯文档不跑代码、i18n 改动不漏 locale 且不无故双构建；工具链变更只运行一次 `verify`；浏览器冒烟可复现且不生成入库截图/报告                         |
+| `SLICE-08` | 待开始       | 米诺斯完整 AI 现代希腊语包、`el` 系统字体和四语言选择器投入 preview；其他三语言行为不退化                                                     | `SLICE-07` 已回到蓝图分支并收口 | 新增 `src/data/localized/minos/`；`src/data/editions.ts`、`localized/packages.ts`、修订与 locale 验证、`foundation.css`、追踪文件                                                                                  | 四语言 preview 推导并生成 125 页；米诺斯零缺失/旧译/fallback/意外汉字且主要类别含 Greek；希腊文查询、320px 表站票务/里站、切换、下载与打印通过                            |
+| `SLICE-09` | 待开始       | 乌萨斯完整 AI 俄语包、`ru` 系统字体和最终五语言选择器投入 preview，并完成五语言交叉收口                                                       | `SLICE-08` 已回到蓝图分支并收口 | 新增 `src/data/localized/ursus/`；`src/data/editions.ts`、`localized/packages.ts`、修订与 locale 验证、`foundation.css`、README/架构/指南、追踪文件                                                                | 五语言 preview 推导并生成 156 页；乌萨斯零缺失/旧译/fallback/意外汉字且主要类别含 Cyrillic；俄文查询、320px 表站票务/里站及五语言跨版本状态、搜索隔离、下载和污染退出通过 |
 
 #### PLAN-01 切片边界
 
