@@ -35,9 +35,12 @@ docs/drafts/
 
 当前内容草稿入口：
 
-| 文件                                                                                 | 类型     | 当前效力                                 |
-| ------------------------------------------------------------------------------------ | -------- | ---------------------------------------- |
-| [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md) | 创意草稿 | 延期的里站异常购票构想，等待未来独立规划 |
+| 文件                                                                                             | 类型           | 当前效力                                   |
+| ------------------------------------------------------------------------------------------------ | -------------- | ------------------------------------------ |
+| [`blueprint/minos-ursus-localization-preview.md`](blueprint/minos-ursus-localization-preview.md) | 蓝图草稿       | 米诺斯语与乌萨斯语双时间层技术预览候选     |
+| [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md)             | 创意草稿       | 延期的里站异常购票构想，等待未来独立规划   |
+| [`plans/five-edition-preview-stage.md`](plans/five-edition-preview-stage.md)                     | 一次性开发计划 | 五国家版本预览与必要审计修正的候选实施编排 |
+| [`recommendations/stage-code-audit-defense.md`](recommendations/stage-code-audit-defense.md)     | 建议草稿       | 当前代码的多视角对抗审计答辩与候选处置     |
 
 ## 固定文档骨架
 
