@@ -271,6 +271,11 @@ for (const [route, filePath] of routes) {
       );
     }
     if (isArchiveRoute) {
+      assert.match(
+        html,
+        /<div class="archive-pollution-stage" data-pollution-visual-layer aria-hidden="true">/u,
+        `${route} 缺少退出语义树的污染装饰层`,
+      );
       assert.ok(
         html.indexOf('<h1') < html.indexOf('data-archive-invitation'),
         `${route} 的主标题必须先于三级邀请`,

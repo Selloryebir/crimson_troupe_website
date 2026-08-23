@@ -46,6 +46,28 @@ html[data-world="archive"][data-pollution-variant="2"] {
   pointer-events: none;
 }
 
+.archive-pollution-stage__echoes {
+  position: absolute;
+  inset: 0;
+  display: none;
+  overflow: hidden;
+  color: rgb(226 197 157 / 18%);
+  font-family: var(--serif);
+  pointer-events: none;
+  user-select: none;
+}
+
+.archive-pollution-stage__echo {
+  position: absolute;
+  display: block;
+  max-width: min(80vw, 980px);
+  overflow-wrap: anywhere;
+  text-shadow:
+    7px -5px rgb(126 12 29 / 32%),
+    -11px 8px rgb(8 4 5 / 72%);
+  pointer-events: none;
+}
+
 html[data-world="archive"] [data-pollution-slot] {
   position: relative;
 }
@@ -194,6 +216,103 @@ html[data-world="archive"][data-pollution-level="3"] .archive-pollution-stage {
   background:
     linear-gradient(101deg, transparent 0 19%, rgb(129 17 30 / 12%) 19.2% 19.8%, transparent 20% 77%, rgb(129 17 30 / 9%) 77.2% 77.8%, transparent 78%),
     radial-gradient(circle at 50% 48%, transparent 0 28%, rgb(9 5 5 / 23%) 61%, transparent 78%);
+  animation: archive-threshold-arrival 820ms steps(3, end) both;
+}
+
+html[data-world="archive"][data-pollution-level="3"] .archive-pollution-stage__echoes {
+  display: block;
+}
+
+html[data-world="archive"][data-pollution-level="3"]
+  .archive-pollution-stage__echo--register {
+  top: 9%;
+  left: 4%;
+  color: rgb(227 194 146 / 24%);
+  font: 700 clamp(0.72rem, 1.6vw, 1.1rem) / 1 var(--sans);
+  letter-spacing: 0.34em;
+  transform: rotate(var(--pollution-counter-tilt));
+}
+
+html[data-world="archive"][data-pollution-level="3"] .archive-pollution-stage__echo--title {
+  top: 17%;
+  right: -4%;
+  color: rgb(155 25 43 / 22%);
+  font-size: clamp(4rem, 14vw, 13rem);
+  font-weight: 700;
+  line-height: 0.78;
+  text-align: right;
+  transform: scaleX(-1) rotate(var(--pollution-strong-tilt));
+  transform-origin: center;
+}
+
+html[data-world="archive"][data-pollution-level="3"] .archive-pollution-stage__echo--venue {
+  bottom: 8%;
+  left: 6%;
+  max-width: 18ch;
+  color: rgb(225 197 158 / 19%);
+  font-size: clamp(1.8rem, 5vw, 5rem);
+  line-height: 0.96;
+  transform: rotate(calc(-7deg + var(--pollution-tilt)));
+}
+
+html[data-world="archive"][data-pollution-level="3"]
+  .archive-pollution-stage__echo--response {
+  top: 51%;
+  left: 54%;
+  width: min(52vw, 760px);
+  color: rgb(228 209 177 / 11%);
+  font-size: clamp(2.1rem, 6vw, 6.6rem);
+  line-height: 0.88;
+  transform: translate(-50%, -50%) rotate(var(--pollution-counter-tilt));
+}
+
+html[data-world="archive"][data-pollution-level="3"][data-pollution-variant="1"]
+  .archive-pollution-stage__echo--title {
+  right: auto;
+  left: -5%;
+  text-align: left;
+  transform: rotate(var(--pollution-strong-tilt));
+}
+
+html[data-world="archive"][data-pollution-level="3"][data-pollution-variant="1"]
+  .archive-pollution-stage__echo--venue {
+  right: 5%;
+  left: auto;
+  text-align: right;
+  transform: scaleX(-1) rotate(calc(8deg + var(--pollution-tilt)));
+}
+
+html[data-world="archive"][data-pollution-level="3"][data-pollution-variant="2"]
+  .archive-pollution-stage__echo--response {
+  top: 66%;
+  left: 42%;
+  transform: translate(-50%, -50%) scaleX(-1) rotate(var(--pollution-counter-tilt));
+}
+
+@keyframes archive-threshold-arrival {
+  0% {
+    opacity: 0.2;
+    filter: contrast(1.8) brightness(1.35);
+    clip-path: inset(0 0 78%);
+  }
+
+  42% {
+    opacity: 0.84;
+    filter: contrast(1.35) brightness(0.72);
+    clip-path: inset(31% 0 17%);
+  }
+
+  72% {
+    opacity: 0.55;
+    filter: contrast(1.6) brightness(1.08);
+    clip-path: inset(4% 0 48%);
+  }
+
+  100% {
+    opacity: 1;
+    filter: none;
+    clip-path: inset(0);
+  }
 }
 
 html[data-world="archive"][data-pollution-level="3"] .archive-pollution-stage__plate {
@@ -259,6 +378,39 @@ html[data-world="archive"][data-pollution-level="3"]
   transform: scale(1.045) translate(var(--pollution-shift-x), -0.7%);
 }
 
+html[data-world="archive"][data-pollution-level="3"] [data-pollution-slot="poster"] {
+  box-shadow:
+    inset 0 0 0 2px rgb(187 43 58 / 58%),
+    var(--pollution-shift-strong-x) var(--pollution-shift-strong-y) 0 rgb(113 11 26 / 28%),
+    calc(0px - var(--pollution-shift-x)) calc(0px - var(--pollution-shift-y)) 0
+      rgb(217 183 132 / 11%),
+    0 34px 90px rgb(0 0 0 / 68%);
+}
+
+html[data-world="archive"][data-pollution-level="3"]
+  [data-pollution-slot="poster"]
+  .archive-projection-level3.archive-poster__image {
+  filter: sepia(0.18) saturate(1.48) contrast(1.14) brightness(0.74);
+}
+
+html[data-world="archive"][data-pollution-level="3"]
+  [data-archive-projection-field="tagline"] {
+  position: relative;
+}
+
+html[data-world="archive"][data-pollution-level="3"]
+  [data-archive-projection-field="tagline"]::after {
+  position: absolute;
+  right: 9%;
+  bottom: 0.08em;
+  width: 34%;
+  height: 0.72em;
+  background: rgb(16 8 9 / 84%);
+  box-shadow: 4px 0 rgb(120 17 31 / 28%);
+  content: "";
+  pointer-events: none;
+}
+
 /* Page responsibilities alter the intrusion's composition without changing source records. */
 html[data-page-type="home"][data-pollution-level="3"] .archive-pollution-stage__threshold {
   width: min(72vw, 880px);
@@ -298,6 +450,7 @@ html[data-page-type="tickets"][data-pollution-level="3"] .archive-pollution-stag
   max-height: calc(100dvh - 48px);
   padding: 0;
   overflow: auto;
+  overflow-x: hidden;
   border: 5px double rgb(194 143 75 / 68%);
   color: #e6d6b9;
   background:
@@ -502,6 +655,26 @@ html[data-page-type="tickets"][data-pollution-level="3"] .archive-pollution-stag
     width: 118vw;
   }
 
+  html[data-world="archive"][data-pollution-level="3"] .archive-pollution-stage__echo--title {
+    top: 24%;
+    right: -18%;
+    font-size: clamp(3.7rem, 25vw, 7rem);
+  }
+
+  html[data-world="archive"][data-pollution-level="3"] .archive-pollution-stage__echo--venue {
+    bottom: 14%;
+    left: -3%;
+    font-size: clamp(1.5rem, 11vw, 3.2rem);
+  }
+
+  html[data-world="archive"][data-pollution-level="3"]
+    .archive-pollution-stage__echo--response {
+    top: 58%;
+    left: 48%;
+    width: 82vw;
+    font-size: clamp(1.8rem, 13vw, 4rem);
+  }
+
   .archive-invitation {
     width: calc(100% - 28px);
     max-height: calc(100dvh - 28px);
@@ -519,5 +692,11 @@ html[data-page-type="tickets"][data-pollution-level="3"] .archive-pollution-stag
 
   .archive-invitation__actions button {
     flex: 1 1 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-world="archive"][data-pollution-level="3"] .archive-pollution-stage {
+    animation: none;
   }
 }

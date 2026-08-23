@@ -44,5 +44,5 @@ const pollutionProfile = getArchivePollutionProfile(pageType);
   </main>
   <ArchiveInvitation content={localization.archiveProjection} profile={pollutionProfile} />
   <SiteFooter localization={localization} world="archive" />
-  <PollutionController />
+  <PollutionController content={localization.archiveProjection} profile={pollutionProfile} />
 </BaseLayout>

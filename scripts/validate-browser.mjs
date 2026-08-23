@@ -11,6 +11,8 @@ import { chromium } from 'playwright';
 
 import { currentArchiveSnapshot } from '../src/data/archive-snapshots.ts';
 import { buildSnapshot } from '../src/data/content/resolve.ts';
+import { builtEditions } from '../src/data/editions.ts';
+import { getLocalization } from '../src/data/localized/resolve.ts';
 
 const serverHost = '127.0.0.1';
 const repositoryRoot = fileURLToPath(new URL('..', import.meta.url));
@@ -62,6 +64,47 @@ async function assertArchiveProjectionList(page, expectedCount, label) {
     expectedCount,
     `${label} 应保留每项原合法链接与邀请入口`,
   );
+}
+
+async function assertArchiveVisualLayer(page, label, reducedMotion = false) {
+  const layer = page.locator('[data-pollution-visual-layer]');
+  assert.equal(await layer.count(), 1, `${label} 应且只应有一个污染装饰层`);
+  assert.equal(await layer.getAttribute('aria-hidden'), 'true', `${label} 装饰层必须退出语义树`);
+  assert.equal(
+    await layer.locator('a, button, input, select, textarea').count(),
+    0,
+    `${label} 装饰层不得包含交互控件`,
+  );
+  assert.equal(
+    await layer.evaluate((element) => window.getComputedStyle(element).pointerEvents),
+    'none',
+    `${label} 装饰层不得截获指针`,
+  );
+  const echoes = layer.locator('.archive-pollution-stage__echo:visible');
+  assert.equal(await echoes.count(), 4, `${label} 应显示四个本地化档案视觉副本`);
+  assert.equal(
+    await echoes.evaluateAll((elements) =>
+      elements.every((element) => window.getComputedStyle(element).pointerEvents === 'none'),
+    ),
+    true,
+    `${label} 的视觉副本不得截获指针`,
+  );
+  const taskControls = page.locator('main a:visible, main button:visible, main select:visible');
+  assert.ok(await taskControls.count(), `${label} 应保留可操作的任务层`);
+  assert.equal(
+    await taskControls.evaluateAll((elements) =>
+      elements.every((element) => window.getComputedStyle(element).transform === 'none'),
+    ),
+    true,
+    `${label} 的真实交互控件必须保持直立`,
+  );
+  if (reducedMotion) {
+    assert.equal(
+      await layer.evaluate((element) => window.getComputedStyle(element).animationName),
+      'none',
+      `${label} 在减少动态效果下不得播放失序动画`,
+    );
+  }
 }
 
 function getFreePort() {
@@ -328,6 +371,85 @@ try {
   );
   assertDesktopErrors();
   await desktop.close();
+
+  const archiveVisualContext = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  await archiveVisualContext.addInitScript(() => {
+    const stateKey = 'crimson-troupe:archive-pollution:v2';
+    if (!sessionStorage.getItem(stateKey)) {
+      sessionStorage.setItem(
+        stateKey,
+        JSON.stringify({ version: 2, level: 0, eventCount: 0, variant: 0 }),
+      );
+    }
+  });
+  const archiveVisualPage = await archiveVisualContext.newPage();
+  const assertArchiveVisualErrors = trackUnexpectedErrors(archiveVisualPage);
+  await archiveVisualPage.goto(`${origin}${archivePath('yan')}`);
+  const visualLayer = archiveVisualPage.locator('[data-pollution-visual-layer]');
+  for (const [level, expectedLayerDisplay, expectedEchoDisplay] of [
+    [0, 'none', 'none'],
+    [1, 'none', 'none'],
+    [2, 'block', 'none'],
+  ]) {
+    await archiveVisualPage.evaluate((nextLevel) => {
+      sessionStorage.setItem(
+        'crimson-troupe:archive-pollution:v2',
+        JSON.stringify({ version: 2, level: nextLevel, eventCount: nextLevel + 2, variant: 0 }),
+      );
+    }, level);
+    await archiveVisualPage.reload();
+    await archiveVisualPage.locator(`html[data-pollution-level="${level}"]`).waitFor();
+    assert.equal(
+      await visualLayer.evaluate((element) => window.getComputedStyle(element).display),
+      expectedLayerDisplay,
+      `污染等级 ${level} 的页面框景显示不正确`,
+    );
+    assert.equal(
+      await archiveVisualPage
+        .locator('.archive-pollution-stage__echoes')
+        .evaluate((element) => window.getComputedStyle(element).display),
+      expectedEchoDisplay,
+      `污染等级 ${level} 不得提前显示等级 3 文字副本`,
+    );
+  }
+  await archiveVisualPage.evaluate(() => {
+    sessionStorage.setItem(
+      'crimson-troupe:archive-pollution:v2',
+      JSON.stringify({ version: 2, level: 3, eventCount: 8, variant: 2 }),
+    );
+  });
+  for (const edition of builtEditions) {
+    await archiveVisualPage.goto(`${origin}${archivePath(edition.routePrefix)}`);
+    await archiveVisualPage.locator('html[data-pollution-level="3"]').waitFor();
+    const expectedProjection = getLocalization(edition).archiveProjection.performance;
+    const projectedTitles = await archiveVisualPage
+      .locator('[data-archive-projection-field="title"]:visible')
+      .allTextContents();
+    assert.ok(projectedTitles.length, `${edition.editionId} 三级污染首页缺少标题投影`);
+    assert.equal(
+      projectedTitles.every((title) => title.trim() === expectedProjection.title),
+      true,
+      `${edition.editionId} 三级污染首页必须使用自身国家版本投影`,
+    );
+    assert.equal(
+      await archiveVisualPage
+        .locator('.archive-pollution-stage__echo--venue')
+        .textContent()
+        .then((value) => value?.trim()),
+      expectedProjection.venue,
+      `${edition.editionId} 页面环境副本必须使用自身国家版本地点`,
+    );
+    await assertArchiveVisualLayer(
+      archiveVisualPage,
+      `1280px ${edition.languageName.zh}三级污染里站`,
+    );
+    await assertNoHorizontalLoss(
+      archiveVisualPage,
+      `1280px ${edition.languageName.zh}三级污染里站`,
+    );
+  }
+  assertArchiveVisualErrors();
+  await archiveVisualContext.close();
 
   const ticketContext = await browser.newContext({ viewport: { width: 320, height: 800 } });
   await ticketContext.addInitScript(() => {
@@ -662,6 +784,7 @@ try {
     `${origin}/yan/archive/site/${currentArchiveSnapshot.routeSegment}/`,
   );
   await archivePage.locator('html[data-pollution-level="3"]').waitFor();
+  await assertArchiveVisualLayer(archivePage, '320px 炎国三级污染里站', true);
   await assertArchiveProjectionList(archivePage, expectedArchiveCurrentCount, '三级污染里站首页');
   await archivePage.goto(`${origin}${archivePath('yan', 'performances')}`);
   await assertArchiveProjectionList(
@@ -826,6 +949,11 @@ try {
   assert.ok(archiveInvitationTarget, '邀请触发器应保留原合法链接');
   await archiveInvitationTrigger.click();
   await archivePage.locator('[data-archive-invitation][open]').waitFor();
+  assert.equal(
+    await archiveInvitation.evaluate((element) => window.getComputedStyle(element).overflowX),
+    'hidden',
+    '邀请装饰不得制造横向滚动条',
+  );
   await archivePage.locator('[data-archive-invitation-close]').first().click();
   assert.equal(
     await archiveInvitationTrigger.evaluate((element) => element === document.activeElement),
@@ -918,7 +1046,7 @@ try {
   await failedSearchContext.close();
 
   console.log(
-    'browser validation passed: editorial home alternation/mobile order, full-list isolation, three venue level maps/zones, five-edition selector, long-script 320px headers, ticket focus/artifact, Minos search/download/print, Ursus search isolation/download/five-edition state/archive exit, archive level 3/reduced motion, no-JS fallback/static archive seats, search failure fallback',
+    'browser validation passed: editorial home alternation/mobile order, full-list isolation, three venue level maps/zones, five-edition selector, long-script 320px headers, ticket focus/artifact, Minos search/download/print, Ursus search isolation/download/five-edition state/archive exit, archive four-level visual escalation/five-edition level 3/reduced motion, no-JS fallback/static archive seats, search failure fallback',
   );
 } catch (error) {
   const serverOutput = preview.output.join('').trim();
