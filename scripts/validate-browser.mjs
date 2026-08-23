@@ -11,8 +11,9 @@ import { chromium } from 'playwright';
 
 import { currentArchiveSnapshot } from '../src/data/archive-snapshots.ts';
 import { buildSnapshot } from '../src/data/content/resolve.ts';
-import { builtEditions } from '../src/data/editions.ts';
+import { builtEditions, editions } from '../src/data/editions.ts';
 import { getLocalization } from '../src/data/localized/resolve.ts';
+import { derivePollutionComposition } from '../src/scripts/pollution-state.ts';
 
 const serverHost = '127.0.0.1';
 const repositoryRoot = fileURLToPath(new URL('..', import.meta.url));
@@ -24,6 +25,15 @@ const expectedArchiveSeatCount = buildSnapshot.performanceEntries.filter(
     performance.status === 'scheduled' &&
     performance.ticketAvailability.state === 'on-sale',
 ).length;
+const expectedArchiveSeats = buildSnapshot.performanceEntries.flatMap(
+  ([performanceId, performance]) =>
+    performance.world === 'archive' &&
+    performance.collection === 'current' &&
+    performance.status === 'scheduled' &&
+    performance.ticketAvailability.state === 'on-sale'
+      ? [{ performanceId, offers: performance.ticketAvailability.offers }]
+      : [],
+);
 const expectedArchiveCurrentCount = buildSnapshot.performanceEntries.filter(
   ([, performance]) => performance.world === 'archive' && performance.collection === 'current',
 ).length;
@@ -36,6 +46,18 @@ process.env.no_proxy = [process.env.no_proxy, serverHost, 'localhost'].filter(Bo
 function archivePath(routePrefix, segment = '') {
   const suffix = segment ? `${segment.replace(/^\/+/, '')}/` : '';
   return `/${routePrefix}/archive/site/${currentArchiveSnapshot.routeSegment}/${suffix}`;
+}
+
+function pollutionStateForComposition(level, pageType, pathname, composition) {
+  for (let eventCount = Math.max(3, level + 2); eventCount <= 30; eventCount += 1) {
+    for (const variant of [0, 1, 2]) {
+      const state = { version: 2, level, eventCount, variant };
+      if (derivePollutionComposition(state, pageType, pathname) === composition) {
+        return state;
+      }
+    }
+  }
+  throw new Error(`无法为污染等级 ${level} / 构图 ${composition} 派生测试状态`);
 }
 
 async function assertArchiveProjectionList(page, expectedCount, label) {
@@ -91,12 +113,36 @@ async function assertArchiveVisualLayer(page, label, reducedMotion = false) {
   );
   const taskControls = page.locator('main a:visible, main button:visible, main select:visible');
   assert.ok(await taskControls.count(), `${label} 应保留可操作的任务层`);
+  assert.ok(
+    await taskControls.evaluateAll((elements) =>
+      elements.some((element) => window.getComputedStyle(element).transform !== 'none'),
+    ),
+    `${label} 的非保护叙事控件应参与有界空间失序`,
+  );
   assert.equal(
     await taskControls.evaluateAll((elements) =>
+      elements.every((element) => {
+        const bounds = element.getBoundingClientRect();
+        return (
+          bounds.width > 0 &&
+          bounds.height > 0 &&
+          window.getComputedStyle(element).pointerEvents !== 'none'
+        );
+      }),
+    ),
+    true,
+    `${label} 的叙事控件在失序后仍应具有可命中的真实区域`,
+  );
+  const protectedControls = page.locator(
+    '[data-pollution-safe] a:visible, [data-pollution-safe] button:visible, [data-pollution-safe] summary:visible',
+  );
+  assert.ok(await protectedControls.count(), `${label} 应保留显式污染保护控件`);
+  assert.equal(
+    await protectedControls.evaluateAll((elements) =>
       elements.every((element) => window.getComputedStyle(element).transform === 'none'),
     ),
     true,
-    `${label} 的真实交互控件必须保持直立`,
+    `${label} 的主导航、国家版本与退出控件不得空间失序`,
   );
   if (reducedMotion) {
     assert.equal(
@@ -104,6 +150,62 @@ async function assertArchiveVisualLayer(page, label, reducedMotion = false) {
       'none',
       `${label} 在减少动态效果下不得播放失序动画`,
     );
+  }
+}
+
+async function assertArchiveInvitationArtifact(page, localization, label, reducedMotion = false) {
+  const invitation = page.locator('[data-archive-invitation][open]');
+  await invitation.waitFor();
+  if (!reducedMotion) {
+    await page.waitForTimeout(520);
+  }
+  assert.equal(
+    (await invitation.locator('h2').textContent())?.trim(),
+    localization.archiveProjection.invitation.title,
+    `${label} 应使用当前国家版本邀请标题`,
+  );
+  assert.equal(
+    await invitation.locator('.archive-invitation__misprint[aria-hidden="true"]').count(),
+    1,
+    `${label} 应包含退出语义树的错版层`,
+  );
+  assert.deepEqual(
+    await invitation
+      .locator('.archive-invitation__register > div')
+      .evaluateAll((rows) => rows.map((row) => row.dataset.registerIndex)),
+    ['01', '02', '03', '04'],
+    `${label} 应保留四项实体登记字段`,
+  );
+  const overlap = await invitation.evaluate((dialog) => {
+    const seal = dialog.querySelector('.archive-invitation__seal')?.getBoundingClientRect();
+    const copy = dialog.querySelector('.archive-invitation__copy')?.getBoundingClientRect();
+    const register = dialog.querySelector('.archive-invitation__register')?.getBoundingClientRect();
+    const intersects = (first, second) =>
+      Boolean(
+        first &&
+        second &&
+        first.left < second.right &&
+        first.right > second.left &&
+        first.top < second.bottom &&
+        first.bottom > second.top,
+      );
+    return {
+      copy: intersects(seal, copy),
+      register: intersects(seal, register),
+      backdrop: window.getComputedStyle(dialog, '::backdrop').backgroundImage,
+      animationName: window.getComputedStyle(dialog).animationName,
+      transform: window.getComputedStyle(dialog).transform,
+    };
+  });
+  assert.deepEqual(
+    { copy: overlap.copy, register: overlap.register },
+    { copy: true, register: true },
+    `${label} 的剧团印章应跨越正文与登记格`,
+  );
+  assert.notEqual(overlap.backdrop, 'none', `${label} 应保留可见的污染页面背景`);
+  assert.notEqual(overlap.transform, 'none', `${label} 应表现为错版实体而非规整系统卡片`);
+  if (reducedMotion) {
+    assert.equal(overlap.animationName, 'none', `${label} 在减少动态效果下应直接显示静态终态`);
   }
 }
 
@@ -121,7 +223,7 @@ function getFreePort() {
   });
 }
 
-async function waitForHttp(url, label, timeoutMs = 20_000) {
+async function waitForHttp(url, label, timeoutMs = 40_000) {
   const deadline = Date.now() + timeoutMs;
   let lastError;
   while (Date.now() < deadline) {
@@ -386,32 +488,156 @@ try {
   const assertArchiveVisualErrors = trackUnexpectedErrors(archiveVisualPage);
   await archiveVisualPage.goto(`${origin}${archivePath('yan')}`);
   const visualLayer = archiveVisualPage.locator('[data-pollution-visual-layer]');
-  for (const [level, expectedLayerDisplay, expectedEchoDisplay] of [
-    [0, 'none', 'none'],
-    [1, 'none', 'none'],
-    [2, 'block', 'none'],
-  ]) {
-    await archiveVisualPage.evaluate((nextLevel) => {
-      sessionStorage.setItem(
-        'crimson-troupe:archive-pollution:v2',
-        JSON.stringify({ version: 2, level: nextLevel, eventCount: nextLevel + 2, variant: 0 }),
+  await archiveVisualPage.evaluate(() => {
+    sessionStorage.setItem(
+      'crimson-troupe:archive-pollution:v2',
+      JSON.stringify({ version: 2, level: 0, eventCount: 0, variant: 0 }),
+    );
+  });
+  await archiveVisualPage.reload();
+  await archiveVisualPage.locator('html[data-pollution-level="0"]').waitFor();
+  assert.equal(
+    await visualLayer.evaluate((element) => window.getComputedStyle(element).display),
+    'none',
+    '污染等级 0 不得显示污染框景',
+  );
+  const compositionTransforms = { 1: new Set(), 2: new Set() };
+  for (const level of [1, 2]) {
+    for (const composition of [0, 1, 2]) {
+      const state = pollutionStateForComposition(level, 'home', archivePath('yan'), composition);
+      await archiveVisualPage.evaluate((nextState) => {
+        sessionStorage.setItem('crimson-troupe:archive-pollution:v2', JSON.stringify(nextState));
+      }, state);
+      await archiveVisualPage.reload();
+      await archiveVisualPage
+        .locator(
+          `html[data-pollution-level="${level}"][data-pollution-composition="${composition}"]`,
+        )
+        .waitFor();
+      assert.equal(
+        await visualLayer.evaluate((element) => window.getComputedStyle(element).display),
+        'block',
+        `污染等级 ${level} / 构图 ${composition} 应显示页面框景`,
       );
-    }, level);
-    await archiveVisualPage.reload();
-    await archiveVisualPage.locator(`html[data-pollution-level="${level}"]`).waitFor();
+      assert.equal(
+        await archiveVisualPage
+          .locator('.archive-pollution-stage__echoes')
+          .evaluate((element) => window.getComputedStyle(element).display),
+        'none',
+        `污染等级 ${level} / 构图 ${composition} 不得提前显示等级 3 文字副本`,
+      );
+      const stageProof = await visualLayer.evaluate((element) => {
+        const proof = window.getComputedStyle(element, '::before');
+        return {
+          content: proof.content,
+          transform: proof.transform,
+          width: Number.parseFloat(proof.width),
+        };
+      });
+      assert.notEqual(stageProof.content, 'none', `污染等级 ${level} 应具有档案错版证明`);
+      assert.ok(stageProof.width > 100, `污染等级 ${level} 的错版证明应清楚可见`);
+      compositionTransforms[level].add(stageProof.transform);
+      assert.notEqual(
+        await archiveVisualPage
+          .locator('[data-pollution-slot="record-list"] > :nth-child(2)')
+          .evaluate((element) => window.getComputedStyle(element).boxShadow),
+        'none',
+        `污染等级 ${level} 应在真实记录列表留下印版痕迹`,
+      );
+    }
     assert.equal(
-      await visualLayer.evaluate((element) => window.getComputedStyle(element).display),
-      expectedLayerDisplay,
-      `污染等级 ${level} 的页面框景显示不正确`,
+      compositionTransforms[level].size,
+      3,
+      `污染等级 ${level} 应提供三种可辨识且同强度的构图族`,
+    );
+  }
+  for (const duty of [
+    {
+      pageType: 'performance-list',
+      path: archivePath('yan', 'performances'),
+      target: '[data-pollution-slot="record-list"]',
+    },
+    {
+      pageType: 'search',
+      path: `${archivePath('yan', 'search')}?q=${encodeURIComponent('湖中')}`,
+      target: '[data-pollution-slot="search-result"]',
+    },
+    {
+      pageType: 'tickets',
+      path: archivePath('yan', 'tickets'),
+      target: '[data-pollution-slot="ticket-record"]',
+    },
+  ]) {
+    const state = pollutionStateForComposition(2, duty.pageType, duty.path.split('?')[0], 1);
+    await archiveVisualPage.goto(`${origin}${duty.path}`);
+    await archiveVisualPage.evaluate((nextLevel) => {
+      sessionStorage.setItem('crimson-troupe:archive-pollution:v2', JSON.stringify(nextLevel));
+    }, state);
+    await archiveVisualPage.reload();
+    await archiveVisualPage
+      .locator('html[data-pollution-level="2"][data-pollution-composition="1"]')
+      .waitFor();
+    const dutyTarget = archiveVisualPage.locator(duty.target).first();
+    await dutyTarget.waitFor();
+    assert.equal(
+      await dutyTarget.evaluate((element) => window.getComputedStyle(element).position),
+      'relative',
+      `${duty.pageType} 应提供真实页面污染作用点`,
+    );
+    if (duty.pageType === 'performance-list') {
+      assert.notEqual(
+        await dutyTarget
+          .locator(':scope > :first-child')
+          .evaluate((element) => window.getComputedStyle(element).transform),
+        'none',
+        '演出列表应在二级污染中形成记录间空间矛盾',
+      );
+    } else {
+      assert.notEqual(
+        await dutyTarget.evaluate((element) => window.getComputedStyle(element).outlineStyle),
+        'none',
+        `${duty.pageType} 应显示档案错版轮廓`,
+      );
+    }
+  }
+  await archiveVisualPage.setViewportSize({ width: 320, height: 800 });
+  await assertNoHorizontalLoss(archiveVisualPage, '320px 炎国二级污染静态席位页');
+  await archiveVisualPage.setViewportSize({ width: 1280, height: 900 });
+  await archiveVisualPage.goto(`${origin}${archivePath('yan')}`);
+  const collapseTransforms = new Set();
+  for (const composition of [0, 1, 2]) {
+    const state = pollutionStateForComposition(3, 'home', archivePath('yan'), composition);
+    await archiveVisualPage.evaluate((nextState) => {
+      sessionStorage.setItem('crimson-troupe:archive-pollution:v2', JSON.stringify(nextState));
+    }, state);
+    await archiveVisualPage.reload();
+    await archiveVisualPage
+      .locator(`html[data-pollution-level="3"][data-pollution-composition="${composition}"]`)
+      .waitFor();
+    collapseTransforms.add(
+      await archiveVisualPage
+        .locator('main')
+        .evaluate((element) => window.getComputedStyle(element, '::before').transform),
+    );
+    assert.notEqual(
+      await archiveVisualPage
+        .locator('main .button')
+        .first()
+        .evaluate((element) => window.getComputedStyle(element).transform),
+      'none',
+      `三级污染构图 ${composition} 应让非保护叙事控件参与空间失序`,
     );
     assert.equal(
       await archiveVisualPage
-        .locator('.archive-pollution-stage__echoes')
-        .evaluate((element) => window.getComputedStyle(element).display),
-      expectedEchoDisplay,
-      `污染等级 ${level} 不得提前显示等级 3 文字副本`,
+        .locator('.main-nav a, .header-tools summary, .header-tools a, [data-world-switch="front"]')
+        .evaluateAll((elements) =>
+          elements.every((element) => window.getComputedStyle(element).transform === 'none'),
+        ),
+      true,
+      `三级污染构图 ${composition} 不得扭曲保护能力`,
     );
   }
+  assert.equal(collapseTransforms.size, 3, '三级污染应提供三种同强度的页面环境接管构图');
   await archiveVisualPage.evaluate(() => {
     sessionStorage.setItem(
       'crimson-troupe:archive-pollution:v2',
@@ -421,7 +647,8 @@ try {
   for (const edition of builtEditions) {
     await archiveVisualPage.goto(`${origin}${archivePath(edition.routePrefix)}`);
     await archiveVisualPage.locator('html[data-pollution-level="3"]').waitFor();
-    const expectedProjection = getLocalization(edition).archiveProjection.performance;
+    const expectedLocalization = getLocalization(edition);
+    const expectedProjection = expectedLocalization.archiveProjection.performance;
     const projectedTitles = await archiveVisualPage
       .locator('[data-archive-projection-field="title"]:visible')
       .allTextContents();
@@ -447,6 +674,13 @@ try {
       archiveVisualPage,
       `1280px ${edition.languageName.zh}三级污染里站`,
     );
+    await archiveVisualPage.locator('[data-archive-invitation-trigger]').first().click();
+    await assertArchiveInvitationArtifact(
+      archiveVisualPage,
+      expectedLocalization,
+      `1280px ${edition.languageName.zh}三级污染请柬`,
+    );
+    await archiveVisualPage.locator('[data-archive-invitation-close]').first().click();
   }
   assertArchiveVisualErrors();
   await archiveVisualContext.close();
@@ -792,6 +1026,13 @@ try {
     expectedArchiveCurrentCount,
     '三级污染里站本季演出',
   );
+  assert.notEqual(
+    await archivePage
+      .locator('[data-pollution-slot="record-list"] > :first-child')
+      .evaluate((element) => window.getComputedStyle(element).transform),
+    'none',
+    '三级污染演出列表应形成记录间空间失序',
+  );
   await archivePage.goto(`${origin}${archivePath('yan', 'performances/history')}`);
   await assertArchiveProjectionList(
     archivePage,
@@ -820,6 +1061,13 @@ try {
       .evaluate((element) => window.getComputedStyle(element).display),
     'none',
     '场次详情不应同时显示等级 0 标题',
+  );
+  assert.notEqual(
+    await archivePage
+      .locator('[data-pollution-slot="record"]')
+      .evaluate((element) => window.getComputedStyle(element).transform),
+    'none',
+    '三级污染场次详情应让记录物件脱离稳定框景',
   );
   const programLinks = archivePage.locator('.program-order a[data-archive-invitation-trigger]');
   assert.ok(await programLinks.count(), '场次详情应保留受控的原剧目关联入口');
@@ -861,6 +1109,13 @@ try {
     officeCount,
     '剧团页职责应逐项收束',
   );
+  assert.notEqual(
+    await archivePage
+      .locator('[data-pollution-slot="company-record"]')
+      .evaluate((element) => window.getComputedStyle(element).transform),
+    'none',
+    '三级污染剧团名册应脱离稳定框景',
+  );
   const companyInvitationTrigger = archivePage.locator(
     '.archive-company [data-archive-invitation-trigger]',
   );
@@ -901,6 +1156,13 @@ try {
     1,
     '三级污染搜索标题应收束为同一回应',
   );
+  assert.notEqual(
+    await archivePage
+      .locator('[data-pollution-slot="search"]')
+      .evaluate((element) => window.getComputedStyle(element).transform),
+    'none',
+    '三级污染搜索工作区应参与页面环境失序',
+  );
   const projectedSearchLink = projectedSearchResults
     .locator('a[data-archive-invitation-trigger][href]')
     .first();
@@ -922,6 +1184,13 @@ try {
   );
   const projectedSeatSelect = projectedSeatEntries.locator('select').first();
   assert.equal(await projectedSeatSelect.isEnabled(), true, '投影不得破坏静态分区选择');
+  assert.notEqual(
+    await archivePage
+      .locator('[data-pollution-slot="ticket-record"]')
+      .evaluate((element) => window.getComputedStyle(element).transform),
+    'none',
+    '三级污染席位登记应参与页面环境失序',
+  );
   const projectedSettlement = archivePage.locator(
     '.archive-settlement[data-archive-projection-level3]:visible',
   );
@@ -987,6 +1256,12 @@ try {
   assert.equal(await minosInvitation.getAttribute('open'), null);
   await minosArchivePage.locator('[data-archive-invitation-trigger]').first().click();
   await minosArchivePage.locator('[data-archive-invitation][open]').waitFor();
+  await assertArchiveInvitationArtifact(
+    minosArchivePage,
+    getLocalization(editions.minos, buildSnapshot),
+    '320px 米诺斯语三级污染请柬',
+    true,
+  );
   await minosArchivePage.locator('[data-world-switch="front"]').waitFor();
   await assertNoHorizontalLoss(minosArchivePage, '320px 米诺斯语三级污染里站');
   await minosArchivePage.locator('[data-archive-invitation-close]').first().click();
@@ -1011,6 +1286,22 @@ try {
     expectedArchiveSeatCount,
     '东国语里站应显示全部同期可登记场次',
   );
+  for (const { performanceId, offers } of expectedArchiveSeats) {
+    const select = noScriptPage.locator(`#archive-zone-${performanceId}`);
+    assert.deepEqual(
+      await select.locator('option').evaluateAll((options) =>
+        options.map((option) => ({
+          zone: option.value,
+          text: option.textContent?.trim() ?? '',
+        })),
+      ),
+      offers.map(({ zone, basePrice }) => ({
+        zone,
+        text: `${getLocalization(editions.higashi, buildSnapshot).programs.ticketZones[zone]} · ${basePrice} LMD`,
+      })),
+      `${performanceId} 应显示唯一矩阵生成的分区和价格`,
+    );
+  }
   await archiveSeatSelects.first().selectOption({ index: 1 });
   assert.notEqual(await archiveSeatSelects.first().inputValue(), 'C');
   assert.equal(

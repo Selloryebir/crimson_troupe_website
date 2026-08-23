@@ -515,6 +515,11 @@
       "related": ["BP-MOD-PROGRAMS", "BP-MOD-TERRA-TIME", "BP-MOD-TICKETING", "BP-CNT-CORE"]
     },
     {
+      "path": "src/data/performance-offers.ts",
+      "primary": "BP-CNT-CORE",
+      "related": ["BP-MOD-PROGRAMS", "BP-MOD-ARCHIVE", "BP-FND-DOMAIN"]
+    },
+    {
       "path": "src/data/production-artworks.ts",
       "primary": "BP-CNT-PRODUCTION-VISUAL",
       "related": [

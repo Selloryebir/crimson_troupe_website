@@ -1,6 +1,7 @@
 import type { BuildEditionId } from '../editions.ts';
 import { locations } from '../locations.ts';
 import { localizationPackages, type PartialLocalizationPackage } from '../localized/packages.ts';
+import { assertPerformanceOfferMatrix } from '../performance-offers.ts';
 import { performances, type Performance, type PerformanceId } from '../performances.ts';
 import {
   productionArtworkManifest,
@@ -77,6 +78,7 @@ export function assertContentBundle(
   rootSet: ContentRootSet,
   sources: ContentValidationSources = defaultSources,
 ): void {
+  assertPerformanceOfferMatrix();
   validateContentRootSet(rootSet, sources.performances);
   const selectedPerformances = getRootPerformanceIds(rootSet).map((performanceId) => {
     const value = sources.performances[performanceId];
