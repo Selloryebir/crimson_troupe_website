@@ -81,4 +81,69 @@ export const leithanienFolioProductions = {
       ['Zeremonielles Kostüm', 'Goldfaden-Schneider'],
     ],
   },
+  'lone-wander': {
+    title: 'Der Einzelwanderer',
+    kind: 'Fabelstück · drei Szenen',
+    tagline: 'Der einsame Weg bewahrt stets eine zweite Spur.',
+    duration: 'Ca. 105 Minuten, mit einer Pause',
+    durationShort: 'Ca. 105 Min.',
+    language: 'Tourneerepertoire · Programmblatt erhältlich',
+    heading: 'Ein Wanderer sucht auf leerer Straße nach dem letzten Gasthaus.',
+    synopsis:
+      'Nachts wird ein Gast verzeichnet, morgens stehen zwei Namen im Buch. Am Ziel muss der Wanderer seine Spur wählen.',
+    guidance: 'Gedämpftes Licht, Bühnennebel und naher Klang; folgen Sie der Platzanweisung.',
+    creatives: [
+      ['Regie', 'Spielraum der alten Truppe'],
+      ['Bühne', 'Werkstatt der langen Galerie'],
+    ],
+  },
+  'wonderland-in-dream': {
+    title: 'Wunderland im Traum',
+    kind: 'Traumstück · vier Akte',
+    tagline: 'Jeder Traum bietet einen Eingang, aber keine Richtung zum Erwachen.',
+    duration: 'Ca. 105 Minuten, mit einer Pause',
+    durationShort: 'Ca. 105 Min.',
+    language: 'Tourneerepertoire · Programmblatt erhältlich',
+    heading: 'Ein umgekehrter Garten, Papiertüren und ein schlafender Führer bilden den Zug.',
+    synopsis:
+      'Ein Mädchen durchquert vier Gärten; nach jedem Erwachen fehlt im Saal eine weitere Reihe.',
+    guidance: 'Gedämpftes Licht, Bühnennebel und naher Klang; folgen Sie der Platzanweisung.',
+    creatives: [
+      ['Regie', 'Spielraum der alten Truppe'],
+      ['Bühne', 'Werkstatt der langen Galerie'],
+    ],
+  },
+  'frost-deer-and-snow-doe': {
+    title: 'Frosthirsch und Schneehindin',
+    kind: 'Winteroper · drei Akte',
+    tagline: 'Zwei Spuren treffen sich am Schnee; nur eine führt in den Frühling.',
+    duration: 'Ca. 105 Minuten, mit einer Pause',
+    durationShort: 'Ca. 105 Min.',
+    language: 'Tourneerepertoire · Programmblatt erhältlich',
+    heading: 'Eine Winteroper über Jagd, Wache und zwei weiße Hirsche.',
+    synopsis:
+      'Der Jäger folgt gekreuzten Spuren, bis Hirsch und Hindin von gegenüberliegenden Seiten denselben Abschied sprechen.',
+    guidance: 'Gedämpftes Licht, Bühnennebel und naher Klang; folgen Sie der Platzanweisung.',
+    creatives: [
+      ['Regie', 'Spielraum der alten Truppe'],
+      ['Bühne', 'Werkstatt der langen Galerie'],
+    ],
+  },
+  'light-of-heria': {
+    title: 'Licht von Heria',
+    kind: 'Ikonenspiel · fünf Kapitel',
+    tagline: 'Das Licht zeigt das Tor und führt alle Schatten an denselben Ort.',
+    duration: 'Ca. 105 Minuten, mit einer Pause',
+    durationShort: 'Ca. 105 Min.',
+    language: 'Tourneerepertoire · Programmblatt erhältlich',
+    heading:
+      'Goldene Ikonen, eine lange Treppe und nacheinander erlöschende Lampen bilden den Ritus.',
+    synopsis:
+      'Herias Lampenwart steigt den Turm hinauf, während jeder Glockenschlag eine Straße nimmt; das letzte Licht wartet auf Zuspätkommende.',
+    guidance: 'Gedämpftes Licht, Bühnennebel und naher Klang; folgen Sie der Platzanweisung.',
+    creatives: [
+      ['Regie', 'Spielraum der alten Truppe'],
+      ['Bühne', 'Werkstatt der langen Galerie'],
+    ],
+  },
 } as const satisfies Record<FolioProductionId, ProductionContent>;

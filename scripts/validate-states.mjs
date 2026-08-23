@@ -29,7 +29,9 @@ import {
   assertTerraDateTime,
   compareTerraDateTime,
   derivePerformanceCollection,
+  getPerformanceVisibilityWindow,
   getSiteTerraNow,
+  isWithinPerformanceVisibilityWindow,
 } from '../src/data/site-time.ts';
 import { getTicketingOptions } from '../src/data/ticketing.ts';
 import { shouldRequestArchiveEntry } from '../src/scripts/pollution-controller.ts';
@@ -77,7 +79,9 @@ assert.deepEqual(buildContexts.preview.editionIds, previewEditionIds);
 assert.deepEqual(buildContexts.release.editionIds, ['yan']);
 assert.throws(() => getBuildContext(buildContexts, 'custom'), /未知构建预设/u);
 
-assert.doesNotThrow(() => validateContentRootSet(currentRootSet, performances));
+assert.doesNotThrow(() =>
+  validateContentRootSet(currentRootSet, performances, buildContexts.showcase),
+);
 assert.throws(
   () =>
     validateContentRootSet(
@@ -149,14 +153,74 @@ for (const [world, misplacedPerformanceId] of [
   );
 }
 
+const frontNow = getSiteTerraNow('front', buildContexts.showcase);
+const archiveNow = getSiteTerraNow('archive', buildContexts.showcase);
+assert.deepEqual(getPerformanceVisibilityWindow(frontNow), {
+  start: { ...frontNow, year: 1101 },
+  end: { ...frontNow, year: 1103 },
+});
+assert.equal(
+  isWithinPerformanceVisibilityWindow(getPerformanceVisibilityWindow(frontNow).start, frontNow),
+  true,
+  '前一年窗口端点应计入根集合',
+);
+assert.equal(
+  isWithinPerformanceVisibilityWindow(getPerformanceVisibilityWindow(frontNow).end, frontNow),
+  true,
+  '后一年窗口端点应计入根集合',
+);
+const oldestFrontPerformanceId = 'caged-fire-jiangdu-1101-0521';
+assert.throws(
+  () =>
+    validateContentRootSet(
+      currentRootSet,
+      {
+        ...performances,
+        [oldestFrontPerformanceId]: {
+          ...performances[oldestFrontPerformanceId],
+          effectiveDateTime: { ...frontNow, year: 1101, month: 4, day: 14 },
+        },
+      },
+      buildContexts.showcase,
+    ),
+  /超出 front 前后一年窗口/u,
+);
+const overusedFrontPerformanceIds = currentRootSet.worlds.front.performanceIds.slice(0, 4);
+const overusedRootSet = {
+  ...currentRootSet,
+  worlds: {
+    ...currentRootSet.worlds,
+    front: {
+      performanceIds: overusedFrontPerformanceIds,
+      featuredPerformanceId: overusedFrontPerformanceIds[0],
+    },
+  },
+};
+assert.throws(
+  () =>
+    validateContentRootSet(
+      overusedRootSet,
+      Object.fromEntries(
+        Object.entries(performances).map(([performanceId, performance]) => [
+          performanceId,
+          overusedFrontPerformanceIds.includes(performanceId)
+            ? { ...performance, productionIds: ['uncrowned'] }
+            : performance,
+        ]),
+      ),
+      buildContexts.showcase,
+    ),
+  /剧目编排超过三次：uncrowned\(4\)/u,
+);
+
 const showcaseSnapshot = resolveContent(buildContexts.showcase);
 const previewSnapshot = resolveContent(buildContexts.preview);
 assert.doesNotThrow(() => assertPerformanceOfferMatrix());
 assert.equal(showcaseSnapshot.maturity, 'preview');
-assert.equal(showcaseSnapshot.performanceEntries.length, 12);
-assert.equal(showcaseSnapshot.productionEntries.length, 7);
-assert.equal(showcaseSnapshot.locationEntries.length, 7);
-assert.equal(showcaseSnapshot.artworkEntries.length, 7);
+assert.equal(showcaseSnapshot.performanceEntries.length, 28);
+assert.equal(showcaseSnapshot.productionEntries.length, 14);
+assert.equal(showcaseSnapshot.locationEntries.length, 10);
+assert.equal(showcaseSnapshot.artworkEntries.length, 14);
 assert.equal(showcaseSnapshot.seatingPlanEntries.length, 3);
 assert.deepEqual(Object.keys(showcaseSnapshot.localizationPackages), ['yan']);
 assert.deepEqual(showcaseSnapshot.featuredPerformanceIds, {
@@ -170,25 +234,25 @@ assert.equal(
   showcaseSnapshot.performanceEntries.filter(
     ([, performance]) => performance.world === 'front' && performance.collection === 'current',
   ).length,
-  3,
+  7,
 );
 assert.equal(
   showcaseSnapshot.performanceEntries.filter(
     ([, performance]) => performance.world === 'front' && performance.collection === 'history',
   ).length,
-  0,
+  4,
 );
 assert.equal(
   showcaseSnapshot.performanceEntries.filter(
     ([, performance]) => performance.world === 'archive' && performance.collection === 'current',
   ).length,
-  5,
+  9,
 );
 assert.equal(
   showcaseSnapshot.performanceEntries.filter(
     ([, performance]) => performance.world === 'archive' && performance.collection === 'history',
   ).length,
-  4,
+  8,
 );
 
 const archiveOfferEntries = showcaseSnapshot.performanceEntries.filter(
@@ -225,13 +289,17 @@ assert.notEqual(
   '同地点异剧目报价应不同',
 );
 
+const excludedPerformanceId = 'procession-of-masks-londinium-1103-0214';
+const reducedFrontPerformanceIds = currentRootSet.worlds.front.performanceIds.filter(
+  (performanceId) => performanceId !== excludedPerformanceId,
+);
 const reducedRootSet = {
   ...currentRootSet,
   worlds: {
     ...currentRootSet.worlds,
     front: {
-      performanceIds: currentRootSet.worlds.front.performanceIds.slice(1),
-      featuredPerformanceId: currentRootSet.worlds.front.performanceIds[1],
+      performanceIds: reducedFrontPerformanceIds,
+      featuredPerformanceId: currentRootSet.worlds.front.featuredPerformanceId,
     },
   },
 };
@@ -240,14 +308,12 @@ const reducedSnapshot = resolveContent(buildContexts.showcase, {
 });
 assert.deepEqual(
   getWorldPerformanceEntries(reducedSnapshot, 'front').map(([performanceId]) => performanceId),
-  currentRootSet.worlds.front.performanceIds.slice(1),
+  reducedFrontPerformanceIds,
 );
-assert.deepEqual(getWorldProductionIds(reducedSnapshot, 'front'), ['caged-fire', 'second-snow']);
-assert.equal(reducedSnapshot.performances['uncrowned-trimount-1102'], undefined);
-assert.equal(reducedSnapshot.productions.uncrowned, undefined);
-assert.equal(reducedSnapshot.locations.trimount, undefined);
-assert.equal(reducedSnapshot.artworks.uncrowned, undefined);
-assert.equal(reducedSnapshot.seatingPlans['trimount-grand-fan'], undefined);
+assert.ok(!getWorldProductionIds(reducedSnapshot, 'front').includes('procession-of-masks'));
+assert.equal(reducedSnapshot.performances[excludedPerformanceId], undefined);
+assert.equal(reducedSnapshot.productions['procession-of-masks'], undefined);
+assert.equal(reducedSnapshot.artworks['procession-of-masks'], undefined);
 assert.throws(
   () => getLocalization(editions.higashi, reducedSnapshot),
   /国家版本 higashi 不属于当前内容快照/u,
@@ -255,12 +321,12 @@ assert.throws(
 const reducedLocalization = getLocalization(editions.yan, reducedSnapshot);
 assert.ok(
   getLocalizedPerformanceEntries(reducedLocalization, reducedSnapshot).every(
-    ([performanceId]) => performanceId !== 'uncrowned-trimount-1102',
+    ([performanceId]) => performanceId !== excludedPerformanceId,
   ),
 );
 const reducedSearch = getFrontSearchIndex(editions.yan, reducedSnapshot);
 assert.ok(
-  reducedSearch.every((entry) => !entry.href.includes('uncrowned-trimount-1102')),
+  reducedSearch.every((entry) => !entry.href.includes(excludedPerformanceId)),
   '集合外场次不得进入搜索索引',
 );
 assert.deepEqual(
@@ -275,8 +341,6 @@ assert.deepEqual(
     .map(([performanceId]) => performanceId),
 );
 
-const frontNow = getSiteTerraNow('front', buildContexts.showcase);
-const archiveNow = getSiteTerraNow('archive', buildContexts.showcase);
 assert.deepEqual(
   archiveSnapshots.map(({ snapshotId, state, routeSegment }) => ({
     snapshotId,

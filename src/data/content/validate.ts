@@ -13,6 +13,7 @@ import { assertLocalizationSourceFresh } from './localization-revisions.ts';
 import { getRootPerformanceIds, type ContentRootSet, validateContentRootSet } from './root-sets.ts';
 import { selectCompleteVariant, type ContentVariantUnit } from './variants.ts';
 import { assertTerraDateTime } from '../site-time.ts';
+import type { BuildContext } from './build-context.ts';
 
 export interface ContentValidationSources {
   performances: Readonly<Record<string, Performance>>;
@@ -77,9 +78,10 @@ export function assertContentBundle(
   editionIds: readonly BuildEditionId[],
   rootSet: ContentRootSet,
   sources: ContentValidationSources = defaultSources,
+  context?: BuildContext,
 ): void {
   assertPerformanceOfferMatrix();
-  validateContentRootSet(rootSet, sources.performances);
+  validateContentRootSet(rootSet, sources.performances, context);
   const selectedPerformances = getRootPerformanceIds(rootSet).map((performanceId) => {
     const value = sources.performances[performanceId];
     const unit: ContentVariantUnit<Performance> = {

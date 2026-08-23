@@ -77,4 +77,68 @@ export const columbiaFolioProductions = {
       ['Ceremonial Costume', 'Gold-Thread Tailors'],
     ],
   },
+  'lone-wander': {
+    title: 'Lone Wander',
+    kind: 'Fable play · three scenes',
+    tagline: 'The lone road always keeps a second set of footsteps.',
+    duration: 'Approx. 105 minutes, with one intermission',
+    durationShort: 'Approx. 105 min',
+    language: 'Touring repertory · programme sheet available',
+    heading: 'A traveller searches an empty road for its final inn.',
+    synopsis:
+      'Only one guest is entered each night, yet the morning ledger holds two names. At the terminus, the traveller must choose which prints are his.',
+    guidance: 'Low light, stage haze and close sound are used; follow the usher to your place.',
+    creatives: [
+      ['Direction', 'Old Troupe Playroom'],
+      ['Stage', 'Long Gallery Workshop'],
+    ],
+  },
+  'wonderland-in-dream': {
+    title: 'Wonderland in Dream',
+    kind: 'Dream play · four acts',
+    tagline: 'Every dream offers an entrance, but none offers the direction of waking.',
+    duration: 'Approx. 105 minutes, with one intermission',
+    durationShort: 'Approx. 105 min',
+    language: 'Touring repertory · programme sheet available',
+    heading: 'An inverted garden, paper doors and a sleeping guide compose this dream procession.',
+    synopsis:
+      'A girl follows backward-growing signs through four gardens; after each waking, the auditorium has lost another row.',
+    guidance: 'Low light, stage haze and close sound are used; follow the usher to your place.',
+    creatives: [
+      ['Direction', 'Old Troupe Playroom'],
+      ['Stage', 'Long Gallery Workshop'],
+    ],
+  },
+  'frost-deer-and-snow-doe': {
+    title: 'Frost Deer and Snow Doe',
+    kind: 'Winter opera · three acts',
+    tagline: 'Two tracks meet at the snowline; only one continues towards spring.',
+    duration: 'Approx. 105 minutes, with one intermission',
+    durationShort: 'Approx. 105 min',
+    language: 'Touring repertory · programme sheet available',
+    heading: 'A winter opera of pursuit, vigil and two white deer.',
+    synopsis:
+      'A hunter follows crossed tracks into a silent wood until stag and doe speak the same farewell from opposite directions.',
+    guidance: 'Low light, stage haze and close sound are used; follow the usher to your place.',
+    creatives: [
+      ['Direction', 'Old Troupe Playroom'],
+      ['Stage', 'Long Gallery Workshop'],
+    ],
+  },
+  'light-of-heria': {
+    title: 'Light of Heria',
+    kind: 'Icon play · five chapters',
+    tagline: 'The light reveals the gate and leads every shadow within to one place.',
+    duration: 'Approx. 105 minutes, with one intermission',
+    durationShort: 'Approx. 105 min',
+    language: 'Touring repertory · programme sheet available',
+    heading: 'Golden icons, a long stair and lamps extinguished in sequence form this rite.',
+    synopsis:
+      'Heria’s lamplighter climbs the tower while each bell removes another street; the final light is reserved for late arrivals.',
+    guidance: 'Low light, stage haze and close sound are used; follow the usher to your place.',
+    creatives: [
+      ['Direction', 'Old Troupe Playroom'],
+      ['Stage', 'Long Gallery Workshop'],
+    ],
+  },
 } as const satisfies Record<FolioProductionId, ProductionContent>;

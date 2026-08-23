@@ -92,8 +92,14 @@ function assertArtworkFiles() {
   }
 }
 
-assert.doesNotThrow(() => assertContentBundle(buildEditionIds, currentRootSet));
+assert.doesNotThrow(() =>
+  assertContentBundle(buildEditionIds, currentRootSet, undefined, buildContext),
+);
 assertArtworkFiles();
+assert.equal(Object.keys(performances).length, 28, '预备场次目录应包含 28 条记录');
+assert.equal(Object.keys(productions).length, 14, '预备剧目目录应包含 14 条记录');
+assert.equal(buildSnapshot.performanceEntries.length, 28, '当前根集合应发布 28 个场次');
+assert.equal(buildSnapshot.productionEntries.length, 14, '当前根集合应发布 14 个剧目');
 
 const fixtureId = 'uncrowned-trimount-1102';
 const fixturePerformance = performances[fixtureId];
