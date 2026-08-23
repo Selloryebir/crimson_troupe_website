@@ -35,10 +35,11 @@ docs/drafts/
 
 当前实际草稿入口：
 
-| 文件                                                                                 | 类型     | 当前效力                                 |
-| ------------------------------------------------------------------------------------ | -------- | ---------------------------------------- |
-| [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md) | 创意草稿 | 延期的里站异常购票构想，等待未来独立规划 |
-| [`creative/performance-pricing-method.md`](creative/performance-pricing-method.md)   | 创意草稿 | 未来正式定价方法候选，已决定延期且不启用 |
+| 文件                                                                                 | 类型       | 当前效力                                 |
+| ------------------------------------------------------------------------------------ | ---------- | ---------------------------------------- |
+| [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md) | 创意草稿   | 延期的里站异常购票构想，等待未来独立规划 |
+| [`creative/performance-pricing-method.md`](creative/performance-pricing-method.md)   | 创意草稿   | 未来正式定价方法候选，已决定延期且不启用 |
+| [`plans/site-time-correction-stage.md`](plans/site-time-correction-stage.md)         | 一次性计划 | 已批准的 1102／1084 时间校正实施计划     |
 
 ## 固定文档骨架
 
