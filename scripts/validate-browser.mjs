@@ -11,7 +11,7 @@ import { chromium } from 'playwright';
 
 import { currentArchiveSnapshot } from '../src/data/archive-snapshots.ts';
 import { buildSnapshot } from '../src/data/content/resolve.ts';
-import { builtEditions } from '../src/data/editions.ts';
+import { builtEditions, editions } from '../src/data/editions.ts';
 import { getLocalization } from '../src/data/localized/resolve.ts';
 
 const serverHost = '127.0.0.1';
@@ -24,6 +24,15 @@ const expectedArchiveSeatCount = buildSnapshot.performanceEntries.filter(
     performance.status === 'scheduled' &&
     performance.ticketAvailability.state === 'on-sale',
 ).length;
+const expectedArchiveSeats = buildSnapshot.performanceEntries.flatMap(
+  ([performanceId, performance]) =>
+    performance.world === 'archive' &&
+    performance.collection === 'current' &&
+    performance.status === 'scheduled' &&
+    performance.ticketAvailability.state === 'on-sale'
+      ? [{ performanceId, offers: performance.ticketAvailability.offers }]
+      : [],
+);
 const expectedArchiveCurrentCount = buildSnapshot.performanceEntries.filter(
   ([, performance]) => performance.world === 'archive' && performance.collection === 'current',
 ).length;
@@ -1011,6 +1020,22 @@ try {
     expectedArchiveSeatCount,
     '东国语里站应显示全部同期可登记场次',
   );
+  for (const { performanceId, offers } of expectedArchiveSeats) {
+    const select = noScriptPage.locator(`#archive-zone-${performanceId}`);
+    assert.deepEqual(
+      await select.locator('option').evaluateAll((options) =>
+        options.map((option) => ({
+          zone: option.value,
+          text: option.textContent?.trim() ?? '',
+        })),
+      ),
+      offers.map(({ zone, basePrice }) => ({
+        zone,
+        text: `${getLocalization(editions.higashi, buildSnapshot).programs.ticketZones[zone]} · ${basePrice} LMD`,
+      })),
+      `${performanceId} 应显示唯一矩阵生成的分区和价格`,
+    );
+  }
   await archiveSeatSelects.first().selectOption({ index: 1 });
   assert.notEqual(await archiveSeatSelects.first().inputValue(), 'C');
   assert.equal(

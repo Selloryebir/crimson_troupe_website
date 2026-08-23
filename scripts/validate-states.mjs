@@ -22,6 +22,7 @@ import {
   getLocalization,
   getLocalizedPerformanceEntries,
 } from '../src/data/localized/resolve.ts';
+import { assertPerformanceOfferMatrix } from '../src/data/performance-offers.ts';
 import { performances } from '../src/data/performances.ts';
 import { getFrontSearchIndex, getSiteSearchScope } from '../src/data/site-search-index.ts';
 import {
@@ -154,6 +155,7 @@ for (const [world, misplacedPerformanceId] of [
 
 const showcaseSnapshot = resolveContent(buildContexts.showcase);
 const previewSnapshot = resolveContent(buildContexts.preview);
+assert.doesNotThrow(() => assertPerformanceOfferMatrix());
 assert.equal(showcaseSnapshot.maturity, 'preview');
 assert.equal(showcaseSnapshot.performanceEntries.length, 12);
 assert.equal(showcaseSnapshot.productionEntries.length, 7);
@@ -191,6 +193,40 @@ assert.equal(
     ([, performance]) => performance.world === 'archive' && performance.collection === 'history',
   ).length,
   4,
+);
+
+const archiveOfferEntries = showcaseSnapshot.performanceEntries.filter(
+  ([, performance]) =>
+    performance.world === 'archive' && performance.ticketAvailability.state === 'on-sale',
+);
+const offerSignature = (performance) =>
+  performance.ticketAvailability.state === 'on-sale'
+    ? performance.ticketAvailability.offers
+        .map(({ zone, basePrice }) => `${zone}:${basePrice}`)
+        .join('|')
+    : '';
+assert.equal(archiveOfferEntries.length, 5);
+assert.equal(
+  new Set(archiveOfferEntries.map(([, performance]) => offerSignature(performance))).size,
+  5,
+);
+assert.deepEqual(
+  performances['the-carnival-montelupe-1091-0921'].ticketAvailability.state === 'on-sale'
+    ? performances['the-carnival-montelupe-1091-0921'].ticketAvailability.offers.map(
+        ({ zone }) => zone,
+      )
+    : [],
+  ['C', 'B', 'A'],
+);
+assert.notEqual(
+  offerSignature(performances['the-carnival-montelupe-1091-0921']),
+  offerSignature(performances['the-carnival-londinium-1091-1009']),
+  '同剧目异地报价应不同',
+);
+assert.notEqual(
+  offerSignature(performances['der-ring-zwillingsturme-1091-0817']),
+  offerSignature(performances['ode-au-triomphe-zwillingsturme-1091-1028']),
+  '同地点异剧目报价应不同',
 );
 
 const reducedRootSet = {
