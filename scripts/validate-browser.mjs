@@ -1025,7 +1025,7 @@ try {
   });
   const archivePage = await archiveContext.newPage();
   const assertArchiveErrors = trackUnexpectedErrors(archivePage);
-  await archivePage.goto(`${origin}/yan/archive/site/1091/`);
+  await archivePage.goto(`${origin}/yan/archive/site/1084/`);
   await archivePage.waitForURL(
     `${origin}/yan/archive/site/${currentArchiveSnapshot.routeSegment}/`,
   );

@@ -16,7 +16,7 @@ export const minosSite = {
     currentEdition: 'Τρέχουσα έκδοση: {language}',
     chooseEdition: 'Τρέχουσα έκδοση: {language}. Επιλέξτε εθνική έκδοση',
     frontFooter: 'Περιοδείες, έργα και υπηρεσίες επισκεπτών',
-    archiveFooter: 'Στιγμιότυπο συλλογής · 1091-07-01 00:00:00',
+    archiveFooter: 'Στιγμιότυπο συλλογής · 1084-07-01 00:00:00',
     archiveCatalog: 'Κατάλογος συλλογής',
     frontToArchive: 'Άνοιγμα εγγραφής συλλογής',
     archiveDamaged: 'Κατεστραμμένη εγγραφή· μη διαθέσιμη',
@@ -57,7 +57,7 @@ export const minosSite = {
       featuredPerformance: 'Επιλεγμένη παράσταση: {title}, {city}',
       viewPerformance: 'Δείτε την Παράσταση',
       seasonStatementLabel: 'Σημείωμα περιόδου',
-      seasonCode: '1098 / ΦΘΙΝΟΠΩΡΙΝΗ ΠΕΡΙΟΔΕΙΑ',
+      seasonCode: '1102 / ΦΘΙΝΟΠΩΡΙΝΗ ΠΕΡΙΟΔΕΙΑ',
       seasonNote:
         'Τρία νέα έργα φτάνουν στο Trimounts, στο Vyseheim και στην κομητεία Norport κατά τη φθινοπωρινή περιοδεία.',
       scheduleEyebrow: 'Πρόγραμμα Περιοδείας',
@@ -231,7 +231,7 @@ export const minosSite = {
       browsePerformances: 'Συμβουλευτείτε την Περίοδο',
       troupeRegister: 'Κατάστιχο Θιάσου',
       featuredPerformance: 'Πρώτη της περιόδου: {title}',
-      featuredNumber: 'ΦΘΙΝΟΠΩΡΟ / 1091',
+      featuredNumber: 'ΦΘΙΝΟΠΩΡΟ / 1084',
       noticeEyebrow: 'Ανακοίνωση Περιοδείας · Αρ. 91',
       noticeTitle: 'Το φθινοπωρινό κατάστιχο περιοδείας ολοκληρώθηκε',
       notice:

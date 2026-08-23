@@ -53,11 +53,11 @@ const forbiddenSearchNarrativePatterns = {
 };
 
 const forbiddenArchiveNarrativePatterns = {
-  yan: /网站存档|历史快照|旧剧团|1091[年 ]?存档|泰拉历\s*1091/u,
-  higashi: /保存版|歴史スナップショット|旧劇団|テラ歴1091年|1091年.*保存/u,
-  columbia: /\b(?:website archive|historic(?:al)? snapshot|old troupe|Terra year 1091)\b/iu,
-  minos: /αρχείο ιστοτόπου|ιστορικό στιγμιότυπο|παλιού .*θιάσ|έτος Terra 1091|έτους Terra 1091/iu,
-  ursus: /архив(?:ный|ная)?|историческ(?:ий|ая)|стар(?:ой|ый).*трупп|год Terra 1091|1091 года/iu,
+  yan: /网站存档|历史快照|旧剧团|1084[年 ]?存档|泰拉历\s*1084/u,
+  higashi: /保存版|歴史スナップショット|旧劇団|テラ歴1084年|1084年.*保存/u,
+  columbia: /\b(?:website archive|historic(?:al)? snapshot|old troupe|Terra year 1084)\b/iu,
+  minos: /αρχείο ιστοτόπου|ιστορικό στιγμιότυπο|παλιού .*θιάσ|έτος Terra 1084|έτους Terra 1084/iu,
+  ursus: /архив(?:ный|ная)?|историческ(?:ий|ая)|стар(?:ой|ый).*трупп|год Terra 1084|1084 года/iu,
 };
 
 function assertComplete(value, path = 'content') {
@@ -99,14 +99,14 @@ assert.ok(productionSourceCounts.folio > 0 && productionSourceCounts.original > 
 const archivePerformances = Object.values(performances).filter(
   (performance) => performance.world === 'archive',
 );
-assert.ok(archivePerformances.length > 0, '1091 里站根集合不能为空');
+assert.ok(archivePerformances.length > 0, '1084 里站根集合不能为空');
 assert.ok(
   archivePerformances.every((performance) =>
     performance.productionIds.every(
       (productionId) => productions[productionId].sourceKind === 'folio',
     ),
   ),
-  '1091 里站只能引用活页剧目',
+  '1084 里站只能引用活页剧目',
 );
 const archiveCompletedPerformances = archivePerformances.filter(
   (performance) => performance.status === 'completed',
@@ -114,13 +114,13 @@ const archiveCompletedPerformances = archivePerformances.filter(
 const archiveScheduledPerformances = archivePerformances.filter(
   (performance) => performance.status === 'scheduled',
 );
-assert.ok(archiveCompletedPerformances.length > 0, '1091 里站应保留同期历史场次');
-assert.ok(archiveScheduledPerformances.length > 0, '1091 里站应保留同期本季场次');
+assert.ok(archiveCompletedPerformances.length > 0, '1084 里站应保留同期历史场次');
+assert.ok(archiveScheduledPerformances.length > 0, '1084 里站应保留同期本季场次');
 assert.ok(
   archiveCompletedPerformances.every(
     (performance) => performance.ticketAvailability.state === 'not-on-sale',
   ),
-  '1091 已闭幕场次不得保持开放登记',
+  '1084 已闭幕场次不得保持开放登记',
 );
 for (const performance of archiveScheduledPerformances) {
   assert.equal(
@@ -170,9 +170,9 @@ const frontOfferByPerformance = Object.fromEntries(
     performance.ticketAvailability.offers,
   ]),
 );
-const trimountOffers = frontOfferByPerformance['uncrowned-trimount-1098'];
-const wiesheimOffers = frontOfferByPerformance['caged-fire-wiesheim-1098'];
-const norportOffers = frontOfferByPerformance['second-snow-norport-1098'];
+const trimountOffers = frontOfferByPerformance['uncrowned-trimount-1102'];
+const wiesheimOffers = frontOfferByPerformance['caged-fire-wiesheim-1102'];
+const norportOffers = frontOfferByPerformance['second-snow-norport-1102'];
 assert.deepEqual(
   norportOffers.map(({ zone }) => zone),
   ['C', 'B', 'A'],

@@ -6,7 +6,7 @@ export const kazimierzArchiveProjection = {
     title: 'Karnawał',
     kind: 'Końcowy występ',
     tagline: 'Miejsce pozostaje zarezerwowane dla okaziciela',
-    dateTime: '1091-11-11 23:49:00 · przed trzecim dzwonkiem',
+    dateTime: '1084-11-11 23:49:00 · przed trzecim dzwonkiem',
     venue: 'Zamek Calais-Blason Woodland',
     status: 'Oczekiwanie na obecność',
     registerCode: 'CT-██/INV-03',

@@ -7,7 +7,7 @@ export const siracusaArchiveProjection = {
     title: 'Il Carnevale',
     kind: 'Performance finale',
     tagline: 'Un posto resta riservato al portatore',
-    dateTime: '1091-11-11 23:49:00 · prima della terza campana',
+    dateTime: '1084-11-11 23:49:00 · prima della terza campana',
     venue: 'Castello nel bosco di Calais-Blason',
     status: 'In attesa di partecipazione',
     registerCode: 'CT-██/INV-03',

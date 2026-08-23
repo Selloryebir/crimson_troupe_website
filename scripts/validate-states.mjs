@@ -160,8 +160,8 @@ assert.equal(showcaseSnapshot.artworkEntries.length, 7);
 assert.equal(showcaseSnapshot.seatingPlanEntries.length, 3);
 assert.deepEqual(Object.keys(showcaseSnapshot.localizationPackages), ['yan']);
 assert.deepEqual(showcaseSnapshot.featuredPerformanceIds, {
-  front: 'uncrowned-trimount-1098',
-  archive: 'der-ring-zwillingsturme-1091-0817',
+  front: 'uncrowned-trimount-1102',
+  archive: 'der-ring-zwillingsturme-1084-0817',
 });
 assert.ok(Object.isFrozen(showcaseSnapshot));
 assert.ok(Object.isFrozen(showcaseSnapshot.performanceEntries));
@@ -207,21 +207,21 @@ assert.equal(
   5,
 );
 assert.deepEqual(
-  performances['the-carnival-montelupe-1091-0921'].ticketAvailability.state === 'on-sale'
-    ? performances['the-carnival-montelupe-1091-0921'].ticketAvailability.offers.map(
+  performances['the-carnival-montelupe-1084-0921'].ticketAvailability.state === 'on-sale'
+    ? performances['the-carnival-montelupe-1084-0921'].ticketAvailability.offers.map(
         ({ zone }) => zone,
       )
     : [],
   ['C', 'B', 'A'],
 );
 assert.notEqual(
-  offerSignature(performances['the-carnival-montelupe-1091-0921']),
-  offerSignature(performances['the-carnival-londinium-1091-1009']),
+  offerSignature(performances['the-carnival-montelupe-1084-0921']),
+  offerSignature(performances['the-carnival-londinium-1084-1009']),
   '同剧目异地报价应不同',
 );
 assert.notEqual(
-  offerSignature(performances['der-ring-zwillingsturme-1091-0817']),
-  offerSignature(performances['ode-au-triomphe-zwillingsturme-1091-1028']),
+  offerSignature(performances['der-ring-zwillingsturme-1084-0817']),
+  offerSignature(performances['ode-au-triomphe-zwillingsturme-1084-1028']),
   '同地点异剧目报价应不同',
 );
 
@@ -243,7 +243,7 @@ assert.deepEqual(
   currentRootSet.worlds.front.performanceIds.slice(1),
 );
 assert.deepEqual(getWorldProductionIds(reducedSnapshot, 'front'), ['caged-fire', 'second-snow']);
-assert.equal(reducedSnapshot.performances['uncrowned-trimount-1098'], undefined);
+assert.equal(reducedSnapshot.performances['uncrowned-trimount-1102'], undefined);
 assert.equal(reducedSnapshot.productions.uncrowned, undefined);
 assert.equal(reducedSnapshot.locations.trimount, undefined);
 assert.equal(reducedSnapshot.artworks.uncrowned, undefined);
@@ -255,12 +255,12 @@ assert.throws(
 const reducedLocalization = getLocalization(editions.yan, reducedSnapshot);
 assert.ok(
   getLocalizedPerformanceEntries(reducedLocalization, reducedSnapshot).every(
-    ([performanceId]) => performanceId !== 'uncrowned-trimount-1098',
+    ([performanceId]) => performanceId !== 'uncrowned-trimount-1102',
   ),
 );
 const reducedSearch = getFrontSearchIndex(editions.yan, reducedSnapshot);
 assert.ok(
-  reducedSearch.every((entry) => !entry.href.includes('uncrowned-trimount-1098')),
+  reducedSearch.every((entry) => !entry.href.includes('uncrowned-trimount-1102')),
   '集合外场次不得进入搜索索引',
 );
 assert.deepEqual(
@@ -285,9 +285,9 @@ assert.deepEqual(
   })),
   [
     {
-      snapshotId: '1091-07-01T00:00:00',
+      snapshotId: '1084-07-01T00:00:00',
       state: 'available',
-      routeSegment: '1091-07-01',
+      routeSegment: '1084-07-01',
     },
     { snapshotId: '1093-damaged', state: 'damaged', routeSegment: null },
     { snapshotId: '1096-damaged', state: 'damaged', routeSegment: null },
@@ -301,14 +301,14 @@ assert.equal(
 );
 assert.deepEqual(frontNow, {
   calendar: 'terra',
-  year: 1098,
-  month: 9,
-  day: 1,
+  year: 1102,
+  month: 4,
+  day: 15,
   time: '00:00',
 });
 assert.deepEqual(archiveNow, {
   calendar: 'terra',
-  year: 1091,
+  year: 1084,
   month: 7,
   day: 1,
   time: '00:00',
@@ -330,7 +330,7 @@ assert.throws(
   /未知或不匹配的内容根集合/u,
 );
 for (const invalidDateTime of [
-  { ...frontNow, year: 1098.5 },
+  { ...frontNow, year: 1102.5 },
   { ...frontNow, month: 0 },
   { ...frontNow, month: 13 },
   { ...frontNow, day: 0 },
@@ -342,7 +342,7 @@ for (const invalidDateTime of [
   assert.throws(() => compareTerraDateTime(invalidDateTime, frontNow), /不是有效的泰拉时间结构/u);
 }
 assert.equal(derivePerformanceCollection(frontNow, frontNow), 'current');
-assert.equal(derivePerformanceCollection({ ...frontNow, month: 8, day: 31 }, frontNow), 'history');
+assert.equal(derivePerformanceCollection({ ...frontNow, day: 14 }, frontNow), 'history');
 
 const collectionFixtures = [
   {
@@ -354,7 +354,7 @@ const collectionFixtures = [
   {
     label: '历史取消场次仍属于历史演出',
     status: 'cancelled',
-    effectiveDateTime: { ...frontNow, month: 8, day: 31 },
+    effectiveDateTime: { ...frontNow, day: 14 },
     expected: 'history',
   },
   {
@@ -380,11 +380,11 @@ for (const fixture of collectionFixtures) {
 }
 
 const noticeFixturePerformance = {
-  ...performances['second-snow-norport-1098'],
+  ...performances['second-snow-norport-1102'],
   status: 'pending',
   previousDateTime: {
     calendar: 'terra',
-    year: 1098,
+    year: 1102,
     month: 10,
     day: 20,
     time: '18:45',
@@ -392,8 +392,8 @@ const noticeFixturePerformance = {
   notice: { reason: 'catastrophe-route', sourceRevision: 'notice-v2' },
 };
 const noticeFixtureContent = {
-  ...getLocalization(editions.yan).programs.performances['second-snow-norport-1098'],
-  previousDateTimeDisplay: '1098.10.20 / 18:45',
+  ...getLocalization(editions.yan).programs.performances['second-snow-norport-1102'],
+  previousDateTimeDisplay: '1102.10.20 / 18:45',
   operationalNotice: { sourceRevision: 'notice-v2', text: '线路调整，排期等待确认。' },
 };
 assert.doesNotThrow(() =>
@@ -418,7 +418,7 @@ assert.throws(
 
 const pendingPerformanceEntries = showcaseSnapshot.performanceEntries.map(
   ([performanceId, performance]) =>
-    performanceId === 'caged-fire-wiesheim-1098'
+    performanceId === 'caged-fire-wiesheim-1102'
       ? [performanceId, { ...performance, status: 'pending' }]
       : [performanceId, performance],
 );
@@ -429,7 +429,7 @@ const pendingSnapshot = {
 };
 assert.ok(
   getTicketingOptions(getLocalization(editions.yan), pendingSnapshot).every(
-    ({ performanceId }) => performanceId !== 'caged-fire-wiesheim-1098',
+    ({ performanceId }) => performanceId !== 'caged-fire-wiesheim-1102',
   ),
   '待定场次不得进入票务候选',
 );
@@ -510,11 +510,11 @@ assert.deepEqual(parsePollutionState('{"version":2,"level":2,"eventCount":8,"var
   variant: 1,
 });
 assert.equal(
-  normalizePollutionPath('//yan///archive/site/1091-07-01/'),
-  '/yan/archive/site/1091-07-01',
+  normalizePollutionPath('//yan///archive/site/1084-07-01/'),
+  '/yan/archive/site/1084-07-01',
 );
 const compositionState = { version: 2, level: 3, eventCount: 8, variant: 1 };
-const compositionPath = '/yan/archive/site/1091-07-01';
+const compositionPath = '/yan/archive/site/1084-07-01';
 const stableComposition = derivePollutionComposition(compositionState, 'home', compositionPath);
 assert.equal(
   derivePollutionComposition(compositionState, 'home', `${compositionPath}/`),
@@ -815,7 +815,7 @@ const artifactPerformance = {
   performanceId: 'performance-a',
   title: '《候选验收》',
   kind: '测试剧目',
-  dateTime: '1098.09.17 / 19:30',
+  dateTime: '1102.09.17 / 19:30',
   place: '特里蒙大剧院',
   visual: 'moon',
   offers: catalog[0].offers,
@@ -907,7 +907,7 @@ const unicodeArtifactSvg = createTicketSvg({
     ...artifactPerformance,
     title: unicodeTicketSamples[0].value,
     kind: 'Особое архивное представление',
-    dateTime: '1098.09.17 / 19:30 — επόμενη είσοδος',
+    dateTime: '1102.09.17 / 19:30 — επόμενη είσοδος',
     place: unicodeTicketSamples[2].value,
   },
   basketItem: basketA,

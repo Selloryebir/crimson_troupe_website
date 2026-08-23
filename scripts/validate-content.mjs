@@ -95,7 +95,7 @@ function assertArtworkFiles() {
 assert.doesNotThrow(() => assertContentBundle(buildEditionIds, currentRootSet));
 assertArtworkFiles();
 
-const fixtureId = 'uncrowned-trimount-1098';
+const fixtureId = 'uncrowned-trimount-1102';
 const fixturePerformance = performances[fixtureId];
 const selectedPreview = selectCompleteVariant(
   {
@@ -295,8 +295,8 @@ assert.equal(changedBodyDigests.site, currentDigests.site);
 assert.equal(changedBodyDigests.rootSet, currentDigests.rootSet);
 assert.notEqual(changedBodyDigests.performances[fixtureId], currentDigests.performances[fixtureId]);
 assert.equal(
-  changedBodyDigests.performances['caged-fire-wiesheim-1098'],
-  currentDigests.performances['caged-fire-wiesheim-1098'],
+  changedBodyDigests.performances['caged-fire-wiesheim-1102'],
+  currentDigests.performances['caged-fire-wiesheim-1102'],
 );
 
 const changedArtworkRegistry = cloneProductionArtworkRegistry();
