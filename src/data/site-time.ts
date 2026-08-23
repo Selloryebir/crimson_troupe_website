@@ -72,6 +72,30 @@ export function compareTerraDateTime(left: TerraDateTime, right: TerraDateTime):
   return terraDateTimeKey(left).localeCompare(terraDateTimeKey(right), 'en');
 }
 
+export interface TerraDateTimeWindow {
+  start: TerraDateTime;
+  end: TerraDateTime;
+}
+
+export function getPerformanceVisibilityWindow(siteTerraNow: TerraDateTime): TerraDateTimeWindow {
+  assertTerraDateTime(siteTerraNow, 'siteTerraNow');
+  return Object.freeze({
+    start: Object.freeze({ ...siteTerraNow, year: siteTerraNow.year - 1 }),
+    end: Object.freeze({ ...siteTerraNow, year: siteTerraNow.year + 1 }),
+  });
+}
+
+export function isWithinPerformanceVisibilityWindow(
+  effectiveDateTime: TerraDateTime,
+  siteTerraNow: TerraDateTime,
+): boolean {
+  const window = getPerformanceVisibilityWindow(siteTerraNow);
+  return (
+    compareTerraDateTime(effectiveDateTime, window.start) >= 0 &&
+    compareTerraDateTime(effectiveDateTime, window.end) <= 0
+  );
+}
+
 export function derivePerformanceCollection(
   effectiveDateTime: TerraDateTime,
   siteTerraNow: TerraDateTime,

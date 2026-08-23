@@ -122,12 +122,27 @@ assert.ok(
   ),
   '1084 已闭幕场次不得保持开放登记',
 );
-for (const performance of archiveScheduledPerformances) {
+const archiveOpenRegistrationPerformances = archiveScheduledPerformances.filter(
+  (performance) => performance.ticketAvailability.state === 'on-sale',
+);
+const archiveStaticScheduledPerformances = archiveScheduledPerformances.filter(
+  (performance) => performance.ticketAvailability.state === 'not-on-sale',
+);
+assert.ok(archiveOpenRegistrationPerformances.length > 0, '1084 里站应保留开放登记样本');
+assert.ok(archiveStaticScheduledPerformances.length > 0, '1084 里站应保留静态待演样本');
+for (const performanceId of [
+  'lone-wander-linqu-1084-0719',
+  'wonderland-in-dream-qingsui-1084-1116',
+  'frost-deer-and-snow-doe-jiangdu-1085-0122',
+  'light-of-heria-trimount-1085-0530',
+]) {
   assert.equal(
-    performance.ticketAvailability.state,
-    'on-sale',
-    `${performance.performanceId} 应保留捕获时的开放登记事实`,
+    performances[performanceId].ticketAvailability.state,
+    'not-on-sale',
+    `${performanceId} 是静态待演样本，不应进入登记流程`,
   );
+}
+for (const performance of archiveOpenRegistrationPerformances) {
   assert.equal(
     performance.ticketAvailability.seatingPlanId,
     undefined,

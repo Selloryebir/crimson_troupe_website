@@ -124,7 +124,7 @@ export function resolveContent(
   rootSetRegistry: ContentRootSetRegistry = contentRootSets,
 ): ContentSnapshot {
   const rootSet = getContentRootSet(context.rootSetId, rootSetRegistry);
-  validateContentRootSet(rootSet, performances);
+  validateContentRootSet(rootSet, performances, context);
   assertContentContextEligible(context, rootSet);
 
   const performanceEntries = getRootPerformanceIds(rootSet).map((performanceId) => {

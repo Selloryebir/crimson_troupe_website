@@ -78,4 +78,68 @@ export const kazimierzFolioProductions = {
       ['Kostium ceremonialny', 'Krawcy ze złotą nicią'],
     ],
   },
+  'lone-wander': {
+    title: 'Samotny wędrowiec',
+    kind: 'Przypowieść sceniczna · trzy obrazy',
+    tagline: 'Samotna droga zawsze zachowuje drugi ślad.',
+    duration: 'Około 105 minut, z jedną przerwą',
+    durationShort: 'Około 105 min',
+    language: 'Repertuar objazdowy · dostępny program',
+    heading: 'Wędrowiec szuka ostatniej gospody przy pustej drodze.',
+    synopsis:
+      'Każdej nocy wpisuje się jednego gościa, lecz rano księga ma dwa nazwiska. U celu wędrowiec wybiera własne ślady.',
+    guidance: 'Niskie światło, dym sceniczny i bliski dźwięk; prosimy podążać za bileterem.',
+    creatives: [
+      ['Reżyseria', 'Scena starej trupy'],
+      ['Scena', 'Warsztat długiej galerii'],
+    ],
+  },
+  'wonderland-in-dream': {
+    title: 'Kraina cudów we śnie',
+    kind: 'Sztuka senna · cztery akty',
+    tagline: 'Każdy sen daje wejście, lecz nie wskazuje drogi przebudzenia.',
+    duration: 'Około 105 minut, z jedną przerwą',
+    durationShort: 'Około 105 min',
+    language: 'Repertuar objazdowy · dostępny program',
+    heading: 'Odwrócony ogród, papierowe drzwi i śpiący przewodnik tworzą pochód.',
+    synopsis:
+      'Dziewczyna przechodzi cztery ogrody; po każdym przebudzeniu widowni brakuje kolejnego rzędu.',
+    guidance: 'Niskie światło, dym sceniczny i bliski dźwięk; prosimy podążać za bileterem.',
+    creatives: [
+      ['Reżyseria', 'Scena starej trupy'],
+      ['Scena', 'Warsztat długiej galerii'],
+    ],
+  },
+  'frost-deer-and-snow-doe': {
+    title: 'Jeleń szronu i łania śniegu',
+    kind: 'Opera zimowa · trzy akty',
+    tagline: 'Dwa tropy spotykają się na śniegu; tylko jeden prowadzi ku wiośnie.',
+    duration: 'Około 105 minut, z jedną przerwą',
+    durationShort: 'Około 105 min',
+    language: 'Repertuar objazdowy · dostępny program',
+    heading: 'Zimowa opera o pościgu, czuwaniu i dwóch białych jeleniach.',
+    synopsis:
+      'Łowca idzie za skrzyżowanymi tropami, aż jeleń i łania wypowiadają to samo pożegnanie z przeciwnych stron.',
+    guidance: 'Niskie światło, dym sceniczny i bliski dźwięk; prosimy podążać za bileterem.',
+    creatives: [
+      ['Reżyseria', 'Scena starej trupy'],
+      ['Scena', 'Warsztat długiej galerii'],
+    ],
+  },
+  'light-of-heria': {
+    title: 'Światło Herii',
+    kind: 'Sztuka ikony · pięć rozdziałów',
+    tagline: 'Światło odsłania bramę i prowadzi wszystkie cienie w jedno miejsce.',
+    duration: 'Około 105 minut, z jedną przerwą',
+    durationShort: 'Około 105 min',
+    language: 'Repertuar objazdowy · dostępny program',
+    heading: 'Złote ikony, długie schody i kolejno gasnące lampy tworzą obrzęd.',
+    synopsis:
+      'Latarnik Herii wspina się na wieżę, a każdy dzwon odbiera jedną ulicę; ostatnie światło czeka na spóźnionych.',
+    guidance: 'Niskie światło, dym sceniczny i bliski dźwięk; prosimy podążać za bileterem.',
+    creatives: [
+      ['Reżyseria', 'Scena starej trupy'],
+      ['Scena', 'Warsztat długiej galerii'],
+    ],
+  },
 } as const satisfies Record<FolioProductionId, ProductionContent>;

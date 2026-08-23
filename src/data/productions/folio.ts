@@ -13,6 +13,22 @@ export const folioProductions = {
     sourceKind: 'folio',
     visual: 'flame',
   },
+  'lone-wander': { productionId: 'lone-wander', sourceKind: 'folio', visual: 'masks' },
+  'wonderland-in-dream': {
+    productionId: 'wonderland-in-dream',
+    sourceKind: 'folio',
+    visual: 'lantern',
+  },
+  'frost-deer-and-snow-doe': {
+    productionId: 'frost-deer-and-snow-doe',
+    sourceKind: 'folio',
+    visual: 'snow',
+  },
+  'light-of-heria': {
+    productionId: 'light-of-heria',
+    sourceKind: 'folio',
+    visual: 'flame',
+  },
 } as const satisfies Record<string, Production>;
 
 export type FolioProductionId = keyof typeof folioProductions;
