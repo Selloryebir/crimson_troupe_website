@@ -13,6 +13,7 @@ import { currentArchiveSnapshot } from '../src/data/archive-snapshots.ts';
 import { buildSnapshot } from '../src/data/content/resolve.ts';
 import { builtEditions, editions } from '../src/data/editions.ts';
 import { getLocalization } from '../src/data/localized/resolve.ts';
+import { derivePollutionComposition } from '../src/scripts/pollution-state.ts';
 
 const serverHost = '127.0.0.1';
 const repositoryRoot = fileURLToPath(new URL('..', import.meta.url));
@@ -408,6 +409,17 @@ try {
     }, level);
     await archiveVisualPage.reload();
     await archiveVisualPage.locator(`html[data-pollution-level="${level}"]`).waitFor();
+    assert.equal(
+      await archiveVisualPage.locator('html').getAttribute('data-pollution-composition'),
+      String(
+        derivePollutionComposition(
+          { version: 2, level, eventCount: level + 2, variant: 0 },
+          'home',
+          archivePath('yan'),
+        ),
+      ),
+      `污染等级 ${level} 应使用状态和页面路径派生构图`,
+    );
     assert.equal(
       await visualLayer.evaluate((element) => window.getComputedStyle(element).display),
       expectedLayerDisplay,

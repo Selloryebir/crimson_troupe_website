@@ -38,6 +38,8 @@ import {
   POLLUTION_PROBABILITY,
   advancePollution,
   createPollutionState,
+  derivePollutionComposition,
+  normalizePollutionPath,
   parsePollutionState,
 } from '../src/scripts/pollution-state.ts';
 import {
@@ -513,6 +515,30 @@ assert.deepEqual(parsePollutionState('{"version":2,"level":2,"eventCount":8,"var
   eventCount: 8,
   variant: 1,
 });
+assert.equal(
+  normalizePollutionPath('//yan///archive/site/1091-07-01/'),
+  '/yan/archive/site/1091-07-01',
+);
+const compositionState = { version: 2, level: 3, eventCount: 8, variant: 1 };
+const compositionPath = '/yan/archive/site/1091-07-01';
+const stableComposition = derivePollutionComposition(compositionState, 'home', compositionPath);
+assert.equal(
+  derivePollutionComposition(compositionState, 'home', `${compositionPath}/`),
+  stableComposition,
+  '同一规范路径刷新后应得到相同构图',
+);
+assert.ok(
+  new Set(
+    ['home', 'performances', 'performances/history', 'search', 'tickets'].map((segment) =>
+      derivePollutionComposition(
+        compositionState,
+        segment === 'home' ? 'home' : segment.replace('/', '-'),
+        `${compositionPath}/${segment === 'home' ? '' : segment}`,
+      ),
+    ),
+  ).size > 1,
+  '不同页面职责与规范路径应能派生同强度的其他构图',
+);
 assert.deepEqual(
   parsePollutionState('{"version":1,"level":2,"variant":1}'),
   createPollutionState(),

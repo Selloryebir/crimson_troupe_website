@@ -2,6 +2,7 @@ import { currentArchiveSnapshot } from '../data/archive-snapshots.ts';
 import {
   advancePollution,
   createPollutionState,
+  derivePollutionComposition,
   MAX_POLLUTION_LEVEL,
   parsePollutionState,
   type PollutionState,
@@ -71,6 +72,7 @@ function writeState(storage: Storage | null, state: PollutionState): void {
 function clearState(storage: Storage | null): void {
   document.documentElement.removeAttribute('data-pollution-level');
   document.documentElement.removeAttribute('data-pollution-variant');
+  document.documentElement.removeAttribute('data-pollution-composition');
   if (!storage) {
     return;
   }
@@ -83,8 +85,12 @@ function clearState(storage: Storage | null): void {
 }
 
 function applyState(state: PollutionState): void {
-  document.documentElement.dataset.pollutionLevel = String(state.level);
-  document.documentElement.dataset.pollutionVariant = String(state.variant);
+  const root = document.documentElement;
+  root.dataset.pollutionLevel = String(state.level);
+  root.dataset.pollutionVariant = String(state.variant);
+  root.dataset.pollutionComposition = String(
+    derivePollutionComposition(state, root.dataset.pageType ?? 'archive', window.location.pathname),
+  );
 }
 
 function requestTransition(storage: Storage | null, trigger: PollutionTrigger): PollutionState {
