@@ -16,7 +16,7 @@ export const ursusSite = {
     currentEdition: 'Текущая версия: {language}',
     chooseEdition: 'Текущая версия: {language}. Выбрать национальную версию',
     frontFooter: 'Гастроли, постановки и обслуживание зрителей',
-    archiveFooter: 'Снимок коллекции · 1091-07-01 00:00:00',
+    archiveFooter: 'Снимок коллекции · 1084-07-01 00:00:00',
     archiveCatalog: 'Каталог коллекции',
     frontToArchive: 'Открыть запись коллекции',
     archiveDamaged: 'Запись повреждена и недоступна',
@@ -56,7 +56,7 @@ export const ursusSite = {
       featuredPerformance: 'Избранный спектакль: {title}, {city}',
       viewPerformance: 'Открыть спектакль',
       seasonStatementLabel: 'Заметка о сезоне',
-      seasonCode: '1098 / ОСЕННИЕ ГАСТРОЛИ',
+      seasonCode: '1102 / ОСЕННИЕ ГАСТРОЛИ',
       seasonNote:
         'Три новые постановки прибывают в Trimounts, Vyseheim и графство Norport во время осенних гастролей.',
       scheduleEyebrow: 'Гастрольное расписание',
@@ -229,7 +229,7 @@ export const ursusSite = {
       browsePerformances: 'Открыть сезонный реестр',
       troupeRegister: 'Реестр труппы',
       featuredPerformance: 'Первый спектакль сезона: {title}',
-      featuredNumber: 'ОСЕНЬ / 1091',
+      featuredNumber: 'ОСЕНЬ / 1084',
       noticeEyebrow: 'Гастрольное уведомление · № 91',
       noticeTitle: 'Осенний гастрольный реестр завершён',
       notice:

@@ -6,7 +6,7 @@ export const victoriaArchiveProjection = {
     title: 'The Carnival',
     kind: 'Final performance',
     tagline: 'A seat remains reserved for the bearer',
-    dateTime: '1091-11-11 23:49:00 · before the third bell',
+    dateTime: '1084-11-11 23:49:00 · before the third bell',
     venue: 'Calais-Blason Woodland Castle',
     status: 'Awaiting attendance',
     registerCode: 'CT-██/INV-03',

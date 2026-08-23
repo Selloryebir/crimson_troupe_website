@@ -16,7 +16,7 @@ export const kazimierzSite = {
     currentEdition: 'Aktualne wydanie: {language}',
     chooseEdition: 'Aktualne wydanie: {language}. Wybierz wydanie krajowe',
     frontFooter: 'Wycieczki, produkcje i usługi dla gości',
-    archiveFooter: 'Migawka kolekcji · 1091-07-01 00:00:00',
+    archiveFooter: 'Migawka kolekcji · 1084-07-01 00:00:00',
     archiveCatalog: 'Indeks kolekcji',
     frontToArchive: 'Otwórz rekord kolekcji',
     archiveDamaged: 'Zapis uszkodzony; niedostępne',
@@ -57,7 +57,7 @@ export const kazimierzSite = {
       featuredPerformance: 'Wyróżniona wydajność: {title}, {city}',
       viewPerformance: 'Wyświetl wydajność',
       seasonStatementLabel: 'Zestawienie sezonów',
-      seasonCode: '1098 / WYCIECZKA JESIENNA',
+      seasonCode: '1102 / WYCIECZKA JESIENNA',
       seasonNote:
         'Podczas jesiennej trasy trzy nowe dzieła przybywają do Trimounts, Vyseheim i hrabstwa Norport.',
       scheduleEyebrow: 'Harmonogram wycieczek',
@@ -238,7 +238,7 @@ export const kazimierzSite = {
       browsePerformances: 'Skonsultuj się w tym sezonie',
       troupeRegister: 'Rejestr firm',
       featuredPerformance: 'Pierwszy w sezonie: {title}',
-      featuredNumber: 'JESIEŃ / 1091',
+      featuredNumber: 'JESIEŃ / 1084',
       noticeEyebrow: 'Zawiadomienie o trasie · Nr 91',
       noticeTitle: 'Lista jesiennych tras koncertowych jest kompletna',
       notice:

@@ -27,18 +27,18 @@
 /{routePrefix}/troupe/
 /{routePrefix}/search/
 /{routePrefix}/tickets/
-/{routePrefix}/archive/site/1091-07-01/
-/{routePrefix}/archive/site/1091-07-01/performances/
-/{routePrefix}/archive/site/1091-07-01/performances/history/
-/{routePrefix}/archive/site/1091-07-01/performances/{performanceId}/
-/{routePrefix}/archive/site/1091-07-01/productions/{productionId}/
-/{routePrefix}/archive/site/1091-07-01/troupe/
-/{routePrefix}/archive/site/1091-07-01/search/
-/{routePrefix}/archive/site/1091-07-01/tickets/
+/{routePrefix}/archive/site/1084-07-01/
+/{routePrefix}/archive/site/1084-07-01/performances/
+/{routePrefix}/archive/site/1084-07-01/performances/history/
+/{routePrefix}/archive/site/1084-07-01/performances/{performanceId}/
+/{routePrefix}/archive/site/1084-07-01/productions/{productionId}/
+/{routePrefix}/archive/site/1084-07-01/troupe/
+/{routePrefix}/archive/site/1084-07-01/search/
+/{routePrefix}/archive/site/1084-07-01/tickets/
 ```
 
 - 表站与里站均以各自首页为网站根路径；`performances/` 表示本季演出，`performances/history/` 表示历史演出，详情路径分别使用稳定的 `performanceId` 与 `productionId`；
-- 已经部署的 `/{routePrefix}/archive/site/1091/` 首页及同构合法深层路径只生成到上述日期快照规范路径的静态重定向；旧路径不保留第二套正文，canonical 始终指向规范路径；
+- `/{routePrefix}/archive/site/1084/` 首页及同构合法深层路径只生成到上述日期快照规范路径的静态重定向；年份兼容路径不保留第二套正文，canonical 始终指向规范路径。当前未批准预览中的错误 `1091` 路径随时间校正退役；
 - 页面通过稳定内容 ID 建立跨国家版本对应关系，不根据翻译标题生成 URL；合法深层 URL 可以直接访问，不强制跳转至首页；
 - 静态路径只遍历当前构建范围中的国家版本；国家版本注册、开发预览范围与正式发布范围由本地化契约分别拥有，页面、组件和验证不得维护平行版本数组；
 - 只有 `/yan/` 允许被索引并进入站点地图。根路径只负责重定向，其他国家版本首页、全部表站内页和全部里站页面输出 `noindex,follow`；
@@ -48,7 +48,7 @@
 ## 双时间层、内容与本地化
 
 - 表站对外只表达叙事语义上的“现在”；内部网站时钟由 `BP-MOD-TERRA-TIME` 负责，当前固定预览值不要求显示，也不进入 URL；
-- 当前唯一可访问里站快照的规范路由段为 `/archive/site/1091-07-01/`；稳定身份和完整捕获时间由 `BP-MOD-ARCHIVE` 的快照记录统一提供，其内部时钟始终固定，不受现实时间或污染影响；
+- 当前唯一可访问里站快照的规范路由段为 `/archive/site/1084-07-01/`；稳定身份和完整捕获时间由 `BP-MOD-ARCHIVE` 的快照记录统一提供，其内部时钟始终固定，不受现实时间或污染影响；
 - `archive` 只表示里站时间层，不承担“历史演出”栏目语义；
 - 默认 `showcase` 生成炎国可部署预览；`preview` 生成本地化蓝图规定的当前严格预览集合；显式 `release` 只生成通过内容与发布门禁的正式范围。三者共用页面与内容解析入口，本蓝图不复制具体版本清单。
 

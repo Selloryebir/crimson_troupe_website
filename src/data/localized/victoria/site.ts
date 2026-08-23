@@ -16,7 +16,7 @@ export const victoriaSite = {
     currentEdition: 'Current edition: {language}',
     chooseEdition: 'Current edition: {language}. Choose a national edition',
     frontFooter: 'Tours, productions, and visitor services',
-    archiveFooter: 'Collection snapshot · 1091-07-01 00:00:00',
+    archiveFooter: 'Collection snapshot · 1084-07-01 00:00:00',
     archiveCatalog: 'Collection index',
     frontToArchive: 'Open collection record',
     archiveDamaged: 'Record damaged; unavailable',
@@ -57,7 +57,7 @@ export const victoriaSite = {
       featuredPerformance: 'Featured performance: {title}, {city}',
       viewPerformance: 'View Performance',
       seasonStatementLabel: 'Season statement',
-      seasonCode: '1098 / AUTUMN TOUR',
+      seasonCode: '1102 / AUTUMN TOUR',
       seasonNote:
         'Three new works arrive in Trimounts, Vyseheim, and Norport County during the autumn tour.',
       scheduleEyebrow: 'Tour Schedule',
@@ -233,7 +233,7 @@ export const victoriaSite = {
       browsePerformances: 'Consult This Season',
       troupeRegister: 'Company Register',
       featuredPerformance: 'First of the season: {title}',
-      featuredNumber: 'AUTUMN / 1091',
+      featuredNumber: 'AUTUMN / 1084',
       noticeEyebrow: 'Touring Notice · No. 91',
       noticeTitle: 'The autumn touring register is complete',
       notice:

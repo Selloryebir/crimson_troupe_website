@@ -15,86 +15,86 @@ export const minosPrograms = {
     'nuova-volsinii': { cityLabel: 'Nuova Volsinii' },
   },
   performances: {
-    'uncrowned-trimount-1098': {
+    'uncrowned-trimount-1102': {
       index: '01',
-      dateTimeDisplay: '1098.09.17 / 19:30',
+      dateTimeDisplay: '1102.09.17 / 19:30',
       venue: 'Μεγάλο Θέατρο Trimounts · Κύρια Σκηνή',
       searchDetail: '17 Σεπτεμβρίου · Trimounts · Σύγχρονη τραγωδία',
       searchKeywords: 'Σεπτέμβριος Trimounts τραγωδία στέμμα',
     },
-    'caged-fire-wiesheim-1098': {
+    'caged-fire-wiesheim-1102': {
       index: '02',
-      dateTimeDisplay: '1098.10.03 / 20:00',
+      dateTimeDisplay: '1102.10.03 / 20:00',
       venue: 'Αυλικό Θέατρο Vyseheim · Αίθουσα Κατόπτρων',
       searchDetail: '3 Οκτωβρίου · Vyseheim · Όπερα δωματίου',
       searchKeywords: 'Οκτώβριος Vyseheim όπερα φωτιά',
     },
-    'second-snow-norport-1098': {
+    'second-snow-norport-1102': {
       index: '03',
-      dateTimeDisplay: '1098.10.29 / 18:45',
+      dateTimeDisplay: '1102.10.29 / 18:45',
       venue: 'Παλιός Σταθμός Κομητείας Norport · Προσωρινή Σκηνή',
       searchDetail: '29 Οκτωβρίου · Κομητεία Norport · Πειραματικό χοροθέατρο',
       searchKeywords: 'Οκτώβριος Norport χορός χιόνι',
     },
-    'der-ring-londinium-1091-0308': {
+    'der-ring-londinium-1084-0308': {
       index: 'I',
-      dateTimeDisplay: 'Έτος Terra 1091 · 8 Μαρτίου · 19:00',
+      dateTimeDisplay: 'Έτος Terra 1084 · 8 Μαρτίου · 19:00',
       venue: 'Παλιό Βασιλικό Θέατρο Londinium · Αίθουσα Λίμνης Κατόπτρων',
       searchDetail: '8 Μαρτίου · Londinium · Το Πετράδι της Λίμνης',
       searchKeywords: 'Londinium πετράδι λίμνη κάτοπτρο Μάρτιος',
     },
-    'one-hundred-and-one-days-norport-1091-0419': {
+    'one-hundred-and-one-days-norport-1084-0419': {
       index: 'II',
-      dateTimeDisplay: 'Έτος Terra 1091 · 19 Απριλίου · 18:30',
+      dateTimeDisplay: 'Έτος Terra 1084 · 19 Απριλίου · 18:30',
       venue: 'Θέατρο Πύργου Ρολογιού Norport · Δυτικός Εξώστης',
       searchDetail: '19 Απριλίου · Κομητεία Norport · Εκατόν Μία Ημέρες',
       searchKeywords: 'Norport εκατόν μία ημέρες ρολόι εξώστης Απρίλιος',
     },
-    'the-carnival-wiesheim-1091-0511': {
+    'the-carnival-wiesheim-1084-0511': {
       index: 'III',
-      dateTimeDisplay: 'Έτος Terra 1091 · 11 Μαΐου · 20:00',
+      dateTimeDisplay: 'Έτος Terra 1084 · 11 Μαΐου · 20:00',
       venue: 'Αίθουσα Ηλιοβασιλέματος Vyseheim · Μεγάλη Σκηνή',
       searchDetail: '11 Μαΐου · Vyseheim · Η Γιορτή',
       searchKeywords: 'Vyseheim γιορτή ηλιοβασίλεμα Μάιος',
     },
-    'ode-au-triomphe-nuova-volsinii-1091-0623': {
+    'ode-au-triomphe-nuova-volsinii-1084-0623': {
       index: 'IV',
-      dateTimeDisplay: 'Έτος Terra 1091 · 23 Ιουνίου · 19:30',
+      dateTimeDisplay: 'Έτος Terra 1084 · 23 Ιουνίου · 19:30',
       venue: 'Δημοτική Όπερα Nuova Volsinii · Κύρια Αίθουσα',
       searchDetail: '23 Ιουνίου · Nuova Volsinii · Ύμνος του Θριάμβου',
       searchKeywords: 'Nuova Volsinii θρίαμβος δημοτική όπερα Ιούνιος',
     },
-    'der-ring-zwillingsturme-1091-0817': {
+    'der-ring-zwillingsturme-1084-0817': {
       index: 'V',
-      dateTimeDisplay: 'Έτος Terra 1091 · 17 Αυγούστου · 20:00',
+      dateTimeDisplay: 'Έτος Terra 1084 · 17 Αυγούστου · 20:00',
       venue: 'Θέατρο Δίδυμων Πύργων Zwillingstürme · Αίθουσα Λίμνης Κατόπτρων',
       searchDetail: '17 Αυγούστου · Zwillingstürme · Το Πετράδι της Λίμνης',
       searchKeywords: 'Zwillingstürme πετράδι λίμνη κάτοπτρο Αύγουστος',
     },
-    'one-hundred-and-one-days-londinium-1091-0903': {
+    'one-hundred-and-one-days-londinium-1084-0903': {
       index: 'VI',
-      dateTimeDisplay: 'Έτος Terra 1091 · 3 Σεπτεμβρίου · 19:30',
+      dateTimeDisplay: 'Έτος Terra 1084 · 3 Σεπτεμβρίου · 19:30',
       venue: 'Παλιό Βασιλικό Θέατρο Londinium · Αίθουσα Καμπάνας',
       searchDetail: '3 Σεπτεμβρίου · Londinium · Εκατόν Μία Ημέρες',
       searchKeywords: 'Londinium εκατόν μία ημέρες βασιλικό θέατρο Σεπτέμβριος',
     },
-    'the-carnival-montelupe-1091-0921': {
+    'the-carnival-montelupe-1084-0921': {
       index: 'VII',
-      dateTimeDisplay: 'Έτος Terra 1091 · 21 Σεπτεμβρίου · 20:00',
+      dateTimeDisplay: 'Έτος Terra 1084 · 21 Σεπτεμβρίου · 20:00',
       venue: 'Κεντρικό Θέατρο Montelupe · Αίθουσα Συμποσίου',
       searchDetail: '21 Σεπτεμβρίου · Montelupe · Η Γιορτή',
       searchKeywords: 'Montelupe γιορτή συμπόσιο Σεπτέμβριος',
     },
-    'the-carnival-londinium-1091-1009': {
+    'the-carnival-londinium-1084-1009': {
       index: 'VIII',
-      dateTimeDisplay: 'Έτος Terra 1091 · 9 Οκτωβρίου · 19:00',
+      dateTimeDisplay: 'Έτος Terra 1084 · 9 Οκτωβρίου · 19:00',
       venue: 'Παλιό Βασιλικό Θέατρο Londinium · Κύρια Σκηνή',
       searchDetail: '9 Οκτωβρίου · Londinium · Η Γιορτή',
       searchKeywords: 'Londinium γιορτή βασιλικό θέατρο Οκτώβριος',
     },
-    'ode-au-triomphe-zwillingsturme-1091-1028': {
+    'ode-au-triomphe-zwillingsturme-1084-1028': {
       index: 'IX',
-      dateTimeDisplay: 'Έτος Terra 1091 · 28 Οκτωβρίου · 18:45',
+      dateTimeDisplay: 'Έτος Terra 1084 · 28 Οκτωβρίου · 18:45',
       venue: 'Θέατρο Δίδυμων Πύργων Zwillingstürme · Αίθουσα Χρυσού Μέτρου',
       searchDetail: '28 Οκτωβρίου · Zwillingstürme · Ύμνος του Θριάμβου',
       searchKeywords: 'Zwillingstürme θρίαμβος χρυσό μέτρο Οκτώβριος',

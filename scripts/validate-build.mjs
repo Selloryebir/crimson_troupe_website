@@ -414,7 +414,7 @@ for (const edition of builtEditions) {
 
 assert.equal(
   currentArchiveSnapshot.snapshotId,
-  '1091-07-01T00:00:00',
+  '1084-07-01T00:00:00',
   '当前可访问快照身份发生漂移',
 );
 for (const snapshot of archiveSnapshots) {

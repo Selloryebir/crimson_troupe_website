@@ -6,7 +6,7 @@ export const ursusArchiveProjection = {
     title: 'Ликование',
     kind: 'Последнее представление',
     tagline: 'Место всё ещё сохранено за предъявителем',
-    dateTime: '1091-11-11 23:49:00 · до третьего колокола',
+    dateTime: '1084-11-11 23:49:00 · до третьего колокола',
     venue: 'Лесной замок Calais-Blason',
     status: 'Ожидается прибытие',
     registerCode: 'CT-██/INV-03',

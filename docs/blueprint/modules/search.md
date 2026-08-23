@@ -15,7 +15,7 @@
 
 ```text
 {editionId}:front                    -> /{routePrefix}/search/
-{editionId}:archive:{snapshotId}     -> /{routePrefix}/archive/site/1091-07-01/search/
+{editionId}:archive:{snapshotId}     -> /{routePrefix}/archive/site/1084-07-01/search/
 ```
 
 - 每个范围在构建期生成独立索引和结果路由，不先加载全站索引再在浏览器中过滤；

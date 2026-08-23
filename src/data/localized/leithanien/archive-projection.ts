@@ -6,7 +6,7 @@ export const leithanienArchiveProjection = {
     title: 'Der Karneval',
     kind: 'Endgültige Leistung',
     tagline: 'Ein Sitzplatz bleibt für den Inhaber reserviert',
-    dateTime: '1091-11-11 23:49:00 · vor dem dritten Glockenschlag',
+    dateTime: '1084-11-11 23:49:00 · vor dem dritten Glockenschlag',
     venue: 'Waldschloss Calais-Blason',
     status: 'Warten auf Anwesenheit',
     registerCode: 'CT-██/INV-03',

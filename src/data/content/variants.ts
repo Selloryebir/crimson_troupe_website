@@ -40,19 +40,19 @@ const baselinePerformanceVariants = new Map<PerformanceId, ContentVariantUnit<Pe
 
 // 当前候选与基线共享同一完整值，不复制内容树；后续改稿替换 preview.value 即可并行验收。
 baselinePerformanceVariants.set(
-  'uncrowned-trimount-1098',
+  'uncrowned-trimount-1102',
   Object.freeze({
-    ...baselinePerformanceVariants.get('uncrowned-trimount-1098'),
-    stableId: 'uncrowned-trimount-1098',
+    ...baselinePerformanceVariants.get('uncrowned-trimount-1102'),
+    stableId: 'uncrowned-trimount-1102',
     baseline: Object.freeze({
       variantId: 'baseline',
       maturity: 'preview',
-      value: performances['uncrowned-trimount-1098'],
+      value: performances['uncrowned-trimount-1102'],
     }),
     preview: Object.freeze({
       variantId: 'current-preview',
       maturity: 'preview',
-      value: performances['uncrowned-trimount-1098'],
+      value: performances['uncrowned-trimount-1102'],
     }),
   }),
 );
