@@ -323,7 +323,7 @@ const movedAssetDigests = createContentApprovalDigests(
 assert.equal(movedAssetDigests.performances[fixtureId], currentDigests.performances[fixtureId]);
 
 const changedSeatingPlans = structuredClone(ticketSeatingPlans);
-changedSeatingPlans['trimount-grand-fan'].stage.width += 1;
+changedSeatingPlans['trimount-grand-fan'].levels[0].stage.width += 1;
 const changedSeatingDigests = createContentApprovalDigests(
   buildContexts.release.editionIds,
   currentRootSet,

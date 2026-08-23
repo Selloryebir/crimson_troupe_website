@@ -1,0 +1,52 @@
+---
+import type { ArchiveSeatRegisterEntry } from '../../data/archive-ticketing.ts';
+import type { ResolvedLocalization } from '../../data/localized/resolve.ts';
+
+interface Props {
+  entries: readonly ArchiveSeatRegisterEntry[];
+  localization: ResolvedLocalization;
+}
+
+const { entries, localization } = Astro.props;
+const copy = localization.site.archive.tickets;
+---
+
+<section class="archive-seat-register page-width" data-pollution-slot="ticket-record">
+  <header>
+    <p class="archive-kicker">{copy.registerEyebrow}</p>
+    <h2>{copy.registerTitle}</h2>
+    <p>{copy.registerIntroduction}</p>
+  </header>
+  {
+    entries.length > 0 ? (
+      <ol>
+        {entries.map((entry) => (
+          <li>
+            <div>
+              <h3>{entry.title}</h3>
+              <p>{entry.dateTime}</p>
+              <p>{entry.place}</p>
+            </div>
+            <label for={`archive-zone-${entry.performanceId}`}>{copy.zone}</label>
+            <select id={`archive-zone-${entry.performanceId}`} name={entry.performanceId}>
+              {entry.offers.map((offer) => (
+                <option value={offer.zone}>
+                  {offer.label} · {offer.basePrice} LMD
+                </option>
+              ))}
+            </select>
+          </li>
+        ))}
+      </ol>
+    ) : (
+      <p class="empty-state">{copy.empty}</p>
+    )
+  }
+  <section class="archive-settlement" aria-labelledby="archive-settlement-title">
+    <h2 id="archive-settlement-title">{copy.settlementTitle}</h2>
+    <p id="archive-settlement-status">{copy.settlementUnavailable}</p>
+    <button type="button" disabled aria-describedby="archive-settlement-status">
+      {copy.submit}
+    </button>
+  </section>
+</section>

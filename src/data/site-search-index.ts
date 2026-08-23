@@ -1,3 +1,4 @@
+import { currentArchiveSnapshot } from './archive-snapshots.ts';
 import { buildSnapshot, getWorldProductionIds, type ContentSnapshot } from './content/resolve.ts';
 import type { BuiltEdition } from './editions.ts';
 import {
@@ -25,6 +26,12 @@ export interface SiteSearchEntry {
   summary: string;
   keywords: string;
   href: string;
+}
+
+export function getSiteSearchScope(edition: BuiltEdition, world: SiteWorld): string {
+  return world === 'front'
+    ? `${edition.editionId}:front`
+    : `${edition.editionId}:archive:${currentArchiveSnapshot.snapshotId}`;
 }
 
 function getPerformanceEntries(

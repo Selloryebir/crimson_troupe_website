@@ -2,6 +2,7 @@
 
 import assert from 'node:assert/strict';
 
+import { archiveSnapshots, currentArchiveSnapshot } from '../src/data/archive-snapshots.ts';
 import {
   buildContext,
   buildContexts,
@@ -22,7 +23,7 @@ import {
   getLocalizedPerformanceEntries,
 } from '../src/data/localized/resolve.ts';
 import { performances } from '../src/data/performances.ts';
-import { getFrontSearchIndex } from '../src/data/site-search-index.ts';
+import { getFrontSearchIndex, getSiteSearchScope } from '../src/data/site-search-index.ts';
 import {
   assertTerraDateTime,
   compareTerraDateTime,
@@ -244,6 +245,28 @@ assert.deepEqual(
 
 const frontNow = getSiteTerraNow('front', buildContexts.showcase);
 const archiveNow = getSiteTerraNow('archive', buildContexts.showcase);
+assert.deepEqual(
+  archiveSnapshots.map(({ snapshotId, state, routeSegment }) => ({
+    snapshotId,
+    state,
+    routeSegment,
+  })),
+  [
+    {
+      snapshotId: '1091-07-01T00:00:00',
+      state: 'available',
+      routeSegment: '1091-07-01',
+    },
+    { snapshotId: '1093-damaged', state: 'damaged', routeSegment: null },
+    { snapshotId: '1096-damaged', state: 'damaged', routeSegment: null },
+  ],
+);
+assert.deepEqual(archiveNow, currentArchiveSnapshot.capturedAt);
+assert.equal(getSiteSearchScope(editions.yan, 'front'), 'yan:front');
+assert.equal(
+  getSiteSearchScope(editions.yan, 'archive'),
+  `yan:archive:${currentArchiveSnapshot.snapshotId}`,
+);
 assert.deepEqual(frontNow, {
   calendar: 'terra',
   year: 1098,

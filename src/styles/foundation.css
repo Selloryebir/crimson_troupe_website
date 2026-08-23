@@ -6,8 +6,16 @@
   --line: rgb(23 19 16 / 18%);
   --crimson: #811b28;
   --crimson-deep: #471018;
-  --serif: "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", SimSun, serif;
-  --sans: Inter, "Helvetica Neue", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+  --serif-zh: "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", SimSun, serif;
+  --sans-zh: Inter, "Helvetica Neue", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+  --serif-ja: "Yu Mincho", YuMincho, "Hiragino Mincho ProN", "Hiragino Mincho Pro",
+    "Noto Serif CJK JP", "Noto Serif JP", serif;
+  --sans-ja: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN",
+    "Yu Gothic", YuGothic, "Noto Sans CJK JP", "Noto Sans JP", sans-serif;
+  --serif-latin: Georgia, "Times New Roman", "Noto Serif", "DejaVu Serif", serif;
+  --sans-latin: Inter, "Helvetica Neue", Arial, "Noto Sans", "DejaVu Sans", sans-serif;
+  --serif: var(--serif-zh);
+  --sans: var(--sans-zh);
   --page: min(1240px, calc(100% - 64px));
   --reading: 760px;
   --space-section: clamp(72px, 9vw, 132px);
@@ -42,15 +50,13 @@ html {
 }
 
 html:lang(en-US) {
-  --serif: Georgia, "Times New Roman", serif;
-  --sans: Inter, "Helvetica Neue", Arial, sans-serif;
+  --serif: var(--serif-latin);
+  --sans: var(--sans-latin);
 }
 
 html:lang(ja-JP) {
-  --serif: "Yu Mincho", YuMincho, "Hiragino Mincho ProN", "Hiragino Mincho Pro",
-    "Noto Serif CJK JP", "Noto Serif JP", serif;
-  --sans: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN",
-    "Yu Gothic", YuGothic, "Noto Sans CJK JP", "Noto Sans JP", sans-serif;
+  --serif: var(--serif-ja);
+  --sans: var(--sans-ja);
 
   line-break: strict;
   overflow-wrap: break-word;
@@ -58,16 +64,16 @@ html:lang(ja-JP) {
 }
 
 html:lang(el) {
-  --serif: Georgia, "Times New Roman", "Noto Serif", "DejaVu Serif", serif;
-  --sans: Inter, "Helvetica Neue", Arial, "Noto Sans", "DejaVu Sans", sans-serif;
+  --serif: var(--serif-latin);
+  --sans: var(--sans-latin);
 
   overflow-wrap: break-word;
   hyphens: auto;
 }
 
 html:lang(ru) {
-  --serif: Georgia, "Times New Roman", "Noto Serif", "DejaVu Serif", serif;
-  --sans: Inter, "Helvetica Neue", Arial, "Noto Sans", "DejaVu Sans", sans-serif;
+  --serif: var(--serif-latin);
+  --sans: var(--sans-latin);
 
   overflow-wrap: break-word;
   hyphens: auto;
@@ -281,6 +287,23 @@ a {
 .edition-selector a[aria-current="page"] {
   color: var(--ink);
   background: color-mix(in srgb, var(--crimson) 8%, transparent);
+}
+
+.edition-selector [lang],
+.current-language [lang] {
+  letter-spacing: normal;
+}
+
+:is(.edition-selector, .current-language) [lang="zh-CN"] {
+  font-family: var(--sans-zh);
+}
+
+:is(.edition-selector, .current-language) [lang="ja-JP"] {
+  font-family: var(--sans-ja);
+}
+
+:is(.edition-selector, .current-language) :is([lang="en-US"], [lang="el"], [lang="ru"]) {
+  font-family: var(--sans-latin);
 }
 
 .ticket-link {
@@ -638,6 +661,52 @@ a {
   border-top: 1px solid var(--line);
 }
 
+.archive-catalog {
+  display: flex;
+  width: var(--page);
+  gap: 14px 24px;
+  align-items: baseline;
+  margin-inline: auto;
+  padding-block: 10px 16px;
+  border-top: 1px solid var(--line);
+  color: color-mix(in srgb, var(--muted) 74%, transparent);
+  font-size: 0.62rem;
+}
+
+.archive-catalog__title {
+  flex: 0 0 auto;
+}
+
+.archive-catalog ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.archive-catalog a,
+.archive-catalog__damaged {
+  display: inline-flex;
+  gap: 7px;
+  align-items: baseline;
+}
+
+.archive-catalog a {
+  cursor: help;
+  text-decoration-style: dotted;
+}
+
+.archive-catalog small {
+  color: inherit;
+  font-size: inherit;
+}
+
+.archive-catalog__damaged {
+  opacity: 0.64;
+}
+
 @media (max-width: 960px) {
   :root {
     --page: min(calc(100% - 36px), 760px);
@@ -744,7 +813,8 @@ a {
   }
 
   .footer-inner,
-  .footer-legal {
+  .footer-legal,
+  .archive-catalog {
     align-items: flex-start;
     flex-direction: column;
   }

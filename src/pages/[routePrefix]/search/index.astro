@@ -3,7 +3,7 @@ import SiteSearch from '../../../components/shared/SiteSearch.astro';
 import { buildSnapshot } from '../../../data/content/resolve.ts';
 import type { BuiltEdition } from '../../../data/editions';
 import { getLocalization } from '../../../data/localized/resolve';
-import { getFrontSearchIndex } from '../../../data/site-search-index';
+import { getFrontSearchIndex, getSiteSearchScope } from '../../../data/site-search-index';
 import { sitePath } from '../../../data/site-routes';
 import FrontLayout from '../../../layouts/FrontLayout.astro';
 export function getStaticPaths() {
@@ -35,6 +35,7 @@ const canonicalPath = sitePath(edition, 'front', 'search');
   <SiteSearch
     entries={getFrontSearchIndex(edition, buildSnapshot)}
     world="front"
+    scopeId={getSiteSearchScope(edition, 'front')}
     scopeLabel={copy.scope}
     placeholder={copy.placeholder}
     locale={edition.locale}

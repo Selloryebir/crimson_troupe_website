@@ -1,106 +1,310 @@
 import type { TicketZone } from './performances.ts';
 
 export type SeatingPlanId =
-  'trimount-grand-fan' | 'wiesheim-mirror-horseshoe' | 'norport-platform-linear';
+  'trimount-grand-fan' | 'wiesheim-mirror-horseshoe' | 'norport-temporary-stand';
 
-export interface SeatingPlanZoneShape {
+export interface SeatingPlanRegion {
+  regionId: string;
   zone: TicketZone;
-  paths: readonly string[];
+  path: string;
   labelX: number;
   labelY: number;
 }
 
+export interface SeatingPlanLevel {
+  levelId: string;
+  stage?: { x: number; y: number; width: number; height: number };
+  regions: readonly SeatingPlanRegion[];
+}
+
 export interface SeatingPlanDefinition {
   seatingPlanId: SeatingPlanId;
-  stage: { x: number; y: number; width: number; height: number };
-  zones: readonly SeatingPlanZoneShape[];
+  levels: readonly SeatingPlanLevel[];
 }
 
 export const ticketSeatingPlans = {
   'trimount-grand-fan': {
     seatingPlanId: 'trimount-grand-fan',
-    stage: { x: 220, y: 24, width: 200, height: 50 },
-    zones: [
+    levels: [
       {
-        zone: 'C',
-        paths: ['M100 250 Q320 350 540 250 L500 220 Q320 290 140 220 Z'],
-        labelX: 320,
-        labelY: 275,
+        levelId: 'orchestra',
+        stage: { x: 220, y: 18, width: 200, height: 32 },
+        regions: [
+          {
+            regionId: 'orchestra-center-front',
+            zone: 'S',
+            path: 'M250 64 H390 L430 124 Q320 150 210 124 Z',
+            labelX: 320,
+            labelY: 98,
+          },
+          {
+            regionId: 'orchestra-left-front',
+            zone: 'A',
+            path: 'M145 72 L245 62 L210 126 L120 145 Z',
+            labelX: 174,
+            labelY: 104,
+          },
+          {
+            regionId: 'orchestra-right-front',
+            zone: 'A',
+            path: 'M495 72 L395 62 L430 126 L520 145 Z',
+            labelX: 466,
+            labelY: 104,
+          },
+          {
+            regionId: 'orchestra-middle',
+            zone: 'B',
+            path: 'M132 150 Q320 205 508 150 L526 181 Q320 232 114 181 Z',
+            labelX: 320,
+            labelY: 155,
+          },
+          {
+            regionId: 'orchestra-rear',
+            zone: 'C',
+            path: 'M105 188 Q320 238 535 188 L574 228 H66 Z',
+            labelX: 320,
+            labelY: 220,
+          },
+        ],
       },
       {
-        zone: 'B',
-        paths: ['M140 220 Q320 290 500 220 L470 185 Q320 235 170 185 Z'],
-        labelX: 320,
-        labelY: 225,
+        levelId: 'first-gallery',
+        regions: [
+          {
+            regionId: 'first-gallery-center',
+            zone: 'A',
+            path: 'M208 95 Q320 150 432 95 L452 136 Q320 202 188 136 Z',
+            labelX: 320,
+            labelY: 145,
+          },
+          {
+            regionId: 'first-gallery-left-arm',
+            zone: 'B',
+            path: 'M58 58 Q112 112 188 136 L166 181 Q76 148 30 82 Z',
+            labelX: 48,
+            labelY: 122,
+          },
+          {
+            regionId: 'first-gallery-right-arm',
+            zone: 'B',
+            path: 'M582 58 Q528 112 452 136 L474 181 Q564 148 610 82 Z',
+            labelX: 592,
+            labelY: 122,
+          },
+          {
+            regionId: 'first-gallery-box-left',
+            zone: 'BOX',
+            path: 'M112 30 H174 L168 78 H104 Z M181 42 H231 L223 91 H174 Z',
+            labelX: 190,
+            labelY: 58,
+          },
+          {
+            regionId: 'first-gallery-box-right',
+            zone: 'BOX',
+            path: 'M409 42 H459 L466 91 H417 Z M466 30 H528 L536 78 H472 Z',
+            labelX: 450,
+            labelY: 58,
+          },
+        ],
       },
       {
-        zone: 'A',
-        paths: ['M170 185 Q320 235 470 185 L450 145 Q320 180 190 145 Z'],
-        labelX: 320,
-        labelY: 181,
-      },
-      {
-        zone: 'S',
-        paths: ['M190 145 Q320 180 450 145 L430 105 Q320 130 210 105 Z'],
-        labelX: 320,
-        labelY: 133,
-      },
-      {
-        zone: 'BOX',
-        paths: ['M62 108 H130 L145 214 H70 Z', 'M510 108 H578 L570 214 H495 Z'],
-        labelX: 535,
-        labelY: 158,
+        levelId: 'upper-gallery',
+        regions: [
+          {
+            regionId: 'upper-gallery-center',
+            zone: 'C',
+            path: 'M176 104 Q320 184 464 104 L488 153 Q320 236 152 153 Z',
+            labelX: 320,
+            labelY: 162,
+          },
+          {
+            regionId: 'upper-gallery-left-arm',
+            zone: 'C',
+            path: 'M42 48 Q86 102 152 153 L126 197 Q48 158 14 80 Z',
+            labelX: 82,
+            labelY: 126,
+          },
+          {
+            regionId: 'upper-gallery-right-arm',
+            zone: 'C',
+            path: 'M598 48 Q554 102 488 153 L514 197 Q592 158 626 80 Z',
+            labelX: 558,
+            labelY: 126,
+          },
+        ],
       },
     ],
   },
   'wiesheim-mirror-horseshoe': {
     seatingPlanId: 'wiesheim-mirror-horseshoe',
-    stage: { x: 230, y: 22, width: 180, height: 46 },
-    zones: [
+    levels: [
       {
-        zone: 'C',
-        paths: [
-          'M90 88 H550 V268 Q550 332 486 332 H154 Q90 332 90 268 Z M145 116 H495 V260 Q495 282 473 282 H167 Q145 282 145 260 Z',
+        levelId: 'orchestra',
+        stage: { x: 230, y: 16, width: 180, height: 30 },
+        regions: [
+          {
+            regionId: 'orchestra-center-front',
+            zone: 'S',
+            path: 'M270 58 H370 L386 96 H254 Z',
+            labelX: 320,
+            labelY: 77,
+          },
+          {
+            regionId: 'orchestra-center',
+            zone: 'A',
+            path: 'M246 102 H394 L420 188 H220 Z',
+            labelX: 320,
+            labelY: 145,
+          },
+          {
+            regionId: 'orchestra-left-side',
+            zone: 'B',
+            path: 'M170 58 H242 L214 190 H140 Z',
+            labelX: 190,
+            labelY: 126,
+          },
+          {
+            regionId: 'orchestra-right-side',
+            zone: 'B',
+            path: 'M470 58 H398 L426 190 H500 Z',
+            labelX: 450,
+            labelY: 126,
+          },
+          {
+            regionId: 'orchestra-rear',
+            zone: 'C',
+            path: 'M196 196 H444 L474 228 H166 Z',
+            labelX: 320,
+            labelY: 212,
+          },
         ],
-        labelX: 320,
-        labelY: 309,
       },
       {
-        zone: 'B',
-        paths: [
-          'M145 116 H495 V260 Q495 282 473 282 H167 Q145 282 145 260 Z M194 142 H446 V246 Q446 254 438 254 H202 Q194 254 194 246 Z',
+        levelId: 'first-gallery',
+        regions: [
+          {
+            regionId: 'first-gallery-center',
+            zone: 'A',
+            path: 'M214 98 Q320 154 426 98 L444 138 Q320 204 196 138 Z',
+            labelX: 320,
+            labelY: 148,
+          },
+          {
+            regionId: 'first-gallery-left-enclosure',
+            zone: 'B',
+            path: 'M72 50 Q118 112 196 138 L172 184 Q82 150 40 78 Z',
+            labelX: 56,
+            labelY: 122,
+          },
+          {
+            regionId: 'first-gallery-right-enclosure',
+            zone: 'B',
+            path: 'M568 50 Q522 112 444 138 L468 184 Q558 150 600 78 Z',
+            labelX: 584,
+            labelY: 122,
+          },
+          {
+            regionId: 'first-gallery-box-left',
+            zone: 'BOX',
+            path: 'M142 35 H206 L196 84 H134 Z',
+            labelX: 190,
+            labelY: 59,
+          },
+          {
+            regionId: 'first-gallery-box-right',
+            zone: 'BOX',
+            path: 'M434 35 H498 L506 84 H444 Z',
+            labelX: 450,
+            labelY: 59,
+          },
         ],
-        labelX: 320,
-        labelY: 268,
       },
       {
-        zone: 'A',
-        paths: ['M194 142 H446 V246 Q446 254 438 254 H202 Q194 254 194 246 Z'],
-        labelX: 320,
-        labelY: 222,
-      },
-      {
-        zone: 'S',
-        paths: ['M238 94 H402 V176 H238 Z'],
-        labelX: 320,
-        labelY: 133,
-      },
-      {
-        zone: 'BOX',
-        paths: ['M104 112 H155 V225 H104 Z', 'M485 112 H536 V225 H485 Z'],
-        labelX: 510,
-        labelY: 164,
+        levelId: 'upper-gallery',
+        regions: [
+          {
+            regionId: 'upper-gallery-center',
+            zone: 'C',
+            path: 'M180 108 Q320 188 460 108 L484 154 Q320 242 156 154 Z',
+            labelX: 320,
+            labelY: 164,
+          },
+          {
+            regionId: 'upper-gallery-left',
+            zone: 'C',
+            path: 'M48 48 Q90 108 156 154 L132 198 Q54 160 18 78 Z',
+            labelX: 48,
+            labelY: 128,
+          },
+          {
+            regionId: 'upper-gallery-right',
+            zone: 'C',
+            path: 'M592 48 Q550 108 484 154 L508 198 Q586 160 622 78 Z',
+            labelX: 592,
+            labelY: 128,
+          },
+          {
+            regionId: 'upper-gallery-box-left',
+            zone: 'BOX',
+            path: 'M118 28 H178 L172 76 H110 Z',
+            labelX: 190,
+            labelY: 51,
+          },
+          {
+            regionId: 'upper-gallery-box-right',
+            zone: 'BOX',
+            path: 'M462 28 H522 L530 76 H468 Z',
+            labelX: 450,
+            labelY: 51,
+          },
+        ],
       },
     ],
   },
-  'norport-platform-linear': {
-    seatingPlanId: 'norport-platform-linear',
-    stage: { x: 24, y: 66, width: 96, height: 228 },
-    zones: [
-      { zone: 'S', paths: ['M148 72 H248 V288 H148 Z'], labelX: 198, labelY: 180 },
-      { zone: 'A', paths: ['M262 72 H362 V288 H262 Z'], labelX: 312, labelY: 180 },
-      { zone: 'B', paths: ['M376 72 H476 V288 H376 Z'], labelX: 426, labelY: 180 },
-      { zone: 'C', paths: ['M490 72 H610 V288 H490 Z'], labelX: 550, labelY: 180 },
+  'norport-temporary-stand': {
+    seatingPlanId: 'norport-temporary-stand',
+    levels: [
+      {
+        levelId: 'platform',
+        stage: { x: 185, y: 18, width: 270, height: 32 },
+        regions: [
+          {
+            regionId: 'platform-center-front',
+            zone: 'A',
+            path: 'M244 66 H396 L422 126 H218 Z',
+            labelX: 320,
+            labelY: 96,
+          },
+          {
+            regionId: 'platform-left-front',
+            zone: 'B',
+            path: 'M116 76 L238 64 L214 130 L96 150 Z',
+            labelX: 164,
+            labelY: 108,
+          },
+          {
+            regionId: 'platform-right-front',
+            zone: 'B',
+            path: 'M524 76 L402 64 L426 130 L544 150 Z',
+            labelX: 476,
+            labelY: 108,
+          },
+          {
+            regionId: 'platform-middle',
+            zone: 'B',
+            path: 'M210 135 Q320 162 430 135 L452 174 Q320 208 188 174 Z',
+            labelX: 320,
+            labelY: 145,
+          },
+          {
+            regionId: 'platform-rear',
+            zone: 'C',
+            path: 'M92 174 Q320 224 548 174 L582 228 H58 Z',
+            labelX: 320,
+            labelY: 220,
+          },
+        ],
+      },
     ],
   },
 } as const satisfies Record<SeatingPlanId, SeatingPlanDefinition>;

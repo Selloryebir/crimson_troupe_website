@@ -29,9 +29,12 @@ export const higashiMessages = {
     emptyBasket: '公演が選択されていません',
     selectionReady: '公演と座席区分を今回のバスケットへ追加しました。',
     selectionRequired: '続行するには1公演以上を選択してください。',
+    zonePreview: '表示中：{zone} · {price} LMD。バスケットには未追加です。',
+    zoneInBasket: 'バスケットに追加済み：{zone} · {price} LMD。',
     seatingPlanSummary: '舞台と座席区分図を表示',
     seatingPlanAria: '{title}の舞台・座席区分図',
     stageDirection: '舞台',
+    seatingLevelLabel: '第{level}層',
     seatingPlanNotice:
       '座席区分の概略図です。個別座席の指定ではありません。図と選択欄は同じ料金を使用します。',
     selectSeatingZone: '{zone}を選択、基本料金 {price} LMD',

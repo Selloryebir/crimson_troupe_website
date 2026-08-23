@@ -188,7 +188,9 @@ export function resolveContent(
     ...new Set(
       performanceEntries.flatMap(([, performance]) =>
         performance.ticketAvailability.state === 'on-sale'
-          ? [performance.ticketAvailability.seatingPlanId]
+          ? [performance.ticketAvailability.seatingPlanId].filter(
+              (seatingPlanId): seatingPlanId is SeatingPlanId => Boolean(seatingPlanId),
+            )
           : [],
       ),
     ),

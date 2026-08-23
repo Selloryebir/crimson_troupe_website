@@ -76,13 +76,19 @@ const copy = localization.site.front.tickets;
                 <p>{option.place}</p>
               </>
               <label for={`zone-${option.performanceId}`}>{copy.zone}</label>
-              <select id={`zone-${option.performanceId}`} data-ticket-zone disabled>
+              <select id={`zone-${option.performanceId}`} data-ticket-zone>
                 {option.offers.map((offer) => (
                   <option value={offer.zone}>
                     {offer.label} · {offer.basePrice} LMD
                   </option>
                 ))}
               </select>
+              <p class="ticket-zone-feedback" data-ticket-zone-feedback>
+                {formatMessage(messages.ticketing.zonePreview, {
+                  zone: option.offers[0].label,
+                  price: option.offers[0].basePrice,
+                })}
+              </p>
               <TicketSeatingPlan
                 planId={option.seatingPlanId}
                 performanceTitle={option.title}

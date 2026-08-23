@@ -97,10 +97,15 @@ export function assertContentBundle(
       );
     }
     if (performance.ticketAvailability.state === 'on-sale') {
-      assertPresent(
-        sources.seatingPlans[performance.ticketAvailability.seatingPlanId],
-        `seatingPlan.${performance.ticketAvailability.seatingPlanId}`,
-      );
+      if (performance.world === 'front' && !performance.ticketAvailability.seatingPlanId) {
+        throw new Error(`表站可售场次 ${performance.performanceId} 缺少分区示意。`);
+      }
+      if (performance.ticketAvailability.seatingPlanId) {
+        assertPresent(
+          sources.seatingPlans[performance.ticketAvailability.seatingPlanId],
+          `seatingPlan.${performance.ticketAvailability.seatingPlanId}`,
+        );
+      }
     }
     for (const editionId of editionIds) {
       const package_ = sources.localizations[editionId];

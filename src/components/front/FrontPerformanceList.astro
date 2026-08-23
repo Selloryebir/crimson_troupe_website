@@ -13,9 +13,16 @@ interface Props {
   performances: ResolvedPerformance[];
   emptyMessage: string;
   filterable?: boolean;
+  variant?: 'catalog' | 'home-editorial';
 }
 
-const { localization, performances, emptyMessage, filterable = false } = Astro.props;
+const {
+  localization,
+  performances,
+  emptyMessage,
+  filterable = false,
+  variant = 'catalog',
+} = Astro.props;
 const { edition, messages } = localization;
 const cities = [
   ...new Map(performances.map((item) => [item.locationId, item.cityLabel])).entries(),
@@ -60,7 +67,10 @@ const months = [...new Set(performances.map((item) => item.dateTime.month))];
           </p>
         </div>
       )}
-      <ol class="front-performance-grid" data-performance-list>
+      <ol
+        class:list={['front-performance-grid', `front-performance-grid--${variant}`]}
+        data-performance-list
+      >
         {performances.map((performance) => {
           const leadProduction = getLocalizedProduction(localization, performance.productionIds[0]);
           return (

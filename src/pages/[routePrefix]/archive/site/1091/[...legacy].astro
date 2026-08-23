@@ -1,0 +1,55 @@
+---
+import {
+  buildSnapshot,
+  getWorldPerformanceEntries,
+  getWorldProductionIds,
+} from '../../../../../data/content/resolve.ts';
+import {
+  performancePath,
+  productionPath,
+  sitePath,
+  siteRoot,
+} from '../../../../../data/site-routes.ts';
+
+export function getStaticPaths() {
+  return buildSnapshot.editions.flatMap((edition) => {
+    const fixedRoutes = [
+      { legacy: undefined, targetPath: siteRoot(edition, 'archive') },
+      { legacy: 'performances', targetPath: sitePath(edition, 'archive', 'performances') },
+      {
+        legacy: 'performances/history',
+        targetPath: sitePath(edition, 'archive', 'performances/history'),
+      },
+      { legacy: 'troupe', targetPath: sitePath(edition, 'archive', 'troupe') },
+      { legacy: 'search', targetPath: sitePath(edition, 'archive', 'search') },
+      { legacy: 'tickets', targetPath: sitePath(edition, 'archive', 'tickets') },
+    ];
+    const performanceRoutes = getWorldPerformanceEntries(buildSnapshot, 'archive').map(
+      ([performanceId]) => ({
+        legacy: `performances/${performanceId}`,
+        targetPath: performancePath(edition, 'archive', performanceId),
+      }),
+    );
+    const productionRoutes = getWorldProductionIds(buildSnapshot, 'archive').map(
+      (productionId) => ({
+        legacy: `productions/${productionId}`,
+        targetPath: productionPath(edition, 'archive', productionId),
+      }),
+    );
+
+    return [...fixedRoutes, ...performanceRoutes, ...productionRoutes].map(
+      ({ legacy, targetPath }) => ({
+        params: { routePrefix: edition.routePrefix, legacy },
+        props: { targetPath },
+      }),
+    );
+  });
+}
+
+interface Props {
+  targetPath: string;
+}
+
+const { targetPath } = Astro.props;
+return Astro.redirect(targetPath, 308);
+---
