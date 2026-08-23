@@ -35,9 +35,11 @@ docs/drafts/
 
 当前实际草稿入口：
 
-| 文件                                                                                 | 类型     | 当前效力                                 |
-| ------------------------------------------------------------------------------------ | -------- | ---------------------------------------- |
-| [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md) | 创意草稿 | 延期的里站异常购票构想，等待未来独立规划 |
+| 文件                                                                                 | 类型       | 当前效力                                               |
+| ------------------------------------------------------------------------------------ | ---------- | ------------------------------------------------------ |
+| [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md) | 创意草稿   | 延期的里站异常购票构想，等待未来独立规划               |
+| [`creative/performance-pricing-method.md`](creative/performance-pricing-method.md)   | 创意草稿   | 五组预览报价待运行时迁移，正式定价方法已经决定保持延期 |
+| [`plans/archive-art-and-offer-matrix.md`](plans/archive-art-and-offer-matrix.md)     | 一次性计划 | 编排里站差异报价与污染艺术阶段的待执行源码切片         |
 
 ## 固定文档骨架
 
