@@ -1,60 +1,78 @@
 import type { ArchiveProjectionContent } from '../schema.ts';
 
 export const columbiaArchiveProjection = {
-  statusAnnouncement: 'The archive display has converged on one open invitation record.',
-  ariaLabel: 'Calais-Blason open archive record',
-  roleLabel: 'Recorded capacities',
-  productionLabel: 'Production',
-  venueLabel: 'Venue',
-  attendanceLabel: 'Attendance',
-  role: 'guest / local resident / dramatic role',
-  production: 'The Carnival',
-  venue: 'Calais-Blason Woodland Castle',
-  attendance: 'before the third bell, Terra Year 1091',
-  closing:
-    'Dates, venues, and seats previously shown on this site need not be cancelled individually. Upon arrival at the castle, they will be filed as separate records of the same performance. Exit instructions will be issued after the final curtain.',
+  statusAnnouncement: 'Every record on the page has corrected its destination at once.',
+  performance: {
+    title: 'The Carnival',
+    kind: 'Final performance',
+    tagline: 'A seat remains reserved for the bearer',
+    dateTime: '1091-11-11 23:49:00 · before the third bell',
+    venue: 'Calais-Blason Woodland Castle',
+    status: 'Awaiting attendance',
+    registerCode: 'CT-██/INV-03',
+    posterAlt: 'A scarlet performance folio leading to Calais-Blason Woodland Castle',
+  },
+  invitation: {
+    ariaLabel: 'Formal invitation from Calais-Blason',
+    eyebrow: 'Formal invitation / delivered',
+    title: 'The castle has already reserved your seat',
+    summary:
+      'The records you just opened came from different dates and cities. They now leave only one route of arrival. They are not waiting to be repaired; they are waiting for you to choose the entrance.',
+    roleLabel: 'Recorded capacity',
+    productionLabel: 'Production',
+    venueLabel: 'Venue',
+    attendanceLabel: 'Attendance',
+    role: 'Bearer of this invitation',
+    production: 'The Carnival',
+    venue: 'Calais-Blason Woodland Castle',
+    attendance: 'Before the third bell',
+    closing:
+      'If you continue, the original record will still open. Do not take that to mean the castle lies behind the record. It merely saw you before this snapshot did.',
+    dismissLabel: 'Close the invitation',
+    continueLabel: 'Continue to the original record',
+  },
   views: {
     invitation: {
-      eyebrow: 'Calais-Blason District Archive Addendum',
-      title: 'Notice of Consolidated Open Records',
+      eyebrow: "Tonight's performance / entrance corrected",
+      title: 'Every route now has only one destination',
       summary:
-        "The Viscount's banquet register, the district levy shortfall, the Victorian reception inventory, and the Crimson Troupe's new-stage seating book retain the same unresolved vacancy. The first three records are closed; the last still awaits its guest. All four vacancies are now assigned to the bearer of this invitation.",
+        'The performances on the home page retain their order, yet every folio has learned the same door.',
     },
     register: {
-      eyebrow: 'Seating book / consolidated collation',
-      title: 'Nine records share one unresolved vacancy',
+      eyebrow: 'Seating book / repeated entry',
+      title: 'Nine records are calling for the same guest',
       summary:
-        'The dates, venues, and numbers under current and historical performances remain valid archive records. Each has also been marked as a separate volume of the same performance, to be surrendered together upon arrival at the woodland castle.',
+        'Dates and numbers remain in place, but the venue in every row points to the same woodland castle.',
     },
     'performance-record': {
-      eyebrow: 'Performance record / pending consolidation',
-      title: 'This performance is not cancelled; it has not yet arrived',
+      eyebrow: 'Performance record / destination overwritten',
+      title: 'This performance has arrived; only its audience is missing',
       summary:
-        'The time, venue, and seating on this page retain their original registration. The archive treats them as advance records made before arrival at Calais-Blason and adds this page visitor to the final register awaiting attendance.',
+        'The scheduled date and venue repeat behind the page. The visible record recognizes only the time printed on the invitation.',
     },
     'production-record': {
-      eyebrow: 'Production record / alternate-title collation',
-      title: 'The catalog title is registered as a rehearsal name',
+      eyebrow: 'Production record / title stripped',
+      title: 'Every production takes the same name before the final curtain',
       summary:
-        'This page retains its title, synopsis, and creative record. The consolidated archive adds only a cross-reference: each distinct title is filed in the new-stage seating book under the same production, The Carnival.',
+        'Synopsis and company credits remain as pale ink. The scarlet title plate has already crossed their frame.',
     },
     company: {
-      eyebrow: 'Company register / capacity addendum',
-      title: 'Guest, local resident, and dramatic role share one field',
+      eyebrow: 'Company register / vacant capacity',
+      title: 'Every office in the register is waiting for the same person',
       summary:
-        "The troupe history and company register have not been removed. Only the new-stage seating book erases the boundary between three capacities and enters the invitation's bearer into the remaining vacancy.",
+        'Names and history remain legible, but each capacity is held open for a bearer who has not yet arrived.',
     },
     inquiry: {
-      eyebrow: 'Archive inquiry / cross-reference',
-      title: 'Results remain separate; their filing destination agrees',
+      eyebrow: 'Archive inquiry / only answer',
+      title: 'You asked different questions; the archive remembers one place',
       summary:
-        'The returned pages, productions, and performances still point to their original records. The archive appends the same open number to each result, pending their collation at the woodland castle as separate evidence of one performance.',
+        'The result count has not fallen. Every summary has replaced its former destination with the woodland castle.',
     },
     office: {
-      eyebrow: 'Seating office / open assignment',
-      title: 'The historic snapshot sells no ticket, but the vacancy has transferred',
+      eyebrow: 'Seating office / attendance confirmation',
+      title: 'The settlement terminal is silent, but the seats know where you are going',
       summary:
-        "This page still provides no purchase, payment, or redemption. The notice treats vacancies in the banquet, levy, reception, and theater as one seat assignment requiring no transaction, transferred to this invitation's bearer.",
+        'Payment and redemption remain unavailable. Every section now leaves the same confirmation of arrival.',
     },
   },
 } satisfies ArchiveProjectionContent;

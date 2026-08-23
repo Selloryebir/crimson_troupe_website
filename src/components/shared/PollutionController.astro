@@ -1,7 +1,38 @@
-<div class="archive-pollution-stage" aria-hidden="true">
+---
+import type { ArchivePollutionProfile } from '../../data/archive-pollution';
+import type { ArchiveProjectionContent } from '../../data/localized/schema';
+
+interface Props {
+  content?: ArchiveProjectionContent;
+  profile?: ArchivePollutionProfile;
+}
+
+const { content, profile } = Astro.props;
+const view = content && profile ? content.views[profile] : undefined;
+---
+
+<div class="archive-pollution-stage" data-pollution-visual-layer aria-hidden="true">
   <span class="archive-pollution-stage__plate"></span>
   <span class="archive-pollution-stage__folio"></span>
   <span class="archive-pollution-stage__threshold"></span>
+  {
+    content && view && (
+      <div class="archive-pollution-stage__echoes">
+        <span class="archive-pollution-stage__echo archive-pollution-stage__echo--register">
+          {content.performance.registerCode}
+        </span>
+        <span class="archive-pollution-stage__echo archive-pollution-stage__echo--title">
+          {content.performance.title}
+        </span>
+        <span class="archive-pollution-stage__echo archive-pollution-stage__echo--venue">
+          {content.performance.venue}
+        </span>
+        <span class="archive-pollution-stage__echo archive-pollution-stage__echo--response">
+          {view.title}
+        </span>
+      </div>
+    )
+  }
 </div>
 
 <script>

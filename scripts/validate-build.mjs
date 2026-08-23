@@ -271,15 +271,25 @@ for (const [route, filePath] of routes) {
       );
     }
     if (isArchiveRoute) {
-      assert.ok(
-        html.indexOf('<h1') < html.indexOf('data-archive-projection'),
-        `${route} 的主标题必须先于三级叙事投影`,
+      assert.match(
+        html,
+        /<div class="archive-pollution-stage" data-pollution-visual-layer aria-hidden="true">/u,
+        `${route} 缺少退出语义树的污染装饰层`,
       );
-      assert.match(html, /data-archive-projection-status[^>]*aria-live="polite"/u);
+      assert.ok(
+        html.indexOf('<h1') < html.indexOf('data-archive-invitation'),
+        `${route} 的主标题必须先于三级邀请`,
+      );
+      assert.match(html, /data-archive-invitation-status[^>]*aria-live="polite"/u);
       assert.doesNotMatch(
         html,
-        /<section[^>]*data-archive-projection[^>]*aria-live=/u,
-        `${route} 不得把完整投影设为 live region`,
+        /<dialog[^>]*data-archive-invitation[^>]*\sopen(?:\s|>)/u,
+        `${route} 不得在静态产物中自动打开邀请`,
+      );
+      assert.doesNotMatch(
+        html,
+        /<section[^>]*\sdata-archive-projection(?:\s|=|>)|data-archive-projection-status/u,
+        `${route} 不得保留底部投影框`,
       );
     }
     if (route.endsWith('/search/')) {

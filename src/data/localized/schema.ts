@@ -84,9 +84,22 @@ export interface ArchiveProjectionView {
   summary: string;
 }
 
-export interface ArchiveProjectionContent {
-  statusAnnouncement: string;
+export interface ArchiveProjectionPerformance {
+  title: string;
+  kind: string;
+  tagline: string;
+  dateTime: string;
+  venue: string;
+  status: string;
+  registerCode: string;
+  posterAlt: string;
+}
+
+export interface ArchiveInvitationContent {
   ariaLabel: string;
+  eyebrow: string;
+  title: string;
+  summary: string;
   roleLabel: string;
   productionLabel: string;
   venueLabel: string;
@@ -96,6 +109,14 @@ export interface ArchiveProjectionContent {
   venue: string;
   attendance: string;
   closing: string;
+  dismissLabel: string;
+  continueLabel: string;
+}
+
+export interface ArchiveProjectionContent {
+  statusAnnouncement: string;
+  performance: ArchiveProjectionPerformance;
+  invitation: ArchiveInvitationContent;
   views: Record<ArchivePollutionProfile, ArchiveProjectionView>;
 }
 

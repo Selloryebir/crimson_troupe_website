@@ -35,6 +35,9 @@ const canonicalPath = performancePath(edition, 'archive', performance.performanc
 const collectionPath =
   performance.collection === 'history' ? 'performances/history' : 'performances';
 const backLabel = performance.collection === 'history' ? copy.backHistory : copy.backCurrent;
+const projection = localization.archiveProjection.performance;
+const projectionView = localization.archiveProjection.views['performance-record'];
+const projectionProduction = getLocalizedProduction(localization, 'the-carnival');
 ---
 
 <ArchiveLayout
@@ -50,11 +53,39 @@ const backLabel = performance.collection === 'history' ? copy.backHistory : copy
       class="detail-header archive-detail-header"
     >
       <div>
-        <p class="eyebrow">{formatMessage(copy.registerNumber, { index: performance.index })}</p><h1
-        >
-          {leadProduction.title}
+        <p class="eyebrow">
+          <span class="archive-projection-source" data-archive-projection-source>
+            {formatMessage(copy.registerNumber, { index: performance.index })}
+          </span>
+          <span
+            class="archive-projection-level3"
+            data-archive-projection-level3
+            data-archive-projection-field="register"
+          >
+            {projection.registerCode}
+          </span>
+        </p><h1>
+          <span class="archive-projection-source" data-archive-projection-source>
+            {leadProduction.title}
+          </span>
+          <span
+            class="archive-projection-level3"
+            data-archive-projection-level3
+            data-archive-projection-field="title"
+          >
+            {projection.title}
+          </span>
         </h1><p>
-          {leadProduction.tagline}
+          <span class="archive-projection-source" data-archive-projection-source>
+            {leadProduction.tagline}
+          </span>
+          <span
+            class="archive-projection-level3"
+            data-archive-projection-level3
+            data-archive-projection-field="tagline"
+          >
+            {projection.tagline}
+          </span>
         </p>
       </div>
       <ArchivePoster
@@ -63,21 +94,71 @@ const backLabel = performance.collection === 'history' ? copy.backHistory : copy
         title={leadProduction.title}
         subtitle={leadProduction.kind}
         number={formatMessage(copy.visualNumber, { index: performance.index })}
+        projection={{
+          productionId: projectionProduction.productionId,
+          title: projection.title,
+          subtitle: projection.kind,
+          number: projection.registerCode,
+        }}
       />
     </header><dl class="fact-grid">
-      <div><dt>{copy.dateTime}</dt><dd>{performance.dateTime.display}</dd></div><div>
-        <dt>{copy.place}</dt><dd>{performance.place}</dd>
+      <div>
+        <dt>{copy.dateTime}</dt><dd>
+          <span class="archive-projection-source" data-archive-projection-source>
+            {performance.dateTime.display}
+          </span>
+          <span
+            class="archive-projection-level3"
+            data-archive-projection-level3
+            data-archive-projection-field="date-time"
+          >
+            {projection.dateTime}
+          </span>
+        </dd>
       </div><div>
-        <dt>{copy.status}</dt><dd>{copy[performance.status]}</dd>
+        <dt>{copy.place}</dt><dd>
+          <span class="archive-projection-source" data-archive-projection-source>
+            {performance.place}
+          </span>
+          <span
+            class="archive-projection-level3"
+            data-archive-projection-level3
+            data-archive-projection-field="venue"
+          >
+            {projection.venue}
+          </span>
+        </dd>
+      </div><div>
+        <dt>{copy.status}</dt><dd>
+          <span class="archive-projection-source" data-archive-projection-source>
+            {copy[performance.status]}
+          </span>
+          <span
+            class="archive-projection-level3"
+            data-archive-projection-level3
+            data-archive-projection-field="status"
+          >
+            {projection.status}
+          </span>
+        </dd>
       </div><div>
         <dt>{copy.seatStatus}</dt><dd>
-          {performance.ticketAvailability.state === 'on-sale' ? copy.onSale : copy.notOnSale}
+          <span class="archive-projection-source" data-archive-projection-source>
+            {performance.ticketAvailability.state === 'on-sale' ? copy.onSale : copy.notOnSale}
+          </span>
+          <span class="archive-projection-level3" data-archive-projection-level3>
+            {localization.archiveProjection.invitation.role}
+          </span>
         </dd>
       </div>
     </dl>
     {
       (performance.previousDateTimeDisplay || performance.operationalNotice) && (
-        <section class="detail-section prose" aria-labelledby="archive-performance-notice">
+        <section
+          class="detail-section prose archive-projection-source"
+          data-archive-projection-source
+          aria-labelledby="archive-performance-notice"
+        >
           <h2 id="archive-performance-notice">{copy.operationalNotice}</h2>
           {performance.previousDateTimeDisplay && (
             <p>
@@ -89,6 +170,15 @@ const backLabel = performance.collection === 'history' ? copy.backHistory : copy
         </section>
       )
     }
+    <section
+      class="detail-section prose archive-projection-level3"
+      data-archive-projection-level3
+      aria-labelledby="archive-performance-projection"
+    >
+      <p class="eyebrow">{projectionView.eyebrow}</p>
+      <h2 id="archive-performance-projection">{projectionView.title}</h2>
+      <p>{projectionView.summary}</p>
+    </section>
     <section class="detail-section">
       <h2>{copy.programTitle}</h2><ol class="program-order">
         {
@@ -98,10 +188,27 @@ const backLabel = performance.collection === 'history' ? copy.backHistory : copy
               <li>
                 <>
                   <span>{String(index + 1).padStart(2, '0')}</span>
-                  <a href={productionPath(edition, 'archive', productionId)}>
+                  <a
+                    href={productionPath(edition, 'archive', productionId)}
+                    data-archive-invitation-trigger
+                  >
                     <>
-                      <strong>{production.title}</strong>
-                      <small>{production.kind}</small>
+                      <strong>
+                        <span class="archive-projection-source" data-archive-projection-source>
+                          {production.title}
+                        </span>
+                        <span class="archive-projection-level3" data-archive-projection-level3>
+                          {projection.title}
+                        </span>
+                      </strong>
+                      <small>
+                        <span class="archive-projection-source" data-archive-projection-source>
+                          {production.kind}
+                        </span>
+                        <span class="archive-projection-level3" data-archive-projection-level3>
+                          {projection.kind}
+                        </span>
+                      </small>
                     </>
                   </a>
                 </>

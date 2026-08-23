@@ -170,7 +170,7 @@
       "related": ["BP-MOD-ARCHIVE", "BP-FND-EXPERIENCE", "BP-CNT-CORE"]
     },
     {
-      "path": "src/components/archive/ArchiveProjection.astro",
+      "path": "src/components/archive/ArchiveInvitation.astro",
       "primary": "BP-MOD-ARCHIVE",
       "related": ["BP-FND-NARRATIVE", "BP-I18N-CORE", "BP-CNT-CORE"]
     },
@@ -699,6 +699,11 @@
       "path": "src/pages/index.astro",
       "primary": "BP-FND-CORE",
       "related": ["BP-I18N-CORE"]
+    },
+    {
+      "path": "src/scripts/archive-invitation.ts",
+      "primary": "BP-MOD-ARCHIVE",
+      "related": ["BP-FND-NARRATIVE", "BP-FND-EXPERIENCE", "BP-I18N-CORE"]
     },
     {
       "path": "src/scripts/performance-filters.ts",

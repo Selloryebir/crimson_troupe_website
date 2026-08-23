@@ -35,6 +35,9 @@ const relatedPerformances = getLocalizedPerformanceEntries(localization)
       item.productionIds.some((productionId) => productionId === production.productionId),
   );
 const canonicalPath = productionPath(edition, 'archive', production.productionId);
+const projection = localization.archiveProjection.performance;
+const projectionView = localization.archiveProjection.views['production-record'];
+const projectionProduction = getLocalizedProduction(localization, 'the-carnival');
 ---
 
 <ArchiveLayout
@@ -50,8 +53,35 @@ const canonicalPath = productionPath(edition, 'archive', production.productionId
       class="detail-header archive-detail-header"
     >
       <div>
-        <p class="eyebrow">{production.kind}</p><h1>{production.title}</h1><p>
-          {production.heading}
+        <p class="eyebrow">
+          <span class="archive-projection-source" data-archive-projection-source>
+            {production.kind}
+          </span>
+          <span
+            class="archive-projection-level3"
+            data-archive-projection-level3
+            data-archive-projection-field="kind"
+          >
+            {projection.kind}
+          </span>
+        </p><h1>
+          <span class="archive-projection-source" data-archive-projection-source>
+            {production.title}
+          </span>
+          <span
+            class="archive-projection-level3"
+            data-archive-projection-level3
+            data-archive-projection-field="title"
+          >
+            {projection.title}
+          </span>
+        </h1><p>
+          <span class="archive-projection-source" data-archive-projection-source>
+            {production.heading}
+          </span>
+          <span class="archive-projection-level3" data-archive-projection-level3>
+            {projection.tagline}
+          </span>
         </p>
       </div>
       <ArchivePoster
@@ -60,16 +90,55 @@ const canonicalPath = productionPath(edition, 'archive', production.productionId
         title={production.title}
         subtitle={production.kind}
         number={copy.visualNumber}
+        projection={{
+          productionId: projectionProduction.productionId,
+          title: projection.title,
+          subtitle: projection.kind,
+          number: projection.registerCode,
+        }}
       />
-    </header><section class="detail-section prose">
+    </header><section
+      class="detail-section prose archive-projection-source"
+      data-archive-projection-source
+    >
       <h2>{copy.introduction}</h2><p>{production.synopsis}</p><p>{production.guidance}</p>
+    </section><section
+      class="detail-section prose archive-projection-level3"
+      data-archive-projection-level3
+      aria-labelledby="archive-production-projection"
+    >
+      <p class="eyebrow">{projectionView.eyebrow}</p>
+      <h2 id="archive-production-projection">{projectionView.title}</h2>
+      <p>{projectionView.summary}</p>
     </section><dl class="archive-credit-list">
       {
         production.creatives.map(([role, name]) => (
           <div>
             <>
-              <dt>{role}</dt>
-              <dd>{name}</dd>
+              <dt>
+                <span class="archive-projection-source" data-archive-projection-source>
+                  {role}
+                </span>
+                <span
+                  class="archive-projection-level3"
+                  data-archive-projection-level3
+                  data-archive-projection-field="role"
+                >
+                  {localization.archiveProjection.invitation.roleLabel}
+                </span>
+              </dt>
+              <dd>
+                <span class="archive-projection-source" data-archive-projection-source>
+                  {name}
+                </span>
+                <span
+                  class="archive-projection-level3"
+                  data-archive-projection-level3
+                  data-archive-projection-field="role-name"
+                >
+                  {localization.archiveProjection.invitation.role}
+                </span>
+              </dd>
             </>
           </div>
         ))
@@ -79,8 +148,20 @@ const canonicalPath = productionPath(edition, 'archive', production.productionId
         {
           relatedPerformances.map((performance) => (
             <li>
-              <a href={performancePath(edition, 'archive', performance.performanceId)}>
-                {performance.dateTime.display} · {performance.place}
+              <a
+                href={performancePath(edition, 'archive', performance.performanceId)}
+                data-archive-invitation-trigger
+              >
+                <span class="archive-projection-source" data-archive-projection-source>
+                  {performance.dateTime.display} · {performance.place}
+                </span>
+                <span
+                  class="archive-projection-level3"
+                  data-archive-projection-level3
+                  data-archive-projection-field="related-performance"
+                >
+                  {projection.dateTime} · {projection.venue}
+                </span>
               </a>
             </li>
           ))

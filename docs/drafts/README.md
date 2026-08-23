@@ -35,10 +35,9 @@ docs/drafts/
 
 当前实际草稿入口：
 
-| 文件                                                                                           | 类型           | 当前效力                                 |
-| ---------------------------------------------------------------------------------------------- | -------------- | ---------------------------------------- |
-| [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md)           | 创意草稿       | 延期的里站异常购票构想，等待未来独立规划 |
-| [`plans/snapshot-interface-ticketing-polish.md`](plans/snapshot-interface-ticketing-polish.md) | 一次性开发计划 | 已批准执行                               |
+| 文件                                                                                 | 类型     | 当前效力                                 |
+| ------------------------------------------------------------------------------------ | -------- | ---------------------------------------- |
+| [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md) | 创意草稿 | 延期的里站异常购票构想，等待未来独立规划 |
 
 ## 固定文档骨架
 

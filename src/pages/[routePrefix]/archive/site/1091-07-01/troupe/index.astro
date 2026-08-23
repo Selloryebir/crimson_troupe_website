@@ -17,6 +17,8 @@ const { edition } = Astro.props;
 const localization = getLocalization(edition);
 const copy = localization.site.archive.troupe;
 const canonicalPath = sitePath(edition, 'archive', 'troupe');
+const projection = localization.archiveProjection;
+const projectionView = projection.views.company;
 ---
 
 <ArchiveLayout
@@ -28,15 +30,61 @@ const canonicalPath = sitePath(edition, 'archive', 'troupe');
   canonicalPath={canonicalPath}
 >
   <section class="page-intro page-width" data-pollution-slot="heading">
-    <p class="eyebrow">{copy.eyebrow}</p><h1>{copy.title}</h1><p>{copy.statement}</p>
+    <p class="eyebrow">
+      <span class="archive-projection-source" data-archive-projection-source>{copy.eyebrow}</span>
+      <span class="archive-projection-level3" data-archive-projection-level3>
+        {projectionView.eyebrow}
+      </span>
+    </p><h1>{copy.title}</h1><p>
+      <span class="archive-projection-source" data-archive-projection-source>{copy.statement}</span>
+      <span class="archive-projection-level3" data-archive-projection-level3>
+        {projectionView.title}
+      </span>
+    </p>
   </section>
   <section class="archive-company page-width" data-pollution-slot="company-record">
     <div>
-      <p class="archive-kicker">{copy.kicker}</p>
-      <h2>{copy.aboutTitle}</h2>
-      <p>{copy.introduction}</p>
-      <p>{copy.invitation}</p>
-      <a class="button" href={sitePath(edition, 'archive', 'performances')}>{copy.browseRegister}</a
+      <p class="archive-kicker">
+        <span class="archive-projection-source" data-archive-projection-source>{copy.kicker}</span>
+        <span class="archive-projection-level3" data-archive-projection-level3>
+          {projection.performance.registerCode}
+        </span>
+      </p>
+      <h2>
+        <span class="archive-projection-source" data-archive-projection-source>
+          {copy.aboutTitle}
+        </span>
+        <span class="archive-projection-level3" data-archive-projection-level3>
+          {projectionView.title}
+        </span>
+      </h2>
+      <p>
+        <span class="archive-projection-source" data-archive-projection-source>
+          {copy.introduction}
+        </span>
+        <span class="archive-projection-level3" data-archive-projection-level3>
+          {projectionView.summary}
+        </span>
+      </p>
+      <p>
+        <span class="archive-projection-source" data-archive-projection-source>
+          {copy.invitation}
+        </span>
+        <span class="archive-projection-level3" data-archive-projection-level3>
+          {projection.invitation.closing}
+        </span>
+      </p>
+      <a
+        class="button"
+        href={sitePath(edition, 'archive', 'performances')}
+        data-archive-invitation-trigger
+      >
+        <span class="archive-projection-source" data-archive-projection-source>
+          {copy.browseRegister}
+        </span>
+        <span class="archive-projection-level3" data-archive-projection-level3>
+          {projection.invitation.eyebrow}
+        </span></a
       >
     </div>
     <dl>
@@ -45,9 +93,29 @@ const canonicalPath = sitePath(edition, 'archive', 'troupe');
           <div>
             <dt>
               <span>{String(index + 1).padStart(2, '0')}</span>
-              {title}
+              <span class="archive-projection-source" data-archive-projection-source>
+                {title}
+              </span>
+              <span
+                class="archive-projection-level3"
+                data-archive-projection-level3
+                data-archive-projection-field="role"
+              >
+                {projection.invitation.roleLabel}
+              </span>
             </dt>
-            <dd>{description}</dd>
+            <dd>
+              <span class="archive-projection-source" data-archive-projection-source>
+                {description}
+              </span>
+              <span
+                class="archive-projection-level3"
+                data-archive-projection-level3
+                data-archive-projection-field="role-name"
+              >
+                {projection.invitation.role} · {projection.invitation.venue}
+              </span>
+            </dd>
           </div>
         ))
       }

@@ -11,6 +11,8 @@ import { chromium } from 'playwright';
 
 import { currentArchiveSnapshot } from '../src/data/archive-snapshots.ts';
 import { buildSnapshot } from '../src/data/content/resolve.ts';
+import { builtEditions } from '../src/data/editions.ts';
+import { getLocalization } from '../src/data/localized/resolve.ts';
 
 const serverHost = '127.0.0.1';
 const repositoryRoot = fileURLToPath(new URL('..', import.meta.url));
@@ -22,12 +24,87 @@ const expectedArchiveSeatCount = buildSnapshot.performanceEntries.filter(
     performance.status === 'scheduled' &&
     performance.ticketAvailability.state === 'on-sale',
 ).length;
+const expectedArchiveCurrentCount = buildSnapshot.performanceEntries.filter(
+  ([, performance]) => performance.world === 'archive' && performance.collection === 'current',
+).length;
+const expectedArchiveHistoryCount = buildSnapshot.performanceEntries.filter(
+  ([, performance]) => performance.world === 'archive' && performance.collection === 'history',
+).length;
 process.env.NO_PROXY = [process.env.NO_PROXY, serverHost, 'localhost'].filter(Boolean).join(',');
 process.env.no_proxy = [process.env.no_proxy, serverHost, 'localhost'].filter(Boolean).join(',');
 
 function archivePath(routePrefix, segment = '') {
   const suffix = segment ? `${segment.replace(/^\/+/, '')}/` : '';
   return `/${routePrefix}/archive/site/${currentArchiveSnapshot.routeSegment}/${suffix}`;
+}
+
+async function assertArchiveProjectionList(page, expectedCount, label) {
+  const cards = page.locator('.archive-performance-list > li');
+  assert.equal(await cards.count(), expectedCount, `${label} 的记录数量不得改变`);
+  for (const field of ['title', 'date-time', 'venue', 'status']) {
+    const values = cards.locator(`[data-archive-projection-field="${field}"]:visible`);
+    assert.equal(await values.count(), expectedCount, `${label} 的 ${field} 应逐项投影`);
+    assert.equal(
+      new Set(await values.allTextContents()).size,
+      1,
+      `${label} 的 ${field} 应收束为同一可见值`,
+    );
+  }
+  assert.equal(
+    await cards
+      .locator('[data-archive-projection-source]')
+      .evaluateAll((elements) =>
+        elements.every((element) => window.getComputedStyle(element).display === 'none'),
+      ),
+    true,
+    `${label} 不应同时显示等级 0 源字段`,
+  );
+  assert.equal(
+    await cards.locator('a[data-archive-invitation-trigger][href]').count(),
+    expectedCount,
+    `${label} 应保留每项原合法链接与邀请入口`,
+  );
+}
+
+async function assertArchiveVisualLayer(page, label, reducedMotion = false) {
+  const layer = page.locator('[data-pollution-visual-layer]');
+  assert.equal(await layer.count(), 1, `${label} 应且只应有一个污染装饰层`);
+  assert.equal(await layer.getAttribute('aria-hidden'), 'true', `${label} 装饰层必须退出语义树`);
+  assert.equal(
+    await layer.locator('a, button, input, select, textarea').count(),
+    0,
+    `${label} 装饰层不得包含交互控件`,
+  );
+  assert.equal(
+    await layer.evaluate((element) => window.getComputedStyle(element).pointerEvents),
+    'none',
+    `${label} 装饰层不得截获指针`,
+  );
+  const echoes = layer.locator('.archive-pollution-stage__echo:visible');
+  assert.equal(await echoes.count(), 4, `${label} 应显示四个本地化档案视觉副本`);
+  assert.equal(
+    await echoes.evaluateAll((elements) =>
+      elements.every((element) => window.getComputedStyle(element).pointerEvents === 'none'),
+    ),
+    true,
+    `${label} 的视觉副本不得截获指针`,
+  );
+  const taskControls = page.locator('main a:visible, main button:visible, main select:visible');
+  assert.ok(await taskControls.count(), `${label} 应保留可操作的任务层`);
+  assert.equal(
+    await taskControls.evaluateAll((elements) =>
+      elements.every((element) => window.getComputedStyle(element).transform === 'none'),
+    ),
+    true,
+    `${label} 的真实交互控件必须保持直立`,
+  );
+  if (reducedMotion) {
+    assert.equal(
+      await layer.evaluate((element) => window.getComputedStyle(element).animationName),
+      'none',
+      `${label} 在减少动态效果下不得播放失序动画`,
+    );
+  }
 }
 
 function getFreePort() {
@@ -294,6 +371,85 @@ try {
   );
   assertDesktopErrors();
   await desktop.close();
+
+  const archiveVisualContext = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  await archiveVisualContext.addInitScript(() => {
+    const stateKey = 'crimson-troupe:archive-pollution:v2';
+    if (!sessionStorage.getItem(stateKey)) {
+      sessionStorage.setItem(
+        stateKey,
+        JSON.stringify({ version: 2, level: 0, eventCount: 0, variant: 0 }),
+      );
+    }
+  });
+  const archiveVisualPage = await archiveVisualContext.newPage();
+  const assertArchiveVisualErrors = trackUnexpectedErrors(archiveVisualPage);
+  await archiveVisualPage.goto(`${origin}${archivePath('yan')}`);
+  const visualLayer = archiveVisualPage.locator('[data-pollution-visual-layer]');
+  for (const [level, expectedLayerDisplay, expectedEchoDisplay] of [
+    [0, 'none', 'none'],
+    [1, 'none', 'none'],
+    [2, 'block', 'none'],
+  ]) {
+    await archiveVisualPage.evaluate((nextLevel) => {
+      sessionStorage.setItem(
+        'crimson-troupe:archive-pollution:v2',
+        JSON.stringify({ version: 2, level: nextLevel, eventCount: nextLevel + 2, variant: 0 }),
+      );
+    }, level);
+    await archiveVisualPage.reload();
+    await archiveVisualPage.locator(`html[data-pollution-level="${level}"]`).waitFor();
+    assert.equal(
+      await visualLayer.evaluate((element) => window.getComputedStyle(element).display),
+      expectedLayerDisplay,
+      `污染等级 ${level} 的页面框景显示不正确`,
+    );
+    assert.equal(
+      await archiveVisualPage
+        .locator('.archive-pollution-stage__echoes')
+        .evaluate((element) => window.getComputedStyle(element).display),
+      expectedEchoDisplay,
+      `污染等级 ${level} 不得提前显示等级 3 文字副本`,
+    );
+  }
+  await archiveVisualPage.evaluate(() => {
+    sessionStorage.setItem(
+      'crimson-troupe:archive-pollution:v2',
+      JSON.stringify({ version: 2, level: 3, eventCount: 8, variant: 2 }),
+    );
+  });
+  for (const edition of builtEditions) {
+    await archiveVisualPage.goto(`${origin}${archivePath(edition.routePrefix)}`);
+    await archiveVisualPage.locator('html[data-pollution-level="3"]').waitFor();
+    const expectedProjection = getLocalization(edition).archiveProjection.performance;
+    const projectedTitles = await archiveVisualPage
+      .locator('[data-archive-projection-field="title"]:visible')
+      .allTextContents();
+    assert.ok(projectedTitles.length, `${edition.editionId} 三级污染首页缺少标题投影`);
+    assert.equal(
+      projectedTitles.every((title) => title.trim() === expectedProjection.title),
+      true,
+      `${edition.editionId} 三级污染首页必须使用自身国家版本投影`,
+    );
+    assert.equal(
+      await archiveVisualPage
+        .locator('.archive-pollution-stage__echo--venue')
+        .textContent()
+        .then((value) => value?.trim()),
+      expectedProjection.venue,
+      `${edition.editionId} 页面环境副本必须使用自身国家版本地点`,
+    );
+    await assertArchiveVisualLayer(
+      archiveVisualPage,
+      `1280px ${edition.languageName.zh}三级污染里站`,
+    );
+    await assertNoHorizontalLoss(
+      archiveVisualPage,
+      `1280px ${edition.languageName.zh}三级污染里站`,
+    );
+  }
+  assertArchiveVisualErrors();
+  await archiveVisualContext.close();
 
   const ticketContext = await browser.newContext({ viewport: { width: 320, height: 800 } });
   await ticketContext.addInitScript(() => {
@@ -628,7 +784,186 @@ try {
     `${origin}/yan/archive/site/${currentArchiveSnapshot.routeSegment}/`,
   );
   await archivePage.locator('html[data-pollution-level="3"]').waitFor();
-  await archivePage.locator('[data-archive-projection]:not([hidden])').waitFor();
+  await assertArchiveVisualLayer(archivePage, '320px 炎国三级污染里站', true);
+  await assertArchiveProjectionList(archivePage, expectedArchiveCurrentCount, '三级污染里站首页');
+  await archivePage.goto(`${origin}${archivePath('yan', 'performances')}`);
+  await assertArchiveProjectionList(
+    archivePage,
+    expectedArchiveCurrentCount,
+    '三级污染里站本季演出',
+  );
+  await archivePage.goto(`${origin}${archivePath('yan', 'performances/history')}`);
+  await assertArchiveProjectionList(
+    archivePage,
+    expectedArchiveHistoryCount,
+    '三级污染里站历史演出',
+  );
+  const archivePerformanceTarget = await archivePage
+    .locator('.archive-performance-list > li > a')
+    .first()
+    .getAttribute('href');
+  assert.ok(archivePerformanceTarget, '历史演出应保留可访问的原场次链接');
+  await archivePage.goto(new URL(archivePerformanceTarget, origin).href);
+  assert.equal(
+    await archivePage.locator('h1 [data-archive-projection-field="title"]:visible').count(),
+    1,
+    '场次详情 H1 应显示职责化投影标题',
+  );
+  assert.equal(
+    await archivePage.locator('.fact-grid [data-archive-projection-field="venue"]:visible').count(),
+    1,
+    '场次详情应显示投影地点',
+  );
+  assert.equal(
+    await archivePage
+      .locator('h1 [data-archive-projection-source]')
+      .evaluate((element) => window.getComputedStyle(element).display),
+    'none',
+    '场次详情不应同时显示等级 0 标题',
+  );
+  const programLinks = archivePage.locator('.program-order a[data-archive-invitation-trigger]');
+  assert.ok(await programLinks.count(), '场次详情应保留受控的原剧目关联入口');
+  const archiveProductionTarget = await programLinks.first().getAttribute('href');
+  assert.ok(archiveProductionTarget, '场次详情剧目入口应保留原链接');
+  await programLinks.first().click();
+  await archivePage.locator('[data-archive-invitation][open]').waitFor();
+  await archivePage.locator('[data-archive-invitation-close]').first().click();
+  await archivePage.goto(new URL(archiveProductionTarget, origin).href);
+  assert.equal(
+    await archivePage.locator('h1 [data-archive-projection-field="title"]:visible').count(),
+    1,
+    '剧目详情 H1 应显示职责化投影标题',
+  );
+  const creditCount = await archivePage.locator('.archive-credit-list > div').count();
+  assert.ok(creditCount, '剧目详情应保留原人员记录数量');
+  assert.equal(
+    await archivePage.locator('[data-archive-projection-field="role"]:visible').count(),
+    creditCount,
+    '剧目详情职责应逐项收束',
+  );
+  assert.equal(
+    new Set(
+      await archivePage
+        .locator('[data-archive-projection-field="role-name"]:visible')
+        .allTextContents(),
+    ).size,
+    1,
+    '剧目详情人员应收束为同一邀请身份',
+  );
+  const relatedLinks = archivePage.locator('.related-links a[data-archive-invitation-trigger]');
+  assert.ok(await relatedLinks.count(), '剧目详情应保留受控的原场次关联入口');
+  await archivePage.goto(`${origin}${archivePath('yan', 'troupe')}`);
+  assert.ok((await archivePage.locator('h1').textContent())?.trim(), '剧团页应保留 H1 任务标题');
+  const officeCount = await archivePage.locator('.archive-company dl > div').count();
+  assert.ok(officeCount, '剧团页应保留原职责记录数量');
+  assert.equal(
+    await archivePage.locator('[data-archive-projection-field="role"]:visible').count(),
+    officeCount,
+    '剧团页职责应逐项收束',
+  );
+  const companyInvitationTrigger = archivePage.locator(
+    '.archive-company [data-archive-invitation-trigger]',
+  );
+  await companyInvitationTrigger.click();
+  await archivePage.locator('[data-archive-invitation][open]').waitFor();
+  await archivePage.locator('[data-archive-invitation-close]').first().click();
+  await archivePage.goto(
+    `${origin}${archivePath('yan', 'search')}?q=${encodeURIComponent('湖中')}`,
+  );
+  await archivePage.locator('[data-search-enhanced]:not([hidden])').waitFor();
+  const projectedSearchResults = archivePage.locator('[data-search-results] > li');
+  const expectedSearchResultCount = await archivePage
+    .locator('[data-site-search]')
+    .evaluate((root, query) => {
+      const locale = root.getAttribute('data-search-locale') ?? document.documentElement.lang;
+      const normalizedQuery = String(query).normalize('NFKC').trim().toLocaleLowerCase(locale);
+      const entries = JSON.parse(root.getAttribute('data-search-index') ?? '[]');
+      return entries.filter((entry) =>
+        `${entry.title} ${entry.summary} ${entry.keywords}`
+          .normalize('NFKC')
+          .trim()
+          .toLocaleLowerCase(locale)
+          .includes(normalizedQuery),
+      ).length;
+    }, '湖中');
+  assert.ok(expectedSearchResultCount, '搜索基准查询应命中稳定索引');
+  assert.equal(
+    await projectedSearchResults.count(),
+    expectedSearchResultCount,
+    '三级污染搜索不得改变匹配与计数',
+  );
+  assert.equal(
+    new Set(
+      await projectedSearchResults
+        .locator('[data-archive-projection-field="search-title"]:visible')
+        .allTextContents(),
+    ).size,
+    1,
+    '三级污染搜索标题应收束为同一回应',
+  );
+  const projectedSearchLink = projectedSearchResults
+    .locator('a[data-archive-invitation-trigger][href]')
+    .first();
+  assert.ok(await projectedSearchLink.getAttribute('href'), '搜索投影应保留原结果链接');
+  await projectedSearchLink.click();
+  await archivePage.locator('[data-archive-invitation][open]').waitFor();
+  await archivePage.locator('[data-archive-invitation-close]').first().click();
+  await archivePage.goto(`${origin}${archivePath('yan', 'tickets')}`);
+  const projectedSeatEntries = archivePage.locator('.archive-seat-register > ol > li');
+  assert.equal(
+    await projectedSeatEntries.count(),
+    expectedArchiveSeatCount,
+    '三级污染静态席位不得改变同期场次数量',
+  );
+  assert.equal(
+    await projectedSeatEntries.locator('[data-archive-projection-field="venue"]:visible').count(),
+    expectedArchiveSeatCount,
+    '三级污染席位地点应逐项收束',
+  );
+  const projectedSeatSelect = projectedSeatEntries.locator('select').first();
+  assert.equal(await projectedSeatSelect.isEnabled(), true, '投影不得破坏静态分区选择');
+  const projectedSettlement = archivePage.locator(
+    '.archive-settlement[data-archive-projection-level3]:visible',
+  );
+  const projectedSettlementTrigger = projectedSettlement.locator(
+    'button[data-archive-invitation-trigger]',
+  );
+  assert.equal(await projectedSettlementTrigger.isEnabled(), true, '席位投影入口应保持可操作');
+  await projectedSettlementTrigger.click();
+  await archivePage.locator('[data-archive-invitation][open]').waitFor();
+  assert.equal(
+    await archivePage.locator('[data-archive-invitation-continue]').getAttribute('hidden'),
+    '',
+    '静态席位投影只发出邀请，不得伪造结算或导航',
+  );
+  await archivePage.locator('[data-archive-invitation-close]').first().click();
+  await archivePage.goto(`${origin}${archivePath('yan')}`);
+  const archiveInvitation = archivePage.locator('[data-archive-invitation]');
+  assert.equal(
+    await archiveInvitation.getAttribute('open'),
+    null,
+    '等级 3 初次呈现不应自动打开邀请',
+  );
+  const archiveInvitationTrigger = archivePage.locator('[data-archive-invitation-trigger]').first();
+  const archiveInvitationTarget = await archiveInvitationTrigger.getAttribute('href');
+  assert.ok(archiveInvitationTarget, '邀请触发器应保留原合法链接');
+  await archiveInvitationTrigger.click();
+  await archivePage.locator('[data-archive-invitation][open]').waitFor();
+  assert.equal(
+    await archiveInvitation.evaluate((element) => window.getComputedStyle(element).overflowX),
+    'hidden',
+    '邀请装饰不得制造横向滚动条',
+  );
+  await archivePage.locator('[data-archive-invitation-close]').first().click();
+  assert.equal(
+    await archiveInvitationTrigger.evaluate((element) => element === document.activeElement),
+    true,
+    '关闭邀请后焦点应返回原触发器',
+  );
+  await archiveInvitationTrigger.click();
+  await archivePage.locator('[data-archive-invitation][open]').waitFor();
+  await archivePage.locator('[data-archive-invitation-continue]').click();
+  await archivePage.waitForURL(new URL(archiveInvitationTarget, origin).href);
   await archivePage.locator('[data-world-switch="front"]').waitFor();
   await assertNoHorizontalLoss(archivePage, '320px 炎国三级污染里站');
   assertArchiveErrors();
@@ -648,9 +983,13 @@ try {
   const assertMinosArchiveErrors = trackUnexpectedErrors(minosArchivePage);
   await minosArchivePage.goto(`${origin}${archivePath('min')}`);
   await minosArchivePage.locator('html[data-pollution-level="3"]').waitFor();
-  await minosArchivePage.locator('[data-archive-projection]:not([hidden])').waitFor();
+  const minosInvitation = minosArchivePage.locator('[data-archive-invitation]');
+  assert.equal(await minosInvitation.getAttribute('open'), null);
+  await minosArchivePage.locator('[data-archive-invitation-trigger]').first().click();
+  await minosArchivePage.locator('[data-archive-invitation][open]').waitFor();
   await minosArchivePage.locator('[data-world-switch="front"]').waitFor();
   await assertNoHorizontalLoss(minosArchivePage, '320px 米诺斯语三级污染里站');
+  await minosArchivePage.locator('[data-archive-invitation-close]').first().click();
   assertMinosArchiveErrors();
   await minosArchiveContext.close();
 
@@ -674,7 +1013,17 @@ try {
   );
   await archiveSeatSelects.first().selectOption({ index: 1 });
   assert.notEqual(await archiveSeatSelects.first().inputValue(), 'C');
-  assert.equal(await noScriptPage.locator('.archive-settlement button').isDisabled(), true);
+  assert.equal(
+    await noScriptPage
+      .locator('.archive-settlement[data-archive-projection-source] button')
+      .isDisabled(),
+    true,
+  );
+  assert.equal(
+    await noScriptPage.locator('.archive-settlement[data-archive-projection-level3]').isVisible(),
+    false,
+    '无脚本等级 0 不应显示三级邀请入口',
+  );
   assert.equal(await noScriptPage.locator('[data-ticketing-app]').count(), 0);
   await assertNoHorizontalLoss(noScriptPage, '390px 东国语无脚本里站席位登记');
   await noScriptContext.close();
@@ -697,7 +1046,7 @@ try {
   await failedSearchContext.close();
 
   console.log(
-    'browser validation passed: editorial home alternation/mobile order, full-list isolation, three venue level maps/zones, five-edition selector, long-script 320px headers, ticket focus/artifact, Minos search/download/print, Ursus search isolation/download/five-edition state/archive exit, archive level 3/reduced motion, no-JS fallback/static archive seats, search failure fallback',
+    'browser validation passed: editorial home alternation/mobile order, full-list isolation, three venue level maps/zones, five-edition selector, long-script 320px headers, ticket focus/artifact, Minos search/download/print, Ursus search isolation/download/five-edition state/archive exit, archive four-level visual escalation/five-edition level 3/reduced motion, no-JS fallback/static archive seats, search failure fallback',
   );
 } catch (error) {
   const serverOutput = preview.output.join('').trim();
