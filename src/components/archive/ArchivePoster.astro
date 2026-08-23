@@ -12,6 +12,12 @@ interface Props {
   subtitle?: string;
   number?: string;
   compact?: boolean;
+  projection?: {
+    productionId: ProductionId;
+    title: string;
+    subtitle?: string;
+    number: string;
+  };
 }
 
 const {
@@ -21,9 +27,16 @@ const {
   subtitle,
   number = 'CT / 1091',
   compact = false,
+  projection,
 } = Astro.props;
 const artwork = getSnapshotProductionArtwork(buildSnapshot, productionId, 'archive');
 const artworkAsset = getSnapshotProductionArtworkAsset(buildSnapshot, productionId, 'archive');
+const projectionArtwork = projection
+  ? getSnapshotProductionArtwork(buildSnapshot, projection.productionId, 'archive')
+  : undefined;
+const projectionArtworkAsset = projection
+  ? getSnapshotProductionArtworkAsset(buildSnapshot, projection.productionId, 'archive')
+  : undefined;
 ---
 
 <div
@@ -41,7 +54,8 @@ const artworkAsset = getSnapshotProductionArtworkAsset(buildSnapshot, production
   {
     artwork && artworkAsset && (
       <Image
-        class="archive-poster__image"
+        class:list={['archive-poster__image', { 'archive-projection-source': projection }]}
+        data-archive-projection-source={projection ? true : undefined}
         src={artworkAsset}
         alt=""
         widths={[240, 480, 768]}
@@ -55,10 +69,60 @@ const artworkAsset = getSnapshotProductionArtworkAsset(buildSnapshot, production
       />
     )
   }
+  {
+    projection && projectionArtwork && projectionArtworkAsset && (
+      <Image
+        class="archive-poster__image archive-projection-level3"
+        data-archive-projection-level3
+        data-archive-projection-field="poster"
+        src={projectionArtworkAsset}
+        alt=""
+        widths={[240, 480, 768]}
+        sizes={
+          compact
+            ? '(max-width: 620px) calc(100vw - 28px), (max-width: 960px) 160px, 180px'
+            : '(max-width: 620px) calc(100vw - 48px), (max-width: 960px) min(590px, calc(100vw - 36px)), 590px'
+        }
+        loading={compact ? 'lazy' : 'eager'}
+        decoding="async"
+        style={`object-position: ${projectionArtwork.focalPoint}`}
+      />
+    )
+  }
   <div class="archive-poster__frame" aria-hidden="true"><i></i><b></b><em></em></div><span
-    class="archive-poster__number">{number}</span
-  ><div class="archive-poster__title">
+    class:list={['archive-poster__number', { 'archive-projection-source': projection }]}
+    data-archive-projection-source={projection ? true : undefined}>{number}</span
+  >{
+    projection && (
+      <span
+        class="archive-poster__number archive-projection-level3"
+        data-archive-projection-level3
+        data-archive-projection-field="register"
+      >
+        {projection.number}
+      </span>
+    )
+  }<div
+    class:list={['archive-poster__title', { 'archive-projection-source': projection }]}
+    data-archive-projection-source={projection ? true : undefined}
+  >
     <strong>{title}</strong>{subtitle && <small>{subtitle}</small>}
   </div>
+  {
+    projection && (
+      <div
+        class:list={[
+          'archive-poster__title',
+          'archive-projection-level3',
+          `archive-poster__title--${projectionArtwork?.titleTone ?? 'light'}`,
+        ]}
+        data-archive-projection-level3
+        data-archive-projection-field="poster-title"
+      >
+        <strong>{projection.title}</strong>
+        {projection.subtitle && <small>{projection.subtitle}</small>}
+      </div>
+    )
+  }
   {artwork && artworkAsset && <TroupeMark class="archive-poster__mark" />}
 </div>

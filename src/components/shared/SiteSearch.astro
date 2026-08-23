@@ -1,5 +1,5 @@
 ---
-import type { SiteSearchEntry } from '../../data/site-search-index';
+import type { SiteSearchEntry, SiteSearchProjection } from '../../data/site-search-index';
 import { formatMessage } from '../../data/localized/format';
 import type { SearchMessages } from '../../data/localized/schema';
 import type { SiteWorld } from '../../data/site-routes';
@@ -12,9 +12,11 @@ interface Props {
   placeholder: string;
   locale: string;
   messages: SearchMessages;
+  archiveProjection?: SiteSearchProjection;
 }
 
-const { entries, world, scopeId, scopeLabel, placeholder, locale, messages } = Astro.props;
+const { entries, world, scopeId, scopeLabel, placeholder, locale, messages, archiveProjection } =
+  Astro.props;
 ---
 
 <section
@@ -24,6 +26,7 @@ const { entries, world, scopeId, scopeLabel, placeholder, locale, messages } = A
   data-search-locale={locale}
   data-search-scope={scopeId}
   data-search-messages={JSON.stringify(messages)}
+  data-search-archive-projection={archiveProjection ? JSON.stringify(archiveProjection) : undefined}
   data-pollution-slot={world === 'archive' ? 'search' : undefined}
 >
   <div class="search-noscript" data-search-fallback role="status">

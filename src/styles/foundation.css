@@ -586,7 +586,7 @@ a {
   text-decoration: none;
 }
 
-.search-results span {
+.search-results a > span {
   grid-row: 1 / 3;
   color: var(--crimson);
   font-size: 0.7rem;
@@ -829,7 +829,7 @@ a {
     border-left: 1px solid var(--ink);
   }
 
-  .search-results span {
+  .search-results a > span {
     grid-row: auto;
   }
 }
