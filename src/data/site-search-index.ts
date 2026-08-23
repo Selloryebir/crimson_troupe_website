@@ -28,6 +28,12 @@ export interface SiteSearchEntry {
   href: string;
 }
 
+export interface SiteSearchProjection {
+  typeLabel: string;
+  title: string;
+  summary: string;
+}
+
 export function getSiteSearchScope(edition: BuiltEdition, world: SiteWorld): string {
   return world === 'front'
     ? `${edition.editionId}:front`

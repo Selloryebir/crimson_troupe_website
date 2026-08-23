@@ -856,6 +856,12 @@ html[data-world="archive"] :is(.program-order li, .related-links li) {
   cursor: not-allowed;
 }
 
+.archive-settlement button:not(:disabled) {
+  border-color: var(--archive-candle);
+  color: var(--archive-paper);
+  cursor: pointer;
+}
+
 .archive-ticket-links {
   padding-bottom: 110px;
 }

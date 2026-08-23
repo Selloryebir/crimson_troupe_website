@@ -9,13 +9,36 @@ interface Props {
 
 const { entries, localization } = Astro.props;
 const copy = localization.site.archive.tickets;
+const projection = localization.archiveProjection;
+const projectionView = projection.views.office;
 ---
 
 <section class="archive-seat-register page-width" data-pollution-slot="ticket-record">
   <header>
-    <p class="archive-kicker">{copy.registerEyebrow}</p>
-    <h2>{copy.registerTitle}</h2>
-    <p>{copy.registerIntroduction}</p>
+    <p class="archive-kicker">
+      <span class="archive-projection-source" data-archive-projection-source>
+        {copy.registerEyebrow}
+      </span>
+      <span class="archive-projection-level3" data-archive-projection-level3>
+        {projectionView.eyebrow}
+      </span>
+    </p>
+    <h2>
+      <span class="archive-projection-source" data-archive-projection-source>
+        {copy.registerTitle}
+      </span>
+      <span class="archive-projection-level3" data-archive-projection-level3>
+        {projectionView.title}
+      </span>
+    </h2>
+    <p>
+      <span class="archive-projection-source" data-archive-projection-source>
+        {copy.registerIntroduction}
+      </span>
+      <span class="archive-projection-level3" data-archive-projection-level3>
+        {projectionView.summary}
+      </span>
+    </p>
   </header>
   {
     entries.length > 0 ? (
@@ -23,11 +46,51 @@ const copy = localization.site.archive.tickets;
         {entries.map((entry) => (
           <li>
             <div>
-              <h3>{entry.title}</h3>
-              <p>{entry.dateTime}</p>
-              <p>{entry.place}</p>
+              <h3>
+                <span class="archive-projection-source" data-archive-projection-source>
+                  {entry.title}
+                </span>
+                <span
+                  class="archive-projection-level3"
+                  data-archive-projection-level3
+                  data-archive-projection-field="title"
+                >
+                  {projection.performance.title}
+                </span>
+              </h3>
+              <p>
+                <span class="archive-projection-source" data-archive-projection-source>
+                  {entry.dateTime}
+                </span>
+                <span
+                  class="archive-projection-level3"
+                  data-archive-projection-level3
+                  data-archive-projection-field="date-time"
+                >
+                  {projection.performance.dateTime}
+                </span>
+              </p>
+              <p>
+                <span class="archive-projection-source" data-archive-projection-source>
+                  {entry.place}
+                </span>
+                <span
+                  class="archive-projection-level3"
+                  data-archive-projection-level3
+                  data-archive-projection-field="venue"
+                >
+                  {projection.performance.venue}
+                </span>
+              </p>
             </div>
-            <label for={`archive-zone-${entry.performanceId}`}>{copy.zone}</label>
+            <label for={`archive-zone-${entry.performanceId}`}>
+              <span class="archive-projection-source" data-archive-projection-source>
+                {copy.zone}
+              </span>
+              <span class="archive-projection-level3" data-archive-projection-level3>
+                {projection.invitation.attendanceLabel}
+              </span>
+            </label>
             <select id={`archive-zone-${entry.performanceId}`} name={entry.performanceId}>
               {entry.offers.map((offer) => (
                 <option value={offer.zone}>
@@ -42,11 +105,21 @@ const copy = localization.site.archive.tickets;
       <p class="empty-state">{copy.empty}</p>
     )
   }
-  <section class="archive-settlement" aria-labelledby="archive-settlement-title">
+  <section
+    class="archive-settlement archive-projection-source"
+    data-archive-projection-source
+    aria-labelledby="archive-settlement-title"
+  >
     <h2 id="archive-settlement-title">{copy.settlementTitle}</h2>
     <p id="archive-settlement-status">{copy.settlementUnavailable}</p>
     <button type="button" disabled aria-describedby="archive-settlement-status">
       {copy.submit}
     </button>
   </section>
+  <div class="archive-settlement archive-projection-level3" data-archive-projection-level3>
+    <p>{projection.invitation.attendance}</p>
+    <button type="button" data-archive-invitation-trigger>
+      {projection.invitation.eyebrow}
+    </button>
+  </div>
 </section>

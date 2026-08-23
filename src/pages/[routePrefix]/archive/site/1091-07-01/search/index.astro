@@ -43,5 +43,10 @@ const canonicalPath = sitePath(edition, 'archive', 'search');
     placeholder={copy.placeholder}
     locale={edition.locale}
     messages={localization.messages.search}
+    archiveProjection={{
+      typeLabel: localization.archiveProjection.performance.kind,
+      title: localization.archiveProjection.performance.title,
+      summary: localization.archiveProjection.views.inquiry.summary,
+    }}
   />
 </ArchiveLayout>

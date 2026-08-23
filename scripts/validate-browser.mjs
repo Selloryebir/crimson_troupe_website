@@ -744,6 +744,76 @@ try {
   await companyInvitationTrigger.click();
   await archivePage.locator('[data-archive-invitation][open]').waitFor();
   await archivePage.locator('[data-archive-invitation-close]').first().click();
+  await archivePage.goto(
+    `${origin}${archivePath('yan', 'search')}?q=${encodeURIComponent('湖中')}`,
+  );
+  await archivePage.locator('[data-search-enhanced]:not([hidden])').waitFor();
+  const projectedSearchResults = archivePage.locator('[data-search-results] > li');
+  const expectedSearchResultCount = await archivePage
+    .locator('[data-site-search]')
+    .evaluate((root, query) => {
+      const locale = root.getAttribute('data-search-locale') ?? document.documentElement.lang;
+      const normalizedQuery = String(query).normalize('NFKC').trim().toLocaleLowerCase(locale);
+      const entries = JSON.parse(root.getAttribute('data-search-index') ?? '[]');
+      return entries.filter((entry) =>
+        `${entry.title} ${entry.summary} ${entry.keywords}`
+          .normalize('NFKC')
+          .trim()
+          .toLocaleLowerCase(locale)
+          .includes(normalizedQuery),
+      ).length;
+    }, '湖中');
+  assert.ok(expectedSearchResultCount, '搜索基准查询应命中稳定索引');
+  assert.equal(
+    await projectedSearchResults.count(),
+    expectedSearchResultCount,
+    '三级污染搜索不得改变匹配与计数',
+  );
+  assert.equal(
+    new Set(
+      await projectedSearchResults
+        .locator('[data-archive-projection-field="search-title"]:visible')
+        .allTextContents(),
+    ).size,
+    1,
+    '三级污染搜索标题应收束为同一回应',
+  );
+  const projectedSearchLink = projectedSearchResults
+    .locator('a[data-archive-invitation-trigger][href]')
+    .first();
+  assert.ok(await projectedSearchLink.getAttribute('href'), '搜索投影应保留原结果链接');
+  await projectedSearchLink.click();
+  await archivePage.locator('[data-archive-invitation][open]').waitFor();
+  await archivePage.locator('[data-archive-invitation-close]').first().click();
+  await archivePage.goto(`${origin}${archivePath('yan', 'tickets')}`);
+  const projectedSeatEntries = archivePage.locator('.archive-seat-register > ol > li');
+  assert.equal(
+    await projectedSeatEntries.count(),
+    expectedArchiveSeatCount,
+    '三级污染静态席位不得改变同期场次数量',
+  );
+  assert.equal(
+    await projectedSeatEntries.locator('[data-archive-projection-field="venue"]:visible').count(),
+    expectedArchiveSeatCount,
+    '三级污染席位地点应逐项收束',
+  );
+  const projectedSeatSelect = projectedSeatEntries.locator('select').first();
+  assert.equal(await projectedSeatSelect.isEnabled(), true, '投影不得破坏静态分区选择');
+  const projectedSettlement = archivePage.locator(
+    '.archive-settlement[data-archive-projection-level3]:visible',
+  );
+  const projectedSettlementTrigger = projectedSettlement.locator(
+    'button[data-archive-invitation-trigger]',
+  );
+  assert.equal(await projectedSettlementTrigger.isEnabled(), true, '席位投影入口应保持可操作');
+  await projectedSettlementTrigger.click();
+  await archivePage.locator('[data-archive-invitation][open]').waitFor();
+  assert.equal(
+    await archivePage.locator('[data-archive-invitation-continue]').getAttribute('hidden'),
+    '',
+    '静态席位投影只发出邀请，不得伪造结算或导航',
+  );
+  await archivePage.locator('[data-archive-invitation-close]').first().click();
   await archivePage.goto(`${origin}${archivePath('yan')}`);
   const archiveInvitation = archivePage.locator('[data-archive-invitation]');
   assert.equal(
@@ -815,7 +885,17 @@ try {
   );
   await archiveSeatSelects.first().selectOption({ index: 1 });
   assert.notEqual(await archiveSeatSelects.first().inputValue(), 'C');
-  assert.equal(await noScriptPage.locator('.archive-settlement button').isDisabled(), true);
+  assert.equal(
+    await noScriptPage
+      .locator('.archive-settlement[data-archive-projection-source] button')
+      .isDisabled(),
+    true,
+  );
+  assert.equal(
+    await noScriptPage.locator('.archive-settlement[data-archive-projection-level3]').isVisible(),
+    false,
+    '无脚本等级 0 不应显示三级邀请入口',
+  );
   assert.equal(await noScriptPage.locator('[data-ticketing-app]').count(), 0);
   await assertNoHorizontalLoss(noScriptPage, '390px 东国语无脚本里站席位登记');
   await noScriptContext.close();
