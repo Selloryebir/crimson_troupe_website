@@ -35,11 +35,10 @@ docs/drafts/
 
 当前实际草稿入口：
 
-| 文件                                                                                                       | 类型           | 当前效力                                               |
-| ---------------------------------------------------------------------------------------------------------- | -------------- | ------------------------------------------------------ |
-| [`blueprint/archive-level3-invitation-convergence.md`](blueprint/archive-level3-invitation-convergence.md) | 蓝图草稿       | 已批准的等级 3 收束、点击邀请与视觉递进，等待正式迁移  |
-| [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md)                       | 创意草稿       | 延期的里站异常购票构想，等待未来独立规划               |
-| [`plans/archive-level3-invitation-convergence.md`](plans/archive-level3-invitation-convergence.md)         | 一次性开发计划 | 候选切片计划，等待正式蓝图迁移、计划审核与自动执行授权 |
+| 文件                                                                                               | 类型           | 当前效力                                 |
+| -------------------------------------------------------------------------------------------------- | -------------- | ---------------------------------------- |
+| [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md)               | 创意草稿       | 延期的里站异常购票构想，等待未来独立规划 |
+| [`plans/archive-level3-invitation-convergence.md`](plans/archive-level3-invitation-convergence.md) | 一次性开发计划 | 已批准执行，`SLICE-01` 待同步            |
 
 ## 固定文档骨架
 
