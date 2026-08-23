@@ -7,6 +7,13 @@ html[data-world="archive"] {
   --pollution-tilt: -1.4deg;
   --pollution-counter-tilt: 1.7deg;
   --pollution-strong-tilt: -3.4deg;
+  --pollution-composition-angle: -1.8deg;
+  --pollution-composition-counter-angle: 0.8deg;
+  --pollution-composition-soft-angle: -0.7deg;
+  --pollution-proof-inline: 7%;
+  --pollution-proof-block: 13%;
+  --pollution-redaction-inline: 16%;
+  --pollution-redaction-width: 29%;
 }
 
 html[data-world="archive"][data-pollution-variant="1"] {
@@ -31,6 +38,26 @@ html[data-world="archive"][data-pollution-variant="2"] {
   --pollution-strong-tilt: -1.2deg;
 }
 
+html[data-world="archive"][data-pollution-composition="1"] {
+  --pollution-composition-angle: 2.2deg;
+  --pollution-composition-counter-angle: -1deg;
+  --pollution-composition-soft-angle: 0.85deg;
+  --pollution-proof-inline: 54%;
+  --pollution-proof-block: 24%;
+  --pollution-redaction-inline: 48%;
+  --pollution-redaction-width: 37%;
+}
+
+html[data-world="archive"][data-pollution-composition="2"] {
+  --pollution-composition-angle: -0.7deg;
+  --pollution-composition-counter-angle: 0.35deg;
+  --pollution-composition-soft-angle: -0.28deg;
+  --pollution-proof-inline: 28%;
+  --pollution-proof-block: 61%;
+  --pollution-redaction-inline: 8%;
+  --pollution-redaction-width: 56%;
+}
+
 .archive-pollution-stage {
   position: fixed;
   z-index: 4;
@@ -43,6 +70,14 @@ html[data-world="archive"][data-pollution-variant="2"] {
 .archive-pollution-stage > span {
   position: absolute;
   display: block;
+  pointer-events: none;
+}
+
+.archive-pollution-stage::before,
+.archive-pollution-stage::after {
+  position: absolute;
+  display: block;
+  content: "";
   pointer-events: none;
 }
 
@@ -90,6 +125,56 @@ html[data-world="archive"]:is(
     [data-pollution-level="2"],
     [data-pollution-level="3"]
   )
+  .archive-pollution-stage {
+  display: block;
+}
+
+html[data-world="archive"][data-pollution-level="1"] .archive-pollution-stage {
+  background:
+    linear-gradient(
+      98deg,
+      transparent 0 23%,
+      rgb(130 22 35 / 9%) 23.2% 23.7%,
+      transparent 23.9% 71%,
+      rgb(206 163 100 / 5%) 71.2% 71.6%,
+      transparent 71.8%
+    ),
+    repeating-linear-gradient(0deg, transparent 0 63px, rgb(218 199 165 / 3%) 64px 65px);
+}
+
+html[data-world="archive"][data-pollution-level="1"] .archive-pollution-stage::before {
+  top: var(--pollution-proof-block);
+  left: var(--pollution-proof-inline);
+  width: min(38vw, 430px);
+  height: min(26vh, 210px);
+  border: 3px double rgb(204 161 96 / 26%);
+  background:
+    linear-gradient(90deg, transparent 0 17%, rgb(127 22 35 / 15%) 17.5% 18.4%, transparent 18.9%),
+    repeating-linear-gradient(0deg, transparent 0 25px, rgb(216 201 173 / 7%) 26px 27px),
+    rgb(16 10 9 / 24%);
+  box-shadow:
+    var(--pollution-shift-x) var(--pollution-shift-y) 0 rgb(122 18 31 / 16%),
+    0 18px 54px rgb(0 0 0 / 28%);
+  transform: rotate(var(--pollution-composition-angle));
+}
+
+html[data-world="archive"][data-pollution-level="1"] .archive-pollution-stage::after {
+  top: calc(var(--pollution-proof-block) + 12vh);
+  left: var(--pollution-redaction-inline);
+  width: var(--pollution-redaction-width);
+  height: 0.42rem;
+  background: rgb(12 7 7 / 72%);
+  box-shadow:
+    calc(0px - var(--pollution-shift-x)) 0 rgb(136 18 32 / 28%),
+    0 1.3rem 0 rgb(12 7 7 / 42%);
+  transform: rotate(var(--pollution-composition-counter-angle));
+}
+
+html[data-world="archive"]:is(
+    [data-pollution-level="1"],
+    [data-pollution-level="2"],
+    [data-pollution-level="3"]
+  )
   [data-pollution-slot="poster"] {
   box-shadow:
     inset 0 0 0 1px color-mix(in srgb, var(--poster-memory, #8d1d2a) 72%, transparent),
@@ -126,8 +211,11 @@ html[data-world="archive"]:is(
     [data-pollution-slot="ticket-record"],
     [data-pollution-slot="search-result"]
   ) {
-  outline: 1px solid rgb(151 37 47 / 25%);
-  outline-offset: 5px;
+  outline: 1px solid rgb(151 37 47 / 42%);
+  outline-offset: 6px;
+  box-shadow:
+    var(--pollution-shift-soft-x) 0 rgb(137 24 37 / 11%),
+    calc(0px - var(--pollution-shift-soft-x)) 2px rgb(211 165 101 / 6%);
 }
 
 html[data-world="archive"]:is(
@@ -137,13 +225,72 @@ html[data-world="archive"]:is(
   )
   [data-pollution-slot="record-list"]
   > :nth-child(3n + 2) {
-  box-shadow: inset 7px 0 rgb(132 25 36 / 12%);
+  box-shadow:
+    inset 9px 0 rgb(132 25 36 / 20%),
+    0 9px 0 -8px rgb(205 159 96 / 18%);
+}
+
+html[data-world="archive"][data-pollution-level="1"][data-pollution-composition="0"]
+  [data-pollution-slot="record-list"]
+  > :nth-child(3n + 1) {
+  transform: translateX(4px) rotate(-0.18deg);
+}
+
+html[data-world="archive"][data-pollution-level="1"][data-pollution-composition="1"]
+  [data-pollution-slot="record-list"]
+  > :nth-child(3n + 2) {
+  transform: translateX(-5px) rotate(0.22deg);
+}
+
+html[data-world="archive"][data-pollution-level="1"][data-pollution-composition="2"]
+  [data-pollution-slot="record-list"]
+  > :nth-child(3n) {
+  transform: translateY(3px) rotate(-0.16deg);
 }
 
 /* Level 2: loose plates and folios begin to disagree with the page that contains them. */
-html[data-world="archive"]:is([data-pollution-level="2"], [data-pollution-level="3"])
-  .archive-pollution-stage {
-  display: block;
+html[data-world="archive"][data-pollution-level="2"] body {
+  background:
+    radial-gradient(circle at 22% 28%, rgb(112 15 28 / 18%), transparent 30rem),
+    radial-gradient(ellipse at 76% 64%, rgb(208 154 85 / 8%), transparent 34rem),
+    repeating-linear-gradient(94deg, transparent 0 41px, rgb(216 201 173 / 3%) 42px 44px),
+    var(--archive-soot);
+}
+
+html[data-world="archive"][data-pollution-level="2"] .archive-pollution-stage {
+  background:
+    linear-gradient(112deg, transparent 0 31%, rgb(118 17 30 / 13%) 31.3% 32.2%, transparent 32.5%),
+    repeating-linear-gradient(174deg, transparent 0 53px, rgb(208 154 85 / 5%) 54px 56px);
+}
+
+html[data-world="archive"][data-pollution-level="2"] .archive-pollution-stage::before {
+  top: var(--pollution-proof-block);
+  left: var(--pollution-proof-inline);
+  width: min(58vw, 720px);
+  height: min(48vh, 430px);
+  border: 4px double rgb(186 128 66 / 31%);
+  background:
+    linear-gradient(77deg, transparent 0 47%, rgb(119 17 30 / 18%) 47.5% 49.3%, transparent 49.8%),
+    repeating-linear-gradient(0deg, transparent 0 31px, rgb(216 201 173 / 7%) 32px 34px),
+    rgb(14 8 8 / 32%);
+  box-shadow:
+    var(--pollution-shift-strong-x) var(--pollution-shift-strong-y) 0 rgb(111 15 29 / 18%),
+    0 0 0 11px rgb(8 5 5 / 24%),
+    0 28px 86px rgb(0 0 0 / 48%);
+  transform: rotate(var(--pollution-composition-angle));
+}
+
+html[data-world="archive"][data-pollution-level="2"] .archive-pollution-stage::after {
+  top: calc(var(--pollution-proof-block) + 17vh);
+  left: var(--pollution-redaction-inline);
+  width: var(--pollution-redaction-width);
+  height: 1rem;
+  background: rgb(9 5 5 / 86%);
+  box-shadow:
+    var(--pollution-shift-x) 0 rgb(137 18 34 / 38%),
+    0 2.2rem 0 rgb(9 5 5 / 72%),
+    calc(0px - var(--pollution-shift-x)) 4.1rem 0 rgb(9 5 5 / 45%);
+  transform: rotate(var(--pollution-composition-counter-angle));
 }
 
 html[data-world="archive"]:is([data-pollution-level="2"], [data-pollution-level="3"])
@@ -180,6 +327,74 @@ html[data-world="archive"]:is([data-pollution-level="2"], [data-pollution-level=
       rgb(117 24 34 / 15%),
     0 26px 72px rgb(0 0 0 / 38%);
   transform: rotate(var(--pollution-counter-tilt));
+}
+
+html[data-world="archive"][data-pollution-level="2"]
+  :is(
+    [data-pollution-slot="heading"],
+    [data-pollution-slot="notice"],
+    [data-pollution-slot="register"],
+    [data-pollution-slot="search-result"]
+  )::after {
+  position: absolute;
+  z-index: 2;
+  top: 48%;
+  left: var(--pollution-redaction-inline);
+  width: min(var(--pollution-redaction-width), 15rem);
+  height: 0.58em;
+  background: rgb(12 7 7 / 80%);
+  box-shadow: var(--pollution-shift-soft-x) 1px rgb(142 21 35 / 35%);
+  content: "";
+  transform: rotate(var(--pollution-composition-soft-angle));
+  pointer-events: none;
+}
+
+html[data-world="archive"][data-pollution-level="2"]
+  :is([data-pollution-slot="record"], [data-pollution-slot="company-record"]) {
+  transform: translate(var(--pollution-shift-x), 5px)
+    rotate(var(--pollution-composition-soft-angle));
+}
+
+html[data-world="archive"][data-pollution-level="2"]
+  [data-pollution-slot="record-list"]
+  > :nth-child(3n + 1) {
+  transform: translate(var(--pollution-shift-x), 6px) rotate(var(--pollution-composition-angle));
+}
+
+html[data-world="archive"][data-pollution-level="2"]
+  [data-pollution-slot="record-list"]
+  > :nth-child(3n + 2) {
+  transform: translate(calc(0px - var(--pollution-shift-x)), -4px)
+    rotate(var(--pollution-composition-counter-angle));
+}
+
+html[data-world="archive"][data-pollution-level="2"][data-pollution-composition="2"]
+  [data-pollution-slot="poster"]
+  .archive-poster__image {
+  transform: scaleX(-1) scale(1.035) translate(var(--pollution-shift-soft-x), 0);
+}
+
+html[data-page-type="home"][data-pollution-level="2"] .archive-pollution-stage__plate {
+  top: 9%;
+  right: -5vw;
+}
+
+html:is([data-page-type="performance-list"], [data-page-type="performance-history"])[data-pollution-level="2"]
+  .archive-pollution-stage__plate {
+  top: 28%;
+  right: -12vw;
+}
+
+html:is([data-page-type="performance-detail"], [data-page-type="production-detail"])[data-pollution-level="2"]
+  .archive-pollution-stage__folio {
+  bottom: 24%;
+  left: -11vw;
+}
+
+html:is([data-page-type="search"], [data-page-type="tickets"])[data-pollution-level="2"]
+  .archive-pollution-stage__folio {
+  bottom: 31%;
+  left: -2vw;
 }
 
 html[data-world="archive"]:is([data-pollution-level="2"], [data-pollution-level="3"])

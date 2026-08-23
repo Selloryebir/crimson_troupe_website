@@ -48,6 +48,18 @@ function archivePath(routePrefix, segment = '') {
   return `/${routePrefix}/archive/site/${currentArchiveSnapshot.routeSegment}/${suffix}`;
 }
 
+function pollutionStateForComposition(level, pageType, pathname, composition) {
+  for (let eventCount = Math.max(3, level + 2); eventCount <= 30; eventCount += 1) {
+    for (const variant of [0, 1, 2]) {
+      const state = { version: 2, level, eventCount, variant };
+      if (derivePollutionComposition(state, pageType, pathname) === composition) {
+        return state;
+      }
+    }
+  }
+  throw new Error(`无法为污染等级 ${level} / 构图 ${composition} 派生测试状态`);
+}
+
 async function assertArchiveProjectionList(page, expectedCount, label) {
   const cards = page.locator('.archive-performance-list > li');
   assert.equal(await cards.count(), expectedCount, `${label} 的记录数量不得改变`);
@@ -396,43 +408,121 @@ try {
   const assertArchiveVisualErrors = trackUnexpectedErrors(archiveVisualPage);
   await archiveVisualPage.goto(`${origin}${archivePath('yan')}`);
   const visualLayer = archiveVisualPage.locator('[data-pollution-visual-layer]');
-  for (const [level, expectedLayerDisplay, expectedEchoDisplay] of [
-    [0, 'none', 'none'],
-    [1, 'none', 'none'],
-    [2, 'block', 'none'],
-  ]) {
-    await archiveVisualPage.evaluate((nextLevel) => {
-      sessionStorage.setItem(
-        'crimson-troupe:archive-pollution:v2',
-        JSON.stringify({ version: 2, level: nextLevel, eventCount: nextLevel + 2, variant: 0 }),
-      );
-    }, level);
-    await archiveVisualPage.reload();
-    await archiveVisualPage.locator(`html[data-pollution-level="${level}"]`).waitFor();
-    assert.equal(
-      await archiveVisualPage.locator('html').getAttribute('data-pollution-composition'),
-      String(
-        derivePollutionComposition(
-          { version: 2, level, eventCount: level + 2, variant: 0 },
-          'home',
-          archivePath('yan'),
-        ),
-      ),
-      `污染等级 ${level} 应使用状态和页面路径派生构图`,
+  await archiveVisualPage.evaluate(() => {
+    sessionStorage.setItem(
+      'crimson-troupe:archive-pollution:v2',
+      JSON.stringify({ version: 2, level: 0, eventCount: 0, variant: 0 }),
     );
-    assert.equal(
-      await visualLayer.evaluate((element) => window.getComputedStyle(element).display),
-      expectedLayerDisplay,
-      `污染等级 ${level} 的页面框景显示不正确`,
-    );
-    assert.equal(
+  });
+  await archiveVisualPage.reload();
+  await archiveVisualPage.locator('html[data-pollution-level="0"]').waitFor();
+  assert.equal(
+    await visualLayer.evaluate((element) => window.getComputedStyle(element).display),
+    'none',
+    '污染等级 0 不得显示污染框景',
+  );
+  const compositionTransforms = { 1: new Set(), 2: new Set() };
+  for (const level of [1, 2]) {
+    for (const composition of [0, 1, 2]) {
+      const state = pollutionStateForComposition(level, 'home', archivePath('yan'), composition);
+      await archiveVisualPage.evaluate((nextState) => {
+        sessionStorage.setItem('crimson-troupe:archive-pollution:v2', JSON.stringify(nextState));
+      }, state);
+      await archiveVisualPage.reload();
       await archiveVisualPage
-        .locator('.archive-pollution-stage__echoes')
-        .evaluate((element) => window.getComputedStyle(element).display),
-      expectedEchoDisplay,
-      `污染等级 ${level} 不得提前显示等级 3 文字副本`,
+        .locator(
+          `html[data-pollution-level="${level}"][data-pollution-composition="${composition}"]`,
+        )
+        .waitFor();
+      assert.equal(
+        await visualLayer.evaluate((element) => window.getComputedStyle(element).display),
+        'block',
+        `污染等级 ${level} / 构图 ${composition} 应显示页面框景`,
+      );
+      assert.equal(
+        await archiveVisualPage
+          .locator('.archive-pollution-stage__echoes')
+          .evaluate((element) => window.getComputedStyle(element).display),
+        'none',
+        `污染等级 ${level} / 构图 ${composition} 不得提前显示等级 3 文字副本`,
+      );
+      const stageProof = await visualLayer.evaluate((element) => {
+        const proof = window.getComputedStyle(element, '::before');
+        return {
+          content: proof.content,
+          transform: proof.transform,
+          width: Number.parseFloat(proof.width),
+        };
+      });
+      assert.notEqual(stageProof.content, 'none', `污染等级 ${level} 应具有档案错版证明`);
+      assert.ok(stageProof.width > 100, `污染等级 ${level} 的错版证明应清楚可见`);
+      compositionTransforms[level].add(stageProof.transform);
+      assert.notEqual(
+        await archiveVisualPage
+          .locator('[data-pollution-slot="record-list"] > :nth-child(2)')
+          .evaluate((element) => window.getComputedStyle(element).boxShadow),
+        'none',
+        `污染等级 ${level} 应在真实记录列表留下印版痕迹`,
+      );
+    }
+    assert.equal(
+      compositionTransforms[level].size,
+      3,
+      `污染等级 ${level} 应提供三种可辨识且同强度的构图族`,
     );
   }
+  for (const duty of [
+    {
+      pageType: 'performance-list',
+      path: archivePath('yan', 'performances'),
+      target: '[data-pollution-slot="record-list"]',
+    },
+    {
+      pageType: 'search',
+      path: `${archivePath('yan', 'search')}?q=${encodeURIComponent('湖中')}`,
+      target: '[data-pollution-slot="search-result"]',
+    },
+    {
+      pageType: 'tickets',
+      path: archivePath('yan', 'tickets'),
+      target: '[data-pollution-slot="ticket-record"]',
+    },
+  ]) {
+    const state = pollutionStateForComposition(2, duty.pageType, duty.path.split('?')[0], 1);
+    await archiveVisualPage.goto(`${origin}${duty.path}`);
+    await archiveVisualPage.evaluate((nextLevel) => {
+      sessionStorage.setItem('crimson-troupe:archive-pollution:v2', JSON.stringify(nextLevel));
+    }, state);
+    await archiveVisualPage.reload();
+    await archiveVisualPage
+      .locator('html[data-pollution-level="2"][data-pollution-composition="1"]')
+      .waitFor();
+    const dutyTarget = archiveVisualPage.locator(duty.target).first();
+    await dutyTarget.waitFor();
+    assert.equal(
+      await dutyTarget.evaluate((element) => window.getComputedStyle(element).position),
+      'relative',
+      `${duty.pageType} 应提供真实页面污染作用点`,
+    );
+    if (duty.pageType === 'performance-list') {
+      assert.notEqual(
+        await dutyTarget
+          .locator(':scope > :first-child')
+          .evaluate((element) => window.getComputedStyle(element).transform),
+        'none',
+        '演出列表应在二级污染中形成记录间空间矛盾',
+      );
+    } else {
+      assert.notEqual(
+        await dutyTarget.evaluate((element) => window.getComputedStyle(element).outlineStyle),
+        'none',
+        `${duty.pageType} 应显示档案错版轮廓`,
+      );
+    }
+  }
+  await archiveVisualPage.setViewportSize({ width: 320, height: 800 });
+  await assertNoHorizontalLoss(archiveVisualPage, '320px 炎国二级污染静态席位页');
+  await archiveVisualPage.setViewportSize({ width: 1280, height: 900 });
   await archiveVisualPage.evaluate(() => {
     sessionStorage.setItem(
       'crimson-troupe:archive-pollution:v2',
