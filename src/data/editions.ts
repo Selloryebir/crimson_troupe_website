@@ -98,10 +98,14 @@ export type Edition = (typeof editions)[EditionId];
 export const releaseEditionIds = ['yan'] as const satisfies readonly EditionId[];
 export const previewEditionIds = [
   'yan',
+  'victoria',
+  'ursus',
+  'siracusa',
+  'minos',
+  'leithanien',
+  'kazimierz',
   'higashi',
   'columbia',
-  'minos',
-  'ursus',
 ] as const satisfies readonly EditionId[];
 
 export type BuildEditionId = (typeof previewEditionIds)[number];
@@ -113,11 +117,11 @@ export const buildProfile = readBuildProfile();
 export const buildContext = getBuildContext(buildContexts, buildProfile);
 assertContentContextEligible(buildContext, currentRootSet);
 
-export const buildEditionIds = buildContext.editionIds as readonly BuildEditionId[];
+export const buildEditionIds = buildContext.editionIds;
 export const builtEditions: readonly BuiltEdition[] = buildEditionIds.map(
   (editionId) => editions[editionId],
 );
 
 export function isBuiltEditionId(editionId: EditionId): editionId is BuildEditionId {
-  return previewEditionIds.includes(editionId as BuildEditionId);
+  return previewEditionIds.includes(editionId);
 }

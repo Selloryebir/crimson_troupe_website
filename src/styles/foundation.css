@@ -49,9 +49,16 @@ html {
   scroll-behavior: smooth;
 }
 
-html:lang(en-US) {
+html:lang(en-US),
+html:lang(en-GB),
+html:lang(it),
+html:lang(de),
+html:lang(pl) {
   --serif: var(--serif-latin);
   --sans: var(--sans-latin);
+
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 html:lang(ja-JP) {
@@ -302,7 +309,16 @@ a {
   font-family: var(--sans-ja);
 }
 
-:is(.edition-selector, .current-language) :is([lang="en-US"], [lang="el"], [lang="ru"]) {
+:is(.edition-selector, .current-language)
+  :is(
+    [lang="en-US"],
+    [lang="en-GB"],
+    [lang="it"],
+    [lang="de"],
+    [lang="pl"],
+    [lang="el"],
+    [lang="ru"]
+  ) {
   font-family: var(--sans-latin);
 }
 

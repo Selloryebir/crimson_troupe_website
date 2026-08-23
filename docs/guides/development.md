@@ -52,17 +52,17 @@ npm run quality -- --plan docs/blueprint/modules/search.md
 | `npm run quality:full`              | 执行一次蓝图、类型、代码、样式与全仓格式检查，不执行构建 |
 | `npm run build`                     | 只生成 `dist/`，不调用质量命令                           |
 | `npm run build:showcase`            | 显式生成炎国未批准展示产物                               |
-| `npm run build:preview`             | 生成当前五国家版本预览产物                               |
+| `npm run build:preview`             | 生成当前九国家版本预览产物                               |
 | `npm run build:release`             | 生成批准内容正式产物；当前应因无批准内容而停止           |
-| `npm run validate:content`          | 检查五国家版本内容闭包、源修订、素材摘要与批准漂移       |
+| `npm run validate:content`          | 检查九国家版本内容闭包、源修订、素材摘要与批准漂移       |
 | `npm run validate:content:showcase` | 只对炎国展示集合执行同一聚焦内容门禁                     |
-| `npm run validate:content:preview`  | 显式对五国家版本预览执行同一聚焦内容门禁                 |
+| `npm run validate:content:preview`  | 显式对九国家版本预览执行同一聚焦内容门禁                 |
 | `npm run validate:content:release`  | 对正式集合执行内容门禁；当前应列出全部无批准摘要对象     |
 | `npm run validate:states`           | 确定性检查污染、票务状态与纪念票字段                     |
 | `npm run validate:locales`          | 检查默认炎国 `showcase` 的本地化覆盖                     |
-| `npm run validate:locales:preview`  | 检查五国家版本预览构建的本地化覆盖                       |
+| `npm run validate:locales:preview`  | 检查九国家版本预览构建的本地化覆盖                       |
 | `npm run validate:build`            | 检查已生成页面的路由、元数据、链接、资源与发布范围       |
-| `npm run validate:build:preview`    | 检查五国家版本预览产物的路由、元数据、链接与隔离范围     |
+| `npm run validate:build:preview`    | 检查九国家版本预览产物的路由、元数据、链接与隔离范围     |
 | `npm run validate:browser:preview`  | 对已生成 preview 运行单一代表性浏览器冒烟矩阵            |
 | `npm run verify`                    | 依次执行完整质量、状态、一次构建与静态产物门禁           |
 | `npm run lint:code:fix`             | 自动修复 ESLint 明确支持的代码问题                       |
