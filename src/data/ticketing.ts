@@ -42,6 +42,10 @@ export function getTicketingOptions(
       performance.productionIds[0],
       snapshot,
     );
+    const { seatingPlanId } = performance.ticketAvailability;
+    if (!seatingPlanId) {
+      throw new Error(`表站可售场次 ${performance.performanceId} 缺少分区示意。`);
+    }
     return [
       {
         performanceId: performance.performanceId,
@@ -51,7 +55,7 @@ export function getTicketingOptions(
         dateTime: performance.dateTime.display,
         place: performance.place,
         visual: leadProduction.visual,
-        seatingPlanId: performance.ticketAvailability.seatingPlanId,
+        seatingPlanId,
         offers: performance.ticketAvailability.offers.map((offer) => ({
           ...offer,
           label: localization.programs.ticketZones[offer.zone],

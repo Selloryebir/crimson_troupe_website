@@ -12,15 +12,16 @@ interface Props {
   localization: ResolvedLocalization;
   performances: ResolvedPerformance[];
   emptyMessage: string;
+  variant?: 'catalog' | 'home-editorial';
 }
 
-const { localization, performances, emptyMessage } = Astro.props;
+const { localization, performances, emptyMessage, variant = 'catalog' } = Astro.props;
 const { edition, messages } = localization;
 ---
 
 {
   performances.length > 0 ? (
-    <ol class="archive-performance-list">
+    <ol class:list={['archive-performance-list', `archive-performance-list--${variant}`]}>
       {performances.map((performance) => {
         const leadProduction = getLocalizedProduction(localization, performance.productionIds[0]);
         return (

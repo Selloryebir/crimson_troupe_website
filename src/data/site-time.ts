@@ -1,3 +1,4 @@
+import { currentArchiveSnapshot } from './archive-snapshots.ts';
 import type { BuildContext, SiteClockStrategy } from './content/build-context.ts';
 import type { PerformanceCollection, TerraDateTime } from './performances.ts';
 import type { SiteWorld } from './site-routes.ts';
@@ -10,17 +11,11 @@ const fixedSiteTimes = Object.freeze({
     day: 1,
     time: '00:00',
   }),
-  archive: Object.freeze({
-    calendar: 'terra',
-    year: 1091,
-    month: 7,
-    day: 1,
-    time: '00:00',
-  }),
-} as const satisfies Record<SiteWorld, TerraDateTime>);
+} as const satisfies Record<'front', TerraDateTime>);
 
 function resolveFixedSiteTime(world: SiteWorld): TerraDateTime {
-  const value = Object.freeze({ ...fixedSiteTimes[world] });
+  const source = world === 'archive' ? currentArchiveSnapshot.capturedAt : fixedSiteTimes.front;
+  const value = Object.freeze({ ...source });
   assertTerraDateTime(value, `${world} fixed site time`);
   return value;
 }

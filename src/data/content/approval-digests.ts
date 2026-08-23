@@ -126,7 +126,8 @@ function createPerformanceApprovalDigest(
     ]),
   );
   const seatingPlan =
-    performance.ticketAvailability.state === 'on-sale'
+    performance.ticketAvailability.state === 'on-sale' &&
+    performance.ticketAvailability.seatingPlanId
       ? sources.seatingPlans[performance.ticketAvailability.seatingPlanId]
       : undefined;
 

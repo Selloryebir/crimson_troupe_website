@@ -30,9 +30,12 @@ export const minosMessages = {
     emptyBasket: 'Δεν έχουν επιλεγεί παραστάσεις',
     selectionReady: 'Η παράσταση και η ζώνη θέσεων βρίσκονται στο καλάθι.',
     selectionRequired: 'Επιλέξτε τουλάχιστον μία παράσταση για να συνεχίσετε.',
+    zonePreview: 'Προβολή: {zone} · {price} LMD. Δεν έχει προστεθεί στο καλάθι.',
+    zoneInBasket: 'Στο καλάθι: {zone} · {price} LMD.',
     seatingPlanSummary: 'Προβολή Σκηνής και Ζωνών',
     seatingPlanAria: 'Σκηνή και ζώνες θέσεων για το {title}',
     stageDirection: 'ΣΚΗΝΗ',
+    seatingLevelLabel: 'Επίπεδο {level}',
     seatingPlanNotice:
       'Μόνο διάγραμμα ζωνών, όχι επιλογή μεμονωμένης θέσης. Το διάγραμμα και ο επιλογέας χρησιμοποιούν τις ίδιες τιμές.',
     selectSeatingZone: 'Επιλογή {zone}, βασική τιμή {price} LMD',

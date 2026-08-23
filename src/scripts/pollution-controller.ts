@@ -1,3 +1,4 @@
+import { currentArchiveSnapshot } from '../data/archive-snapshots.ts';
 import {
   advancePollution,
   createPollutionState,
@@ -157,6 +158,16 @@ function isPlainCurrentTabClick(event: MouseEvent, anchor: HTMLAnchorElement): b
   );
 }
 
+function isCurrentArchivePath(pathname: string): boolean {
+  const [, routePrefix, archiveSegment, siteSegment, snapshotSegment] = pathname.split('/');
+  return (
+    Boolean(routePrefix) &&
+    archiveSegment === 'archive' &&
+    siteSegment === 'site' &&
+    snapshotSegment === currentArchiveSnapshot.routeSegment
+  );
+}
+
 function getNavigationType(): PerformanceNavigationTiming['type'] | 'navigate' {
   try {
     const entry = performance.getEntriesByType('navigation')[0] as
@@ -256,8 +267,7 @@ export function initPollutionController(): void {
 
       const target = new URL(anchor.href, window.location.href);
       const isSameOriginArchive =
-        target.origin === window.location.origin &&
-        /^\/[^/]+\/archive\/site\/1091\//.test(target.pathname);
+        target.origin === window.location.origin && isCurrentArchivePath(target.pathname);
       const isSameDocument =
         target.pathname === window.location.pathname && target.search === window.location.search;
       if (!isSameOriginArchive || isSameDocument) {
