@@ -113,12 +113,36 @@ async function assertArchiveVisualLayer(page, label, reducedMotion = false) {
   );
   const taskControls = page.locator('main a:visible, main button:visible, main select:visible');
   assert.ok(await taskControls.count(), `${label} 应保留可操作的任务层`);
+  assert.ok(
+    await taskControls.evaluateAll((elements) =>
+      elements.some((element) => window.getComputedStyle(element).transform !== 'none'),
+    ),
+    `${label} 的非保护叙事控件应参与有界空间失序`,
+  );
   assert.equal(
     await taskControls.evaluateAll((elements) =>
+      elements.every((element) => {
+        const bounds = element.getBoundingClientRect();
+        return (
+          bounds.width > 0 &&
+          bounds.height > 0 &&
+          window.getComputedStyle(element).pointerEvents !== 'none'
+        );
+      }),
+    ),
+    true,
+    `${label} 的叙事控件在失序后仍应具有可命中的真实区域`,
+  );
+  const protectedControls = page.locator(
+    '[data-pollution-safe] a:visible, [data-pollution-safe] button:visible, [data-pollution-safe] summary:visible',
+  );
+  assert.ok(await protectedControls.count(), `${label} 应保留显式污染保护控件`);
+  assert.equal(
+    await protectedControls.evaluateAll((elements) =>
       elements.every((element) => window.getComputedStyle(element).transform === 'none'),
     ),
     true,
-    `${label} 的真实交互控件必须保持直立`,
+    `${label} 的主导航、国家版本与退出控件不得空间失序`,
   );
   if (reducedMotion) {
     assert.equal(
@@ -523,6 +547,41 @@ try {
   await archiveVisualPage.setViewportSize({ width: 320, height: 800 });
   await assertNoHorizontalLoss(archiveVisualPage, '320px 炎国二级污染静态席位页');
   await archiveVisualPage.setViewportSize({ width: 1280, height: 900 });
+  await archiveVisualPage.goto(`${origin}${archivePath('yan')}`);
+  const collapseTransforms = new Set();
+  for (const composition of [0, 1, 2]) {
+    const state = pollutionStateForComposition(3, 'home', archivePath('yan'), composition);
+    await archiveVisualPage.evaluate((nextState) => {
+      sessionStorage.setItem('crimson-troupe:archive-pollution:v2', JSON.stringify(nextState));
+    }, state);
+    await archiveVisualPage.reload();
+    await archiveVisualPage
+      .locator(`html[data-pollution-level="3"][data-pollution-composition="${composition}"]`)
+      .waitFor();
+    collapseTransforms.add(
+      await archiveVisualPage
+        .locator('main')
+        .evaluate((element) => window.getComputedStyle(element, '::before').transform),
+    );
+    assert.notEqual(
+      await archiveVisualPage
+        .locator('main .button')
+        .first()
+        .evaluate((element) => window.getComputedStyle(element).transform),
+      'none',
+      `三级污染构图 ${composition} 应让非保护叙事控件参与空间失序`,
+    );
+    assert.equal(
+      await archiveVisualPage
+        .locator('.main-nav a, .header-tools summary, .header-tools a, [data-world-switch="front"]')
+        .evaluateAll((elements) =>
+          elements.every((element) => window.getComputedStyle(element).transform === 'none'),
+        ),
+      true,
+      `三级污染构图 ${composition} 不得扭曲保护能力`,
+    );
+  }
+  assert.equal(collapseTransforms.size, 3, '三级污染应提供三种同强度的页面环境接管构图');
   await archiveVisualPage.evaluate(() => {
     sessionStorage.setItem(
       'crimson-troupe:archive-pollution:v2',
@@ -903,6 +962,13 @@ try {
     expectedArchiveCurrentCount,
     '三级污染里站本季演出',
   );
+  assert.notEqual(
+    await archivePage
+      .locator('[data-pollution-slot="record-list"] > :first-child')
+      .evaluate((element) => window.getComputedStyle(element).transform),
+    'none',
+    '三级污染演出列表应形成记录间空间失序',
+  );
   await archivePage.goto(`${origin}${archivePath('yan', 'performances/history')}`);
   await assertArchiveProjectionList(
     archivePage,
@@ -931,6 +997,13 @@ try {
       .evaluate((element) => window.getComputedStyle(element).display),
     'none',
     '场次详情不应同时显示等级 0 标题',
+  );
+  assert.notEqual(
+    await archivePage
+      .locator('[data-pollution-slot="record"]')
+      .evaluate((element) => window.getComputedStyle(element).transform),
+    'none',
+    '三级污染场次详情应让记录物件脱离稳定框景',
   );
   const programLinks = archivePage.locator('.program-order a[data-archive-invitation-trigger]');
   assert.ok(await programLinks.count(), '场次详情应保留受控的原剧目关联入口');
@@ -972,6 +1045,13 @@ try {
     officeCount,
     '剧团页职责应逐项收束',
   );
+  assert.notEqual(
+    await archivePage
+      .locator('[data-pollution-slot="company-record"]')
+      .evaluate((element) => window.getComputedStyle(element).transform),
+    'none',
+    '三级污染剧团名册应脱离稳定框景',
+  );
   const companyInvitationTrigger = archivePage.locator(
     '.archive-company [data-archive-invitation-trigger]',
   );
@@ -1012,6 +1092,13 @@ try {
     1,
     '三级污染搜索标题应收束为同一回应',
   );
+  assert.notEqual(
+    await archivePage
+      .locator('[data-pollution-slot="search"]')
+      .evaluate((element) => window.getComputedStyle(element).transform),
+    'none',
+    '三级污染搜索工作区应参与页面环境失序',
+  );
   const projectedSearchLink = projectedSearchResults
     .locator('a[data-archive-invitation-trigger][href]')
     .first();
@@ -1033,6 +1120,13 @@ try {
   );
   const projectedSeatSelect = projectedSeatEntries.locator('select').first();
   assert.equal(await projectedSeatSelect.isEnabled(), true, '投影不得破坏静态分区选择');
+  assert.notEqual(
+    await archivePage
+      .locator('[data-pollution-slot="ticket-record"]')
+      .evaluate((element) => window.getComputedStyle(element).transform),
+    'none',
+    '三级污染席位登记应参与页面环境失序',
+  );
   const projectedSettlement = archivePage.locator(
     '.archive-settlement[data-archive-projection-level3]:visible',
   );
