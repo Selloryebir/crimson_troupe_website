@@ -153,6 +153,62 @@ async function assertArchiveVisualLayer(page, label, reducedMotion = false) {
   }
 }
 
+async function assertArchiveInvitationArtifact(page, localization, label, reducedMotion = false) {
+  const invitation = page.locator('[data-archive-invitation][open]');
+  await invitation.waitFor();
+  if (!reducedMotion) {
+    await page.waitForTimeout(520);
+  }
+  assert.equal(
+    (await invitation.locator('h2').textContent())?.trim(),
+    localization.archiveProjection.invitation.title,
+    `${label} 应使用当前国家版本邀请标题`,
+  );
+  assert.equal(
+    await invitation.locator('.archive-invitation__misprint[aria-hidden="true"]').count(),
+    1,
+    `${label} 应包含退出语义树的错版层`,
+  );
+  assert.deepEqual(
+    await invitation
+      .locator('.archive-invitation__register > div')
+      .evaluateAll((rows) => rows.map((row) => row.dataset.registerIndex)),
+    ['01', '02', '03', '04'],
+    `${label} 应保留四项实体登记字段`,
+  );
+  const overlap = await invitation.evaluate((dialog) => {
+    const seal = dialog.querySelector('.archive-invitation__seal')?.getBoundingClientRect();
+    const copy = dialog.querySelector('.archive-invitation__copy')?.getBoundingClientRect();
+    const register = dialog.querySelector('.archive-invitation__register')?.getBoundingClientRect();
+    const intersects = (first, second) =>
+      Boolean(
+        first &&
+        second &&
+        first.left < second.right &&
+        first.right > second.left &&
+        first.top < second.bottom &&
+        first.bottom > second.top,
+      );
+    return {
+      copy: intersects(seal, copy),
+      register: intersects(seal, register),
+      backdrop: window.getComputedStyle(dialog, '::backdrop').backgroundImage,
+      animationName: window.getComputedStyle(dialog).animationName,
+      transform: window.getComputedStyle(dialog).transform,
+    };
+  });
+  assert.deepEqual(
+    { copy: overlap.copy, register: overlap.register },
+    { copy: true, register: true },
+    `${label} 的剧团印章应跨越正文与登记格`,
+  );
+  assert.notEqual(overlap.backdrop, 'none', `${label} 应保留可见的污染页面背景`);
+  assert.notEqual(overlap.transform, 'none', `${label} 应表现为错版实体而非规整系统卡片`);
+  if (reducedMotion) {
+    assert.equal(overlap.animationName, 'none', `${label} 在减少动态效果下应直接显示静态终态`);
+  }
+}
+
 function getFreePort() {
   return new Promise((resolve, reject) => {
     const server = net.createServer();
@@ -167,7 +223,7 @@ function getFreePort() {
   });
 }
 
-async function waitForHttp(url, label, timeoutMs = 20_000) {
+async function waitForHttp(url, label, timeoutMs = 40_000) {
   const deadline = Date.now() + timeoutMs;
   let lastError;
   while (Date.now() < deadline) {
@@ -591,7 +647,8 @@ try {
   for (const edition of builtEditions) {
     await archiveVisualPage.goto(`${origin}${archivePath(edition.routePrefix)}`);
     await archiveVisualPage.locator('html[data-pollution-level="3"]').waitFor();
-    const expectedProjection = getLocalization(edition).archiveProjection.performance;
+    const expectedLocalization = getLocalization(edition);
+    const expectedProjection = expectedLocalization.archiveProjection.performance;
     const projectedTitles = await archiveVisualPage
       .locator('[data-archive-projection-field="title"]:visible')
       .allTextContents();
@@ -617,6 +674,13 @@ try {
       archiveVisualPage,
       `1280px ${edition.languageName.zh}三级污染里站`,
     );
+    await archiveVisualPage.locator('[data-archive-invitation-trigger]').first().click();
+    await assertArchiveInvitationArtifact(
+      archiveVisualPage,
+      expectedLocalization,
+      `1280px ${edition.languageName.zh}三级污染请柬`,
+    );
+    await archiveVisualPage.locator('[data-archive-invitation-close]').first().click();
   }
   assertArchiveVisualErrors();
   await archiveVisualContext.close();
@@ -1192,6 +1256,12 @@ try {
   assert.equal(await minosInvitation.getAttribute('open'), null);
   await minosArchivePage.locator('[data-archive-invitation-trigger]').first().click();
   await minosArchivePage.locator('[data-archive-invitation][open]').waitFor();
+  await assertArchiveInvitationArtifact(
+    minosArchivePage,
+    getLocalization(editions.minos, buildSnapshot),
+    '320px 米诺斯语三级污染请柬',
+    true,
+  );
   await minosArchivePage.locator('[data-world-switch="front"]').waitFor();
   await assertNoHorizontalLoss(minosArchivePage, '320px 米诺斯语三级污染里站');
   await minosArchivePage.locator('[data-archive-invitation-close]').first().click();

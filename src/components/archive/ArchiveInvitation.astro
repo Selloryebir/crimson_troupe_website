@@ -1,6 +1,7 @@
 ---
 import type { ArchivePollutionProfile } from '../../data/archive-pollution';
 import type { ArchiveProjectionContent } from '../../data/localized/schema';
+import TroupeMark from '../shared/TroupeMark.astro';
 
 interface Props {
   content: ArchiveProjectionContent;
@@ -22,6 +23,15 @@ const view = content.views[profile];
   aria-describedby="archive-invitation-summary archive-invitation-closing"
 >
   <div class="archive-invitation__frame">
+    <div class="archive-invitation__misprint" aria-hidden="true">
+      <span class="archive-invitation__overprint archive-invitation__overprint--register">
+        {content.performance.registerCode}
+      </span>
+      <span class="archive-invitation__overprint archive-invitation__overprint--response">
+        {view.eyebrow}
+      </span>
+      <i></i><b></b><em></em>
+    </div>
     <button
       class="archive-invitation__corner-close"
       type="button"
@@ -41,11 +51,18 @@ const view = content.views[profile];
       </p>
     </div>
     <dl class="archive-invitation__register">
-      <div><dt>{invitation.roleLabel}</dt><dd>{invitation.role}</dd></div>
-      <div><dt>{invitation.productionLabel}</dt><dd>{invitation.production}</dd></div>
-      <div><dt>{invitation.venueLabel}</dt><dd>{invitation.venue}</dd></div>
-      <div><dt>{invitation.attendanceLabel}</dt><dd>{invitation.attendance}</dd></div>
+      <div data-register-index="01"><dt>{invitation.roleLabel}</dt><dd>{invitation.role}</dd></div>
+      <div data-register-index="02">
+        <dt>{invitation.productionLabel}</dt><dd>{invitation.production}</dd>
+      </div>
+      <div data-register-index="03">
+        <dt>{invitation.venueLabel}</dt><dd>{invitation.venue}</dd>
+      </div>
+      <div data-register-index="04">
+        <dt>{invitation.attendanceLabel}</dt><dd>{invitation.attendance}</dd>
+      </div>
     </dl>
+    <TroupeMark class="archive-invitation__seal" />
     <p id="archive-invitation-closing" class="archive-invitation__closing">
       {invitation.closing}
     </p>
