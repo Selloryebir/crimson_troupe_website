@@ -15,86 +15,86 @@ export const ursusPrograms = {
     'nuova-volsinii': { cityLabel: 'Nuova Volsinii' },
   },
   performances: {
-    'uncrowned-trimount-1098': {
+    'uncrowned-trimount-1102': {
       index: '01',
-      dateTimeDisplay: '1098.09.17 / 19:30',
+      dateTimeDisplay: '1102.09.17 / 19:30',
       venue: 'Большой театр Trimounts · Главная сцена',
       searchDetail: '17 сентября · Trimounts · Современная трагедия',
       searchKeywords: 'сентябрь Trimounts трагедия корона',
     },
-    'caged-fire-wiesheim-1098': {
+    'caged-fire-wiesheim-1102': {
       index: '02',
-      dateTimeDisplay: '1098.10.03 / 20:00',
+      dateTimeDisplay: '1102.10.03 / 20:00',
       venue: 'Придворный театр Vyseheim · Зеркальный зал',
       searchDetail: '3 октября · Vyseheim · Камерная опера',
       searchKeywords: 'октябрь Vyseheim опера огонь',
     },
-    'second-snow-norport-1098': {
+    'second-snow-norport-1102': {
       index: '03',
-      dateTimeDisplay: '1098.10.29 / 18:45',
+      dateTimeDisplay: '1102.10.29 / 18:45',
       venue: 'Старый вокзал графства Norport · Временная сцена',
       searchDetail: '29 октября · Графство Norport · Экспериментальный танцевальный театр',
       searchKeywords: 'октябрь Norport танец снег',
     },
-    'der-ring-londinium-1091-0308': {
+    'der-ring-londinium-1084-0308': {
       index: 'I',
-      dateTimeDisplay: 'Год Terra 1091 · 8 марта · 19:00',
+      dateTimeDisplay: 'Год Terra 1084 · 8 марта · 19:00',
       venue: 'Старый королевский театр Londinium · Зал зеркального озера',
       searchDetail: '8 марта · Londinium · Сокровище озера',
       searchKeywords: 'Londinium сокровище озеро зеркало март',
     },
-    'one-hundred-and-one-days-norport-1091-0419': {
+    'one-hundred-and-one-days-norport-1084-0419': {
       index: 'II',
-      dateTimeDisplay: 'Год Terra 1091 · 19 апреля · 18:30',
+      dateTimeDisplay: 'Год Terra 1084 · 19 апреля · 18:30',
       venue: 'Театр часовой башни Norport · Западная галерея',
       searchDetail: '19 апреля · Графство Norport · Сто один день',
       searchKeywords: 'Norport сто один день часы галерея апрель',
     },
-    'the-carnival-wiesheim-1091-0511': {
+    'the-carnival-wiesheim-1084-0511': {
       index: 'III',
-      dateTimeDisplay: 'Год Terra 1091 · 11 мая · 20:00',
+      dateTimeDisplay: 'Год Terra 1084 · 11 мая · 20:00',
       venue: 'Зал заката Vyseheim · Большая сцена',
       searchDetail: '11 мая · Vyseheim · Ликование',
       searchKeywords: 'Vyseheim ликование закат май',
     },
-    'ode-au-triomphe-nuova-volsinii-1091-0623': {
+    'ode-au-triomphe-nuova-volsinii-1084-0623': {
       index: 'IV',
-      dateTimeDisplay: 'Год Terra 1091 · 23 июня · 19:30',
+      dateTimeDisplay: 'Год Terra 1084 · 23 июня · 19:30',
       venue: 'Городская опера Nuova Volsinii · Главный зал',
       searchDetail: '23 июня · Nuova Volsinii · Ода триумфу',
       searchKeywords: 'Nuova Volsinii триумф городская опера июнь',
     },
-    'der-ring-zwillingsturme-1091-0817': {
+    'der-ring-zwillingsturme-1084-0817': {
       index: 'V',
-      dateTimeDisplay: 'Год Terra 1091 · 17 августа · 20:00',
+      dateTimeDisplay: 'Год Terra 1084 · 17 августа · 20:00',
       venue: 'Театр Двух Башен Zwillingstürme · Зал зеркального озера',
       searchDetail: '17 августа · Zwillingstürme · Сокровище озера',
       searchKeywords: 'Zwillingstürme сокровище озеро зеркало август',
     },
-    'one-hundred-and-one-days-londinium-1091-0903': {
+    'one-hundred-and-one-days-londinium-1084-0903': {
       index: 'VI',
-      dateTimeDisplay: 'Год Terra 1091 · 3 сентября · 19:30',
+      dateTimeDisplay: 'Год Terra 1084 · 3 сентября · 19:30',
       venue: 'Старый королевский театр Londinium · Колокольный зал',
       searchDetail: '3 сентября · Londinium · Сто один день',
       searchKeywords: 'Londinium сто один день королевский театр сентябрь',
     },
-    'the-carnival-montelupe-1091-0921': {
+    'the-carnival-montelupe-1084-0921': {
       index: 'VII',
-      dateTimeDisplay: 'Год Terra 1091 · 21 сентября · 20:00',
+      dateTimeDisplay: 'Год Terra 1084 · 21 сентября · 20:00',
       venue: 'Центральный театр Montelupe · Пиршественный зал',
       searchDetail: '21 сентября · Montelupe · Ликование',
       searchKeywords: 'Montelupe ликование пир сентябрь',
     },
-    'the-carnival-londinium-1091-1009': {
+    'the-carnival-londinium-1084-1009': {
       index: 'VIII',
-      dateTimeDisplay: 'Год Terra 1091 · 9 октября · 19:00',
+      dateTimeDisplay: 'Год Terra 1084 · 9 октября · 19:00',
       venue: 'Старый королевский театр Londinium · Главная сцена',
       searchDetail: '9 октября · Londinium · Ликование',
       searchKeywords: 'Londinium ликование королевский театр октябрь',
     },
-    'ode-au-triomphe-zwillingsturme-1091-1028': {
+    'ode-au-triomphe-zwillingsturme-1084-1028': {
       index: 'IX',
-      dateTimeDisplay: 'Год Terra 1091 · 28 октября · 18:45',
+      dateTimeDisplay: 'Год Terra 1084 · 28 октября · 18:45',
       venue: 'Театр Двух Башен Zwillingstürme · Зал золотой меры',
       searchDetail: '28 октября · Zwillingstürme · Ода триумфу',
       searchKeywords: 'Zwillingstürme триумф золотая мера октябрь',

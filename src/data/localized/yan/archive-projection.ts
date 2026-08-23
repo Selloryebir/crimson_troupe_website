@@ -6,7 +6,7 @@ export const yanArchiveProjection = {
     title: '欢欣鼓舞',
     kind: '终场演出',
     tagline: '席位仍为持柬者保留',
-    dateTime: '1091-11-11 23:49:00 · 第三次钟声以前',
+    dateTime: '1084-11-11 23:49:00 · 第三次钟声以前',
     venue: '克莱布拉松林地城堡',
     status: '恭候到场',
     registerCode: 'CT-██/INV-03',

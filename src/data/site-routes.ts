@@ -1,7 +1,7 @@
 import { currentArchiveSnapshot } from './archive-snapshots.ts';
 import type { Edition } from './editions';
 
-export const LEGACY_ARCHIVE_ROUTE_SEGMENT = '1091' as const;
+export const LEGACY_ARCHIVE_ROUTE_SEGMENT = '1084' as const;
 export type SiteWorld = 'front' | 'archive';
 
 const withTrailingSlash = (path: string) => (path.endsWith('/') ? path : `${path}/`);

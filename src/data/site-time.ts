@@ -6,9 +6,9 @@ import type { SiteWorld } from './site-routes.ts';
 const fixedSiteTimes = Object.freeze({
   front: Object.freeze({
     calendar: 'terra',
-    year: 1098,
-    month: 9,
-    day: 1,
+    year: 1102,
+    month: 4,
+    day: 15,
     time: '00:00',
   }),
 } as const satisfies Record<'front', TerraDateTime>);

@@ -6,7 +6,7 @@ export const minosArchiveProjection = {
     title: 'Η Γιορτή',
     kind: 'Τελική παράσταση',
     tagline: 'Η θέση παραμένει κρατημένη για τον κομιστή',
-    dateTime: '1091-11-11 23:49:00 · πριν από την τρίτη καμπάνα',
+    dateTime: '1084-11-11 23:49:00 · πριν από την τρίτη καμπάνα',
     venue: 'Δασικό Κάστρο Calais-Blason',
     status: 'Αναμένεται η παρουσία',
     registerCode: 'CT-██/INV-03',

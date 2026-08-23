@@ -24,17 +24,17 @@ export type ArchiveSnapshot = AvailableArchiveSnapshot | DamagedArchiveSnapshot;
 
 export const archiveSnapshots = Object.freeze([
   Object.freeze({
-    snapshotId: '1091-07-01T00:00:00',
+    snapshotId: '1084-07-01T00:00:00',
     state: 'available',
     capturedAt: Object.freeze({
       calendar: 'terra',
-      year: 1091,
+      year: 1084,
       month: 7,
       day: 1,
       time: '00:00',
     }),
-    displayCapturedAt: '1091-07-01 00:00:00',
-    routeSegment: '1091-07-01',
+    displayCapturedAt: '1084-07-01 00:00:00',
+    routeSegment: '1084-07-01',
   }),
   Object.freeze({
     snapshotId: '1093-damaged',

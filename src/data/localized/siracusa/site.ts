@@ -16,7 +16,7 @@ export const siracusaSite = {
     currentEdition: 'Edizione attuale: {language}',
     chooseEdition: "Edizione attuale: {language}. Scegli un'edizione nazionale",
     frontFooter: 'Tour, produzioni e servizi per i visitatori',
-    archiveFooter: 'Istantanea della raccolta · 1091-07-01 00:00:00',
+    archiveFooter: 'Istantanea della raccolta · 1084-07-01 00:00:00',
     archiveCatalog: 'Indice della raccolta',
     frontToArchive: 'Apri il record della raccolta',
     archiveDamaged: 'Registrazione danneggiata; non disponibile',
@@ -60,7 +60,7 @@ export const siracusaSite = {
       featuredPerformance: 'Prestazioni in primo piano: {title}, {city}',
       viewPerformance: 'Visualizza prestazioni',
       seasonStatementLabel: 'Resoconto stagionale',
-      seasonCode: "1098 / TOUR D'AUTUNNO",
+      seasonCode: "1102 / TOUR D'AUTUNNO",
       seasonNote:
         'Tre nuovi lavori arrivano a Trimounts, Vyseheim e Norport County durante il tour autunnale.',
       scheduleEyebrow: 'Programma del tour',
@@ -244,7 +244,7 @@ export const siracusaSite = {
       browsePerformances: 'Consulta questa stagione',
       troupeRegister: 'Registro delle Imprese',
       featuredPerformance: 'Primo della stagione: {title}',
-      featuredNumber: 'AUTUNNO / 1091',
+      featuredNumber: 'AUTUNNO / 1084',
       noticeEyebrow: 'Avviso di tournée · N. 91',
       noticeTitle: 'Il registro delle tournée autunnali è completo',
       notice:

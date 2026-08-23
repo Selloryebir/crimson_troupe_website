@@ -16,7 +16,7 @@ export const leithanienSite = {
     currentEdition: 'Aktuelle Ausgabe: {language}',
     chooseEdition: 'Aktuelle Ausgabe: {language}. Wählen Sie eine nationale Ausgabe',
     frontFooter: 'Führungen, Produktionen und Besucherdienste',
-    archiveFooter: 'Sammlungsschnappschuss · 1091-07-01 00:00:00',
+    archiveFooter: 'Sammlungsschnappschuss · 1084-07-01 00:00:00',
     archiveCatalog: 'Sammlungsindex',
     frontToArchive: 'Sammlungsdatensatz öffnen',
     archiveDamaged: 'Datensatz beschädigt; nicht verfügbar',
@@ -60,7 +60,7 @@ export const leithanienSite = {
       featuredPerformance: 'Empfohlene Leistung: {title}, {city}',
       viewPerformance: 'Leistung anzeigen',
       seasonStatementLabel: 'Saisonerklärung',
-      seasonCode: '1098 / HERBST-TOUR',
+      seasonCode: '1102 / HERBST-TOUR',
       seasonNote:
         'Drei neue Werke kommen während der Herbsttournee in Trimounts, Vyseheim und Norport County an.',
       scheduleEyebrow: 'Tourplan',
@@ -245,7 +245,7 @@ export const leithanienSite = {
       browsePerformances: 'Konsultieren Sie diese Saison',
       troupeRegister: 'Firmenbuch',
       featuredPerformance: 'Erster der Saison: {title}',
-      featuredNumber: 'HERBST / 1091',
+      featuredNumber: 'HERBST / 1084',
       noticeEyebrow: 'Tourhinweis · Nr. 91',
       noticeTitle: 'Das Herbsttourenregister ist vollständig',
       notice:

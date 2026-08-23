@@ -6,7 +6,7 @@ export const higashiArchiveProjection = {
     title: '歓喜',
     kind: '終演',
     tagline: '招待状の所持者の席はまだ保留されています',
-    dateTime: '1091-11-11 23:49:00 ・ 第三の鐘が鳴る前',
+    dateTime: '1084-11-11 23:49:00 ・ 第三の鐘が鳴る前',
     venue: 'カレー＝ブラゾン林地城',
     status: 'ご到着をお待ちしております',
     registerCode: 'CT-██/INV-03',

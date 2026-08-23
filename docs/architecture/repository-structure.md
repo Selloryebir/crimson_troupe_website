@@ -78,7 +78,7 @@ crimson_troupe_website/
 
 ## 当前实现快照
 
-当前源码通过默认炎国 `showcase`、九国家版本 `preview` 与显式炎国 `release` 三个有限构建预设生成同一套页面。`src/pages/index.astro` 只负责进入 `/yan/`，表站与 1091 里站使用独立页面树；`src/data/editions.ts` 拥有国家版本注册，`src/data/locations.ts`、`src/data/performances.ts` 和 `src/data/productions/` 保存语言无关事实，`src/data/localized/` 保存类型化国家版本内容包。完整基线、有序根集合、构建预设与内容资格经过唯一解析边界形成不可变构建快照，路由、页面、搜索、票务和验证器统一消费该快照；浏览器交互由 `src/scripts/` 中的原生 TypeScript 按页面装配。
+当前源码通过默认炎国 `showcase`、九国家版本 `preview` 与显式炎国 `release` 三个有限构建预设生成同一套页面。`src/pages/index.astro` 只负责进入 `/yan/`，表站与 1084 里站使用独立页面树；`src/data/editions.ts` 拥有国家版本注册，`src/data/locations.ts`、`src/data/performances.ts` 和 `src/data/productions/` 保存语言无关事实，`src/data/localized/` 保存类型化国家版本内容包。完整基线、有序根集合、构建预设与内容资格经过唯一解析边界形成不可变构建快照，路由、页面、搜索、票务和验证器统一消费该快照；浏览器交互由 `src/scripts/` 中的原生 TypeScript 按页面装配。
 
 默认 `showcase` 只包含 `yan / zh-CN`，当前生成 51 个静态页面；九国家版本 `preview` 额外包含 `victoria / en-GB`、`ursus / ru`、`siracusa / it`、`minos / el`、`leithanien / de`、`kazimierz / pl`、`higashi / ja-JP` 与 `columbia / en-US` 等价页面，共生成 451 个页面。八种目标语言内容只用于技术与视觉预览，不代表翻译已通过人工审核。当前批准摘要为空，因此 `release` 会在生成页面前列出不合格稳定 ID 并停止，不会把预览内容静默提升为正式内容。具体行为契约由 active 蓝图拥有，下文只解释源码职责与依赖方向。
 
@@ -118,7 +118,7 @@ crimson_troupe_website/
 `src/components/` 按页面与用户能力划分：
 
 - `front/`：表站场次呈现、剧目视觉和票务体验；
-- `archive/`：里站场次呈现与 1091 年代视觉；
+- `archive/`：里站场次呈现与 1084 年代视觉；
 - `shared/`：两个网站真正共享的基础结构、页脚声明和无障碍能力。
 
 只有在出现真实复用或独立职责时才增加新的能力目录；覆盖呈现不得承担本应独立路由的完整页面。

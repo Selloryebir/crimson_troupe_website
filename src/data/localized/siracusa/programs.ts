@@ -15,87 +15,87 @@ export const siracusaPrograms = {
     'nuova-volsinii': { cityLabel: 'Nuova Volsinii' },
   },
   performances: {
-    'uncrowned-trimount-1098': {
+    'uncrowned-trimount-1102': {
       index: '01',
-      dateTimeDisplay: '17/09/1098 / 19:30',
+      dateTimeDisplay: '17/09/1102 / 19:30',
       venue: 'Trimounts Grand Theatre · Palco principale',
       searchDetail: '17 settembre · Trimounts · Tragedia moderna',
       searchKeywords: 'Corona della tragedia di settembre Trimounts',
     },
-    'caged-fire-wiesheim-1098': {
+    'caged-fire-wiesheim-1102': {
       index: '02',
-      dateTimeDisplay: '3.10.1098 / 20:00',
+      dateTimeDisplay: '3.10.1102 / 20:00',
       venue: 'Teatro di corte di Vyseheim · Sala degli specchi',
       searchDetail: '3 ottobre · Vyseheim · Opera da camera',
       searchKeywords: "Ottobre Incendio dell'opera di Vyseheim",
     },
-    'second-snow-norport-1098': {
+    'second-snow-norport-1102': {
       index: '03',
-      dateTimeDisplay: '29.10.1098 / 18:45',
+      dateTimeDisplay: '29.10.1102 / 18:45',
       venue: 'Vecchia stazione della contea di Norport · Stadio temporaneo',
       searchDetail: '29 ottobre · Contea di Norport · Teatro danza sperimentale',
       searchKeywords: 'Ottobre Norport balla la neve',
     },
-    'der-ring-londinium-1091-0308': {
+    'der-ring-londinium-1084-0308': {
       index: 'I',
-      dateTimeDisplay: 'Anno Terra 1091 · 8 marzo · 19:00',
+      dateTimeDisplay: 'Anno Terra 1084 · 8 marzo · 19:00',
       venue: 'Vecchio teatro reale di Londinium · Mirror Lake Hall',
       searchDetail: '8 marzo · Londinium · Der Ring',
       searchKeywords: 'Londinium Der Ring Mirror Lake Hall marzo',
     },
-    'one-hundred-and-one-days-norport-1091-0419': {
+    'one-hundred-and-one-days-norport-1084-0419': {
       index: 'II',
-      dateTimeDisplay: 'Anno Terra 1091 · 19 aprile · 18:30',
+      dateTimeDisplay: 'Anno Terra 1084 · 19 aprile · 18:30',
       venue: "Teatro della torre dell'orologio della contea di Norport · Galleria ovest",
       searchDetail: '19 aprile · Contea di Norport · Centouno giorni',
       searchKeywords:
         "Galleria della torre dell'orologio dei centouno giorni della contea di Norport aprile",
     },
-    'the-carnival-wiesheim-1091-0511': {
+    'the-carnival-wiesheim-1084-0511': {
       index: 'III',
-      dateTimeDisplay: 'Anno Terra 1091 · 11 maggio · 20:00',
+      dateTimeDisplay: 'Anno Terra 1084 · 11 maggio · 20:00',
       venue: 'Sala del tramonto di Vyseheim · Palcoscenico',
       searchDetail: '11 maggio · Vyseheim · Il Carnevale',
       searchKeywords: 'Vyseheim Sala del tramonto del CarnevaleMag',
     },
-    'ode-au-triomphe-nuova-volsinii-1091-0623': {
+    'ode-au-triomphe-nuova-volsinii-1084-0623': {
       index: 'IV',
-      dateTimeDisplay: 'Anno Terra 1091 · 23 giugno · 19:30',
+      dateTimeDisplay: 'Anno Terra 1084 · 23 giugno · 19:30',
       venue: 'Opera Civica Nuova Volsinii · Sala Grande',
       searchDetail: '23 giugno · Nuova Volsinii · Ode au Triomphe',
       searchKeywords: 'Nuova Volsinii Ode au Triomphe opera civica giugno',
     },
-    'der-ring-zwillingsturme-1091-0817': {
+    'der-ring-zwillingsturme-1084-0817': {
       index: 'V',
-      dateTimeDisplay: 'Anno Terra 1091 · 17 agosto · 20:00',
+      dateTimeDisplay: 'Anno Terra 1084 · 17 agosto · 20:00',
       venue: 'Teatro delle torri gemelle Zwillingstürme · Mirror Lake Hall',
       searchDetail: '17 agosto · Zwillingstürme · Der Ring',
       searchKeywords: 'Zwillingstürme Der Ring Mirror Lake Agosto',
     },
-    'one-hundred-and-one-days-londinium-1091-0903': {
+    'one-hundred-and-one-days-londinium-1084-0903': {
       index: 'VI',
-      dateTimeDisplay: 'Anno Terra 1091 · 3 settembre · 19:30',
+      dateTimeDisplay: 'Anno Terra 1084 · 3 settembre · 19:30',
       venue: 'Vecchio teatro reale di Londinium · Sala della campana',
       searchDetail: '3 settembre · Londinium · Centouno giorni',
       searchKeywords: 'Londinium Teatro Reale dei Centouno Giorni Settembre',
     },
-    'the-carnival-montelupe-1091-0921': {
+    'the-carnival-montelupe-1084-0921': {
       index: 'VII',
-      dateTimeDisplay: 'Anno Terra 1091 · 21 settembre · 20:00',
+      dateTimeDisplay: 'Anno Terra 1084 · 21 settembre · 20:00',
       venue: 'Teatro Centrale di Montelupe · Sala Banchetti',
       searchDetail: '21 settembre · Montelupe · Il Carnevale',
       searchKeywords: 'Montelupe Il banchetto di Carnevale Settembre',
     },
-    'the-carnival-londinium-1091-1009': {
+    'the-carnival-londinium-1084-1009': {
       index: 'VIII',
-      dateTimeDisplay: 'Anno Terra 1091 · 9 ottobre · 19:00',
+      dateTimeDisplay: 'Anno Terra 1084 · 9 ottobre · 19:00',
       venue: 'Londinium Old Royal Theatre · Palco principale',
       searchDetail: '9 ottobre · Londinium · Il Carnevale',
       searchKeywords: 'Londinium Il Carnevale Teatro Reale Ottobre',
     },
-    'ode-au-triomphe-zwillingsturme-1091-1028': {
+    'ode-au-triomphe-zwillingsturme-1084-1028': {
       index: 'IX',
-      dateTimeDisplay: 'Anno Terra 1091 · 28 ottobre · 18:45',
+      dateTimeDisplay: 'Anno Terra 1084 · 28 ottobre · 18:45',
       venue: "Teatro delle torri gemelle Zwillingstürme · Sala della Misura d'Oro",
       searchDetail: '28 ottobre · Zwillingstürme · Ode au Triomphe',
       searchKeywords: "Zwillingstürme Ode au Triomphe Misura d'Oro Ottobre",

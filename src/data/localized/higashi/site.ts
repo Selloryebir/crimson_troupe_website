@@ -16,7 +16,7 @@ export const higashiSite = {
     currentEdition: '現在の版：{language}',
     chooseEdition: '現在の版：{language}。国別版を選択',
     frontFooter: '巡演・演目・観劇案内',
-    archiveFooter: '収蔵スナップショット・1091-07-01 00:00:00',
+    archiveFooter: '収蔵スナップショット・1084-07-01 00:00:00',
     archiveCatalog: '収蔵目録',
     frontToArchive: '収蔵記録を開く',
     archiveDamaged: '記録破損・閲覧不可',
@@ -56,7 +56,7 @@ export const higashiSite = {
       featuredPerformance: '注目公演：{title}、{city}',
       viewPerformance: '公演詳細',
       seasonStatementLabel: '今季について',
-      seasonCode: '1098 / AUTUMN TOUR',
+      seasonCode: '1102 / AUTUMN TOUR',
       seasonNote:
         '秋の巡演では、トリマウンツ、ヴィシェハイム、ノーポート郡を三つの新作が訪れます。',
       scheduleEyebrow: '巡演日程',
@@ -221,7 +221,7 @@ export const higashiSite = {
       browsePerformances: '今季の公演を調べる',
       troupeRegister: '劇団名簿',
       featuredPerformance: '今季最初の公演：{title}',
-      featuredNumber: 'AUTUMN / 1091',
+      featuredNumber: 'AUTUMN / 1084',
       noticeEyebrow: '巡演告示・第九十一号',
       noticeTitle: '秋季巡演名簿の清書が完了しました',
       notice:
