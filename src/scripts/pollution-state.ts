@@ -3,6 +3,7 @@ export const MAX_POLLUTION_LEVEL = 3;
 
 export type PollutionLevel = 0 | 1 | 2 | 3;
 export type PollutionVariant = 0 | 1 | 2;
+export type PollutionComposition = 0 | 1 | 2;
 export type PollutionTrigger =
   'front-entry' | 'direct-entry' | 'archive-navigation' | 'archive-locale' | 'archive-search';
 
@@ -27,6 +28,35 @@ const isPollutionVariant = (value: unknown): value is PollutionVariant =>
 
 const isEventCount = (value: unknown): value is number =>
   Number.isSafeInteger(value) && Number(value) >= 0;
+
+function hashCompositionInput(value: string): number {
+  let hash = 0x811c9dc5;
+  for (const character of value) {
+    hash ^= character.codePointAt(0) ?? 0;
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return hash >>> 0;
+}
+
+export function normalizePollutionPath(pathname: string): string {
+  const normalized = pathname.replace(/\/{2,}/gu, '/').replace(/\/$/u, '');
+  return normalized || '/';
+}
+
+export function derivePollutionComposition(
+  state: PollutionState,
+  pageType: string,
+  pathname: string,
+): PollutionComposition {
+  const input = [
+    state.variant,
+    state.eventCount,
+    state.level,
+    pageType,
+    normalizePollutionPath(pathname),
+  ].join('|');
+  return (hashCompositionInput(input) % 3) as PollutionComposition;
+}
 
 export function createPollutionState(variant: PollutionVariant = 0): PollutionState {
   return { version: 2, level: 0, eventCount: 0, variant };

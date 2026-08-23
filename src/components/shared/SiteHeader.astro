@@ -41,7 +41,7 @@ const links = [
         ></span
       >
     </a>
-    <nav class="main-nav" aria-label={copy.mainNavigation}>
+    <nav class="main-nav" aria-label={copy.mainNavigation} data-pollution-safe>
       {
         links.map((link) => (
           <a href={link.href} aria-current={currentSection === link.id ? 'page' : undefined}>
@@ -50,7 +50,7 @@ const links = [
         ))
       }
     </nav>
-    <div class="header-tools">
+    <div class="header-tools" data-pollution-safe>
       <EditionSelector localization={localization} world={world} currentPath={currentPath} />
       <a class="ticket-link" href={sitePath(edition, world, 'tickets')}>{ticketLabel}</a>
     </div>
