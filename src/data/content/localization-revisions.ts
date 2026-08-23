@@ -91,6 +91,7 @@ const acceptedYanSourceRevision: LocalizationSourceRevision = Object.freeze({
 export const localizationSourceRevisions: LocalizationSourceRevisionRegistry = Object.freeze({
   victoria: acceptedYanSourceRevision,
   ursus: acceptedYanSourceRevision,
+  siracusa: acceptedYanSourceRevision,
   minos: acceptedYanSourceRevision,
   higashi: acceptedYanSourceRevision,
   columbia: acceptedYanSourceRevision,

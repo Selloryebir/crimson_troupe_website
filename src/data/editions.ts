@@ -100,6 +100,7 @@ export const previewEditionIds = [
   'yan',
   'victoria',
   'ursus',
+  'siracusa',
   'minos',
   'higashi',
   'columbia',
