@@ -675,6 +675,75 @@ try {
     expectedArchiveHistoryCount,
     '三级污染里站历史演出',
   );
+  const archivePerformanceTarget = await archivePage
+    .locator('.archive-performance-list > li > a')
+    .first()
+    .getAttribute('href');
+  assert.ok(archivePerformanceTarget, '历史演出应保留可访问的原场次链接');
+  await archivePage.goto(new URL(archivePerformanceTarget, origin).href);
+  assert.equal(
+    await archivePage.locator('h1 [data-archive-projection-field="title"]:visible').count(),
+    1,
+    '场次详情 H1 应显示职责化投影标题',
+  );
+  assert.equal(
+    await archivePage.locator('.fact-grid [data-archive-projection-field="venue"]:visible').count(),
+    1,
+    '场次详情应显示投影地点',
+  );
+  assert.equal(
+    await archivePage
+      .locator('h1 [data-archive-projection-source]')
+      .evaluate((element) => window.getComputedStyle(element).display),
+    'none',
+    '场次详情不应同时显示等级 0 标题',
+  );
+  const programLinks = archivePage.locator('.program-order a[data-archive-invitation-trigger]');
+  assert.ok(await programLinks.count(), '场次详情应保留受控的原剧目关联入口');
+  const archiveProductionTarget = await programLinks.first().getAttribute('href');
+  assert.ok(archiveProductionTarget, '场次详情剧目入口应保留原链接');
+  await programLinks.first().click();
+  await archivePage.locator('[data-archive-invitation][open]').waitFor();
+  await archivePage.locator('[data-archive-invitation-close]').first().click();
+  await archivePage.goto(new URL(archiveProductionTarget, origin).href);
+  assert.equal(
+    await archivePage.locator('h1 [data-archive-projection-field="title"]:visible').count(),
+    1,
+    '剧目详情 H1 应显示职责化投影标题',
+  );
+  const creditCount = await archivePage.locator('.archive-credit-list > div').count();
+  assert.ok(creditCount, '剧目详情应保留原人员记录数量');
+  assert.equal(
+    await archivePage.locator('[data-archive-projection-field="role"]:visible').count(),
+    creditCount,
+    '剧目详情职责应逐项收束',
+  );
+  assert.equal(
+    new Set(
+      await archivePage
+        .locator('[data-archive-projection-field="role-name"]:visible')
+        .allTextContents(),
+    ).size,
+    1,
+    '剧目详情人员应收束为同一邀请身份',
+  );
+  const relatedLinks = archivePage.locator('.related-links a[data-archive-invitation-trigger]');
+  assert.ok(await relatedLinks.count(), '剧目详情应保留受控的原场次关联入口');
+  await archivePage.goto(`${origin}${archivePath('yan', 'troupe')}`);
+  assert.ok((await archivePage.locator('h1').textContent())?.trim(), '剧团页应保留 H1 任务标题');
+  const officeCount = await archivePage.locator('.archive-company dl > div').count();
+  assert.ok(officeCount, '剧团页应保留原职责记录数量');
+  assert.equal(
+    await archivePage.locator('[data-archive-projection-field="role"]:visible').count(),
+    officeCount,
+    '剧团页职责应逐项收束',
+  );
+  const companyInvitationTrigger = archivePage.locator(
+    '.archive-company [data-archive-invitation-trigger]',
+  );
+  await companyInvitationTrigger.click();
+  await archivePage.locator('[data-archive-invitation][open]').waitFor();
+  await archivePage.locator('[data-archive-invitation-close]').first().click();
   await archivePage.goto(`${origin}${archivePath('yan')}`);
   const archiveInvitation = archivePage.locator('[data-archive-invitation]');
   assert.equal(

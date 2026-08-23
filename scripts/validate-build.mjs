@@ -283,7 +283,7 @@ for (const [route, filePath] of routes) {
       );
       assert.doesNotMatch(
         html,
-        /<section[^>]*data-archive-projection|data-archive-projection-status/u,
+        /<section[^>]*\sdata-archive-projection(?:\s|=|>)|data-archive-projection-status/u,
         `${route} 不得保留底部投影框`,
       );
     }
