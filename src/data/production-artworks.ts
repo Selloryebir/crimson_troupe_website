@@ -79,6 +79,51 @@ export const productionArtworkRegistry: ProductionArtworkRegistry = {
       },
     },
   },
+  'red-banquet': {
+    front: {
+      ...requireArtworkManifest('red-banquet', 'front'),
+      focalPoint: '50% 58%',
+      safeCrop: 'portrait-center',
+      memoryColor: '#8b302b',
+      titleTone: 'light',
+      altIntent: 'decorative-production-art',
+      pollution: {
+        misregisterLayer: 'celadon-ledger',
+        darkenZones: ['top', 'sides'],
+        breachEdge: 'lower-right',
+      },
+    },
+  },
+  'seventh-lantern': {
+    front: {
+      ...requireArtworkManifest('seventh-lantern', 'front'),
+      focalPoint: '50% 52%',
+      safeCrop: 'portrait-center',
+      memoryColor: '#d39a43',
+      titleTone: 'light',
+      altIntent: 'decorative-production-art',
+      pollution: {
+        misregisterLayer: 'seventh-amber',
+        darkenZones: ['sides', 'lower'],
+        breachEdge: 'side-seam',
+      },
+    },
+  },
+  'procession-of-masks': {
+    front: {
+      ...requireArtworkManifest('procession-of-masks', 'front'),
+      focalPoint: '50% 54%',
+      safeCrop: 'portrait-center',
+      memoryColor: '#345b98',
+      titleTone: 'light',
+      altIntent: 'decorative-production-art',
+      pollution: {
+        misregisterLayer: 'cobalt-procession',
+        darkenZones: ['top', 'corners'],
+        breachEdge: 'upper-center',
+      },
+    },
+  },
   'der-ring': {
     archive: {
       ...requireArtworkManifest('der-ring', 'archive'),
@@ -134,6 +179,66 @@ export const productionArtworkRegistry: ProductionArtworkRegistry = {
       altIntent: 'decorative-production-art',
       pollution: {
         misregisterLayer: 'cobalt-gold-axis',
+        darkenZones: ['corners', 'lower'],
+        breachEdge: 'upper-center',
+      },
+    },
+  },
+  'lone-wander': {
+    archive: {
+      ...requireArtworkManifest('lone-wander', 'archive'),
+      focalPoint: '50% 55%',
+      safeCrop: 'portrait-center',
+      memoryColor: '#3e5535',
+      titleTone: 'dark',
+      altIntent: 'decorative-production-art',
+      pollution: {
+        misregisterLayer: 'moss-double-track',
+        darkenZones: ['sides', 'lower'],
+        breachEdge: 'side-seam',
+      },
+    },
+  },
+  'wonderland-in-dream': {
+    archive: {
+      ...requireArtworkManifest('wonderland-in-dream', 'archive'),
+      focalPoint: '50% 48%',
+      safeCrop: 'portrait-center',
+      memoryColor: '#477f72',
+      titleTone: 'light',
+      altIntent: 'decorative-production-art',
+      pollution: {
+        misregisterLayer: 'celadon-inversion',
+        darkenZones: ['top', 'corners'],
+        breachEdge: 'lower-right',
+      },
+    },
+  },
+  'frost-deer-and-snow-doe': {
+    archive: {
+      ...requireArtworkManifest('frost-deer-and-snow-doe', 'archive'),
+      focalPoint: '50% 49%',
+      safeCrop: 'portrait-center',
+      memoryColor: '#81709a',
+      titleTone: 'light',
+      altIntent: 'decorative-production-art',
+      pollution: {
+        misregisterLayer: 'violet-snowline',
+        darkenZones: ['sides', 'lower'],
+        breachEdge: 'side-seam',
+      },
+    },
+  },
+  'light-of-heria': {
+    archive: {
+      ...requireArtworkManifest('light-of-heria', 'archive'),
+      focalPoint: '50% 44%',
+      safeCrop: 'portrait-center',
+      memoryColor: '#1f3f78',
+      titleTone: 'light',
+      altIntent: 'decorative-production-art',
+      pollution: {
+        misregisterLayer: 'lapis-final-light',
         darkenZones: ['corners', 'lower'],
         breachEdge: 'upper-center',
       },
