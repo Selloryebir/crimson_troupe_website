@@ -906,14 +906,14 @@ html[data-pollution-composition="1"] .archive-invitation {
   --invitation-angle: 0.9deg;
   --invitation-counter-angle: -1.25deg;
   --invitation-seal-x: 68%;
-  --invitation-seal-y: 56%;
+  --invitation-seal-y: 47%;
 }
 
 html[data-pollution-composition="2"] .archive-invitation {
   --invitation-angle: -0.35deg;
   --invitation-counter-angle: 1.7deg;
   --invitation-seal-x: 42%;
-  --invitation-seal-y: 55%;
+  --invitation-seal-y: 48%;
 }
 
 .archive-invitation[open] {
