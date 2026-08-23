@@ -628,7 +628,27 @@ try {
     `${origin}/yan/archive/site/${currentArchiveSnapshot.routeSegment}/`,
   );
   await archivePage.locator('html[data-pollution-level="3"]').waitFor();
-  await archivePage.locator('[data-archive-projection]:not([hidden])').waitFor();
+  const archiveInvitation = archivePage.locator('[data-archive-invitation]');
+  assert.equal(
+    await archiveInvitation.getAttribute('open'),
+    null,
+    '等级 3 初次呈现不应自动打开邀请',
+  );
+  const archiveInvitationTrigger = archivePage.locator('[data-archive-invitation-trigger]').first();
+  const archiveInvitationTarget = await archiveInvitationTrigger.getAttribute('href');
+  assert.ok(archiveInvitationTarget, '邀请触发器应保留原合法链接');
+  await archiveInvitationTrigger.click();
+  await archivePage.locator('[data-archive-invitation][open]').waitFor();
+  await archivePage.locator('[data-archive-invitation-close]').first().click();
+  assert.equal(
+    await archiveInvitationTrigger.evaluate((element) => element === document.activeElement),
+    true,
+    '关闭邀请后焦点应返回原触发器',
+  );
+  await archiveInvitationTrigger.click();
+  await archivePage.locator('[data-archive-invitation][open]').waitFor();
+  await archivePage.locator('[data-archive-invitation-continue]').click();
+  await archivePage.waitForURL(new URL(archiveInvitationTarget, origin).href);
   await archivePage.locator('[data-world-switch="front"]').waitFor();
   await assertNoHorizontalLoss(archivePage, '320px 炎国三级污染里站');
   assertArchiveErrors();
@@ -648,9 +668,13 @@ try {
   const assertMinosArchiveErrors = trackUnexpectedErrors(minosArchivePage);
   await minosArchivePage.goto(`${origin}${archivePath('min')}`);
   await minosArchivePage.locator('html[data-pollution-level="3"]').waitFor();
-  await minosArchivePage.locator('[data-archive-projection]:not([hidden])').waitFor();
+  const minosInvitation = minosArchivePage.locator('[data-archive-invitation]');
+  assert.equal(await minosInvitation.getAttribute('open'), null);
+  await minosArchivePage.locator('[data-archive-invitation-trigger]').first().click();
+  await minosArchivePage.locator('[data-archive-invitation][open]').waitFor();
   await minosArchivePage.locator('[data-world-switch="front"]').waitFor();
   await assertNoHorizontalLoss(minosArchivePage, '320px 米诺斯语三级污染里站');
+  await minosArchivePage.locator('[data-archive-invitation-close]').first().click();
   assertMinosArchiveErrors();
   await minosArchiveContext.close();
 

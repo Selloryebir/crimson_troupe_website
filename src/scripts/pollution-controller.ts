@@ -83,20 +83,8 @@ function clearState(storage: Storage | null): void {
 }
 
 function applyState(state: PollutionState): void {
-  const previousLevel = document.documentElement.dataset.pollutionLevel;
   document.documentElement.dataset.pollutionLevel = String(state.level);
   document.documentElement.dataset.pollutionVariant = String(state.variant);
-  document.querySelectorAll<HTMLElement>('[data-archive-projection]').forEach((projection) => {
-    projection.hidden = state.level !== MAX_POLLUTION_LEVEL;
-  });
-  const status = document.querySelector<HTMLElement>('[data-archive-projection-status]');
-  const projection = document.querySelector<HTMLElement>('[data-archive-projection]');
-  if (status) {
-    status.textContent =
-      state.level === MAX_POLLUTION_LEVEL && previousLevel !== String(MAX_POLLUTION_LEVEL)
-        ? (projection?.dataset.projectionAnnouncement ?? '')
-        : '';
-  }
 }
 
 function requestTransition(storage: Storage | null, trigger: PollutionTrigger): PollutionState {
@@ -257,6 +245,13 @@ export function initPollutionController(): void {
       const anchor =
         event.target instanceof Element ? event.target.closest<HTMLAnchorElement>('a') : null;
       if (!anchor || !isPlainCurrentTabClick(event, anchor)) {
+        return;
+      }
+
+      if (
+        root.dataset.pollutionLevel === String(MAX_POLLUTION_LEVEL) &&
+        anchor.hasAttribute('data-archive-invitation-trigger')
+      ) {
         return;
       }
 

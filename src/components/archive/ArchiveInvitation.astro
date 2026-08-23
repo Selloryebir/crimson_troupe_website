@@ -1,0 +1,66 @@
+---
+import type { ArchivePollutionProfile } from '../../data/archive-pollution';
+import type { ArchiveProjectionContent } from '../../data/localized/schema';
+
+interface Props {
+  content: ArchiveProjectionContent;
+  profile: ArchivePollutionProfile;
+}
+
+const { content, profile } = Astro.props;
+const invitation = content.invitation;
+const view = content.views[profile];
+---
+
+<dialog
+  class:list={['archive-invitation', `archive-invitation--${profile}`]}
+  data-archive-invitation
+  data-projection-profile={profile}
+  data-invitation-announcement={content.statusAnnouncement}
+  aria-label={invitation.ariaLabel}
+  aria-labelledby="archive-invitation-title"
+  aria-describedby="archive-invitation-summary archive-invitation-closing"
+>
+  <div class="archive-invitation__frame">
+    <button
+      class="archive-invitation__corner-close"
+      type="button"
+      data-archive-invitation-close
+      aria-label={invitation.dismissLabel}
+    >
+      <span aria-hidden="true">×</span>
+    </button>
+    <div class="archive-invitation__copy">
+      <p class="archive-invitation__eyebrow">{invitation.eyebrow}</p>
+      <h2 id="archive-invitation-title">{invitation.title}</h2>
+      <p id="archive-invitation-summary">{invitation.summary}</p>
+      <p class="archive-invitation__page-response">
+        <span>{view.eyebrow}</span>
+        <strong>{view.title}</strong>
+        {view.summary}
+      </p>
+    </div>
+    <dl class="archive-invitation__register">
+      <div><dt>{invitation.roleLabel}</dt><dd>{invitation.role}</dd></div>
+      <div><dt>{invitation.productionLabel}</dt><dd>{invitation.production}</dd></div>
+      <div><dt>{invitation.venueLabel}</dt><dd>{invitation.venue}</dd></div>
+      <div><dt>{invitation.attendanceLabel}</dt><dd>{invitation.attendance}</dd></div>
+    </dl>
+    <p id="archive-invitation-closing" class="archive-invitation__closing">
+      {invitation.closing}
+    </p>
+    <div class="archive-invitation__actions">
+      <button type="button" data-archive-invitation-close>{invitation.dismissLabel}</button>
+      <button type="button" data-archive-invitation-continue>
+        {invitation.continueLabel}
+      </button>
+    </div>
+  </div>
+</dialog>
+<p class="visually-hidden" data-archive-invitation-status aria-live="polite"></p>
+
+<script>
+  import { initArchiveInvitation } from '../../scripts/archive-invitation';
+
+  initArchiveInvitation();
+</script>

@@ -26,7 +26,10 @@ const { edition, messages } = localization;
         const leadProduction = getLocalizedProduction(localization, performance.productionIds[0]);
         return (
           <li>
-            <a href={performancePath(edition, 'archive', performance.performanceId)}>
+            <a
+              href={performancePath(edition, 'archive', performance.performanceId)}
+              data-archive-invitation-trigger
+            >
               <ArchivePoster
                 productionId={leadProduction.productionId}
                 visual={leadProduction.visual}
