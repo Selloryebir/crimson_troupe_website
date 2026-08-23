@@ -50,6 +50,18 @@ html[data-world="archive"] [data-pollution-slot] {
   position: relative;
 }
 
+.archive-projection-level3 {
+  display: none;
+}
+
+html[data-world="archive"][data-pollution-level="3"] .archive-projection-source {
+  display: none;
+}
+
+html[data-world="archive"][data-pollution-level="3"] .archive-projection-level3 {
+  display: revert;
+}
+
 /* Level 1: the same archive has been printed twice, a few millimetres apart. */
 html[data-world="archive"]:is(
     [data-pollution-level="1"],

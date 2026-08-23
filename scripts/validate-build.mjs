@@ -281,7 +281,11 @@ for (const [route, filePath] of routes) {
         /<dialog[^>]*data-archive-invitation[^>]*\sopen(?:\s|>)/u,
         `${route} 不得在静态产物中自动打开邀请`,
       );
-      assert.doesNotMatch(html, /data-archive-projection/u, `${route} 不得保留底部投影框`);
+      assert.doesNotMatch(
+        html,
+        /<section[^>]*data-archive-projection|data-archive-projection-status/u,
+        `${route} 不得保留底部投影框`,
+      );
     }
     if (route.endsWith('/search/')) {
       assert.match(html, /data-search-fallback/u, `${route} 缺少唯一搜索降级内容`);

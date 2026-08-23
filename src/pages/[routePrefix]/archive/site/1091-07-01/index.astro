@@ -4,7 +4,6 @@ import ArchivePoster from '../../../../../components/archive/ArchivePoster.astro
 import TroupeMark from '../../../../../components/shared/TroupeMark.astro';
 import { buildSnapshot } from '../../../../../data/content/resolve.ts';
 import type { BuiltEdition } from '../../../../../data/editions.ts';
-import { formatMessage } from '../../../../../data/localized/format';
 import {
   getLocalization,
   getLocalizedPerformance,
@@ -35,6 +34,8 @@ const featuredPerformance = getLocalizedPerformance(
 const featuredProduction = featuredPerformance
   ? getLocalizedProduction(localization, featuredPerformance.productionIds[0])
   : undefined;
+const projection = localization.archiveProjection.performance;
+const projectionProduction = getLocalizedProduction(localization, 'the-carnival');
 ---
 
 <ArchiveLayout
@@ -63,7 +64,7 @@ const featuredProduction = featuredPerformance
         <a
           class="archive-feature"
           href={sitePath(edition, 'archive', `performances/${featuredPerformance.performanceId}`)}
-          aria-label={formatMessage(copy.featuredPerformance, { title: featuredProduction.title })}
+          data-archive-invitation-trigger
         >
           <ArchivePoster
             productionId={featuredProduction.productionId}
@@ -71,6 +72,12 @@ const featuredProduction = featuredPerformance
             title={featuredProduction.title}
             subtitle={featuredProduction.kind}
             number={copy.featuredNumber}
+            projection={{
+              productionId: projectionProduction.productionId,
+              title: projection.title,
+              subtitle: projection.kind,
+              number: projection.registerCode,
+            }}
           />
         </a>
       )

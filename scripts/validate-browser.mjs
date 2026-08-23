@@ -22,12 +22,46 @@ const expectedArchiveSeatCount = buildSnapshot.performanceEntries.filter(
     performance.status === 'scheduled' &&
     performance.ticketAvailability.state === 'on-sale',
 ).length;
+const expectedArchiveCurrentCount = buildSnapshot.performanceEntries.filter(
+  ([, performance]) => performance.world === 'archive' && performance.collection === 'current',
+).length;
+const expectedArchiveHistoryCount = buildSnapshot.performanceEntries.filter(
+  ([, performance]) => performance.world === 'archive' && performance.collection === 'history',
+).length;
 process.env.NO_PROXY = [process.env.NO_PROXY, serverHost, 'localhost'].filter(Boolean).join(',');
 process.env.no_proxy = [process.env.no_proxy, serverHost, 'localhost'].filter(Boolean).join(',');
 
 function archivePath(routePrefix, segment = '') {
   const suffix = segment ? `${segment.replace(/^\/+/, '')}/` : '';
   return `/${routePrefix}/archive/site/${currentArchiveSnapshot.routeSegment}/${suffix}`;
+}
+
+async function assertArchiveProjectionList(page, expectedCount, label) {
+  const cards = page.locator('.archive-performance-list > li');
+  assert.equal(await cards.count(), expectedCount, `${label} 的记录数量不得改变`);
+  for (const field of ['title', 'date-time', 'venue', 'status']) {
+    const values = cards.locator(`[data-archive-projection-field="${field}"]:visible`);
+    assert.equal(await values.count(), expectedCount, `${label} 的 ${field} 应逐项投影`);
+    assert.equal(
+      new Set(await values.allTextContents()).size,
+      1,
+      `${label} 的 ${field} 应收束为同一可见值`,
+    );
+  }
+  assert.equal(
+    await cards
+      .locator('[data-archive-projection-source]')
+      .evaluateAll((elements) =>
+        elements.every((element) => window.getComputedStyle(element).display === 'none'),
+      ),
+    true,
+    `${label} 不应同时显示等级 0 源字段`,
+  );
+  assert.equal(
+    await cards.locator('a[data-archive-invitation-trigger][href]').count(),
+    expectedCount,
+    `${label} 应保留每项原合法链接与邀请入口`,
+  );
 }
 
 function getFreePort() {
@@ -628,6 +662,20 @@ try {
     `${origin}/yan/archive/site/${currentArchiveSnapshot.routeSegment}/`,
   );
   await archivePage.locator('html[data-pollution-level="3"]').waitFor();
+  await assertArchiveProjectionList(archivePage, expectedArchiveCurrentCount, '三级污染里站首页');
+  await archivePage.goto(`${origin}${archivePath('yan', 'performances')}`);
+  await assertArchiveProjectionList(
+    archivePage,
+    expectedArchiveCurrentCount,
+    '三级污染里站本季演出',
+  );
+  await archivePage.goto(`${origin}${archivePath('yan', 'performances/history')}`);
+  await assertArchiveProjectionList(
+    archivePage,
+    expectedArchiveHistoryCount,
+    '三级污染里站历史演出',
+  );
+  await archivePage.goto(`${origin}${archivePath('yan')}`);
   const archiveInvitation = archivePage.locator('[data-archive-invitation]');
   assert.equal(
     await archiveInvitation.getAttribute('open'),

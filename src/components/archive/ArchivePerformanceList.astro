@@ -17,6 +17,8 @@ interface Props {
 
 const { localization, performances, emptyMessage, variant = 'catalog' } = Astro.props;
 const { edition, messages } = localization;
+const projection = localization.archiveProjection.performance;
+const projectionProduction = getLocalizedProduction(localization, 'the-carnival');
 ---
 
 {
@@ -36,22 +38,94 @@ const { edition, messages } = localization;
                 title={leadProduction.title}
                 number={`NO. ${performance.index}`}
                 compact
+                projection={{
+                  productionId: projectionProduction.productionId,
+                  title: projection.title,
+                  subtitle: projection.kind,
+                  number: projection.registerCode,
+                }}
               />
               <span class="archive-performance-list__register" data-pollution-slot="register">
                 <small>
-                  {formatMessage(messages.programs.archiveRegister, { index: performance.index })}
+                  <span class="archive-projection-source" data-archive-projection-source>
+                    {formatMessage(messages.programs.archiveRegister, { index: performance.index })}
+                  </span>
+                  <span
+                    class="archive-projection-level3"
+                    data-archive-projection-level3
+                    data-archive-projection-field="register"
+                  >
+                    {projection.registerCode}
+                  </span>
                 </small>
-                <strong>{leadProduction.title}</strong>
-                <span>{leadProduction.tagline}</span>
+                <strong>
+                  <span class="archive-projection-source" data-archive-projection-source>
+                    {leadProduction.title}
+                  </span>
+                  <span
+                    class="archive-projection-level3"
+                    data-archive-projection-level3
+                    data-archive-projection-field="title"
+                  >
+                    {projection.title}
+                  </span>
+                </strong>
+                <span>
+                  <span class="archive-projection-source" data-archive-projection-source>
+                    {leadProduction.tagline}
+                  </span>
+                  <span
+                    class="archive-projection-level3"
+                    data-archive-projection-level3
+                    data-archive-projection-field="tagline"
+                  >
+                    {projection.tagline}
+                  </span>
+                </span>
               </span>
               <span class="archive-performance-list__date">
-                <time>{performance.dateTime.display}</time>
-                <span>{performance.place}</span>
-                <small>{localization.site.archive.performanceDetail[performance.status]}</small>
-                {performance.operationalNotice && (
-                  <small>{performance.operationalNotice.text}</small>
-                )}
+                <time>
+                  <span class="archive-projection-source" data-archive-projection-source>
+                    {performance.dateTime.display}
+                  </span>
+                  <span
+                    class="archive-projection-level3"
+                    data-archive-projection-level3
+                    data-archive-projection-field="date-time"
+                  >
+                    {projection.dateTime}
+                  </span>
+                </time>
+                <span>
+                  <span class="archive-projection-source" data-archive-projection-source>
+                    {performance.place}
+                  </span>
+                  <span
+                    class="archive-projection-level3"
+                    data-archive-projection-level3
+                    data-archive-projection-field="venue"
+                  >
+                    {projection.venue}
+                  </span>
+                </span>
                 <small>
+                  <span class="archive-projection-source" data-archive-projection-source>
+                    {localization.site.archive.performanceDetail[performance.status]}
+                  </span>
+                  <span
+                    class="archive-projection-level3"
+                    data-archive-projection-level3
+                    data-archive-projection-field="status"
+                  >
+                    {projection.status}
+                  </span>
+                </small>
+                {performance.operationalNotice && (
+                  <small class="archive-projection-source" data-archive-projection-source>
+                    {performance.operationalNotice.text}
+                  </small>
+                )}
+                <small class="archive-projection-source" data-archive-projection-source>
                   {formatMessage(messages.programs.productionCount, {
                     count: performance.productionIds.length,
                   })}

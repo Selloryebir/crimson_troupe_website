@@ -318,6 +318,18 @@ html[data-world="archive"] :is(.text-link, .back-link):hover {
   text-shadow: 0 1px 12px rgb(239 218 181 / 40%);
 }
 
+.archive-poster.has-artwork .archive-poster__title--light {
+  color: #f1e2c5;
+  background: linear-gradient(180deg, rgb(18 11 10 / 76%), transparent 100%);
+  text-shadow: 0 2px 18px rgb(0 0 0 / 80%);
+}
+
+.archive-poster.has-artwork .archive-poster__title--dark {
+  color: #2d211a;
+  background: linear-gradient(180deg, rgb(226 207 172 / 82%), transparent 100%);
+  text-shadow: 0 1px 12px rgb(239 218 181 / 40%);
+}
+
 .archive-poster.has-artwork .archive-poster__number {
   color: var(--archive-paper);
   text-shadow: 0 2px 12px rgb(0 0 0 / 90%);
