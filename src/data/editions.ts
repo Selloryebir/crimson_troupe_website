@@ -98,10 +98,11 @@ export type Edition = (typeof editions)[EditionId];
 export const releaseEditionIds = ['yan'] as const satisfies readonly EditionId[];
 export const previewEditionIds = [
   'yan',
+  'victoria',
+  'ursus',
+  'minos',
   'higashi',
   'columbia',
-  'minos',
-  'ursus',
 ] as const satisfies readonly EditionId[];
 
 export type BuildEditionId = (typeof previewEditionIds)[number];

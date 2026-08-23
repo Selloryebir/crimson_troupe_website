@@ -913,7 +913,7 @@ html[data-pollution-composition="2"] .archive-invitation {
   --invitation-angle: -0.35deg;
   --invitation-counter-angle: 1.7deg;
   --invitation-seal-x: 42%;
-  --invitation-seal-y: 62%;
+  --invitation-seal-y: 55%;
 }
 
 .archive-invitation[open] {

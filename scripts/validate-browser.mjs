@@ -442,8 +442,16 @@ try {
     new RegExp(`/archive/site/${currentArchiveSnapshot.routeSegment}/$`, 'u'),
   );
   const selector = desktopPage.locator('[data-edition-selector]');
-  assert.equal(await selector.locator('li').count(), 5, '五语言 preview 应显示五个版本选项');
-  assert.equal(await selector.locator('li .edition-badge').count(), 5, '每个版本选项都应显示徽记');
+  assert.equal(
+    await selector.locator('li').count(),
+    builtEditions.length,
+    'preview 应显示当前构建集合的全部版本选项',
+  );
+  assert.equal(
+    await selector.locator('li .edition-badge').count(),
+    builtEditions.length,
+    '每个版本选项都应显示徽记',
+  );
   const summary = selector.locator('summary');
   await summary.focus();
   await desktopPage.keyboard.press('Enter');
@@ -1337,7 +1345,7 @@ try {
   await failedSearchContext.close();
 
   console.log(
-    'browser validation passed: editorial home alternation/mobile order, full-list isolation, three venue level maps/zones, five-edition selector, long-script 320px headers, ticket focus/artifact, Minos search/download/print, Ursus search isolation/download/five-edition state/archive exit, archive four-level visual escalation/five-edition level 3/reduced motion, no-JS fallback/static archive seats, search failure fallback',
+    'browser validation passed: editorial home alternation/mobile order, full-list isolation, three venue level maps/zones, build-scoped edition selector, long-script 320px headers, ticket focus/artifact, Minos search/download/print, Ursus search isolation/download/cross-edition state/archive exit, archive four-level visual escalation/cross-edition level 3/reduced motion, no-JS fallback/static archive seats, search failure fallback',
   );
 } catch (error) {
   const serverOutput = preview.output.join('').trim();
