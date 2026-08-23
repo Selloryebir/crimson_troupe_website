@@ -101,8 +101,9 @@ export const previewEditionIds = [
   'victoria',
   'ursus',
   'siracusa',
-  'leithanien',
   'minos',
+  'leithanien',
+  'kazimierz',
   'higashi',
   'columbia',
 ] as const satisfies readonly EditionId[];
@@ -116,11 +117,11 @@ export const buildProfile = readBuildProfile();
 export const buildContext = getBuildContext(buildContexts, buildProfile);
 assertContentContextEligible(buildContext, currentRootSet);
 
-export const buildEditionIds = buildContext.editionIds as readonly BuildEditionId[];
+export const buildEditionIds = buildContext.editionIds;
 export const builtEditions: readonly BuiltEdition[] = buildEditionIds.map(
   (editionId) => editions[editionId],
 );
 
 export function isBuiltEditionId(editionId: EditionId): editionId is BuildEditionId {
-  return previewEditionIds.includes(editionId as BuildEditionId);
+  return previewEditionIds.includes(editionId);
 }

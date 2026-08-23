@@ -919,7 +919,7 @@ try {
           ]),
         ),
       );
-      for (const locale of ['en-US', 'el', 'ru']) {
+      for (const locale of ['en-US', 'en-GB', 'it', 'de', 'pl', 'el', 'ru']) {
         assert.match(optionStyles[locale].fontFamily, /Arial|Noto Sans|DejaVu Sans/u);
         assert.doesNotMatch(optionStyles[locale].fontFamily, /Yu Gothic|Hiragino/u);
         assert.equal(optionStyles[locale].letterSpacing, 'normal');
@@ -966,7 +966,7 @@ try {
   await ursusPage.locator('[data-ticket-start]').click();
   await ursusPage.locator('[data-ticket-action="resolve"]').click();
   await ursusPage.locator('[data-ticket-result]:not([hidden])').waitFor();
-  const editionRouteSequence = ['yan', 'hig', 'col', 'min', 'urs'];
+  const editionRouteSequence = builtEditions.map(({ routePrefix }) => routePrefix);
   for (const routePrefix of editionRouteSequence) {
     const editionSelector = ursusPage.locator('[data-edition-selector]');
     await editionSelector.locator('summary').click();
@@ -974,6 +974,10 @@ try {
     await ursusPage.locator('[data-ticket-result]:not([hidden])').waitFor();
     assert.match(new URL(ursusPage.url()).pathname, new RegExp(`^/${routePrefix}/tickets/$`, 'u'));
   }
+  const returnToUrsusSelector = ursusPage.locator('[data-edition-selector]');
+  await returnToUrsusSelector.locator('summary').click();
+  await returnToUrsusSelector.locator('a[href^="/urs/tickets/"]').click();
+  await ursusPage.locator('[data-ticket-result]:not([hidden])').waitFor();
   const ursusTicketSource = await ursusPage.locator('.issued-ticket > img').getAttribute('src');
   assert.match(decodeURIComponent(ursusTicketSource ?? ''), /\p{Script=Cyrillic}/u);
   const ursusDownloadPromise = ursusPage.waitForEvent('download');

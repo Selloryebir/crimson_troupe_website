@@ -1,6 +1,7 @@
 import type { BuildEditionId } from '../editions.ts';
 import { columbiaLocalizationPackage } from './columbia/index.ts';
 import { higashiLocalizationPackage } from './higashi/index.ts';
+import { kazimierzLocalizationPackage } from './kazimierz/index.ts';
 import { leithanienLocalizationPackage } from './leithanien/index.ts';
 import { minosLocalizationPackage } from './minos/index.ts';
 import type { LocalizationAuthoringPackage } from './schema.ts';
@@ -21,8 +22,9 @@ export const localizationPackages: Record<BuildEditionId, PartialLocalizationPac
   victoria: victoriaLocalizationPackage,
   ursus: ursusLocalizationPackage,
   siracusa: siracusaLocalizationPackage,
-  leithanien: leithanienLocalizationPackage,
   minos: minosLocalizationPackage,
+  leithanien: leithanienLocalizationPackage,
+  kazimierz: kazimierzLocalizationPackage,
   higashi: higashiLocalizationPackage,
   columbia: columbiaLocalizationPackage,
 };

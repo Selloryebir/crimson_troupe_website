@@ -92,8 +92,9 @@ export const localizationSourceRevisions: LocalizationSourceRevisionRegistry = O
   victoria: acceptedYanSourceRevision,
   ursus: acceptedYanSourceRevision,
   siracusa: acceptedYanSourceRevision,
-  leithanien: acceptedYanSourceRevision,
   minos: acceptedYanSourceRevision,
+  leithanien: acceptedYanSourceRevision,
+  kazimierz: acceptedYanSourceRevision,
   higashi: acceptedYanSourceRevision,
   columbia: acceptedYanSourceRevision,
 });
