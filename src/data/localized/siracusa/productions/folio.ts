@@ -79,4 +79,72 @@ export const siracusaFolioProductions = {
       ['Costume da Cerimonia', "Sarti del filo d'oro"],
     ],
   },
+  'lone-wander': {
+    title: 'Viandante solitario',
+    kind: 'Favola teatrale · tre scene',
+    tagline: 'La strada solitaria conserva sempre una seconda serie di passi.',
+    duration: 'Circa 105 minuti, con un intervallo',
+    durationShort: 'Circa 105 min',
+    language: 'Repertorio itinerante · programma disponibile',
+    heading: 'Un viandante cerca l’ultima locanda lungo una strada vuota.',
+    synopsis:
+      'Ogni notte viene registrato un ospite, ma al mattino il libro mostra due nomi. Al termine il viandante deve scegliere le proprie orme.',
+    guidance:
+      'Luci basse, fumo scenico e suoni ravvicinati; seguire le indicazioni dell’accompagnatore.',
+    creatives: [
+      ['Regia', 'Sala scenica della vecchia compagnia'],
+      ['Scena', 'Officina della lunga galleria'],
+    ],
+  },
+  'wonderland-in-dream': {
+    title: 'Meraviglia nel sogno',
+    kind: 'Dramma onirico · quattro atti',
+    tagline: 'Ogni sogno offre un ingresso, ma non la direzione del risveglio.',
+    duration: 'Circa 105 minuti, con un intervallo',
+    durationShort: 'Circa 105 min',
+    language: 'Repertorio itinerante · programma disponibile',
+    heading: 'Un giardino capovolto, porte di carta e una guida addormentata compongono il corteo.',
+    synopsis:
+      'Una ragazza attraversa quattro giardini; dopo ogni risveglio, alla platea manca un’altra fila.',
+    guidance:
+      'Luci basse, fumo scenico e suoni ravvicinati; seguire le indicazioni dell’accompagnatore.',
+    creatives: [
+      ['Regia', 'Sala scenica della vecchia compagnia'],
+      ['Scena', 'Officina della lunga galleria'],
+    ],
+  },
+  'frost-deer-and-snow-doe': {
+    title: 'Cervo di brina e cerva di neve',
+    kind: 'Opera d’inverno · tre atti',
+    tagline: 'Due tracce si incontrano sulla neve; una sola prosegue verso la primavera.',
+    duration: 'Circa 105 minuti, con un intervallo',
+    durationShort: 'Circa 105 min',
+    language: 'Repertorio itinerante · programma disponibile',
+    heading: 'Un’opera invernale di caccia, veglia e due cervi bianchi.',
+    synopsis:
+      'Il cacciatore segue impronte incrociate finché cervo e cerva pronunciano lo stesso addio da lati opposti.',
+    guidance:
+      'Luci basse, fumo scenico e suoni ravvicinati; seguire le indicazioni dell’accompagnatore.',
+    creatives: [
+      ['Regia', 'Sala scenica della vecchia compagnia'],
+      ['Scena', 'Officina della lunga galleria'],
+    ],
+  },
+  'light-of-heria': {
+    title: 'Luce di Heria',
+    kind: 'Dramma d’icona · cinque capitoli',
+    tagline: 'La luce rivela la porta e conduce ogni ombra nello stesso luogo.',
+    duration: 'Circa 105 minuti, con un intervallo',
+    durationShort: 'Circa 105 min',
+    language: 'Repertorio itinerante · programma disponibile',
+    heading: 'Icone d’oro, una lunga scala e lampade spente in sequenza formano il rito.',
+    synopsis:
+      'Il guardiano delle lampade sale la torre mentre ogni rintocco cancella una via; l’ultima luce attende chi arriva tardi.',
+    guidance:
+      'Luci basse, fumo scenico e suoni ravvicinati; seguire le indicazioni dell’accompagnatore.',
+    creatives: [
+      ['Regia', 'Sala scenica della vecchia compagnia'],
+      ['Scena', 'Officina della lunga galleria'],
+    ],
+  },
 } as const satisfies Record<FolioProductionId, ProductionContent>;
