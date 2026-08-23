@@ -38,7 +38,7 @@ docs/drafts/
 | 文件                                                                                               | 类型           | 当前效力                                 |
 | -------------------------------------------------------------------------------------------------- | -------------- | ---------------------------------------- |
 | [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md)               | 创意草稿       | 延期的里站异常购票构想，等待未来独立规划 |
-| [`plans/archive-level3-invitation-convergence.md`](plans/archive-level3-invitation-convergence.md) | 一次性开发计划 | 已批准执行，`SLICE-04` 待同步            |
+| [`plans/archive-level3-invitation-convergence.md`](plans/archive-level3-invitation-convergence.md) | 一次性开发计划 | 已批准执行，`SLICE-05` 待同步            |
 
 ## 固定文档骨架
 
