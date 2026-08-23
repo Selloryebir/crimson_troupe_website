@@ -157,7 +157,7 @@ export function resolveContent(
   );
   const snapshotEditions = context.editionIds.map((editionId) => {
     if (!isRegisteredLocalizationEdition(editionId)) {
-      throw new Error(`国家版本 ${editionId} 缺少已注册本地化包。`);
+      throw new Error(`国家版本 ${String(editionId)} 缺少已注册本地化包。`);
     }
     return editions[editionId];
   });
@@ -206,7 +206,7 @@ export function resolveContent(
     context,
     maturity: 'preview',
     rootSet,
-    editionIds: Object.freeze(context.editionIds) as readonly BuiltEdition['editionId'][],
+    editionIds: Object.freeze(context.editionIds),
     editions: Object.freeze(snapshotEditions),
     performanceEntries: Object.freeze(performanceEntries),
     performances: toReadonlyRecord(performanceEntries),

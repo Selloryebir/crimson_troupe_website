@@ -442,8 +442,16 @@ try {
     new RegExp(`/archive/site/${currentArchiveSnapshot.routeSegment}/$`, 'u'),
   );
   const selector = desktopPage.locator('[data-edition-selector]');
-  assert.equal(await selector.locator('li').count(), 5, '五语言 preview 应显示五个版本选项');
-  assert.equal(await selector.locator('li .edition-badge').count(), 5, '每个版本选项都应显示徽记');
+  assert.equal(
+    await selector.locator('li').count(),
+    builtEditions.length,
+    'preview 应显示当前构建集合的全部版本选项',
+  );
+  assert.equal(
+    await selector.locator('li .edition-badge').count(),
+    builtEditions.length,
+    '每个版本选项都应显示徽记',
+  );
   const summary = selector.locator('summary');
   await summary.focus();
   await desktopPage.keyboard.press('Enter');
@@ -911,7 +919,7 @@ try {
           ]),
         ),
       );
-      for (const locale of ['en-US', 'el', 'ru']) {
+      for (const locale of ['en-US', 'en-GB', 'it', 'de', 'pl', 'el', 'ru']) {
         assert.match(optionStyles[locale].fontFamily, /Arial|Noto Sans|DejaVu Sans/u);
         assert.doesNotMatch(optionStyles[locale].fontFamily, /Yu Gothic|Hiragino/u);
         assert.equal(optionStyles[locale].letterSpacing, 'normal');
@@ -958,7 +966,7 @@ try {
   await ursusPage.locator('[data-ticket-start]').click();
   await ursusPage.locator('[data-ticket-action="resolve"]').click();
   await ursusPage.locator('[data-ticket-result]:not([hidden])').waitFor();
-  const editionRouteSequence = ['yan', 'hig', 'col', 'min', 'urs'];
+  const editionRouteSequence = builtEditions.map(({ routePrefix }) => routePrefix);
   for (const routePrefix of editionRouteSequence) {
     const editionSelector = ursusPage.locator('[data-edition-selector]');
     await editionSelector.locator('summary').click();
@@ -966,6 +974,10 @@ try {
     await ursusPage.locator('[data-ticket-result]:not([hidden])').waitFor();
     assert.match(new URL(ursusPage.url()).pathname, new RegExp(`^/${routePrefix}/tickets/$`, 'u'));
   }
+  const returnToUrsusSelector = ursusPage.locator('[data-edition-selector]');
+  await returnToUrsusSelector.locator('summary').click();
+  await returnToUrsusSelector.locator('a[href^="/urs/tickets/"]').click();
+  await ursusPage.locator('[data-ticket-result]:not([hidden])').waitFor();
   const ursusTicketSource = await ursusPage.locator('.issued-ticket > img').getAttribute('src');
   assert.match(decodeURIComponent(ursusTicketSource ?? ''), /\p{Script=Cyrillic}/u);
   const ursusDownloadPromise = ursusPage.waitForEvent('download');
@@ -1337,7 +1349,7 @@ try {
   await failedSearchContext.close();
 
   console.log(
-    'browser validation passed: editorial home alternation/mobile order, full-list isolation, three venue level maps/zones, five-edition selector, long-script 320px headers, ticket focus/artifact, Minos search/download/print, Ursus search isolation/download/five-edition state/archive exit, archive four-level visual escalation/five-edition level 3/reduced motion, no-JS fallback/static archive seats, search failure fallback',
+    'browser validation passed: editorial home alternation/mobile order, full-list isolation, three venue level maps/zones, build-scoped edition selector, long-script 320px headers, ticket focus/artifact, Minos search/download/print, Ursus search isolation/download/cross-edition state/archive exit, archive four-level visual escalation/cross-edition level 3/reduced motion, no-JS fallback/static archive seats, search failure fallback',
   );
 } catch (error) {
   const serverOutput = preview.output.join('').trim();

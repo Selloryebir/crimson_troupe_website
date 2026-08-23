@@ -18,6 +18,18 @@ const localeValidationRules = {
     forbiddenPattern: /\p{Script=Han}/u,
     forbiddenMessage: '哥伦比亚预览内容包含意外汉字',
   },
+  siracusa: {
+    forbiddenPattern: /\p{Script=Han}/u,
+    forbiddenMessage: '叙拉古预览内容包含意外汉字',
+  },
+  leithanien: {
+    forbiddenPattern: /\p{Script=Han}/u,
+    forbiddenMessage: '莱塔尼亚预览内容包含意外汉字',
+  },
+  kazimierz: {
+    forbiddenPattern: /\p{Script=Han}/u,
+    forbiddenMessage: '卡西米尔预览内容包含意外汉字',
+  },
   minos: {
     forbiddenPattern: /\p{Script=Han}/u,
     forbiddenMessage: '米诺斯预览内容包含意外汉字',
