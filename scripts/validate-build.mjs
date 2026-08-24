@@ -291,6 +291,17 @@ for (const [route, filePath] of routes) {
         /<section[^>]*\sdata-archive-projection(?:\s|=|>)|data-archive-projection-status/u,
         `${route} 不得保留底部投影框`,
       );
+      const projectionPosters = [
+        ...html.matchAll(/<img\b[^>]*data-archive-projection-field="poster"[^>]*>/gu),
+      ];
+      for (const [projectionPoster] of projectionPosters) {
+        assert.match(projectionPoster, /\sloading="lazy"/u, `${route} 的隐藏投影图必须延迟加载`);
+        assert.doesNotMatch(
+          projectionPoster,
+          /\sloading="eager"/u,
+          `${route} 的等级 0 不得急切请求隐藏投影图`,
+        );
+      }
     }
     if (route.endsWith('/search/')) {
       assert.match(html, /data-search-fallback/u, `${route} 缺少唯一搜索降级内容`);

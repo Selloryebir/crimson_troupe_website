@@ -33,6 +33,7 @@ export interface TicketTextLayout {
 
 export interface TicketTextLayoutOptions {
   maxWidth: number;
+  maxHeight?: number;
   preferredFontSize: number;
   minimumFontSize: number;
   maxLines: number;
@@ -148,18 +149,27 @@ export function layoutTicketText(
   locale: string,
   options: TicketTextLayoutOptions,
 ): TicketTextLayout {
-  const { maxWidth, preferredFontSize, minimumFontSize, maxLines } = options;
+  const {
+    maxWidth,
+    maxHeight = Number.POSITIVE_INFINITY,
+    preferredFontSize,
+    minimumFontSize,
+    maxLines,
+  } = options;
   for (let fontSize = preferredFontSize; fontSize >= minimumFontSize; fontSize -= 2) {
     const lines = wrapTicketText(value, locale, maxWidth / fontSize);
-    if (lines.length <= maxLines || fontSize === minimumFontSize) {
+    const lineHeight = Math.round(fontSize * 1.12);
+    if (lines.length <= maxLines && lines.length * lineHeight <= maxHeight) {
       return {
         lines,
         fontSize,
-        lineHeight: Math.round(fontSize * 1.12),
+        lineHeight,
       };
     }
   }
-  throw new Error('无法为票面文字生成布局。');
+  throw new Error(
+    `票面文字在最小字号 ${minimumFontSize} 下仍超过 ${maxLines} 行或 ${maxHeight} 像素高度。`,
+  );
 }
 
 function createTextMarkup(
@@ -303,7 +313,13 @@ export function createTicketSvg(input: TicketArtifactInput): string {
     locale,
     70,
     128,
-    { maxWidth: 770, preferredFontSize: 54, minimumFontSize: 30, maxLines: 3 },
+    {
+      maxWidth: 770,
+      maxHeight: 102,
+      preferredFontSize: 54,
+      minimumFontSize: 30,
+      maxLines: 3,
+    },
     'font-family="serif" font-weight="600" fill="#211713"',
   );
   const kindMarkup = createTextMarkup(
@@ -311,8 +327,8 @@ export function createTicketSvg(input: TicketArtifactInput): string {
     performance.kind,
     locale,
     70,
-    224,
-    { maxWidth: 770, preferredFontSize: 22, minimumFontSize: 16, maxLines: 2 },
+    238,
+    { maxWidth: 770, maxHeight: 36, preferredFontSize: 22, minimumFontSize: 16, maxLines: 2 },
     'font-family="sans-serif" fill="#6d625b"',
   );
   const dateTimeMarkup = createTextMarkup(
@@ -320,8 +336,8 @@ export function createTicketSvg(input: TicketArtifactInput): string {
     performance.dateTime,
     locale,
     70,
-    304,
-    { maxWidth: 770, preferredFontSize: 29, minimumFontSize: 18, maxLines: 2 },
+    316,
+    { maxWidth: 770, maxHeight: 45, preferredFontSize: 29, minimumFontSize: 18, maxLines: 2 },
     'font-family="serif" fill="#211713"',
   );
   const placeMarkup = createTextMarkup(
@@ -329,8 +345,8 @@ export function createTicketSvg(input: TicketArtifactInput): string {
     performance.place,
     locale,
     70,
-    370,
-    { maxWidth: 770, preferredFontSize: 20, minimumFontSize: 16, maxLines: 2 },
+    374,
+    { maxWidth: 770, maxHeight: 40, preferredFontSize: 20, minimumFontSize: 16, maxLines: 2 },
     'font-family="sans-serif" fill="#6d625b"',
   );
 
@@ -347,7 +363,7 @@ export function createTicketSvg(input: TicketArtifactInput): string {
   <text x="70" y="72" font-family="sans-serif" font-size="18" letter-spacing="5" fill="${accent}">${escapeXml(messages.header)}</text>
   ${titleMarkup}
   ${kindMarkup}
-  <text x="70" y="274" font-family="sans-serif" font-size="20" fill="#6d625b">${escapeXml(messages.dateTime)}</text>
+  <text x="70" y="286" font-family="sans-serif" font-size="20" fill="#6d625b">${escapeXml(messages.dateTime)}</text>
   ${dateTimeMarkup}
   ${placeMarkup}
   <text x="70" y="440" font-family="sans-serif" font-size="20" fill="#6d625b">${escapeXml(messages.zone)}</text>

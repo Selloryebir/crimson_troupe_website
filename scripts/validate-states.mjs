@@ -965,6 +965,7 @@ for (const sample of unicodeTicketSamples) {
   assert.ok(graphemes.every((grapheme) => !/^\p{Mark}/u.test(grapheme)));
   const layout = layoutTicketText(sample.value, sample.locale, {
     maxWidth: 770,
+    maxHeight: 102,
     preferredFontSize: 54,
     minimumFontSize: 30,
     maxLines: 3,
@@ -972,7 +973,19 @@ for (const sample of unicodeTicketSamples) {
   assert.ok(layout.fontSize >= 30);
   assert.ok(layout.lines.length <= 3);
   assert.equal(layout.lines.join('').replaceAll(/\s/gu, ''), sample.value.replaceAll(/\s/gu, ''));
+  assert.ok(128 + layout.lines.length * layout.lineHeight <= 230, '票面标题不得侵入下一字段区域');
 }
+assert.throws(
+  () =>
+    layoutTicketText('W'.repeat(400), 'en-US', {
+      maxWidth: 770,
+      maxHeight: 102,
+      preferredFontSize: 54,
+      minimumFontSize: 30,
+      maxLines: 3,
+    }),
+  /最小字号 30 下仍超过 3 行或 102 像素高度/u,
+);
 
 const unicodeArtifactSvg = createTicketSvg({
   performance: {
