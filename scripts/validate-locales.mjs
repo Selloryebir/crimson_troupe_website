@@ -218,6 +218,11 @@ const frontTicketingPerformances = Object.values(performances).filter(
     performance.world === 'front' && performance.ticketAvailability.state === 'on-sale',
 );
 assert.ok(frontTicketingPerformances.length > 0, '表站当前快照没有可售场次');
+assert.deepEqual(
+  frontTicketingPerformances.map(({ performanceId }) => performanceId),
+  buildSnapshot.homepagePerformanceIds.front,
+  '当前表站首页策展场次与票务候选必须保持相同顺序',
+);
 for (const performance of frontTicketingPerformances) {
   const { seatingPlanId, offers } = performance.ticketAvailability;
   assert.ok(seatingPlanId, `${performance.performanceId} 缺少表站分区示意`);
