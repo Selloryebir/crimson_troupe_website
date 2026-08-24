@@ -1,0 +1,68 @@
+---
+import type { ResolvedLocalization } from '../../data/localized/resolve.ts';
+import type {
+  TicketingPerformanceOption,
+  TicketingPlatformPresentation,
+} from '../../data/ticketing.ts';
+import TicketingPlatformBrand from './TicketingPlatformBrand.astro';
+
+interface Props {
+  localization: ResolvedLocalization;
+  options: readonly TicketingPerformanceOption[];
+  riceNetwork: TicketingPlatformPresentation;
+  dropTower: TicketingPlatformPresentation;
+  officialPath: string;
+}
+
+const { localization, options, riceNetwork, dropTower, officialPath } = Astro.props;
+const messages = localization.messages.ticketing;
+---
+
+<section class="partner-ticketing__fallback" data-partner-ticketing-fallback role="status">
+  <h2>{messages.partnerUnavailableTitle}</h2>
+  <p>{messages.partnerUnavailableCopy}</p>
+  <a class="button-link" href={officialPath}>{messages.returnToBasket}</a>
+</section>
+
+<section
+  class="partner-ticketing-flow"
+  data-partner-ticketing-app
+  data-ticketing-options={JSON.stringify(options)}
+  data-ticketing-messages={JSON.stringify(messages)}
+  data-ticketing-official-path={officialPath}
+  hidden
+>
+  <div class="partner-ticketing-progress" data-partner-progress hidden>
+    <span class="partner-ticketing-progress__spinner" aria-hidden="true"></span>
+    <p data-partner-progress-label></p>
+    <progress max="3" value="0" data-partner-progress-value></progress>
+  </div>
+
+  <button class="button" type="button" data-partner-review hidden>{messages.submitRequest}</button>
+
+  <dialog
+    class="partner-ticketing-dialog"
+    data-partner-dialog
+    aria-labelledby="partner-result-title"
+  >
+    <div class="partner-ticketing-dialog__brand" data-partner-brand="rice-network">
+      <TicketingPlatformBrand platform={riceNetwork} headingLevel="div" />
+    </div>
+    <div class="partner-ticketing-dialog__brand" data-partner-brand="drop-tower" hidden>
+      <TicketingPlatformBrand platform={dropTower} headingLevel="div" />
+    </div>
+    <p class="eyebrow" data-partner-channel></p>
+    <h2 id="partner-result-title" data-partner-title tabindex="-1"></h2>
+    <p data-partner-copy></p>
+    <div class="ticket-flow__details" data-partner-details></div>
+    <div class="actions" data-partner-actions></div>
+  </dialog>
+
+  <p class="ticketing-live" data-partner-live aria-live="polite"></p>
+</section>
+
+<script>
+  import { initPartnerTicketingExperience } from '../../scripts/partner-ticketing-controller.ts';
+
+  initPartnerTicketingExperience();
+</script>

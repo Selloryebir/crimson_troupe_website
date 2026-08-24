@@ -902,10 +902,15 @@ const networkFailure = resolveTicketingAttempt(
   () => '000000000000',
 );
 assert.equal(standardSuccess.phase, 'success');
+assert.equal(standardSuccess.currentEndingId, 'ENDING_NORMAL_SUCCESS');
+assert.deepEqual(standardSuccess.endingHistory, ['ENDING_NORMAL_SUCCESS']);
 assert.equal(standardFailure.phase, 'failure');
+assert.equal(standardFailure.currentEndingId, null);
 assert.equal(standardFailure.attemptCount, 1);
 assert.equal(standardFailure.lastOutcome, 'unavailable');
 assert.equal(networkFailure.phase, 'network');
+assert.equal(networkFailure.currentEndingId, 'ENDING_NETWORK_ERROR');
+assert.deepEqual(networkFailure.endingHistory, ['ENDING_NETWORK_ERROR']);
 assert.equal(networkFailure.attemptCount, 1);
 const networkRetry = retryTicketingAttempt(networkFailure);
 assert.deepEqual(networkRetry.basket, selection.basket);
@@ -934,6 +939,8 @@ const premiumFailure = resolveTicketingAttempt(
 );
 assert.equal(premiumSuccess.phase, 'success');
 assert.equal(premiumFailure.phase, 'failure');
+assert.equal(premiumSuccess.currentEndingId, 'ENDING_SCALPER_SUCCESS');
+assert.equal(premiumFailure.currentEndingId, 'ENDING_SCALPER_FAILED');
 assert.equal(premiumSuccess.result?.baseTotal, 1100);
 assert.deepEqual(premiumSuccess.result?.adjustments, [{ id: 'priority-service', amount: 550 }]);
 assert.equal(premiumSuccess.result?.settledTotal, 1650);
@@ -956,6 +963,13 @@ const retainedSuccess = resolveTicketingAttempt(
   () => 0.1,
   () => '555555555555',
 );
+const retainedFailure = resolveTicketingAttempt(
+  retainedAttempt,
+  () => 0.9,
+  () => '000000000000',
+);
+assert.equal(retainedSuccess.currentEndingId, 'ENDING_DISCOUNT_SUCCESS');
+assert.equal(retainedFailure.currentEndingId, 'ENDING_DISCOUNT_FAILED');
 assert.deepEqual(retainedSuccess.result?.adjustments, [{ id: 'retention-service', amount: 528 }]);
 assert.equal(retainedSuccess.result?.settledTotal, 1628);
 assert.deepEqual(retainedSuccess.result?.stampIds, [
@@ -966,6 +980,7 @@ assert.deepEqual(retainedSuccess.result?.stampIds, [
 
 const retentionDeclined = declineRetentionOffer(firstRetentionOffer);
 assert.equal(retentionDeclined.phase, 'selection');
+assert.equal(retentionDeclined.currentEndingId, 'ENDING_REJECT_RESCALPER');
 const failureAfterRetention = resolveTicketingAttempt(
   startTicketingAttempt(retentionDeclined),
   () => 0.5,
@@ -1000,6 +1015,7 @@ const forcedManualReview = resolveTicketingAttempt(
 );
 assert.equal(boundedRandomCalls, MAX_REQUIRING_RESUBMIT_RESULTS);
 assert.equal(forcedManualReview.phase, 'success');
+assert.equal(forcedManualReview.currentEndingId, 'ENDING_NORMAL_SUCCESS');
 assert.equal(forcedManualReview.route, 'standard');
 assert.ok(forcedManualReview.journeyTags.includes('manual-review'));
 assert.ok(forcedManualReview.result?.stampIds.includes('manual-review'));
@@ -1064,6 +1080,7 @@ const restored = restoreTicketingState(JSON.stringify(premiumSuccess), catalog);
 assert.equal(restored.phase, 'success');
 assert.deepEqual(restored.result?.tickets, premiumSuccess.result?.tickets);
 assert.deepEqual(restored.result?.journeyTags, premiumSuccess.result?.journeyTags);
+assert.deepEqual(restored.result?.endingHistory, premiumSuccess.result?.endingHistory);
 const invalidForcedCombination = {
   ...forcedReturnedSeat,
   journeyTags: [...forcedReturnedSeat.journeyTags, 'manual-review'],
@@ -1073,6 +1090,7 @@ assert.deepEqual(
   createTicketingState(),
 );
 assert.deepEqual(restoreTicketingState('{"version":2}', catalog), createTicketingState());
+assert.deepEqual(restoreTicketingState('{"version":3}', catalog), createTicketingState());
 assert.deepEqual(restoreTicketingState('{"version":999}', catalog), createTicketingState());
 
 const previewLocalizations = previewEditionIds.map((editionId) =>
@@ -1225,10 +1243,21 @@ assert.ok(unicodeArtifactSvg.includes('data-ticket-line="2"'));
 assert.ok(!unicodeArtifactSvg.includes('…'));
 assert.ok(unicodeArtifactSvg.includes('<rect x="920"'));
 
+const coveredTicketingEndings = new Set([
+  networkFailure.currentEndingId,
+  standardSuccess.currentEndingId,
+  retentionDeclined.currentEndingId,
+  premiumSuccess.currentEndingId,
+  premiumFailure.currentEndingId,
+  retainedSuccess.currentEndingId,
+  retainedFailure.currentEndingId,
+]);
+assert.equal(coveredTicketingEndings.size, 7, '七种票务 Ending 必须全部可确定性复现');
+
 console.log(
   `state validation passed: pollution=${pollutionTriggers.length} triggers, p12-events=${(
     probabilityAtLeastThreeInTen * 100
   ).toFixed(
     4,
-  )}%, p10-events=${(probabilityAtLeastThreeInFirstTenEvents * 100).toFixed(4)}%, ticket outcomes=5, matrix=${matrix.length}`,
+  )}%, p10-events=${(probabilityAtLeastThreeInFirstTenEvents * 100).toFixed(4)}%, ticket outcomes=${coveredTicketingEndings.size}, matrix=${matrix.length}`,
 );

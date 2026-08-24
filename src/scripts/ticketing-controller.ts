@@ -3,6 +3,13 @@ import { formatMessage } from '../data/localized/format';
 import type { TicketingMessages } from '../data/localized/schema';
 import { createTicketSvg } from './ticket-artifact';
 import {
+  clearTicketingSession,
+  createTicketNumber,
+  getTicketingSessionStorage,
+  restoreTicketingSession,
+  saveTicketingSession,
+} from './ticketing-session.ts';
+import {
   acceptRetentionOffer,
   calculateAdjustmentAmount,
   calculateBaseTotal,
@@ -13,7 +20,6 @@ import {
   enterPremiumRoute,
   openPremiumOffer,
   resolveTicketingAttempt,
-  restoreTicketingState,
   retryTicketingAttempt,
   returnToSelection,
   returnToStandardRoute,
@@ -21,33 +27,6 @@ import {
   updateBasket,
   type TicketBasketItem,
 } from './ticketing-state';
-
-const STORAGE_KEY = 'crimson-troupe:ticketing:v3';
-
-function getSessionStorage(): Storage | null {
-  try {
-    const probe = `${STORAGE_KEY}:probe`;
-    sessionStorage.setItem(probe, '1');
-    sessionStorage.removeItem(probe);
-    return sessionStorage;
-  } catch {
-    return null;
-  }
-}
-
-function createTicketNumber(): string {
-  try {
-    const bytes = new Uint8Array(6);
-    crypto.getRandomValues(bytes);
-    let value = 0n;
-    for (const byte of bytes) {
-      value = (value << 8n) + BigInt(byte);
-    }
-    return String(value % 1_000_000_000_000n).padStart(12, '0');
-  } catch {
-    return String(Math.floor(Math.random() * 1_000_000_000_000)).padStart(12, '0');
-  }
-}
 
 function createButton(action: string, label: string, primary = false): HTMLButtonElement {
   const button = document.createElement('button');
@@ -156,23 +135,20 @@ export function initTicketingExperience(): void {
     return;
   }
   const locale = app.dataset.ticketingLocale ?? document.documentElement.lang;
+  const partnerPath = app.dataset.ticketingPartnerPath;
 
-  const storage = getSessionStorage();
-  let state = restoreTicketingState(
-    storage?.getItem(STORAGE_KEY) ?? null,
+  const storage = getTicketingSessionStorage();
+  let state = restoreTicketingSession(
+    storage,
     options.map((option) => ({ performanceId: option.performanceId, offers: option.offers })),
   );
 
-  const save = () => {
-    if (!storage) {
-      return;
-    }
-    try {
-      storage.setItem(STORAGE_KEY, JSON.stringify(state));
-    } catch {
-      // The active page keeps working in memory when tab storage is unavailable.
-    }
-  };
+  const save = () => saveTicketingSession(storage, state);
+
+  if (state.phase !== 'selection' && state.phase !== 'success' && partnerPath) {
+    window.location.replace(partnerPath);
+    return;
+  }
 
   const optionFor = (performanceId: string) =>
     options.find((option) => option.performanceId === performanceId);
@@ -537,8 +513,12 @@ export function initTicketingExperience(): void {
     }
     state = next;
     save();
+    live.textContent = messages.submitted;
+    if (partnerPath) {
+      window.location.assign(partnerPath);
+      return;
+    }
     render(true);
-    live.textContent = flowTitle.textContent || messages.submitted;
   });
 
   flowActions.addEventListener('click', (event) => {
@@ -621,18 +601,12 @@ export function initTicketingExperience(): void {
 
   newRound.addEventListener('click', () => {
     state = createTicketingState();
-    if (storage) {
-      try {
-        storage.removeItem(STORAGE_KEY);
-      } catch {
-        // In-memory reset still succeeds.
-      }
-    }
+    clearTicketingSession(storage);
     live.textContent = messages.newRound;
     render(true);
   });
 
   fallback.hidden = true;
   app.hidden = false;
-  render();
+  render(state.phase === 'success');
 }

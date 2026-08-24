@@ -205,6 +205,11 @@
       "related": ["BP-FND-EXPERIENCE", "BP-CNT-CORE", "BP-I18N-CORE"]
     },
     {
+      "path": "src/components/ticketing/PartnerTicketingExperience.astro",
+      "primary": "BP-MOD-TICKETING",
+      "related": ["BP-FND-EXPERIENCE", "BP-FND-DOMAIN", "BP-I18N-CORE"]
+    },
+    {
       "path": "src/components/shared/PollutionController.astro",
       "primary": "BP-FND-NARRATIVE",
       "related": ["BP-MOD-ARCHIVE", "BP-FND-EXPERIENCE"]
@@ -901,6 +906,11 @@
       "related": ["BP-FND-EXPERIENCE"]
     },
     {
+      "path": "src/scripts/partner-ticketing-controller.ts",
+      "primary": "BP-MOD-TICKETING",
+      "related": ["BP-FND-EXPERIENCE", "BP-FND-DOMAIN", "BP-I18N-CORE"]
+    },
+    {
       "path": "src/scripts/pollution-controller.ts",
       "primary": "BP-FND-NARRATIVE",
       "related": ["BP-MOD-ARCHIVE", "BP-MOD-SEARCH", "BP-I18N-CORE"]
@@ -924,6 +934,11 @@
       "path": "src/scripts/ticketing-controller.ts",
       "primary": "BP-MOD-TICKETING",
       "related": ["BP-FND-EXPERIENCE", "BP-FND-EXTENSION"]
+    },
+    {
+      "path": "src/scripts/ticketing-session.ts",
+      "primary": "BP-MOD-TICKETING",
+      "related": ["BP-FND-DOMAIN"]
     },
     {
       "path": "src/scripts/ticketing-state.ts",

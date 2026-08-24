@@ -1012,14 +1012,23 @@ try {
 
   await firstTicketCheckbox.check();
   await ticketPage.locator('[data-ticket-start]').click();
-  await ticketPage.locator('[data-ticket-flow]:not([hidden])').waitFor();
+  await ticketPage.waitForURL(`${origin}/yan/tickets/partner/`);
+  const partnerDialog = ticketPage.locator('[data-partner-dialog][open]');
+  await partnerDialog.waitFor();
   assert.equal(
     await ticketPage
-      .locator('[data-ticket-flow-title]')
+      .locator('[data-partner-title]')
       .evaluate((element) => element === document.activeElement),
     true,
   );
-  await ticketPage.locator('[data-ticket-action="resolve"]').click();
+  assert.equal(
+    await partnerDialog
+      .locator('[data-partner-brand="rice-network"] [data-ticketing-platform]')
+      .count(),
+    1,
+  );
+  await ticketPage.locator('[data-partner-action="receipt"]').click();
+  await ticketPage.waitForURL(`${origin}/yan/tickets/`);
   await ticketPage.locator('[data-ticket-result]:not([hidden])').waitFor();
   assert.equal(
     await ticketPage
@@ -1032,10 +1041,10 @@ try {
   assert.match(decodeURIComponent(ticketSource ?? ''), /data-ticket-field="title"/u);
   await assertNoHorizontalLoss(ticketPage, '320px 炎国票务结果');
   await ticketPage.goto(`${origin}/yan/tickets/partner/`);
-  const partnerBrand = ticketPage.locator('[data-ticketing-platform="rice-network"]');
+  const partnerBrand = ticketPage.locator('[data-ticketing-platform="rice-network"]:has(h1)');
   await partnerBrand.waitFor();
   assert.equal(await partnerBrand.locator('h1').textContent(), '水稻网');
-  assert.equal(await partnerBrand.locator('img').getAttribute('alt'), '水稻网临时标识');
+  assert.equal(await partnerBrand.locator('img').first().getAttribute('alt'), '水稻网临时标识');
   assert.equal(
     await ticketPage.locator('.partner-ticketing__fallback a').getAttribute('href'),
     '/yan/tickets/',
@@ -1043,6 +1052,49 @@ try {
   await assertNoHorizontalLoss(ticketPage, '320px 炎国水稻网页面');
   assertTicketErrors();
   await ticketContext.close();
+
+  const partnerBranchContext = await browser.newContext({ viewport: { width: 320, height: 800 } });
+  await partnerBranchContext.addInitScript(() => {
+    Math.random = () => 0.5;
+  });
+  const partnerBranchPage = await partnerBranchContext.newPage();
+  const assertPartnerBranchErrors = trackUnexpectedErrors(partnerBranchPage);
+  await partnerBranchPage.goto(`${origin}/yan/tickets/`);
+  await partnerBranchPage.locator('[data-ticketing-app]:not([hidden])').waitFor();
+  await partnerBranchPage.locator('[data-ticket-select]').first().check();
+  await partnerBranchPage.locator('[data-ticket-start]').click();
+  await partnerBranchPage.waitForURL(`${origin}/yan/tickets/partner/`);
+  const branchDialog = partnerBranchPage.locator('[data-partner-dialog][open]');
+  await branchDialog.waitFor();
+  await partnerBranchPage.locator('[data-partner-action="offer"]').click();
+  await branchDialog.waitFor();
+  assert.equal(
+    await partnerBranchPage
+      .locator(
+        '[data-partner-brand="drop-tower"]:not([hidden]) [data-ticketing-platform="drop-tower"]',
+      )
+      .count(),
+    1,
+  );
+  await partnerBranchPage.keyboard.press('Escape');
+  const reviewPartnerResult = partnerBranchPage.locator('[data-partner-review]:not([hidden])');
+  await reviewPartnerResult.waitFor();
+  assert.equal(
+    await reviewPartnerResult.evaluate((element) => element === document.activeElement),
+    true,
+    'Escape 关闭第三方提示后焦点应回到复核按钮',
+  );
+  await reviewPartnerResult.click();
+  await partnerBranchPage.locator('[data-partner-action="decline-premium"]').click();
+  assert.equal(
+    await partnerBranchPage.locator('[data-partner-brand="drop-tower"]:not([hidden])').isVisible(),
+    true,
+  );
+  await partnerBranchPage.locator('[data-partner-action="decline-retention"]').click();
+  await partnerBranchPage.waitForURL(`${origin}/yan/tickets/`);
+  await assertNoHorizontalLoss(partnerBranchPage, '320px 跳楼机邀请与挽留路径');
+  assertPartnerBranchErrors();
+  await partnerBranchContext.close();
 
   const minosContext = await browser.newContext({
     viewport: { width: 320, height: 800 },
@@ -1065,7 +1117,10 @@ try {
   await minosPage.locator('[data-ticketing-app]:not([hidden])').waitFor();
   await minosPage.locator('[data-ticket-select]').first().check();
   await minosPage.locator('[data-ticket-start]').click();
-  await minosPage.locator('[data-ticket-action="resolve"]').click();
+  await minosPage.waitForURL(`${origin}/min/tickets/partner/`);
+  await minosPage.locator('[data-partner-dialog][open]').waitFor();
+  await minosPage.locator('[data-partner-action="receipt"]').click();
+  await minosPage.waitForURL(`${origin}/min/tickets/`);
   await minosPage.locator('[data-ticket-result]:not([hidden])').waitFor();
   const minosTicketSource = await minosPage.locator('.issued-ticket > img').getAttribute('src');
   assert.match(decodeURIComponent(minosTicketSource ?? ''), /\p{Script=Greek}/u);
@@ -1162,7 +1217,10 @@ try {
   await ursusPage.locator('[data-ticketing-app]:not([hidden])').waitFor();
   await ursusPage.locator('[data-ticket-select]').first().check();
   await ursusPage.locator('[data-ticket-start]').click();
-  await ursusPage.locator('[data-ticket-action="resolve"]').click();
+  await ursusPage.waitForURL(`${origin}/urs/tickets/partner/`);
+  await ursusPage.locator('[data-partner-dialog][open]').waitFor();
+  await ursusPage.locator('[data-partner-action="receipt"]').click();
+  await ursusPage.waitForURL(`${origin}/urs/tickets/`);
   await ursusPage.locator('[data-ticket-result]:not([hidden])').waitFor();
   const editionRouteSequence = builtEditions.map(({ routePrefix }) => routePrefix);
   for (const routePrefix of editionRouteSequence) {

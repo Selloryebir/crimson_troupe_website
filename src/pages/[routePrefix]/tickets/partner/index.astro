@@ -1,10 +1,12 @@
 ---
 import TicketingPlatformBrand from '../../../../components/ticketing/TicketingPlatformBrand.astro';
+import PartnerTicketingExperience from '../../../../components/ticketing/PartnerTicketingExperience.astro';
 import { buildSnapshot } from '../../../../data/content/resolve.ts';
 import type { BuiltEdition } from '../../../../data/editions.ts';
 import { getLocalization } from '../../../../data/localized/resolve.ts';
 import { sitePath } from '../../../../data/site-routes.ts';
 import { getTicketingPlatformPresentation } from '../../../../data/ticketing.ts';
+import { getTicketingOptions } from '../../../../data/ticketing.ts';
 import FrontLayout from '../../../../layouts/FrontLayout.astro';
 
 export function getStaticPaths() {
@@ -22,6 +24,7 @@ const { edition } = Astro.props;
 const localization = getLocalization(edition);
 const copy = localization.messages.ticketing;
 const platform = getTicketingPlatformPresentation(localization, 'rice-network', buildSnapshot);
+const dropTower = getTicketingPlatformPresentation(localization, 'drop-tower', buildSnapshot);
 const canonicalPath = sitePath(edition, 'front', 'tickets/partner');
 const returnPath = sitePath(edition, 'front', 'tickets');
 const title = copy.partnerPageTitle.replace('{platform}', platform.displayName);
@@ -39,10 +42,12 @@ const title = copy.partnerPageTitle.replace('{platform}', platform.displayName);
     <p class="partner-ticketing__eyebrow">{copy.partnerPageEyebrow}</p>
     <TicketingPlatformBrand platform={platform} headingLevel="h1" />
     <p class="partner-ticketing__introduction">{copy.partnerPageIntroduction}</p>
-    <section class="partner-ticketing__fallback" aria-labelledby="partner-ticketing-status">
-      <h2 id="partner-ticketing-status">{copy.partnerUnavailableTitle}</h2>
-      <p>{copy.partnerUnavailableCopy}</p>
-      <a class="button-link" href={returnPath}>{copy.returnToBasket}</a>
-    </section>
+    <PartnerTicketingExperience
+      localization={localization}
+      options={getTicketingOptions(localization, buildSnapshot)}
+      riceNetwork={platform}
+      dropTower={dropTower}
+      officialPath={returnPath}
+    />
   </div>
 </FrontLayout>
