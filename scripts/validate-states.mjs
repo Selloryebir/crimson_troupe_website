@@ -299,12 +299,12 @@ assert.equal(showcaseSnapshot.performanceEntries.length, 28);
 assert.equal(showcaseSnapshot.productionEntries.length, 14);
 assert.equal(showcaseSnapshot.locationEntries.length, 10);
 assert.equal(showcaseSnapshot.artworkEntries.length, 14);
-assert.equal(showcaseSnapshot.seatingPlanEntries.length, 3);
+assert.equal(showcaseSnapshot.seatingPlanEntries.length, 7);
 assert.deepEqual(showcaseSnapshot.editionIds, ['yan']);
 assert.deepEqual(
   new Set(showcaseSnapshot.localizationPackageEditionIds),
-  new Set(['yan', 'columbia', 'leithanien', 'victoria']),
-  'showcase 只生成炎国页面，但票面闭包必须包含三个实际举办地语言依赖',
+  new Set(['yan', 'columbia', 'leithanien', 'victoria', 'siracusa']),
+  'showcase 只生成炎国页面，但票面闭包必须包含全部实际举办地语言依赖',
 );
 assert.deepEqual(showcaseSnapshot.featuredPerformanceIds, {
   front: 'uncrowned-trimount-1102',
@@ -1143,6 +1143,11 @@ const previewLocalizations = previewEditionIds.map((editionId) =>
 );
 const yanLocalization = previewLocalizations[0];
 const yanOptions = getTicketingOptions(yanLocalization, previewSnapshot);
+assert.deepEqual(
+  yanOptions.map(({ performanceId }) => performanceId),
+  previewSnapshot.homepagePerformanceIds.front,
+  '当前表站首页策展场次与票务候选必须保持相同顺序',
+);
 const crossLocaleItem = {
   performanceId: yanOptions[0].performanceId,
   zone: yanOptions[0].offers[0].zone,

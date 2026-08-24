@@ -894,6 +894,10 @@ try {
     { id: 'trimount-grand-fan', levels: 3, zones: ['C', 'B', 'A', 'S', 'BOX'] },
     { id: 'wiesheim-mirror-horseshoe', levels: 3, zones: ['C', 'B', 'A', 'S', 'BOX'] },
     { id: 'norport-temporary-stand', levels: 1, zones: ['C', 'B', 'A'] },
+    { id: 'montelupe-banquet-horseshoe', levels: 2, zones: ['C', 'B', 'A', 'S', 'BOX'] },
+    { id: 'linqu-courtyard-fan', levels: 1, zones: ['C', 'B', 'A', 'S'] },
+    { id: 'londinium-grand-tiers', levels: 3, zones: ['C', 'B', 'A', 'S', 'BOX'] },
+    { id: 'qingsui-opera-courtyard', levels: 3, zones: ['C', 'B', 'A', 'S'] },
   ];
   for (const expected of seatingPlans) {
     const details = ticketPage.locator(`[data-seating-plan="${expected.id}"]`);
@@ -965,7 +969,12 @@ try {
     await assertNoHorizontalLoss(ticketPage, `320px ${expected.id} 分区示意`);
   }
   const ticketRows = ticketPage.locator('[data-ticket-option]');
-  const firstTicketRow = ticketRows.first();
+  assert.deepEqual(
+    await ticketRows.evaluateAll((rows) => rows.map((row) => row.dataset.ticketOption)),
+    buildSnapshot.homepagePerformanceIds.front,
+    '票务页场次应与表站首页策展顺序一致',
+  );
+  const firstTicketRow = ticketPage.locator('[data-ticket-option="uncrowned-trimount-1102"]');
   const firstTicketSelect = firstTicketRow.locator('[data-ticket-zone]');
   const firstTicketCheckbox = firstTicketRow.locator('[data-ticket-select]');
   const firstTicketMap = firstTicketRow.locator('[data-ticket-seating-map]');
@@ -1758,7 +1767,7 @@ try {
   await failedSearchContext.close();
 
   console.log(
-    'browser validation passed: editorial home alternation/mobile order, full-list isolation, ranked/grouped search keyboard path, three venue level maps/zones, build-scoped edition selector, long-script 320px headers, ticket focus/artifact, Minos search/download/print, Ursus search isolation/download/cross-edition state/archive exit, archive four-level visual escalation/cross-edition level 3/reduced motion, 320/768 protected controls, localized pollution live status, keyboard invitation exit/continue, no-JS fallback/static archive seats, search failure fallback',
+    'browser validation passed: editorial home alternation/mobile order, full-list isolation, ranked/grouped search keyboard path, seven venue level maps/zones, build-scoped edition selector, long-script 320px headers, ticket focus/artifact, Minos search/download/print, Ursus search isolation/download/cross-edition state/archive exit, archive four-level visual escalation/cross-edition level 3/reduced motion, 320/768 protected controls, localized pollution live status, keyboard invitation exit/continue, no-JS fallback/static archive seats, search failure fallback',
   );
 } catch (error) {
   const serverOutput = preview.output.join('').trim();
