@@ -1,5 +1,11 @@
 import type { LocalizedShape } from '../schema';
 import type { yanMessages } from '../yan/messages';
+import type { yanTicketingPlatforms } from '../yan/messages';
+
+export const siracusaTicketingPlatforms = {
+  'rice-network': { displayName: 'Rete Riso', logoAlt: 'Marchio provvisorio di Rete Riso' },
+  'drop-tower': { displayName: 'Torre a Caduta', logoAlt: 'Marchio provvisorio di Torre a Caduta' },
+} as const satisfies LocalizedShape<typeof yanTicketingPlatforms>;
 
 export const siracusaMessages = {
   filters: {
@@ -27,6 +33,14 @@ export const siracusaMessages = {
       'Questa pagina non invia query e non carica alcun servizio remoto. Puoi comunque sfogliare le performance e le informazioni sulla compagnia con la navigazione principale.',
   },
   ticketing: {
+    partnerPageEyebrow: 'PARTNER UFFICIALE DI BIGLIETTERIA',
+    partnerPageTitle: 'Servizio posti {platform}',
+    partnerPageIntroduction:
+      'Il sito della compagnia ha affidato il carrello alla piattaforma partner. Questa anteprima offre solo una destinazione di ripiego affidabile.',
+    partnerUnavailableTitle: 'Collegamento non ancora disponibile',
+    partnerUnavailableCopy:
+      'Questa anteprima non contatta servizi remoti e non crea transazioni. Puoi tornare in sicurezza al carrello ufficiale.',
+    returnToBasket: 'Torna al carrello ufficiale',
     selectedCount: 'Performance {count} selezionate',
     emptyBasket: 'Nessuna performance selezionata',
     selectionReady: 'La zona spettacolo e posti a sedere si trovano in questo carrello.',

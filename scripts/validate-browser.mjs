@@ -1031,6 +1031,16 @@ try {
   assert.match(ticketSource ?? '', /^data:image\/svg\+xml/u);
   assert.match(decodeURIComponent(ticketSource ?? ''), /data-ticket-field="title"/u);
   await assertNoHorizontalLoss(ticketPage, '320px 炎国票务结果');
+  await ticketPage.goto(`${origin}/yan/tickets/partner/`);
+  const partnerBrand = ticketPage.locator('[data-ticketing-platform="rice-network"]');
+  await partnerBrand.waitFor();
+  assert.equal(await partnerBrand.locator('h1').textContent(), '水稻网');
+  assert.equal(await partnerBrand.locator('img').getAttribute('alt'), '水稻网临时标识');
+  assert.equal(
+    await ticketPage.locator('.partner-ticketing__fallback a').getAttribute('href'),
+    '/yan/tickets/',
+  );
+  await assertNoHorizontalLoss(ticketPage, '320px 炎国水稻网页面');
   assertTicketErrors();
   await ticketContext.close();
 

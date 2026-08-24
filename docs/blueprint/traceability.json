@@ -200,6 +200,11 @@
       "related": ["BP-FND-EXPERIENCE", "BP-FND-DOMAIN", "BP-CNT-CORE"]
     },
     {
+      "path": "src/components/ticketing/TicketingPlatformBrand.astro",
+      "primary": "BP-MOD-TICKETING",
+      "related": ["BP-FND-EXPERIENCE", "BP-CNT-CORE", "BP-I18N-CORE"]
+    },
+    {
       "path": "src/components/shared/PollutionController.astro",
       "primary": "BP-FND-NARRATIVE",
       "related": ["BP-MOD-ARCHIVE", "BP-FND-EXPERIENCE"]
@@ -761,6 +766,16 @@
       "related": ["BP-FND-DOMAIN", "BP-CNT-CORE"]
     },
     {
+      "path": "src/data/ticketing-platform-assets.ts",
+      "primary": "BP-MOD-TICKETING",
+      "related": ["BP-CNT-CORE"]
+    },
+    {
+      "path": "src/data/ticketing-platforms.ts",
+      "primary": "BP-MOD-TICKETING",
+      "related": ["BP-FND-DOMAIN", "BP-CNT-CORE", "BP-I18N-CORE"]
+    },
+    {
       "path": "src/data/ticketing.ts",
       "primary": "BP-MOD-TICKETING",
       "related": ["BP-FND-DOMAIN", "BP-MOD-PROGRAMS", "BP-CNT-CORE"]
@@ -861,6 +876,11 @@
       "related": ["BP-FND-CORE", "BP-MOD-PROGRAMS"]
     },
     {
+      "path": "src/pages/[routePrefix]/tickets/partner/index.astro",
+      "primary": "BP-MOD-TICKETING",
+      "related": ["BP-FND-CORE", "BP-FND-EXPERIENCE", "BP-I18N-CORE"]
+    },
+    {
       "path": "src/pages/[routePrefix]/troupe/index.astro",
       "primary": "BP-CNT-CORE",
       "related": ["BP-FND-CORE", "BP-FND-EXPERIENCE"]
@@ -929,6 +949,11 @@
       "path": "src/styles/main.css",
       "primary": "BP-FND-EXPERIENCE",
       "related": ["BP-FND-CORE", "BP-MOD-ARCHIVE", "BP-MOD-PROGRAMS"]
+    },
+    {
+      "path": "src/styles/partner-ticketing.css",
+      "primary": "BP-MOD-TICKETING",
+      "related": ["BP-FND-EXPERIENCE", "BP-I18N-CORE"]
     },
     {
       "path": "src/styles/pollution.css",

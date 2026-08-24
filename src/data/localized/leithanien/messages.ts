@@ -1,5 +1,11 @@
 import type { LocalizedShape } from '../schema';
 import type { yanMessages } from '../yan/messages';
+import type { yanTicketingPlatforms } from '../yan/messages';
+
+export const leithanienTicketingPlatforms = {
+  'rice-network': { displayName: 'Reisnetz', logoAlt: 'Vorläufiges Zeichen des Reisnetzes' },
+  'drop-tower': { displayName: 'Fallturm', logoAlt: 'Vorläufiges Zeichen des Fallturms' },
+} as const satisfies LocalizedShape<typeof yanTicketingPlatforms>;
 
 export const leithanienMessages = {
   filters: {
@@ -29,6 +35,14 @@ export const leithanienMessages = {
       'Diese Seite sendet keine Anfrage und lädt keinen Remote-Dienst. Über die Hauptnavigation können Sie weiterhin nach Leistungen und Unternehmensinformationen suchen.',
   },
   ticketing: {
+    partnerPageEyebrow: 'OFFIZIELLER KARTENPARTNER',
+    partnerPageTitle: 'Sitzplatzdienst {platform}',
+    partnerPageIntroduction:
+      'Die Website der Truppe hat den Warenkorb an die Partnerplattform übergeben. Diese Vorschau bietet nur eine verlässliche Ausweichseite.',
+    partnerUnavailableTitle: 'Verbindung noch nicht verfügbar',
+    partnerUnavailableCopy:
+      'Diese Vorschau kontaktiert keinen externen Dienst und erzeugt keine Transaktion. Sie können sicher zum offiziellen Warenkorb zurückkehren.',
+    returnToBasket: 'Zum offiziellen Warenkorb',
     selectedCount: '{count} Auftritte ausgewählt',
     emptyBasket: 'Keine Auftritte ausgewählt',
     selectionReady: 'Die Aufführungs- und Sitzbereich befinden sich in diesem Korb.',

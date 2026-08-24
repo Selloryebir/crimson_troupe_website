@@ -15,6 +15,11 @@ import { getRegisteredProductionArtwork, type ProductionArtwork } from '../produ
 import type { SiteWorld } from '../site-routes.ts';
 import { derivePerformanceCollection, getSiteTerraNow } from '../site-time.ts';
 import {
+  ticketingPlatforms,
+  type TicketingPlatformDefinition,
+  type TicketingPlatformId,
+} from '../ticketing-platforms.ts';
+import {
   getRegisteredTicketSeatingPlan,
   type SeatingPlanDefinition,
   type SeatingPlanId,
@@ -57,6 +62,13 @@ export interface ContentSnapshot {
   >;
   seatingPlanEntries: readonly (readonly [SeatingPlanId, Readonly<SeatingPlanDefinition>])[];
   seatingPlans: Readonly<Partial<Record<SeatingPlanId, Readonly<SeatingPlanDefinition>>>>;
+  ticketingPlatformEntries: readonly (readonly [
+    TicketingPlatformId,
+    Readonly<TicketingPlatformDefinition>,
+  ])[];
+  ticketingPlatforms: Readonly<
+    Partial<Record<TicketingPlatformId, Readonly<TicketingPlatformDefinition>>>
+  >;
   featuredPerformanceIds: Readonly<Record<SiteWorld, PerformanceId>>;
   homepagePerformanceIds: Readonly<Record<SiteWorld, readonly PerformanceId[]>>;
   archiveProjectionProductionId: ProductionId;
@@ -187,6 +199,9 @@ export function resolveContent(
       Object.freeze(getRegisteredTicketSeatingPlan(seatingPlanId)),
     ] as const),
   );
+  const ticketingPlatformEntries = Object.entries(ticketingPlatforms) as Array<
+    [TicketingPlatformId, TicketingPlatformDefinition]
+  >;
 
   return cloneImmutable({
     context,
@@ -205,6 +220,8 @@ export function resolveContent(
     artworks: toArtworkRecord(artworkEntries),
     seatingPlanEntries: Object.freeze(seatingPlanEntries),
     seatingPlans: toReadonlyRecord(seatingPlanEntries),
+    ticketingPlatformEntries: Object.freeze(ticketingPlatformEntries),
+    ticketingPlatforms: toReadonlyRecord(ticketingPlatformEntries),
     featuredPerformanceIds: Object.freeze({
       front: rootSet.worlds.front.featuredPerformanceId,
       archive: rootSet.worlds.archive.featuredPerformanceId,
@@ -230,6 +247,13 @@ export function getSnapshotSeatingPlan(
   seatingPlanId: SeatingPlanId,
 ): Readonly<SeatingPlanDefinition> | undefined {
   return snapshot.seatingPlans[seatingPlanId];
+}
+
+export function getSnapshotTicketingPlatform(
+  snapshot: ContentSnapshot,
+  platformId: TicketingPlatformId,
+): Readonly<TicketingPlatformDefinition> | undefined {
+  return snapshot.ticketingPlatforms[platformId];
 }
 
 export function getWorldPerformanceEntries(

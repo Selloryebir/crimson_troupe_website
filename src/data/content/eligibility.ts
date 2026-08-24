@@ -6,11 +6,19 @@ import {
 } from './approval-digests.ts';
 import type { ContentRootSet } from './root-sets.ts';
 import { getRootPerformanceIds } from './root-sets.ts';
+import {
+  ticketingPlatforms,
+  type TicketingPlatformDefinition,
+  type TicketingPlatformId,
+} from '../ticketing-platforms.ts';
 
 export function assertContentContextEligible(
   context: BuildContext,
   rootSet: ContentRootSet,
   approvals: ApprovedContentDigests = approvedContentDigests,
+  platforms: Readonly<
+    Record<TicketingPlatformId, TicketingPlatformDefinition>
+  > = ticketingPlatforms,
 ): void {
   if (context.contentPolicy === 'preview-ok') {
     return;
@@ -18,6 +26,11 @@ export function assertContentContextEligible(
 
   const currentDigests = createContentApprovalDigests(context.editionIds, rootSet);
   const ineligible: string[] = [];
+  for (const platform of Object.values(platforms)) {
+    if (platform.logo.approvalStatus !== 'approved') {
+      ineligible.push(`ticketing-platform.${platform.platformId}.logo（正式 Logo 缺失）`);
+    }
+  }
   if (!approvals.site) {
     ineligible.push('site（无批准摘要）');
   } else if (approvals.site !== currentDigests.site) {

@@ -1,5 +1,11 @@
 import type { LocalizedShape } from '../schema';
 import type { yanMessages } from '../yan/messages';
+import type { yanTicketingPlatforms } from '../yan/messages';
+
+export const kazimierzTicketingPlatforms = {
+  'rice-network': { displayName: 'Sieć Ryżowa', logoAlt: 'Tymczasowy znak Sieci Ryżowej' },
+  'drop-tower': { displayName: 'Wieża Spadku', logoAlt: 'Tymczasowy znak Wieży Spadku' },
+} as const satisfies LocalizedShape<typeof yanTicketingPlatforms>;
 
 export const kazimierzMessages = {
   filters: {
@@ -26,6 +32,14 @@ export const kazimierzMessages = {
       'Ta strona nie wysyła żadnych zapytań i nie ładuje żadnych usług zdalnych. Nadal możesz przeglądać występy i informacje o firmie za pomocą głównej nawigacji.',
   },
   ticketing: {
+    partnerPageEyebrow: 'OFICJALNY PARTNER BILETOWY',
+    partnerPageTitle: 'Obsługa miejsc {platform}',
+    partnerPageIntroduction:
+      'Strona trupy przekazała koszyk platformie partnerskiej. Ten podgląd zapewnia jedynie niezawodną stronę zastępczą.',
+    partnerUnavailableTitle: 'Połączenie nie jest jeszcze dostępne',
+    partnerUnavailableCopy:
+      'Ten podgląd nie łączy się z usługą zewnętrzną i nie tworzy transakcji. Można bezpiecznie wrócić do oficjalnego koszyka.',
+    returnToBasket: 'Wróć do oficjalnego koszyka',
     selectedCount: 'Wybrano wydajność {count}',
     emptyBasket: 'Nie wybrano żadnych wykonań',
     selectionReady: 'Strefa wydajności i siedzenia znajdują się w tym koszyku.',

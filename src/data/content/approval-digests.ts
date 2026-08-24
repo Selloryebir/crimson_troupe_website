@@ -14,6 +14,11 @@ import {
   type SeatingPlanDefinition,
   type SeatingPlanId,
 } from '../ticket-seating-plans.ts';
+import {
+  ticketingPlatforms,
+  type TicketingPlatformDefinition,
+  type TicketingPlatformId,
+} from '../ticketing-platforms.ts';
 import { createContentFingerprint } from './fingerprint.ts';
 import { getRootPerformanceIds, type ContentRootSet, type ContentRootSetId } from './root-sets.ts';
 import { assertPerformanceVariantComplete } from './validate.ts';
@@ -43,6 +48,7 @@ export interface ApprovalDigestSources {
   localizations: Readonly<Record<string, PartialLocalizationPackage>>;
   artwork: ProductionArtworkRegistry;
   seatingPlans: Readonly<Record<SeatingPlanId, SeatingPlanDefinition>>;
+  ticketingPlatforms: Readonly<Record<TicketingPlatformId, TicketingPlatformDefinition>>;
   archiveProjection: ArchiveProjectionIdentity;
 }
 
@@ -53,6 +59,7 @@ const defaultSources: ApprovalDigestSources = {
   localizations: localizationPackages,
   artwork: productionArtworkRegistry,
   seatingPlans: ticketSeatingPlans,
+  ticketingPlatforms,
   archiveProjection: archiveProjectionIdentity,
 };
 
@@ -71,6 +78,7 @@ function createSiteApprovalDigest(
             messages: package_?.messages,
             archiveProjection: package_?.archiveProjection,
             ticketZones: package_?.programs?.ticketZones,
+            ticketingPlatforms: package_?.platforms,
           },
         ];
       }),
@@ -90,6 +98,7 @@ function createSiteApprovalDigest(
         sources.artwork[sources.archiveProjection.productionId]?.archive,
       ),
     },
+    ticketingPlatforms: sources.ticketingPlatforms,
   });
 }
 

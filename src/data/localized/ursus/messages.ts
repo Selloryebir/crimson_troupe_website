@@ -1,5 +1,11 @@
 import type { LocalizedShape } from '../schema';
 import type { yanMessages } from '../yan/messages';
+import type { yanTicketingPlatforms } from '../yan/messages';
+
+export const ursusTicketingPlatforms = {
+  'rice-network': { displayName: 'Рисовая сеть', logoAlt: 'Временный знак Рисовой сети' },
+  'drop-tower': { displayName: 'Башня падения', logoAlt: 'Временный знак Башни падения' },
+} as const satisfies LocalizedShape<typeof yanTicketingPlatforms>;
 
 export const ursusMessages = {
   filters: {
@@ -26,6 +32,14 @@ export const ursusMessages = {
       'Страница не отправляет запрос и не загружает удалённую службу. Спектакли и сведения о театре доступны через навигацию.',
   },
   ticketing: {
+    partnerPageEyebrow: 'ОФИЦИАЛЬНЫЙ БИЛЕТНЫЙ ПАРТНЁР',
+    partnerPageTitle: 'Сервис мест: {platform}',
+    partnerPageIntroduction:
+      'Сайт труппы передал корзину партнёрской платформе. Эта версия содержит только надёжную резервную страницу.',
+    partnerUnavailableTitle: 'Подключение пока недоступно',
+    partnerUnavailableCopy:
+      'Эта версия не обращается к внешнему сервису и не создаёт сделку. Можно безопасно вернуться к корзине труппы.',
+    returnToBasket: 'Вернуться к корзине труппы',
     selectedCount: 'Выбрано спектаклей: {count}',
     emptyBasket: 'Спектакли не выбраны',
     selectionReady: 'Спектакль и зона мест добавлены в корзину.',

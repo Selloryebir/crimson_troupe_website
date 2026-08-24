@@ -1,5 +1,11 @@
 import type { LocalizedShape } from '../schema';
 import type { yanMessages } from '../yan/messages';
+import type { yanTicketingPlatforms } from '../yan/messages';
+
+export const minosTicketingPlatforms = {
+  'rice-network': { displayName: 'Δίκτυο Ρυζιού', logoAlt: 'Προσωρινό σήμα του Δικτύου Ρυζιού' },
+  'drop-tower': { displayName: 'Πύργος Πτώσης', logoAlt: 'Προσωρινό σήμα του Πύργου Πτώσης' },
+} as const satisfies LocalizedShape<typeof yanTicketingPlatforms>;
 
 export const minosMessages = {
   filters: {
@@ -27,6 +33,14 @@ export const minosMessages = {
       'Η σελίδα δεν στέλνει ερώτημα και δεν φορτώνει απομακρυσμένη υπηρεσία. Μπορείτε να περιηγηθείτε στις παραστάσεις και στις πληροφορίες του θιάσου.',
   },
   ticketing: {
+    partnerPageEyebrow: 'ΕΠΙΣΗΜΟΣ ΣΥΝΕΡΓΑΤΗΣ ΕΙΣΙΤΗΡΙΩΝ',
+    partnerPageTitle: 'Υπηρεσία θέσεων {platform}',
+    partnerPageIntroduction:
+      'Ο ιστότοπος του θιάσου παρέδωσε το καλάθι στην πλατφόρμα συνεργάτη. Η προεπισκόπηση παρέχει μόνο μια αξιόπιστη εφεδρική σελίδα.',
+    partnerUnavailableTitle: 'Η σύνδεση δεν είναι ακόμη διαθέσιμη',
+    partnerUnavailableCopy:
+      'Η προεπισκόπηση δεν επικοινωνεί με εξωτερική υπηρεσία και δεν δημιουργεί συναλλαγή. Μπορείτε να επιστρέψετε με ασφάλεια στο επίσημο καλάθι.',
+    returnToBasket: 'Επιστροφή στο επίσημο καλάθι',
     selectedCount: 'Επιλέχθηκαν {count} παραστάσεις',
     emptyBasket: 'Δεν έχουν επιλεγεί παραστάσεις',
     selectionReady: 'Η παράσταση και η ζώνη θέσεων βρίσκονται στο καλάθι.',

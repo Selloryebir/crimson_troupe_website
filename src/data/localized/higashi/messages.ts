@@ -1,5 +1,11 @@
 import type { LocalizedShape } from '../schema.ts';
 import type { yanMessages } from '../yan/messages.ts';
+import type { yanTicketingPlatforms } from '../yan/messages.ts';
+
+export const higashiTicketingPlatforms = {
+  'rice-network': { displayName: '稲穂ネット', logoAlt: '稲穂ネットの仮マーク' },
+  'drop-tower': { displayName: 'ドロップタワー', logoAlt: 'ドロップタワーの仮マーク' },
+} as const satisfies LocalizedShape<typeof yanTicketingPlatforms>;
 
 export const higashiMessages = {
   filters: {
@@ -26,6 +32,14 @@ export const higashiMessages = {
       'このページは検索内容を送信せず、外部サービスも読み込みません。メインナビゲーションから公演や劇団情報を閲覧できます。',
   },
   ticketing: {
+    partnerPageEyebrow: '公式発券パートナー',
+    partnerPageTitle: '{platform} 座席サービス',
+    partnerPageIntroduction:
+      '劇団公式サイトから提携プラットフォームへ買い物かごを引き継ぎました。このプレビューでは安全な代替ページのみを表示します。',
+    partnerUnavailableTitle: '接続手続きはまだ利用できません',
+    partnerUnavailableCopy:
+      'このプレビューは外部サービスへ接続せず、取引も作成しません。公式の買い物かごへ安全に戻れます。',
+    returnToBasket: '公式の買い物かごへ戻る',
     selectedCount: '{count}公演を選択済み',
     emptyBasket: '公演が選択されていません',
     selectionReady: '公演と座席区分を今回のバスケットへ追加しました。',

@@ -1,5 +1,11 @@
 import type { LocalizedShape } from '../schema';
 import type { yanMessages } from '../yan/messages';
+import type { yanTicketingPlatforms } from '../yan/messages';
+
+export const victoriaTicketingPlatforms = {
+  'rice-network': { displayName: 'RiceNet', logoAlt: 'RiceNet preview mark' },
+  'drop-tower': { displayName: 'Drop Tower', logoAlt: 'Drop Tower preview mark' },
+} as const satisfies LocalizedShape<typeof yanTicketingPlatforms>;
 
 export const victoriaMessages = {
   filters: {
@@ -26,6 +32,14 @@ export const victoriaMessages = {
       'This page sends no query and loads no remote service. You can still browse performances and company information with the main navigation.',
   },
   ticketing: {
+    partnerPageEyebrow: 'OFFICIAL TICKETING PARTNER',
+    partnerPageTitle: '{platform} Seat Service',
+    partnerPageIntroduction:
+      'The troupe website has handed this basket to its partner platform. This preview provides only a reliable fallback destination.',
+    partnerUnavailableTitle: 'Connection flow not yet open',
+    partnerUnavailableCopy:
+      'This preview contacts no remote service and creates no transaction. You may safely return to the official basket.',
+    returnToBasket: 'Return to Official Basket',
     selectedCount: '{count} performances selected',
     emptyBasket: 'No performances selected',
     selectionReady: 'The performance and seating zone are in this basket.',

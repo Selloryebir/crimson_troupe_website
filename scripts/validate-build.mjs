@@ -77,6 +77,7 @@ function requiredRoutesForEdition(edition) {
     sitePath(edition, 'front', 'troupe'),
     sitePath(edition, 'front', 'search'),
     sitePath(edition, 'front', 'tickets'),
+    sitePath(edition, 'front', 'tickets/partner'),
     siteRoot(edition, 'archive'),
     sitePath(edition, 'archive', 'performances'),
     sitePath(edition, 'archive', 'performances/history'),

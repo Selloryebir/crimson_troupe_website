@@ -237,6 +237,11 @@ for (const edition of builtEditions) {
     `${edition.editionId}.messages 发生回退`,
   );
   assert.equal(
+    localization.sources.platforms.usedFallback,
+    false,
+    `${edition.editionId}.platforms 发生回退`,
+  );
+  assert.equal(
     localization.sources.archiveProjection.usedFallback,
     false,
     `${edition.editionId}.archiveProjection 发生回退`,
@@ -244,6 +249,7 @@ for (const edition of builtEditions) {
   assertComplete(localization.site, `${edition.editionId}.site`);
   assertComplete(localization.programs, `${edition.editionId}.programs`);
   assertComplete(localization.messages, `${edition.editionId}.messages`);
+  assertComplete(localization.platforms, `${edition.editionId}.platforms`);
   assertComplete(localization.archiveProjection, `${edition.editionId}.archiveProjection`);
   assertSnapshotKeysPresent(
     localization.programs.locations,

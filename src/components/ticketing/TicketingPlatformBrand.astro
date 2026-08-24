@@ -1,0 +1,24 @@
+---
+import { getTicketingPlatformLogoAsset } from '../../data/ticketing-platform-assets.ts';
+import type { TicketingPlatformPresentation } from '../../data/ticketing.ts';
+
+interface Props {
+  platform: TicketingPlatformPresentation;
+  headingLevel?: 'h1' | 'h2' | 'h3';
+}
+
+const { platform, headingLevel = 'h2' } = Astro.props;
+const logo = getTicketingPlatformLogoAsset(platform.logo.assetId);
+const Heading = headingLevel;
+---
+
+<div class="ticketing-platform-brand" data-ticketing-platform={platform.platformId}>
+  <img
+    class="ticketing-platform-brand__logo"
+    src={logo.src}
+    width={logo.width}
+    height={logo.height}
+    alt={platform.logoAlt}
+  />
+  <Heading class="ticketing-platform-brand__name">{platform.displayName}</Heading>
+</div>

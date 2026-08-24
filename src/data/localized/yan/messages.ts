@@ -1,4 +1,14 @@
-import type { FilterMessages, SearchMessages, TicketingMessages } from '../schema';
+import type {
+  FilterMessages,
+  SearchMessages,
+  TicketingMessages,
+  TicketingPlatformContent,
+} from '../schema';
+
+export const yanTicketingPlatforms = {
+  'rice-network': { displayName: '水稻网', logoAlt: '水稻网临时标识' },
+  'drop-tower': { displayName: '跳楼机', logoAlt: '跳楼机临时标识' },
+} as const satisfies Record<string, TicketingPlatformContent>;
 
 export const yanMessages = {
   filters: {
@@ -24,6 +34,14 @@ export const yanMessages = {
     noscriptCopy: '当前页面不会发送查询或加载远端服务。您仍可使用主导航浏览演出与剧团信息。',
   } satisfies SearchMessages,
   ticketing: {
+    partnerPageEyebrow: 'OFFICIAL TICKETING PARTNER',
+    partnerPageTitle: '{platform}席位服务',
+    partnerPageIntroduction:
+      '剧团官网已将票篮交由合作平台处理。当前页面只展示预览阶段的可靠降级入口。',
+    partnerUnavailableTitle: '连接流程尚未开放',
+    partnerUnavailableCopy:
+      '当前预览版本不会连接远端服务，也不会形成交易。您可以安全返回官网票篮。',
+    returnToBasket: '返回官网票篮',
     selectedCount: '已选择 {count} 个场次',
     emptyBasket: '尚未选择场次',
     selectionReady: '场次与分区已加入本次票篮。',

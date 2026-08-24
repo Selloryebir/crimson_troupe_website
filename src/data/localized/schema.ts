@@ -2,6 +2,7 @@ import type { ArchivePollutionProfile } from '../archive-pollution.ts';
 import type { LocationId } from '../locations';
 import type { PerformanceId, TicketZone } from '../performances';
 import type { ProductionId } from '../productions/index.ts';
+import type { TicketingPlatformId } from '../ticketing-platforms.ts';
 
 export type LocalizedShape<T> = T extends string
   ? string
@@ -65,6 +66,7 @@ export interface LocalizationAuthoringPackage<SiteContent, MessageContent> {
   site?: Partial<SiteContent>;
   programs?: AuthoringProgramContent;
   messages?: Partial<MessageContent>;
+  platforms?: Partial<Record<TicketingPlatformId, TicketingPlatformContent>>;
   archiveProjection?: ArchiveProjectionContent;
 }
 
@@ -72,7 +74,13 @@ export interface LocalizationPackage<SiteContent, MessageContent> {
   site: SiteContent;
   programs: ProgramContent;
   messages: MessageContent;
+  platforms: Record<TicketingPlatformId, TicketingPlatformContent>;
   archiveProjection: ArchiveProjectionContent;
+}
+
+export interface TicketingPlatformContent {
+  displayName: string;
+  logoAlt: string;
 }
 
 export interface ArchiveProjectionView {
@@ -163,6 +171,12 @@ export interface TicketArtifactMessages {
 }
 
 export interface TicketingMessages {
+  partnerPageEyebrow: string;
+  partnerPageTitle: string;
+  partnerPageIntroduction: string;
+  partnerUnavailableTitle: string;
+  partnerUnavailableCopy: string;
+  returnToBasket: string;
   selectedCount: string;
   emptyBasket: string;
   selectionReady: string;

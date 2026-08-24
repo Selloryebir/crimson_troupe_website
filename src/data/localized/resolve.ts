@@ -18,12 +18,14 @@ import type {
 } from '../performances.ts';
 import type { Production, ProductionId } from '../productions/index.ts';
 import type { SiteWorld } from '../site-routes';
+import type { TicketingPlatformId } from '../ticketing-platforms.ts';
 import type {
   ArchiveProjectionContent,
   LocalizedRecord,
   LocationContent,
   PerformanceContent,
   ProductionContent,
+  TicketingPlatformContent,
 } from './schema';
 import { formatTerraDateTime } from './format.ts';
 import { sourceLocalizationPackage, type PartialLocalizationPackage } from './packages.ts';
@@ -41,11 +43,13 @@ export interface ResolvedLocalization {
   site: WebsiteLocalizationPackage['site'];
   programs: ResolvedProgramContent;
   messages: WebsiteLocalizationPackage['messages'];
+  platforms: Readonly<Record<TicketingPlatformId, TicketingPlatformContent>>;
   archiveProjection: ArchiveProjectionContent;
   sources: {
     site: LocalizedRecord<WebsiteLocalizationPackage['site']>;
     programs: LocalizedRecord<ResolvedProgramContent>;
     messages: LocalizedRecord<WebsiteLocalizationPackage['messages']>;
+    platforms: LocalizedRecord<Readonly<Record<TicketingPlatformId, TicketingPlatformContent>>>;
     archiveProjection: LocalizedRecord<ArchiveProjectionContent>;
   };
 }
@@ -114,6 +118,8 @@ function localizationRequirements(
   const targetSite = objectRecord(target?.site);
   const sourceMessages = objectRecord(source.messages);
   const targetMessages = objectRecord(target?.messages);
+  const sourcePlatforms = objectRecord(source.platforms);
+  const targetPlatforms = objectRecord(target?.platforms);
   const requirements: LocalizationRequirement[] = [
     ...Object.keys(sourceSite).map((recordId) => ({
       path: `site.${recordId}`,
@@ -131,6 +137,13 @@ function localizationRequirements(
       targetValue: target?.archiveProjection,
     },
   ];
+  for (const [platformId] of snapshot.ticketingPlatformEntries) {
+    requirements.push({
+      path: `platforms.${platformId}`,
+      sourceValue: sourcePlatforms[platformId],
+      targetValue: targetPlatforms[platformId],
+    });
+  }
   for (const [locationId] of snapshot.locationEntries) {
     requirements.push({
       path: `locations.${locationId}`,
@@ -225,6 +238,9 @@ export function getLocalization(
 
   const site = target.site as WebsiteLocalizationPackage['site'];
   const messages = target.messages as WebsiteLocalizationPackage['messages'];
+  const platforms = Object.freeze(target.platforms) as Readonly<
+    Record<TicketingPlatformId, TicketingPlatformContent>
+  >;
   const archiveProjection = target.archiveProjection as ArchiveProjectionContent;
   const programs: ResolvedProgramContent = Object.freeze({
     locations: scopedRecord(snapshot.locationEntries, target.programs?.locations),
@@ -245,11 +261,13 @@ export function getLocalization(
     site,
     programs,
     messages,
+    platforms,
     archiveProjection,
     sources: Object.freeze({
       site: strictRecord(site),
       programs: strictRecord(programs),
       messages: strictRecord(messages),
+      platforms: strictRecord(platforms),
       archiveProjection: strictRecord(archiveProjection),
     }),
   });

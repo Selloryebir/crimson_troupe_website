@@ -36,6 +36,7 @@ import { productionArtworkManifest } from '../src/data/production-artwork-manife
 import { productionArtworkRegistry } from '../src/data/production-artworks.ts';
 import { productions } from '../src/data/productions/index.ts';
 import { ticketSeatingPlans } from '../src/data/ticket-seating-plans.ts';
+import { ticketingPlatforms } from '../src/data/ticketing-platforms.ts';
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -58,6 +59,7 @@ function createValidationSources(overrides = {}) {
     localizations: localizationPackages,
     artwork: productionArtworkManifest,
     seatingPlans: ticketSeatingPlans,
+    ticketingPlatforms,
     offerMatrix: performanceOfferMatrix,
     archiveProjection: archiveProjectionIdentity,
     ...overrides,
@@ -72,6 +74,7 @@ function createApprovalSources(overrides = {}) {
     localizations: localizationPackages,
     artwork: productionArtworkRegistry,
     seatingPlans: ticketSeatingPlans,
+    ticketingPlatforms,
     archiveProjection: archiveProjectionIdentity,
     ...overrides,
   };
@@ -114,8 +117,22 @@ function assertArtworkFiles() {
   }
 }
 
+function assertTicketingPlatformLogoFiles() {
+  for (const platform of Object.values(ticketingPlatforms)) {
+    const digest = `sha256:${createHash('sha256')
+      .update(readFileSync(path.join(repositoryRoot, platform.logo.assetPath)))
+      .digest('hex')}`;
+    assert.equal(
+      digest,
+      platform.logo.sourceRevision,
+      `${platform.logo.assetPath} 与素材修订摘要不一致`,
+    );
+  }
+}
+
 assert.doesNotThrow(() => assertContentBundle(buildEditionIds, currentRootSet, buildContext));
 assertArtworkFiles();
+assertTicketingPlatformLogoFiles();
 assert.equal(Object.keys(performances).length, 28, '预备场次目录应包含 28 条记录');
 assert.equal(Object.keys(productions).length, 14, '预备剧目目录应包含 14 条记录');
 assert.equal(buildSnapshot.performanceEntries.length, 28, '当前根集合应发布 28 个场次');
@@ -493,8 +510,26 @@ const currentApprovals = {
   rootSets: { [currentRootSet.rootSetId]: currentDigests.rootSet },
   performances: currentDigests.performances,
 };
+assert.throws(
+  () => assertContentContextEligible(buildContexts.release, currentRootSet, currentApprovals),
+  /ticketing-platform\.rice-network\.logo（正式 Logo 缺失）.*ticketing-platform\.drop-tower\.logo（正式 Logo 缺失）/u,
+);
+const approvedTicketingPlatforms = Object.fromEntries(
+  Object.entries(ticketingPlatforms).map(([platformId, platform]) => [
+    platformId,
+    {
+      ...platform,
+      logo: { ...platform.logo, maturity: 'formal', approvalStatus: 'approved' },
+    },
+  ]),
+);
 assert.doesNotThrow(() =>
-  assertContentContextEligible(buildContexts.release, currentRootSet, currentApprovals),
+  assertContentContextEligible(
+    buildContexts.release,
+    currentRootSet,
+    currentApprovals,
+    approvedTicketingPlatforms,
+  ),
 );
 assert.throws(
   () => assertContentContextEligible(buildContexts.release, currentRootSet),

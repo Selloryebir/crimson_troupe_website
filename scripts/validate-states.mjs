@@ -35,7 +35,7 @@ import {
   getSiteTerraNow,
   isWithinPerformanceVisibilityWindow,
 } from '../src/data/site-time.ts';
-import { getTicketingOptions } from '../src/data/ticketing.ts';
+import { getTicketingOptions, getTicketingPlatformPresentation } from '../src/data/ticketing.ts';
 import { shouldRequestArchiveEntry } from '../src/scripts/pollution-controller.ts';
 import { countSearchGraphemes, searchSiteEntries } from '../src/scripts/site-search.ts';
 import {
@@ -311,6 +311,27 @@ assert.deepEqual(showcaseSnapshot.homepagePerformanceIds, {
 });
 assert.ok(Object.isFrozen(showcaseSnapshot));
 assert.ok(Object.isFrozen(showcaseSnapshot.performanceEntries));
+assert.ok(Object.isFrozen(showcaseSnapshot.ticketingPlatformEntries));
+assert.deepEqual(
+  showcaseSnapshot.ticketingPlatformEntries.map(([platformId]) => platformId),
+  ['rice-network', 'drop-tower'],
+);
+assert.equal(
+  getTicketingPlatformPresentation(
+    getLocalization(editions.yan, showcaseSnapshot),
+    'rice-network',
+    showcaseSnapshot,
+  ).displayName,
+  '水稻网',
+);
+assert.equal(
+  getTicketingPlatformPresentation(
+    getLocalization(editions.columbia, previewSnapshot),
+    'drop-tower',
+    previewSnapshot,
+  ).displayName,
+  'Drop Tower',
+);
 assert.ok(Object.isFrozen(showcaseSnapshot.homepagePerformanceIds));
 assert.ok(Object.isFrozen(showcaseSnapshot.homepagePerformanceIds.front));
 assert.ok(Object.isFrozen(showcaseSnapshot.homepagePerformanceIds.archive));

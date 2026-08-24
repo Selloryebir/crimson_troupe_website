@@ -4,7 +4,7 @@ import type {
   LocalizedShape,
 } from '../schema.ts';
 import { yanArchiveProjection } from './archive-projection.ts';
-import { yanMessages } from './messages.ts';
+import { yanMessages, yanTicketingPlatforms } from './messages.ts';
 import { yanPrograms } from './programs.ts';
 import { yanProductions } from './productions/index.ts';
 import { yanSite } from './site.ts';
@@ -22,5 +22,6 @@ export const yanLocalizationPackage = {
   site: yanSite,
   programs: { ...yanPrograms, productions: yanProductions },
   messages: yanMessages,
+  platforms: yanTicketingPlatforms,
   archiveProjection: yanArchiveProjection,
 } satisfies WebsiteLocalizationPackage;

@@ -15,6 +15,12 @@ import {
 } from '../production-artwork-manifest.ts';
 import { productions, type Production } from '../productions/index.ts';
 import { ticketSeatingPlans, type SeatingPlanDefinition } from '../ticket-seating-plans.ts';
+import {
+  ticketingPlatformIds,
+  ticketingPlatforms,
+  type TicketingPlatformDefinition,
+  type TicketingPlatformId,
+} from '../ticketing-platforms.ts';
 import { assertLocalizationSourceFresh } from './localization-revisions.ts';
 import { getRootPerformanceIds, type ContentRootSet, validateContentRootSet } from './root-sets.ts';
 import {
@@ -33,6 +39,7 @@ export interface ContentValidationSources {
   localizations: Readonly<Record<BuildEditionId, PartialLocalizationPackage>>;
   artwork: ProductionArtworkManifest;
   seatingPlans: Readonly<Record<string, SeatingPlanDefinition>>;
+  ticketingPlatforms: Readonly<Record<TicketingPlatformId, TicketingPlatformDefinition>>;
   offerMatrix: PerformanceOfferMatrix;
   archiveProjection: ArchiveProjectionIdentity;
 }
@@ -44,6 +51,7 @@ const defaultSources: ContentValidationSources = {
   localizations: localizationPackages,
   artwork: productionArtworkManifest,
   seatingPlans: ticketSeatingPlans,
+  ticketingPlatforms,
   offerMatrix: performanceOfferMatrix,
   archiveProjection: archiveProjectionIdentity,
 };
@@ -149,6 +157,16 @@ export function assertContentBundle(
   sources: ContentValidationSources = defaultSources,
 ): void {
   assertPerformanceOfferMatrix(sources.offerMatrix);
+  for (const platformId of ticketingPlatformIds) {
+    const platform = sources.ticketingPlatforms[platformId];
+    assertPresent(platform, `ticketingPlatform.${platformId}`);
+    if (platform.platformId !== platformId) {
+      throw new Error(`票务平台稳定 ID 与记录不一致：${platformId} != ${platform.platformId}`);
+    }
+    if (platform.logo.rights !== 'project-original') {
+      throw new Error(`票务平台 ${platformId} 的 Logo 缺少项目原创权利声明。`);
+    }
+  }
   const selectedPerformances = getRootPerformanceIds(rootSet).map((performanceId) => {
     const unit = getPerformanceVariantUnit(performanceId, sources.performanceVariants);
     if (!unit) {
@@ -197,6 +215,9 @@ export function assertContentBundle(
       const package_ = sources.localizations[editionId];
       assertPresent(package_?.site, `${editionId}.site`);
       assertPresent(package_?.messages, `${editionId}.messages`);
+      for (const platformId of ticketingPlatformIds) {
+        assertPresent(package_?.platforms?.[platformId], `${editionId}.platforms.${platformId}`);
+      }
       assertPresent(package_?.archiveProjection, `${editionId}.archiveProjection`);
       assertPresent(
         package_?.programs?.locations?.[performance.locationId],
@@ -227,6 +248,9 @@ export function assertContentBundle(
     const package_ = sources.localizations[editionId];
     assertPresent(package_?.site, `${editionId}.site`);
     assertPresent(package_?.messages, `${editionId}.messages`);
+    for (const platformId of ticketingPlatformIds) {
+      assertPresent(package_?.platforms?.[platformId], `${editionId}.platforms.${platformId}`);
+    }
     assertPresent(package_?.archiveProjection, `${editionId}.archiveProjection`);
     assertPresent(
       package_?.programs?.productions?.[sources.archiveProjection.productionId],
