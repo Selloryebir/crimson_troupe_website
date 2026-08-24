@@ -54,11 +54,11 @@ export function createLocalizationSourceRevision(
 const acceptedYanSourceRevision: LocalizationSourceRevision = Object.freeze({
   'site.brand': 'fnv1a64:03d196aa49398779',
   'site.shared': 'fnv1a64:ef3bddf368e82d21',
-  'site.front': 'fnv1a64:032849e4a53971de',
+  'site.front': 'fnv1a64:cfe2fbfc3c6353ec',
   'site.archive': 'fnv1a64:96b69f28a909aa0d',
   'messages.filters': 'fnv1a64:d98c683356dc4246',
   'messages.search': 'fnv1a64:c3b686630f9f3028',
-  'messages.ticketing': 'fnv1a64:b4bc4419066fb846',
+  'messages.ticketing': 'fnv1a64:187af5e642298faf',
   'messages.programs': 'fnv1a64:ffc6bbc6b04c00bd',
   'platforms.rice-network': 'fnv1a64:3a8ef46ba8476461',
   'platforms.drop-tower': 'fnv1a64:6f31cd7d9bbcf84d',

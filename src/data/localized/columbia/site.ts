@@ -41,7 +41,7 @@ export const columbiaSite = {
       troupeKeywords: 'company creative practice touring',
       ticketsTitle: 'Tickets',
       ticketsSummary:
-        'Choose performances and seating zones to enter the simulated ticketing experience.',
+        'Choose performances and seating zones, then submit the seat request through our ticketing partner.',
       ticketsKeywords: 'tickets seats booking zone commemorative ticket',
     },
     home: {

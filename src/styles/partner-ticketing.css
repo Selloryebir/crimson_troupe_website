@@ -144,6 +144,12 @@
   margin-top: 1.5rem;
 }
 
+.partner-ticketing-dialog .actions > .button {
+  flex: 1 1 16rem;
+  min-height: 3.25rem;
+  white-space: normal;
+}
+
 @keyframes partner-ticketing-spin {
   to {
     transform: rotate(1turn);

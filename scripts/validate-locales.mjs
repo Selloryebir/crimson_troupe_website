@@ -236,6 +236,20 @@ for (const edition of builtEditions) {
     false,
     `${edition.editionId}.messages 发生回退`,
   );
+  const ticketingMessages = localization.messages.ticketing;
+  assert.ok(
+    ticketingMessages.retryStandard.includes(localization.platforms['rice-network'].displayName),
+    `${edition.editionId}.ticketing.retryStandard 必须明确水稻网原价线路`,
+  );
+  assert.ok(
+    ticketingMessages.tryPremium.includes(localization.platforms['drop-tower'].displayName),
+    `${edition.editionId}.ticketing.tryPremium 必须明确跳楼机加价方案`,
+  );
+  assert.doesNotMatch(
+    JSON.stringify(ticketingMessages),
+    /SIMULATED|simulated|模拟体验|模拟流程|模拟服务|模拟结算|模擬体験|模擬購入|模擬サービス|προσομοιω|имитац|имитируем|условн|symul|simulier|simulato/iu,
+    `${edition.editionId}.ticketing 不得反复使用开发视角的模拟提示`,
+  );
   assert.equal(
     localization.sources.platforms.usedFallback,
     false,

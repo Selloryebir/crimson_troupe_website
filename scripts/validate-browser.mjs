@@ -1087,8 +1087,35 @@ try {
   await partnerBranchPage.waitForURL(`${origin}/yan/tickets/partner/`);
   const branchDialog = partnerBranchPage.locator('[data-partner-dialog][open]');
   await branchDialog.waitFor();
+  const standardRetry = branchDialog.locator('[data-partner-action="retry"]');
+  const premiumOfferAction = branchDialog.locator('[data-partner-action="offer"]');
+  const returnToBasket = branchDialog.locator('[data-partner-action="back"]');
+  assert.match((await standardRetry.textContent()) ?? '', /水稻网.*原价/u);
+  assert.match((await premiumOfferAction.textContent()) ?? '', /跳楼机.*加价/u);
+  assert.match((await returnToBasket.textContent()) ?? '', /官方票篮/u);
+  assert.equal(await standardRetry.getAttribute('class'), 'button');
+  assert.equal(await premiumOfferAction.getAttribute('class'), 'button');
+  const [retryBox, offerBox] = await Promise.all([
+    standardRetry.boundingBox(),
+    premiumOfferAction.boundingBox(),
+  ]);
+  assert.ok(retryBox && offerBox, '标准重试与加价方案控件应可见');
+  assert.ok(
+    Math.abs(retryBox.height - offerBox.height) <= 1,
+    '标准重试与加价方案控件应保持同等视觉高度',
+  );
   await partnerBranchPage.locator('[data-partner-action="offer"]').click();
   await branchDialog.waitFor();
+  assert.equal(
+    await partnerBranchPage.locator('[data-partner-action="accept-premium"]').count(),
+    1,
+    '查看跳楼机方案后仍须由访客明确接受',
+  );
+  assert.equal(
+    await partnerBranchPage.locator('[data-ticket-result]:not([hidden])').count(),
+    0,
+    '查看方案不得直接产生购票结果',
+  );
   assert.equal(
     await partnerBranchPage
       .locator(

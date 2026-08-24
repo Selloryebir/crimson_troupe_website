@@ -222,7 +222,7 @@ export function initPartnerTicketingExperience(
       copy.textContent = messages.standardFailureCopy;
       actions.append(
         createButton('retry', messages.retryStandard, true),
-        createButton('offer', messages.tryPremium),
+        createButton('offer', messages.tryPremium, true),
         createButton('back', messages.backToBasket),
       );
     } else if (state.phase === 'failure') {

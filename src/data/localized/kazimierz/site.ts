@@ -41,7 +41,7 @@ export const kazimierzSite = {
       troupeKeywords: 'tournée po praktykach kreatywnych firmy',
       ticketsTitle: 'Bilety',
       ticketsSummary:
-        'Wybierz występy i strefy miejsc, aby wejść do symulowanego doświadczenia związanego z biletami.',
+        'Wybierz występy i strefy miejsc, a następnie prześlij wniosek przez partnera biletowego.',
       ticketsKeywords: 'bilety miejsca rezerwacja strefy bilet pamiątkowy',
     },
     home: {

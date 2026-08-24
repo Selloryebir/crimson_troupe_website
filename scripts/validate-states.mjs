@@ -940,6 +940,9 @@ assert.deepEqual(returnToSelection(standardFailure).basket, selection.basket);
 
 const premiumOffer = openPremiumOffer(standardFailure);
 assert.equal(premiumOffer.phase, 'premium-offer');
+assert.equal(premiumOffer.currentEndingId, null);
+assert.deepEqual(premiumOffer.endingHistory, []);
+assert.equal(premiumOffer.route, 'standard');
 const premiumAttempt = enterPremiumRoute(premiumOffer);
 const premiumSuccess = resolveTicketingAttempt(
   premiumAttempt,
