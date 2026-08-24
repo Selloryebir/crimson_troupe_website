@@ -1,4 +1,4 @@
-import type { WebsiteLocalizationPackage } from '../yan/index.ts';
+import type { WebsiteLocalizationAuthoringPackage } from '../yan/index.ts';
 import { kazimierzArchiveProjection } from './archive-projection.ts';
 import { kazimierzMessages } from './messages.ts';
 import { kazimierzPrograms } from './programs.ts';
@@ -10,4 +10,4 @@ export const kazimierzLocalizationPackage = {
   programs: { ...kazimierzPrograms, productions: kazimierzProductions },
   messages: kazimierzMessages,
   archiveProjection: kazimierzArchiveProjection,
-} satisfies WebsiteLocalizationPackage;
+} satisfies WebsiteLocalizationAuthoringPackage;

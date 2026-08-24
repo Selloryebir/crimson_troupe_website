@@ -1,4 +1,4 @@
-import type { WebsiteLocalizationPackage } from '../yan/index.ts';
+import type { WebsiteLocalizationAuthoringPackage } from '../yan/index.ts';
 import { victoriaArchiveProjection } from './archive-projection.ts';
 import { victoriaMessages } from './messages.ts';
 import { victoriaPrograms } from './programs.ts';
@@ -10,4 +10,4 @@ export const victoriaLocalizationPackage = {
   programs: { ...victoriaPrograms, productions: victoriaProductions },
   messages: victoriaMessages,
   archiveProjection: victoriaArchiveProjection,
-} satisfies WebsiteLocalizationPackage;
+} satisfies WebsiteLocalizationAuthoringPackage;

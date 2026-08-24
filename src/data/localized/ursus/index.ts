@@ -1,4 +1,4 @@
-import type { WebsiteLocalizationPackage } from '../yan/index.ts';
+import type { WebsiteLocalizationAuthoringPackage } from '../yan/index.ts';
 import { ursusArchiveProjection } from './archive-projection.ts';
 import { ursusMessages } from './messages.ts';
 import { ursusPrograms } from './programs.ts';
@@ -10,4 +10,4 @@ export const ursusLocalizationPackage = {
   programs: { ...ursusPrograms, productions: ursusProductions },
   messages: ursusMessages,
   archiveProjection: ursusArchiveProjection,
-} satisfies WebsiteLocalizationPackage;
+} satisfies WebsiteLocalizationAuthoringPackage;

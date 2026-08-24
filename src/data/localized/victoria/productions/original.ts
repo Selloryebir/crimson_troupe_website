@@ -116,4 +116,4 @@ export const victoriaOriginalProductions = {
       ['Running Order', 'Old Troupe Book Room'],
     ],
   },
-} as const satisfies Record<OriginalProductionId, ProductionContent>;
+} as const satisfies Partial<Record<OriginalProductionId, ProductionContent>>;

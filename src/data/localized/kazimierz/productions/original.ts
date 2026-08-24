@@ -117,4 +117,4 @@ export const kazimierzOriginalProductions = {
       ['Rozkaz wykonania', 'Pokój Księgarni Starej Trupy'],
     ],
   },
-} as const satisfies Record<OriginalProductionId, ProductionContent>;
+} as const satisfies Partial<Record<OriginalProductionId, ProductionContent>>;

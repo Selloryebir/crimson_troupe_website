@@ -142,4 +142,4 @@ export const kazimierzFolioProductions = {
       ['Scena', 'Warsztat długiej galerii'],
     ],
   },
-} as const satisfies Record<FolioProductionId, ProductionContent>;
+} as const satisfies Partial<Record<FolioProductionId, ProductionContent>>;

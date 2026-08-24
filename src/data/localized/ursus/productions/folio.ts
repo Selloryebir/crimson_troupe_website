@@ -145,4 +145,4 @@ export const ursusFolioProductions = {
       ['Сцена', 'Мастерская длинной галереи'],
     ],
   },
-} as const satisfies Record<FolioProductionId, ProductionContent>;
+} as const satisfies Partial<Record<FolioProductionId, ProductionContent>>;

@@ -141,6 +141,26 @@ const persistentFixture = getPerformanceVariantUnit(fixtureId);
 assert.ok(persistentFixture);
 assert.equal(persistentFixture.preview?.variantId, 'current-preview');
 assert.equal(persistentFixture.preview?.value, persistentFixture.baseline.value);
+assert.equal(
+  localizationPackages.columbia.programs.locations['calais-blason'],
+  undefined,
+  '集合外作者候选不要求哥伦比亚语记录',
+);
+assert.throws(
+  () =>
+    assertContentBundle(
+      ['yan', 'columbia'],
+      currentRootSet,
+      buildContext,
+      createValidationSources({
+        performanceVariants: withPreviewVariant(fixtureId, {
+          ...fixturePerformance,
+          locationId: 'calais-blason',
+        }),
+      }),
+    ),
+  /columbia\.locations\.calais-blason 缺失/u,
+);
 assert.throws(
   () =>
     selectCompleteVariant(

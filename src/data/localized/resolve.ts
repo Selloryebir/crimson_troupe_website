@@ -25,6 +25,7 @@ import type {
   PerformanceContent,
   ProductionContent,
 } from './schema';
+import { formatTerraDateTime } from './format.ts';
 import { sourceLocalizationPackage, type PartialLocalizationPackage } from './packages.ts';
 import type { WebsiteLocalizationPackage } from './yan/index.ts';
 
@@ -71,6 +72,7 @@ export interface ResolvedPerformance
   extends Omit<SnapshotPerformance, 'effectiveDateTime'>, PerformanceContent {
   cityLabel: string;
   dateTime: Performance['effectiveDateTime'] & { display: string };
+  previousDateTimeDisplay?: string;
   place: string;
 }
 
@@ -288,7 +290,13 @@ export function getLocalizedPerformance(
     ...performance,
     ...content,
     cityLabel: location.cityLabel,
-    dateTime: { ...performance.effectiveDateTime, display: content.dateTimeDisplay },
+    dateTime: {
+      ...performance.effectiveDateTime,
+      display: formatTerraDateTime(performance.effectiveDateTime, localization.edition.locale),
+    },
+    previousDateTimeDisplay: performance.previousDateTime
+      ? formatTerraDateTime(performance.previousDateTime, localization.edition.locale)
+      : undefined,
     place: content.venue,
   };
 }
@@ -300,9 +308,6 @@ export function assertPerformanceContentFresh(
 ): asserts content is PerformanceContent {
   if (!content) {
     throw new Error(`场次 ${performanceId} 缺少本地化内容。`);
-  }
-  if (performance.previousDateTime && !content.previousDateTimeDisplay?.trim()) {
-    throw new Error(`场次 ${performanceId} 缺少原定排期译文。`);
   }
   if (!performance.notice) {
     return;

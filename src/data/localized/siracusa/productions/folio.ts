@@ -147,4 +147,4 @@ export const siracusaFolioProductions = {
       ['Scena', 'Officina della lunga galleria'],
     ],
   },
-} as const satisfies Record<FolioProductionId, ProductionContent>;
+} as const satisfies Partial<Record<FolioProductionId, ProductionContent>>;

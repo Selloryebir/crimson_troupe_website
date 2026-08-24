@@ -146,4 +146,4 @@ export const leithanienFolioProductions = {
       ['Bühne', 'Werkstatt der langen Galerie'],
     ],
   },
-} as const satisfies Record<FolioProductionId, ProductionContent>;
+} as const satisfies Partial<Record<FolioProductionId, ProductionContent>>;

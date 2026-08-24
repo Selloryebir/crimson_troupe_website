@@ -23,11 +23,8 @@ export interface LocationContent {
 
 export interface PerformanceContent {
   index: string;
-  dateTimeDisplay: string;
   venue: string;
-  searchDetail: string;
   searchKeywords: string;
-  previousDateTimeDisplay?: string;
   operationalNotice?: {
     sourceRevision: string;
     text: string;

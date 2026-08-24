@@ -1,4 +1,4 @@
-import type { WebsiteLocalizationPackage } from '../yan/index.ts';
+import type { WebsiteLocalizationAuthoringPackage } from '../yan/index.ts';
 import { siracusaArchiveProjection } from './archive-projection.ts';
 import { siracusaMessages } from './messages.ts';
 import { siracusaPrograms } from './programs.ts';
@@ -10,4 +10,4 @@ export const siracusaLocalizationPackage = {
   programs: { ...siracusaPrograms, productions: siracusaProductions },
   messages: siracusaMessages,
   archiveProjection: siracusaArchiveProjection,
-} satisfies WebsiteLocalizationPackage;
+} satisfies WebsiteLocalizationAuthoringPackage;

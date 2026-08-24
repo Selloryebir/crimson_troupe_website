@@ -1,4 +1,4 @@
-import type { WebsiteLocalizationPackage } from '../yan/index.ts';
+import type { WebsiteLocalizationAuthoringPackage } from '../yan/index.ts';
 import { leithanienArchiveProjection } from './archive-projection.ts';
 import { leithanienMessages } from './messages.ts';
 import { leithanienPrograms } from './programs.ts';
@@ -10,4 +10,4 @@ export const leithanienLocalizationPackage = {
   programs: { ...leithanienPrograms, productions: leithanienProductions },
   messages: leithanienMessages,
   archiveProjection: leithanienArchiveProjection,
-} satisfies WebsiteLocalizationPackage;
+} satisfies WebsiteLocalizationAuthoringPackage;

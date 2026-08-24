@@ -466,7 +466,6 @@ const noticeFixturePerformance = {
 };
 const noticeFixtureContent = {
   ...getLocalization(editions.yan).programs.performances['second-snow-norport-1102'],
-  previousDateTimeDisplay: '1102.10.20 / 18:45',
   operationalNotice: { sourceRevision: 'notice-v2', text: '线路调整，排期等待确认。' },
 };
 assert.doesNotThrow(() =>

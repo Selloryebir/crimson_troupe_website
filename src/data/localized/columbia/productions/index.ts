@@ -6,4 +6,4 @@ import { columbiaOriginalProductions } from './original.ts';
 export const columbiaProductions = {
   ...columbiaFolioProductions,
   ...columbiaOriginalProductions,
-} satisfies Record<ProductionId, ProductionContent>;
+} satisfies Partial<Record<ProductionId, ProductionContent>>;
