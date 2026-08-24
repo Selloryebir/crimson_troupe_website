@@ -18,6 +18,7 @@ export const higashiMessages = {
     scope: '検索範囲：{scope}',
     unavailable: '検索索引を利用できません。メインナビゲーションから閲覧してください。',
     prompt: '公演、演目、サイト内ページを検索する語句を入力してください。',
+    minimumQuery: '{count}文字以上入力してください。',
     resultCount: '{count}件の結果が見つかりました。',
     noResults: '一致する内容は見つかりませんでした。',
     noscriptTitle: '検索にはJavaScriptが必要です',

@@ -17,6 +17,7 @@ export const yanMessages = {
     scope: '搜索范围：{scope}',
     unavailable: '搜索索引暂时不可用。请使用主导航继续浏览。',
     prompt: '输入关键词以查找场次、剧目与网站栏目。',
+    minimumQuery: '请至少输入 {count} 个字符。',
     resultCount: '找到 {count} 条结果。',
     noResults: '没有找到匹配内容。',
     noscriptTitle: '搜索需要启用 JavaScript',

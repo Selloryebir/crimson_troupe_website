@@ -25,6 +25,7 @@ import {
 import { assertPerformanceOfferMatrix } from '../src/data/performance-offers.ts';
 import { performances } from '../src/data/performances.ts';
 import { productions } from '../src/data/productions/index.ts';
+import { getMinimumSearchGraphemes } from '../src/data/search-policy.ts';
 import { getFrontSearchIndex, getSiteSearchScope } from '../src/data/site-search-index.ts';
 import {
   assertTerraDateTime,
@@ -36,7 +37,7 @@ import {
 } from '../src/data/site-time.ts';
 import { getTicketingOptions } from '../src/data/ticketing.ts';
 import { shouldRequestArchiveEntry } from '../src/scripts/pollution-controller.ts';
-import { searchSiteEntries } from '../src/scripts/site-search.ts';
+import { countSearchGraphemes, searchSiteEntries } from '../src/scripts/site-search.ts';
 import {
   MAX_POLLUTION_LEVEL,
   POLLUTION_PROBABILITY,
@@ -438,6 +439,29 @@ assert.deepEqual(
 );
 assert.deepEqual(searchSiteEntries(searchOrganizationEntries, '', 'en-US'), []);
 assert.deepEqual(searchSiteEntries(searchOrganizationEntries, 'needel', 'en-US'), []);
+assert.equal(getMinimumSearchGraphemes('yan'), 2);
+assert.equal(getMinimumSearchGraphemes('higashi'), 2);
+for (const editionId of previewEditionIds.filter(
+  (editionId) => editionId !== 'yan' && editionId !== 'higashi',
+)) {
+  assert.equal(getMinimumSearchGraphemes(editionId), 3);
+}
+assert.equal(countSearchGraphemes('e\u0301', 'el'), 1, '组合字符应按一个字素计数');
+assert.equal(countSearchGraphemes('👨‍👩‍👧‍👦', 'en-US'), 1, 'ZWJ 字符序列应按一个字素计数');
+
+const fullFrontSearch = getFrontSearchIndex(editions.yan, showcaseSnapshot);
+const uncrownedSearchEntry = fullFrontSearch.find(({ id }) => id === 'front-production-uncrowned');
+const uncrownedContent = getLocalization(editions.yan, showcaseSnapshot).programs.productions
+  .uncrowned;
+assert.ok(uncrownedSearchEntry && uncrownedContent);
+assert.match(uncrownedSearchEntry.keywords, new RegExp(uncrownedContent.synopsis, 'u'));
+assert.match(uncrownedSearchEntry.keywords, new RegExp(uncrownedContent.guidance, 'u'));
+assert.ok(
+  uncrownedContent.creatives.every(([role, name]) =>
+    uncrownedSearchEntry.keywords.includes(`${role} ${name}`),
+  ),
+  '剧目主创职责与姓名应进入公开匹配文字',
+);
 
 const homepageExcludedPerformanceId = 'procession-of-masks-londinium-1103-0214';
 const curatedRootSet = {

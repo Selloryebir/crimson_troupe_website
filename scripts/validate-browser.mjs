@@ -531,6 +531,14 @@ try {
     true,
     '键盘提交后应能继续进入首个搜索结果',
   );
+  await desktopPage.locator('[data-search-input]').fill('演');
+  await desktopPage.locator('[data-search-input]').press('Enter');
+  assert.equal(await desktopPage.locator('[data-search-result]').count(), 0);
+  assert.match(
+    (await desktopPage.locator('[data-search-feedback]').textContent()) ?? '',
+    /2/u,
+    '炎语单字查询应显示两字素门槛而不是无结果',
+  );
   await desktopPage.goto(`${origin}${archivePath('yan')}`);
   await assertEditorialAlternation(
     desktopPage,
@@ -796,6 +804,18 @@ try {
     }).observe(status, { childList: true });
   });
   const accessSearch = archiveAccessPage.locator('[data-search-input]');
+  const initialSearchEventCount = await archiveAccessPage.evaluate(
+    () => JSON.parse(sessionStorage.getItem('crimson-troupe:archive-pollution:v2')).eventCount,
+  );
+  await accessSearch.fill('湖');
+  await accessSearch.press('Enter');
+  assert.equal(
+    await archiveAccessPage.evaluate(
+      () => JSON.parse(sessionStorage.getItem('crimson-troupe:archive-pollution:v2')).eventCount,
+    ),
+    initialSearchEventCount,
+    '里站过短查询不得消耗污染事件',
+  );
   await accessSearch.fill('湖中');
   await accessSearch.press('Enter');
   await archiveAccessPage.locator('html[data-pollution-level="1"]').waitFor();

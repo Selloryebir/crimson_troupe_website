@@ -18,6 +18,7 @@ export const kazimierzMessages = {
     scope: 'Zakres wyszukiwania: {scope}',
     unavailable: 'Indeks wyszukiwania jest chwilowo niedostępny. Kontynuuj główną nawigację.',
     prompt: 'Wprowadź termin, aby znaleźć spektakle, produkcje i strony internetowe.',
+    minimumQuery: 'Wprowadź co najmniej {count} znaki.',
     resultCount: 'Znaleziono wyniki {count}.',
     noResults: 'Nie znaleziono pasującej treści.',
     noscriptTitle: 'Wyszukiwanie wymaga JavaScript',

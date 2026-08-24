@@ -123,6 +123,7 @@ export interface SearchMessages {
   scope: string;
   unavailable: string;
   prompt: string;
+  minimumQuery: string;
   resultCount: string;
   noResults: string;
   noscriptTitle: string;

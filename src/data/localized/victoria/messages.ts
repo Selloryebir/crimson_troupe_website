@@ -18,6 +18,7 @@ export const victoriaMessages = {
     scope: 'Search scope: {scope}',
     unavailable: 'The search index is temporarily unavailable. Continue with the main navigation.',
     prompt: 'Enter a term to find performances, productions, and website pages.',
+    minimumQuery: 'Enter at least {count} characters.',
     resultCount: '{count} results found.',
     noResults: 'No matching content was found.',
     noscriptTitle: 'Search requires JavaScript',

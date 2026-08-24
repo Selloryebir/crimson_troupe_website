@@ -19,6 +19,7 @@ export const siracusaMessages = {
     unavailable:
       "L'indice di ricerca è temporaneamente non disponibile. Proseguire con la navigazione principale.",
     prompt: 'Inserisci un termine per trovare spettacoli, produzioni e pagine del sito web.',
+    minimumQuery: 'Inserisci almeno {count} caratteri.',
     resultCount: 'Risultati {count} trovati.',
     noResults: 'Nessun contenuto corrispondente trovato.',
     noscriptTitle: 'La ricerca richiede JavaScript',

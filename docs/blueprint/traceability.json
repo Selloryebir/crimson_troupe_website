@@ -741,6 +741,11 @@
       "related": ["BP-FND-DOMAIN", "BP-I18N-CORE"]
     },
     {
+      "path": "src/data/search-policy.ts",
+      "primary": "BP-MOD-SEARCH",
+      "related": ["BP-I18N-CORE"]
+    },
+    {
       "path": "src/data/site-search-index.ts",
       "primary": "BP-MOD-SEARCH",
       "related": ["BP-FND-DOMAIN", "BP-CNT-CORE", "BP-I18N-CORE", "BP-I18N-TERMS"]

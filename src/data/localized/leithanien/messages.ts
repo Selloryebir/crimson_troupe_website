@@ -21,6 +21,7 @@ export const leithanienMessages = {
       'Der Suchindex ist vorübergehend nicht verfügbar. Fahren Sie mit der Hauptnavigation fort.',
     prompt:
       'Geben Sie einen Begriff ein, um Aufführungen, Produktionen und Website-Seiten zu finden.',
+    minimumQuery: 'Geben Sie mindestens {count} Zeichen ein.',
     resultCount: '{count} Ergebnisse gefunden.',
     noResults: 'Es wurde kein passender Inhalt gefunden.',
     noscriptTitle: 'Für die Suche ist JavaScript erforderlich',
