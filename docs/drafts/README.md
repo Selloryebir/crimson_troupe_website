@@ -35,10 +35,11 @@ docs/drafts/
 
 当前实际草稿入口：
 
-| 文件                                                                                 | 类型     | 当前效力                                 |
-| ------------------------------------------------------------------------------------ | -------- | ---------------------------------------- |
-| [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md) | 创意草稿 | 延期的里站异常购票构想，等待未来独立规划 |
-| [`creative/performance-pricing-method.md`](creative/performance-pricing-method.md)   | 创意草稿 | 未来正式定价方法候选，已决定延期且不启用 |
+| 文件                                                                                         | 类型       | 当前效力                                 |
+| -------------------------------------------------------------------------------------------- | ---------- | ---------------------------------------- |
+| [`plans/ticket-artifact-localization-stage.md`](plans/ticket-artifact-localization-stage.md) | 一次性计划 | 纪念票字段配对与本地化修正阶段计划       |
+| [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md)         | 创意草稿   | 延期的里站异常购票构想，等待未来独立规划 |
+| [`creative/performance-pricing-method.md`](creative/performance-pricing-method.md)           | 创意草稿   | 未来正式定价方法候选，已决定延期且不启用 |
 
 ## 固定文档骨架
 
