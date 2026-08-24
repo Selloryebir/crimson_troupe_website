@@ -117,15 +117,6 @@ export const siracusaMessages = {
       'priority-service': 'Regolazione del servizio di percorso prioritario',
       'retention-service': 'Adeguamento del servizio preventivo di conservazione',
     },
-    stamps: {
-      'admission-confirmed': 'AMMISSIONE CONFERMATA',
-      'standard-route': 'PERCORSO STANDARD',
-      'priority-route': 'PERCORSO PRIORITARIO',
-      'network-recovered': 'RETE RECUPERATA',
-      'returned-seat': 'POSTO RESTITUITO',
-      'retention-offer': 'CITAZIONE DI RITENZIONE',
-      'manual-review': 'REVISIONE MANUALE',
-    },
     artifact: {
       title: 'Biglietto commemorativo {title}',
       description: '{dateTime}, {place}, {zone}, {price} LMD, numero biglietto {number}',

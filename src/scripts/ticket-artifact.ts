@@ -1,18 +1,14 @@
 import { formatMessage } from '../data/localized/format.ts';
-import type { TicketStampId } from '../data/localized/schema.ts';
 import type { TicketArtifactProjection, TicketingPerformanceOption } from '../data/ticketing.ts';
-import type { TicketBasketItem } from './ticketing-state.ts';
-
-export interface TicketArtifactStamp {
-  id: TicketStampId;
-  label: string;
-}
+import type { JourneyTag, TicketBasketItem, TicketingEndingId } from './ticketing-state.ts';
 
 export interface TicketArtifactInput {
   performance: TicketingPerformanceOption;
   basketItem: TicketBasketItem;
   number: string;
-  stamps: readonly TicketArtifactStamp[];
+  endingHistory: readonly TicketingEndingId[];
+  endingLabels: Readonly<Record<TicketingEndingId, string>>;
+  journeyTags: readonly JourneyTag[];
   projection: TicketArtifactProjection;
 }
 
@@ -246,45 +242,49 @@ export function createTicketTexture(number: string): TicketTexture {
   return { signature, lineYs, lineSlants, punchXs };
 }
 
-function createStampShape(id: TicketStampId): string {
-  if (id === 'admission-confirmed') {
-    return '<ellipse rx="70" ry="21"/><ellipse rx="64" ry="16"/>';
-  }
-  if (id === 'priority-route') {
-    return '<path d="M0-24 72 0 0 24-72 0Z"/><path d="M0-18 61 0 0 18-61 0Z"/>';
-  }
-  if (id === 'network-recovered') {
-    return '<rect x="-68" y="-20" width="136" height="40"/><rect x="-64" y="-16" width="136" height="40" stroke-dasharray="5 4" opacity=".55"/>';
-  }
-  if (id === 'returned-seat') {
-    return '<rect x="-70" y="-21" width="140" height="42"/><path d="M-62-14h18m-18 7h12m100 14h-18m18 7h-12"/>';
-  }
-  if (id === 'retention-offer') {
-    return '<path d="M-70-21h50l8 8 8-8h74v42H18l-8-8-8 8h-72Z" stroke-dasharray="7 4"/>';
-  }
-  if (id === 'manual-review') {
-    return '<rect x="-70" y="-21" width="140" height="42"/><path d="M-60-12h18m-18 8h12m90-8h18m-12 8h12"/><circle cx="-59" cy="13" r="3"/><circle cx="59" cy="13" r="3"/>';
-  }
-  return '<rect x="-70" y="-21" width="140" height="42"/>';
-}
+const endingComponents: Readonly<Record<TicketingEndingId, string>> = {
+  ENDING_NETWORK_ERROR:
+    '<path d="M-91-4a94 64 0 0 1 29-43M-41-58a94 64 0 0 1 110 15M83-25a94 64 0 0 1 1 49" stroke-dasharray="15 7"/>',
+  ENDING_NORMAL_SUCCESS:
+    '<ellipse rx="45" ry="29"/><path d="M-22 0-7 15 25-17M-34-17h14m40 34h14"/>',
+  ENDING_REJECT_RESCALPER:
+    '<circle cx="-76" cy="31" r="7"/><circle cx="76" cy="-31" r="7"/><path d="M-67 25 67-25"/>',
+  ENDING_SCALPER_SUCCESS:
+    '<path d="M0-49 31-14 18-14 18 30-18 30-18-14-31-14Z"/><path d="M-12 13h24"/>',
+  ENDING_SCALPER_FAILED:
+    '<path d="M-69-32h33v18h-33zm105 46h33v18H36z"/><path d="M-58-23 58 23" stroke-dasharray="5 5"/>',
+  ENDING_DISCOUNT_SUCCESS:
+    '<path d="M-82 10q23-31 50-37M82-10Q59 21 32 27M-78 17l18-2-7-17M78-17l-18 2 7 17"/>',
+  ENDING_DISCOUNT_FAILED:
+    '<path d="M-94-17h19v-19M94 17H75v19M-94 17h19v19M94-17H75v-19"/><path d="M-15-8 15 8M-15 8 15-8"/>',
+};
 
-function createStampMarkup(stamps: readonly TicketArtifactStamp[], accent: string): string {
-  return stamps
-    .map((stamp, index) => {
-      const x = 630 + index * 118;
-      const y = 482;
-      const rotation = [-4, 2, -2, 3, -3][index] ?? 0;
-      const graphemeCount = segmentTicketGraphemes(stamp.label, 'und').length;
-      const fontSize = Math.max(9, Math.min(12, 130 / Math.max(graphemeCount, 1)));
-      const fittedText =
-        graphemeCount > 10 ? ' textLength="96" lengthAdjust="spacingAndGlyphs"' : '';
-      return `<g data-stamp-id="${stamp.id}" transform="translate(${x} ${y}) rotate(${rotation})" fill="none" stroke="${accent}" stroke-width="2.4"><title>${escapeXml(stamp.label)}</title><g transform="scale(.78 1)">${createStampShape(stamp.id)}</g><text x="0" y="4" fill="${accent}" stroke="none" font-family="sans-serif" font-size="${fontSize}" font-weight="700" text-anchor="middle"${fittedText}>${escapeXml(stamp.label)}</text></g>`;
+function createCompositeStampMarkup(
+  endingHistory: readonly TicketingEndingId[],
+  endingLabels: Readonly<Record<TicketingEndingId, string>>,
+  journeyTags: readonly JourneyTag[],
+  accent: string,
+): string {
+  const activeEndings = new Set(endingHistory);
+  const uniqueHistory = [...activeEndings];
+  const accessibleHistory = uniqueHistory.map((endingId) => endingLabels[endingId]).join(' / ');
+  const components = Object.entries(endingComponents)
+    .map(([endingId, shape]) => {
+      const active = activeEndings.has(endingId as TicketingEndingId);
+      return `<g data-ending-component="${endingId}" data-active="${active}" opacity="${active ? '1' : '.1'}">${shape}</g>`;
     })
     .join('');
+  const administrativeTexture = journeyTags.includes('returned-seat')
+    ? '<path data-journey-mark="returned-seat" d="M-58 45h116M-43 51h86" stroke-dasharray="4 5"/>'
+    : journeyTags.includes('manual-review')
+      ? '<path data-journey-mark="manual-review" d="M-58 45h18m8 0h24m8 0h18m8 0h32M-48 51h96"/>'
+      : '';
+  return `<g data-ticket-composite-stamp data-ending-components="${escapeXml(uniqueHistory.join(' '))}" transform="translate(1020 445) rotate(-3) scale(.78)" fill="none" stroke="${accent}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><title>${escapeXml(accessibleHistory)}</title><ellipse rx="102" ry="66" opacity=".7"/><ellipse rx="97" ry="61" stroke-dasharray="3 5" opacity=".52"/>${components}${administrativeTexture}</g>`;
 }
 
 export function createTicketSvg(input: TicketArtifactInput): string {
-  const { performance, basketItem, number, stamps, projection } = input;
+  const { performance, basketItem, number, endingHistory, endingLabels, journeyTags, projection } =
+    input;
   const { primary, secondary } = projection;
   const zoneLabel = primary.zoneLabels[basketItem.zone];
   if (!zoneLabel) {
@@ -311,7 +311,7 @@ export function createTicketSvg(input: TicketArtifactInput): string {
   const punches = texture.punchXs
     .map((x) => `<circle cx="${x}" cy="32" r="3"/><circle cx="${x}" cy="508" r="3"/>`)
     .join('');
-  const stampMarkup = createStampMarkup(stamps, accent);
+  const stampMarkup = createCompositeStampMarkup(endingHistory, endingLabels, journeyTags, accent);
   const titleMarkup = createTextMarkup(
     'title',
     primary.title,

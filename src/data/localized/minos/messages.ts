@@ -117,15 +117,6 @@ export const minosMessages = {
       'priority-service': 'Προσαύξηση Υπηρεσίας Προτεραιότητας',
       'retention-service': 'Προσαύξηση Τελικής Προσφοράς',
     },
-    stamps: {
-      'admission-confirmed': 'ΕΙΣΟΔΟΣ ΕΠΙΒΕΒΑΙΩΘΗΚΕ',
-      'standard-route': 'ΚΑΝΟΝΙΚΗ ΔΙΑΔΡΟΜΗ',
-      'priority-route': 'ΔΙΑΔΡΟΜΗ ΠΡΟΤΕΡΑΙΟΤΗΤΑΣ',
-      'network-recovered': 'ΔΙΚΤΥΟ ΑΠΟΚΑΤΑΣΤΑΘΗΚΕ',
-      'returned-seat': 'ΕΠΙΣΤΡΟΦΗ ΘΕΣΗΣ',
-      'retention-offer': 'ΤΕΛΙΚΗ ΠΡΟΣΦΟΡΑ',
-      'manual-review': 'ΧΕΙΡΟΚΙΝΗΤΟΣ ΕΛΕΓΧΟΣ',
-    },
     artifact: {
       title: 'Αναμνηστικό Εισιτήριο {title}',
       description: '{dateTime}, {place}, {zone}, {price} LMD, αριθμός εισιτηρίου {number}',

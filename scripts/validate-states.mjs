@@ -54,6 +54,7 @@ import {
   layoutTicketText,
   segmentTicketGraphemes,
 } from '../src/scripts/ticket-artifact.ts';
+import { getTicketEndingLabels } from '../src/scripts/ticket-result-renderer.ts';
 import {
   MAX_REQUIRING_RESUBMIT_RESULTS,
   acceptRetentionOffer,
@@ -63,7 +64,6 @@ import {
   createTicketingState,
   declinePremiumOffer,
   declineRetentionOffer,
-  deriveTicketStampIds,
   enterPremiumRoute,
   openPremiumOffer,
   resolveTicketingAttempt,
@@ -920,6 +920,15 @@ assert.equal(networkFailure.attemptCount, 1);
 const networkRetry = retryTicketingAttempt(networkFailure);
 assert.deepEqual(networkRetry.basket, selection.basket);
 assert.deepEqual(networkRetry.journeyTags, ['network-retry']);
+const networkThenSuccess = resolveTicketingAttempt(
+  networkRetry,
+  () => 0.1,
+  () => '333333333333',
+);
+assert.deepEqual(networkThenSuccess.result?.endingHistory, [
+  'ENDING_NETWORK_ERROR',
+  'ENDING_NORMAL_SUCCESS',
+]);
 const noConsecutiveNetwork = resolveTicketingAttempt(
   networkRetry,
   () => 0.9,
@@ -949,7 +958,16 @@ assert.equal(premiumFailure.currentEndingId, 'ENDING_SCALPER_FAILED');
 assert.equal(premiumSuccess.result?.baseTotal, 1100);
 assert.deepEqual(premiumSuccess.result?.adjustments, [{ id: 'priority-service', amount: 550 }]);
 assert.equal(premiumSuccess.result?.settledTotal, 1650);
-assert.deepEqual(premiumSuccess.result?.stampIds, ['admission-confirmed', 'priority-route']);
+assert.deepEqual(premiumSuccess.result?.endingHistory, ['ENDING_SCALPER_SUCCESS']);
+const premiumFailureThenSuccess = resolveTicketingAttempt(
+  retryTicketingAttempt(premiumFailure),
+  () => 0.1,
+  () => '444444444444',
+);
+assert.deepEqual(premiumFailureThenSuccess.result?.endingHistory, [
+  'ENDING_SCALPER_FAILED',
+  'ENDING_SCALPER_SUCCESS',
+]);
 assert.equal(returnToStandardRoute(premiumFailure).route, 'standard');
 assert.equal(calculateAdjustmentAmount(1100, 'full'), 550);
 assert.equal(calculateAdjustmentAmount(1100, 'retention'), 528);
@@ -977,10 +995,15 @@ assert.equal(retainedSuccess.currentEndingId, 'ENDING_DISCOUNT_SUCCESS');
 assert.equal(retainedFailure.currentEndingId, 'ENDING_DISCOUNT_FAILED');
 assert.deepEqual(retainedSuccess.result?.adjustments, [{ id: 'retention-service', amount: 528 }]);
 assert.equal(retainedSuccess.result?.settledTotal, 1628);
-assert.deepEqual(retainedSuccess.result?.stampIds, [
-  'admission-confirmed',
-  'priority-route',
-  'retention-offer',
+assert.deepEqual(retainedSuccess.result?.endingHistory, ['ENDING_DISCOUNT_SUCCESS']);
+const retainedFailureThenSuccess = resolveTicketingAttempt(
+  retryTicketingAttempt(retainedFailure),
+  () => 0.1,
+  () => '666666666666',
+);
+assert.deepEqual(retainedFailureThenSuccess.result?.endingHistory, [
+  'ENDING_DISCOUNT_FAILED',
+  'ENDING_DISCOUNT_SUCCESS',
 ]);
 
 const retentionDeclined = declineRetentionOffer(firstRetentionOffer);
@@ -1023,7 +1046,7 @@ assert.equal(forcedManualReview.phase, 'success');
 assert.equal(forcedManualReview.currentEndingId, 'ENDING_NORMAL_SUCCESS');
 assert.equal(forcedManualReview.route, 'standard');
 assert.ok(forcedManualReview.journeyTags.includes('manual-review'));
-assert.ok(forcedManualReview.result?.stampIds.includes('manual-review'));
+assert.deepEqual(forcedManualReview.result?.endingHistory, ['ENDING_NORMAL_SUCCESS']);
 
 let returnedSeatJourney = declineRetentionOffer(firstRetentionOffer);
 returnedSeatJourney = startTicketingAttempt(returnedSeatJourney);
@@ -1046,23 +1069,10 @@ assert.equal(forcedReturnedSeat.phase, 'success');
 assert.equal(forcedReturnedSeat.route, 'standard');
 assert.ok(forcedReturnedSeat.journeyTags.includes('returned-seat'));
 assert.ok(forcedReturnedSeat.journeyTags.includes('priority-refused'));
-assert.ok(forcedReturnedSeat.result?.stampIds.includes('returned-seat'));
-
-assert.deepEqual(
-  deriveTicketStampIds('standard', [
-    'network-retry',
-    'priority-refused',
-    'retention-accepted',
-    'returned-seat',
-  ]),
-  [
-    'admission-confirmed',
-    'standard-route',
-    'network-recovered',
-    'returned-seat',
-    'retention-offer',
-  ],
-);
+assert.deepEqual(forcedReturnedSeat.result?.endingHistory, [
+  'ENDING_REJECT_RESCALPER',
+  'ENDING_NORMAL_SUCCESS',
+]);
 
 let frozenRandomCalls = 0;
 let frozenNumberCalls = 0;
@@ -1096,6 +1106,7 @@ assert.deepEqual(
 );
 assert.deepEqual(restoreTicketingState('{"version":2}', catalog), createTicketingState());
 assert.deepEqual(restoreTicketingState('{"version":3}', catalog), createTicketingState());
+assert.deepEqual(restoreTicketingState('{"version":4}', catalog), createTicketingState());
 assert.deepEqual(restoreTicketingState('{"version":999}', catalog), createTicketingState());
 
 const previewLocalizations = previewEditionIds.map((editionId) =>
@@ -1157,13 +1168,14 @@ const matrix = createTicketMatrix('123456789012');
 const texture = createTicketTexture('123456789012');
 assert.deepEqual(texture, createTicketTexture('123456789012'));
 assert.notDeepEqual(texture, createTicketTexture('123456789013'));
-const artifactStamps = [
-  { id: 'admission-confirmed', label: '确认入场' },
-  { id: 'priority-route', label: '优先线路' },
-  { id: 'network-recovered', label: '网络恢复' },
-  { id: 'retention-offer', label: '挽留报价' },
-  { id: 'manual-review', label: '人工复核' },
+const artifactEndingHistory = [
+  'ENDING_NETWORK_ERROR',
+  'ENDING_REJECT_RESCALPER',
+  'ENDING_DISCOUNT_FAILED',
+  'ENDING_DISCOUNT_SUCCESS',
 ];
+const artifactJourneyTags = ['network-retry', 'priority-refused', 'retention-accepted'];
+const artifactEndingLabels = getTicketEndingLabels(yanLocalization.messages.ticketing);
 for (const [performanceId, expectedPrimaryLocale, expectedSecondaryLocale] of [
   ['uncrowned-trimount-1102', 'en-US', null],
   ['caged-fire-wiesheim-1102', 'de', 'en-GB'],
@@ -1180,7 +1192,9 @@ for (const [performanceId, expectedPrimaryLocale, expectedSecondaryLocale] of [
       basePrice: offer.basePrice,
     },
     number: '321098765432',
-    stamps: artifactStamps,
+    endingHistory: artifactEndingHistory,
+    endingLabels: artifactEndingLabels,
+    journeyTags: artifactJourneyTags,
     projection: option.artifact,
   });
   assert.ok(
@@ -1227,7 +1241,9 @@ const svg = createTicketSvg({
   performance: artifactPerformance,
   basketItem: basketA,
   number: '123456789012',
-  stamps: artifactStamps,
+  endingHistory: artifactEndingHistory,
+  endingLabels: artifactEndingLabels,
+  journeyTags: artifactJourneyTags,
   projection: artifactProjection,
 });
 assert.equal(matrix.length, 21 * 21);
@@ -1238,17 +1254,27 @@ for (const requiredText of [
   'A 区',
   `${basketA.basePrice} LMD`,
   '123456789012',
-  '确认入场',
-  '优先线路',
-  '网络恢复',
-  '挽留报价',
-  '人工复核',
 ]) {
   assert.ok(svg.includes(requiredText), `票面缺少必要字段：${requiredText}`);
 }
-for (const stamp of artifactStamps) {
-  assert.ok(svg.includes(`data-stamp-id="${stamp.id}"`));
+for (const endingId of [
+  'ENDING_NETWORK_ERROR',
+  'ENDING_NORMAL_SUCCESS',
+  'ENDING_REJECT_RESCALPER',
+  'ENDING_SCALPER_SUCCESS',
+  'ENDING_SCALPER_FAILED',
+  'ENDING_DISCOUNT_SUCCESS',
+  'ENDING_DISCOUNT_FAILED',
+]) {
+  assert.ok(svg.includes(`data-ending-component="${endingId}"`));
+  assert.ok(
+    svg.includes(
+      `data-ending-component="${endingId}" data-active="${artifactEndingHistory.includes(endingId)}"`,
+    ),
+  );
 }
+assert.ok(svg.includes('data-ticket-composite-stamp'));
+assert.ok(!svg.includes('data-stamp-id='));
 assert.ok(svg.includes(`data-ticket-pattern="${texture.signature}"`));
 assert.equal(
   svg,
@@ -1256,7 +1282,9 @@ assert.equal(
     performance: artifactPerformance,
     basketItem: basketA,
     number: '123456789012',
-    stamps: artifactStamps,
+    endingHistory: artifactEndingHistory,
+    endingLabels: artifactEndingLabels,
+    journeyTags: artifactJourneyTags,
     projection: artifactProjection,
   }),
 );
@@ -1313,7 +1341,9 @@ const unicodeArtifactSvg = createTicketSvg({
   },
   basketItem: basketA,
   number: '123456789012',
-  stamps: artifactStamps,
+  endingHistory: artifactEndingHistory,
+  endingLabels: artifactEndingLabels,
+  journeyTags: artifactJourneyTags,
   projection: {
     primary: {
       ...artifactProjection.primary,

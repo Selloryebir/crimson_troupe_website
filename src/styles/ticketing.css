@@ -26,7 +26,7 @@
 .ticket-fallback h2,
 .ticketing-app h2,
 .ticket-flow h3,
-.ticket-result h3 {
+.ticket-result h2 {
   margin: 0;
   font: 500 clamp(1.9rem, 4vw, 4rem) / 1.15 var(--serif);
 }
@@ -462,7 +462,7 @@
   max-width: 760px;
 }
 
-.ticket-receipt__heading h3 {
+.ticket-receipt__heading h2 {
   font-size: clamp(2.2rem, 5vw, 4.8rem);
 }
 
@@ -536,7 +536,7 @@
   align-self: center;
 }
 
-.issued-ticket__caption h4 {
+.issued-ticket__caption h3 {
   margin: 0 0 18px;
   font: 500 1.55rem / 1.25 var(--serif);
 }
@@ -551,36 +551,6 @@
   border-top: 1px solid var(--line);
   color: var(--muted);
   font-size: 0.68rem;
-}
-
-.issued-ticket__stamps {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-  padding: 0;
-  margin: 14px 0 0;
-  color: var(--crimson);
-  list-style: none;
-}
-
-.issued-ticket__stamps li {
-  padding: 5px 8px;
-  border: 1px solid currentcolor;
-  font-size: 0.64rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-}
-
-.issued-ticket__stamps li[data-ticket-stamp="admission-confirmed"] {
-  border-radius: 999px;
-}
-
-.issued-ticket__stamps li[data-ticket-stamp="network-recovered"] {
-  border-style: double;
-}
-
-.issued-ticket__stamps li[data-ticket-stamp="retention-offer"] {
-  border-style: dashed;
 }
 
 .issued-ticket__controls {
@@ -833,14 +803,18 @@ html[data-world="front"] .issued-ticket__caption {
 
   body.is-printing-ticket .site-main,
   body.is-printing-ticket .ticketing-app,
+  body.is-printing-ticket .partner-ticketing,
+  body.is-printing-ticket .partner-ticketing-flow,
   body.is-printing-ticket .ticket-result,
   body.is-printing-ticket .issued-tickets,
   body.is-printing-ticket .issued-ticket.is-print-target {
     display: block !important;
   }
 
-  body.is-printing-ticket .site-main > *:not(.ticketing-app),
+  body.is-printing-ticket .site-main > *:not(.ticketing-app):not(.partner-ticketing),
   body.is-printing-ticket .ticketing-app > *:not(.ticket-result),
+  body.is-printing-ticket .partner-ticketing > *:not(.partner-ticketing-flow),
+  body.is-printing-ticket .partner-ticketing-flow > *:not(.ticket-result),
   body.is-printing-ticket .ticket-result > *:not(.issued-tickets),
   body.is-printing-ticket .issued-ticket:not(.is-print-target),
   body.is-printing-ticket .issued-ticket__caption {

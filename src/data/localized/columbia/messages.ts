@@ -116,15 +116,6 @@ export const columbiaMessages = {
       'priority-service': 'Priority Route Service Adjustment',
       'retention-service': 'Retention Quote Service Adjustment',
     },
-    stamps: {
-      'admission-confirmed': 'ADMISSION CONFIRMED',
-      'standard-route': 'STANDARD ROUTE',
-      'priority-route': 'PRIORITY ROUTE',
-      'network-recovered': 'NETWORK RECOVERED',
-      'returned-seat': 'RETURNED SEAT',
-      'retention-offer': 'RETENTION QUOTE',
-      'manual-review': 'MANUAL REVIEW',
-    },
     artifact: {
       title: '{title} Commemorative Ticket',
       description: '{dateTime}, {place}, {zone}, {price} LMD, ticket number {number}',

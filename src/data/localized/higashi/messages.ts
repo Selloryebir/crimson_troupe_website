@@ -114,15 +114,6 @@ export const higashiMessages = {
       'priority-service': '優先経路サービス差額',
       'retention-service': '継続提示サービス差額',
     },
-    stamps: {
-      'admission-confirmed': '入場確認',
-      'standard-route': '通常経路',
-      'priority-route': '優先経路',
-      'network-recovered': '通信復旧',
-      'returned-seat': '還流座席',
-      'retention-offer': '継続提示',
-      'manual-review': '手動確認',
-    },
     artifact: {
       title: '{title} 記念券',
       description: '{dateTime}、{place}、{zone}、{price} LMD、券番号 {number}',

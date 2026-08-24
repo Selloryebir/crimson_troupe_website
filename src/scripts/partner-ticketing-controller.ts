@@ -1,11 +1,13 @@
 import type { TicketingMessages } from '../data/localized/schema.ts';
 import type { TicketingPerformanceOption } from '../data/ticketing.ts';
 import {
+  clearTicketingSession,
   createTicketNumber,
   getTicketingSessionStorage,
   restoreTicketingSession,
   saveTicketingSession,
 } from './ticketing-session.ts';
+import { handleTicketArtifactAction, renderTicketingResult } from './ticket-result-renderer.ts';
 import {
   acceptRetentionOffer,
   calculateAdjustmentAmount,
@@ -86,6 +88,10 @@ export function initPartnerTicketingExperience(
   const channel = app.querySelector<HTMLElement>('[data-partner-channel]');
   const details = app.querySelector<HTMLElement>('[data-partner-details]');
   const actions = app.querySelector<HTMLElement>('[data-partner-actions]');
+  const result = app.querySelector<HTMLElement>('[data-ticket-result]');
+  const receipt = app.querySelector<HTMLElement>('[data-ticket-receipt]');
+  const issuedTickets = app.querySelector<HTMLElement>('[data-issued-tickets]');
+  const newRound = app.querySelector<HTMLButtonElement>('[data-ticket-new-round]');
   const live = app.querySelector<HTMLElement>('[data-partner-live]');
   if (
     !progress ||
@@ -98,6 +104,10 @@ export function initPartnerTicketingExperience(
     !channel ||
     !details ||
     !actions ||
+    !result ||
+    !receipt ||
+    !issuedTickets ||
+    !newRound ||
     !live
   ) {
     return;
@@ -150,11 +160,27 @@ export function initPartnerTicketingExperience(
   };
 
   const openDialog = () => {
+    result.hidden = true;
     review.hidden = true;
     if (!dialog.open) {
       dialog.showModal();
     }
     title.focus();
+  };
+
+  const showResult = (focusStage = false) => {
+    if (!state.result) {
+      window.location.replace(officialPath ?? '/');
+      return;
+    }
+    progress.hidden = true;
+    review.hidden = true;
+    result.hidden = false;
+    renderTicketingResult(state.result, options, messages, { receipt, issuedTickets });
+    live.textContent = messages.success;
+    if (focusStage) {
+      result.querySelector<HTMLElement>('#ticket-result-title')?.focus();
+    }
   };
 
   const renderDialog = () => {
@@ -287,7 +313,11 @@ export function initPartnerTicketingExperience(
       state = returnToSelection(state);
     }
     save();
-    if (action === 'back' || action === 'decline-retention' || action === 'receipt') {
+    if (action === 'receipt') {
+      showResult(true);
+      return;
+    }
+    if (action === 'back' || action === 'decline-retention') {
       window.location.assign(officialPath ?? '/');
       return;
     }
@@ -307,11 +337,22 @@ export function initPartnerTicketingExperience(
     review.hidden = false;
     review.focus();
   });
+  issuedTickets.addEventListener('click', (event) => {
+    if (state.result) {
+      handleTicketArtifactAction(event, state.result, options, messages, issuedTickets, live);
+    }
+  });
+  newRound.addEventListener('click', () => {
+    clearTicketingSession(storage);
+    window.location.assign(officialPath ?? '/');
+  });
 
   fallback.hidden = true;
   app.hidden = false;
   if (state.phase === 'attempt') {
     void processAttempt();
+  } else if (state.phase === 'success') {
+    showResult(true);
   } else {
     renderDialog();
   }

@@ -116,15 +116,6 @@ export const kazimierzMessages = {
       'priority-service': 'Dostosowanie usługi trasy priorytetowej',
       'retention-service': 'Korekta usługi przechowywania wyceny',
     },
-    stamps: {
-      'admission-confirmed': 'WSTĘP POTWIERDZONY',
-      'standard-route': 'TRASA STANDARDOWA',
-      'priority-route': 'TRASA PRIORYTETOWA',
-      'network-recovered': 'SIEĆ ODZYSKANA',
-      'returned-seat': 'MIEJSCE ZWRÓCONE',
-      'retention-offer': 'WYCENA ZATRZYMANIA',
-      'manual-review': 'PRZEGLĄD INSTRUKCJI',
-    },
     artifact: {
       title: 'Bilet pamiątkowy {title}',
       description: '{dateTime}, {place}, {zone}, {price} LMD, numer biletu {number}',

@@ -149,14 +149,6 @@ export interface FilterMessages {
   empty: string;
 }
 
-export type TicketStampId =
-  | 'admission-confirmed'
-  | 'standard-route'
-  | 'priority-route'
-  | 'network-recovered'
-  | 'returned-seat'
-  | 'retention-offer'
-  | 'manual-review';
 export type TicketAdjustmentId = 'priority-service' | 'retention-service';
 
 export interface TicketArtifactMessages {
@@ -240,6 +232,5 @@ export interface TicketingMessages {
   downloadStarted: string;
   newRound: string;
   adjustments: Record<TicketAdjustmentId, string>;
-  stamps: Record<TicketStampId, string>;
   artifact: TicketArtifactMessages;
 }

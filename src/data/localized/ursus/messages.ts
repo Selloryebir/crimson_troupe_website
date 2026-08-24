@@ -116,15 +116,6 @@ export const ursusMessages = {
       'priority-service': 'Наценка приоритетного сервиса',
       'retention-service': 'Наценка последнего предложения',
     },
-    stamps: {
-      'admission-confirmed': 'ВХОД ПОДТВЕРЖДЁН',
-      'standard-route': 'ОБЫЧНЫЙ МАРШРУТ',
-      'priority-route': 'ПРИОРИТЕТНЫЙ МАРШРУТ',
-      'network-recovered': 'СЕТЬ ВОССТАНОВЛЕНА',
-      'returned-seat': 'ВОЗВРАЩЁННОЕ МЕСТО',
-      'retention-offer': 'ПОСЛЕДНЕЕ ПРЕДЛОЖЕНИЕ',
-      'manual-review': 'РУЧНАЯ ПРОВЕРКА',
-    },
     artifact: {
       title: 'Памятный билет: {title}',
       description: '{dateTime}, {place}, {zone}, {price} LMD, билет № {number}',

@@ -119,15 +119,6 @@ export const leithanienMessages = {
       'priority-service': 'Anpassung des Prioritätsroutendienstes',
       'retention-service': 'Anpassung des Retention Quote Service',
     },
-    stamps: {
-      'admission-confirmed': 'ZULASSUNG BESTÄTIGT',
-      'standard-route': 'STANDARDROUTE',
-      'priority-route': 'PRIORITÄTSROUTE',
-      'network-recovered': 'NETZWERK WIEDERHERGESTELLT',
-      'returned-seat': 'SITZ ZURÜCKGEGEBEN',
-      'retention-offer': 'RETENTIONSANGEBOT',
-      'manual-review': 'HANDBUCHÜBERPRÜFUNG',
-    },
     artifact: {
       title: '{title} Gedenkticket',
       description: '{dateTime}, {place}, {zone}, {price} LMD, Ticketnummer {number}',

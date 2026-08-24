@@ -71,6 +71,25 @@
   margin-top: clamp(2rem, 6vw, 4rem);
 }
 
+.partner-ticketing-result {
+  color: var(--partner-ink);
+}
+
+.partner-ticketing-result .ticket-receipt__totals {
+  padding: 1rem 1.25rem;
+  border-radius: 1rem;
+  background: var(--partner-paper);
+  box-shadow: 0 1rem 3rem rgb(23 63 73 / 8%);
+}
+
+.partner-ticketing-result .issued-ticket {
+  border: 0;
+  border-top: 0.35rem solid var(--partner-accent);
+  border-radius: 1rem;
+  background: var(--partner-paper);
+  box-shadow: 0 1rem 3rem rgb(23 63 73 / 8%);
+}
+
 .partner-ticketing-progress {
   padding: clamp(1.15rem, 4vw, 2rem);
   border-radius: 1.4rem;

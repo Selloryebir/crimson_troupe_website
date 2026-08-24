@@ -1028,8 +1028,8 @@ try {
     1,
   );
   await ticketPage.locator('[data-partner-action="receipt"]').click();
-  await ticketPage.waitForURL(`${origin}/yan/tickets/`);
   await ticketPage.locator('[data-ticket-result]:not([hidden])').waitFor();
+  assert.equal(new URL(ticketPage.url()).pathname, '/yan/tickets/partner/');
   assert.equal(
     await ticketPage
       .locator('#ticket-result-title')
@@ -1042,7 +1042,14 @@ try {
   assert.match(decodedTicketSource, /data-ticket-field="title"/u);
   assert.match(decodedTicketSource, /data-ticket-language="primary" lang="en-US"/u);
   assert.doesNotMatch(decodedTicketSource, /data-ticket-language="secondary"/u);
+  assert.match(decodedTicketSource, /data-ticket-composite-stamp/u);
+  assert.equal(
+    await ticketPage.locator('[data-ticket-receipt] .ticket-receipt__lines li').count(),
+    1,
+  );
   await assertNoHorizontalLoss(ticketPage, '320px 炎国票务结果');
+  await ticketPage.locator('[data-ticket-new-round]').click();
+  await ticketPage.waitForURL(`${origin}/yan/tickets/`);
   await ticketPage.goto(`${origin}/yan/tickets/partner/`);
   const partnerBrand = ticketPage.locator('[data-ticketing-platform="rice-network"]:has(h1)');
   await partnerBrand.waitFor();
@@ -1123,8 +1130,8 @@ try {
   await minosPage.waitForURL(`${origin}/min/tickets/partner/`);
   await minosPage.locator('[data-partner-dialog][open]').waitFor();
   await minosPage.locator('[data-partner-action="receipt"]').click();
-  await minosPage.waitForURL(`${origin}/min/tickets/`);
   await minosPage.locator('[data-ticket-result]:not([hidden])').waitFor();
+  assert.equal(new URL(minosPage.url()).pathname, '/min/tickets/partner/');
   const minosTicketSource = await minosPage.locator('.issued-ticket > img').getAttribute('src');
   assert.match(decodeURIComponent(minosTicketSource ?? ''), /\p{Script=Greek}/u);
   const downloadPromise = minosPage.waitForEvent('download');
@@ -1139,7 +1146,7 @@ try {
   await minosSelector.locator('summary').click();
   await minosSelector.locator('a[lang="zh-CN"]').click();
   await minosPage.locator('[data-ticket-result]:not([hidden])').waitFor();
-  assert.match(new URL(minosPage.url()).pathname, /^\/yan\/tickets\/$/u);
+  assert.match(new URL(minosPage.url()).pathname, /^\/yan\/tickets\/partner\/$/u);
   assertMinosErrors();
   await minosContext.close();
 
@@ -1223,7 +1230,6 @@ try {
   await ursusPage.waitForURL(`${origin}/urs/tickets/partner/`);
   await ursusPage.locator('[data-partner-dialog][open]').waitFor();
   await ursusPage.locator('[data-partner-action="receipt"]').click();
-  await ursusPage.waitForURL(`${origin}/urs/tickets/`);
   await ursusPage.locator('[data-ticket-result]:not([hidden])').waitFor();
   const editionRouteSequence = builtEditions.map(({ routePrefix }) => routePrefix);
   for (const routePrefix of editionRouteSequence) {
@@ -1231,7 +1237,10 @@ try {
     await editionSelector.locator('summary').click();
     await editionSelector.locator(`a[href^="/${routePrefix}/tickets/"]`).click();
     await ursusPage.locator('[data-ticket-result]:not([hidden])').waitFor();
-    assert.match(new URL(ursusPage.url()).pathname, new RegExp(`^/${routePrefix}/tickets/$`, 'u'));
+    assert.match(
+      new URL(ursusPage.url()).pathname,
+      new RegExp(`^/${routePrefix}/tickets/partner/$`, 'u'),
+    );
   }
   const returnToUrsusSelector = ursusPage.locator('[data-edition-selector]');
   await returnToUrsusSelector.locator('summary').click();

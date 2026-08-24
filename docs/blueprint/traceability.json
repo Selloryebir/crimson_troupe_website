@@ -931,6 +931,11 @@
       "related": ["BP-CNT-CORE", "BP-FND-EXPERIENCE", "BP-I18N-CORE"]
     },
     {
+      "path": "src/scripts/ticket-result-renderer.ts",
+      "primary": "BP-MOD-TICKETING",
+      "related": ["BP-FND-EXPERIENCE", "BP-I18N-CORE"]
+    },
+    {
       "path": "src/scripts/ticketing-controller.ts",
       "primary": "BP-MOD-TICKETING",
       "related": ["BP-FND-EXPERIENCE", "BP-FND-EXTENSION"]

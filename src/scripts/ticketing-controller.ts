@@ -1,51 +1,17 @@
-import type { TicketingPerformanceOption } from '../data/ticketing';
-import { formatMessage } from '../data/localized/format';
-import type { TicketingMessages } from '../data/localized/schema';
-import { createTicketSvg } from './ticket-artifact';
+import { formatMessage } from '../data/localized/format.ts';
+import type { TicketingMessages } from '../data/localized/schema.ts';
+import type { TicketingPerformanceOption } from '../data/ticketing.ts';
 import {
-  clearTicketingSession,
-  createTicketNumber,
   getTicketingSessionStorage,
   restoreTicketingSession,
   saveTicketingSession,
 } from './ticketing-session.ts';
 import {
-  acceptRetentionOffer,
-  calculateAdjustmentAmount,
   calculateBaseTotal,
-  calculateFailureServiceFee,
-  createTicketingState,
-  declinePremiumOffer,
-  declineRetentionOffer,
-  enterPremiumRoute,
-  openPremiumOffer,
-  resolveTicketingAttempt,
-  retryTicketingAttempt,
-  returnToSelection,
-  returnToStandardRoute,
   startTicketingAttempt,
   updateBasket,
   type TicketBasketItem,
-} from './ticketing-state';
-
-function createButton(action: string, label: string, primary = false): HTMLButtonElement {
-  const button = document.createElement('button');
-  button.type = 'button';
-  button.dataset.ticketAction = action;
-  button.className = primary ? 'button' : 'text-button';
-  button.textContent = label;
-  return button;
-}
-
-function addDefinition(list: HTMLDListElement, term: string, description: string): void {
-  const row = document.createElement('div');
-  const dt = document.createElement('dt');
-  const dd = document.createElement('dd');
-  dt.textContent = term;
-  dd.textContent = description;
-  row.append(dt, dd);
-  list.append(row);
-}
+} from './ticketing-state.ts';
 
 function parseOptions(rawValue: string | undefined): readonly TicketingPerformanceOption[] {
   const options = JSON.parse(rawValue ?? '[]') as TicketingPerformanceOption[];
@@ -70,10 +36,8 @@ function parseMessages(rawValue: string | undefined): TicketingMessages {
   const messages = JSON.parse(rawValue ?? '{}') as Partial<TicketingMessages>;
   if (
     typeof messages.selectedCount !== 'string' ||
-    typeof messages.success !== 'string' ||
-    !messages.adjustments ||
-    !messages.stamps ||
-    !messages.artifact
+    typeof messages.selectionRequired !== 'string' ||
+    typeof messages.submitted !== 'string'
   ) {
     throw new Error('Ticketing messages are unavailable');
   }
@@ -88,41 +52,12 @@ export function initTicketingExperience(): void {
   }
 
   const form = app.querySelector<HTMLFormElement>('[data-ticket-basket]');
-  const basketTitle = app.querySelector<HTMLElement>('[data-ticket-basket-title]');
   const count = app.querySelector<HTMLElement>('[data-ticket-count]');
   const baseTotal = app.querySelector<HTMLElement>('[data-ticket-base-total]');
   const start = app.querySelector<HTMLButtonElement>('[data-ticket-start]');
   const selectionFeedback = app.querySelector<HTMLElement>('[data-ticket-selection-feedback]');
-  const flow = app.querySelector<HTMLElement>('[data-ticket-flow]');
-  const flowLabel = app.querySelector<HTMLElement>('[data-ticket-flow-label]');
-  const flowTitle = app.querySelector<HTMLElement>('[data-ticket-flow-title]');
-  const flowCopy = app.querySelector<HTMLElement>('[data-ticket-flow-copy]');
-  const flowDetails = app.querySelector<HTMLElement>('[data-ticket-flow-details]');
-  const flowActions = app.querySelector<HTMLElement>('[data-ticket-flow-actions]');
-  const result = app.querySelector<HTMLElement>('[data-ticket-result]');
-  const receipt = app.querySelector<HTMLElement>('[data-ticket-receipt]');
-  const issuedTickets = app.querySelector<HTMLElement>('[data-issued-tickets]');
-  const newRound = app.querySelector<HTMLButtonElement>('[data-ticket-new-round]');
   const live = app.querySelector<HTMLElement>('[data-ticketing-live]');
-  if (
-    !form ||
-    !basketTitle ||
-    !count ||
-    !baseTotal ||
-    !start ||
-    !selectionFeedback ||
-    !flow ||
-    !flowLabel ||
-    !flowTitle ||
-    !flowCopy ||
-    !flowDetails ||
-    !flowActions ||
-    !result ||
-    !receipt ||
-    !issuedTickets ||
-    !newRound ||
-    !live
-  ) {
+  if (!form || !count || !baseTotal || !start || !selectionFeedback || !live) {
     return;
   }
 
@@ -134,31 +69,35 @@ export function initTicketingExperience(): void {
   } catch {
     return;
   }
-  const partnerPath = app.dataset.ticketingPartnerPath;
 
+  const partnerPath = app.dataset.ticketingPartnerPath;
   const storage = getTicketingSessionStorage();
   let state = restoreTicketingSession(
     storage,
     options.map((option) => ({ performanceId: option.performanceId, offers: option.offers })),
   );
-
-  const save = () => saveTicketingSession(storage, state);
-
-  if (state.phase !== 'selection' && state.phase !== 'success' && partnerPath) {
-    window.location.replace(partnerPath);
+  if (state.phase !== 'selection') {
+    if (partnerPath) {
+      window.location.replace(partnerPath);
+    }
     return;
   }
 
+  const save = () => saveTicketingSession(storage, state);
   const optionFor = (performanceId: string) =>
     options.find((option) => option.performanceId === performanceId);
 
-  const zoneLabelFor = (item: TicketBasketItem): string =>
-    optionFor(item.performanceId)?.offers.find((offer) => offer.zone === item.zone)?.label ??
-    item.zone;
-
-  const artifactStamps = () =>
-    state.result?.stampIds.map((stampId) => ({ id: stampId, label: messages.stamps[stampId] })) ??
-    [];
+  const basketItemFromRow = (row: HTMLElement): TicketBasketItem | null => {
+    const performanceId = row.dataset.ticketOption;
+    const checkbox = row.querySelector<HTMLInputElement>('[data-ticket-select]');
+    const select = row.querySelector<HTMLSelectElement>('[data-ticket-zone]');
+    const option = performanceId ? optionFor(performanceId) : undefined;
+    const offer = option?.offers.find((entry) => entry.zone === select?.value);
+    if (!performanceId || !checkbox?.checked || !offer) {
+      return null;
+    }
+    return { performanceId, zone: offer.zone, basePrice: offer.basePrice };
+  };
 
   const syncBasketControls = () => {
     form.querySelectorAll<HTMLElement>('[data-ticket-option]').forEach((row) => {
@@ -203,259 +142,6 @@ export function initTicketingExperience(): void {
     start.disabled = state.basket.length === 0;
     selectionFeedback.textContent =
       state.basket.length > 0 ? messages.selectionReady : messages.selectionRequired;
-  };
-
-  const basketItemFromRow = (row: HTMLElement): TicketBasketItem | null => {
-    const performanceId = row.dataset.ticketOption;
-    const checkbox = row.querySelector<HTMLInputElement>('[data-ticket-select]');
-    const select = row.querySelector<HTMLSelectElement>('[data-ticket-zone]');
-    const option = performanceId ? optionFor(performanceId) : undefined;
-    const offer = option?.offers.find((entry) => entry.zone === select?.value);
-    if (!performanceId || !checkbox?.checked || !offer) {
-      return null;
-    }
-    return {
-      performanceId,
-      zone: offer.zone,
-      basePrice: offer.basePrice,
-    };
-  };
-
-  const renderReceipt = () => {
-    receipt.replaceChildren();
-    issuedTickets.replaceChildren();
-    if (!state.result) {
-      return;
-    }
-
-    const heading = document.createElement('div');
-    heading.className = 'ticket-receipt__heading';
-    const eyebrow = document.createElement('p');
-    eyebrow.className = 'eyebrow';
-    eyebrow.textContent = messages.receiptEyebrow;
-    const title = document.createElement('h3');
-    title.id = 'ticket-result-title';
-    title.tabIndex = -1;
-    title.textContent = messages.receiptTitle;
-    const copy = document.createElement('p');
-    copy.textContent = messages.receiptCopy;
-    heading.append(eyebrow, title, copy);
-
-    const lines = document.createElement('ol');
-    lines.className = 'ticket-receipt__lines';
-    for (const item of state.result.basket) {
-      const option = optionFor(item.performanceId);
-      if (!option) {
-        continue;
-      }
-      const line = document.createElement('li');
-      const name = document.createElement('span');
-      const price = document.createElement('strong');
-      name.textContent = `${option.title} · ${zoneLabelFor(item)}`;
-      price.textContent = `${item.basePrice} LMD`;
-      line.append(name, price);
-      lines.append(line);
-    }
-
-    const totals = document.createElement('dl');
-    totals.className = 'ticket-receipt__totals';
-    addDefinition(totals, messages.baseTotal, `${state.result.baseTotal} LMD`);
-    if (state.result.adjustments.length === 0) {
-      addDefinition(totals, messages.offerAdjustment, messages.adjustmentNone);
-    } else {
-      for (const adjustment of state.result.adjustments) {
-        addDefinition(totals, messages.adjustments[adjustment.id], `+ ${adjustment.amount} LMD`);
-      }
-    }
-    addDefinition(totals, messages.settledTotal, `${state.result.settledTotal} LMD`);
-    const disclaimer = document.createElement('small');
-    disclaimer.textContent = messages.disclaimer;
-    receipt.append(heading, lines, totals, disclaimer);
-
-    for (const issued of state.result.tickets) {
-      const option = optionFor(issued.performanceId);
-      const basketItem = state.result.basket.find(
-        (item) => item.performanceId === issued.performanceId,
-      );
-      if (!option || !basketItem) {
-        continue;
-      }
-      const primary = option.artifact.primary;
-      const secondary = option.artifact.secondary;
-      const artifactZoneLabel = primary.zoneLabels[basketItem.zone];
-      if (!artifactZoneLabel) {
-        continue;
-      }
-      const artifact = {
-        performance: option,
-        basketItem,
-        number: issued.number,
-        stamps: artifactStamps(),
-        projection: option.artifact,
-      };
-      const article = document.createElement('article');
-      article.className = 'issued-ticket';
-      article.dataset.issuedTicket = issued.performanceId;
-      const image = document.createElement('img');
-      image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(createTicketSvg(artifact))}`;
-      image.alt = formatMessage(primary.messages.alt, {
-        title: primary.title,
-        dateTime: primary.dateTime,
-        place: primary.place,
-        zone: artifactZoneLabel,
-        price: basketItem.basePrice,
-        number: issued.number,
-      });
-      const caption = document.createElement('div');
-      caption.className = 'issued-ticket__caption';
-      const ticketTitle = document.createElement('h4');
-      ticketTitle.lang = primary.locale;
-      ticketTitle.textContent = primary.title;
-      const ticketMeta = document.createElement('p');
-      ticketMeta.lang = primary.locale;
-      ticketMeta.textContent = `${primary.dateTime} · ${primary.place} · ${artifactZoneLabel} · ${basketItem.basePrice} LMD`;
-      const secondaryMeta = document.createElement('p');
-      secondaryMeta.className = 'issued-ticket__secondary-language';
-      if (secondary) {
-        secondaryMeta.lang = secondary.locale;
-        secondaryMeta.textContent = `${secondary.title} · ${secondary.dateTime} · ${secondary.place}`;
-      } else {
-        secondaryMeta.hidden = true;
-      }
-      const ticketNumber = document.createElement('p');
-      ticketNumber.textContent = formatMessage(messages.ticketNumber, { number: issued.number });
-      const stamps = document.createElement('ul');
-      stamps.className = 'issued-ticket__stamps';
-      for (const stamp of artifactStamps()) {
-        const item = document.createElement('li');
-        item.dataset.ticketStamp = stamp.id;
-        item.textContent = stamp.label;
-        stamps.append(item);
-      }
-      const controls = document.createElement('div');
-      controls.className = 'issued-ticket__controls';
-      controls.append(
-        createButton(`download:${issued.performanceId}`, messages.downloadSvg),
-        createButton(`print:${issued.performanceId}`, messages.printTicket),
-      );
-      caption.append(ticketTitle, ticketMeta, secondaryMeta, ticketNumber, stamps, controls);
-      article.append(image, caption);
-      issuedTickets.append(article);
-    }
-  };
-
-  const renderFlow = () => {
-    flowDetails.replaceChildren();
-    flowActions.replaceChildren();
-    const offerPhase = state.phase === 'premium-offer' || state.phase === 'retention-offer';
-    flowLabel.textContent =
-      state.route === 'premium' || offerPhase ? messages.priorityChannel : messages.standardChannel;
-
-    const renderOffer = (offerVariant: 'full' | 'retention') => {
-      const base = calculateBaseTotal(state.basket);
-      const adjustment = calculateAdjustmentAmount(base, offerVariant);
-      const quote = document.createElement('dl');
-      quote.className = 'ticket-flow__ledger';
-      addDefinition(quote, messages.offerBaseTotal, `${base} LMD`);
-      addDefinition(quote, messages.offerAdjustment, `+ ${adjustment} LMD`);
-      addDefinition(quote, messages.offerFinalTotal, `${base + adjustment} LMD`);
-      flowDetails.append(quote);
-    };
-
-    if (state.phase === 'premium-offer') {
-      flowTitle.textContent = messages.premiumOfferTitle;
-      flowCopy.textContent = messages.premiumOfferCopy;
-      renderOffer('full');
-      flowActions.append(
-        createButton('accept-premium', messages.acceptPremium, true),
-        createButton('decline-premium', messages.declinePremium),
-      );
-      return;
-    }
-    if (state.phase === 'retention-offer') {
-      flowTitle.textContent = messages.retentionOfferTitle;
-      flowCopy.textContent = messages.retentionOfferCopy;
-      renderOffer('retention');
-      flowActions.append(
-        createButton('accept-retention', messages.acceptRetention, true),
-        createButton('decline-retention', messages.declineRetention),
-      );
-      return;
-    }
-    if (state.phase === 'attempt') {
-      flowTitle.textContent =
-        state.route === 'premium' ? messages.premiumAttemptTitle : messages.standardAttemptTitle;
-      flowCopy.textContent =
-        state.route === 'premium' ? messages.premiumAttemptCopy : messages.standardAttemptCopy;
-      flowActions.append(
-        createButton('resolve', messages.submitRequest, true),
-        createButton('back', messages.backToBasket),
-      );
-      return;
-    }
-    if (state.phase === 'network') {
-      flowTitle.textContent = messages.networkTitle;
-      flowCopy.textContent = messages.networkCopy;
-      flowActions.append(
-        createButton('retry', messages.retryBasket, true),
-        createButton('back', messages.backToBasket),
-      );
-      return;
-    }
-    flowTitle.textContent =
-      state.route === 'premium' ? messages.premiumFailureTitle : messages.standardFailureTitle;
-    flowCopy.textContent =
-      state.route === 'premium' ? messages.premiumFailureCopy : messages.standardFailureCopy;
-    if (state.route === 'standard') {
-      flowActions.append(
-        createButton('retry', messages.retryStandard, true),
-        createButton('offer', messages.tryPremium),
-        createButton('back', messages.backToBasket),
-      );
-    } else {
-      const base = calculateBaseTotal(state.basket);
-      const record = document.createElement('section');
-      record.className = 'ticket-flow__failure-record';
-      const recordTitle = document.createElement('h4');
-      recordTitle.textContent = messages.failureRecordTitle;
-      const ledger = document.createElement('dl');
-      ledger.className = 'ticket-flow__ledger';
-      addDefinition(ledger, messages.allocatedSeats, '0');
-      addDefinition(ledger, messages.offerBaseTotal, `${base} LMD`);
-      addDefinition(ledger, messages.failureServiceFee, `${calculateFailureServiceFee(base)} LMD`);
-      const notice = document.createElement('small');
-      notice.textContent = messages.failureRecordDisclaimer;
-      record.append(recordTitle, ledger, notice);
-      flowDetails.append(record);
-      flowActions.append(
-        createButton('retry', messages.retryPremium, true),
-        createButton('standard', messages.returnStandard),
-        createButton('back', messages.backToBasket),
-      );
-    }
-  };
-
-  const render = (focusStage = false) => {
-    const selection = state.phase === 'selection';
-    form.hidden = !selection;
-    flow.hidden = selection || state.phase === 'success';
-    result.hidden = state.phase !== 'success';
-    syncBasketControls();
-    if (!flow.hidden) {
-      renderFlow();
-    }
-    if (!result.hidden) {
-      renderReceipt();
-    }
-    if (focusStage) {
-      const focusTarget =
-        state.phase === 'success'
-          ? result.querySelector<HTMLElement>('#ticket-result-title')
-          : state.phase === 'selection'
-            ? basketTitle
-            : flowTitle;
-      focusTarget?.focus();
-    }
   };
 
   form.addEventListener('change', (event) => {
@@ -529,95 +215,10 @@ export function initTicketingExperience(): void {
     live.textContent = messages.submitted;
     if (partnerPath) {
       window.location.assign(partnerPath);
-      return;
     }
-    render(true);
-  });
-
-  flowActions.addEventListener('click', (event) => {
-    const button =
-      event.target instanceof Element ? event.target.closest<HTMLButtonElement>('button') : null;
-    const action = button?.dataset.ticketAction;
-    if (!action) {
-      return;
-    }
-    if (action === 'resolve') {
-      state = resolveTicketingAttempt(state, Math.random, createTicketNumber);
-    } else if (action === 'retry') {
-      state = retryTicketingAttempt(state);
-    } else if (action === 'offer') {
-      state = openPremiumOffer(state);
-    } else if (action === 'accept-premium') {
-      state = enterPremiumRoute(state);
-    } else if (action === 'decline-premium') {
-      state = declinePremiumOffer(state);
-    } else if (action === 'accept-retention') {
-      state = acceptRetentionOffer(state);
-    } else if (action === 'decline-retention') {
-      state = declineRetentionOffer(state);
-    } else if (action === 'standard') {
-      state = returnToStandardRoute(state);
-    } else if (action === 'back') {
-      state = returnToSelection(state);
-    }
-    save();
-    render(true);
-    live.textContent =
-      state.phase === 'success' ? messages.success : flowTitle.textContent || messages.stateUpdated;
-  });
-
-  issuedTickets.addEventListener('click', (event) => {
-    const button =
-      event.target instanceof Element ? event.target.closest<HTMLButtonElement>('button') : null;
-    const action = button?.dataset.ticketAction;
-    if (!action || !state.result) {
-      return;
-    }
-    const [kind, performanceId] = action.split(':');
-    const issued = state.result.tickets.find((ticket) => ticket.performanceId === performanceId);
-    const basketItem = state.result.basket.find((item) => item.performanceId === performanceId);
-    const option = optionFor(performanceId);
-    const article = [...issuedTickets.querySelectorAll<HTMLElement>('[data-issued-ticket]')].find(
-      (item) => item.dataset.issuedTicket === performanceId,
-    );
-    if (!issued || !basketItem || !option || !article) {
-      return;
-    }
-    if (kind === 'download') {
-      const svg = createTicketSvg({
-        performance: option,
-        basketItem,
-        number: issued.number,
-        stamps: artifactStamps(),
-        projection: option.artifact,
-      });
-      const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml;charset=utf-8' }));
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `crimson-troupe-${performanceId}-${issued.number}.svg`;
-      link.click();
-      window.setTimeout(() => URL.revokeObjectURL(url), 0);
-      live.textContent = formatMessage(messages.downloadStarted, { title: option.title });
-    } else if (kind === 'print') {
-      document.body.classList.add('is-printing-ticket');
-      article.classList.add('is-print-target');
-      const cleanup = () => {
-        document.body.classList.remove('is-printing-ticket');
-        article.classList.remove('is-print-target');
-      };
-      window.addEventListener('afterprint', cleanup, { once: true });
-      window.print();
-    }
-  });
-
-  newRound.addEventListener('click', () => {
-    state = createTicketingState();
-    clearTicketingSession(storage);
-    live.textContent = messages.newRound;
-    render(true);
   });
 
   fallback.hidden = true;
   app.hidden = false;
-  render(state.phase === 'success');
+  syncBasketControls();
 }

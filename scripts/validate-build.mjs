@@ -403,8 +403,7 @@ for (const edition of builtEditions) {
   assert.match(ticketPage, /data-ticketing-app[^>]*hidden/u);
   assert.match(ticketPage, /data-ticketing-messages/u);
   assert.match(ticketPage, /data-ticket-basket[^>]*aria-labelledby="ticket-basket-title"/u);
-  assert.match(ticketPage, /data-ticket-flow[^>]*aria-labelledby="ticket-flow-title"/u);
-  assert.match(ticketPage, /data-ticket-result[^>]*aria-labelledby="ticket-result-title"/u);
+  assert.doesNotMatch(ticketPage, /data-ticket-flow|data-ticket-result/u);
   const encodedTicketOptions = ticketPage.match(/data-ticketing-options="([^"]+)"/u)?.[1];
   assert.ok(encodedTicketOptions, `${edition.editionId} 票务页缺少构建期候选`);
   const ticketOptions = JSON.parse(decodeHtmlAttribute(encodedTicketOptions));
@@ -412,6 +411,16 @@ for (const edition of builtEditions) {
     JSON.stringify(getTicketingOptions(getLocalization(edition), buildSnapshot)),
   );
   assert.deepEqual(ticketOptions, expectedTicketOptions);
+  const partnerTicketPage = readFileSync(
+    routes.get(sitePath(edition, 'front', 'tickets/partner')),
+    'utf8',
+  );
+  assert.match(partnerTicketPage, /data-partner-ticketing-app[^>]*hidden/u);
+  assert.match(partnerTicketPage, /data-partner-dialog/u);
+  assert.match(
+    partnerTicketPage,
+    /data-ticket-result[^>]*aria-labelledby="ticket-result-title"[^>]*hidden/u,
+  );
   const archiveTicketPage = readFileSync(
     routes.get(sitePath(edition, 'archive', 'tickets')),
     'utf8',

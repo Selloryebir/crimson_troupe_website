@@ -1,7 +1,7 @@
 import type { TicketOffer, TicketZone } from '../data/performances.ts';
-import type { TicketAdjustmentId, TicketStampId } from '../data/localized/schema.ts';
+import type { TicketAdjustmentId } from '../data/localized/schema.ts';
 
-export const TICKETING_STATE_VERSION = 4 as const;
+export const TICKETING_STATE_VERSION = 5 as const;
 export const STANDARD_SUCCESS_THRESHOLD = 0.32;
 export const STANDARD_FAILURE_THRESHOLD = 0.68;
 export const PREMIUM_SUCCESS_THRESHOLD = 0.58;
@@ -54,7 +54,6 @@ export interface TicketingResult {
   baseTotal: number;
   adjustments: readonly TicketAdjustment[];
   settledTotal: number;
-  stampIds: readonly TicketStampId[];
   journeyTags: readonly JourneyTag[];
   tickets: readonly IssuedTicket[];
 }
@@ -168,29 +167,6 @@ export function calculateFailureServiceFee(baseTotal: number): number {
   return Math.ceil(baseTotal * FAILURE_SERVICE_RATE);
 }
 
-export function deriveTicketStampIds(
-  route: TicketingRoute,
-  tags: readonly JourneyTag[],
-): readonly TicketStampId[] {
-  const stampIds: TicketStampId[] = [
-    'admission-confirmed',
-    route === 'premium' ? 'priority-route' : 'standard-route',
-  ];
-  if (tags.includes('network-retry')) {
-    stampIds.push('network-recovered');
-  }
-  if (tags.includes('returned-seat')) {
-    stampIds.push('returned-seat');
-  }
-  if (tags.includes('retention-accepted')) {
-    stampIds.push('retention-offer');
-  }
-  if (tags.includes('manual-review')) {
-    stampIds.push('manual-review');
-  }
-  return stampIds;
-}
-
 export function updateBasket(
   state: TicketingState,
   item: TicketBasketItem | null,
@@ -232,7 +208,6 @@ function createResult(state: TicketingState, ticketNumberFactory: () => string):
         ]
       : [];
   const settledTotal = baseTotal + adjustments.reduce((total, item) => total + item.amount, 0);
-  const stampIds = deriveTicketStampIds(state.route, state.journeyTags);
   const tickets = basket.map((item) => ({
     performanceId: item.performanceId,
     number: ticketNumberFactory(),
@@ -246,7 +221,6 @@ function createResult(state: TicketingState, ticketNumberFactory: () => string):
     baseTotal,
     adjustments,
     settledTotal,
-    stampIds,
     journeyTags: [...state.journeyTags],
     tickets,
   };

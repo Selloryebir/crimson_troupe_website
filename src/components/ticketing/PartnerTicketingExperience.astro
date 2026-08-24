@@ -58,6 +58,21 @@ const messages = localization.messages.ticketing;
     <div class="actions" data-partner-actions></div>
   </dialog>
 
+  <section
+    class="ticket-result partner-ticketing-result"
+    data-ticket-result
+    aria-labelledby="ticket-result-title"
+    hidden
+  >
+    <div data-ticket-receipt></div>
+    <div class="issued-tickets" data-issued-tickets></div>
+    <div class="actions">
+      <button class="text-button" type="button" data-ticket-new-round>
+        {localization.site.front.tickets.newRound}
+      </button>
+    </div>
+  </section>
+
   <p class="ticketing-live" data-partner-live aria-live="polite"></p>
 </section>
 
