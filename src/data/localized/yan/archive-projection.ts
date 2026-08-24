@@ -1,7 +1,7 @@
 import type { ArchiveProjectionContent } from '../schema.ts';
 
 export const yanArchiveProjection = {
-  statusAnnouncement: '页面上的记录同时更正了去向。',
+  statusAnnouncements: ['档案出现一处异常。', '档案关系正在改写。', '页面记录已统一更正去向。'],
   performance: {
     title: '欢欣鼓舞',
     kind: '终场演出',

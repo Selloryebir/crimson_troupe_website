@@ -1,7 +1,11 @@
 import type { ArchiveProjectionContent } from '../schema.ts';
 
 export const higashiArchiveProjection = {
-  statusAnnouncement: '頁上の記録が同時に行き先を書き換えました。',
+  statusAnnouncements: [
+    '記録に一つの異常が現れました。',
+    '記録同士の関係が書き換わっています。',
+    '頁上の記録がすべて同じ行き先を示しています。',
+  ],
   performance: {
     title: '歓喜',
     kind: '終演',

@@ -280,7 +280,16 @@ for (const [route, filePath] of routes) {
         html.indexOf('<h1') < html.indexOf('data-archive-invitation'),
         `${route} 的主标题必须先于三级邀请`,
       );
-      assert.match(html, /data-archive-invitation-status[^>]*aria-live="polite"/u);
+      assert.match(
+        html,
+        /data-pollution-status[^>]*data-pollution-announcement-level1[^>]*data-pollution-announcement-level2[^>]*data-pollution-announcement-level3[^>]*aria-live="polite"/u,
+        `${route} 缺少三级本地化污染状态公告`,
+      );
+      assert.doesNotMatch(
+        html,
+        /data-archive-invitation-status|data-invitation-announcement/u,
+        `${route} 的请柬不得拥有独立 live 公告`,
+      );
       assert.doesNotMatch(
         html,
         /<dialog[^>]*data-archive-invitation[^>]*\sopen(?:\s|>)/u,

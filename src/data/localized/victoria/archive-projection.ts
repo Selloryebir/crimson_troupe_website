@@ -1,7 +1,11 @@
 import type { ArchiveProjectionContent } from '../schema.ts';
 
 export const victoriaArchiveProjection = {
-  statusAnnouncement: 'Every record on the page has corrected its destination at once.',
+  statusAnnouncements: [
+    'An irregularity has appeared in the archive.',
+    'Relationships between the records are changing.',
+    'Every record on the page now points to the same destination.',
+  ],
   performance: {
     title: 'The Carnival',
     kind: 'Final performance',

@@ -357,6 +357,23 @@ async function assertNoHorizontalLoss(page, label) {
   assert.ok(result.main.right <= result.viewportWidth + 1, `${label} 的 main 右侧超出视口`);
 }
 
+async function assertControlsWithinViewport(page, selector, label) {
+  const violations = await page.locator(selector).evaluateAll((elements) =>
+    elements
+      .filter((element) => {
+        const style = window.getComputedStyle(element);
+        const bounds = element.getBoundingClientRect();
+        return style.visibility !== 'hidden' && style.display !== 'none' && bounds.width > 0;
+      })
+      .map((element) => ({
+        label: element.getAttribute('aria-label') ?? element.textContent?.trim() ?? element.tagName,
+        bounds: element.getBoundingClientRect().toJSON(),
+      }))
+      .filter(({ bounds }) => bounds.left < -1 || bounds.right > window.innerWidth + 1),
+  );
+  assert.deepEqual(violations, [], `${label} 的关键控件不得被水平裁切`);
+}
+
 async function assertEditorialAlternation(page, listSelector, visualSelector, copySelector, label) {
   const rows = page.locator(`${listSelector} > li`);
   assert.ok((await rows.count()) >= 2, `${label} 至少需要两行才能验证交替编排`);
@@ -692,6 +709,98 @@ try {
   }
   assertArchiveVisualErrors();
   await archiveVisualContext.close();
+
+  const archiveAccessContext = await browser.newContext({
+    viewport: { width: 768, height: 900 },
+    reducedMotion: 'reduce',
+  });
+  await archiveAccessContext.addInitScript(() => {
+    Math.random = () => 0;
+    const stateKey = 'crimson-troupe:archive-pollution:v2';
+    if (!sessionStorage.getItem(stateKey)) {
+      sessionStorage.setItem(
+        stateKey,
+        JSON.stringify({ version: 2, level: 0, eventCount: 1, variant: 0 }),
+      );
+    }
+  });
+  const archiveAccessPage = await archiveAccessContext.newPage();
+  const assertArchiveAccessErrors = trackUnexpectedErrors(archiveAccessPage);
+  await archiveAccessPage.goto(`${origin}${archivePath('yan', 'search')}`);
+  const pollutionStatus = archiveAccessPage.locator('[data-pollution-status]');
+  assert.equal((await pollutionStatus.textContent())?.trim(), '', '初始加载不得朗读污染或请柬');
+  await archiveAccessPage.evaluate(() => {
+    const status = document.querySelector('[data-pollution-status]');
+    window.__pollutionStatusMutations = 0;
+    new window.MutationObserver(() => {
+      window.__pollutionStatusMutations += 1;
+    }).observe(status, { childList: true });
+  });
+  const accessSearch = archiveAccessPage.locator('[data-search-input]');
+  await accessSearch.fill('湖中');
+  await accessSearch.press('Enter');
+  await archiveAccessPage.locator('html[data-pollution-level="1"]').waitFor();
+  assert.equal(
+    (await pollutionStatus.textContent())?.trim(),
+    getLocalization(editions.yan, buildSnapshot).archiveProjection.statusAnnouncements[0],
+    '等级变化应使用当前国家版本的短公告',
+  );
+  await archiveAccessPage.evaluate(() => {
+    Math.random = () => 1;
+  });
+  await accessSearch.press('Enter');
+  assert.equal(
+    await archiveAccessPage.evaluate(() => window.__pollutionStatusMutations),
+    1,
+    '同一等级内的后续动作不得重复公告',
+  );
+
+  await archiveAccessPage.evaluate(() => {
+    sessionStorage.setItem(
+      'crimson-troupe:archive-pollution:v2',
+      JSON.stringify({ version: 2, level: 3, eventCount: 8, variant: 1 }),
+    );
+  });
+  await archiveAccessPage.goto(`${origin}${archivePath('yan')}`);
+  await archiveAccessPage.locator('html[data-pollution-level="3"]').waitFor();
+  assert.equal(
+    (await archiveAccessPage.locator('[data-pollution-status]').textContent())?.trim(),
+    '',
+    '读取既有等级 3 状态时不得把请柬作为初始公告',
+  );
+  await assertNoHorizontalLoss(archiveAccessPage, '768px 炎国三级污染里站');
+  await assertControlsWithinViewport(
+    archiveAccessPage,
+    '[data-pollution-safe] a, [data-pollution-safe] button, [data-pollution-safe] summary',
+    '768px 炎国三级污染里站',
+  );
+  const accessInvitationTrigger = archiveAccessPage
+    .locator('a[data-archive-invitation-trigger]')
+    .first();
+  const accessInvitationTarget = await accessInvitationTrigger.getAttribute('href');
+  assert.ok(accessInvitationTarget, '768px 邀请触发器应保留合法链接');
+  await accessInvitationTrigger.focus();
+  await archiveAccessPage.keyboard.press('Enter');
+  await archiveAccessPage.locator('[data-archive-invitation][open]').waitFor();
+  await assertControlsWithinViewport(
+    archiveAccessPage,
+    '[data-archive-invitation][open] button',
+    '768px 炎国三级污染请柬',
+  );
+  await archiveAccessPage.keyboard.press('Escape');
+  assert.equal(
+    await accessInvitationTrigger.evaluate((element) => element === document.activeElement),
+    true,
+    'Escape 关闭邀请后焦点应返回原触发器',
+  );
+  await archiveAccessPage.keyboard.press('Enter');
+  await archiveAccessPage.locator('[data-archive-invitation][open]').waitFor();
+  const accessContinue = archiveAccessPage.locator('[data-archive-invitation-continue]');
+  await accessContinue.focus();
+  await archiveAccessPage.keyboard.press('Enter');
+  await archiveAccessPage.waitForURL(new URL(accessInvitationTarget, origin).href);
+  assertArchiveAccessErrors();
+  await archiveAccessContext.close();
 
   const ticketContext = await browser.newContext({ viewport: { width: 320, height: 800 } });
   await ticketContext.addInitScript(() => {
@@ -1247,6 +1356,11 @@ try {
   await archivePage.waitForURL(new URL(archiveInvitationTarget, origin).href);
   await archivePage.locator('[data-world-switch="front"]').waitFor();
   await assertNoHorizontalLoss(archivePage, '320px 炎国三级污染里站');
+  await assertControlsWithinViewport(
+    archivePage,
+    '[data-pollution-safe] a, [data-pollution-safe] button, [data-pollution-safe] summary',
+    '320px 炎国三级污染里站',
+  );
   assertArchiveErrors();
   await archiveContext.close();
 
@@ -1349,7 +1463,7 @@ try {
   await failedSearchContext.close();
 
   console.log(
-    'browser validation passed: editorial home alternation/mobile order, full-list isolation, three venue level maps/zones, build-scoped edition selector, long-script 320px headers, ticket focus/artifact, Minos search/download/print, Ursus search isolation/download/cross-edition state/archive exit, archive four-level visual escalation/cross-edition level 3/reduced motion, no-JS fallback/static archive seats, search failure fallback',
+    'browser validation passed: editorial home alternation/mobile order, full-list isolation, three venue level maps/zones, build-scoped edition selector, long-script 320px headers, ticket focus/artifact, Minos search/download/print, Ursus search isolation/download/cross-edition state/archive exit, archive four-level visual escalation/cross-edition level 3/reduced motion, 320/768 protected controls, localized pollution live status, keyboard invitation exit/continue, no-JS fallback/static archive seats, search failure fallback',
   );
 } catch (error) {
   const serverOutput = preview.output.join('').trim();

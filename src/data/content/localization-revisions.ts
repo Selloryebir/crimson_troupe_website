@@ -59,7 +59,7 @@ const acceptedYanSourceRevision: LocalizationSourceRevision = Object.freeze({
   'messages.search': 'fnv1a64:8db8feaa1a5ea44c',
   'messages.ticketing': 'fnv1a64:58f0dd00a74e3b4d',
   'messages.programs': 'fnv1a64:ffc6bbc6b04c00bd',
-  archiveProjection: 'fnv1a64:9721f1ffe158ea46',
+  archiveProjection: 'fnv1a64:b3541f8e08feb345',
   'locations.trimount': 'fnv1a64:1a2db00bc2ab72c2',
   'locations.wiesheim': 'fnv1a64:c703aa685502941e',
   'locations.norport': 'fnv1a64:e1a39a61d6921382',

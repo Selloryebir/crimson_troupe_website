@@ -28,7 +28,6 @@ export function initArchiveInvitation(): void {
   const continueButton = dialog.querySelector<HTMLButtonElement>(
     '[data-archive-invitation-continue]',
   );
-  const status = document.querySelector<HTMLElement>('[data-archive-invitation-status]');
   let activeTrigger: HTMLElement | null = null;
   let bypassTrigger: HTMLElement | null = null;
 
@@ -65,9 +64,6 @@ export function initArchiveInvitation(): void {
         'hidden',
         !(trigger instanceof HTMLAnchorElement || trigger.dataset.archiveInvitationHref),
       );
-      if (status) {
-        status.textContent = dialog.dataset.invitationAnnouncement ?? '';
-      }
       if (!dialog.open) {
         dialog.showModal();
       }
@@ -78,9 +74,6 @@ export function initArchiveInvitation(): void {
 
   closeButtons.forEach((button) => button.addEventListener('click', closeInvitation));
   dialog.addEventListener('close', () => {
-    if (status) {
-      status.textContent = '';
-    }
     activeTrigger?.focus({ preventScroll: true });
   });
 

@@ -1,8 +1,11 @@
 import type { ArchiveProjectionContent } from '../schema.ts';
 
 export const siracusaArchiveProjection = {
-  statusAnnouncement:
-    'Ogni record sulla pagina ha corretto immediatamente la propria destinazione.',
+  statusAnnouncements: [
+    "Nell'archivio è comparsa un'anomalia.",
+    'Le relazioni tra le registrazioni stanno cambiando.',
+    'Tutte le registrazioni della pagina indicano ora la stessa destinazione.',
+  ],
   performance: {
     title: 'Il Carnevale',
     kind: 'Performance finale',

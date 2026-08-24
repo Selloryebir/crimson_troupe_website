@@ -111,7 +111,7 @@ export interface ArchiveInvitationContent {
 }
 
 export interface ArchiveProjectionContent {
-  statusAnnouncement: string;
+  statusAnnouncements: readonly [level1: string, level2: string, level3: string];
   performance: ArchiveProjectionPerformance;
   invitation: ArchiveInvitationContent;
   views: Record<ArchivePollutionProfile, ArchiveProjectionView>;
