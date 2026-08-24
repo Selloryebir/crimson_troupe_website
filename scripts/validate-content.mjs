@@ -492,6 +492,21 @@ assert.throws(
   new RegExp(`yan\\.performances\\.${fixtureId} 缺失`, 'u'),
 );
 
+const localizationWithoutAuxiliaryTicketContent = structuredClone(localizationPackages);
+delete localizationWithoutAuxiliaryTicketContent.victoria.programs.performances[
+  'caged-fire-wiesheim-1102'
+];
+assert.throws(
+  () =>
+    assertContentBundle(
+      ['yan'],
+      currentRootSet,
+      buildContexts.showcase,
+      createValidationSources({ localizations: localizationWithoutAuxiliaryTicketContent }),
+    ),
+  /ticketArtifact\.victoria\.performances\.caged-fire-wiesheim-1102 缺失/u,
+);
+
 const currentDigests = createContentApprovalDigests(
   buildContexts.release.editionIds,
   currentRootSet,
@@ -504,6 +519,20 @@ const alternateDependencyDigests = createContentApprovalDigests(
 assert.notEqual(
   alternateDependencyDigests.performances[alternateDependencyId],
   currentDigests.performances[alternateDependencyId],
+);
+const changedAuxiliaryTicketLocalizations = structuredClone(localizationPackages);
+changedAuxiliaryTicketLocalizations.victoria.messages.ticketing.artifact.header =
+  'CHANGED TICKET HEADER';
+const changedAuxiliaryTicketDigests = createContentApprovalDigests(
+  buildContexts.release.editionIds,
+  currentRootSet,
+  createApprovalSources({ localizations: changedAuxiliaryTicketLocalizations }),
+);
+assert.equal(changedAuxiliaryTicketDigests.site, currentDigests.site);
+assert.notEqual(
+  changedAuxiliaryTicketDigests.performances['caged-fire-wiesheim-1102'],
+  currentDigests.performances['caged-fire-wiesheim-1102'],
+  '辅助票面语言变化必须使消费它的场次批准摘要失效',
 );
 const currentApprovals = {
   site: currentDigests.site,

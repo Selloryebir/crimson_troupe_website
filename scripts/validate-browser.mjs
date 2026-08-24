@@ -1038,7 +1038,10 @@ try {
   );
   const ticketSource = await ticketPage.locator('.issued-ticket > img').getAttribute('src');
   assert.match(ticketSource ?? '', /^data:image\/svg\+xml/u);
-  assert.match(decodeURIComponent(ticketSource ?? ''), /data-ticket-field="title"/u);
+  const decodedTicketSource = decodeURIComponent(ticketSource ?? '');
+  assert.match(decodedTicketSource, /data-ticket-field="title"/u);
+  assert.match(decodedTicketSource, /data-ticket-language="primary" lang="en-US"/u);
+  assert.doesNotMatch(decodedTicketSource, /data-ticket-language="secondary"/u);
   await assertNoHorizontalLoss(ticketPage, '320px 炎国票务结果');
   await ticketPage.goto(`${origin}/yan/tickets/partner/`);
   const partnerBrand = ticketPage.locator('[data-ticketing-platform="rice-network"]:has(h1)');

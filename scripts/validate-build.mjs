@@ -408,7 +408,10 @@ for (const edition of builtEditions) {
   const encodedTicketOptions = ticketPage.match(/data-ticketing-options="([^"]+)"/u)?.[1];
   assert.ok(encodedTicketOptions, `${edition.editionId} 票务页缺少构建期候选`);
   const ticketOptions = JSON.parse(decodeHtmlAttribute(encodedTicketOptions));
-  assert.deepEqual(ticketOptions, getTicketingOptions(getLocalization(edition), buildSnapshot));
+  const expectedTicketOptions = JSON.parse(
+    JSON.stringify(getTicketingOptions(getLocalization(edition), buildSnapshot)),
+  );
+  assert.deepEqual(ticketOptions, expectedTicketOptions);
   const archiveTicketPage = readFileSync(
     routes.get(sitePath(edition, 'archive', 'tickets')),
     'utf8',

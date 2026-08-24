@@ -165,6 +165,38 @@ function createPerformanceApprovalDigest(
     performance.ticketAvailability.seatingPlanId
       ? sources.seatingPlans[performance.ticketAvailability.seatingPlanId]
       : undefined;
+  const ticketArtifactLocalization =
+    performance.world === 'front' && performance.ticketAvailability.state === 'on-sale'
+      ? Object.fromEntries(
+          [sources.locations[performance.locationId].countryEditionId, 'victoria' as const]
+            .filter(
+              (editionId, index, editionIds) =>
+                editionIds.indexOf(editionId) === index &&
+                !(
+                  sources.locations[performance.locationId].countryEditionId === 'columbia' &&
+                  editionId === 'victoria'
+                ),
+            )
+            .map((editionId) => {
+              const package_ = sources.localizations[editionId];
+              return [
+                editionId,
+                {
+                  location: package_?.programs?.locations?.[performance.locationId],
+                  performance: package_?.programs?.performances?.[performanceId],
+                  productions: Object.fromEntries(
+                    productionIds.map((productionId) => [
+                      productionId,
+                      package_?.programs?.productions?.[productionId],
+                    ]),
+                  ),
+                  ticketZones: package_?.programs?.ticketZones,
+                  artifact: package_?.messages?.ticketing?.artifact,
+                },
+              ];
+            }),
+        )
+      : undefined;
 
   return createContentFingerprint({
     stableId: performanceId,
@@ -176,6 +208,7 @@ function createPerformanceApprovalDigest(
     localization,
     artwork,
     seatingPlan,
+    ticketArtifactLocalization,
   });
 }
 

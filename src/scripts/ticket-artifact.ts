@@ -1,6 +1,6 @@
 import { formatMessage } from '../data/localized/format.ts';
-import type { TicketArtifactMessages, TicketStampId } from '../data/localized/schema.ts';
-import type { TicketingPerformanceOption } from '../data/ticketing.ts';
+import type { TicketStampId } from '../data/localized/schema.ts';
+import type { TicketArtifactProjection, TicketingPerformanceOption } from '../data/ticketing.ts';
 import type { TicketBasketItem } from './ticketing-state.ts';
 
 export interface TicketArtifactStamp {
@@ -11,11 +11,9 @@ export interface TicketArtifactStamp {
 export interface TicketArtifactInput {
   performance: TicketingPerformanceOption;
   basketItem: TicketBasketItem;
-  zoneLabel: string;
   number: string;
   stamps: readonly TicketArtifactStamp[];
-  messages: TicketArtifactMessages;
-  locale: string;
+  projection: TicketArtifactProjection;
 }
 
 export interface TicketTexture {
@@ -286,7 +284,14 @@ function createStampMarkup(stamps: readonly TicketArtifactStamp[], accent: strin
 }
 
 export function createTicketSvg(input: TicketArtifactInput): string {
-  const { performance, basketItem, zoneLabel, number, stamps, messages, locale } = input;
+  const { performance, basketItem, number, stamps, projection } = input;
+  const { primary, secondary } = projection;
+  const zoneLabel = primary.zoneLabels[basketItem.zone];
+  if (!zoneLabel) {
+    throw new Error(`票面主语言 ${primary.editionId} 缺少 ${basketItem.zone} 分区标签。`);
+  }
+  const messages = primary.messages;
+  const locale = primary.locale;
   const accent = visualColors[performance.visual];
   const matrix = createTicketMatrix(number);
   const texture = createTicketTexture(number);
@@ -309,7 +314,7 @@ export function createTicketSvg(input: TicketArtifactInput): string {
   const stampMarkup = createStampMarkup(stamps, accent);
   const titleMarkup = createTextMarkup(
     'title',
-    performance.title,
+    primary.title,
     locale,
     70,
     128,
@@ -324,51 +329,86 @@ export function createTicketSvg(input: TicketArtifactInput): string {
   );
   const kindMarkup = createTextMarkup(
     'kind',
-    performance.kind,
+    primary.kind,
     locale,
     70,
-    238,
+    228,
     { maxWidth: 770, maxHeight: 36, preferredFontSize: 22, minimumFontSize: 16, maxLines: 2 },
     'font-family="sans-serif" fill="#6d625b"',
   );
   const dateTimeMarkup = createTextMarkup(
     'date-time',
-    performance.dateTime,
+    primary.dateTime,
     locale,
     70,
-    316,
+    348,
     { maxWidth: 770, maxHeight: 45, preferredFontSize: 29, minimumFontSize: 18, maxLines: 2 },
     'font-family="serif" fill="#211713"',
   );
   const placeMarkup = createTextMarkup(
     'place',
-    performance.place,
+    primary.place,
     locale,
     70,
-    374,
+    390,
     { maxWidth: 770, maxHeight: 40, preferredFontSize: 20, minimumFontSize: 16, maxLines: 2 },
     'font-family="sans-serif" fill="#6d625b"',
   );
+  const secondaryMarkup = secondary
+    ? `<g data-ticket-language="secondary" lang="${escapeXml(secondary.locale)}" opacity=".78">
+  ${createTextMarkup(
+    'secondary-title',
+    secondary.title,
+    secondary.locale,
+    70,
+    260,
+    { maxWidth: 770, maxHeight: 40, preferredFontSize: 18, minimumFontSize: 14, maxLines: 2 },
+    'font-family="serif" font-weight="600" fill="#211713"',
+  )}
+  ${createTextMarkup(
+    'secondary-date-time',
+    secondary.dateTime,
+    secondary.locale,
+    70,
+    298,
+    { maxWidth: 250, maxHeight: 22, preferredFontSize: 14, minimumFontSize: 12, maxLines: 1 },
+    'font-family="sans-serif" fill="#6d625b"',
+  )}
+  ${createTextMarkup(
+    'secondary-place',
+    secondary.place,
+    secondary.locale,
+    340,
+    298,
+    { maxWidth: 500, maxHeight: 22, preferredFontSize: 14, minimumFontSize: 12, maxLines: 1 },
+    'font-family="sans-serif" fill="#6d625b"',
+  )}
+  <text data-ticket-field="secondary-zone-label" x="70" y="466" font-family="sans-serif" font-size="13" fill="#6d625b">${escapeXml(secondary.messages.zone)}</text>
+</g>`
+    : '';
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 540" width="1200" height="540" role="img" lang="${escapeXml(locale)}" aria-labelledby="title description" data-ticket-pattern="${texture.signature}">
-  <title id="title">${escapeXml(formatMessage(messages.title, { title: performance.title }))}</title>
-  <desc id="description">${escapeXml(formatMessage(messages.description, { dateTime: performance.dateTime, place: performance.place, zone: zoneLabel, price: basketItem.basePrice, number }))}</desc>
+  <title id="title">${escapeXml(formatMessage(messages.title, { title: primary.title }))}</title>
+  <desc id="description">${escapeXml(formatMessage(messages.description, { dateTime: primary.dateTime, place: primary.place, zone: zoneLabel, price: basketItem.basePrice, number }))}</desc>
   <rect width="1200" height="540" fill="#f2ede3"/>
   <g fill="none" stroke="${accent}" stroke-width="1" opacity=".075">${textureLines}</g>
   <rect width="28" height="540" fill="${accent}"/>
   <rect x="42" y="32" width="1126" height="476" fill="none" stroke="#251a16" stroke-width="2"/>
   <g fill="#f2ede3" stroke="${accent}" stroke-width="1.5">${punches}</g>
   <path d="M880 32V508" stroke="#9a8e82" stroke-dasharray="8 8"/>
+  <g data-ticket-language="primary" lang="${escapeXml(primary.locale)}">
   <text x="70" y="72" font-family="sans-serif" font-size="18" letter-spacing="5" fill="${accent}">${escapeXml(messages.header)}</text>
   ${titleMarkup}
   ${kindMarkup}
-  <text x="70" y="286" font-family="sans-serif" font-size="20" fill="#6d625b">${escapeXml(messages.dateTime)}</text>
+  <text x="70" y="324" font-family="sans-serif" font-size="18" fill="#6d625b">${escapeXml(messages.dateTime)}</text>
   ${dateTimeMarkup}
   ${placeMarkup}
   <text x="70" y="440" font-family="sans-serif" font-size="20" fill="#6d625b">${escapeXml(messages.zone)}</text>
   <text x="150" y="440" font-family="serif" font-size="31" fill="#211713">${escapeXml(zoneLabel)}</text>
   <text x="350" y="410" font-family="sans-serif" font-size="20" fill="#6d625b">${escapeXml(messages.faceValue)}</text>
+  </g>
+  ${secondaryMarkup}
   <text x="350" y="444" font-family="serif" font-size="31" fill="#211713">${basketItem.basePrice} LMD</text>
   <g fill="#171310">${modules}</g>
   <text x="920" y="354" font-family="sans-serif" font-size="14" letter-spacing="2" fill="#6d625b">${escapeXml(messages.ticketNumber)}</text>

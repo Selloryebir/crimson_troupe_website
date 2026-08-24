@@ -134,7 +134,6 @@ export function initTicketingExperience(): void {
   } catch {
     return;
   }
-  const locale = app.dataset.ticketingLocale ?? document.documentElement.lang;
   const partnerPath = app.dataset.ticketingPartnerPath;
 
   const storage = getTicketingSessionStorage();
@@ -281,34 +280,48 @@ export function initTicketingExperience(): void {
       if (!option || !basketItem) {
         continue;
       }
+      const primary = option.artifact.primary;
+      const secondary = option.artifact.secondary;
+      const artifactZoneLabel = primary.zoneLabels[basketItem.zone];
+      if (!artifactZoneLabel) {
+        continue;
+      }
       const artifact = {
         performance: option,
         basketItem,
-        zoneLabel: zoneLabelFor(basketItem),
         number: issued.number,
         stamps: artifactStamps(),
-        messages: messages.artifact,
-        locale,
+        projection: option.artifact,
       };
       const article = document.createElement('article');
       article.className = 'issued-ticket';
       article.dataset.issuedTicket = issued.performanceId;
       const image = document.createElement('img');
       image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(createTicketSvg(artifact))}`;
-      image.alt = formatMessage(messages.artifact.alt, {
-        title: option.title,
-        dateTime: option.dateTime,
-        place: option.place,
-        zone: zoneLabelFor(basketItem),
+      image.alt = formatMessage(primary.messages.alt, {
+        title: primary.title,
+        dateTime: primary.dateTime,
+        place: primary.place,
+        zone: artifactZoneLabel,
         price: basketItem.basePrice,
         number: issued.number,
       });
       const caption = document.createElement('div');
       caption.className = 'issued-ticket__caption';
       const ticketTitle = document.createElement('h4');
-      ticketTitle.textContent = option.title;
+      ticketTitle.lang = primary.locale;
+      ticketTitle.textContent = primary.title;
       const ticketMeta = document.createElement('p');
-      ticketMeta.textContent = `${option.dateTime} · ${option.place} · ${zoneLabelFor(basketItem)} · ${basketItem.basePrice} LMD`;
+      ticketMeta.lang = primary.locale;
+      ticketMeta.textContent = `${primary.dateTime} · ${primary.place} · ${artifactZoneLabel} · ${basketItem.basePrice} LMD`;
+      const secondaryMeta = document.createElement('p');
+      secondaryMeta.className = 'issued-ticket__secondary-language';
+      if (secondary) {
+        secondaryMeta.lang = secondary.locale;
+        secondaryMeta.textContent = `${secondary.title} · ${secondary.dateTime} · ${secondary.place}`;
+      } else {
+        secondaryMeta.hidden = true;
+      }
       const ticketNumber = document.createElement('p');
       ticketNumber.textContent = formatMessage(messages.ticketNumber, { number: issued.number });
       const stamps = document.createElement('ul');
@@ -325,7 +338,7 @@ export function initTicketingExperience(): void {
         createButton(`download:${issued.performanceId}`, messages.downloadSvg),
         createButton(`print:${issued.performanceId}`, messages.printTicket),
       );
-      caption.append(ticketTitle, ticketMeta, ticketNumber, stamps, controls);
+      caption.append(ticketTitle, ticketMeta, secondaryMeta, ticketNumber, stamps, controls);
       article.append(image, caption);
       issuedTickets.append(article);
     }
@@ -574,11 +587,9 @@ export function initTicketingExperience(): void {
       const svg = createTicketSvg({
         performance: option,
         basketItem,
-        zoneLabel: zoneLabelFor(basketItem),
         number: issued.number,
         stamps: artifactStamps(),
-        messages: messages.artifact,
-        locale,
+        projection: option.artifact,
       });
       const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml;charset=utf-8' }));
       const link = document.createElement('a');

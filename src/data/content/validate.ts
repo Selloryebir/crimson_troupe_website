@@ -1,6 +1,6 @@
 import { archiveProjectionIdentity, type ArchiveProjectionIdentity } from '../archive-pollution.ts';
 import type { BuildEditionId } from '../editions.ts';
-import { locations } from '../locations.ts';
+import { locations, type Location } from '../locations.ts';
 import { localizationPackages, type PartialLocalizationPackage } from '../localized/packages.ts';
 import {
   assertPerformanceOfferMatrix,
@@ -35,7 +35,7 @@ import type { BuildContext } from './build-context.ts';
 export interface ContentValidationSources {
   performanceVariants: PerformanceVariantRegistry;
   productions: Readonly<Record<string, Production>>;
-  locations: Readonly<Record<string, unknown>>;
+  locations: Readonly<Record<string, Location>>;
   localizations: Readonly<Record<BuildEditionId, PartialLocalizationPackage>>;
   artwork: ProductionArtworkManifest;
   seatingPlans: Readonly<Record<string, SeatingPlanDefinition>>;
@@ -184,6 +184,7 @@ export function assertContentBundle(
   );
   productionIds.add(sources.archiveProjection.productionId);
   const locationIds = new Set(selectedPerformances.map((performance) => performance.locationId));
+  const ticketArtifactEditionIds = new Set<BuildEditionId>();
 
   for (const performance of selectedPerformances) {
     assertPresent(sources.locations[performance.locationId], `location.${performance.locationId}`);
@@ -193,6 +194,39 @@ export function assertContentBundle(
         sources.artwork[productionId]?.[performance.world],
         `artwork.${productionId}.${performance.world}`,
       );
+    }
+    if (performance.world === 'front' && performance.ticketAvailability.state === 'on-sale') {
+      const countryEditionId = sources.locations[performance.locationId].countryEditionId;
+      const performanceArtifactEditionIds: BuildEditionId[] = [countryEditionId];
+      if (countryEditionId !== 'victoria' && countryEditionId !== 'columbia') {
+        performanceArtifactEditionIds.push('victoria');
+      }
+      performanceArtifactEditionIds.forEach((editionId) => ticketArtifactEditionIds.add(editionId));
+      for (const artifactEditionId of performanceArtifactEditionIds) {
+        const artifactPackage = sources.localizations[artifactEditionId];
+        assertPresent(
+          artifactPackage?.programs?.locations?.[performance.locationId],
+          `ticketArtifact.${artifactEditionId}.locations.${performance.locationId}`,
+        );
+        assertPresent(
+          artifactPackage?.programs?.performances?.[performance.performanceId as PerformanceId],
+          `ticketArtifact.${artifactEditionId}.performances.${performance.performanceId}`,
+        );
+        for (const productionId of performance.productionIds) {
+          assertPresent(
+            artifactPackage?.programs?.productions?.[productionId],
+            `ticketArtifact.${artifactEditionId}.productions.${productionId}`,
+          );
+        }
+        assertPresent(
+          artifactPackage?.programs?.ticketZones,
+          `ticketArtifact.${artifactEditionId}.ticketZones`,
+        );
+        assertPresent(
+          artifactPackage?.messages?.ticketing?.artifact,
+          `ticketArtifact.${artifactEditionId}.messages.ticketing.artifact`,
+        );
+      }
     }
     if (performance.ticketAvailability.state === 'on-sale') {
       if (performance.world === 'front' && !performance.ticketAvailability.seatingPlanId) {
@@ -258,18 +292,23 @@ export function assertContentBundle(
     );
   }
 
-  assertLocalizationSourceFresh(editionIds, sources.localizations, undefined, {
-    locationEntries: [...locationIds].map((locationId) => [
-      locationId,
-      sources.locations[locationId],
-    ]),
-    performanceEntries: selectedPerformances.map((performance) => [
-      performance.performanceId,
-      performance,
-    ]),
-    productionEntries: [...productionIds].map((productionId) => [
-      productionId,
-      sources.productions[productionId],
-    ]),
-  });
+  assertLocalizationSourceFresh(
+    [...new Set([...editionIds, ...ticketArtifactEditionIds])],
+    sources.localizations,
+    undefined,
+    {
+      locationEntries: [...locationIds].map((locationId) => [
+        locationId,
+        sources.locations[locationId],
+      ]),
+      performanceEntries: selectedPerformances.map((performance) => [
+        performance.performanceId,
+        performance,
+      ]),
+      productionEntries: [...productionIds].map((productionId) => [
+        productionId,
+        sources.productions[productionId],
+      ]),
+    },
+  );
 }

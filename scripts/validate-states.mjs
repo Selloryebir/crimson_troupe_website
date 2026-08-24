@@ -300,7 +300,12 @@ assert.equal(showcaseSnapshot.productionEntries.length, 14);
 assert.equal(showcaseSnapshot.locationEntries.length, 10);
 assert.equal(showcaseSnapshot.artworkEntries.length, 14);
 assert.equal(showcaseSnapshot.seatingPlanEntries.length, 3);
-assert.deepEqual(Object.keys(showcaseSnapshot.localizationPackages), ['yan']);
+assert.deepEqual(showcaseSnapshot.editionIds, ['yan']);
+assert.deepEqual(
+  new Set(showcaseSnapshot.localizationPackageEditionIds),
+  new Set(['yan', 'columbia', 'leithanien', 'victoria']),
+  'showcase 只生成炎国页面，但票面闭包必须包含三个实际举办地语言依赖',
+);
 assert.deepEqual(showcaseSnapshot.featuredPerformanceIds, {
   front: 'uncrowned-trimount-1102',
   archive: 'der-ring-zwillingsturme-1084-0817',
@@ -1116,7 +1121,28 @@ for (const localization of previewLocalizations.slice(1)) {
   );
   assert.deepEqual(crossLocaleRestored, crossLocaleState);
   assert.notEqual(yanOptions[0].offers[0].label, targetOptions[0].offers[0].label);
+  assert.deepEqual(
+    targetOptions[0].artifact,
+    yanOptions[0].artifact,
+    '网站国家版本切换不得改变由举办地决定的票面语言投影',
+  );
 }
+
+const trimountArtifact = yanOptions.find(
+  ({ performanceId }) => performanceId === 'uncrowned-trimount-1102',
+)?.artifact;
+const wiesheimArtifact = yanOptions.find(
+  ({ performanceId }) => performanceId === 'caged-fire-wiesheim-1102',
+)?.artifact;
+const norportArtifact = yanOptions.find(
+  ({ performanceId }) => performanceId === 'second-snow-norport-1102',
+)?.artifact;
+assert.equal(trimountArtifact?.primary.editionId, 'columbia');
+assert.equal(trimountArtifact?.secondary, undefined);
+assert.equal(wiesheimArtifact?.primary.editionId, 'leithanien');
+assert.equal(wiesheimArtifact?.secondary?.editionId, 'victoria');
+assert.equal(norportArtifact?.primary.editionId, 'victoria');
+assert.equal(norportArtifact?.secondary, undefined);
 
 const artifactPerformance = {
   performanceId: 'performance-a',
@@ -1138,14 +1164,71 @@ const artifactStamps = [
   { id: 'retention-offer', label: '挽留报价' },
   { id: 'manual-review', label: '人工复核' },
 ];
+for (const [performanceId, expectedPrimaryLocale, expectedSecondaryLocale] of [
+  ['uncrowned-trimount-1102', 'en-US', null],
+  ['caged-fire-wiesheim-1102', 'de', 'en-GB'],
+  ['second-snow-norport-1102', 'en-GB', null],
+]) {
+  const option = yanOptions.find((candidate) => candidate.performanceId === performanceId);
+  assert.ok(option, `${performanceId} 应属于当前票务候选`);
+  const offer = option.offers[0];
+  const actualProjectionSvg = createTicketSvg({
+    performance: option,
+    basketItem: {
+      performanceId: option.performanceId,
+      zone: offer.zone,
+      basePrice: offer.basePrice,
+    },
+    number: '321098765432',
+    stamps: artifactStamps,
+    projection: option.artifact,
+  });
+  assert.ok(
+    actualProjectionSvg.includes(`data-ticket-language="primary" lang="${expectedPrimaryLocale}"`),
+  );
+  if (expectedSecondaryLocale) {
+    assert.ok(
+      actualProjectionSvg.includes(
+        `data-ticket-language="secondary" lang="${expectedSecondaryLocale}"`,
+      ),
+    );
+  } else {
+    assert.ok(!actualProjectionSvg.includes('data-ticket-language="secondary"'));
+  }
+}
+assert.deepEqual(
+  Object.keys(yanOptions[0].artifact.primary).sort(),
+  ['dateTime', 'editionId', 'kind', 'locale', 'messages', 'place', 'title', 'zoneLabels'],
+  '客户端票面投影不得携带完整辅助语言包',
+);
+const artifactProjection = {
+  primary: {
+    editionId: 'yan',
+    locale: 'zh-CN',
+    title: artifactPerformance.title,
+    kind: artifactPerformance.kind,
+    dateTime: artifactPerformance.dateTime,
+    place: artifactPerformance.place,
+    zoneLabels: { A: 'A 区' },
+    messages: yanLocalization.messages.ticketing.artifact,
+  },
+  secondary: {
+    editionId: 'victoria',
+    locale: 'en-GB',
+    title: 'Candidate Review',
+    kind: 'Test production',
+    dateTime: '1102 · 09/17 · 19:30',
+    place: 'Trimount Grand Theatre',
+    zoneLabels: { A: 'Zone A' },
+    messages: getLocalization(editions.victoria, previewSnapshot).messages.ticketing.artifact,
+  },
+};
 const svg = createTicketSvg({
   performance: artifactPerformance,
   basketItem: basketA,
-  zoneLabel: 'A 区',
   number: '123456789012',
   stamps: artifactStamps,
-  messages: yanLocalization.messages.ticketing.artifact,
-  locale: 'zh-CN',
+  projection: artifactProjection,
 });
 assert.equal(matrix.length, 21 * 21);
 for (const requiredText of [
@@ -1172,11 +1255,9 @@ assert.equal(
   createTicketSvg({
     performance: artifactPerformance,
     basketItem: basketA,
-    zoneLabel: 'A 区',
     number: '123456789012',
     stamps: artifactStamps,
-    messages: yanLocalization.messages.ticketing.artifact,
-    locale: 'zh-CN',
+    projection: artifactProjection,
   }),
 );
 
@@ -1231,14 +1312,31 @@ const unicodeArtifactSvg = createTicketSvg({
     place: unicodeTicketSamples[2].value,
   },
   basketItem: basketA,
-  zoneLabel: 'Α 区',
   number: '123456789012',
   stamps: artifactStamps,
-  messages: yanLocalization.messages.ticketing.artifact,
-  locale: 'el',
+  projection: {
+    primary: {
+      ...artifactProjection.primary,
+      editionId: 'higashi',
+      locale: 'ja-JP',
+      title: unicodeTicketSamples[0].value,
+      kind: '特別上演',
+      dateTime: '1102.09.17 / 19:30',
+      place: '極東巡回劇場',
+      zoneLabels: { A: 'A区' },
+    },
+    secondary: {
+      ...artifactProjection.secondary,
+      title: 'The Theatre That Lost Its Name Beneath Falling Stars',
+      place: 'Higashi Touring Theatre',
+    },
+  },
 });
 assert.ok(unicodeArtifactSvg.includes('data-ticket-field="title"'));
 assert.ok(unicodeArtifactSvg.includes('data-ticket-field="place"'));
+assert.ok(unicodeArtifactSvg.includes('data-ticket-language="secondary"'));
+assert.ok(unicodeArtifactSvg.includes('lang="ja-JP"'));
+assert.ok(unicodeArtifactSvg.includes('lang="en-GB"'));
 assert.ok(unicodeArtifactSvg.includes('data-ticket-line="2"'));
 assert.ok(!unicodeArtifactSvg.includes('…'));
 assert.ok(unicodeArtifactSvg.includes('<rect x="920"'));

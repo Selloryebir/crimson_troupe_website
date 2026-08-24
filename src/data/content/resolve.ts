@@ -47,6 +47,7 @@ export interface ContentSnapshot {
   rootSet: ContentRootSet;
   editionIds: readonly BuiltEdition['editionId'][];
   editions: readonly BuiltEdition[];
+  localizationPackageEditionIds: readonly BuiltEdition['editionId'][];
   performanceEntries: readonly (readonly [PerformanceId, Readonly<SnapshotPerformance>])[];
   performances: Readonly<Partial<Record<PerformanceId, Readonly<SnapshotPerformance>>>>;
   productionEntries: readonly (readonly [ProductionId, Readonly<Production>])[];
@@ -158,11 +159,23 @@ export function resolveContent(
     }
     return editions[editionId];
   });
+  const ticketArtifactEditionIds = performanceEntries.flatMap(([, performance]) => {
+    if (performance.world !== 'front' || performance.ticketAvailability.state !== 'on-sale') {
+      return [];
+    }
+    const countryEditionId = locations[performance.locationId].countryEditionId;
+    return countryEditionId === 'victoria' || countryEditionId === 'columbia'
+      ? [countryEditionId]
+      : [countryEditionId, 'victoria' as const];
+  });
+  const localizationPackageEditionIds = [
+    ...new Set([...context.editionIds, ...ticketArtifactEditionIds]),
+  ];
   const snapshotLocalizationPackages = Object.freeze(
     Object.fromEntries(
-      snapshotEditions.map((edition) => [
-        edition.editionId,
-        localizationPackages[edition.editionId],
+      localizationPackageEditionIds.map((editionId) => [
+        editionId,
+        localizationPackages[editionId],
       ]),
     ),
   ) as ContentSnapshot['localizationPackages'];
@@ -209,6 +222,7 @@ export function resolveContent(
     rootSet,
     editionIds: Object.freeze(context.editionIds),
     editions: Object.freeze(snapshotEditions),
+    localizationPackageEditionIds: Object.freeze(localizationPackageEditionIds),
     performanceEntries: Object.freeze(performanceEntries),
     performances: toReadonlyRecord(performanceEntries),
     productionEntries: Object.freeze(productionEntries),

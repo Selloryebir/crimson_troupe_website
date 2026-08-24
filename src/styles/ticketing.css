@@ -546,6 +546,13 @@
   font-size: 0.75rem;
 }
 
+.issued-ticket__caption .issued-ticket__secondary-language {
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.68rem;
+}
+
 .issued-ticket__stamps {
   display: flex;
   flex-wrap: wrap;
