@@ -58,6 +58,7 @@ export interface ContentSnapshot {
   seatingPlanEntries: readonly (readonly [SeatingPlanId, Readonly<SeatingPlanDefinition>])[];
   seatingPlans: Readonly<Partial<Record<SeatingPlanId, Readonly<SeatingPlanDefinition>>>>;
   featuredPerformanceIds: Readonly<Record<SiteWorld, PerformanceId>>;
+  homepagePerformanceIds: Readonly<Record<SiteWorld, readonly PerformanceId[]>>;
   archiveProjectionProductionId: ProductionId;
 }
 
@@ -207,6 +208,10 @@ export function resolveContent(
     featuredPerformanceIds: Object.freeze({
       front: rootSet.worlds.front.featuredPerformanceId,
       archive: rootSet.worlds.archive.featuredPerformanceId,
+    }),
+    homepagePerformanceIds: Object.freeze({
+      front: Object.freeze(rootSet.worlds.front.homepagePerformanceIds),
+      archive: Object.freeze(rootSet.worlds.archive.homepagePerformanceIds),
     }),
     archiveProjectionProductionId: archiveProjectionIdentity.productionId,
   });

@@ -7,7 +7,6 @@ import { formatMessage } from '../../data/localized/format';
 import {
   getLocalization,
   getLocalizedPerformance,
-  getLocalizedPerformances,
   getLocalizedProduction,
 } from '../../data/localized/resolve';
 import { sitePath, siteRoot } from '../../data/site-routes';
@@ -28,7 +27,9 @@ const { edition } = Astro.props;
 const localization = getLocalization(edition);
 const copy = localization.site.front.home;
 const canonicalPath = siteRoot(edition, 'front');
-const currentPerformances = getLocalizedPerformances(localization, 'front', 'current');
+const homepagePerformances = buildSnapshot.homepagePerformanceIds.front.map((performanceId) =>
+  getLocalizedPerformance(localization, performanceId),
+);
 const featuredPerformance = getLocalizedPerformance(
   localization,
   buildSnapshot.featuredPerformanceIds.front,
@@ -99,7 +100,7 @@ const featuredProduction = featuredPerformance
     </div>
     <FrontPerformanceList
       localization={localization}
-      performances={currentPerformances}
+      performances={homepagePerformances}
       emptyMessage={copy.empty}
       variant="home-editorial"
     />

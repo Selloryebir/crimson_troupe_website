@@ -446,6 +446,11 @@ try {
     '.front-performance-card__copy',
     '1280px 炎国表站首页',
   );
+  assert.equal(
+    await desktopPage.locator('.front-performance-grid--home-editorial > li').count(),
+    buildSnapshot.homepagePerformanceIds.front.length,
+    '表站首页应只装配显式策展集合',
+  );
   const archiveCatalog = desktopPage.locator('.archive-catalog');
   assert.equal(await archiveCatalog.locator('li').count(), 3, '表站页脚应显示三条馆藏记录');
   assert.equal(await archiveCatalog.locator('a').count(), 1, '只有当前快照可以进入');
@@ -482,6 +487,13 @@ try {
     0,
     '表站完整本季列表不得套用首页编排',
   );
+  assert.equal(
+    await desktopPage.locator('.front-performance-grid--catalog > li').count(),
+    buildSnapshot.performanceEntries.filter(
+      ([, performance]) => performance.world === 'front' && performance.collection === 'current',
+    ).length,
+    '表站完整本季列表不得被首页策展集合裁剪',
+  );
   await desktopPage.goto(`${origin}${archivePath('yan')}`);
   await assertEditorialAlternation(
     desktopPage,
@@ -490,11 +502,21 @@ try {
     '.archive-performance-list__register',
     '1280px 炎国里站首页',
   );
+  assert.equal(
+    await desktopPage.locator('.archive-performance-list--home-editorial > li').count(),
+    buildSnapshot.homepagePerformanceIds.archive.length,
+    '里站首页应只装配显式策展集合',
+  );
   await desktopPage.goto(`${origin}${archivePath('yan', 'performances')}`);
   assert.equal(
     await desktopPage.locator('.archive-performance-list--home-editorial').count(),
     0,
     '里站完整本季列表不得套用首页编排',
+  );
+  assert.equal(
+    await desktopPage.locator('.archive-performance-list--catalog > li').count(),
+    expectedArchiveCurrentCount,
+    '里站完整本季列表不得被首页策展集合裁剪',
   );
   assertDesktopErrors();
   await desktop.close();

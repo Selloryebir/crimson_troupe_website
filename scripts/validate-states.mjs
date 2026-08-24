@@ -96,6 +96,7 @@ assert.throws(
               currentRootSet.worlds.front.performanceIds[0],
             ],
             featuredPerformanceId: currentRootSet.worlds.front.featuredPerformanceId,
+            homepagePerformanceIds: [currentRootSet.worlds.front.performanceIds[0]],
           },
         },
       },
@@ -115,6 +116,7 @@ assert.throws(
           front: {
             performanceIds: [currentRootSet.worlds.front.performanceIds[0]],
             featuredPerformanceId: currentRootSet.worlds.front.performanceIds[1],
+            homepagePerformanceIds: [currentRootSet.worlds.front.performanceIds[0]],
           },
         },
       },
@@ -123,6 +125,64 @@ assert.throws(
       buildContexts.showcase,
     ),
   /焦点不属于该时间层/u,
+);
+const frontHomepagePerformanceId = currentRootSet.worlds.front.homepagePerformanceIds[0];
+assert.throws(
+  () =>
+    validateContentRootSet(
+      {
+        ...currentRootSet,
+        worlds: {
+          ...currentRootSet.worlds,
+          front: {
+            ...currentRootSet.worlds.front,
+            homepagePerformanceIds: [frontHomepagePerformanceId, frontHomepagePerformanceId],
+          },
+        },
+      },
+      performances,
+      productions,
+      buildContexts.showcase,
+    ),
+  /首页策展含重复场次/u,
+);
+assert.throws(
+  () =>
+    validateContentRootSet(
+      {
+        ...currentRootSet,
+        worlds: {
+          ...currentRootSet.worlds,
+          front: {
+            ...currentRootSet.worlds.front,
+            homepagePerformanceIds: [currentRootSet.worlds.archive.performanceIds[0]],
+          },
+        },
+      },
+      performances,
+      productions,
+      buildContexts.showcase,
+    ),
+  /首页策展不属于该时间层根集合/u,
+);
+assert.throws(
+  () =>
+    validateContentRootSet(
+      {
+        ...currentRootSet,
+        worlds: {
+          ...currentRootSet.worlds,
+          front: {
+            ...currentRootSet.worlds.front,
+            homepagePerformanceIds: [currentRootSet.worlds.front.performanceIds[0]],
+          },
+        },
+      },
+      performances,
+      productions,
+      buildContexts.showcase,
+    ),
+  /首页策展含非本季场次/u,
 );
 for (const [world, misplacedPerformanceId] of [
   ['front', currentRootSet.worlds.archive.performanceIds[0]],
@@ -145,10 +205,16 @@ for (const [world, misplacedPerformanceId] of [
                 currentRootSet.worlds[sourceWorld].featuredPerformanceId === misplacedPerformanceId
                   ? sourcePerformanceIds[0]
                   : currentRootSet.worlds[sourceWorld].featuredPerformanceId,
+              homepagePerformanceIds: currentRootSet.worlds[
+                sourceWorld
+              ].homepagePerformanceIds.filter(
+                (performanceId) => performanceId !== misplacedPerformanceId,
+              ),
             },
             [world]: {
               performanceIds: [misplacedPerformanceId],
               featuredPerformanceId: misplacedPerformanceId,
+              homepagePerformanceIds: [misplacedPerformanceId],
             },
           },
         },
@@ -201,6 +267,7 @@ const overusedRootSet = {
     front: {
       performanceIds: overusedFrontPerformanceIds,
       featuredPerformanceId: overusedFrontPerformanceIds[0],
+      homepagePerformanceIds: [],
     },
   },
 };
@@ -236,8 +303,15 @@ assert.deepEqual(showcaseSnapshot.featuredPerformanceIds, {
   front: 'uncrowned-trimount-1102',
   archive: 'der-ring-zwillingsturme-1084-0817',
 });
+assert.deepEqual(showcaseSnapshot.homepagePerformanceIds, {
+  front: currentRootSet.worlds.front.homepagePerformanceIds,
+  archive: currentRootSet.worlds.archive.homepagePerformanceIds,
+});
 assert.ok(Object.isFrozen(showcaseSnapshot));
 assert.ok(Object.isFrozen(showcaseSnapshot.performanceEntries));
+assert.ok(Object.isFrozen(showcaseSnapshot.homepagePerformanceIds));
+assert.ok(Object.isFrozen(showcaseSnapshot.homepagePerformanceIds.front));
+assert.ok(Object.isFrozen(showcaseSnapshot.homepagePerformanceIds.archive));
 assert.throws(() => resolveContent(buildContexts.release), /不合格内容.*无批准摘要/u);
 assert.equal(
   showcaseSnapshot.performanceEntries.filter(
@@ -298,6 +372,34 @@ assert.notEqual(
   '同地点异剧目报价应不同',
 );
 
+const homepageExcludedPerformanceId = 'procession-of-masks-londinium-1103-0214';
+const curatedRootSet = {
+  ...currentRootSet,
+  worlds: {
+    ...currentRootSet.worlds,
+    front: {
+      ...currentRootSet.worlds.front,
+      homepagePerformanceIds: currentRootSet.worlds.front.homepagePerformanceIds.filter(
+        (performanceId) => performanceId !== homepageExcludedPerformanceId,
+      ),
+    },
+  },
+};
+const curatedSnapshot = resolveContent(buildContexts.showcase, {
+  [curatedRootSet.rootSetId]: curatedRootSet,
+});
+assert.ok(curatedSnapshot.performances[homepageExcludedPerformanceId]);
+assert.ok(
+  getWorldPerformanceEntries(curatedSnapshot, 'front').some(
+    ([performanceId]) => performanceId === homepageExcludedPerformanceId,
+  ),
+  '首页策展不得裁剪完整本季集合',
+);
+assert.ok(
+  !curatedSnapshot.homepagePerformanceIds.front.includes(homepageExcludedPerformanceId),
+  '首页策展应能独立排除仍属于完整本季集合的场次',
+);
+
 const excludedPerformanceId = 'procession-of-masks-londinium-1103-0214';
 const reducedFrontPerformanceIds = currentRootSet.worlds.front.performanceIds.filter(
   (performanceId) => performanceId !== excludedPerformanceId,
@@ -309,6 +411,9 @@ const reducedRootSet = {
     front: {
       performanceIds: reducedFrontPerformanceIds,
       featuredPerformanceId: currentRootSet.worlds.front.featuredPerformanceId,
+      homepagePerformanceIds: currentRootSet.worlds.front.homepagePerformanceIds.filter(
+        (performanceId) => performanceId !== excludedPerformanceId,
+      ),
     },
   },
 };
