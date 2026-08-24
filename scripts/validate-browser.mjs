@@ -494,6 +494,43 @@ try {
     ).length,
     '表站完整本季列表不得被首页策展集合裁剪',
   );
+  await desktopPage.goto(`${origin}/yan/search/?q=${encodeURIComponent('演出')}`);
+  await desktopPage.locator('[data-search-enhanced]:not([hidden])').waitFor();
+  const organizedSearchResults = desktopPage.locator('[data-search-result]');
+  assert.ok(await organizedSearchResults.count(), '搜索组织基准查询应有结果');
+  const searchOrganization = await organizedSearchResults.evaluateAll((items) =>
+    items.map((item) => ({
+      match: item.getAttribute('data-search-match'),
+      type: item.getAttribute('data-search-result-type'),
+      startsGroup: item.hasAttribute('data-search-group-start'),
+    })),
+  );
+  const firstDetailMatch = searchOrganization.findIndex(({ match }) => match === 'detail');
+  assert.ok(firstDetailMatch > 0, '基准查询应同时覆盖标题命中与详情命中');
+  assert.equal(
+    searchOrganization.slice(0, firstDetailMatch).every(({ match }) => match === 'title'),
+    true,
+    '标题命中应稳定先于摘要或关键词命中',
+  );
+  for (const [index, item] of searchOrganization.entries()) {
+    const previous = searchOrganization[index - 1];
+    const shouldStartGroup =
+      index === 0 || previous.match !== item.match || previous.type !== item.type;
+    assert.equal(item.startsGroup, shouldStartGroup, '搜索结果应显式标记稳定类型组边界');
+  }
+  await desktopPage.locator('[data-search-input]').focus();
+  await desktopPage.keyboard.press('ControlOrMeta+A');
+  await desktopPage.keyboard.type('演出');
+  await desktopPage.keyboard.press('Enter');
+  await desktopPage.locator('[data-search-result] a').first().focus();
+  assert.equal(
+    await desktopPage
+      .locator('[data-search-result] a')
+      .first()
+      .evaluate((element) => element === document.activeElement),
+    true,
+    '键盘提交后应能继续进入首个搜索结果',
+  );
   await desktopPage.goto(`${origin}${archivePath('yan')}`);
   await assertEditorialAlternation(
     desktopPage,
@@ -1485,7 +1522,7 @@ try {
   await failedSearchContext.close();
 
   console.log(
-    'browser validation passed: editorial home alternation/mobile order, full-list isolation, three venue level maps/zones, build-scoped edition selector, long-script 320px headers, ticket focus/artifact, Minos search/download/print, Ursus search isolation/download/cross-edition state/archive exit, archive four-level visual escalation/cross-edition level 3/reduced motion, 320/768 protected controls, localized pollution live status, keyboard invitation exit/continue, no-JS fallback/static archive seats, search failure fallback',
+    'browser validation passed: editorial home alternation/mobile order, full-list isolation, ranked/grouped search keyboard path, three venue level maps/zones, build-scoped edition selector, long-script 320px headers, ticket focus/artifact, Minos search/download/print, Ursus search isolation/download/cross-edition state/archive exit, archive four-level visual escalation/cross-edition level 3/reduced motion, 320/768 protected controls, localized pollution live status, keyboard invitation exit/continue, no-JS fallback/static archive seats, search failure fallback',
   );
 } catch (error) {
   const serverOutput = preview.output.join('').trim();

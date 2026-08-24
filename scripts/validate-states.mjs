@@ -36,6 +36,7 @@ import {
 } from '../src/data/site-time.ts';
 import { getTicketingOptions } from '../src/data/ticketing.ts';
 import { shouldRequestArchiveEntry } from '../src/scripts/pollution-controller.ts';
+import { searchSiteEntries } from '../src/scripts/site-search.ts';
 import {
   MAX_POLLUTION_LEVEL,
   POLLUTION_PROBABILITY,
@@ -371,6 +372,72 @@ assert.notEqual(
   offerSignature(performances['ode-au-triomphe-zwillingsturme-1084-1028']),
   '同地点异剧目报价应不同',
 );
+
+const searchEntry = (id, type, title, summary = '', keywords = '') => ({
+  id,
+  type,
+  typeLabel: type,
+  title,
+  summary,
+  keywords,
+  href: `/${id}/`,
+});
+const searchOrganizationEntries = [
+  searchEntry(
+    'performance-title-first',
+    'performance',
+    'Needle Matinee',
+    'First performance title match',
+  ),
+  searchEntry('page-detail', 'page', 'Archive guide', 'Needle appears only in this summary'),
+  searchEntry('performance-title-second', 'performance', 'Second Needle Matinee'),
+  searchEntry('page-title', 'page', 'Needle register'),
+  searchEntry('production-title', 'production', 'Needle libretto'),
+  searchEntry('performance-detail', 'performance', 'Evening register', '', 'Needle'),
+  searchEntry(
+    'production-detail',
+    'production',
+    'Evening libretto',
+    'Needle appears only in this summary',
+  ),
+];
+const organizedSearchMatches = searchSiteEntries(
+  searchOrganizationEntries,
+  'ＮＥＥＤＬＥ',
+  'en-US',
+);
+assert.deepEqual(
+  organizedSearchMatches.map(({ entry }) => entry.id),
+  [
+    'page-title',
+    'performance-title-first',
+    'performance-title-second',
+    'production-title',
+    'page-detail',
+    'performance-detail',
+    'production-detail',
+  ],
+  '搜索应先按标题命中、再按页面类型组织，并保持同组索引顺序',
+);
+assert.deepEqual(
+  organizedSearchMatches.map(({ matchKind }) => matchKind),
+  ['title', 'title', 'title', 'title', 'detail', 'detail', 'detail'],
+);
+assert.deepEqual(
+  organizedSearchMatches
+    .filter(({ startsTypeGroup }) => startsTypeGroup)
+    .map(({ entry, matchKind }) => `${matchKind}:${entry.type}`),
+  [
+    'title:page',
+    'title:performance',
+    'title:production',
+    'detail:page',
+    'detail:performance',
+    'detail:production',
+  ],
+);
+assert.deepEqual(searchSiteEntries(searchOrganizationEntries, '', 'en-US'), []);
+assert.deepEqual(searchSiteEntries(searchOrganizationEntries, 'needel', 'en-US'), []);
 
 const homepageExcludedPerformanceId = 'procession-of-masks-londinium-1103-0214';
 const curatedRootSet = {
