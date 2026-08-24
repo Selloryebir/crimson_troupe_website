@@ -127,11 +127,11 @@ export const victoriaMessages = {
       title: '{title} Commemorative Ticket',
       description: '{dateTime}, {place}, {zone}, {price} LMD, ticket number {number}',
       header: 'CRIMSON TROUPE · COMMEMORATIVE ADMISSION',
-      dateTime: 'TERRA DATE AND TIME',
+      dateTime: 'DATE AND TIME',
       zone: 'ZONE',
       faceValue: 'BASE FACE VALUE',
       ticketNumber: 'TICKET NUMBER',
-      alt: '{title} commemorative ticket: {dateTime}, {place}, {zone}, {price} LMD, ticket and matrix number {number}',
+      alt: '{title} commemorative ticket: {dateTime}, {place}, {zone}, {price} LMD, ticket number {number}',
     },
   },
   programs: {

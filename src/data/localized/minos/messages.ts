@@ -128,11 +128,11 @@ export const minosMessages = {
       title: 'Αναμνηστικό Εισιτήριο {title}',
       description: '{dateTime}, {place}, {zone}, {price} LMD, αριθμός εισιτηρίου {number}',
       header: 'ΠΟΡΦΥΡΟΣ ΘΙΑΣΟΣ · ΑΝΑΜΝΗΣΤΙΚΗ ΕΙΣΟΔΟΣ',
-      dateTime: 'ΗΜΕΡΟΜΗΝΙΑ ΚΑΙ ΩΡΑ TERRA',
+      dateTime: 'ΗΜΕΡΟΜΗΝΙΑ ΚΑΙ ΩΡΑ',
       zone: 'ΖΩΝΗ',
       faceValue: 'ΒΑΣΙΚΗ ΟΝΟΜΑΣΤΙΚΗ ΑΞΙΑ',
       ticketNumber: 'ΑΡΙΘΜΟΣ ΕΙΣΙΤΗΡΙΟΥ',
-      alt: 'Αναμνηστικό εισιτήριο {title}: {dateTime}, {place}, {zone}, {price} LMD, αριθμός εισιτηρίου και μήτρας {number}',
+      alt: 'Αναμνηστικό εισιτήριο {title}: {dateTime}, {place}, {zone}, {price} LMD, αριθμός εισιτηρίου {number}',
     },
   },
   programs: {

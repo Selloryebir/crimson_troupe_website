@@ -11,6 +11,7 @@ import {
   type ResolvedLocalization,
 } from './localized/resolve.ts';
 import type { TicketArtifactMessages } from './localized/schema.ts';
+import { formatTicketTerraDateTime } from './localized/format.ts';
 import { ticketArtifactLocalesShareLanguage } from './localized/ticket-artifact.ts';
 import type { LocationId } from './locations.ts';
 import type { PerformanceId, TicketOffer, TicketZone } from './performances.ts';
@@ -67,7 +68,7 @@ function getArtifactLocalizedLayer(
     locale: edition.locale,
     title: production.title,
     kind: production.kind,
-    dateTime: performance.dateTime.display,
+    dateTime: formatTicketTerraDateTime(performance.dateTime, edition.locale),
     place: performance.place,
     zoneLabels: Object.freeze({ ...localization.programs.ticketZones }),
     messages: Object.freeze({ ...localization.messages.ticketing.artifact }),

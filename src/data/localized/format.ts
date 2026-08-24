@@ -25,3 +25,18 @@ export function formatTerraDateTime(value: TerraDateTime, locale: string): strin
   }).format(referenceDate);
   return `${value.year} · ${monthDay} · ${time}`;
 }
+
+export function formatTicketTerraDateTime(value: TerraDateTime, locale: string): string {
+  const [hour, minute] = value.time.split(':').map(Number);
+  const referenceDate = new Date(0);
+  referenceDate.setUTCFullYear(value.year, value.month - 1, value.day);
+  referenceDate.setUTCHours(hour, minute, 0, 0);
+  return new Intl.DateTimeFormat(locale, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZone: 'UTC',
+  }).format(referenceDate);
+}

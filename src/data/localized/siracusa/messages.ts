@@ -128,11 +128,11 @@ export const siracusaMessages = {
       title: 'Biglietto commemorativo {title}',
       description: '{dateTime}, {place}, {zone}, {price} LMD, numero biglietto {number}',
       header: 'CRIMSON TROUPE · INGRESSO COMMEMORATIVO',
-      dateTime: 'DATA E ORA DELLA TERRA',
+      dateTime: 'DATA E ORA',
       zone: 'ZONA',
       faceValue: 'VALORE NOMINALE BASE',
       ticketNumber: 'NUMERO BIGLIETTO',
-      alt: 'Biglietto commemorativo {title}: {dateTime}, {place}, {zone}, {price} LMD, biglietto e numero matrice {number}',
+      alt: 'Biglietto commemorativo {title}: {dateTime}, {place}, {zone}, {price} LMD, numero biglietto {number}',
     },
   },
   programs: {

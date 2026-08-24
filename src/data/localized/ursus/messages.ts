@@ -127,11 +127,11 @@ export const ursusMessages = {
       title: 'Памятный билет: {title}',
       description: '{dateTime}, {place}, {zone}, {price} LMD, билет № {number}',
       header: 'БАГРЯНАЯ ТРУППА · ПАМЯТНЫЙ ПРОПУСК',
-      dateTime: 'ДАТА И ВРЕМЯ TERRA',
+      dateTime: 'ДАТА И ВРЕМЯ',
       zone: 'ЗОНА',
       faceValue: 'БАЗОВАЯ НОМИНАЛЬНАЯ ЦЕНА',
       ticketNumber: 'НОМЕР БИЛЕТА',
-      alt: 'Памятный билет {title}: {dateTime}, {place}, {zone}, {price} LMD, номер билета и матрица {number}',
+      alt: 'Памятный билет {title}: {dateTime}, {place}, {zone}, {price} LMD, номер билета {number}',
     },
   },
   programs: {

@@ -127,11 +127,11 @@ export const kazimierzMessages = {
       title: 'Bilet pamiątkowy {title}',
       description: '{dateTime}, {place}, {zone}, {price} LMD, numer biletu {number}',
       header: 'SZMARAŃCZOWA TRUPA · WSTĘP PAMIĘCIOWY',
-      dateTime: 'TERRA DATA I CZAS',
+      dateTime: 'DATA I CZAS',
       zone: 'STREFA',
       faceValue: 'PODSTAWOWA WARTOŚĆ NOMINALNA',
       ticketNumber: 'NUMER BILETU',
-      alt: 'Bilet pamiątkowy {title}: {dateTime}, {place}, {zone}, {price} LMD, numer biletu i matrycy {number}',
+      alt: 'Bilet pamiątkowy {title}: {dateTime}, {place}, {zone}, {price} LMD, numer biletu {number}',
     },
   },
   programs: {

@@ -1215,6 +1215,8 @@ const columbiaNorportArtifact = columbiaOptions.find(
 )?.artifact;
 assert.equal(trimountArtifact?.primary.editionId, 'columbia');
 assert.equal(trimountArtifact?.secondary?.editionId, 'yan');
+assert.equal(trimountArtifact?.primary.dateTime, 'September 17, 1102 at 7:30 PM');
+assert.equal(trimountArtifact?.secondary?.dateTime, '1102年9月17日 19:30');
 assert.equal(wiesheimArtifact?.primary.editionId, 'leithanien');
 assert.equal(wiesheimArtifact?.secondary?.editionId, 'yan');
 assert.equal(norportArtifact?.primary.editionId, 'victoria');

@@ -131,11 +131,11 @@ export const leithanienMessages = {
       title: '{title} Gedenkticket',
       description: '{dateTime}, {place}, {zone}, {price} LMD, Ticketnummer {number}',
       header: 'CRIMSON TROUPE · GEDENKEINTRITT',
-      dateTime: 'TERRA DATUM UND UHRZEIT',
+      dateTime: 'DATUM UND UHRZEIT',
       zone: 'ZONE',
       faceValue: 'BASISNennwert',
       ticketNumber: 'TICKETNUMMER',
-      alt: '{title} Gedenkticket: {dateTime}, {place}, {zone}, {price} LMD, Ticket- und Matrixnummer {number}',
+      alt: '{title} Gedenkticket: {dateTime}, {place}, {zone}, {price} LMD, Ticketnummer {number}',
     },
   },
   programs: {

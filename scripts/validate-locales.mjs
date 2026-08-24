@@ -4,11 +4,68 @@ import assert from 'node:assert/strict';
 
 import { buildSnapshot } from '../src/data/content/resolve.ts';
 import { buildEditionIds, buildProfile, editions } from '../src/data/editions.ts';
-import { formatTerraDateTime } from '../src/data/localized/format.ts';
+import { formatTerraDateTime, formatTicketTerraDateTime } from '../src/data/localized/format.ts';
 import { getLocalization, getLocalizedPerformanceEntries } from '../src/data/localized/resolve.ts';
 import { ticketSeatingPlans } from '../src/data/ticket-seating-plans.ts';
 
 const { editions: builtEditions, locations, performances, productions } = buildSnapshot;
+
+const ticketArtifactExpectations = {
+  yan: {
+    dateTime: '1102年9月17日 19:30',
+    dateTimeLabel: '日期与时间',
+    screenTicketNumber: '票号 {number}',
+    ticketNumberLabel: '票号',
+  },
+  victoria: {
+    dateTime: '17 September 1102 at 19:30',
+    dateTimeLabel: 'DATE AND TIME',
+    screenTicketNumber: 'Ticket number {number}',
+    ticketNumberLabel: 'TICKET NUMBER',
+  },
+  ursus: {
+    dateTime: '17 сентября 1102 г. в 19:30',
+    dateTimeLabel: 'ДАТА И ВРЕМЯ',
+    screenTicketNumber: 'Билет № {number}',
+    ticketNumberLabel: 'НОМЕР БИЛЕТА',
+  },
+  siracusa: {
+    dateTime: '17 settembre 1102 alle ore 19:30',
+    dateTimeLabel: 'DATA E ORA',
+    screenTicketNumber: 'Numero biglietto {number}',
+    ticketNumberLabel: 'NUMERO BIGLIETTO',
+  },
+  minos: {
+    dateTime: '17 Σεπτεμβρίου 1102 στις 7:30 μ.μ.',
+    dateTimeLabel: 'ΗΜΕΡΟΜΗΝΙΑ ΚΑΙ ΩΡΑ',
+    screenTicketNumber: 'Αριθμός εισιτηρίου {number}',
+    ticketNumberLabel: 'ΑΡΙΘΜΟΣ ΕΙΣΙΤΗΡΙΟΥ',
+  },
+  leithanien: {
+    dateTime: '17. September 1102 um 19:30',
+    dateTimeLabel: 'DATUM UND UHRZEIT',
+    screenTicketNumber: 'Ticketnummer {number}',
+    ticketNumberLabel: 'TICKETNUMMER',
+  },
+  kazimierz: {
+    dateTime: '17 września 1102 19:30',
+    dateTimeLabel: 'DATA I CZAS',
+    screenTicketNumber: 'Numer biletu {number}',
+    ticketNumberLabel: 'NUMER BILETU',
+  },
+  higashi: {
+    dateTime: '1102年9月17日 19:30',
+    dateTimeLabel: '日付と時刻',
+    screenTicketNumber: '券番号 {number}',
+    ticketNumberLabel: '券番号',
+  },
+  columbia: {
+    dateTime: 'September 17, 1102 at 7:30 PM',
+    dateTimeLabel: 'DATE AND TIME',
+    screenTicketNumber: 'Ticket number {number}',
+    ticketNumberLabel: 'TICKET NUMBER',
+  },
+};
 
 const localeValidationRules = {
   higashi: {
@@ -211,6 +268,34 @@ assert.equal(ticketSeatingPlans['norport-temporary-stand'].levels.length, 1);
 
 for (const edition of builtEditions) {
   const localization = getLocalization(edition);
+  const expectedTicketArtifact = ticketArtifactExpectations[edition.editionId];
+  const exampleTerraDateTime = {
+    calendar: 'terra',
+    year: 1102,
+    month: 9,
+    day: 17,
+    time: '19:30',
+  };
+  assert.equal(
+    formatTicketTerraDateTime(exampleTerraDateTime, edition.locale),
+    expectedTicketArtifact.dateTime,
+    `${edition.editionId} 票面日期时间格式不符合 locale 预期`,
+  );
+  assert.equal(
+    localization.messages.ticketing.artifact.dateTime,
+    expectedTicketArtifact.dateTimeLabel,
+    `${edition.editionId} 票面日期字段名不准确`,
+  );
+  assert.equal(
+    localization.messages.ticketing.ticketNumber,
+    expectedTicketArtifact.screenTicketNumber,
+    `${edition.editionId} 屏幕票号字段名不准确`,
+  );
+  assert.equal(
+    localization.messages.ticketing.artifact.ticketNumber,
+    expectedTicketArtifact.ticketNumberLabel,
+    `${edition.editionId} SVG 票号字段名不准确`,
+  );
   for (const [performanceId, performance] of getLocalizedPerformanceEntries(
     localization,
     buildSnapshot,
