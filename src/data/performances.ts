@@ -49,6 +49,36 @@ const norportTemporaryStageOffers = [
   { zone: 'A', basePrice: 240 },
 ] as const satisfies readonly TicketOffer[];
 
+const montelupeBanquetTheaterOffers = [
+  { zone: 'C', basePrice: 180 },
+  { zone: 'B', basePrice: 300 },
+  { zone: 'A', basePrice: 480 },
+  { zone: 'S', basePrice: 760 },
+  { zone: 'BOX', basePrice: 1260 },
+] as const satisfies readonly TicketOffer[];
+
+const linquCourtyardOffers = [
+  { zone: 'C', basePrice: 110 },
+  { zone: 'B', basePrice: 190 },
+  { zone: 'A', basePrice: 300 },
+  { zone: 'S', basePrice: 460 },
+] as const satisfies readonly TicketOffer[];
+
+const londiniumGrandTheaterOffers = [
+  { zone: 'C', basePrice: 300 },
+  { zone: 'B', basePrice: 480 },
+  { zone: 'A', basePrice: 760 },
+  { zone: 'S', basePrice: 1120 },
+  { zone: 'BOX', basePrice: 1880 },
+] as const satisfies readonly TicketOffer[];
+
+const qingsuiOperaCourtyardOffers = [
+  { zone: 'C', basePrice: 140 },
+  { zone: 'B', basePrice: 240 },
+  { zone: 'A', basePrice: 380 },
+  { zone: 'S', basePrice: 600 },
+] as const satisfies readonly TicketOffer[];
+
 export interface Performance {
   performanceId: string;
   world: SiteWorld;
@@ -108,7 +138,11 @@ export const performances = {
     locationId: 'montelupe',
     effectiveDateTime: { calendar: 'terra', year: 1102, month: 6, day: 6, time: '20:00' },
     productionIds: ['red-banquet'],
-    ticketAvailability: { state: 'not-on-sale' },
+    ticketAvailability: {
+      state: 'on-sale',
+      seatingPlanId: 'montelupe-banquet-horseshoe',
+      offers: montelupeBanquetTheaterOffers,
+    },
   },
   'uncrowned-trimount-1102': {
     performanceId: 'uncrowned-trimount-1102',
@@ -156,7 +190,11 @@ export const performances = {
     locationId: 'linqu',
     effectiveDateTime: { calendar: 'terra', year: 1102, month: 12, day: 12, time: '19:30' },
     productionIds: ['seventh-lantern'],
-    ticketAvailability: { state: 'not-on-sale' },
+    ticketAvailability: {
+      state: 'on-sale',
+      seatingPlanId: 'linqu-courtyard-fan',
+      offers: linquCourtyardOffers,
+    },
   },
   'procession-of-masks-londinium-1103-0214': {
     performanceId: 'procession-of-masks-londinium-1103-0214',
@@ -165,7 +203,11 @@ export const performances = {
     locationId: 'londinium',
     effectiveDateTime: { calendar: 'terra', year: 1103, month: 2, day: 14, time: '20:00' },
     productionIds: ['procession-of-masks'],
-    ticketAvailability: { state: 'not-on-sale' },
+    ticketAvailability: {
+      state: 'on-sale',
+      seatingPlanId: 'londinium-grand-tiers',
+      offers: londiniumGrandTheaterOffers,
+    },
   },
   'uncrowned-qingsui-1103-0404': {
     performanceId: 'uncrowned-qingsui-1103-0404',
@@ -174,7 +216,11 @@ export const performances = {
     locationId: 'qingsui',
     effectiveDateTime: { calendar: 'terra', year: 1103, month: 4, day: 4, time: '19:00' },
     productionIds: ['uncrowned'],
-    ticketAvailability: { state: 'not-on-sale' },
+    ticketAvailability: {
+      state: 'on-sale',
+      seatingPlanId: 'qingsui-opera-courtyard',
+      offers: qingsuiOperaCourtyardOffers,
+    },
   },
   'lone-wander-wiesheim-1083-0814': {
     performanceId: 'lone-wander-wiesheim-1083-0814',
