@@ -35,12 +35,11 @@ docs/drafts/
 
 当前实际草稿入口：
 
-| 文件                                                                                       | 类型       | 当前效力                                 |
-| ------------------------------------------------------------------------------------------ | ---------- | ---------------------------------------- |
-| [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md)       | 创意草稿   | 延期的里站异常购票构想，等待未来独立规划 |
-| [`creative/performance-pricing-method.md`](creative/performance-pricing-method.md)         | 创意草稿   | 未来正式定价方法候选，已决定延期且不启用 |
-| [`recommendations/stage-adversarial-audit.md`](recommendations/stage-adversarial-audit.md) | 建议草稿   | 审计结论已通过，等待正式迁移与实施       |
-| [`plans/stage-audit-remediation.md`](plans/stage-audit-remediation.md)                     | 一次性计划 | 审计修正切片计划，等待正式迁移与执行授权 |
+| 文件                                                                                 | 类型       | 当前效力                                  |
+| ------------------------------------------------------------------------------------ | ---------- | ----------------------------------------- |
+| [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md) | 创意草稿   | 延期的里站异常购票构想，等待未来独立规划  |
+| [`creative/performance-pricing-method.md`](creative/performance-pricing-method.md)   | 创意草稿   | 未来正式定价方法候选，已决定延期且不启用  |
+| [`plans/stage-audit-remediation.md`](plans/stage-audit-remediation.md)               | 一次性计划 | 审计修正计划已批准，当前执行 `CONTENT-01` |
 
 ## 固定文档骨架
 

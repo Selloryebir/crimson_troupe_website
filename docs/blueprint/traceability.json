@@ -272,7 +272,7 @@
     {
       "path": "src/data/content/root-sets.ts",
       "primary": "BP-CNT-CORE",
-      "related": ["BP-FND-DOMAIN", "BP-MOD-PROGRAMS"]
+      "related": ["BP-FND-DOMAIN", "BP-MOD-PROGRAMS", "BP-MOD-TERRA-TIME"]
     },
     {
       "path": "src/data/content/validate.ts",
