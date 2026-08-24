@@ -166,7 +166,12 @@ export function layoutTicketText(
   );
 }
 
-function createTextMarkup(
+interface TicketTextBlock {
+  markup: string;
+  bottomY: number;
+}
+
+function createTicketTextBlock(
   field: string,
   value: string,
   locale: string,
@@ -174,7 +179,7 @@ function createTextMarkup(
   y: number,
   options: TicketTextLayoutOptions,
   attributes: string,
-): string {
+): TicketTextBlock {
   const layout = layoutTicketText(value, locale, options);
   const lines = layout.lines
     .map(
@@ -182,7 +187,10 @@ function createTextMarkup(
         `<tspan x="${x}" y="${y + index * layout.lineHeight}" data-ticket-line="${index + 1}">${escapeXml(line)}</tspan>`,
     )
     .join('');
-  return `<text data-ticket-field="${field}" font-size="${layout.fontSize}" ${attributes}>${lines}</text>`;
+  return {
+    markup: `<text data-ticket-field="${field}" font-size="${layout.fontSize}" ${attributes}>${lines}</text>`,
+    bottomY: y + (layout.lines.length - 1) * layout.lineHeight,
+  };
 }
 
 function seedFromNumber(number: string): number {
@@ -312,80 +320,139 @@ export function createTicketSvg(input: TicketArtifactInput): string {
     .map((x) => `<circle cx="${x}" cy="32" r="3"/><circle cx="${x}" cy="508" r="3"/>`)
     .join('');
   const stampMarkup = createCompositeStampMarkup(endingHistory, endingLabels, journeyTags, accent);
-  const titleMarkup = createTextMarkup(
+  let contentCursorY = 120;
+  const titleBlock = createTicketTextBlock(
     'title',
     primary.title,
     locale,
     70,
-    128,
+    contentCursorY,
     {
       maxWidth: 770,
-      maxHeight: 102,
-      preferredFontSize: 54,
-      minimumFontSize: 30,
-      maxLines: 3,
+      maxHeight: 100,
+      preferredFontSize: 52,
+      minimumFontSize: 28,
+      maxLines: 2,
     },
     'font-family="serif" font-weight="600" fill="#211713"',
   );
-  const kindMarkup = createTextMarkup(
+  contentCursorY = titleBlock.bottomY + 20;
+  const secondaryTitleBlock = secondary
+    ? createTicketTextBlock(
+        'secondary-title',
+        secondary.title,
+        secondary.locale,
+        70,
+        contentCursorY,
+        {
+          maxWidth: 770,
+          maxHeight: 44,
+          preferredFontSize: 18,
+          minimumFontSize: 13,
+          maxLines: 2,
+        },
+        'font-family="serif" font-weight="600" fill="#4f4540"',
+      )
+    : undefined;
+  if (secondaryTitleBlock) {
+    contentCursorY = secondaryTitleBlock.bottomY + 20;
+  }
+  const kindBlock = createTicketTextBlock(
     'kind',
     primary.kind,
     locale,
     70,
-    228,
-    { maxWidth: 770, maxHeight: 36, preferredFontSize: 22, minimumFontSize: 16, maxLines: 2 },
+    contentCursorY,
+    { maxWidth: 770, maxHeight: 40, preferredFontSize: 20, minimumFontSize: 14, maxLines: 2 },
     'font-family="sans-serif" fill="#6d625b"',
   );
-  const dateTimeMarkup = createTextMarkup(
+  const dateTimeLabelY = Math.max(kindBlock.bottomY + 34, 248);
+  const dateTimeBlock = createTicketTextBlock(
     'date-time',
     primary.dateTime,
     locale,
     70,
-    348,
-    { maxWidth: 770, maxHeight: 45, preferredFontSize: 29, minimumFontSize: 18, maxLines: 2 },
+    dateTimeLabelY + 30,
+    { maxWidth: 770, maxHeight: 48, preferredFontSize: 27, minimumFontSize: 17, maxLines: 2 },
     'font-family="serif" fill="#211713"',
   );
-  const placeMarkup = createTextMarkup(
+  const secondaryDateTimeBlock = secondary
+    ? createTicketTextBlock(
+        'secondary-date-time',
+        secondary.dateTime,
+        secondary.locale,
+        70,
+        dateTimeBlock.bottomY + 22,
+        {
+          maxWidth: 770,
+          maxHeight: 22,
+          preferredFontSize: 14,
+          minimumFontSize: 12,
+          maxLines: 1,
+        },
+        'font-family="sans-serif" fill="#6d625b"',
+      )
+    : undefined;
+  const dateTimeGroupBottom = secondaryDateTimeBlock?.bottomY ?? dateTimeBlock.bottomY;
+  const placeY = Math.max(dateTimeGroupBottom + 34, 370);
+  const placeBlock = createTicketTextBlock(
     'place',
     primary.place,
     locale,
     70,
-    390,
-    { maxWidth: 770, maxHeight: 40, preferredFontSize: 20, minimumFontSize: 16, maxLines: 2 },
+    placeY,
+    { maxWidth: 770, maxHeight: 42, preferredFontSize: 20, minimumFontSize: 15, maxLines: 2 },
     'font-family="sans-serif" fill="#6d625b"',
   );
-  const secondaryMarkup = secondary
-    ? `<g data-ticket-language="secondary" lang="${escapeXml(secondary.locale)}" opacity=".78">
-  ${createTextMarkup(
-    'secondary-title',
-    secondary.title,
-    secondary.locale,
-    70,
-    260,
-    { maxWidth: 770, maxHeight: 40, preferredFontSize: 18, minimumFontSize: 14, maxLines: 2 },
-    'font-family="serif" font-weight="600" fill="#211713"',
-  )}
-  ${createTextMarkup(
-    'secondary-date-time',
-    secondary.dateTime,
-    secondary.locale,
-    70,
-    298,
-    { maxWidth: 250, maxHeight: 22, preferredFontSize: 14, minimumFontSize: 12, maxLines: 1 },
-    'font-family="sans-serif" fill="#6d625b"',
-  )}
-  ${createTextMarkup(
-    'secondary-place',
-    secondary.place,
-    secondary.locale,
-    340,
-    298,
-    { maxWidth: 500, maxHeight: 22, preferredFontSize: 14, minimumFontSize: 12, maxLines: 1 },
-    'font-family="sans-serif" fill="#6d625b"',
-  )}
-  <text data-ticket-field="secondary-zone-label" x="70" y="466" font-family="sans-serif" font-size="13" fill="#6d625b">${escapeXml(secondary.messages.zone)}</text>
-</g>`
+  const secondaryPlaceBlock = secondary
+    ? createTicketTextBlock(
+        'secondary-place',
+        secondary.place,
+        secondary.locale,
+        70,
+        placeBlock.bottomY + 21,
+        {
+          maxWidth: 770,
+          maxHeight: 22,
+          preferredFontSize: 14,
+          minimumFontSize: 12,
+          maxLines: 1,
+        },
+        'font-family="sans-serif" fill="#6d625b"',
+      )
+    : undefined;
+  const contentBottom = secondaryPlaceBlock?.bottomY ?? placeBlock.bottomY;
+  if (contentBottom > 424) {
+    throw new Error(`票面字段组超过可用内容高度：${contentBottom}。`);
+  }
+
+  const primaryLanguage = `data-ticket-language="primary" lang="${escapeXml(primary.locale)}"`;
+  const secondaryLanguage = secondary
+    ? `data-ticket-language="secondary" lang="${escapeXml(secondary.locale)}" opacity=".78"`
     : '';
+  const productionGroupMarkup = `<g data-ticket-field-group="production">
+  <g ${primaryLanguage}>${titleBlock.markup}</g>
+  ${secondaryTitleBlock ? `<g ${secondaryLanguage}>${secondaryTitleBlock.markup}</g>` : ''}
+  <g ${primaryLanguage}>${kindBlock.markup}</g>
+</g>`;
+  const dateTimeGroupMarkup = `<g data-ticket-field-group="date-time">
+  <g ${primaryLanguage}>
+    <text data-ticket-field="date-time-label" x="70" y="${dateTimeLabelY}" font-family="sans-serif" font-size="18" fill="#6d625b">${escapeXml(messages.dateTime)}</text>
+    ${dateTimeBlock.markup}
+  </g>
+  ${secondaryDateTimeBlock ? `<g ${secondaryLanguage}>${secondaryDateTimeBlock.markup}</g>` : ''}
+</g>`;
+  const venueGroupMarkup = `<g data-ticket-field-group="venue">
+  <g ${primaryLanguage}>${placeBlock.markup}</g>
+  ${secondaryPlaceBlock ? `<g ${secondaryLanguage}>${secondaryPlaceBlock.markup}</g>` : ''}
+</g>`;
+  const zoneGroupMarkup = `<g data-ticket-field-group="zone">
+  <g ${primaryLanguage}>
+    <text data-ticket-field="zone-label" x="70" y="456" font-family="sans-serif" font-size="18" fill="#6d625b">${escapeXml(messages.zone)}</text>
+    <text data-ticket-field="zone" x="150" y="480" font-family="serif" font-size="29" fill="#211713">${escapeXml(zoneLabel)}</text>
+  </g>
+  ${secondary ? `<g ${secondaryLanguage}><text data-ticket-field="secondary-zone-label" x="70" y="478" font-family="sans-serif" font-size="12" fill="#6d625b">${escapeXml(secondary.messages.zone)}</text></g>` : ''}
+</g>`;
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 540" width="1200" height="540" role="img" lang="${escapeXml(locale)}" aria-labelledby="title description" data-ticket-pattern="${texture.signature}">
@@ -397,19 +464,17 @@ export function createTicketSvg(input: TicketArtifactInput): string {
   <rect x="42" y="32" width="1126" height="476" fill="none" stroke="#251a16" stroke-width="2"/>
   <g fill="#f2ede3" stroke="${accent}" stroke-width="1.5">${punches}</g>
   <path d="M880 32V508" stroke="#9a8e82" stroke-dasharray="8 8"/>
-  <g data-ticket-language="primary" lang="${escapeXml(primary.locale)}">
+  <g ${primaryLanguage}>
   <text x="70" y="72" font-family="sans-serif" font-size="18" letter-spacing="5" fill="${accent}">${escapeXml(messages.header)}</text>
-  ${titleMarkup}
-  ${kindMarkup}
-  <text x="70" y="324" font-family="sans-serif" font-size="18" fill="#6d625b">${escapeXml(messages.dateTime)}</text>
-  ${dateTimeMarkup}
-  ${placeMarkup}
-  <text x="70" y="440" font-family="sans-serif" font-size="20" fill="#6d625b">${escapeXml(messages.zone)}</text>
-  <text x="150" y="440" font-family="serif" font-size="31" fill="#211713">${escapeXml(zoneLabel)}</text>
-  <text x="350" y="410" font-family="sans-serif" font-size="20" fill="#6d625b">${escapeXml(messages.faceValue)}</text>
   </g>
-  ${secondaryMarkup}
-  <text x="350" y="444" font-family="serif" font-size="31" fill="#211713">${basketItem.basePrice} LMD</text>
+  ${productionGroupMarkup}
+  ${dateTimeGroupMarkup}
+  ${venueGroupMarkup}
+  ${zoneGroupMarkup}
+  <g ${primaryLanguage}>
+    <text data-ticket-field="face-value-label" x="350" y="450" font-family="sans-serif" font-size="18" fill="#6d625b">${escapeXml(messages.faceValue)}</text>
+    <text data-ticket-field="face-value" x="350" y="480" font-family="serif" font-size="29" fill="#211713">${basketItem.basePrice} LMD</text>
+  </g>
   <g fill="#171310">${modules}</g>
   <text x="920" y="354" font-family="sans-serif" font-size="14" letter-spacing="2" fill="#6d625b">${escapeXml(messages.ticketNumber)}</text>
   <text x="920" y="382" font-family="monospace" font-size="22" fill="#211713">${number}</text>

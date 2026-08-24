@@ -172,21 +172,62 @@ export function renderTicketingResult(
     });
     const caption = document.createElement('div');
     caption.className = 'issued-ticket__caption';
+    const productionGroup = document.createElement('div');
+    productionGroup.className = 'issued-ticket__field-group issued-ticket__production';
+    productionGroup.dataset.ticketFieldGroup = 'production';
     const ticketTitle = document.createElement('h3');
     ticketTitle.lang = primary.locale;
     ticketTitle.textContent = primary.title;
-    const ticketMeta = document.createElement('p');
-    ticketMeta.lang = primary.locale;
-    ticketMeta.textContent = `${primary.dateTime} · ${primary.place} · ${artifactZoneLabel} · ${basketItem.basePrice} LMD`;
-    const secondaryMeta = document.createElement('p');
-    secondaryMeta.className = 'issued-ticket__secondary-language';
+    productionGroup.append(ticketTitle);
     if (secondary) {
-      secondaryMeta.lang = secondary.locale;
-      secondaryMeta.textContent = `${secondary.title} · ${secondary.dateTime} · ${secondary.place}`;
-    } else {
-      secondaryMeta.hidden = true;
+      const secondaryTitle = document.createElement('p');
+      secondaryTitle.className = 'issued-ticket__secondary-language';
+      secondaryTitle.lang = secondary.locale;
+      secondaryTitle.textContent = secondary.title;
+      productionGroup.append(secondaryTitle);
     }
+    const kind = document.createElement('p');
+    kind.className = 'issued-ticket__kind';
+    kind.lang = primary.locale;
+    kind.textContent = primary.kind;
+    productionGroup.append(kind);
+
+    const dateTimeGroup = document.createElement('div');
+    dateTimeGroup.className = 'issued-ticket__field-group';
+    dateTimeGroup.dataset.ticketFieldGroup = 'date-time';
+    const primaryDateTime = document.createElement('p');
+    primaryDateTime.lang = primary.locale;
+    primaryDateTime.textContent = primary.dateTime;
+    dateTimeGroup.append(primaryDateTime);
+    if (secondary) {
+      const secondaryDateTime = document.createElement('p');
+      secondaryDateTime.className = 'issued-ticket__secondary-language';
+      secondaryDateTime.lang = secondary.locale;
+      secondaryDateTime.textContent = secondary.dateTime;
+      dateTimeGroup.append(secondaryDateTime);
+    }
+
+    const venueGroup = document.createElement('div');
+    venueGroup.className = 'issued-ticket__field-group';
+    venueGroup.dataset.ticketFieldGroup = 'venue';
+    const primaryVenue = document.createElement('p');
+    primaryVenue.lang = primary.locale;
+    primaryVenue.textContent = primary.place;
+    venueGroup.append(primaryVenue);
+    if (secondary) {
+      const secondaryVenue = document.createElement('p');
+      secondaryVenue.className = 'issued-ticket__secondary-language';
+      secondaryVenue.lang = secondary.locale;
+      secondaryVenue.textContent = secondary.place;
+      venueGroup.append(secondaryVenue);
+    }
+
+    const facts = document.createElement('p');
+    facts.className = 'issued-ticket__facts';
+    facts.lang = primary.locale;
+    facts.textContent = `${artifactZoneLabel} · ${basketItem.basePrice} LMD`;
     const ticketNumber = document.createElement('p');
+    ticketNumber.className = 'issued-ticket__number';
     ticketNumber.textContent = formatMessage(messages.ticketNumber, { number: issued.number });
     const journey = document.createElement('p');
     journey.className = 'visually-hidden';
@@ -200,7 +241,15 @@ export function renderTicketingResult(
       createButton(`download:${issued.performanceId}`, messages.downloadSvg),
       createButton(`print:${issued.performanceId}`, messages.printTicket),
     );
-    caption.append(ticketTitle, ticketMeta, secondaryMeta, ticketNumber, journey, controls);
+    caption.append(
+      productionGroup,
+      dateTimeGroup,
+      venueGroup,
+      facts,
+      ticketNumber,
+      journey,
+      controls,
+    );
     article.append(image, caption);
     issuedTickets.append(article);
   }

@@ -1053,7 +1053,50 @@ try {
   assert.match(decodedTicketSource, /data-ticket-field="title"/u);
   assert.match(decodedTicketSource, /data-ticket-language="primary" lang="en-US"/u);
   assert.match(decodedTicketSource, /data-ticket-language="secondary" lang="zh-CN"/u);
+  assert.match(decodedTicketSource, /data-ticket-field-group="production"/u);
+  assert.match(decodedTicketSource, /data-ticket-field-group="date-time"/u);
+  assert.match(decodedTicketSource, /data-ticket-field-group="venue"/u);
+  assert.match(decodedTicketSource, /data-ticket-field-group="zone"/u);
+  const downloadedFieldOrder = [
+    'data-ticket-field="title"',
+    'data-ticket-field="secondary-title"',
+    'data-ticket-field="kind"',
+    'data-ticket-field="date-time"',
+    'data-ticket-field="secondary-date-time"',
+    'data-ticket-field="place"',
+    'data-ticket-field="secondary-place"',
+  ].map((field) => decodedTicketSource.indexOf(field));
+  assert.ok(downloadedFieldOrder.every((index) => index >= 0));
+  assert.deepEqual(
+    [...downloadedFieldOrder].sort((left, right) => left - right),
+    downloadedFieldOrder,
+  );
   assert.match(decodedTicketSource, /data-ticket-composite-stamp=""/u);
+  const screenFieldGroups = await ticketPage
+    .locator('.issued-ticket__caption [data-ticket-field-group]')
+    .evaluateAll((elements) =>
+      elements.map((element) => element.getAttribute('data-ticket-field-group')),
+    );
+  assert.deepEqual(screenFieldGroups, ['production', 'date-time', 'venue']);
+  assert.match(
+    (await ticketPage
+      .locator('.issued-ticket__caption [data-ticket-field-group="production"]')
+      .textContent()) ?? '',
+    /The Uncrowned Night.*无冕之夜.*Modern Tragedy/su,
+  );
+  assert.match(
+    (await ticketPage
+      .locator('.issued-ticket__caption [data-ticket-field-group="date-time"]')
+      .textContent()) ?? '',
+    /September 17, 1102 at 7:30 PM.*1102年9月17日 19:30/su,
+  );
+  assert.match(
+    (await ticketPage
+      .locator('.issued-ticket__caption [data-ticket-field-group="venue"]')
+      .textContent()) ?? '',
+    /Trimounts Grand Theater · Main Stage.*特里蒙大剧院 · 主舞台/su,
+  );
+  assert.match((await ticketPage.locator('.issued-ticket__number').textContent()) ?? '', /^票号 /u);
   assert.equal(
     await ticketPage.locator('[data-ticket-receipt] .ticket-receipt__lines li').count(),
     1,

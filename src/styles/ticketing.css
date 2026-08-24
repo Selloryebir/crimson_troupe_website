@@ -591,20 +591,37 @@
 }
 
 .issued-ticket__caption h3 {
-  margin: 0 0 18px;
+  margin: 0;
   font: 500 1.55rem / 1.25 var(--serif);
 }
 
 .issued-ticket__caption p {
-  margin: 6px 0;
+  margin: 4px 0;
   font-size: 0.75rem;
 }
 
+.issued-ticket__field-group + .issued-ticket__field-group {
+  margin-top: 18px;
+}
+
 .issued-ticket__caption .issued-ticket__secondary-language {
-  padding-top: 8px;
-  border-top: 1px solid var(--line);
   color: var(--muted);
   font-size: 0.68rem;
+}
+
+.issued-ticket__caption .issued-ticket__kind {
+  margin-top: 10px;
+  color: var(--muted);
+}
+
+.issued-ticket__facts {
+  margin-top: 18px !important;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.issued-ticket__number {
+  font-variant-numeric: tabular-nums;
 }
 
 .issued-ticket__controls {

@@ -1328,6 +1328,27 @@ for (const requiredText of [
 ]) {
   assert.ok(svg.includes(requiredText), `票面缺少必要字段：${requiredText}`);
 }
+for (const fieldGroup of ['production', 'date-time', 'venue', 'zone']) {
+  assert.ok(svg.includes(`data-ticket-field-group="${fieldGroup}"`));
+}
+const ticketFieldOrder = [
+  'data-ticket-field="title"',
+  'data-ticket-field="secondary-title"',
+  'data-ticket-field="kind"',
+  'data-ticket-field="date-time"',
+  'data-ticket-field="secondary-date-time"',
+  'data-ticket-field="place"',
+  'data-ticket-field="secondary-place"',
+].map((field) => svg.indexOf(field));
+assert.ok(
+  ticketFieldOrder.every((index) => index >= 0),
+  '双语票面字段组必须完整',
+);
+assert.deepEqual(
+  [...ticketFieldOrder].sort((left, right) => left - right),
+  ticketFieldOrder,
+  '主辅标题、日期和场馆必须按字段成组排列',
+);
 for (const endingId of [
   'ENDING_NETWORK_ERROR',
   'ENDING_NORMAL_SUCCESS',
