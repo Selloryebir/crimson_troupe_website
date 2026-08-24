@@ -1,7 +1,8 @@
+import { archiveProjectionIdentity, type ArchiveProjectionIdentity } from '../archive-pollution.ts';
 import type { EditionId } from '../editions.ts';
 import { locations, type Location } from '../locations.ts';
 import { localizationPackages, type PartialLocalizationPackage } from '../localized/packages.ts';
-import { performances, type Performance, type PerformanceId } from '../performances.ts';
+import type { PerformanceId } from '../performances.ts';
 import {
   productionArtworkRegistry,
   type ProductionArtwork,
@@ -15,6 +16,13 @@ import {
 } from '../ticket-seating-plans.ts';
 import { createContentFingerprint } from './fingerprint.ts';
 import { getRootPerformanceIds, type ContentRootSet, type ContentRootSetId } from './root-sets.ts';
+import { assertPerformanceVariantComplete } from './validate.ts';
+import {
+  getPerformanceVariantUnit,
+  performanceVariantRegistry,
+  selectCompleteVariant,
+  type PerformanceVariantRegistry,
+} from './variants.ts';
 
 export interface ContentApprovalDigests {
   site: string;
@@ -29,21 +37,23 @@ export interface ApprovedContentDigests {
 }
 
 export interface ApprovalDigestSources {
-  performances: Readonly<Record<string, Performance>>;
+  performanceVariants: PerformanceVariantRegistry;
   productions: Readonly<Record<string, Production>>;
   locations: Readonly<Record<string, Location>>;
   localizations: Readonly<Record<string, PartialLocalizationPackage>>;
   artwork: ProductionArtworkRegistry;
   seatingPlans: Readonly<Record<SeatingPlanId, SeatingPlanDefinition>>;
+  archiveProjection: ArchiveProjectionIdentity;
 }
 
 const defaultSources: ApprovalDigestSources = {
-  performances,
+  performanceVariants: performanceVariantRegistry,
   productions,
   locations,
   localizations: localizationPackages,
   artwork: productionArtworkRegistry,
   seatingPlans: ticketSeatingPlans,
+  archiveProjection: archiveProjectionIdentity,
 };
 
 function createSiteApprovalDigest(
@@ -65,6 +75,21 @@ function createSiteApprovalDigest(
         ];
       }),
     ),
+    archiveProjection: {
+      identity: sources.archiveProjection,
+      production: sources.productions[sources.archiveProjection.productionId],
+      localization: Object.fromEntries(
+        editionIds.map((editionId) => [
+          editionId,
+          sources.localizations[editionId]?.programs?.productions?.[
+            sources.archiveProjection.productionId
+          ],
+        ]),
+      ),
+      artwork: artworkApprovalValue(
+        sources.artwork[sources.archiveProjection.productionId]?.archive,
+      ),
+    },
   });
 }
 
@@ -96,10 +121,11 @@ function createPerformanceApprovalDigest(
   editionIds: readonly EditionId[],
   sources: ApprovalDigestSources,
 ): string {
-  const performance = sources.performances[performanceId];
-  if (!performance) {
-    throw new Error(`批准摘要无法解析未知场次：${performanceId}`);
+  const variantUnit = getPerformanceVariantUnit(performanceId, sources.performanceVariants);
+  if (!variantUnit) {
+    throw new Error(`批准摘要无法解析缺少变体的场次：${performanceId}`);
   }
+  const performance = selectCompleteVariant(variantUnit, assertPerformanceVariantComplete).value;
   const productionIds = [...performance.productionIds];
   const localization = Object.fromEntries(
     editionIds.map((editionId) => {

@@ -24,6 +24,7 @@ import {
 } from '../src/data/localized/resolve.ts';
 import { assertPerformanceOfferMatrix } from '../src/data/performance-offers.ts';
 import { performances } from '../src/data/performances.ts';
+import { productions } from '../src/data/productions/index.ts';
 import { getFrontSearchIndex, getSiteSearchScope } from '../src/data/site-search-index.ts';
 import {
   assertTerraDateTime,
@@ -80,7 +81,7 @@ assert.deepEqual(buildContexts.release.editionIds, ['yan']);
 assert.throws(() => getBuildContext(buildContexts, 'custom'), /未知构建预设/u);
 
 assert.doesNotThrow(() =>
-  validateContentRootSet(currentRootSet, performances, buildContexts.showcase),
+  validateContentRootSet(currentRootSet, performances, productions, buildContexts.showcase),
 );
 assert.throws(
   () =>
@@ -99,6 +100,8 @@ assert.throws(
         },
       },
       performances,
+      productions,
+      buildContexts.showcase,
     ),
   /含重复场次/u,
 );
@@ -116,6 +119,8 @@ assert.throws(
         },
       },
       performances,
+      productions,
+      buildContexts.showcase,
     ),
   /焦点不属于该时间层/u,
 );
@@ -148,6 +153,8 @@ for (const [world, misplacedPerformanceId] of [
           },
         },
         performances,
+        productions,
+        buildContexts.showcase,
       ),
     /跨时间层场次/u,
   );
@@ -181,6 +188,7 @@ assert.throws(
           effectiveDateTime: { ...frontNow, year: 1101, month: 4, day: 14 },
         },
       },
+      productions,
       buildContexts.showcase,
     ),
   /超出 front 前后一年窗口/u,
@@ -208,6 +216,7 @@ assert.throws(
             : performance,
         ]),
       ),
+      productions,
       buildContexts.showcase,
     ),
   /剧目编排超过三次：uncrowned\(4\)/u,

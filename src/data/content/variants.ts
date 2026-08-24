@@ -12,6 +12,10 @@ export interface ContentVariantUnit<T> {
   preview?: CompleteContentVariant<T>;
 }
 
+export type PerformanceVariantRegistry = Readonly<
+  Partial<Record<PerformanceId, ContentVariantUnit<Performance>>>
+>;
+
 export function selectCompleteVariant<T>(
   unit: ContentVariantUnit<T>,
   validate: (stableId: string, value: T) => void,
@@ -24,25 +28,33 @@ export function selectCompleteVariant<T>(
   return unit.baseline;
 }
 
-const baselinePerformanceVariants = new Map<PerformanceId, ContentVariantUnit<Performance>>(
-  Object.entries(performances).map(([performanceId, performance]) => [
-    performanceId as PerformanceId,
-    Object.freeze({
-      stableId: performanceId,
-      baseline: Object.freeze({
-        variantId: 'baseline',
-        maturity: 'preview',
-        value: performance,
-      }),
-    }),
-  ]),
-);
+export function createBaselinePerformanceVariantRegistry(
+  source: Readonly<Record<string, Performance>>,
+): PerformanceVariantRegistry {
+  return Object.freeze(
+    Object.fromEntries(
+      Object.entries(source).map(([performanceId, performance]) => [
+        performanceId,
+        Object.freeze({
+          stableId: performanceId,
+          baseline: Object.freeze({
+            variantId: 'baseline',
+            maturity: 'preview',
+            value: performance,
+          }),
+        }),
+      ]),
+    ) as Record<PerformanceId, ContentVariantUnit<Performance>>,
+  );
+}
+
+const baselinePerformanceVariants = createBaselinePerformanceVariantRegistry(performances);
 
 // 当前候选与基线共享同一完整值，不复制内容树；后续改稿替换 preview.value 即可并行验收。
-baselinePerformanceVariants.set(
-  'uncrowned-trimount-1102',
-  Object.freeze({
-    ...baselinePerformanceVariants.get('uncrowned-trimount-1102'),
+export const performanceVariantRegistry: PerformanceVariantRegistry = Object.freeze({
+  ...baselinePerformanceVariants,
+  'uncrowned-trimount-1102': Object.freeze({
+    ...baselinePerformanceVariants['uncrowned-trimount-1102'],
     stableId: 'uncrowned-trimount-1102',
     baseline: Object.freeze({
       variantId: 'baseline',
@@ -55,10 +67,11 @@ baselinePerformanceVariants.set(
       value: performances['uncrowned-trimount-1102'],
     }),
   }),
-);
+});
 
 export function getPerformanceVariantUnit(
   performanceId: PerformanceId,
+  registry: PerformanceVariantRegistry = performanceVariantRegistry,
 ): ContentVariantUnit<Performance> | undefined {
-  return baselinePerformanceVariants.get(performanceId);
+  return registry[performanceId];
 }

@@ -1,6 +1,5 @@
 import type { BuildEditionId } from '../editions.ts';
 import type { PartialLocalizationPackage } from '../localized/packages.ts';
-import type { ContentSnapshot } from './resolve.ts';
 import { createContentFingerprint } from './fingerprint.ts';
 
 export type LocalizationSourceRevision = Readonly<Record<string, string>>;
@@ -8,24 +7,33 @@ export type LocalizationSourceRevisionRegistry = Readonly<
   Partial<Record<BuildEditionId, LocalizationSourceRevision>>
 >;
 
+export interface LocalizationRevisionScope {
+  locationEntries: readonly (readonly [string, unknown])[];
+  performanceEntries: readonly (readonly [string, unknown])[];
+  productionEntries: readonly (readonly [string, unknown])[];
+}
+
 function recordEntries(prefix: string, records: object | undefined): Array<[string, unknown]> {
   return Object.entries(records ?? {}).map(([recordId, value]) => [`${prefix}.${recordId}`, value]);
 }
 
 export function createLocalizationSourceRevision(
   source: PartialLocalizationPackage,
-  snapshot?: Pick<ContentSnapshot, 'locationEntries' | 'performanceEntries' | 'productionEntries'>,
+  scope?: LocalizationRevisionScope,
 ): LocalizationSourceRevision {
-  const locationIds = snapshot?.locationEntries.map(([locationId]) => locationId);
-  const performanceIds = snapshot?.performanceEntries.map(([performanceId]) => performanceId);
-  const productionIds = snapshot?.productionEntries.map(([productionId]) => productionId);
-  const scopedEntries = <T extends string>(
+  const locationIds = scope?.locationEntries.map(([locationId]) => locationId);
+  const performanceIds = scope?.performanceEntries.map(([performanceId]) => performanceId);
+  const productionIds = scope?.productionEntries.map(([productionId]) => productionId);
+  const scopedEntries = (
     prefix: string,
-    records: Partial<Record<T, unknown>> | undefined,
-    ids: readonly T[] | undefined,
+    records: object | undefined,
+    ids: readonly string[] | undefined,
   ): Array<[string, unknown]> =>
     ids
-      ? ids.map((recordId) => [`${prefix}.${recordId}`, records?.[recordId]])
+      ? ids.map((recordId) => [
+          `${prefix}.${recordId}`,
+          (records as Readonly<Record<string, unknown>> | undefined)?.[recordId],
+        ])
       : recordEntries(prefix, records);
   const entries: Array<[string, unknown]> = [
     ...recordEntries('site', source.site),
@@ -123,9 +131,9 @@ export function assertLocalizationSourceFresh(
   editionIds: readonly BuildEditionId[],
   packages: Readonly<Record<BuildEditionId, PartialLocalizationPackage>>,
   expectedRevisions: LocalizationSourceRevisionRegistry = localizationSourceRevisions,
-  snapshot?: Pick<ContentSnapshot, 'locationEntries' | 'performanceEntries' | 'productionEntries'>,
+  scope?: LocalizationRevisionScope,
 ): void {
-  const current = createLocalizationSourceRevision(packages.yan, snapshot);
+  const current = createLocalizationSourceRevision(packages.yan, scope);
   for (const editionId of editionIds) {
     if (editionId === 'yan') {
       continue;

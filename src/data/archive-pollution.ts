@@ -28,6 +28,16 @@ const archivePollutionProfiles = {
   tickets: 'office',
 } as const satisfies Record<ArchivePageType, ArchivePollutionProfile>;
 
+export interface ArchiveProjectionIdentity {
+  productionId: ProductionId;
+}
+
+// 等级 3 的统一剧目身份属于构建闭包，不由页面或本地化文案各自猜测。
+export const archiveProjectionIdentity: ArchiveProjectionIdentity = Object.freeze({
+  productionId: 'the-carnival',
+});
+
 export function getArchivePollutionProfile(pageType: ArchivePageType): ArchivePollutionProfile {
   return archivePollutionProfiles[pageType];
 }
+import type { ProductionId } from './productions/index.ts';

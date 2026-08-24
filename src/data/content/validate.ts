@@ -1,36 +1,51 @@
+import { archiveProjectionIdentity, type ArchiveProjectionIdentity } from '../archive-pollution.ts';
 import type { BuildEditionId } from '../editions.ts';
 import { locations } from '../locations.ts';
 import { localizationPackages, type PartialLocalizationPackage } from '../localized/packages.ts';
-import { assertPerformanceOfferMatrix } from '../performance-offers.ts';
-import { performances, type Performance, type PerformanceId } from '../performances.ts';
+import {
+  assertPerformanceOfferMatrix,
+  performanceOfferMatrix,
+  ticketZoneOrder,
+  type PerformanceOfferMatrix,
+} from '../performance-offers.ts';
+import type { Performance, PerformanceId, TicketZone } from '../performances.ts';
 import {
   productionArtworkManifest,
   type ProductionArtworkManifest,
 } from '../production-artwork-manifest.ts';
-import { productions } from '../productions/index.ts';
+import { productions, type Production } from '../productions/index.ts';
 import { ticketSeatingPlans, type SeatingPlanDefinition } from '../ticket-seating-plans.ts';
 import { assertLocalizationSourceFresh } from './localization-revisions.ts';
 import { getRootPerformanceIds, type ContentRootSet, validateContentRootSet } from './root-sets.ts';
-import { selectCompleteVariant, type ContentVariantUnit } from './variants.ts';
+import {
+  getPerformanceVariantUnit,
+  performanceVariantRegistry,
+  selectCompleteVariant,
+  type PerformanceVariantRegistry,
+} from './variants.ts';
 import { assertTerraDateTime } from '../site-time.ts';
 import type { BuildContext } from './build-context.ts';
 
 export interface ContentValidationSources {
-  performances: Readonly<Record<string, Performance>>;
-  productions: Readonly<Record<string, unknown>>;
+  performanceVariants: PerformanceVariantRegistry;
+  productions: Readonly<Record<string, Production>>;
   locations: Readonly<Record<string, unknown>>;
   localizations: Readonly<Record<BuildEditionId, PartialLocalizationPackage>>;
   artwork: ProductionArtworkManifest;
   seatingPlans: Readonly<Record<string, SeatingPlanDefinition>>;
+  offerMatrix: PerformanceOfferMatrix;
+  archiveProjection: ArchiveProjectionIdentity;
 }
 
 const defaultSources: ContentValidationSources = {
-  performances,
+  performanceVariants: performanceVariantRegistry,
   productions,
   locations,
   localizations: localizationPackages,
   artwork: productionArtworkManifest,
   seatingPlans: ticketSeatingPlans,
+  offerMatrix: performanceOfferMatrix,
+  archiveProjection: archiveProjectionIdentity,
 };
 
 function assertPresent(value: unknown, path: string): void {
@@ -74,22 +89,83 @@ export function assertPerformanceVariantComplete(stableId: string, value: Perfor
   }
 }
 
+function assertFinalTicketOffers(
+  performance: Performance,
+  seatingPlan: SeatingPlanDefinition | undefined,
+): void {
+  if (performance.ticketAvailability.state !== 'on-sale') {
+    return;
+  }
+  const path = `performance.${performance.performanceId}.ticketAvailability.offers`;
+  const offers = performance.ticketAvailability.offers;
+  if (offers.length === 0) {
+    throw new Error(`${path} 不能为空。`);
+  }
+
+  const seenZones = new Set<TicketZone>();
+  let previousZoneIndex = -1;
+  let previousPrice = 0;
+  for (const offer of offers) {
+    const zoneIndex = ticketZoneOrder.indexOf(offer.zone);
+    if (zoneIndex === -1) {
+      throw new Error(`${path} 含非法分区：${String(offer.zone)}`);
+    }
+    if (seenZones.has(offer.zone)) {
+      throw new Error(`${path} 含重复分区：${offer.zone}`);
+    }
+    if (zoneIndex <= previousZoneIndex) {
+      throw new Error(`${path} 必须按 C、B、A、S、BOX 顺序排列。`);
+    }
+    if (!Number.isSafeInteger(offer.basePrice) || offer.basePrice <= 0) {
+      throw new Error(`${path}.${offer.zone} 必须是正安全整数。`);
+    }
+    if (offer.basePrice <= previousPrice) {
+      throw new Error(`${path} 的有效价格必须严格递增。`);
+    }
+    seenZones.add(offer.zone);
+    previousZoneIndex = zoneIndex;
+    previousPrice = offer.basePrice;
+  }
+
+  if (!seatingPlan) {
+    return;
+  }
+  const topologyZones = new Set(
+    seatingPlan.levels.flatMap((level) => level.regions.map((region) => region.zone)),
+  );
+  const missingOffers = [...topologyZones].filter((zone) => !seenZones.has(zone));
+  const unknownOffers = [...seenZones].filter((zone) => !topologyZones.has(zone));
+  if (missingOffers.length > 0 || unknownOffers.length > 0) {
+    throw new Error(
+      `performance.${performance.performanceId} 的报价分区与座席拓扑不一致：缺少 ${missingOffers.join('、') || '无'}；多出 ${unknownOffers.join('、') || '无'}`,
+    );
+  }
+}
+
 export function assertContentBundle(
   editionIds: readonly BuildEditionId[],
   rootSet: ContentRootSet,
+  context: BuildContext,
   sources: ContentValidationSources = defaultSources,
-  context?: BuildContext,
 ): void {
-  assertPerformanceOfferMatrix();
-  validateContentRootSet(rootSet, sources.performances, context);
+  assertPerformanceOfferMatrix(sources.offerMatrix);
   const selectedPerformances = getRootPerformanceIds(rootSet).map((performanceId) => {
-    const value = sources.performances[performanceId];
-    const unit: ContentVariantUnit<Performance> = {
-      stableId: performanceId,
-      baseline: { variantId: 'baseline', maturity: 'preview', value },
-    };
+    const unit = getPerformanceVariantUnit(performanceId, sources.performanceVariants);
+    if (!unit) {
+      throw new Error(`场次 ${performanceId} 缺少持久化内容变体。`);
+    }
     return selectCompleteVariant(unit, assertPerformanceVariantComplete).value;
   });
+  const selectedPerformanceRegistry = Object.fromEntries(
+    selectedPerformances.map((performance) => [performance.performanceId, performance]),
+  );
+  validateContentRootSet(rootSet, selectedPerformanceRegistry, sources.productions, context);
+
+  const productionIds = new Set(
+    selectedPerformances.flatMap((performance) => performance.productionIds),
+  );
+  productionIds.add(sources.archiveProjection.productionId);
+  const locationIds = new Set(selectedPerformances.map((performance) => performance.locationId));
 
   for (const performance of selectedPerformances) {
     assertPresent(sources.locations[performance.locationId], `location.${performance.locationId}`);
@@ -110,6 +186,12 @@ export function assertContentBundle(
           `seatingPlan.${performance.ticketAvailability.seatingPlanId}`,
         );
       }
+      assertFinalTicketOffers(
+        performance,
+        performance.ticketAvailability.seatingPlanId
+          ? sources.seatingPlans[performance.ticketAvailability.seatingPlanId]
+          : undefined,
+      );
     }
     for (const editionId of editionIds) {
       const package_ = sources.localizations[editionId];
@@ -133,5 +215,37 @@ export function assertContentBundle(
     }
   }
 
-  assertLocalizationSourceFresh(editionIds, sources.localizations);
+  assertPresent(
+    sources.productions[sources.archiveProjection.productionId],
+    `archiveProjection.production.${sources.archiveProjection.productionId}`,
+  );
+  assertPresent(
+    sources.artwork[sources.archiveProjection.productionId]?.archive,
+    `archiveProjection.artwork.${sources.archiveProjection.productionId}.archive`,
+  );
+  for (const editionId of editionIds) {
+    const package_ = sources.localizations[editionId];
+    assertPresent(package_?.site, `${editionId}.site`);
+    assertPresent(package_?.messages, `${editionId}.messages`);
+    assertPresent(package_?.archiveProjection, `${editionId}.archiveProjection`);
+    assertPresent(
+      package_?.programs?.productions?.[sources.archiveProjection.productionId],
+      `${editionId}.archiveProjection.production.${sources.archiveProjection.productionId}`,
+    );
+  }
+
+  assertLocalizationSourceFresh(editionIds, sources.localizations, undefined, {
+    locationEntries: [...locationIds].map((locationId) => [
+      locationId,
+      sources.locations[locationId],
+    ]),
+    performanceEntries: selectedPerformances.map((performance) => [
+      performance.performanceId,
+      performance,
+    ]),
+    productionEntries: [...productionIds].map((productionId) => [
+      productionId,
+      sources.productions[productionId],
+    ]),
+  });
 }

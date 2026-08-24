@@ -7,6 +7,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { createContentApprovalDigests } from '../src/data/content/approval-digests.ts';
+import { archiveProjectionIdentity } from '../src/data/archive-pollution.ts';
 import { assertContentContextEligible } from '../src/data/content/eligibility.ts';
 import {
   assertLocalizationSourceFresh,
@@ -19,12 +20,18 @@ import {
   assertContentBundle,
   assertPerformanceVariantComplete,
 } from '../src/data/content/validate.ts';
-import { getPerformanceVariantUnit, selectCompleteVariant } from '../src/data/content/variants.ts';
+import {
+  createBaselinePerformanceVariantRegistry,
+  getPerformanceVariantUnit,
+  performanceVariantRegistry,
+  selectCompleteVariant,
+} from '../src/data/content/variants.ts';
 import { buildContext, buildContexts, buildEditionIds, editions } from '../src/data/editions.ts';
 import { locations } from '../src/data/locations.ts';
 import { localizationPackages } from '../src/data/localized/packages.ts';
 import { diagnoseLocalization, getLocalization } from '../src/data/localized/resolve.ts';
 import { performances } from '../src/data/performances.ts';
+import { performanceOfferMatrix } from '../src/data/performance-offers.ts';
 import { productionArtworkManifest } from '../src/data/production-artwork-manifest.ts';
 import { productionArtworkRegistry } from '../src/data/production-artworks.ts';
 import { productions } from '../src/data/productions/index.ts';
@@ -45,24 +52,27 @@ function cloneArtworkManifest() {
 
 function createValidationSources(overrides = {}) {
   return {
-    performances,
+    performanceVariants: performanceVariantRegistry,
     productions,
     locations,
     localizations: localizationPackages,
     artwork: productionArtworkManifest,
     seatingPlans: ticketSeatingPlans,
+    offerMatrix: performanceOfferMatrix,
+    archiveProjection: archiveProjectionIdentity,
     ...overrides,
   };
 }
 
 function createApprovalSources(overrides = {}) {
   return {
-    performances,
+    performanceVariants: performanceVariantRegistry,
     productions,
     locations,
     localizations: localizationPackages,
     artwork: productionArtworkRegistry,
     seatingPlans: ticketSeatingPlans,
+    archiveProjection: archiveProjectionIdentity,
     ...overrides,
   };
 }
@@ -76,6 +86,18 @@ function cloneProductionArtworkRegistry() {
       ),
     ]),
   );
+}
+
+function withPreviewVariant(performanceId, value, variantId = 'test-preview') {
+  const baseline = performanceVariantRegistry[performanceId];
+  assert.ok(baseline, `测试场次 ${performanceId} 应存在基线变体`);
+  return {
+    ...performanceVariantRegistry,
+    [performanceId]: {
+      ...baseline,
+      preview: { variantId, maturity: 'preview', value },
+    },
+  };
 }
 
 function assertArtworkFiles() {
@@ -92,9 +114,7 @@ function assertArtworkFiles() {
   }
 }
 
-assert.doesNotThrow(() =>
-  assertContentBundle(buildEditionIds, currentRootSet, undefined, buildContext),
-);
+assert.doesNotThrow(() => assertContentBundle(buildEditionIds, currentRootSet, buildContext));
 assertArtworkFiles();
 assert.equal(Object.keys(performances).length, 28, '预备场次目录应包含 28 条记录');
 assert.equal(Object.keys(productions).length, 14, '预备剧目目录应包含 14 条记录');
@@ -136,6 +156,73 @@ assert.throws(
       assertPerformanceVariantComplete,
     ),
   /locationId 缺失/u,
+);
+
+const alternateDependencyId = 'procession-of-masks-londinium-1103-0214';
+const alternateDependencyPerformance = performances[alternateDependencyId];
+const alternateDependencyVariants = withPreviewVariant(alternateDependencyId, {
+  ...alternateDependencyPerformance,
+  productionIds: ['caged-fire'],
+});
+const manifestWithoutUnselectedBaseline = cloneArtworkManifest();
+delete manifestWithoutUnselectedBaseline['procession-of-masks'].front;
+assert.doesNotThrow(() =>
+  assertContentBundle(
+    ['yan'],
+    currentRootSet,
+    buildContext,
+    createValidationSources({
+      performanceVariants: alternateDependencyVariants,
+      artwork: manifestWithoutUnselectedBaseline,
+    }),
+  ),
+);
+const alternateDependencyLocalizations = structuredClone(localizationPackages);
+alternateDependencyLocalizations.yan.programs.productions[
+  alternateDependencyPerformance.productionIds[0]
+].heading += '测试';
+assert.doesNotThrow(() =>
+  assertContentBundle(
+    ['yan', 'columbia'],
+    currentRootSet,
+    buildContext,
+    createValidationSources({
+      performanceVariants: alternateDependencyVariants,
+      localizations: alternateDependencyLocalizations,
+    }),
+  ),
+);
+const manifestWithoutSelectedPreview = cloneArtworkManifest();
+delete manifestWithoutSelectedPreview['caged-fire'].front;
+assert.throws(
+  () =>
+    assertContentBundle(
+      ['yan'],
+      currentRootSet,
+      buildContext,
+      createValidationSources({
+        performanceVariants: alternateDependencyVariants,
+        artwork: manifestWithoutSelectedPreview,
+      }),
+    ),
+  /artwork\.caged-fire\.front 缺失/u,
+);
+
+const archiveOriginalId = currentRootSet.worlds.archive.performanceIds[0];
+assert.throws(
+  () =>
+    assertContentBundle(
+      ['yan'],
+      currentRootSet,
+      buildContext,
+      createValidationSources({
+        performanceVariants: withPreviewVariant(archiveOriginalId, {
+          ...performances[archiveOriginalId],
+          productionIds: ['uncrowned'],
+        }),
+      }),
+    ),
+  /只能引用 folio 剧目：uncrowned/u,
 );
 
 const staleRevisions = {
@@ -212,6 +299,86 @@ const outOfScopeSnapshot = {
   localizationPackages: packagesWithOutOfScopeChange,
 };
 assert.doesNotThrow(() => getLocalization(editions.columbia, outOfScopeSnapshot));
+assert.doesNotThrow(() =>
+  assertContentBundle(
+    ['yan', 'columbia'],
+    currentRootSet,
+    buildContext,
+    createValidationSources({ localizations: packagesWithOutOfScopeChange }),
+  ),
+);
+
+assert.throws(
+  () =>
+    assertContentBundle(
+      ['yan'],
+      currentRootSet,
+      buildContext,
+      createValidationSources({ archiveProjection: { productionId: 'uncrowned' } }),
+    ),
+  /archiveProjection\.artwork\.uncrowned\.archive 缺失/u,
+);
+
+const offersFixtureId = 'uncrowned-trimount-1102';
+const offersFixture = performances[offersFixtureId];
+assert.equal(offersFixture.ticketAvailability.state, 'on-sale');
+for (const [label, offers, expectation] of [
+  [
+    'duplicate',
+    [offersFixture.ticketAvailability.offers[0], offersFixture.ticketAvailability.offers[0]],
+    /含重复分区：C/u,
+  ],
+  [
+    'negative',
+    [{ ...offersFixture.ticketAvailability.offers[0], basePrice: -1 }],
+    /必须是正安全整数/u,
+  ],
+  [
+    'topology-missing',
+    offersFixture.ticketAvailability.offers.slice(0, -1),
+    /报价分区与座席拓扑不一致：缺少 BOX/u,
+  ],
+]) {
+  assert.throws(
+    () =>
+      assertContentBundle(
+        ['yan'],
+        currentRootSet,
+        buildContext,
+        createValidationSources({
+          performanceVariants: withPreviewVariant(
+            offersFixtureId,
+            {
+              ...offersFixture,
+              ticketAvailability: {
+                ...offersFixture.ticketAvailability,
+                offers,
+              },
+            },
+            `offers-${label}`,
+          ),
+        }),
+      ),
+    expectation,
+  );
+}
+
+assert.throws(
+  () =>
+    assertContentBundle(
+      ['yan'],
+      currentRootSet,
+      buildContext,
+      createValidationSources({
+        offerMatrix: {
+          'der-ring': {
+            'zwillingsturme-mirror-lake-hall': [-1, 280, 450, 720, 1180],
+          },
+        },
+      }),
+    ),
+  /performanceOffers\.der-ring\.zwillingsturme-mirror-lake-hall\.C 必须是正整数/u,
+);
 
 const manifestWithoutRequiredArtwork = cloneArtworkManifest();
 delete manifestWithoutRequiredArtwork.uncrowned.front;
@@ -220,6 +387,7 @@ assert.throws(
     assertContentBundle(
       ['yan'],
       currentRootSet,
+      buildContext,
       createValidationSources({ artwork: manifestWithoutRequiredArtwork }),
     ),
   /artwork\.uncrowned\.front 缺失/u,
@@ -232,6 +400,7 @@ assert.throws(
     assertContentBundle(
       ['yan'],
       currentRootSet,
+      buildContext,
       createValidationSources({ seatingPlans: seatingPlansWithoutRequiredPlan }),
     ),
   /seatingPlan\.trimount-grand-fan 缺失/u,
@@ -253,6 +422,7 @@ assert.throws(
     assertContentBundle(
       ['yan'],
       currentRootSet,
+      buildContext,
       createValidationSources({ localizations: localizationWithoutPerformance }),
     ),
   new RegExp(`yan\\.performances\\.${fixtureId} 缺失`, 'u'),
@@ -261,6 +431,15 @@ assert.throws(
 const currentDigests = createContentApprovalDigests(
   buildContexts.release.editionIds,
   currentRootSet,
+);
+const alternateDependencyDigests = createContentApprovalDigests(
+  buildContexts.release.editionIds,
+  currentRootSet,
+  createApprovalSources({ performanceVariants: alternateDependencyVariants }),
+);
+assert.notEqual(
+  alternateDependencyDigests.performances[alternateDependencyId],
+  currentDigests.performances[alternateDependencyId],
 );
 const currentApprovals = {
   site: currentDigests.site,
@@ -287,10 +466,10 @@ assert.throws(
 );
 
 const changedPerformanceSources = createApprovalSources({
-  performances: {
+  performanceVariants: createBaselinePerformanceVariantRegistry({
     ...performances,
     [fixtureId]: { ...fixturePerformance, status: 'pending' },
-  },
+  }),
 });
 const changedBodyDigests = createContentApprovalDigests(
   buildContexts.release.editionIds,

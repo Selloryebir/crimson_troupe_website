@@ -35,7 +35,10 @@ const featuredProduction = featuredPerformance
   ? getLocalizedProduction(localization, featuredPerformance.productionIds[0])
   : undefined;
 const projection = localization.archiveProjection.performance;
-const projectionProduction = getLocalizedProduction(localization, 'the-carnival');
+const projectionProduction = getLocalizedProduction(
+  localization,
+  buildSnapshot.archiveProjectionProductionId,
+);
 ---
 
 <ArchiveLayout

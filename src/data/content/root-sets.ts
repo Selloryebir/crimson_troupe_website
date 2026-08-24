@@ -92,7 +92,8 @@ export function validateContentRootSet(
       }
     >
   >,
-  context?: BuildContext,
+  knownProductions: Readonly<Record<string, { sourceKind: 'folio' | 'original' }>>,
+  context: BuildContext,
 ): void {
   const allIds = getRootPerformanceIds(rootSet);
   const duplicates = allIds.filter((id, index) => allIds.indexOf(id) !== index);
@@ -124,21 +125,29 @@ export function validateContentRootSet(
     }
 
     const productionAppearances = new Map<string, number>();
-    const siteTerraNow = context ? getSiteTerraNow(world, context) : undefined;
+    const siteTerraNow = getSiteTerraNow(world, context);
     for (const performanceId of roots.performanceIds) {
       const performance = knownPerformances[performanceId];
       if (!performance) {
         continue;
       }
-      if (
-        siteTerraNow &&
-        !isWithinPerformanceVisibilityWindow(performance.effectiveDateTime, siteTerraNow)
-      ) {
+      if (!isWithinPerformanceVisibilityWindow(performance.effectiveDateTime, siteTerraNow)) {
         throw new Error(
           `根集合 ${rootSet.rootSetId} 的 ${performanceId} 超出 ${world} 前后一年窗口。`,
         );
       }
       for (const productionId of performance.productionIds) {
+        const production = knownProductions[productionId];
+        if (!production) {
+          throw new Error(
+            `根集合 ${rootSet.rootSetId} 的 ${performanceId} 引用未知剧目：${productionId}`,
+          );
+        }
+        if (world === 'archive' && production.sourceKind !== 'folio') {
+          throw new Error(
+            `根集合 ${rootSet.rootSetId} 的里站场次 ${performanceId} 只能引用 folio 剧目：${productionId}`,
+          );
+        }
         productionAppearances.set(productionId, (productionAppearances.get(productionId) ?? 0) + 1);
       }
     }

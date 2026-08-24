@@ -6,14 +6,14 @@ import {
   type BuiltEdition,
   type EditionId,
 } from '../editions.ts';
+import { archiveProjectionIdentity } from '../archive-pollution.ts';
 import { locations, type Location, type LocationId } from '../locations.ts';
 import { localizationPackages, type PartialLocalizationPackage } from '../localized/packages.ts';
-import {
-  performances,
-  type Performance,
-  type PerformanceCollection,
-  type PerformanceId,
-  type TicketAvailability,
+import type {
+  Performance,
+  PerformanceCollection,
+  PerformanceId,
+  TicketAvailability,
 } from '../performances.ts';
 import { productions, type Production, type ProductionId } from '../productions/index.ts';
 import { getRegisteredProductionArtwork, type ProductionArtwork } from '../production-artworks.ts';
@@ -63,6 +63,7 @@ export interface ContentSnapshot {
   seatingPlanEntries: readonly (readonly [SeatingPlanId, Readonly<SeatingPlanDefinition>])[];
   seatingPlans: Readonly<Partial<Record<SeatingPlanId, Readonly<SeatingPlanDefinition>>>>;
   featuredPerformanceIds: Readonly<Record<SiteWorld, PerformanceId>>;
+  archiveProjectionProductionId: ProductionId;
 }
 
 function cloneTicketAvailability(value: TicketAvailability): TicketAvailability {
@@ -124,9 +125,6 @@ export function resolveContent(
   rootSetRegistry: ContentRootSetRegistry = contentRootSets,
 ): ContentSnapshot {
   const rootSet = getContentRootSet(context.rootSetId, rootSetRegistry);
-  validateContentRootSet(rootSet, performances, context);
-  assertContentContextEligible(context, rootSet);
-
   const performanceEntries = getRootPerformanceIds(rootSet).map((performanceId) => {
     const variantUnit = getPerformanceVariantUnit(performanceId);
     if (!variantUnit) {
@@ -143,8 +141,15 @@ export function resolveContent(
       Object.freeze({ ...clonedPerformance, collection }),
     ] as const);
   });
+  const selectedPerformanceRegistry = Object.fromEntries(performanceEntries);
+  validateContentRootSet(rootSet, selectedPerformanceRegistry, productions, context);
+  assertContentContextEligible(context, rootSet);
+
   const productionIds = [
-    ...new Set(performanceEntries.flatMap(([, performance]) => performance.productionIds)),
+    ...new Set([
+      ...performanceEntries.flatMap(([, performance]) => performance.productionIds),
+      archiveProjectionIdentity.productionId,
+    ]),
   ];
   const locationIds = [
     ...new Set(performanceEntries.map(([, performance]) => performance.locationId)),
@@ -170,11 +175,12 @@ export function resolveContent(
     ),
   ) as ContentSnapshot['localizationPackages'];
   const artworkKeys = [
-    ...new Set(
-      performanceEntries.flatMap(([, performance]) =>
+    ...new Set([
+      ...performanceEntries.flatMap(([, performance]) =>
         performance.productionIds.map((productionId) => `${productionId}:${performance.world}`),
       ),
-    ),
+      `${archiveProjectionIdentity.productionId}:archive`,
+    ]),
   ];
   const artworkEntries = artworkKeys.map((key) => {
     const [productionId, world] = key.split(':') as [ProductionId, SiteWorld];
@@ -223,6 +229,7 @@ export function resolveContent(
       front: rootSet.worlds.front.featuredPerformanceId,
       archive: rootSet.worlds.archive.featuredPerformanceId,
     }),
+    archiveProjectionProductionId: archiveProjectionIdentity.productionId,
   });
 }
 
