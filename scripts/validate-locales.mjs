@@ -262,9 +262,33 @@ for (const zone of ['C', 'B', 'A']) {
     `诺伯特郡 ${zone} 区应低于两座正式剧院`,
   );
 }
-assert.equal(ticketSeatingPlans['trimount-grand-fan'].levels.length, 3);
-assert.equal(ticketSeatingPlans['wiesheim-mirror-horseshoe'].levels.length, 3);
-assert.equal(ticketSeatingPlans['norport-temporary-stand'].levels.length, 1);
+const seatingPlanExpectations = {
+  'trimount-grand-fan': { levels: 3, zones: ['C', 'B', 'A', 'S', 'BOX'] },
+  'wiesheim-mirror-horseshoe': { levels: 3, zones: ['C', 'B', 'A', 'S', 'BOX'] },
+  'norport-temporary-stand': { levels: 1, zones: ['C', 'B', 'A'] },
+  'montelupe-banquet-horseshoe': { levels: 2, zones: ['C', 'B', 'A', 'S', 'BOX'] },
+  'linqu-courtyard-fan': { levels: 1, zones: ['C', 'B', 'A', 'S'] },
+  'londinium-grand-tiers': { levels: 3, zones: ['C', 'B', 'A', 'S', 'BOX'] },
+  'qingsui-opera-courtyard': { levels: 3, zones: ['C', 'B', 'A', 'S'] },
+};
+assert.equal(
+  Object.keys(ticketSeatingPlans).length,
+  Object.keys(seatingPlanExpectations).length,
+  '每张已注册分区示意都必须拥有结构预期',
+);
+for (const [seatingPlanId, expectation] of Object.entries(seatingPlanExpectations)) {
+  const plan = ticketSeatingPlans[seatingPlanId];
+  assert.ok(plan, `${seatingPlanId} 缺少分区示意`);
+  assert.equal(plan.levels.length, expectation.levels, `${seatingPlanId} 的楼层数量不符`);
+  const actualZones = [
+    ...new Set(plan.levels.flatMap(({ regions }) => regions.map(({ zone }) => zone))),
+  ].sort();
+  assert.deepEqual(
+    actualZones,
+    [...expectation.zones].sort(),
+    `${seatingPlanId} 的可见分区集合不符`,
+  );
+}
 
 for (const edition of builtEditions) {
   const localization = getLocalization(edition);
