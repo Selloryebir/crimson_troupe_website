@@ -11,12 +11,22 @@ interface Props {
   scopeLabel: string;
   placeholder: string;
   locale: string;
+  minimumQueryGraphemes: number;
   messages: SearchMessages;
   archiveProjection?: SiteSearchProjection;
 }
 
-const { entries, world, scopeId, scopeLabel, placeholder, locale, messages, archiveProjection } =
-  Astro.props;
+const {
+  entries,
+  world,
+  scopeId,
+  scopeLabel,
+  placeholder,
+  locale,
+  minimumQueryGraphemes,
+  messages,
+  archiveProjection,
+} = Astro.props;
 ---
 
 <section
@@ -24,6 +34,7 @@ const { entries, world, scopeId, scopeLabel, placeholder, locale, messages, arch
   data-site-search
   data-search-index={JSON.stringify(entries)}
   data-search-locale={locale}
+  data-search-minimum-graphemes={minimumQueryGraphemes}
   data-search-scope={scopeId}
   data-search-messages={JSON.stringify(messages)}
   data-search-archive-projection={archiveProjection ? JSON.stringify(archiveProjection) : undefined}
@@ -43,11 +54,16 @@ const { entries, world, scopeId, scopeLabel, placeholder, locale, messages, arch
           type="search"
           autocomplete="off"
           placeholder={placeholder}
+          aria-describedby="site-search-guidance"
           data-search-input
         />
         <button type="submit">{messages.submit}</button>
       </div>
-      <p>{formatMessage(messages.scope, { scope: scopeLabel })}</p>
+      <p id="site-search-guidance">
+        {formatMessage(messages.scope, { scope: scopeLabel })}
+        {' · '}
+        {formatMessage(messages.minimumQuery, { count: minimumQueryGraphemes })}
+      </p>
     </form>
     <div class="search-feedback" data-search-feedback aria-live="polite">
       <p>{messages.prompt}</p>

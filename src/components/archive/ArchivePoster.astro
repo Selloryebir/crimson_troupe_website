@@ -83,7 +83,8 @@ const projectionArtworkAsset = projection
             ? '(max-width: 620px) calc(100vw - 28px), (max-width: 960px) 160px, 180px'
             : '(max-width: 620px) calc(100vw - 48px), (max-width: 960px) min(590px, calc(100vw - 36px)), 590px'
         }
-        loading={compact ? 'lazy' : 'eager'}
+        loading="lazy"
+        fetchpriority="low"
         decoding="async"
         style={`object-position: ${projectionArtwork.focalPoint}`}
       />

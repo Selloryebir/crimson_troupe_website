@@ -147,4 +147,4 @@ export const minosFolioProductions = {
       ['Σκηνή', 'Εργαστήριο μακράς στοάς'],
     ],
   },
-} as const satisfies Record<FolioProductionId, ProductionContent>;
+} as const satisfies Partial<Record<FolioProductionId, ProductionContent>>;

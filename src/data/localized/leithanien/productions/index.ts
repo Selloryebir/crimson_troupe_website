@@ -6,4 +6,4 @@ import { leithanienOriginalProductions } from './original.ts';
 export const leithanienProductions = {
   ...leithanienFolioProductions,
   ...leithanienOriginalProductions,
-} satisfies Record<ProductionId, ProductionContent>;
+} satisfies Partial<Record<ProductionId, ProductionContent>>;

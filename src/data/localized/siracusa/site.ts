@@ -43,7 +43,7 @@ export const siracusaSite = {
       troupeKeywords: 'tournée di pratica creativa aziendale',
       ticketsTitle: 'Biglietti',
       ticketsSummary:
-        "Scegli gli spettacoli e le zone dei posti a sedere per accedere all'esperienza di biglietteria simulata.",
+        'Scegli gli spettacoli e le zone dei posti, quindi invia la richiesta tramite il partner di biglietteria.',
       ticketsKeywords: 'biglietti posti prenotazione zona biglietto commemorativo',
     },
     home: {

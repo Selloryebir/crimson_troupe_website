@@ -6,19 +6,20 @@ import {
   type BuiltEdition,
   type EditionId,
 } from '../editions.ts';
+import { archiveProjectionIdentity } from '../archive-pollution.ts';
 import { locations, type Location, type LocationId } from '../locations.ts';
 import { localizationPackages, type PartialLocalizationPackage } from '../localized/packages.ts';
-import {
-  performances,
-  type Performance,
-  type PerformanceCollection,
-  type PerformanceId,
-  type TicketAvailability,
-} from '../performances.ts';
+import { getTicketArtifactEditionIds } from '../localized/ticket-artifact.ts';
+import type { Performance, PerformanceCollection, PerformanceId } from '../performances.ts';
 import { productions, type Production, type ProductionId } from '../productions/index.ts';
 import { getRegisteredProductionArtwork, type ProductionArtwork } from '../production-artworks.ts';
 import type { SiteWorld } from '../site-routes.ts';
 import { derivePerformanceCollection, getSiteTerraNow } from '../site-time.ts';
+import {
+  ticketingPlatforms,
+  type TicketingPlatformDefinition,
+  type TicketingPlatformId,
+} from '../ticketing-platforms.ts';
 import {
   getRegisteredTicketSeatingPlan,
   type SeatingPlanDefinition,
@@ -47,6 +48,7 @@ export interface ContentSnapshot {
   rootSet: ContentRootSet;
   editionIds: readonly BuiltEdition['editionId'][];
   editions: readonly BuiltEdition[];
+  localizationPackageEditionIds: readonly BuiltEdition['editionId'][];
   performanceEntries: readonly (readonly [PerformanceId, Readonly<SnapshotPerformance>])[];
   performances: Readonly<Partial<Record<PerformanceId, Readonly<SnapshotPerformance>>>>;
   productionEntries: readonly (readonly [ProductionId, Readonly<Production>])[];
@@ -62,34 +64,31 @@ export interface ContentSnapshot {
   >;
   seatingPlanEntries: readonly (readonly [SeatingPlanId, Readonly<SeatingPlanDefinition>])[];
   seatingPlans: Readonly<Partial<Record<SeatingPlanId, Readonly<SeatingPlanDefinition>>>>;
+  ticketingPlatformEntries: readonly (readonly [
+    TicketingPlatformId,
+    Readonly<TicketingPlatformDefinition>,
+  ])[];
+  ticketingPlatforms: Readonly<
+    Partial<Record<TicketingPlatformId, Readonly<TicketingPlatformDefinition>>>
+  >;
   featuredPerformanceIds: Readonly<Record<SiteWorld, PerformanceId>>;
+  homepagePerformanceIds: Readonly<Record<SiteWorld, readonly PerformanceId[]>>;
+  archiveProjectionProductionId: ProductionId;
 }
 
-function cloneTicketAvailability(value: TicketAvailability): TicketAvailability {
-  if (value.state !== 'on-sale') {
-    return Object.freeze({ ...value });
-  }
-  return Object.freeze({
-    ...value,
-    offers: Object.freeze(value.offers.map((offer) => Object.freeze({ ...offer }))),
-  });
-}
-
-function clonePerformance(value: Performance): Readonly<Performance> {
-  const productionIds = Object.freeze([
-    value.productionIds[0],
-    ...value.productionIds.slice(1),
-  ] as const);
-  return Object.freeze({
-    ...value,
-    effectiveDateTime: Object.freeze({ ...value.effectiveDateTime }),
-    previousDateTime: value.previousDateTime
-      ? Object.freeze({ ...value.previousDateTime })
-      : undefined,
-    notice: value.notice ? Object.freeze({ ...value.notice }) : undefined,
-    productionIds,
-    ticketAvailability: cloneTicketAvailability(value.ticketAvailability),
-  });
+function cloneImmutable<T>(value: T): T {
+  const clone = structuredClone(value);
+  const freeze = (candidate: unknown): void => {
+    if (!candidate || typeof candidate !== 'object' || Object.isFrozen(candidate)) {
+      return;
+    }
+    for (const nested of Object.values(candidate)) {
+      freeze(nested);
+    }
+    Object.freeze(candidate);
+  };
+  freeze(clone);
+  return clone;
 }
 
 function toReadonlyRecord<K extends string, V>(
@@ -124,27 +123,27 @@ export function resolveContent(
   rootSetRegistry: ContentRootSetRegistry = contentRootSets,
 ): ContentSnapshot {
   const rootSet = getContentRootSet(context.rootSetId, rootSetRegistry);
-  validateContentRootSet(rootSet, performances, context);
-  assertContentContextEligible(context, rootSet);
-
   const performanceEntries = getRootPerformanceIds(rootSet).map((performanceId) => {
     const variantUnit = getPerformanceVariantUnit(performanceId);
     if (!variantUnit) {
       throw new Error(`场次 ${performanceId} 缺少持久化内容变体。`);
     }
     const performance = selectCompleteVariant(variantUnit, assertPerformanceVariantComplete).value;
-    const clonedPerformance = clonePerformance(performance);
     const collection = derivePerformanceCollection(
-      clonedPerformance.effectiveDateTime,
-      getSiteTerraNow(clonedPerformance.world, context),
+      performance.effectiveDateTime,
+      getSiteTerraNow(performance.world, context),
     );
-    return Object.freeze([
-      performanceId,
-      Object.freeze({ ...clonedPerformance, collection }),
-    ] as const);
+    return Object.freeze([performanceId, Object.freeze({ ...performance, collection })] as const);
   });
+  const selectedPerformanceRegistry = Object.fromEntries(performanceEntries);
+  validateContentRootSet(rootSet, selectedPerformanceRegistry, productions, context);
+  assertContentContextEligible(context, rootSet);
+
   const productionIds = [
-    ...new Set(performanceEntries.flatMap(([, performance]) => performance.productionIds)),
+    ...new Set([
+      ...performanceEntries.flatMap(([, performance]) => performance.productionIds),
+      archiveProjectionIdentity.productionId,
+    ]),
   ];
   const locationIds = [
     ...new Set(performanceEntries.map(([, performance]) => performance.locationId)),
@@ -161,20 +160,31 @@ export function resolveContent(
     }
     return editions[editionId];
   });
+  const venueTicketArtifactEditionIds = performanceEntries.flatMap(([, performance]) => {
+    if (performance.world !== 'front' || performance.ticketAvailability.state !== 'on-sale') {
+      return [];
+    }
+    return [locations[performance.locationId].countryEditionId];
+  });
+  const localizationPackageEditionIds = venueTicketArtifactEditionIds.reduce(
+    (editionIds, venueEditionId) => getTicketArtifactEditionIds(editionIds, venueEditionId),
+    context.editionIds,
+  );
   const snapshotLocalizationPackages = Object.freeze(
     Object.fromEntries(
-      snapshotEditions.map((edition) => [
-        edition.editionId,
-        localizationPackages[edition.editionId],
+      localizationPackageEditionIds.map((editionId) => [
+        editionId,
+        localizationPackages[editionId],
       ]),
     ),
   ) as ContentSnapshot['localizationPackages'];
   const artworkKeys = [
-    ...new Set(
-      performanceEntries.flatMap(([, performance]) =>
+    ...new Set([
+      ...performanceEntries.flatMap(([, performance]) =>
         performance.productionIds.map((productionId) => `${productionId}:${performance.world}`),
       ),
-    ),
+      `${archiveProjectionIdentity.productionId}:archive`,
+    ]),
   ];
   const artworkEntries = artworkKeys.map((key) => {
     const [productionId, world] = key.split(':') as [ProductionId, SiteWorld];
@@ -201,13 +211,17 @@ export function resolveContent(
       Object.freeze(getRegisteredTicketSeatingPlan(seatingPlanId)),
     ] as const),
   );
+  const ticketingPlatformEntries = Object.entries(ticketingPlatforms) as Array<
+    [TicketingPlatformId, TicketingPlatformDefinition]
+  >;
 
-  return Object.freeze({
+  return cloneImmutable({
     context,
     maturity: 'preview',
     rootSet,
     editionIds: Object.freeze(context.editionIds),
     editions: Object.freeze(snapshotEditions),
+    localizationPackageEditionIds: Object.freeze(localizationPackageEditionIds),
     performanceEntries: Object.freeze(performanceEntries),
     performances: toReadonlyRecord(performanceEntries),
     productionEntries: Object.freeze(productionEntries),
@@ -219,10 +233,17 @@ export function resolveContent(
     artworks: toArtworkRecord(artworkEntries),
     seatingPlanEntries: Object.freeze(seatingPlanEntries),
     seatingPlans: toReadonlyRecord(seatingPlanEntries),
+    ticketingPlatformEntries: Object.freeze(ticketingPlatformEntries),
+    ticketingPlatforms: toReadonlyRecord(ticketingPlatformEntries),
     featuredPerformanceIds: Object.freeze({
       front: rootSet.worlds.front.featuredPerformanceId,
       archive: rootSet.worlds.archive.featuredPerformanceId,
     }),
+    homepagePerformanceIds: Object.freeze({
+      front: Object.freeze(rootSet.worlds.front.homepagePerformanceIds),
+      archive: Object.freeze(rootSet.worlds.archive.homepagePerformanceIds),
+    }),
+    archiveProjectionProductionId: archiveProjectionIdentity.productionId,
   });
 }
 
@@ -239,6 +260,13 @@ export function getSnapshotSeatingPlan(
   seatingPlanId: SeatingPlanId,
 ): Readonly<SeatingPlanDefinition> | undefined {
   return snapshot.seatingPlans[seatingPlanId];
+}
+
+export function getSnapshotTicketingPlatform(
+  snapshot: ContentSnapshot,
+  platformId: TicketingPlatformId,
+): Readonly<TicketingPlatformDefinition> | undefined {
+  return snapshot.ticketingPlatforms[platformId];
 }
 
 export function getWorldPerformanceEntries(

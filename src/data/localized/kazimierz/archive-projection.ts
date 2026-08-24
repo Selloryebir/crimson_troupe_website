@@ -1,7 +1,11 @@
 import type { ArchiveProjectionContent } from '../schema.ts';
 
 export const kazimierzArchiveProjection = {
-  statusAnnouncement: 'Każdy rekord na stronie natychmiast poprawił swoje miejsce docelowe.',
+  statusAnnouncements: [
+    'W archiwum pojawiła się nieprawidłowość.',
+    'Relacje między zapisami ulegają zmianie.',
+    'Wszystkie zapisy na stronie wskazują teraz ten sam cel.',
+  ],
   performance: {
     title: 'Karnawał',
     kind: 'Końcowy występ',

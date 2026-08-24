@@ -6,4 +6,4 @@ import { higashiOriginalProductions } from './original.ts';
 export const higashiProductions = {
   ...higashiFolioProductions,
   ...higashiOriginalProductions,
-} satisfies Record<ProductionId, ProductionContent>;
+} satisfies Partial<Record<ProductionId, ProductionContent>>;

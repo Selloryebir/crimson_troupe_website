@@ -1,5 +1,11 @@
 import type { LocalizedShape } from '../schema';
 import type { yanMessages } from '../yan/messages';
+import type { yanTicketingPlatforms } from '../yan/messages';
+
+export const ursusTicketingPlatforms = {
+  'rice-network': { displayName: 'Рисовая сеть', logoAlt: 'Временный знак Рисовой сети' },
+  'drop-tower': { displayName: 'Башня падения', logoAlt: 'Временный знак Башни падения' },
+} as const satisfies LocalizedShape<typeof yanTicketingPlatforms>;
 
 export const ursusMessages = {
   filters: {
@@ -18,6 +24,7 @@ export const ursusMessages = {
     scope: 'Область поиска: {scope}',
     unavailable: 'Поисковый индекс временно недоступен. Продолжите с главной навигации.',
     prompt: 'Введите запрос для поиска спектаклей, постановок и страниц.',
+    minimumQuery: 'Введите не менее {count} символов.',
     resultCount: 'Найдено результатов: {count}.',
     noResults: 'Подходящих материалов не найдено.',
     noscriptTitle: 'Для поиска требуется JavaScript',
@@ -25,6 +32,14 @@ export const ursusMessages = {
       'Страница не отправляет запрос и не загружает удалённую службу. Спектакли и сведения о театре доступны через навигацию.',
   },
   ticketing: {
+    partnerPageEyebrow: 'ОФИЦИАЛЬНЫЙ БИЛЕТНЫЙ ПАРТНЁР',
+    partnerPageTitle: 'Сервис мест: {platform}',
+    partnerPageIntroduction:
+      'Сайт труппы передал корзину билетному партнёру. Завершите здесь запрос мест или вернитесь к корзине до подтверждения.',
+    partnerUnavailableTitle: 'Подключение пока недоступно',
+    partnerUnavailableCopy:
+      'Рисовая сеть сейчас не принимает новые запросы мест. Корзина сохранена на сайте труппы.',
+    returnToBasket: 'Вернуться к корзине труппы',
     selectedCount: 'Выбрано спектаклей: {count}',
     emptyBasket: 'Спектакли не выбраны',
     selectionReady: 'Спектакль и зона мест добавлены в корзину.',
@@ -38,13 +53,20 @@ export const ursusMessages = {
     seatingPlanNotice:
       'Это схема зон, а не выбор отдельного кресла. На схеме и в списке используются одинаковые значения.',
     selectSeatingZone: 'Выбрать {zone}, базовая цена {price} LMD',
-    receiptEyebrow: 'ИМИТАЦИЯ КВИТАНЦИИ',
+    receiptEyebrow: 'ЗАПИСЬ О РАСПРЕДЕЛЕНИИ МЕСТ',
     receiptTitle: 'Квитанция регистрации мест',
-    receiptCopy:
-      'Запрос подтверждён. Суммы и места относятся только к этой имитации билетного сервиса.',
-    baseTotal: 'Базовая сумма',
-    adjustmentNone: 'Нет',
-    settledTotal: 'Итоговая условная сумма',
+    receiptCopy: 'Запрос подтверждён. Проверьте назначенные места и сумму к оплате.',
+    receiptAcceptedAt: 'Время принятия',
+    receiptChannel: 'Канал распределения',
+    receiptStatus: 'Статус принятия',
+    receiptStatusAllocated: 'Места распределены',
+    receiptPerformance: 'Место на спектакль',
+    receiptSchedule: 'Время спектакля',
+    receiptVenue: 'Место проведения',
+    receiptZone: 'Зона мест',
+    receiptFaceValue: 'Стоимость места',
+    ticketSubtotal: 'Промежуточная сумма билетов',
+    amountDue: 'Итого к оплате',
     disclaimer: 'Только игровой материал. Квитанция не создаёт обязательств по обмену.',
     ticketNumber: 'Билет № {number}',
     downloadSvg: 'Скачать SVG',
@@ -58,14 +80,14 @@ export const ursusMessages = {
     premiumAttemptCopy:
       'Канал обещает улучшить место в очереди и при успехе добавляет сервисную наценку. Результат всё равно не гарантирован.',
     submitRequest: 'Подтвердить и отправить',
-    backToBasket: 'Вернуться в корзину',
+    backToBasket: 'Вернуться к корзине труппы',
     networkTitle: 'Сеть перестала отвечать до подтверждения',
     networkCopy:
-      'Расчёт не создан, корзина сохранена без изменений. Повторите попытку по тому же маршруту.',
-    retryBasket: 'Сохранить корзину и повторить',
+      'Места не распределены, корзина сохранена без изменений. Отправьте запрос через Рисовую сеть ещё раз.',
+    retryBasket: 'Повторить через Рисовую сеть',
     premiumFailureTitle: 'Приоритетный канал не нашёл мест',
     premiumFailureCopy:
-      'Места не найдены, но оформлена условная запись об услуге поиска. Корзина и базовые цены не изменились.',
+      'Места не найдены, но оформлена запись о приёме поиска мест. Корзина и цены билетов не изменились.',
     premiumOfferTitle: 'Общий канал возвращённых мест предлагает новый поиск',
     premiumOfferCopy:
       'Канал изменит порядок запроса и при успехе добавит наценку в 50% от базовой суммы. Место не гарантируется.',
@@ -75,50 +97,41 @@ export const ursusMessages = {
     standardFailureTitle: 'Высокая нагрузка: запрос не выполнен',
     standardFailureCopy:
       'Сохраните корзину и отправьте запрос снова или попробуйте приоритетный маршрут с доплатой при успехе.',
-    retryStandard: 'Повторить обычный маршрут',
-    tryPremium: 'Рассмотреть предложение возвращённых мест',
+    retryStandard: 'Повторить через «Рисовая сеть» по исходной цене',
+    tryPremium: 'Посмотреть план с наценкой от «Башня падения»',
     acceptPremium: 'Принять предложение 150% и искать снова',
     declinePremium: 'Отклонить предложение',
     acceptRetention: 'Принять последнее предложение 148%',
     declineRetention: 'Окончательно отказаться и вернуться',
-    retryPremium: 'Повторить приоритетный маршрут',
-    returnStandard: 'Отменить наценку и вернуться к обычному маршруту',
-    offerBaseTotal: 'Базовая сумма корзины',
-    offerAdjustment: 'Условная сервисная наценка',
-    offerFinalTotal: 'Текущее условное предложение',
-    failureRecordTitle: 'Запись о неудачной услуге',
+    retryPremium: 'Повторить текущий план Башни падения',
+    returnStandard: 'Отклонить наценку и вернуться в Рисовую сеть',
+    offerBaseTotal: 'Промежуточная сумма билетов',
+    offerAdjustment: 'Услуга приоритетного распределения мест',
+    offerFinalTotal: 'Сумма предложения к оплате',
+    failureRecordTitle: 'Запись о приёме поиска мест',
     allocatedSeats: 'Назначенные места',
-    failureServiceFee: 'Условная плата за поиск',
+    failureServiceFee: 'Плата за приём поиска мест',
     failureRecordDisclaimer:
       'Реального списания не было. Запись не создаёт квитанцию, памятный билет или обязательство по обмену.',
     startRequired: 'Сначала выберите хотя бы один спектакль.',
-    submitted: 'Корзина отправлена. Запущен имитируемый билетный процесс.',
+    submitted: 'Корзина отправлена. Рисовая сеть проверяет места.',
     success: 'Оформление завершено. Памятные билеты готовы.',
-    stateUpdated: 'Состояние оформления обновлено.',
+    stateUpdated: 'Состояние запроса мест обновлено.',
     downloadStarted: 'Начато скачивание билета на {title}.',
-    newRound: 'Предыдущий раунд завершён. Можно сделать новый выбор.',
+    newRound: 'Предыдущий запрос мест завершён. Можно сделать новый выбор.',
     adjustments: {
-      'priority-service': 'Наценка приоритетного сервиса',
-      'retention-service': 'Наценка последнего предложения',
-    },
-    stamps: {
-      'admission-confirmed': 'ВХОД ПОДТВЕРЖДЁН',
-      'standard-route': 'ОБЫЧНЫЙ МАРШРУТ',
-      'priority-route': 'ПРИОРИТЕТНЫЙ МАРШРУТ',
-      'network-recovered': 'СЕТЬ ВОССТАНОВЛЕНА',
-      'returned-seat': 'ВОЗВРАЩЁННОЕ МЕСТО',
-      'retention-offer': 'ПОСЛЕДНЕЕ ПРЕДЛОЖЕНИЕ',
-      'manual-review': 'РУЧНАЯ ПРОВЕРКА',
+      'priority-service': 'Услуга приоритетного распределения мест',
+      'retention-service': 'Скидка за немедленное подтверждение',
     },
     artifact: {
       title: 'Памятный билет: {title}',
       description: '{dateTime}, {place}, {zone}, {price} LMD, билет № {number}',
       header: 'БАГРЯНАЯ ТРУППА · ПАМЯТНЫЙ ПРОПУСК',
-      dateTime: 'ДАТА И ВРЕМЯ TERRA',
+      dateTime: 'ДАТА И ВРЕМЯ',
       zone: 'ЗОНА',
       faceValue: 'БАЗОВАЯ НОМИНАЛЬНАЯ ЦЕНА',
       ticketNumber: 'НОМЕР БИЛЕТА',
-      alt: 'Памятный билет {title}: {dateTime}, {place}, {zone}, {price} LMD, номер билета и матрица {number}',
+      alt: 'Памятный билет {title}: {dateTime}, {place}, {zone}, {price} LMD, номер билета {number}',
     },
   },
   programs: {

@@ -5,7 +5,9 @@ import {
   derivePollutionComposition,
   MAX_POLLUTION_LEVEL,
   parsePollutionState,
+  type PollutionLevel,
   type PollutionState,
+  type PollutionTransition,
   type PollutionTrigger,
   type PollutionVariant,
 } from './pollution-state.ts';
@@ -17,6 +19,12 @@ const PENDING_LIFETIME_MS = 30_000;
 interface PendingNavigation {
   targetPath: string;
   expiresAt: number;
+  announcementLevel?: PollutionLevel;
+}
+
+interface ConsumedNavigation {
+  matched: boolean;
+  announcementLevel?: PollutionLevel;
 }
 
 function randomVariant(): PollutionVariant {
@@ -73,6 +81,10 @@ function clearState(storage: Storage | null): void {
   document.documentElement.removeAttribute('data-pollution-level');
   document.documentElement.removeAttribute('data-pollution-variant');
   document.documentElement.removeAttribute('data-pollution-composition');
+  const status = document.querySelector<HTMLElement>('[data-pollution-status]');
+  if (status) {
+    status.textContent = '';
+  }
   if (!storage) {
     return;
   }
@@ -93,23 +105,42 @@ function applyState(state: PollutionState): void {
   );
 }
 
-function requestTransition(storage: Storage | null, trigger: PollutionTrigger): PollutionState {
+function announcePollutionLevel(level: PollutionLevel): void {
+  if (level === 0) {
+    return;
+  }
+  const status = document.querySelector<HTMLElement>('[data-pollution-status]');
+  const announcement = status?.dataset[`pollutionAnnouncementLevel${level}`];
+  if (status && announcement) {
+    status.textContent = announcement;
+  }
+}
+
+function requestTransition(
+  storage: Storage | null,
+  trigger: PollutionTrigger,
+): PollutionTransition {
   if (!storage) {
-    return createPollutionState();
+    return { state: createPollutionState(), trigger, advanced: false };
   }
   const current = readState(storage);
   const transition = advancePollution(current, trigger, Math.random);
   writeState(storage, transition.state);
-  return transition.state;
+  return transition;
 }
 
-function markPending(storage: Storage | null, targetPath: string): void {
+function markPending(
+  storage: Storage | null,
+  targetPath: string,
+  announcementLevel?: PollutionLevel,
+): void {
   if (!storage) {
     return;
   }
   const pending: PendingNavigation = {
     targetPath,
     expiresAt: Date.now() + PENDING_LIFETIME_MS,
+    announcementLevel,
   };
   try {
     storage.setItem(PENDING_KEY, JSON.stringify(pending));
@@ -118,24 +149,31 @@ function markPending(storage: Storage | null, targetPath: string): void {
   }
 }
 
-function consumePending(storage: Storage | null, currentPath: string): boolean {
+function consumePending(storage: Storage | null, currentPath: string): ConsumedNavigation {
   if (!storage) {
-    return false;
+    return { matched: false };
   }
   try {
     const rawValue = storage.getItem(PENDING_KEY);
     storage.removeItem(PENDING_KEY);
     if (!rawValue) {
-      return false;
+      return { matched: false };
     }
     const pending = JSON.parse(rawValue) as Partial<PendingNavigation>;
-    return (
+    const matched =
       pending.targetPath === currentPath &&
       typeof pending.expiresAt === 'number' &&
-      pending.expiresAt >= Date.now()
-    );
+      pending.expiresAt >= Date.now();
+    const announcementLevel = pending.announcementLevel;
+    return {
+      matched,
+      announcementLevel:
+        matched && (announcementLevel === 1 || announcementLevel === 2 || announcementLevel === 3)
+          ? announcementLevel
+          : undefined,
+    };
   } catch {
-    return false;
+    return { matched: false };
   }
 }
 
@@ -206,8 +244,12 @@ export function initPollutionController(): void {
           return;
         }
         const target = new URL(anchor.href, window.location.href);
-        requestTransition(storage, 'front-entry');
-        markPending(storage, target.pathname);
+        const transition = requestTransition(storage, 'front-entry');
+        markPending(
+          storage,
+          target.pathname,
+          transition.advanced ? transition.state.level : undefined,
+        );
       },
       { capture: true },
     );
@@ -220,25 +262,36 @@ export function initPollutionController(): void {
 
   const pendingNavigation = consumePending(storage, window.location.pathname);
   const navigationType = getNavigationType();
-  const initialState = shouldRequestArchiveEntry(
-    pendingNavigation,
+  const entryTransition = shouldRequestArchiveEntry(
+    pendingNavigation.matched,
     navigationType,
     hasStoredState(storage),
   )
     ? requestTransition(storage, 'direct-entry')
-    : readState(storage);
+    : undefined;
+  const initialState = entryTransition?.state ?? readState(storage);
   applyState(initialState);
+  const initialAnnouncementLevel = entryTransition?.advanced
+    ? entryTransition.state.level
+    : pendingNavigation.announcementLevel;
+  if (initialAnnouncementLevel === initialState.level) {
+    announcePollutionLevel(initialAnnouncementLevel);
+  }
 
   window.addEventListener('pageshow', (event) => {
     if (event.persisted) {
-      const restoredState = shouldRequestArchiveEntry(
+      const restoredTransition = shouldRequestArchiveEntry(
         false,
         'back_forward',
         hasStoredState(storage),
       )
         ? requestTransition(storage, 'direct-entry')
-        : readState(storage);
+        : undefined;
+      const restoredState = restoredTransition?.state ?? readState(storage);
       applyState(restoredState);
+      if (restoredTransition?.advanced) {
+        announcePollutionLevel(restoredTransition.state.level);
+      }
     }
   });
 
@@ -278,13 +331,21 @@ export function initPollutionController(): void {
       const trigger: PollutionTrigger = anchor.hasAttribute('data-locale-switch')
         ? 'archive-locale'
         : 'archive-navigation';
-      requestTransition(storage, trigger);
-      markPending(storage, target.pathname);
+      const transition = requestTransition(storage, trigger);
+      markPending(
+        storage,
+        target.pathname,
+        transition.advanced ? transition.state.level : undefined,
+      );
     },
     { capture: true },
   );
 
   document.addEventListener('crimson:archive-search-submit', () => {
-    applyState(requestTransition(storage, 'archive-search'));
+    const transition = requestTransition(storage, 'archive-search');
+    applyState(transition.state);
+    if (transition.advanced) {
+      announcePollutionLevel(transition.state.level);
+    }
   });
 }

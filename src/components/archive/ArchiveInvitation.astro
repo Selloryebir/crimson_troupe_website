@@ -17,7 +17,6 @@ const view = content.views[profile];
   class:list={['archive-invitation', `archive-invitation--${profile}`]}
   data-archive-invitation
   data-projection-profile={profile}
-  data-invitation-announcement={content.statusAnnouncement}
   aria-label={invitation.ariaLabel}
   aria-labelledby="archive-invitation-title"
   aria-describedby="archive-invitation-summary archive-invitation-closing"
@@ -74,7 +73,6 @@ const view = content.views[profile];
     </div>
   </div>
 </dialog>
-<p class="visually-hidden" data-archive-invitation-status aria-live="polite"></p>
 
 <script>
   import { initArchiveInvitation } from '../../scripts/archive-invitation';

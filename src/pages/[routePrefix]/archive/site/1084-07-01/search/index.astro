@@ -8,6 +8,7 @@ import {
   getSiteSearchScope,
 } from '../../../../../../data/site-search-index';
 import { sitePath } from '../../../../../../data/site-routes';
+import { getMinimumSearchGraphemes } from '../../../../../../data/search-policy';
 import ArchiveLayout from '../../../../../../layouts/ArchiveLayout.astro';
 export function getStaticPaths() {
   return buildSnapshot.editions.map((edition) => ({
@@ -42,6 +43,7 @@ const canonicalPath = sitePath(edition, 'archive', 'search');
     scopeLabel={copy.scope}
     placeholder={copy.placeholder}
     locale={edition.locale}
+    minimumQueryGraphemes={getMinimumSearchGraphemes(edition.editionId)}
     messages={localization.messages.search}
     archiveProjection={{
       typeLabel: localization.archiveProjection.performance.kind,

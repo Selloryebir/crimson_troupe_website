@@ -117,4 +117,4 @@ export const minosOriginalProductions = {
       ['Σειρά Προγράμματος', 'Αίθουσα Βιβλίων του Παλιού Θιάσου'],
     ],
   },
-} as const satisfies Record<OriginalProductionId, ProductionContent>;
+} as const satisfies Partial<Record<OriginalProductionId, ProductionContent>>;

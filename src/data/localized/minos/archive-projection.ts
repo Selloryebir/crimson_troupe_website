@@ -1,7 +1,11 @@
 import type { ArchiveProjectionContent } from '../schema.ts';
 
 export const minosArchiveProjection = {
-  statusAnnouncement: 'Κάθε εγγραφή της σελίδας διόρθωσε ταυτόχρονα τον προορισμό της.',
+  statusAnnouncements: [
+    'Μια ανωμαλία εμφανίστηκε στο αρχείο.',
+    'Οι σχέσεις μεταξύ των εγγραφών αλλάζουν.',
+    'Όλες οι εγγραφές της σελίδας δείχνουν πλέον στον ίδιο προορισμό.',
+  ],
   performance: {
     title: 'Η Γιορτή',
     kind: 'Τελική παράσταση',

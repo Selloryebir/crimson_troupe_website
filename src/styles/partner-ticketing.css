@@ -1,0 +1,173 @@
+.partner-ticketing {
+  --partner-ink: #173f49;
+  --partner-paper: #fffaf0;
+  --partner-accent: #e85f3f;
+
+  max-width: 54rem;
+  padding-block: clamp(2.5rem, 8vw, 6rem);
+  color: var(--partner-ink);
+}
+
+.partner-ticketing__eyebrow {
+  margin: 0 0 1rem;
+  color: var(--partner-accent);
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.16em;
+}
+
+.ticketing-platform-brand {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.85rem, 3vw, 1.4rem);
+}
+
+.ticketing-platform-brand__logo {
+  width: clamp(3.75rem, 14vw, 5.5rem);
+  height: auto;
+  border-radius: 24%;
+  box-shadow: 0 0.65rem 1.8rem rgb(23 63 73 / 18%);
+}
+
+.ticketing-platform-brand__name {
+  margin: 0;
+  font-family: ui-rounded, "Arial Rounded MT Bold", "Trebuchet MS", sans-serif;
+  font-size: clamp(2.15rem, 8vw, 4.8rem);
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+}
+
+.partner-ticketing__introduction {
+  max-width: 44rem;
+  margin-block: 1.5rem 0;
+  font-size: clamp(1rem, 2.4vw, 1.2rem);
+  line-height: 1.75;
+}
+
+.partner-ticketing__fallback {
+  margin-top: clamp(2rem, 6vw, 4rem);
+  padding: clamp(1.15rem, 4vw, 2rem);
+  border: 1px solid rgb(23 63 73 / 18%);
+  border-radius: 1.4rem;
+  background:
+    radial-gradient(circle at 100% 0, rgb(246 200 74 / 35%), transparent 35%),
+    var(--partner-paper);
+  box-shadow: 0 1rem 3rem rgb(23 63 73 / 8%);
+}
+
+.partner-ticketing__fallback h2 {
+  margin-top: 0;
+}
+
+.partner-ticketing__fallback .button-link {
+  display: inline-flex;
+  margin-top: 0.8rem;
+  border-radius: 999px;
+  background: var(--partner-ink);
+  color: #fff;
+}
+
+.partner-ticketing-flow {
+  margin-top: clamp(2rem, 6vw, 4rem);
+}
+
+.partner-ticketing-result {
+  color: var(--partner-ink);
+}
+
+.partner-ticketing-result .ticket-receipt__totals {
+  padding: 1rem 1.25rem;
+  border-radius: 1rem;
+  background: var(--partner-paper);
+  box-shadow: 0 1rem 3rem rgb(23 63 73 / 8%);
+}
+
+.partner-ticketing-result .issued-ticket {
+  border: 0;
+  border-top: 0.35rem solid var(--partner-accent);
+  border-radius: 1rem;
+  background: var(--partner-paper);
+  box-shadow: 0 1rem 3rem rgb(23 63 73 / 8%);
+}
+
+.partner-ticketing-progress {
+  padding: clamp(1.15rem, 4vw, 2rem);
+  border-radius: 1.4rem;
+  background: var(--partner-paper);
+  box-shadow: 0 1rem 3rem rgb(23 63 73 / 8%);
+}
+
+.partner-ticketing-progress__spinner {
+  display: block;
+  width: 2.75rem;
+  aspect-ratio: 1;
+  border: 0.35rem solid rgb(23 63 73 / 14%);
+  border-top-color: var(--partner-accent);
+  border-radius: 50%;
+  animation: partner-ticketing-spin 900ms linear infinite;
+}
+
+.partner-ticketing-progress progress {
+  width: 100%;
+  accent-color: var(--partner-accent);
+}
+
+.partner-ticketing-dialog {
+  width: min(42rem, calc(100% - 2rem));
+  max-height: calc(100dvh - 2rem);
+  padding: clamp(1.15rem, 5vw, 2.4rem);
+  border: 0;
+  border-radius: 1.5rem;
+  color: var(--partner-ink);
+  background: var(--partner-paper);
+  box-shadow: 0 1.5rem 6rem rgb(13 24 30 / 35%);
+}
+
+.partner-ticketing-dialog::backdrop {
+  background: rgb(13 24 30 / 62%);
+  backdrop-filter: blur(0.25rem);
+}
+
+.partner-ticketing-dialog__brand .ticketing-platform-brand__logo {
+  width: 3.5rem;
+}
+
+.partner-ticketing-dialog__brand .ticketing-platform-brand__name {
+  font-size: clamp(1.55rem, 7vw, 2.5rem);
+}
+
+.partner-ticketing-dialog [data-partner-brand="drop-tower"] {
+  color: #341d45;
+}
+
+.partner-ticketing-dialog .actions {
+  margin-top: 1.5rem;
+}
+
+.partner-ticketing-dialog .actions > .button {
+  flex: 1 1 16rem;
+  min-height: 3.25rem;
+  white-space: normal;
+}
+
+@keyframes partner-ticketing-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .partner-ticketing-progress__spinner {
+    animation: none;
+  }
+}
+
+@media (max-width: 30rem) {
+  .ticketing-platform-brand {
+    align-items: flex-start;
+  }
+
+  .partner-ticketing__eyebrow {
+    letter-spacing: 0.1em;
+  }
+}

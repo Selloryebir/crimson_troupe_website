@@ -1,7 +1,9 @@
+import { archiveProjectionIdentity, type ArchiveProjectionIdentity } from '../archive-pollution.ts';
 import type { EditionId } from '../editions.ts';
 import { locations, type Location } from '../locations.ts';
 import { localizationPackages, type PartialLocalizationPackage } from '../localized/packages.ts';
-import { performances, type Performance, type PerformanceId } from '../performances.ts';
+import { getTicketArtifactEditionIds } from '../localized/ticket-artifact.ts';
+import type { PerformanceId } from '../performances.ts';
 import {
   productionArtworkRegistry,
   type ProductionArtwork,
@@ -13,8 +15,20 @@ import {
   type SeatingPlanDefinition,
   type SeatingPlanId,
 } from '../ticket-seating-plans.ts';
+import {
+  ticketingPlatforms,
+  type TicketingPlatformDefinition,
+  type TicketingPlatformId,
+} from '../ticketing-platforms.ts';
 import { createContentFingerprint } from './fingerprint.ts';
 import { getRootPerformanceIds, type ContentRootSet, type ContentRootSetId } from './root-sets.ts';
+import { assertPerformanceVariantComplete } from './validate.ts';
+import {
+  getPerformanceVariantUnit,
+  performanceVariantRegistry,
+  selectCompleteVariant,
+  type PerformanceVariantRegistry,
+} from './variants.ts';
 
 export interface ContentApprovalDigests {
   site: string;
@@ -29,21 +43,25 @@ export interface ApprovedContentDigests {
 }
 
 export interface ApprovalDigestSources {
-  performances: Readonly<Record<string, Performance>>;
+  performanceVariants: PerformanceVariantRegistry;
   productions: Readonly<Record<string, Production>>;
   locations: Readonly<Record<string, Location>>;
   localizations: Readonly<Record<string, PartialLocalizationPackage>>;
   artwork: ProductionArtworkRegistry;
   seatingPlans: Readonly<Record<SeatingPlanId, SeatingPlanDefinition>>;
+  ticketingPlatforms: Readonly<Record<TicketingPlatformId, TicketingPlatformDefinition>>;
+  archiveProjection: ArchiveProjectionIdentity;
 }
 
 const defaultSources: ApprovalDigestSources = {
-  performances,
+  performanceVariants: performanceVariantRegistry,
   productions,
   locations,
   localizations: localizationPackages,
   artwork: productionArtworkRegistry,
   seatingPlans: ticketSeatingPlans,
+  ticketingPlatforms,
+  archiveProjection: archiveProjectionIdentity,
 };
 
 function createSiteApprovalDigest(
@@ -61,10 +79,27 @@ function createSiteApprovalDigest(
             messages: package_?.messages,
             archiveProjection: package_?.archiveProjection,
             ticketZones: package_?.programs?.ticketZones,
+            ticketingPlatforms: package_?.platforms,
           },
         ];
       }),
     ),
+    archiveProjection: {
+      identity: sources.archiveProjection,
+      production: sources.productions[sources.archiveProjection.productionId],
+      localization: Object.fromEntries(
+        editionIds.map((editionId) => [
+          editionId,
+          sources.localizations[editionId]?.programs?.productions?.[
+            sources.archiveProjection.productionId
+          ],
+        ]),
+      ),
+      artwork: artworkApprovalValue(
+        sources.artwork[sources.archiveProjection.productionId]?.archive,
+      ),
+    },
+    ticketingPlatforms: sources.ticketingPlatforms,
   });
 }
 
@@ -96,10 +131,11 @@ function createPerformanceApprovalDigest(
   editionIds: readonly EditionId[],
   sources: ApprovalDigestSources,
 ): string {
-  const performance = sources.performances[performanceId];
-  if (!performance) {
-    throw new Error(`批准摘要无法解析未知场次：${performanceId}`);
+  const variantUnit = getPerformanceVariantUnit(performanceId, sources.performanceVariants);
+  if (!variantUnit) {
+    throw new Error(`批准摘要无法解析缺少变体的场次：${performanceId}`);
   }
+  const performance = selectCompleteVariant(variantUnit, assertPerformanceVariantComplete).value;
   const productionIds = [...performance.productionIds];
   const localization = Object.fromEntries(
     editionIds.map((editionId) => {
@@ -130,6 +166,32 @@ function createPerformanceApprovalDigest(
     performance.ticketAvailability.seatingPlanId
       ? sources.seatingPlans[performance.ticketAvailability.seatingPlanId]
       : undefined;
+  const ticketArtifactLocalization =
+    performance.world === 'front' && performance.ticketAvailability.state === 'on-sale'
+      ? Object.fromEntries(
+          getTicketArtifactEditionIds(
+            editionIds,
+            sources.locations[performance.locationId].countryEditionId,
+          ).map((editionId) => {
+            const package_ = sources.localizations[editionId];
+            return [
+              editionId,
+              {
+                location: package_?.programs?.locations?.[performance.locationId],
+                performance: package_?.programs?.performances?.[performanceId],
+                productions: Object.fromEntries(
+                  productionIds.map((productionId) => [
+                    productionId,
+                    package_?.programs?.productions?.[productionId],
+                  ]),
+                ),
+                ticketZones: package_?.programs?.ticketZones,
+                artifact: package_?.messages?.ticketing?.artifact,
+              },
+            ];
+          }),
+        )
+      : undefined;
 
   return createContentFingerprint({
     stableId: performanceId,
@@ -141,6 +203,7 @@ function createPerformanceApprovalDigest(
     localization,
     artwork,
     seatingPlan,
+    ticketArtifactLocalization,
   });
 }
 

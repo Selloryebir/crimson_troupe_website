@@ -1,5 +1,11 @@
 import type { LocalizedShape } from '../schema';
 import type { yanMessages } from '../yan/messages';
+import type { yanTicketingPlatforms } from '../yan/messages';
+
+export const victoriaTicketingPlatforms = {
+  'rice-network': { displayName: 'RiceNet', logoAlt: 'RiceNet preview mark' },
+  'drop-tower': { displayName: 'Drop Tower', logoAlt: 'Drop Tower preview mark' },
+} as const satisfies LocalizedShape<typeof yanTicketingPlatforms>;
 
 export const victoriaMessages = {
   filters: {
@@ -18,6 +24,7 @@ export const victoriaMessages = {
     scope: 'Search scope: {scope}',
     unavailable: 'The search index is temporarily unavailable. Continue with the main navigation.',
     prompt: 'Enter a term to find performances, productions, and website pages.',
+    minimumQuery: 'Enter at least {count} characters.',
     resultCount: '{count} results found.',
     noResults: 'No matching content was found.',
     noscriptTitle: 'Search requires JavaScript',
@@ -25,6 +32,14 @@ export const victoriaMessages = {
       'This page sends no query and loads no remote service. You can still browse performances and company information with the main navigation.',
   },
   ticketing: {
+    partnerPageEyebrow: 'OFFICIAL TICKETING PARTNER',
+    partnerPageTitle: '{platform} Seat Service',
+    partnerPageIntroduction:
+      'The troupe website has passed your basket to its ticketing partner. Complete the seat request here, or return to the official basket before confirmation.',
+    partnerUnavailableTitle: 'Connection flow not yet open',
+    partnerUnavailableCopy:
+      'Rice Network cannot accept a new seat request at present. Your basket remains available on the troupe website.',
+    returnToBasket: 'Return to Official Basket',
     selectedCount: '{count} performances selected',
     emptyBasket: 'No performances selected',
     selectionReady: 'The performance and seating zone are in this basket.',
@@ -38,13 +53,20 @@ export const victoriaMessages = {
     seatingPlanNotice:
       'Zone diagram only, not individual seat selection. The diagram and selector use the same prices.',
     selectSeatingZone: 'Select {zone}, base price {price} LMD',
-    receiptEyebrow: 'SIMULATED RECEIPT',
-    receiptTitle: 'Seat Registration Receipt',
-    receiptCopy:
-      'This request is confirmed. The amounts and seats below belong only to this simulated experience.',
-    baseTotal: 'Base Total',
-    adjustmentNone: 'None',
-    settledTotal: 'Simulated Settlement Total',
+    receiptEyebrow: 'SEAT ALLOCATION RECORD',
+    receiptTitle: 'Seat Allocation Receipt',
+    receiptCopy: 'This request is confirmed. Review the allocated seats and the amount due below.',
+    receiptAcceptedAt: 'Acceptance Time',
+    receiptChannel: 'Allocation Channel',
+    receiptStatus: 'Acceptance Status',
+    receiptStatusAllocated: 'Seats Allocated',
+    receiptPerformance: 'Performance Seat',
+    receiptSchedule: 'Performance Time',
+    receiptVenue: 'Venue',
+    receiptZone: 'Seating Zone',
+    receiptFaceValue: 'Performance Seat Fare',
+    ticketSubtotal: 'Ticket Subtotal',
+    amountDue: 'Total Amount Due',
     disclaimer: 'Game content only. This receipt creates no redemption obligation.',
     ticketNumber: 'Ticket number {number}',
     downloadSvg: 'Download SVG',
@@ -58,14 +80,14 @@ export const victoriaMessages = {
     premiumAttemptCopy:
       'The channel claims to improve your queue position and adds a service adjustment on success. It may still fail.',
     submitRequest: 'Confirm and Submit',
-    backToBasket: 'Back to Basket',
+    backToBasket: 'Return to Official Basket',
     networkTitle: 'The network stopped responding before confirmation',
     networkCopy:
-      'No settlement was created and your basket remains intact. Retry on the same route.',
-    retryBasket: 'Keep Basket and Retry',
+      'No seat allocation was created and your basket remains intact. Resubmit through Rice Network when ready.',
+    retryBasket: 'Resubmit Through Rice Network',
     premiumFailureTitle: 'The priority channel still found no seats',
     premiumFailureCopy:
-      'The channel found no seats but issued a simulated search-service record. Your basket and base prices remain unchanged.',
+      'The channel found no seats but issued a seat-search acceptance record. Your basket and ticket prices remain unchanged.',
     premiumOfferTitle: 'The Joint Seat Return Channel offers another search',
     premiumOfferCopy:
       'The channel will remark your request order and add a service adjustment equal to 50% of the basket base total on success. It cannot guarantee a seat.',
@@ -75,50 +97,41 @@ export const victoriaMessages = {
     standardFailureTitle: 'Heavy traffic: ticket request failed',
     standardFailureCopy:
       'Keep the basket and submit again, or try the priority route that adds a charge on success.',
-    retryStandard: 'Retry Standard Route',
-    tryPremium: 'Review Seat Return Quote',
+    retryStandard: 'Retry at Original Price with RiceNet',
+    tryPremium: 'View Drop Tower Markup Plan',
     acceptPremium: 'Accept 150% Quote and Search Again',
     declinePremium: 'Decline This Quote',
     acceptRetention: 'Accept the 148% Retention Quote',
     declineRetention: 'Still Decline and Return to Basket',
-    retryPremium: 'Retry Priority Route',
-    returnStandard: 'Cancel Markup and Return to Standard',
-    offerBaseTotal: 'Basket Base Total',
-    offerAdjustment: 'Simulated Service Adjustment',
-    offerFinalTotal: 'Current Simulated Quote',
-    failureRecordTitle: 'Failed Service Record',
+    retryPremium: 'Retry the Current Drop Tower Plan',
+    returnStandard: 'Decline Markup and Return to Rice Network',
+    offerBaseTotal: 'Ticket Subtotal',
+    offerAdjustment: 'Priority Seat Allocation Service',
+    offerFinalTotal: 'Quoted Amount Due',
+    failureRecordTitle: 'Seat-Search Acceptance Record',
     allocatedSeats: 'Seats Allocated',
-    failureServiceFee: 'Simulated Search-Service Fee',
+    failureServiceFee: 'Seat-Search Acceptance Fee',
     failureRecordDisclaimer:
       'No real charge occurred. This record creates no receipt, commemorative ticket, or redemption obligation.',
     startRequired: 'Select at least one performance first.',
-    submitted: 'Basket submitted. Entering the simulated ticketing flow.',
+    submitted: 'Basket submitted. Rice Network is checking seat availability.',
     success: 'Ticketing succeeded. Your commemorative tickets are ready.',
-    stateUpdated: 'The ticketing state has been updated.',
+    stateUpdated: 'The seat request status has been updated.',
     downloadStarted: 'The download for {title} has started.',
-    newRound: 'The previous round has ended. You may select performances again.',
+    newRound: 'The previous seat request has ended. You may select performances again.',
     adjustments: {
-      'priority-service': 'Priority Route Service Adjustment',
-      'retention-service': 'Retention Quote Service Adjustment',
-    },
-    stamps: {
-      'admission-confirmed': 'ADMISSION CONFIRMED',
-      'standard-route': 'STANDARD ROUTE',
-      'priority-route': 'PRIORITY ROUTE',
-      'network-recovered': 'NETWORK RECOVERED',
-      'returned-seat': 'RETURNED SEAT',
-      'retention-offer': 'RETENTION QUOTE',
-      'manual-review': 'MANUAL REVIEW',
+      'priority-service': 'Priority Seat Allocation Service',
+      'retention-service': 'Immediate Confirmation Concession',
     },
     artifact: {
       title: '{title} Commemorative Ticket',
       description: '{dateTime}, {place}, {zone}, {price} LMD, ticket number {number}',
       header: 'CRIMSON TROUPE · COMMEMORATIVE ADMISSION',
-      dateTime: 'TERRA DATE AND TIME',
+      dateTime: 'DATE AND TIME',
       zone: 'ZONE',
       faceValue: 'BASE FACE VALUE',
       ticketNumber: 'TICKET NUMBER',
-      alt: '{title} commemorative ticket: {dateTime}, {place}, {zone}, {price} LMD, ticket and matrix number {number}',
+      alt: '{title} commemorative ticket: {dateTime}, {place}, {zone}, {price} LMD, ticket number {number}',
     },
   },
   programs: {

@@ -37,7 +37,10 @@ const relatedPerformances = getLocalizedPerformanceEntries(localization)
 const canonicalPath = productionPath(edition, 'archive', production.productionId);
 const projection = localization.archiveProjection.performance;
 const projectionView = localization.archiveProjection.views['production-record'];
-const projectionProduction = getLocalizedProduction(localization, 'the-carnival');
+const projectionProduction = getLocalizedProduction(
+  localization,
+  buildSnapshot.archiveProjectionProductionId,
+);
 ---
 
 <ArchiveLayout

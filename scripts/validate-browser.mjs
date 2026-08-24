@@ -357,6 +357,23 @@ async function assertNoHorizontalLoss(page, label) {
   assert.ok(result.main.right <= result.viewportWidth + 1, `${label} 的 main 右侧超出视口`);
 }
 
+async function assertControlsWithinViewport(page, selector, label) {
+  const violations = await page.locator(selector).evaluateAll((elements) =>
+    elements
+      .filter((element) => {
+        const style = window.getComputedStyle(element);
+        const bounds = element.getBoundingClientRect();
+        return style.visibility !== 'hidden' && style.display !== 'none' && bounds.width > 0;
+      })
+      .map((element) => ({
+        label: element.getAttribute('aria-label') ?? element.textContent?.trim() ?? element.tagName,
+        bounds: element.getBoundingClientRect().toJSON(),
+      }))
+      .filter(({ bounds }) => bounds.left < -1 || bounds.right > window.innerWidth + 1),
+  );
+  assert.deepEqual(violations, [], `${label} 的关键控件不得被水平裁切`);
+}
+
 async function assertEditorialAlternation(page, listSelector, visualSelector, copySelector, label) {
   const rows = page.locator(`${listSelector} > li`);
   assert.ok((await rows.count()) >= 2, `${label} 至少需要两行才能验证交替编排`);
@@ -429,6 +446,11 @@ try {
     '.front-performance-card__copy',
     '1280px 炎国表站首页',
   );
+  assert.equal(
+    await desktopPage.locator('.front-performance-grid--home-editorial > li').count(),
+    buildSnapshot.homepagePerformanceIds.front.length,
+    '表站首页应只装配显式策展集合',
+  );
   const archiveCatalog = desktopPage.locator('.archive-catalog');
   assert.equal(await archiveCatalog.locator('li').count(), 3, '表站页脚应显示三条馆藏记录');
   assert.equal(await archiveCatalog.locator('a').count(), 1, '只有当前快照可以进入');
@@ -465,6 +487,58 @@ try {
     0,
     '表站完整本季列表不得套用首页编排',
   );
+  assert.equal(
+    await desktopPage.locator('.front-performance-grid--catalog > li').count(),
+    buildSnapshot.performanceEntries.filter(
+      ([, performance]) => performance.world === 'front' && performance.collection === 'current',
+    ).length,
+    '表站完整本季列表不得被首页策展集合裁剪',
+  );
+  await desktopPage.goto(`${origin}/yan/search/?q=${encodeURIComponent('演出')}`);
+  await desktopPage.locator('[data-search-enhanced]:not([hidden])').waitFor();
+  const organizedSearchResults = desktopPage.locator('[data-search-result]');
+  assert.ok(await organizedSearchResults.count(), '搜索组织基准查询应有结果');
+  const searchOrganization = await organizedSearchResults.evaluateAll((items) =>
+    items.map((item) => ({
+      match: item.getAttribute('data-search-match'),
+      type: item.getAttribute('data-search-result-type'),
+      startsGroup: item.hasAttribute('data-search-group-start'),
+    })),
+  );
+  const firstDetailMatch = searchOrganization.findIndex(({ match }) => match === 'detail');
+  assert.ok(firstDetailMatch > 0, '基准查询应同时覆盖标题命中与详情命中');
+  assert.equal(
+    searchOrganization.slice(0, firstDetailMatch).every(({ match }) => match === 'title'),
+    true,
+    '标题命中应稳定先于摘要或关键词命中',
+  );
+  for (const [index, item] of searchOrganization.entries()) {
+    const previous = searchOrganization[index - 1];
+    const shouldStartGroup =
+      index === 0 || previous.match !== item.match || previous.type !== item.type;
+    assert.equal(item.startsGroup, shouldStartGroup, '搜索结果应显式标记稳定类型组边界');
+  }
+  await desktopPage.locator('[data-search-input]').focus();
+  await desktopPage.keyboard.press('ControlOrMeta+A');
+  await desktopPage.keyboard.type('演出');
+  await desktopPage.keyboard.press('Enter');
+  await desktopPage.locator('[data-search-result] a').first().focus();
+  assert.equal(
+    await desktopPage
+      .locator('[data-search-result] a')
+      .first()
+      .evaluate((element) => element === document.activeElement),
+    true,
+    '键盘提交后应能继续进入首个搜索结果',
+  );
+  await desktopPage.locator('[data-search-input]').fill('演');
+  await desktopPage.locator('[data-search-input]').press('Enter');
+  assert.equal(await desktopPage.locator('[data-search-result]').count(), 0);
+  assert.match(
+    (await desktopPage.locator('[data-search-feedback]').textContent()) ?? '',
+    /2/u,
+    '炎语单字查询应显示两字素门槛而不是无结果',
+  );
   await desktopPage.goto(`${origin}${archivePath('yan')}`);
   await assertEditorialAlternation(
     desktopPage,
@@ -473,11 +547,21 @@ try {
     '.archive-performance-list__register',
     '1280px 炎国里站首页',
   );
+  assert.equal(
+    await desktopPage.locator('.archive-performance-list--home-editorial > li').count(),
+    buildSnapshot.homepagePerformanceIds.archive.length,
+    '里站首页应只装配显式策展集合',
+  );
   await desktopPage.goto(`${origin}${archivePath('yan', 'performances')}`);
   assert.equal(
     await desktopPage.locator('.archive-performance-list--home-editorial').count(),
     0,
     '里站完整本季列表不得套用首页编排',
+  );
+  assert.equal(
+    await desktopPage.locator('.archive-performance-list--catalog > li').count(),
+    expectedArchiveCurrentCount,
+    '里站完整本季列表不得被首页策展集合裁剪',
   );
   assertDesktopErrors();
   await desktop.close();
@@ -693,6 +777,110 @@ try {
   assertArchiveVisualErrors();
   await archiveVisualContext.close();
 
+  const archiveAccessContext = await browser.newContext({
+    viewport: { width: 768, height: 900 },
+    reducedMotion: 'reduce',
+  });
+  await archiveAccessContext.addInitScript(() => {
+    Math.random = () => 0;
+    const stateKey = 'crimson-troupe:archive-pollution:v2';
+    if (!sessionStorage.getItem(stateKey)) {
+      sessionStorage.setItem(
+        stateKey,
+        JSON.stringify({ version: 2, level: 0, eventCount: 1, variant: 0 }),
+      );
+    }
+  });
+  const archiveAccessPage = await archiveAccessContext.newPage();
+  const assertArchiveAccessErrors = trackUnexpectedErrors(archiveAccessPage);
+  await archiveAccessPage.goto(`${origin}${archivePath('yan', 'search')}`);
+  const pollutionStatus = archiveAccessPage.locator('[data-pollution-status]');
+  assert.equal((await pollutionStatus.textContent())?.trim(), '', '初始加载不得朗读污染或请柬');
+  await archiveAccessPage.evaluate(() => {
+    const status = document.querySelector('[data-pollution-status]');
+    window.__pollutionStatusMutations = 0;
+    new window.MutationObserver(() => {
+      window.__pollutionStatusMutations += 1;
+    }).observe(status, { childList: true });
+  });
+  const accessSearch = archiveAccessPage.locator('[data-search-input]');
+  const initialSearchEventCount = await archiveAccessPage.evaluate(
+    () => JSON.parse(sessionStorage.getItem('crimson-troupe:archive-pollution:v2')).eventCount,
+  );
+  await accessSearch.fill('湖');
+  await accessSearch.press('Enter');
+  assert.equal(
+    await archiveAccessPage.evaluate(
+      () => JSON.parse(sessionStorage.getItem('crimson-troupe:archive-pollution:v2')).eventCount,
+    ),
+    initialSearchEventCount,
+    '里站过短查询不得消耗污染事件',
+  );
+  await accessSearch.fill('湖中');
+  await accessSearch.press('Enter');
+  await archiveAccessPage.locator('html[data-pollution-level="1"]').waitFor();
+  assert.equal(
+    (await pollutionStatus.textContent())?.trim(),
+    getLocalization(editions.yan, buildSnapshot).archiveProjection.statusAnnouncements[0],
+    '等级变化应使用当前国家版本的短公告',
+  );
+  await archiveAccessPage.evaluate(() => {
+    Math.random = () => 1;
+  });
+  await accessSearch.press('Enter');
+  assert.equal(
+    await archiveAccessPage.evaluate(() => window.__pollutionStatusMutations),
+    1,
+    '同一等级内的后续动作不得重复公告',
+  );
+
+  await archiveAccessPage.evaluate(() => {
+    sessionStorage.setItem(
+      'crimson-troupe:archive-pollution:v2',
+      JSON.stringify({ version: 2, level: 3, eventCount: 8, variant: 1 }),
+    );
+  });
+  await archiveAccessPage.goto(`${origin}${archivePath('yan')}`);
+  await archiveAccessPage.locator('html[data-pollution-level="3"]').waitFor();
+  assert.equal(
+    (await archiveAccessPage.locator('[data-pollution-status]').textContent())?.trim(),
+    '',
+    '读取既有等级 3 状态时不得把请柬作为初始公告',
+  );
+  await assertNoHorizontalLoss(archiveAccessPage, '768px 炎国三级污染里站');
+  await assertControlsWithinViewport(
+    archiveAccessPage,
+    '[data-pollution-safe] a, [data-pollution-safe] button, [data-pollution-safe] summary',
+    '768px 炎国三级污染里站',
+  );
+  const accessInvitationTrigger = archiveAccessPage
+    .locator('a[data-archive-invitation-trigger]')
+    .first();
+  const accessInvitationTarget = await accessInvitationTrigger.getAttribute('href');
+  assert.ok(accessInvitationTarget, '768px 邀请触发器应保留合法链接');
+  await accessInvitationTrigger.focus();
+  await archiveAccessPage.keyboard.press('Enter');
+  await archiveAccessPage.locator('[data-archive-invitation][open]').waitFor();
+  await assertControlsWithinViewport(
+    archiveAccessPage,
+    '[data-archive-invitation][open] button',
+    '768px 炎国三级污染请柬',
+  );
+  await archiveAccessPage.keyboard.press('Escape');
+  assert.equal(
+    await accessInvitationTrigger.evaluate((element) => element === document.activeElement),
+    true,
+    'Escape 关闭邀请后焦点应返回原触发器',
+  );
+  await archiveAccessPage.keyboard.press('Enter');
+  await archiveAccessPage.locator('[data-archive-invitation][open]').waitFor();
+  const accessContinue = archiveAccessPage.locator('[data-archive-invitation-continue]');
+  await accessContinue.focus();
+  await archiveAccessPage.keyboard.press('Enter');
+  await archiveAccessPage.waitForURL(new URL(accessInvitationTarget, origin).href);
+  assertArchiveAccessErrors();
+  await archiveAccessContext.close();
+
   const ticketContext = await browser.newContext({ viewport: { width: 320, height: 800 } });
   await ticketContext.addInitScript(() => {
     Math.random = () => 0.1;
@@ -824,27 +1012,235 @@ try {
 
   await firstTicketCheckbox.check();
   await ticketPage.locator('[data-ticket-start]').click();
-  await ticketPage.locator('[data-ticket-flow]:not([hidden])').waitFor();
+  await ticketPage.waitForURL(`${origin}/yan/tickets/partner/`);
+  const partnerDialog = ticketPage.locator('[data-partner-dialog][open]');
+  await partnerDialog.waitFor();
   assert.equal(
     await ticketPage
-      .locator('[data-ticket-flow-title]')
+      .locator('[data-partner-title]')
       .evaluate((element) => element === document.activeElement),
     true,
   );
-  await ticketPage.locator('[data-ticket-action="resolve"]').click();
+  assert.equal(
+    await partnerDialog
+      .locator('[data-partner-brand="rice-network"] [data-ticketing-platform]')
+      .count(),
+    1,
+  );
+  await ticketPage.locator('[data-partner-action="receipt"]').click();
   await ticketPage.locator('[data-ticket-result]:not([hidden])').waitFor();
+  assert.equal(new URL(ticketPage.url()).pathname, '/yan/tickets/partner/');
   assert.equal(
     await ticketPage
       .locator('#ticket-result-title')
       .evaluate((element) => element === document.activeElement),
     true,
   );
-  const ticketSource = await ticketPage.locator('.issued-ticket > img').getAttribute('src');
+  const ticketImage = ticketPage.locator('.issued-ticket > img');
+  const ticketSource = await ticketImage.getAttribute('src');
   assert.match(ticketSource ?? '', /^data:image\/svg\+xml/u);
-  assert.match(decodeURIComponent(ticketSource ?? ''), /data-ticket-field="title"/u);
+  const decodedTicketSource = decodeURIComponent((ticketSource ?? '').split(',', 2)[1] ?? '');
+  const ticketImageSize = await ticketImage.evaluate(async (image) => {
+    await image.decode();
+    return { width: image.naturalWidth, height: image.naturalHeight };
+  });
+  assert.deepEqual(ticketImageSize, { width: 1200, height: 540 });
+  const ticketParserError = await ticketPage.evaluate((source) => {
+    const document_ = new globalThis.DOMParser().parseFromString(source, 'image/svg+xml');
+    return document_.querySelector('parsererror')?.textContent ?? null;
+  }, decodedTicketSource);
+  assert.equal(ticketParserError, null, '纪念票 SVG 应通过独立 XML 解析');
+  assert.match(decodedTicketSource, /data-ticket-field="title"/u);
+  assert.match(decodedTicketSource, /data-ticket-language="primary" lang="en-US"/u);
+  assert.match(decodedTicketSource, /data-ticket-language="secondary" lang="zh-CN"/u);
+  assert.match(decodedTicketSource, /data-ticket-field-group="production"/u);
+  assert.match(decodedTicketSource, /data-ticket-field-group="date-time"/u);
+  assert.match(decodedTicketSource, /data-ticket-field-group="venue"/u);
+  assert.match(decodedTicketSource, /data-ticket-field-group="zone"/u);
+  const downloadedFieldOrder = [
+    'data-ticket-field="title"',
+    'data-ticket-field="secondary-title"',
+    'data-ticket-field="kind"',
+    'data-ticket-field="date-time"',
+    'data-ticket-field="secondary-date-time"',
+    'data-ticket-field="place"',
+    'data-ticket-field="secondary-place"',
+  ].map((field) => decodedTicketSource.indexOf(field));
+  assert.ok(downloadedFieldOrder.every((index) => index >= 0));
+  assert.deepEqual(
+    [...downloadedFieldOrder].sort((left, right) => left - right),
+    downloadedFieldOrder,
+  );
+  assert.match(decodedTicketSource, /data-ticket-composite-stamp=""/u);
+  const screenFieldGroups = await ticketPage
+    .locator('.issued-ticket__caption [data-ticket-field-group]')
+    .evaluateAll((elements) =>
+      elements.map((element) => element.getAttribute('data-ticket-field-group')),
+    );
+  assert.deepEqual(screenFieldGroups, ['production', 'date-time', 'venue']);
+  assert.match(
+    (await ticketPage
+      .locator('.issued-ticket__caption [data-ticket-field-group="production"]')
+      .textContent()) ?? '',
+    /The Uncrowned Night.*无冕之夜.*Modern Tragedy/su,
+  );
+  assert.match(
+    (await ticketPage
+      .locator('.issued-ticket__caption [data-ticket-field-group="date-time"]')
+      .textContent()) ?? '',
+    /September 17, 1102 at 7:30 PM.*1102年9月17日 19:30/su,
+  );
+  assert.match(
+    (await ticketPage
+      .locator('.issued-ticket__caption [data-ticket-field-group="venue"]')
+      .textContent()) ?? '',
+    /Trimounts Grand Theater · Main Stage.*特里蒙大剧院 · 主舞台/su,
+  );
+  assert.match((await ticketPage.locator('.issued-ticket__number').textContent()) ?? '', /^票号 /u);
+  assert.equal(
+    await ticketPage.locator('[data-ticket-receipt] .ticket-receipt__lines li').count(),
+    1,
+  );
+  assert.equal(
+    await ticketPage.locator('[data-ticket-receipt] .ticket-receipt__meta > div').count(),
+    3,
+  );
+  assert.match(
+    (await ticketPage.locator('[data-ticket-receipt] .ticket-receipt__meta').textContent()) ?? '',
+    /受理时间.*1102.*配发渠道.*STANDARD CHANNEL.*受理状态.*席位已配发/su,
+  );
+  assert.equal(
+    await ticketPage.locator('[data-ticket-receipt] .ticket-receipt__line-details > div').count(),
+    4,
+  );
+  assert.equal(
+    await ticketPage.locator('[data-ticket-receipt] .ticket-receipt__totals > div').count(),
+    2,
+    '普通成功只显示票款小计与应付合计',
+  );
+  assert.equal(await ticketPage.locator('[data-ticket-receipt] > small').count(), 1);
   await assertNoHorizontalLoss(ticketPage, '320px 炎国票务结果');
+  await ticketPage.locator('[data-ticket-new-round]').click();
+  await ticketPage.waitForURL(`${origin}/yan/tickets/`);
+  await ticketPage.goto(`${origin}/yan/tickets/partner/`);
+  const partnerBrand = ticketPage.locator('[data-ticketing-platform="rice-network"]:has(h1)');
+  await partnerBrand.waitFor();
+  assert.equal(await partnerBrand.locator('h1').textContent(), '水稻网');
+  assert.equal(await partnerBrand.locator('img').first().getAttribute('alt'), '水稻网临时标识');
+  assert.equal(
+    await ticketPage.locator('.partner-ticketing__fallback a').getAttribute('href'),
+    '/yan/tickets/',
+  );
+  await assertNoHorizontalLoss(ticketPage, '320px 炎国水稻网页面');
   assertTicketErrors();
   await ticketContext.close();
+
+  const partnerBranchContext = await browser.newContext({ viewport: { width: 320, height: 800 } });
+  await partnerBranchContext.addInitScript(() => {
+    Math.random = () => 0.5;
+  });
+  const partnerBranchPage = await partnerBranchContext.newPage();
+  const assertPartnerBranchErrors = trackUnexpectedErrors(partnerBranchPage);
+  await partnerBranchPage.goto(`${origin}/yan/tickets/`);
+  await partnerBranchPage.locator('[data-ticketing-app]:not([hidden])').waitFor();
+  await partnerBranchPage.locator('[data-ticket-select]').first().check();
+  await partnerBranchPage.locator('[data-ticket-start]').click();
+  await partnerBranchPage.waitForURL(`${origin}/yan/tickets/partner/`);
+  const branchDialog = partnerBranchPage.locator('[data-partner-dialog][open]');
+  await branchDialog.waitFor();
+  const standardRetry = branchDialog.locator('[data-partner-action="retry"]');
+  const premiumOfferAction = branchDialog.locator('[data-partner-action="offer"]');
+  const returnToBasket = branchDialog.locator('[data-partner-action="back"]');
+  assert.match((await standardRetry.textContent()) ?? '', /水稻网.*原价/u);
+  assert.match((await premiumOfferAction.textContent()) ?? '', /跳楼机.*加价/u);
+  assert.match((await returnToBasket.textContent()) ?? '', /官网.*票篮/u);
+  assert.equal(await standardRetry.getAttribute('class'), 'button');
+  assert.equal(await premiumOfferAction.getAttribute('class'), 'button');
+  const [retryBox, offerBox] = await Promise.all([
+    standardRetry.boundingBox(),
+    premiumOfferAction.boundingBox(),
+  ]);
+  assert.ok(retryBox && offerBox, '标准重试与加价方案控件应可见');
+  assert.ok(
+    Math.abs(retryBox.height - offerBox.height) <= 1,
+    '标准重试与加价方案控件应保持同等视觉高度',
+  );
+  await partnerBranchPage.locator('[data-partner-action="offer"]').click();
+  await branchDialog.waitFor();
+  assert.equal(
+    await partnerBranchPage.locator('[data-partner-action="accept-premium"]').count(),
+    1,
+    '查看跳楼机方案后仍须由访客明确接受',
+  );
+  assert.equal(
+    await partnerBranchPage.locator('[data-ticket-result]:not([hidden])').count(),
+    0,
+    '查看方案不得直接产生购票结果',
+  );
+  assert.equal(
+    await partnerBranchPage
+      .locator(
+        '[data-partner-brand="drop-tower"]:not([hidden]) [data-ticketing-platform="drop-tower"]',
+      )
+      .count(),
+    1,
+  );
+  await partnerBranchPage.keyboard.press('Escape');
+  const reviewPartnerResult = partnerBranchPage.locator('[data-partner-review]:not([hidden])');
+  await reviewPartnerResult.waitFor();
+  assert.equal(
+    await reviewPartnerResult.evaluate((element) => element === document.activeElement),
+    true,
+    'Escape 关闭第三方提示后焦点应回到复核按钮',
+  );
+  await reviewPartnerResult.click();
+  await partnerBranchPage.locator('[data-partner-action="decline-premium"]').click();
+  assert.equal(
+    await partnerBranchPage.locator('[data-partner-brand="drop-tower"]:not([hidden])').isVisible(),
+    true,
+  );
+  await partnerBranchPage.locator('[data-partner-action="decline-retention"]').click();
+  await partnerBranchPage.waitForURL(`${origin}/yan/tickets/`);
+  await assertNoHorizontalLoss(partnerBranchPage, '320px 跳楼机邀请与挽留路径');
+  assertPartnerBranchErrors();
+  await partnerBranchContext.close();
+
+  for (const priorityPath of ['full', 'retention']) {
+    const priorityContext = await browser.newContext({ viewport: { width: 320, height: 800 } });
+    await priorityContext.addInitScript(() => {
+      Math.random = () => 0.5;
+    });
+    const priorityPage = await priorityContext.newPage();
+    const assertPriorityErrors = trackUnexpectedErrors(priorityPage);
+    await priorityPage.goto(`${origin}/yan/tickets/`);
+    await priorityPage.locator('[data-ticketing-app]:not([hidden])').waitFor();
+    await priorityPage.locator('[data-ticket-select]').first().check();
+    await priorityPage.locator('[data-ticket-start]').click();
+    await priorityPage.waitForURL(`${origin}/yan/tickets/partner/`);
+    await priorityPage.locator('[data-partner-dialog][open]').waitFor();
+    await priorityPage.locator('[data-partner-action="offer"]').click();
+    if (priorityPath === 'retention') {
+      await priorityPage.locator('[data-partner-action="decline-premium"]').click();
+      await priorityPage.locator('[data-partner-action="accept-retention"]').click();
+    } else {
+      await priorityPage.locator('[data-partner-action="accept-premium"]').click();
+    }
+    await priorityPage.locator('[data-partner-dialog][open]').waitFor();
+    await priorityPage.locator('[data-partner-action="receipt"]').click();
+    await priorityPage.locator('[data-ticket-result]:not([hidden])').waitFor();
+    const priorityTotals = priorityPage.locator('[data-ticket-receipt] .ticket-receipt__totals');
+    assert.match((await priorityTotals.textContent()) ?? '', /优先席位调度服务.*\+/su);
+    if (priorityPath === 'retention') {
+      assert.equal(await priorityTotals.locator(':scope > div').count(), 4);
+      assert.match((await priorityTotals.textContent()) ?? '', /即时确认减让.*−/su);
+    } else {
+      assert.equal(await priorityTotals.locator(':scope > div').count(), 3);
+      assert.doesNotMatch((await priorityTotals.textContent()) ?? '', /即时确认减让/u);
+    }
+    await assertNoHorizontalLoss(priorityPage, `320px ${priorityPath} 优先线路凭单`);
+    assertPriorityErrors();
+    await priorityContext.close();
+  }
 
   const minosContext = await browser.newContext({
     viewport: { width: 320, height: 800 },
@@ -867,8 +1263,11 @@ try {
   await minosPage.locator('[data-ticketing-app]:not([hidden])').waitFor();
   await minosPage.locator('[data-ticket-select]').first().check();
   await minosPage.locator('[data-ticket-start]').click();
-  await minosPage.locator('[data-ticket-action="resolve"]').click();
+  await minosPage.waitForURL(`${origin}/min/tickets/partner/`);
+  await minosPage.locator('[data-partner-dialog][open]').waitFor();
+  await minosPage.locator('[data-partner-action="receipt"]').click();
   await minosPage.locator('[data-ticket-result]:not([hidden])').waitFor();
+  assert.equal(new URL(minosPage.url()).pathname, '/min/tickets/partner/');
   const minosTicketSource = await minosPage.locator('.issued-ticket > img').getAttribute('src');
   assert.match(decodeURIComponent(minosTicketSource ?? ''), /\p{Script=Greek}/u);
   const downloadPromise = minosPage.waitForEvent('download');
@@ -883,7 +1282,7 @@ try {
   await minosSelector.locator('summary').click();
   await minosSelector.locator('a[lang="zh-CN"]').click();
   await minosPage.locator('[data-ticket-result]:not([hidden])').waitFor();
-  assert.match(new URL(minosPage.url()).pathname, /^\/yan\/tickets\/$/u);
+  assert.match(new URL(minosPage.url()).pathname, /^\/yan\/tickets\/partner\/$/u);
   assertMinosErrors();
   await minosContext.close();
 
@@ -964,7 +1363,9 @@ try {
   await ursusPage.locator('[data-ticketing-app]:not([hidden])').waitFor();
   await ursusPage.locator('[data-ticket-select]').first().check();
   await ursusPage.locator('[data-ticket-start]').click();
-  await ursusPage.locator('[data-ticket-action="resolve"]').click();
+  await ursusPage.waitForURL(`${origin}/urs/tickets/partner/`);
+  await ursusPage.locator('[data-partner-dialog][open]').waitFor();
+  await ursusPage.locator('[data-partner-action="receipt"]').click();
   await ursusPage.locator('[data-ticket-result]:not([hidden])').waitFor();
   const editionRouteSequence = builtEditions.map(({ routePrefix }) => routePrefix);
   for (const routePrefix of editionRouteSequence) {
@@ -972,7 +1373,10 @@ try {
     await editionSelector.locator('summary').click();
     await editionSelector.locator(`a[href^="/${routePrefix}/tickets/"]`).click();
     await ursusPage.locator('[data-ticket-result]:not([hidden])').waitFor();
-    assert.match(new URL(ursusPage.url()).pathname, new RegExp(`^/${routePrefix}/tickets/$`, 'u'));
+    assert.match(
+      new URL(ursusPage.url()).pathname,
+      new RegExp(`^/${routePrefix}/tickets/partner/$`, 'u'),
+    );
   }
   const returnToUrsusSelector = ursusPage.locator('[data-edition-selector]');
   await returnToUrsusSelector.locator('summary').click();
@@ -1247,6 +1651,11 @@ try {
   await archivePage.waitForURL(new URL(archiveInvitationTarget, origin).href);
   await archivePage.locator('[data-world-switch="front"]').waitFor();
   await assertNoHorizontalLoss(archivePage, '320px 炎国三级污染里站');
+  await assertControlsWithinViewport(
+    archivePage,
+    '[data-pollution-safe] a, [data-pollution-safe] button, [data-pollution-safe] summary',
+    '320px 炎国三级污染里站',
+  );
   assertArchiveErrors();
   await archiveContext.close();
 
@@ -1349,7 +1758,7 @@ try {
   await failedSearchContext.close();
 
   console.log(
-    'browser validation passed: editorial home alternation/mobile order, full-list isolation, three venue level maps/zones, build-scoped edition selector, long-script 320px headers, ticket focus/artifact, Minos search/download/print, Ursus search isolation/download/cross-edition state/archive exit, archive four-level visual escalation/cross-edition level 3/reduced motion, no-JS fallback/static archive seats, search failure fallback',
+    'browser validation passed: editorial home alternation/mobile order, full-list isolation, ranked/grouped search keyboard path, three venue level maps/zones, build-scoped edition selector, long-script 320px headers, ticket focus/artifact, Minos search/download/print, Ursus search isolation/download/cross-edition state/archive exit, archive four-level visual escalation/cross-edition level 3/reduced motion, 320/768 protected controls, localized pollution live status, keyboard invitation exit/continue, no-JS fallback/static archive seats, search failure fallback',
   );
 } catch (error) {
   const serverOutput = preview.output.join('').trim();

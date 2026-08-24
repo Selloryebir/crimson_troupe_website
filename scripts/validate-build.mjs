@@ -77,6 +77,7 @@ function requiredRoutesForEdition(edition) {
     sitePath(edition, 'front', 'troupe'),
     sitePath(edition, 'front', 'search'),
     sitePath(edition, 'front', 'tickets'),
+    sitePath(edition, 'front', 'tickets/partner'),
     siteRoot(edition, 'archive'),
     sitePath(edition, 'archive', 'performances'),
     sitePath(edition, 'archive', 'performances/history'),
@@ -280,7 +281,16 @@ for (const [route, filePath] of routes) {
         html.indexOf('<h1') < html.indexOf('data-archive-invitation'),
         `${route} 的主标题必须先于三级邀请`,
       );
-      assert.match(html, /data-archive-invitation-status[^>]*aria-live="polite"/u);
+      assert.match(
+        html,
+        /data-pollution-status[^>]*data-pollution-announcement-level1[^>]*data-pollution-announcement-level2[^>]*data-pollution-announcement-level3[^>]*aria-live="polite"/u,
+        `${route} 缺少三级本地化污染状态公告`,
+      );
+      assert.doesNotMatch(
+        html,
+        /data-archive-invitation-status|data-invitation-announcement/u,
+        `${route} 的请柬不得拥有独立 live 公告`,
+      );
       assert.doesNotMatch(
         html,
         /<dialog[^>]*data-archive-invitation[^>]*\sopen(?:\s|>)/u,
@@ -291,6 +301,17 @@ for (const [route, filePath] of routes) {
         /<section[^>]*\sdata-archive-projection(?:\s|=|>)|data-archive-projection-status/u,
         `${route} 不得保留底部投影框`,
       );
+      const projectionPosters = [
+        ...html.matchAll(/<img\b[^>]*data-archive-projection-field="poster"[^>]*>/gu),
+      ];
+      for (const [projectionPoster] of projectionPosters) {
+        assert.match(projectionPoster, /\sloading="lazy"/u, `${route} 的隐藏投影图必须延迟加载`);
+        assert.doesNotMatch(
+          projectionPoster,
+          /\sloading="eager"/u,
+          `${route} 的等级 0 不得急切请求隐藏投影图`,
+        );
+      }
     }
     if (route.endsWith('/search/')) {
       assert.match(html, /data-search-fallback/u, `${route} 缺少唯一搜索降级内容`);
@@ -382,12 +403,24 @@ for (const edition of builtEditions) {
   assert.match(ticketPage, /data-ticketing-app[^>]*hidden/u);
   assert.match(ticketPage, /data-ticketing-messages/u);
   assert.match(ticketPage, /data-ticket-basket[^>]*aria-labelledby="ticket-basket-title"/u);
-  assert.match(ticketPage, /data-ticket-flow[^>]*aria-labelledby="ticket-flow-title"/u);
-  assert.match(ticketPage, /data-ticket-result[^>]*aria-labelledby="ticket-result-title"/u);
+  assert.doesNotMatch(ticketPage, /data-ticket-flow|data-ticket-result/u);
   const encodedTicketOptions = ticketPage.match(/data-ticketing-options="([^"]+)"/u)?.[1];
   assert.ok(encodedTicketOptions, `${edition.editionId} 票务页缺少构建期候选`);
   const ticketOptions = JSON.parse(decodeHtmlAttribute(encodedTicketOptions));
-  assert.deepEqual(ticketOptions, getTicketingOptions(getLocalization(edition), buildSnapshot));
+  const expectedTicketOptions = JSON.parse(
+    JSON.stringify(getTicketingOptions(getLocalization(edition), buildSnapshot)),
+  );
+  assert.deepEqual(ticketOptions, expectedTicketOptions);
+  const partnerTicketPage = readFileSync(
+    routes.get(sitePath(edition, 'front', 'tickets/partner')),
+    'utf8',
+  );
+  assert.match(partnerTicketPage, /data-partner-ticketing-app[^>]*hidden/u);
+  assert.match(partnerTicketPage, /data-partner-dialog/u);
+  assert.match(
+    partnerTicketPage,
+    /data-ticket-result[^>]*aria-labelledby="ticket-result-title"[^>]*hidden/u,
+  );
   const archiveTicketPage = readFileSync(
     routes.get(sitePath(edition, 'archive', 'tickets')),
     'utf8',
