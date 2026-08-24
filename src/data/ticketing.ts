@@ -11,6 +11,7 @@ import {
   type ResolvedLocalization,
 } from './localized/resolve.ts';
 import type { TicketArtifactMessages } from './localized/schema.ts';
+import { ticketArtifactLocalesShareLanguage } from './localized/ticket-artifact.ts';
 import type { LocationId } from './locations.ts';
 import type { PerformanceId, TicketOffer, TicketZone } from './performances.ts';
 import type { ProductionId, ProductionVisual } from './productions/index.ts';
@@ -77,6 +78,7 @@ function getTicketArtifactProjection(
   performanceId: PerformanceId,
   productionId: ProductionId,
   locationId: LocationId,
+  websiteEditionId: BuildEditionId,
   snapshot: ContentSnapshot,
 ): TicketArtifactProjection {
   const countryEditionId = snapshot.locations[locationId]?.countryEditionId;
@@ -89,10 +91,10 @@ function getTicketArtifactProjection(
     productionId,
     snapshot,
   );
-  const secondary =
-    countryEditionId === 'victoria' || countryEditionId === 'columbia'
-      ? undefined
-      : getArtifactLocalizedLayer('victoria', performanceId, productionId, snapshot);
+  const websiteEdition = editions[websiteEditionId];
+  const secondary = ticketArtifactLocalesShareLanguage(primary.locale, websiteEdition.locale)
+    ? undefined
+    : getArtifactLocalizedLayer(websiteEditionId, performanceId, productionId, snapshot);
   return Object.freeze({ primary, secondary });
 }
 
@@ -158,6 +160,7 @@ export function getTicketingOptions(
             performanceId,
             leadProduction.productionId,
             performance.locationId,
+            localization.edition.editionId,
             snapshot,
           ),
         },

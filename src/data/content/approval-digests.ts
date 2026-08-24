@@ -2,6 +2,7 @@ import { archiveProjectionIdentity, type ArchiveProjectionIdentity } from '../ar
 import type { EditionId } from '../editions.ts';
 import { locations, type Location } from '../locations.ts';
 import { localizationPackages, type PartialLocalizationPackage } from '../localized/packages.ts';
+import { getTicketArtifactEditionIds } from '../localized/ticket-artifact.ts';
 import type { PerformanceId } from '../performances.ts';
 import {
   productionArtworkRegistry,
@@ -168,33 +169,27 @@ function createPerformanceApprovalDigest(
   const ticketArtifactLocalization =
     performance.world === 'front' && performance.ticketAvailability.state === 'on-sale'
       ? Object.fromEntries(
-          [sources.locations[performance.locationId].countryEditionId, 'victoria' as const]
-            .filter(
-              (editionId, index, editionIds) =>
-                editionIds.indexOf(editionId) === index &&
-                !(
-                  sources.locations[performance.locationId].countryEditionId === 'columbia' &&
-                  editionId === 'victoria'
+          getTicketArtifactEditionIds(
+            editionIds,
+            sources.locations[performance.locationId].countryEditionId,
+          ).map((editionId) => {
+            const package_ = sources.localizations[editionId];
+            return [
+              editionId,
+              {
+                location: package_?.programs?.locations?.[performance.locationId],
+                performance: package_?.programs?.performances?.[performanceId],
+                productions: Object.fromEntries(
+                  productionIds.map((productionId) => [
+                    productionId,
+                    package_?.programs?.productions?.[productionId],
+                  ]),
                 ),
-            )
-            .map((editionId) => {
-              const package_ = sources.localizations[editionId];
-              return [
-                editionId,
-                {
-                  location: package_?.programs?.locations?.[performance.locationId],
-                  performance: package_?.programs?.performances?.[performanceId],
-                  productions: Object.fromEntries(
-                    productionIds.map((productionId) => [
-                      productionId,
-                      package_?.programs?.productions?.[productionId],
-                    ]),
-                  ),
-                  ticketZones: package_?.programs?.ticketZones,
-                  artifact: package_?.messages?.ticketing?.artifact,
-                },
-              ];
-            }),
+                ticketZones: package_?.programs?.ticketZones,
+                artifact: package_?.messages?.ticketing?.artifact,
+              },
+            ];
+          }),
         )
       : undefined;
 

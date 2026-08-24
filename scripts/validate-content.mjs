@@ -493,7 +493,7 @@ assert.throws(
 );
 
 const localizationWithoutAuxiliaryTicketContent = structuredClone(localizationPackages);
-delete localizationWithoutAuxiliaryTicketContent.victoria.programs.performances[
+delete localizationWithoutAuxiliaryTicketContent.leithanien.programs.performances[
   'caged-fire-wiesheim-1102'
 ];
 assert.throws(
@@ -504,7 +504,7 @@ assert.throws(
       buildContexts.showcase,
       createValidationSources({ localizations: localizationWithoutAuxiliaryTicketContent }),
     ),
-  /ticketArtifact\.victoria\.performances\.caged-fire-wiesheim-1102 缺失/u,
+  /ticketArtifact\.leithanien\.performances\.caged-fire-wiesheim-1102 缺失/u,
 );
 
 const currentDigests = createContentApprovalDigests(
@@ -521,7 +521,7 @@ assert.notEqual(
   currentDigests.performances[alternateDependencyId],
 );
 const changedAuxiliaryTicketLocalizations = structuredClone(localizationPackages);
-changedAuxiliaryTicketLocalizations.victoria.messages.ticketing.artifact.header =
+changedAuxiliaryTicketLocalizations.leithanien.messages.ticketing.artifact.header =
   'CHANGED TICKET HEADER';
 const changedAuxiliaryTicketDigests = createContentApprovalDigests(
   buildContexts.release.editionIds,

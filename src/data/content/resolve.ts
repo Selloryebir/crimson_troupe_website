@@ -9,6 +9,7 @@ import {
 import { archiveProjectionIdentity } from '../archive-pollution.ts';
 import { locations, type Location, type LocationId } from '../locations.ts';
 import { localizationPackages, type PartialLocalizationPackage } from '../localized/packages.ts';
+import { getTicketArtifactEditionIds } from '../localized/ticket-artifact.ts';
 import type { Performance, PerformanceCollection, PerformanceId } from '../performances.ts';
 import { productions, type Production, type ProductionId } from '../productions/index.ts';
 import { getRegisteredProductionArtwork, type ProductionArtwork } from '../production-artworks.ts';
@@ -159,18 +160,16 @@ export function resolveContent(
     }
     return editions[editionId];
   });
-  const ticketArtifactEditionIds = performanceEntries.flatMap(([, performance]) => {
+  const venueTicketArtifactEditionIds = performanceEntries.flatMap(([, performance]) => {
     if (performance.world !== 'front' || performance.ticketAvailability.state !== 'on-sale') {
       return [];
     }
-    const countryEditionId = locations[performance.locationId].countryEditionId;
-    return countryEditionId === 'victoria' || countryEditionId === 'columbia'
-      ? [countryEditionId]
-      : [countryEditionId, 'victoria' as const];
+    return [locations[performance.locationId].countryEditionId];
   });
-  const localizationPackageEditionIds = [
-    ...new Set([...context.editionIds, ...ticketArtifactEditionIds]),
-  ];
+  const localizationPackageEditionIds = venueTicketArtifactEditionIds.reduce(
+    (editionIds, venueEditionId) => getTicketArtifactEditionIds(editionIds, venueEditionId),
+    context.editionIds,
+  );
   const snapshotLocalizationPackages = Object.freeze(
     Object.fromEntries(
       localizationPackageEditionIds.map((editionId) => [

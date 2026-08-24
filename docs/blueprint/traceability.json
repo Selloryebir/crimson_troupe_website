@@ -642,6 +642,11 @@
       "related": ["BP-CNT-CORE", "BP-FND-DOMAIN", "BP-MOD-TICKETING"]
     },
     {
+      "path": "src/data/localized/ticket-artifact.ts",
+      "primary": "BP-I18N-CORE",
+      "related": ["BP-CNT-CORE", "BP-MOD-TICKETING"]
+    },
+    {
       "path": "src/data/localized/yan/index.ts",
       "primary": "BP-I18N-CORE",
       "related": ["BP-CNT-CORE"]

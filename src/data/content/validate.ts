@@ -2,6 +2,7 @@ import { archiveProjectionIdentity, type ArchiveProjectionIdentity } from '../ar
 import type { BuildEditionId } from '../editions.ts';
 import { locations, type Location } from '../locations.ts';
 import { localizationPackages, type PartialLocalizationPackage } from '../localized/packages.ts';
+import { getTicketArtifactEditionIds } from '../localized/ticket-artifact.ts';
 import {
   assertPerformanceOfferMatrix,
   performanceOfferMatrix,
@@ -197,10 +198,10 @@ export function assertContentBundle(
     }
     if (performance.world === 'front' && performance.ticketAvailability.state === 'on-sale') {
       const countryEditionId = sources.locations[performance.locationId].countryEditionId;
-      const performanceArtifactEditionIds: BuildEditionId[] = [countryEditionId];
-      if (countryEditionId !== 'victoria' && countryEditionId !== 'columbia') {
-        performanceArtifactEditionIds.push('victoria');
-      }
+      const performanceArtifactEditionIds = getTicketArtifactEditionIds(
+        editionIds,
+        countryEditionId,
+      );
       performanceArtifactEditionIds.forEach((editionId) => ticketArtifactEditionIds.add(editionId));
       for (const artifactEditionId of performanceArtifactEditionIds) {
         const artifactPackage = sources.localizations[artifactEditionId];

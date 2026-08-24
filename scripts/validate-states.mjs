@@ -1133,9 +1133,16 @@ for (const localization of previewLocalizations.slice(1)) {
   assert.deepEqual(crossLocaleRestored, crossLocaleState);
   assert.notEqual(yanOptions[0].offers[0].label, targetOptions[0].offers[0].label);
   assert.deepEqual(
-    targetOptions[0].artifact,
-    yanOptions[0].artifact,
-    '网站国家版本切换不得改变由举办地决定的票面语言投影',
+    targetOptions[0].artifact.primary,
+    yanOptions[0].artifact.primary,
+    '网站国家版本切换不得改变由举办地决定的票面主语言投影',
+  );
+  const sharesPrimaryLanguage =
+    targetOptions[0].artifact.primary.locale.split('-')[0] ===
+    localization.edition.locale.split('-')[0];
+  assert.equal(
+    targetOptions[0].artifact.secondary?.editionId,
+    sharesPrimaryLanguage ? undefined : localization.edition.editionId,
   );
 }
 
@@ -1148,12 +1155,30 @@ const wiesheimArtifact = yanOptions.find(
 const norportArtifact = yanOptions.find(
   ({ performanceId }) => performanceId === 'second-snow-norport-1102',
 )?.artifact;
+const leithanienOptions = getTicketingOptions(
+  getLocalization(editions.leithanien, previewSnapshot),
+  previewSnapshot,
+);
+const columbiaOptions = getTicketingOptions(
+  getLocalization(editions.columbia, previewSnapshot),
+  previewSnapshot,
+);
+const leithanienWiesheimArtifact = leithanienOptions.find(
+  ({ performanceId }) => performanceId === 'caged-fire-wiesheim-1102',
+)?.artifact;
+const columbiaNorportArtifact = columbiaOptions.find(
+  ({ performanceId }) => performanceId === 'second-snow-norport-1102',
+)?.artifact;
 assert.equal(trimountArtifact?.primary.editionId, 'columbia');
-assert.equal(trimountArtifact?.secondary, undefined);
+assert.equal(trimountArtifact?.secondary?.editionId, 'yan');
 assert.equal(wiesheimArtifact?.primary.editionId, 'leithanien');
-assert.equal(wiesheimArtifact?.secondary?.editionId, 'victoria');
+assert.equal(wiesheimArtifact?.secondary?.editionId, 'yan');
 assert.equal(norportArtifact?.primary.editionId, 'victoria');
-assert.equal(norportArtifact?.secondary, undefined);
+assert.equal(norportArtifact?.secondary?.editionId, 'yan');
+assert.equal(leithanienWiesheimArtifact?.primary.editionId, 'leithanien');
+assert.equal(leithanienWiesheimArtifact?.secondary, undefined);
+assert.equal(columbiaNorportArtifact?.primary.editionId, 'victoria');
+assert.equal(columbiaNorportArtifact?.secondary, undefined);
 
 const artifactPerformance = {
   performanceId: 'performance-a',
@@ -1177,9 +1202,9 @@ const artifactEndingHistory = [
 const artifactJourneyTags = ['network-retry', 'priority-refused', 'retention-accepted'];
 const artifactEndingLabels = getTicketEndingLabels(yanLocalization.messages.ticketing);
 for (const [performanceId, expectedPrimaryLocale, expectedSecondaryLocale] of [
-  ['uncrowned-trimount-1102', 'en-US', null],
-  ['caged-fire-wiesheim-1102', 'de', 'en-GB'],
-  ['second-snow-norport-1102', 'en-GB', null],
+  ['uncrowned-trimount-1102', 'en-US', 'zh-CN'],
+  ['caged-fire-wiesheim-1102', 'de', 'zh-CN'],
+  ['second-snow-norport-1102', 'en-GB', 'zh-CN'],
 ]) {
   const option = yanOptions.find((candidate) => candidate.performanceId === performanceId);
   assert.ok(option, `${performanceId} 应属于当前票务候选`);
