@@ -121,6 +121,33 @@ assert.equal(Object.keys(productions).length, 14, '预备剧目目录应包含 1
 assert.equal(buildSnapshot.performanceEntries.length, 28, '当前根集合应发布 28 个场次');
 assert.equal(buildSnapshot.productionEntries.length, 14, '当前根集合应发布 14 个剧目');
 
+const cachedYanLocalization = getLocalization(editions.yan, buildSnapshot);
+assert.equal(
+  getLocalization(editions.yan, buildSnapshot),
+  cachedYanLocalization,
+  '同一快照与国家版本应复用严格本地化解析结果',
+);
+const parallelSnapshot = { ...buildSnapshot };
+assert.notEqual(
+  getLocalization(editions.yan, parallelSnapshot),
+  cachedYanLocalization,
+  '本地化缓存不得跨内容快照复用',
+);
+const snapshotArtwork = buildSnapshot.artworkEntries[0][2];
+const snapshotSeatingPlan = buildSnapshot.seatingPlanEntries[0][1];
+assert.ok(Object.isFrozen(buildSnapshot.localizationPackages.yan.site.brand));
+assert.ok(Object.isFrozen(snapshotArtwork.pollution.darkenZones));
+assert.ok(Object.isFrozen(snapshotSeatingPlan.levels));
+assert.ok(Object.isFrozen(snapshotSeatingPlan.levels[0].regions));
+assert.throws(() => {
+  buildSnapshot.localizationPackages.yan.site.brand.name = '测试';
+}, TypeError);
+assert.throws(() => snapshotArtwork.pollution.darkenZones.push('top'), TypeError);
+assert.throws(() => snapshotSeatingPlan.levels.push(snapshotSeatingPlan.levels[0]), TypeError);
+assert.throws(() => {
+  snapshotSeatingPlan.levels[0].regions[0].path = 'M0 0';
+}, TypeError);
+
 const fixtureId = 'uncrowned-trimount-1102';
 const fixturePerformance = performances[fixtureId];
 const selectedPreview = selectCompleteVariant(

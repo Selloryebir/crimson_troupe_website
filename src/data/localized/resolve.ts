@@ -82,6 +82,11 @@ interface LocalizationRequirement {
   targetValue: unknown;
 }
 
+const resolvedLocalizationCache = new WeakMap<
+  ContentSnapshot,
+  Map<BuiltEdition['editionId'], ResolvedLocalization>
+>();
+
 function objectRecord(value: unknown): Record<string, unknown> {
   return value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
 }
@@ -200,6 +205,10 @@ export function getLocalization(
   edition: BuiltEdition,
   snapshot: ContentSnapshot = buildSnapshot,
 ): ResolvedLocalization {
+  const cached = resolvedLocalizationCache.get(snapshot)?.get(edition.editionId);
+  if (cached) {
+    return cached;
+  }
   const target = snapshot.localizationPackages[edition.editionId];
   if (!target) {
     throw new Error(`国家版本 ${edition.editionId} 不属于当前内容快照。`);
@@ -225,24 +234,31 @@ export function getLocalization(
       Record<TicketZone, string>
     >,
   });
-  const strictRecord = <T>(value: T): LocalizedRecord<T> => ({
-    value,
-    sourceLocale: edition.locale,
-    usedFallback: false,
-  });
-  return {
+  const strictRecord = <T>(value: T): LocalizedRecord<T> =>
+    Object.freeze({
+      value,
+      sourceLocale: edition.locale,
+      usedFallback: false,
+    });
+  const resolved = Object.freeze({
     edition,
     site,
     programs,
     messages,
     archiveProjection,
-    sources: {
+    sources: Object.freeze({
       site: strictRecord(site),
       programs: strictRecord(programs),
       messages: strictRecord(messages),
       archiveProjection: strictRecord(archiveProjection),
-    },
-  };
+    }),
+  });
+  const snapshotCache =
+    resolvedLocalizationCache.get(snapshot) ??
+    new Map<BuiltEdition['editionId'], ResolvedLocalization>();
+  snapshotCache.set(edition.editionId, resolved);
+  resolvedLocalizationCache.set(snapshot, snapshotCache);
+  return resolved;
 }
 
 export function getLocalizedProduction(
