@@ -1,5 +1,11 @@
 import type { LocalizedShape } from '../schema';
 import type { yanMessages } from '../yan/messages';
+import type { yanTicketingPlatforms } from '../yan/messages';
+
+export const leithanienTicketingPlatforms = {
+  'rice-network': { displayName: 'Reisnetz', logoAlt: 'Vorläufiges Zeichen des Reisnetzes' },
+  'drop-tower': { displayName: 'Fallturm', logoAlt: 'Vorläufiges Zeichen des Fallturms' },
+} as const satisfies LocalizedShape<typeof yanTicketingPlatforms>;
 
 export const leithanienMessages = {
   filters: {
@@ -21,6 +27,7 @@ export const leithanienMessages = {
       'Der Suchindex ist vorübergehend nicht verfügbar. Fahren Sie mit der Hauptnavigation fort.',
     prompt:
       'Geben Sie einen Begriff ein, um Aufführungen, Produktionen und Website-Seiten zu finden.',
+    minimumQuery: 'Geben Sie mindestens {count} Zeichen ein.',
     resultCount: '{count} Ergebnisse gefunden.',
     noResults: 'Es wurde kein passender Inhalt gefunden.',
     noscriptTitle: 'Für die Suche ist JavaScript erforderlich',
@@ -28,6 +35,14 @@ export const leithanienMessages = {
       'Diese Seite sendet keine Anfrage und lädt keinen Remote-Dienst. Über die Hauptnavigation können Sie weiterhin nach Leistungen und Unternehmensinformationen suchen.',
   },
   ticketing: {
+    partnerPageEyebrow: 'OFFIZIELLER KARTENPARTNER',
+    partnerPageTitle: 'Sitzplatzdienst {platform}',
+    partnerPageIntroduction:
+      'Die Website der Truppe hat den Warenkorb an den Ticketpartner übergeben. Schließen Sie hier die Platzanfrage ab oder kehren Sie vor der Bestätigung zurück.',
+    partnerUnavailableTitle: 'Verbindung noch nicht verfügbar',
+    partnerUnavailableCopy:
+      'Das Reisnetz nimmt derzeit keine neuen Platzanfragen an. Ihr Warenkorb bleibt auf der Website der Truppe erhalten.',
+    returnToBasket: 'Zum offiziellen Warenkorb',
     selectedCount: '{count} Auftritte ausgewählt',
     emptyBasket: 'Keine Auftritte ausgewählt',
     selectionReady: 'Die Aufführungs- und Sitzbereich befinden sich in diesem Korb.',
@@ -41,13 +56,21 @@ export const leithanienMessages = {
     seatingPlanNotice:
       'Nur Zonendiagramm, keine individuelle Sitzplatzauswahl. Das Diagramm und der Selektor verwenden dieselben Preise.',
     selectSeatingZone: 'Wählen Sie {zone}, Basispreis {price} LMD',
-    receiptEyebrow: 'SIMULIERTER EMPFANG',
+    receiptEyebrow: 'SITZPLATZZUTEILUNG',
     receiptTitle: 'Sitzplatzregistrierungsbeleg',
     receiptCopy:
-      'Diese Anfrage wird bestätigt. Die unten angegebenen Beträge und Sitzplätze gelten nur für dieses simulierte Erlebnis.',
-    baseTotal: 'Basissumme',
-    adjustmentNone: 'Keine',
-    settledTotal: 'Simulierte Abrechnungssumme',
+      'Diese Anfrage wurde bestätigt. Prüfen Sie die zugeteilten Plätze und den fälligen Betrag.',
+    receiptAcceptedAt: 'Annahmezeit',
+    receiptChannel: 'Zuteilungskanal',
+    receiptStatus: 'Annahmestatus',
+    receiptStatusAllocated: 'Sitzplätze zugeteilt',
+    receiptPerformance: 'Aufführungsplatz',
+    receiptSchedule: 'Aufführungszeit',
+    receiptVenue: 'Spielstätte',
+    receiptZone: 'Sitzbereich',
+    receiptFaceValue: 'Aufführungssitzpreis',
+    ticketSubtotal: 'Zwischensumme der Tickets',
+    amountDue: 'Fälliger Gesamtbetrag',
     disclaimer: 'Nur Spielinhalte. Mit dieser Quittung entsteht keine Rücknahmepflicht.',
     ticketNumber: 'Ticketnummer {number}',
     downloadSvg: 'SVG herunterladen',
@@ -61,14 +84,14 @@ export const leithanienMessages = {
     premiumAttemptCopy:
       'Der Kanal behauptet, Ihre Warteschlangenposition zu verbessern und fügt bei Erfolg eine Serviceanpassung hinzu. Es kann trotzdem sein, dass es scheitert.',
     submitRequest: 'Bestätigen und absenden',
-    backToBasket: 'Zurück zum Warenkorb',
+    backToBasket: 'Zum offiziellen Warenkorb zurückkehren',
     networkTitle: 'Das Netzwerk reagierte vor der Bestätigung nicht mehr',
     networkCopy:
-      'Es wurde keine Abrechnung erstellt und Ihr Warenkorb bleibt intakt. Versuchen Sie es erneut auf derselben Route.',
-    retryBasket: 'Warenkorb behalten und erneut versuchen',
+      'Es wurden keine Plätze zugeteilt und Ihr Warenkorb bleibt erhalten. Senden Sie die Anfrage erneut über das Reisnetz.',
+    retryBasket: 'Erneut über das Reisnetz senden',
     premiumFailureTitle: 'Der Prioritätskanal hat immer noch keine Plätze gefunden',
     premiumFailureCopy:
-      'Der Sender hat keine Sitzplätze gefunden, aber einen simulierten Suchdiensteintrag ausgegeben. Ihr Warenkorb und die Grundpreise bleiben unverändert.',
+      'Der Kanal hat keine Plätze gefunden, aber einen Annahmebeleg für die Platzsuche erstellt. Warenkorb und Ticketpreise bleiben unverändert.',
     premiumOfferTitle: 'Der Joint Seat Return Channel bietet eine weitere Suche',
     premiumOfferCopy:
       'Der Kanal wird Ihre Anfragebestellung vermerken und bei Erfolg eine Serviceanpassung in Höhe von 50 % der Warenkorb-Basissumme hinzufügen. Es kann kein Sitzplatz garantiert werden.',
@@ -78,50 +101,41 @@ export const leithanienMessages = {
     standardFailureTitle: 'Starker Verkehr: Ticketanfrage fehlgeschlagen',
     standardFailureCopy:
       'Behalten Sie den Warenkorb und senden Sie ihn erneut, oder versuchen Sie es mit der Prioritätsroute, bei der bei Erfolg eine Gebühr erhoben wird.',
-    retryStandard: 'Standardroute erneut versuchen',
-    tryPremium: 'Überprüfen Sie das Angebot für die Sitzplatzrückgabe',
+    retryStandard: 'Zum Originalpreis über das Reisnetz erneut versuchen',
+    tryPremium: 'Aufschlagplan des Fallturms anzeigen',
     acceptPremium: 'Akzeptieren Sie ein 150 %-Angebot und suchen Sie erneut',
     declinePremium: 'Dieses Angebot ablehnen',
     acceptRetention: 'Akzeptieren Sie das 148 % Retention-Angebot',
     declineRetention: 'Lehnen Sie weiterhin ab und kehren Sie zum Warenkorb zurück',
-    retryPremium: 'Prioritätsroute erneut versuchen',
-    returnStandard: 'Markup abbrechen und zum Standard zurückkehren',
-    offerBaseTotal: 'Warenkorb-Basissumme',
-    offerAdjustment: 'Simulierte Serviceanpassung',
-    offerFinalTotal: 'Aktuelles simuliertes Angebot',
-    failureRecordTitle: 'Fehlerhafter Servicedatensatz',
+    retryPremium: 'Aktuellen Fallturm-Plan erneut versuchen',
+    returnStandard: 'Aufschlag ablehnen und zum Reisnetz zurückkehren',
+    offerBaseTotal: 'Zwischensumme der Tickets',
+    offerAdjustment: 'Priorisierte Sitzplatzzuteilung',
+    offerFinalTotal: 'Fälliger Angebotsbetrag',
+    failureRecordTitle: 'Annahmebeleg für die Platzsuche',
     allocatedSeats: 'Sitzplätze zugewiesen',
-    failureServiceFee: 'Gebühr für simulierte Suchdienste',
+    failureServiceFee: 'Annahmegebühr für die Platzsuche',
     failureRecordDisclaimer:
       'Es ist keine tatsächliche Belastung erfolgt. Durch diese Aufzeichnung entsteht keine Quittung, kein Erinnerungsticket und keine Rücknahmepflicht.',
     startRequired: 'Wählen Sie zunächst mindestens eine Aufführung aus.',
-    submitted: 'Warenkorb eingereicht. Eintritt in den simulierten Ticketing-Ablauf.',
+    submitted: 'Warenkorb übermittelt. Das Reisnetz prüft die verfügbaren Plätze.',
     success: 'Die Ticketausstellung war erfolgreich. Ihre Erinnerungskarten sind fertig.',
-    stateUpdated: 'Der Ticketstatus wurde aktualisiert.',
+    stateUpdated: 'Der Status der Platzanfrage wurde aktualisiert.',
     downloadStarted: 'Der Download für {title} hat begonnen.',
-    newRound: 'Die vorherige Runde ist beendet. Sie können Auftritte erneut auswählen.',
+    newRound: 'Die vorherige Platzanfrage ist beendet. Sie können erneut auswählen.',
     adjustments: {
-      'priority-service': 'Anpassung des Prioritätsroutendienstes',
-      'retention-service': 'Anpassung des Retention Quote Service',
-    },
-    stamps: {
-      'admission-confirmed': 'ZULASSUNG BESTÄTIGT',
-      'standard-route': 'STANDARDROUTE',
-      'priority-route': 'PRIORITÄTSROUTE',
-      'network-recovered': 'NETZWERK WIEDERHERGESTELLT',
-      'returned-seat': 'SITZ ZURÜCKGEGEBEN',
-      'retention-offer': 'RETENTIONSANGEBOT',
-      'manual-review': 'HANDBUCHÜBERPRÜFUNG',
+      'priority-service': 'Priorisierte Sitzplatzzuteilung',
+      'retention-service': 'Nachlass für sofortige Bestätigung',
     },
     artifact: {
       title: '{title} Gedenkticket',
       description: '{dateTime}, {place}, {zone}, {price} LMD, Ticketnummer {number}',
       header: 'CRIMSON TROUPE · GEDENKEINTRITT',
-      dateTime: 'TERRA DATUM UND UHRZEIT',
+      dateTime: 'DATUM UND UHRZEIT',
       zone: 'ZONE',
       faceValue: 'BASISNennwert',
       ticketNumber: 'TICKETNUMMER',
-      alt: '{title} Gedenkticket: {dateTime}, {place}, {zone}, {price} LMD, Ticket- und Matrixnummer {number}',
+      alt: '{title} Gedenkticket: {dateTime}, {place}, {zone}, {price} LMD, Ticketnummer {number}',
     },
   },
   programs: {

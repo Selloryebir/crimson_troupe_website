@@ -40,7 +40,7 @@ export const ursusSite = {
       troupeTitle: 'Труппа',
       troupeKeywords: 'труппа творческий метод гастроли',
       ticketsTitle: 'Билеты',
-      ticketsSummary: 'Выберите спектакли и зоны мест для имитации оформления билетов.',
+      ticketsSummary: 'Выберите спектакли и зоны мест и отправьте запрос билетному партнёру.',
       ticketsKeywords: 'билеты места бронирование зона памятный',
     },
     home: {

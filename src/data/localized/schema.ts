@@ -2,6 +2,7 @@ import type { ArchivePollutionProfile } from '../archive-pollution.ts';
 import type { LocationId } from '../locations';
 import type { PerformanceId, TicketZone } from '../performances';
 import type { ProductionId } from '../productions/index.ts';
+import type { TicketingPlatformId } from '../ticketing-platforms.ts';
 
 export type LocalizedShape<T> = T extends string
   ? string
@@ -23,11 +24,8 @@ export interface LocationContent {
 
 export interface PerformanceContent {
   index: string;
-  dateTimeDisplay: string;
   venue: string;
-  searchDetail: string;
   searchKeywords: string;
-  previousDateTimeDisplay?: string;
   operationalNotice?: {
     sourceRevision: string;
     text: string;
@@ -68,6 +66,7 @@ export interface LocalizationAuthoringPackage<SiteContent, MessageContent> {
   site?: Partial<SiteContent>;
   programs?: AuthoringProgramContent;
   messages?: Partial<MessageContent>;
+  platforms?: Partial<Record<TicketingPlatformId, TicketingPlatformContent>>;
   archiveProjection?: ArchiveProjectionContent;
 }
 
@@ -75,7 +74,13 @@ export interface LocalizationPackage<SiteContent, MessageContent> {
   site: SiteContent;
   programs: ProgramContent;
   messages: MessageContent;
+  platforms: Record<TicketingPlatformId, TicketingPlatformContent>;
   archiveProjection: ArchiveProjectionContent;
+}
+
+export interface TicketingPlatformContent {
+  displayName: string;
+  logoAlt: string;
 }
 
 export interface ArchiveProjectionView {
@@ -114,7 +119,7 @@ export interface ArchiveInvitationContent {
 }
 
 export interface ArchiveProjectionContent {
-  statusAnnouncement: string;
+  statusAnnouncements: readonly [level1: string, level2: string, level3: string];
   performance: ArchiveProjectionPerformance;
   invitation: ArchiveInvitationContent;
   views: Record<ArchivePollutionProfile, ArchiveProjectionView>;
@@ -126,6 +131,7 @@ export interface SearchMessages {
   scope: string;
   unavailable: string;
   prompt: string;
+  minimumQuery: string;
   resultCount: string;
   noResults: string;
   noscriptTitle: string;
@@ -143,14 +149,6 @@ export interface FilterMessages {
   empty: string;
 }
 
-export type TicketStampId =
-  | 'admission-confirmed'
-  | 'standard-route'
-  | 'priority-route'
-  | 'network-recovered'
-  | 'returned-seat'
-  | 'retention-offer'
-  | 'manual-review';
 export type TicketAdjustmentId = 'priority-service' | 'retention-service';
 
 export interface TicketArtifactMessages {
@@ -165,6 +163,12 @@ export interface TicketArtifactMessages {
 }
 
 export interface TicketingMessages {
+  partnerPageEyebrow: string;
+  partnerPageTitle: string;
+  partnerPageIntroduction: string;
+  partnerUnavailableTitle: string;
+  partnerUnavailableCopy: string;
+  returnToBasket: string;
   selectedCount: string;
   emptyBasket: string;
   selectionReady: string;
@@ -180,9 +184,17 @@ export interface TicketingMessages {
   receiptEyebrow: string;
   receiptTitle: string;
   receiptCopy: string;
-  baseTotal: string;
-  adjustmentNone: string;
-  settledTotal: string;
+  receiptAcceptedAt: string;
+  receiptChannel: string;
+  receiptStatus: string;
+  receiptStatusAllocated: string;
+  receiptPerformance: string;
+  receiptSchedule: string;
+  receiptVenue: string;
+  receiptZone: string;
+  receiptFaceValue: string;
+  ticketSubtotal: string;
+  amountDue: string;
   disclaimer: string;
   ticketNumber: string;
   downloadSvg: string;
@@ -228,6 +240,5 @@ export interface TicketingMessages {
   downloadStarted: string;
   newRound: string;
   adjustments: Record<TicketAdjustmentId, string>;
-  stamps: Record<TicketStampId, string>;
   artifact: TicketArtifactMessages;
 }

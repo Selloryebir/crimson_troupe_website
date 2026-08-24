@@ -37,7 +37,10 @@ const collectionPath =
 const backLabel = performance.collection === 'history' ? copy.backHistory : copy.backCurrent;
 const projection = localization.archiveProjection.performance;
 const projectionView = localization.archiveProjection.views['performance-record'];
-const projectionProduction = getLocalizedProduction(localization, 'the-carnival');
+const projectionProduction = getLocalizedProduction(
+  localization,
+  buildSnapshot.archiveProjectionProductionId,
+);
 ---
 
 <ArchiveLayout

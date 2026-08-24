@@ -37,7 +37,7 @@ export const yanSite = {
       troupeTitle: '剧团',
       troupeKeywords: '剧团 公司 创作 方法 巡演',
       ticketsTitle: '票务',
-      ticketsSummary: '选择当前巡演季场次与分区，进入模拟购票体验。',
+      ticketsSummary: '选择当前巡演季场次与分区，并由合作平台受理席位请求。',
       ticketsKeywords: '票务 席位 购票 分区 纪念票',
     },
     home: {

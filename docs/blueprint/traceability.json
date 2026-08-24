@@ -100,6 +100,7 @@
         "BP-FND-EXTENSION",
         "BP-FND-DOMAIN",
         "BP-MOD-PROGRAMS",
+        "BP-MOD-TERRA-TIME",
         "BP-CNT-CORE",
         "BP-I18N-CORE",
         "BP-I18N-TERMS"
@@ -200,6 +201,16 @@
       "related": ["BP-FND-EXPERIENCE", "BP-FND-DOMAIN", "BP-CNT-CORE"]
     },
     {
+      "path": "src/components/ticketing/TicketingPlatformBrand.astro",
+      "primary": "BP-MOD-TICKETING",
+      "related": ["BP-FND-EXPERIENCE", "BP-CNT-CORE", "BP-I18N-CORE"]
+    },
+    {
+      "path": "src/components/ticketing/PartnerTicketingExperience.astro",
+      "primary": "BP-MOD-TICKETING",
+      "related": ["BP-FND-EXPERIENCE", "BP-FND-DOMAIN", "BP-MOD-TERRA-TIME", "BP-I18N-CORE"]
+    },
+    {
       "path": "src/components/shared/PollutionController.astro",
       "primary": "BP-FND-NARRATIVE",
       "related": ["BP-MOD-ARCHIVE", "BP-FND-EXPERIENCE"]
@@ -247,7 +258,7 @@
     {
       "path": "src/data/content/approval-digests.ts",
       "primary": "BP-CNT-CORE",
-      "related": ["BP-I18N-CORE", "BP-CNT-PRODUCTION-VISUAL"]
+      "related": ["BP-I18N-CORE", "BP-MOD-TICKETING", "BP-CNT-PRODUCTION-VISUAL"]
     },
     {
       "path": "src/data/content/eligibility.ts",
@@ -267,17 +278,23 @@
     {
       "path": "src/data/content/resolve.ts",
       "primary": "BP-CNT-CORE",
-      "related": ["BP-FND-DOMAIN", "BP-I18N-CORE", "BP-MOD-PROGRAMS", "BP-MOD-TERRA-TIME"]
+      "related": [
+        "BP-FND-DOMAIN",
+        "BP-I18N-CORE",
+        "BP-MOD-PROGRAMS",
+        "BP-MOD-TERRA-TIME",
+        "BP-MOD-TICKETING"
+      ]
     },
     {
       "path": "src/data/content/root-sets.ts",
       "primary": "BP-CNT-CORE",
-      "related": ["BP-FND-DOMAIN", "BP-MOD-PROGRAMS"]
+      "related": ["BP-FND-DOMAIN", "BP-MOD-PROGRAMS", "BP-MOD-TERRA-TIME"]
     },
     {
       "path": "src/data/content/validate.ts",
       "primary": "BP-CNT-CORE",
-      "related": ["BP-I18N-CORE", "BP-CNT-PRODUCTION-VISUAL"]
+      "related": ["BP-I18N-CORE", "BP-MOD-TICKETING", "BP-CNT-PRODUCTION-VISUAL"]
     },
     {
       "path": "src/data/content/variants.ts",
@@ -287,7 +304,7 @@
     {
       "path": "src/data/localized/format.ts",
       "primary": "BP-I18N-CORE",
-      "related": ["BP-CNT-CORE"]
+      "related": ["BP-CNT-CORE", "BP-MOD-TERRA-TIME", "BP-MOD-TICKETING"]
     },
     {
       "path": "src/data/localized/packages.ts",
@@ -332,7 +349,7 @@
     {
       "path": "src/data/localized/higashi/site.ts",
       "primary": "BP-CNT-CORE",
-      "related": ["BP-I18N-CORE", "BP-FND-CORE", "BP-FND-EXPERIENCE"]
+      "related": ["BP-I18N-CORE", "BP-FND-CORE", "BP-FND-EXPERIENCE", "BP-MOD-TICKETING"]
     },
     {
       "path": "src/data/localized/columbia/index.ts",
@@ -372,7 +389,7 @@
     {
       "path": "src/data/localized/columbia/site.ts",
       "primary": "BP-CNT-CORE",
-      "related": ["BP-I18N-CORE", "BP-FND-CORE", "BP-FND-EXPERIENCE"]
+      "related": ["BP-I18N-CORE", "BP-FND-CORE", "BP-FND-EXPERIENCE", "BP-MOD-TICKETING"]
     },
     {
       "path": "src/data/localized/victoria/index.ts",
@@ -412,7 +429,7 @@
     {
       "path": "src/data/localized/victoria/site.ts",
       "primary": "BP-CNT-CORE",
-      "related": ["BP-I18N-CORE", "BP-FND-CORE", "BP-FND-EXPERIENCE"]
+      "related": ["BP-I18N-CORE", "BP-FND-CORE", "BP-FND-EXPERIENCE", "BP-MOD-TICKETING"]
     },
     {
       "path": "src/data/localized/siracusa/index.ts",
@@ -452,7 +469,7 @@
     {
       "path": "src/data/localized/siracusa/site.ts",
       "primary": "BP-CNT-CORE",
-      "related": ["BP-I18N-CORE", "BP-FND-CORE", "BP-FND-EXPERIENCE"]
+      "related": ["BP-I18N-CORE", "BP-FND-CORE", "BP-FND-EXPERIENCE", "BP-MOD-TICKETING"]
     },
     {
       "path": "src/data/localized/leithanien/index.ts",
@@ -492,7 +509,7 @@
     {
       "path": "src/data/localized/leithanien/site.ts",
       "primary": "BP-CNT-CORE",
-      "related": ["BP-I18N-CORE", "BP-FND-CORE", "BP-FND-EXPERIENCE"]
+      "related": ["BP-I18N-CORE", "BP-FND-CORE", "BP-FND-EXPERIENCE", "BP-MOD-TICKETING"]
     },
     {
       "path": "src/data/localized/kazimierz/index.ts",
@@ -532,7 +549,7 @@
     {
       "path": "src/data/localized/kazimierz/site.ts",
       "primary": "BP-CNT-CORE",
-      "related": ["BP-I18N-CORE", "BP-FND-CORE", "BP-FND-EXPERIENCE"]
+      "related": ["BP-I18N-CORE", "BP-FND-CORE", "BP-FND-EXPERIENCE", "BP-MOD-TICKETING"]
     },
     {
       "path": "src/data/localized/minos/index.ts",
@@ -572,7 +589,7 @@
     {
       "path": "src/data/localized/minos/site.ts",
       "primary": "BP-CNT-CORE",
-      "related": ["BP-I18N-CORE", "BP-FND-CORE", "BP-FND-EXPERIENCE"]
+      "related": ["BP-I18N-CORE", "BP-FND-CORE", "BP-FND-EXPERIENCE", "BP-MOD-TICKETING"]
     },
     {
       "path": "src/data/localized/ursus/index.ts",
@@ -612,7 +629,7 @@
     {
       "path": "src/data/localized/ursus/site.ts",
       "primary": "BP-CNT-CORE",
-      "related": ["BP-I18N-CORE", "BP-FND-CORE", "BP-FND-EXPERIENCE"]
+      "related": ["BP-I18N-CORE", "BP-FND-CORE", "BP-FND-EXPERIENCE", "BP-MOD-TICKETING"]
     },
     {
       "path": "src/data/localized/resolve.ts",
@@ -622,7 +639,12 @@
     {
       "path": "src/data/localized/schema.ts",
       "primary": "BP-I18N-CORE",
-      "related": ["BP-CNT-CORE", "BP-FND-DOMAIN"]
+      "related": ["BP-CNT-CORE", "BP-FND-DOMAIN", "BP-MOD-TICKETING"]
+    },
+    {
+      "path": "src/data/localized/ticket-artifact.ts",
+      "primary": "BP-I18N-CORE",
+      "related": ["BP-CNT-CORE", "BP-MOD-TICKETING"]
     },
     {
       "path": "src/data/localized/yan/index.ts",
@@ -662,7 +684,7 @@
     {
       "path": "src/data/localized/yan/site.ts",
       "primary": "BP-CNT-CORE",
-      "related": ["BP-I18N-CORE", "BP-FND-CORE", "BP-FND-EXPERIENCE"]
+      "related": ["BP-I18N-CORE", "BP-FND-CORE", "BP-FND-EXPERIENCE", "BP-MOD-TICKETING"]
     },
     {
       "path": "src/data/locations.ts",
@@ -741,6 +763,11 @@
       "related": ["BP-FND-DOMAIN", "BP-I18N-CORE"]
     },
     {
+      "path": "src/data/search-policy.ts",
+      "primary": "BP-MOD-SEARCH",
+      "related": ["BP-I18N-CORE"]
+    },
+    {
       "path": "src/data/site-search-index.ts",
       "primary": "BP-MOD-SEARCH",
       "related": ["BP-FND-DOMAIN", "BP-CNT-CORE", "BP-I18N-CORE", "BP-I18N-TERMS"]
@@ -756,9 +783,19 @@
       "related": ["BP-FND-DOMAIN", "BP-CNT-CORE"]
     },
     {
+      "path": "src/data/ticketing-platform-assets.ts",
+      "primary": "BP-MOD-TICKETING",
+      "related": ["BP-CNT-CORE"]
+    },
+    {
+      "path": "src/data/ticketing-platforms.ts",
+      "primary": "BP-MOD-TICKETING",
+      "related": ["BP-FND-DOMAIN", "BP-CNT-CORE", "BP-I18N-CORE"]
+    },
+    {
       "path": "src/data/ticketing.ts",
       "primary": "BP-MOD-TICKETING",
-      "related": ["BP-FND-DOMAIN", "BP-MOD-PROGRAMS", "BP-CNT-CORE"]
+      "related": ["BP-FND-DOMAIN", "BP-MOD-PROGRAMS", "BP-CNT-CORE", "BP-I18N-CORE"]
     },
     {
       "path": "src/layouts/ArchiveLayout.astro",
@@ -856,6 +893,11 @@
       "related": ["BP-FND-CORE", "BP-MOD-PROGRAMS"]
     },
     {
+      "path": "src/pages/[routePrefix]/tickets/partner/index.astro",
+      "primary": "BP-MOD-TICKETING",
+      "related": ["BP-FND-CORE", "BP-FND-EXPERIENCE", "BP-MOD-TERRA-TIME", "BP-I18N-CORE"]
+    },
+    {
       "path": "src/pages/[routePrefix]/troupe/index.astro",
       "primary": "BP-CNT-CORE",
       "related": ["BP-FND-CORE", "BP-FND-EXPERIENCE"]
@@ -874,6 +916,11 @@
       "path": "src/scripts/performance-filters.ts",
       "primary": "BP-MOD-PROGRAMS",
       "related": ["BP-FND-EXPERIENCE"]
+    },
+    {
+      "path": "src/scripts/partner-ticketing-controller.ts",
+      "primary": "BP-MOD-TICKETING",
+      "related": ["BP-FND-EXPERIENCE", "BP-FND-DOMAIN", "BP-MOD-TERRA-TIME", "BP-I18N-CORE"]
     },
     {
       "path": "src/scripts/pollution-controller.ts",
@@ -896,14 +943,24 @@
       "related": ["BP-CNT-CORE", "BP-FND-EXPERIENCE", "BP-I18N-CORE"]
     },
     {
+      "path": "src/scripts/ticket-result-renderer.ts",
+      "primary": "BP-MOD-TICKETING",
+      "related": ["BP-FND-EXPERIENCE", "BP-MOD-TERRA-TIME", "BP-I18N-CORE"]
+    },
+    {
       "path": "src/scripts/ticketing-controller.ts",
       "primary": "BP-MOD-TICKETING",
       "related": ["BP-FND-EXPERIENCE", "BP-FND-EXTENSION"]
     },
     {
+      "path": "src/scripts/ticketing-session.ts",
+      "primary": "BP-MOD-TICKETING",
+      "related": ["BP-FND-DOMAIN", "BP-MOD-TERRA-TIME"]
+    },
+    {
       "path": "src/scripts/ticketing-state.ts",
       "primary": "BP-MOD-TICKETING",
-      "related": ["BP-FND-DOMAIN", "BP-QLT-STAGES"]
+      "related": ["BP-FND-DOMAIN", "BP-MOD-TERRA-TIME", "BP-QLT-STAGES"]
     },
     {
       "path": "src/styles/archive.css",
@@ -924,6 +981,11 @@
       "path": "src/styles/main.css",
       "primary": "BP-FND-EXPERIENCE",
       "related": ["BP-FND-CORE", "BP-MOD-ARCHIVE", "BP-MOD-PROGRAMS"]
+    },
+    {
+      "path": "src/styles/partner-ticketing.css",
+      "primary": "BP-MOD-TICKETING",
+      "related": ["BP-FND-EXPERIENCE", "BP-I18N-CORE"]
     },
     {
       "path": "src/styles/pollution.css",

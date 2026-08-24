@@ -24,6 +24,8 @@ import {
 } from '../src/data/localized/resolve.ts';
 import { assertPerformanceOfferMatrix } from '../src/data/performance-offers.ts';
 import { performances } from '../src/data/performances.ts';
+import { productions } from '../src/data/productions/index.ts';
+import { getMinimumSearchGraphemes } from '../src/data/search-policy.ts';
 import { getFrontSearchIndex, getSiteSearchScope } from '../src/data/site-search-index.ts';
 import {
   assertTerraDateTime,
@@ -33,8 +35,9 @@ import {
   getSiteTerraNow,
   isWithinPerformanceVisibilityWindow,
 } from '../src/data/site-time.ts';
-import { getTicketingOptions } from '../src/data/ticketing.ts';
+import { getTicketingOptions, getTicketingPlatformPresentation } from '../src/data/ticketing.ts';
 import { shouldRequestArchiveEntry } from '../src/scripts/pollution-controller.ts';
+import { countSearchGraphemes, searchSiteEntries } from '../src/scripts/site-search.ts';
 import {
   MAX_POLLUTION_LEVEL,
   POLLUTION_PROBABILITY,
@@ -51,6 +54,7 @@ import {
   layoutTicketText,
   segmentTicketGraphemes,
 } from '../src/scripts/ticket-artifact.ts';
+import { getTicketEndingLabels } from '../src/scripts/ticket-result-renderer.ts';
 import {
   MAX_REQUIRING_RESUBMIT_RESULTS,
   acceptRetentionOffer,
@@ -60,10 +64,9 @@ import {
   createTicketingState,
   declinePremiumOffer,
   declineRetentionOffer,
-  deriveTicketStampIds,
   enterPremiumRoute,
   openPremiumOffer,
-  resolveTicketingAttempt,
+  resolveTicketingAttempt as resolveTicketingAttemptAt,
   restoreTicketingState,
   retryTicketingAttempt,
   returnToSelection,
@@ -80,7 +83,7 @@ assert.deepEqual(buildContexts.release.editionIds, ['yan']);
 assert.throws(() => getBuildContext(buildContexts, 'custom'), /未知构建预设/u);
 
 assert.doesNotThrow(() =>
-  validateContentRootSet(currentRootSet, performances, buildContexts.showcase),
+  validateContentRootSet(currentRootSet, performances, productions, buildContexts.showcase),
 );
 assert.throws(
   () =>
@@ -95,10 +98,13 @@ assert.throws(
               currentRootSet.worlds.front.performanceIds[0],
             ],
             featuredPerformanceId: currentRootSet.worlds.front.featuredPerformanceId,
+            homepagePerformanceIds: [currentRootSet.worlds.front.performanceIds[0]],
           },
         },
       },
       performances,
+      productions,
+      buildContexts.showcase,
     ),
   /含重复场次/u,
 );
@@ -112,12 +118,73 @@ assert.throws(
           front: {
             performanceIds: [currentRootSet.worlds.front.performanceIds[0]],
             featuredPerformanceId: currentRootSet.worlds.front.performanceIds[1],
+            homepagePerformanceIds: [currentRootSet.worlds.front.performanceIds[0]],
           },
         },
       },
       performances,
+      productions,
+      buildContexts.showcase,
     ),
   /焦点不属于该时间层/u,
+);
+const frontHomepagePerformanceId = currentRootSet.worlds.front.homepagePerformanceIds[0];
+assert.throws(
+  () =>
+    validateContentRootSet(
+      {
+        ...currentRootSet,
+        worlds: {
+          ...currentRootSet.worlds,
+          front: {
+            ...currentRootSet.worlds.front,
+            homepagePerformanceIds: [frontHomepagePerformanceId, frontHomepagePerformanceId],
+          },
+        },
+      },
+      performances,
+      productions,
+      buildContexts.showcase,
+    ),
+  /首页策展含重复场次/u,
+);
+assert.throws(
+  () =>
+    validateContentRootSet(
+      {
+        ...currentRootSet,
+        worlds: {
+          ...currentRootSet.worlds,
+          front: {
+            ...currentRootSet.worlds.front,
+            homepagePerformanceIds: [currentRootSet.worlds.archive.performanceIds[0]],
+          },
+        },
+      },
+      performances,
+      productions,
+      buildContexts.showcase,
+    ),
+  /首页策展不属于该时间层根集合/u,
+);
+assert.throws(
+  () =>
+    validateContentRootSet(
+      {
+        ...currentRootSet,
+        worlds: {
+          ...currentRootSet.worlds,
+          front: {
+            ...currentRootSet.worlds.front,
+            homepagePerformanceIds: [currentRootSet.worlds.front.performanceIds[0]],
+          },
+        },
+      },
+      performances,
+      productions,
+      buildContexts.showcase,
+    ),
+  /首页策展含非本季场次/u,
 );
 for (const [world, misplacedPerformanceId] of [
   ['front', currentRootSet.worlds.archive.performanceIds[0]],
@@ -140,14 +207,22 @@ for (const [world, misplacedPerformanceId] of [
                 currentRootSet.worlds[sourceWorld].featuredPerformanceId === misplacedPerformanceId
                   ? sourcePerformanceIds[0]
                   : currentRootSet.worlds[sourceWorld].featuredPerformanceId,
+              homepagePerformanceIds: currentRootSet.worlds[
+                sourceWorld
+              ].homepagePerformanceIds.filter(
+                (performanceId) => performanceId !== misplacedPerformanceId,
+              ),
             },
             [world]: {
               performanceIds: [misplacedPerformanceId],
               featuredPerformanceId: misplacedPerformanceId,
+              homepagePerformanceIds: [misplacedPerformanceId],
             },
           },
         },
         performances,
+        productions,
+        buildContexts.showcase,
       ),
     /跨时间层场次/u,
   );
@@ -181,6 +256,7 @@ assert.throws(
           effectiveDateTime: { ...frontNow, year: 1101, month: 4, day: 14 },
         },
       },
+      productions,
       buildContexts.showcase,
     ),
   /超出 front 前后一年窗口/u,
@@ -193,6 +269,7 @@ const overusedRootSet = {
     front: {
       performanceIds: overusedFrontPerformanceIds,
       featuredPerformanceId: overusedFrontPerformanceIds[0],
+      homepagePerformanceIds: [],
     },
   },
 };
@@ -208,6 +285,7 @@ assert.throws(
             : performance,
         ]),
       ),
+      productions,
       buildContexts.showcase,
     ),
   /剧目编排超过三次：uncrowned\(4\)/u,
@@ -222,13 +300,46 @@ assert.equal(showcaseSnapshot.productionEntries.length, 14);
 assert.equal(showcaseSnapshot.locationEntries.length, 10);
 assert.equal(showcaseSnapshot.artworkEntries.length, 14);
 assert.equal(showcaseSnapshot.seatingPlanEntries.length, 3);
-assert.deepEqual(Object.keys(showcaseSnapshot.localizationPackages), ['yan']);
+assert.deepEqual(showcaseSnapshot.editionIds, ['yan']);
+assert.deepEqual(
+  new Set(showcaseSnapshot.localizationPackageEditionIds),
+  new Set(['yan', 'columbia', 'leithanien', 'victoria']),
+  'showcase 只生成炎国页面，但票面闭包必须包含三个实际举办地语言依赖',
+);
 assert.deepEqual(showcaseSnapshot.featuredPerformanceIds, {
   front: 'uncrowned-trimount-1102',
   archive: 'der-ring-zwillingsturme-1084-0817',
 });
+assert.deepEqual(showcaseSnapshot.homepagePerformanceIds, {
+  front: currentRootSet.worlds.front.homepagePerformanceIds,
+  archive: currentRootSet.worlds.archive.homepagePerformanceIds,
+});
 assert.ok(Object.isFrozen(showcaseSnapshot));
 assert.ok(Object.isFrozen(showcaseSnapshot.performanceEntries));
+assert.ok(Object.isFrozen(showcaseSnapshot.ticketingPlatformEntries));
+assert.deepEqual(
+  showcaseSnapshot.ticketingPlatformEntries.map(([platformId]) => platformId),
+  ['rice-network', 'drop-tower'],
+);
+assert.equal(
+  getTicketingPlatformPresentation(
+    getLocalization(editions.yan, showcaseSnapshot),
+    'rice-network',
+    showcaseSnapshot,
+  ).displayName,
+  '水稻网',
+);
+assert.equal(
+  getTicketingPlatformPresentation(
+    getLocalization(editions.columbia, previewSnapshot),
+    'drop-tower',
+    previewSnapshot,
+  ).displayName,
+  'Drop Tower',
+);
+assert.ok(Object.isFrozen(showcaseSnapshot.homepagePerformanceIds));
+assert.ok(Object.isFrozen(showcaseSnapshot.homepagePerformanceIds.front));
+assert.ok(Object.isFrozen(showcaseSnapshot.homepagePerformanceIds.archive));
 assert.throws(() => resolveContent(buildContexts.release), /不合格内容.*无批准摘要/u);
 assert.equal(
   showcaseSnapshot.performanceEntries.filter(
@@ -289,6 +400,123 @@ assert.notEqual(
   '同地点异剧目报价应不同',
 );
 
+const searchEntry = (id, type, title, summary = '', keywords = '') => ({
+  id,
+  type,
+  typeLabel: type,
+  title,
+  summary,
+  keywords,
+  href: `/${id}/`,
+});
+const searchOrganizationEntries = [
+  searchEntry(
+    'performance-title-first',
+    'performance',
+    'Needle Matinee',
+    'First performance title match',
+  ),
+  searchEntry('page-detail', 'page', 'Archive guide', 'Needle appears only in this summary'),
+  searchEntry('performance-title-second', 'performance', 'Second Needle Matinee'),
+  searchEntry('page-title', 'page', 'Needle register'),
+  searchEntry('production-title', 'production', 'Needle libretto'),
+  searchEntry('performance-detail', 'performance', 'Evening register', '', 'Needle'),
+  searchEntry(
+    'production-detail',
+    'production',
+    'Evening libretto',
+    'Needle appears only in this summary',
+  ),
+];
+const organizedSearchMatches = searchSiteEntries(
+  searchOrganizationEntries,
+  'ＮＥＥＤＬＥ',
+  'en-US',
+);
+assert.deepEqual(
+  organizedSearchMatches.map(({ entry }) => entry.id),
+  [
+    'page-title',
+    'performance-title-first',
+    'performance-title-second',
+    'production-title',
+    'page-detail',
+    'performance-detail',
+    'production-detail',
+  ],
+  '搜索应先按标题命中、再按页面类型组织，并保持同组索引顺序',
+);
+assert.deepEqual(
+  organizedSearchMatches.map(({ matchKind }) => matchKind),
+  ['title', 'title', 'title', 'title', 'detail', 'detail', 'detail'],
+);
+assert.deepEqual(
+  organizedSearchMatches
+    .filter(({ startsTypeGroup }) => startsTypeGroup)
+    .map(({ entry, matchKind }) => `${matchKind}:${entry.type}`),
+  [
+    'title:page',
+    'title:performance',
+    'title:production',
+    'detail:page',
+    'detail:performance',
+    'detail:production',
+  ],
+);
+assert.deepEqual(searchSiteEntries(searchOrganizationEntries, '', 'en-US'), []);
+assert.deepEqual(searchSiteEntries(searchOrganizationEntries, 'needel', 'en-US'), []);
+assert.equal(getMinimumSearchGraphemes('yan'), 2);
+assert.equal(getMinimumSearchGraphemes('higashi'), 2);
+for (const editionId of previewEditionIds.filter(
+  (editionId) => editionId !== 'yan' && editionId !== 'higashi',
+)) {
+  assert.equal(getMinimumSearchGraphemes(editionId), 3);
+}
+assert.equal(countSearchGraphemes('e\u0301', 'el'), 1, '组合字符应按一个字素计数');
+assert.equal(countSearchGraphemes('👨‍👩‍👧‍👦', 'en-US'), 1, 'ZWJ 字符序列应按一个字素计数');
+
+const fullFrontSearch = getFrontSearchIndex(editions.yan, showcaseSnapshot);
+const uncrownedSearchEntry = fullFrontSearch.find(({ id }) => id === 'front-production-uncrowned');
+const uncrownedContent = getLocalization(editions.yan, showcaseSnapshot).programs.productions
+  .uncrowned;
+assert.ok(uncrownedSearchEntry && uncrownedContent);
+assert.match(uncrownedSearchEntry.keywords, new RegExp(uncrownedContent.synopsis, 'u'));
+assert.match(uncrownedSearchEntry.keywords, new RegExp(uncrownedContent.guidance, 'u'));
+assert.ok(
+  uncrownedContent.creatives.every(([role, name]) =>
+    uncrownedSearchEntry.keywords.includes(`${role} ${name}`),
+  ),
+  '剧目主创职责与姓名应进入公开匹配文字',
+);
+
+const homepageExcludedPerformanceId = 'procession-of-masks-londinium-1103-0214';
+const curatedRootSet = {
+  ...currentRootSet,
+  worlds: {
+    ...currentRootSet.worlds,
+    front: {
+      ...currentRootSet.worlds.front,
+      homepagePerformanceIds: currentRootSet.worlds.front.homepagePerformanceIds.filter(
+        (performanceId) => performanceId !== homepageExcludedPerformanceId,
+      ),
+    },
+  },
+};
+const curatedSnapshot = resolveContent(buildContexts.showcase, {
+  [curatedRootSet.rootSetId]: curatedRootSet,
+});
+assert.ok(curatedSnapshot.performances[homepageExcludedPerformanceId]);
+assert.ok(
+  getWorldPerformanceEntries(curatedSnapshot, 'front').some(
+    ([performanceId]) => performanceId === homepageExcludedPerformanceId,
+  ),
+  '首页策展不得裁剪完整本季集合',
+);
+assert.ok(
+  !curatedSnapshot.homepagePerformanceIds.front.includes(homepageExcludedPerformanceId),
+  '首页策展应能独立排除仍属于完整本季集合的场次',
+);
+
 const excludedPerformanceId = 'procession-of-masks-londinium-1103-0214';
 const reducedFrontPerformanceIds = currentRootSet.worlds.front.performanceIds.filter(
   (performanceId) => performanceId !== excludedPerformanceId,
@@ -300,6 +528,9 @@ const reducedRootSet = {
     front: {
       performanceIds: reducedFrontPerformanceIds,
       featuredPerformanceId: currentRootSet.worlds.front.featuredPerformanceId,
+      homepagePerformanceIds: currentRootSet.worlds.front.homepagePerformanceIds.filter(
+        (performanceId) => performanceId !== excludedPerformanceId,
+      ),
     },
   },
 };
@@ -457,7 +688,6 @@ const noticeFixturePerformance = {
 };
 const noticeFixtureContent = {
   ...getLocalization(editions.yan).programs.performances['second-snow-norport-1102'],
-  previousDateTimeDisplay: '1102.10.20 / 18:45',
   operationalNotice: { sourceRevision: 'notice-v2', text: '线路调整，排期等待确认。' },
 };
 assert.doesNotThrow(() =>
@@ -653,6 +883,15 @@ const catalog = [
 ];
 const basketA = { performanceId: 'performance-a', zone: 'A', basePrice: 420 };
 const basketB = { performanceId: 'performance-b', zone: 'S', basePrice: 680 };
+const ticketAcceptedAt = {
+  calendar: 'terra',
+  year: 1102,
+  month: 4,
+  day: 15,
+  time: '00:00',
+};
+const resolveTicketingAttempt = (state, random, ticketNumberFactory) =>
+  resolveTicketingAttemptAt(state, random, ticketNumberFactory, ticketAcceptedAt);
 
 let selection = createTicketingState();
 selection = updateBasket(selection, basketA, basketA.performanceId);
@@ -677,14 +916,29 @@ const networkFailure = resolveTicketingAttempt(
   () => '000000000000',
 );
 assert.equal(standardSuccess.phase, 'success');
+assert.equal(standardSuccess.currentEndingId, 'ENDING_NORMAL_SUCCESS');
+assert.deepEqual(standardSuccess.endingHistory, ['ENDING_NORMAL_SUCCESS']);
+assert.deepEqual(standardSuccess.result?.acceptedAt, ticketAcceptedAt);
 assert.equal(standardFailure.phase, 'failure');
+assert.equal(standardFailure.currentEndingId, null);
 assert.equal(standardFailure.attemptCount, 1);
 assert.equal(standardFailure.lastOutcome, 'unavailable');
 assert.equal(networkFailure.phase, 'network');
+assert.equal(networkFailure.currentEndingId, 'ENDING_NETWORK_ERROR');
+assert.deepEqual(networkFailure.endingHistory, ['ENDING_NETWORK_ERROR']);
 assert.equal(networkFailure.attemptCount, 1);
 const networkRetry = retryTicketingAttempt(networkFailure);
 assert.deepEqual(networkRetry.basket, selection.basket);
 assert.deepEqual(networkRetry.journeyTags, ['network-retry']);
+const networkThenSuccess = resolveTicketingAttempt(
+  networkRetry,
+  () => 0.1,
+  () => '333333333333',
+);
+assert.deepEqual(networkThenSuccess.result?.endingHistory, [
+  'ENDING_NETWORK_ERROR',
+  'ENDING_NORMAL_SUCCESS',
+]);
 const noConsecutiveNetwork = resolveTicketingAttempt(
   networkRetry,
   () => 0.9,
@@ -696,6 +950,9 @@ assert.deepEqual(returnToSelection(standardFailure).basket, selection.basket);
 
 const premiumOffer = openPremiumOffer(standardFailure);
 assert.equal(premiumOffer.phase, 'premium-offer');
+assert.equal(premiumOffer.currentEndingId, null);
+assert.deepEqual(premiumOffer.endingHistory, []);
+assert.equal(premiumOffer.route, 'standard');
 const premiumAttempt = enterPremiumRoute(premiumOffer);
 const premiumSuccess = resolveTicketingAttempt(
   premiumAttempt,
@@ -709,10 +966,21 @@ const premiumFailure = resolveTicketingAttempt(
 );
 assert.equal(premiumSuccess.phase, 'success');
 assert.equal(premiumFailure.phase, 'failure');
+assert.equal(premiumSuccess.currentEndingId, 'ENDING_SCALPER_SUCCESS');
+assert.equal(premiumFailure.currentEndingId, 'ENDING_SCALPER_FAILED');
 assert.equal(premiumSuccess.result?.baseTotal, 1100);
 assert.deepEqual(premiumSuccess.result?.adjustments, [{ id: 'priority-service', amount: 550 }]);
 assert.equal(premiumSuccess.result?.settledTotal, 1650);
-assert.deepEqual(premiumSuccess.result?.stampIds, ['admission-confirmed', 'priority-route']);
+assert.deepEqual(premiumSuccess.result?.endingHistory, ['ENDING_SCALPER_SUCCESS']);
+const premiumFailureThenSuccess = resolveTicketingAttempt(
+  retryTicketingAttempt(premiumFailure),
+  () => 0.1,
+  () => '444444444444',
+);
+assert.deepEqual(premiumFailureThenSuccess.result?.endingHistory, [
+  'ENDING_SCALPER_FAILED',
+  'ENDING_SCALPER_SUCCESS',
+]);
 assert.equal(returnToStandardRoute(premiumFailure).route, 'standard');
 assert.equal(calculateAdjustmentAmount(1100, 'full'), 550);
 assert.equal(calculateAdjustmentAmount(1100, 'retention'), 528);
@@ -731,16 +999,37 @@ const retainedSuccess = resolveTicketingAttempt(
   () => 0.1,
   () => '555555555555',
 );
-assert.deepEqual(retainedSuccess.result?.adjustments, [{ id: 'retention-service', amount: 528 }]);
+const retainedFailure = resolveTicketingAttempt(
+  retainedAttempt,
+  () => 0.9,
+  () => '000000000000',
+);
+assert.equal(retainedSuccess.currentEndingId, 'ENDING_DISCOUNT_SUCCESS');
+assert.equal(retainedFailure.currentEndingId, 'ENDING_DISCOUNT_FAILED');
+assert.deepEqual(retainedSuccess.result?.adjustments, [
+  { id: 'priority-service', amount: 550 },
+  { id: 'retention-service', amount: -22 },
+]);
 assert.equal(retainedSuccess.result?.settledTotal, 1628);
-assert.deepEqual(retainedSuccess.result?.stampIds, [
-  'admission-confirmed',
-  'priority-route',
-  'retention-offer',
+assert.equal(
+  retainedSuccess.result?.baseTotal +
+    retainedSuccess.result?.adjustments.reduce((total, item) => total + item.amount, 0),
+  retainedSuccess.result?.settledTotal,
+);
+assert.deepEqual(retainedSuccess.result?.endingHistory, ['ENDING_DISCOUNT_SUCCESS']);
+const retainedFailureThenSuccess = resolveTicketingAttempt(
+  retryTicketingAttempt(retainedFailure),
+  () => 0.1,
+  () => '666666666666',
+);
+assert.deepEqual(retainedFailureThenSuccess.result?.endingHistory, [
+  'ENDING_DISCOUNT_FAILED',
+  'ENDING_DISCOUNT_SUCCESS',
 ]);
 
 const retentionDeclined = declineRetentionOffer(firstRetentionOffer);
 assert.equal(retentionDeclined.phase, 'selection');
+assert.equal(retentionDeclined.currentEndingId, 'ENDING_REJECT_RESCALPER');
 const failureAfterRetention = resolveTicketingAttempt(
   startTicketingAttempt(retentionDeclined),
   () => 0.5,
@@ -775,9 +1064,10 @@ const forcedManualReview = resolveTicketingAttempt(
 );
 assert.equal(boundedRandomCalls, MAX_REQUIRING_RESUBMIT_RESULTS);
 assert.equal(forcedManualReview.phase, 'success');
+assert.equal(forcedManualReview.currentEndingId, 'ENDING_NORMAL_SUCCESS');
 assert.equal(forcedManualReview.route, 'standard');
 assert.ok(forcedManualReview.journeyTags.includes('manual-review'));
-assert.ok(forcedManualReview.result?.stampIds.includes('manual-review'));
+assert.deepEqual(forcedManualReview.result?.endingHistory, ['ENDING_NORMAL_SUCCESS']);
 
 let returnedSeatJourney = declineRetentionOffer(firstRetentionOffer);
 returnedSeatJourney = startTicketingAttempt(returnedSeatJourney);
@@ -800,23 +1090,10 @@ assert.equal(forcedReturnedSeat.phase, 'success');
 assert.equal(forcedReturnedSeat.route, 'standard');
 assert.ok(forcedReturnedSeat.journeyTags.includes('returned-seat'));
 assert.ok(forcedReturnedSeat.journeyTags.includes('priority-refused'));
-assert.ok(forcedReturnedSeat.result?.stampIds.includes('returned-seat'));
-
-assert.deepEqual(
-  deriveTicketStampIds('standard', [
-    'network-retry',
-    'priority-refused',
-    'retention-accepted',
-    'returned-seat',
-  ]),
-  [
-    'admission-confirmed',
-    'standard-route',
-    'network-recovered',
-    'returned-seat',
-    'retention-offer',
-  ],
-);
+assert.deepEqual(forcedReturnedSeat.result?.endingHistory, [
+  'ENDING_REJECT_RESCALPER',
+  'ENDING_NORMAL_SUCCESS',
+]);
 
 let frozenRandomCalls = 0;
 let frozenNumberCalls = 0;
@@ -839,6 +1116,14 @@ const restored = restoreTicketingState(JSON.stringify(premiumSuccess), catalog);
 assert.equal(restored.phase, 'success');
 assert.deepEqual(restored.result?.tickets, premiumSuccess.result?.tickets);
 assert.deepEqual(restored.result?.journeyTags, premiumSuccess.result?.journeyTags);
+assert.deepEqual(restored.result?.endingHistory, premiumSuccess.result?.endingHistory);
+assert.deepEqual(restored.result?.acceptedAt, ticketAcceptedAt);
+const missingAcceptanceTime = structuredClone(premiumSuccess);
+delete missingAcceptanceTime.result.acceptedAt;
+assert.deepEqual(
+  restoreTicketingState(JSON.stringify(missingAcceptanceTime), catalog),
+  createTicketingState(),
+);
 const invalidForcedCombination = {
   ...forcedReturnedSeat,
   journeyTags: [...forcedReturnedSeat.journeyTags, 'manual-review'],
@@ -848,6 +1133,9 @@ assert.deepEqual(
   createTicketingState(),
 );
 assert.deepEqual(restoreTicketingState('{"version":2}', catalog), createTicketingState());
+assert.deepEqual(restoreTicketingState('{"version":3}', catalog), createTicketingState());
+assert.deepEqual(restoreTicketingState('{"version":4}', catalog), createTicketingState());
+assert.deepEqual(restoreTicketingState('{"version":5}', catalog), createTicketingState());
 assert.deepEqual(restoreTicketingState('{"version":999}', catalog), createTicketingState());
 
 const previewLocalizations = previewEditionIds.map((editionId) =>
@@ -865,6 +1153,11 @@ const crossLocaleState = updateBasket(
   crossLocaleItem,
   crossLocaleItem.performanceId,
 );
+const crossLocaleSuccess = resolveTicketingAttempt(
+  startTicketingAttempt(crossLocaleState),
+  () => 0.1,
+  () => '777777777777',
+);
 for (const localization of previewLocalizations.slice(1)) {
   const targetOptions = getTicketingOptions(localization, previewSnapshot);
   const crossLocaleRestored = restoreTicketingState(
@@ -872,8 +1165,66 @@ for (const localization of previewLocalizations.slice(1)) {
     targetOptions.map((option) => ({ performanceId: option.performanceId, offers: option.offers })),
   );
   assert.deepEqual(crossLocaleRestored, crossLocaleState);
+  const crossLocaleSuccessRestored = restoreTicketingState(
+    JSON.stringify(crossLocaleSuccess),
+    targetOptions.map((option) => ({ performanceId: option.performanceId, offers: option.offers })),
+  );
+  assert.deepEqual(crossLocaleSuccessRestored.result?.acceptedAt, ticketAcceptedAt);
+  assert.deepEqual(crossLocaleSuccessRestored.result?.tickets, crossLocaleSuccess.result?.tickets);
+  assert.equal(
+    crossLocaleSuccessRestored.result?.settledTotal,
+    crossLocaleSuccess.result?.settledTotal,
+  );
   assert.notEqual(yanOptions[0].offers[0].label, targetOptions[0].offers[0].label);
+  assert.deepEqual(
+    targetOptions[0].artifact.primary,
+    yanOptions[0].artifact.primary,
+    '网站国家版本切换不得改变由举办地决定的票面主语言投影',
+  );
+  const sharesPrimaryLanguage =
+    targetOptions[0].artifact.primary.locale.split('-')[0] ===
+    localization.edition.locale.split('-')[0];
+  assert.equal(
+    targetOptions[0].artifact.secondary?.editionId,
+    sharesPrimaryLanguage ? undefined : localization.edition.editionId,
+  );
 }
+
+const trimountArtifact = yanOptions.find(
+  ({ performanceId }) => performanceId === 'uncrowned-trimount-1102',
+)?.artifact;
+const wiesheimArtifact = yanOptions.find(
+  ({ performanceId }) => performanceId === 'caged-fire-wiesheim-1102',
+)?.artifact;
+const norportArtifact = yanOptions.find(
+  ({ performanceId }) => performanceId === 'second-snow-norport-1102',
+)?.artifact;
+const leithanienOptions = getTicketingOptions(
+  getLocalization(editions.leithanien, previewSnapshot),
+  previewSnapshot,
+);
+const columbiaOptions = getTicketingOptions(
+  getLocalization(editions.columbia, previewSnapshot),
+  previewSnapshot,
+);
+const leithanienWiesheimArtifact = leithanienOptions.find(
+  ({ performanceId }) => performanceId === 'caged-fire-wiesheim-1102',
+)?.artifact;
+const columbiaNorportArtifact = columbiaOptions.find(
+  ({ performanceId }) => performanceId === 'second-snow-norport-1102',
+)?.artifact;
+assert.equal(trimountArtifact?.primary.editionId, 'columbia');
+assert.equal(trimountArtifact?.secondary?.editionId, 'yan');
+assert.equal(trimountArtifact?.primary.dateTime, 'September 17, 1102 at 7:30 PM');
+assert.equal(trimountArtifact?.secondary?.dateTime, '1102年9月17日 19:30');
+assert.equal(wiesheimArtifact?.primary.editionId, 'leithanien');
+assert.equal(wiesheimArtifact?.secondary?.editionId, 'yan');
+assert.equal(norportArtifact?.primary.editionId, 'victoria');
+assert.equal(norportArtifact?.secondary?.editionId, 'yan');
+assert.equal(leithanienWiesheimArtifact?.primary.editionId, 'leithanien');
+assert.equal(leithanienWiesheimArtifact?.secondary, undefined);
+assert.equal(columbiaNorportArtifact?.primary.editionId, 'victoria');
+assert.equal(columbiaNorportArtifact?.secondary, undefined);
 
 const artifactPerformance = {
   performanceId: 'performance-a',
@@ -888,21 +1239,83 @@ const matrix = createTicketMatrix('123456789012');
 const texture = createTicketTexture('123456789012');
 assert.deepEqual(texture, createTicketTexture('123456789012'));
 assert.notDeepEqual(texture, createTicketTexture('123456789013'));
-const artifactStamps = [
-  { id: 'admission-confirmed', label: '确认入场' },
-  { id: 'priority-route', label: '优先线路' },
-  { id: 'network-recovered', label: '网络恢复' },
-  { id: 'retention-offer', label: '挽留报价' },
-  { id: 'manual-review', label: '人工复核' },
+const artifactEndingHistory = [
+  'ENDING_NETWORK_ERROR',
+  'ENDING_REJECT_RESCALPER',
+  'ENDING_DISCOUNT_FAILED',
+  'ENDING_DISCOUNT_SUCCESS',
 ];
+const artifactJourneyTags = ['network-retry', 'priority-refused', 'retention-accepted'];
+const artifactEndingLabels = getTicketEndingLabels(yanLocalization.messages.ticketing);
+for (const [performanceId, expectedPrimaryLocale, expectedSecondaryLocale] of [
+  ['uncrowned-trimount-1102', 'en-US', 'zh-CN'],
+  ['caged-fire-wiesheim-1102', 'de', 'zh-CN'],
+  ['second-snow-norport-1102', 'en-GB', 'zh-CN'],
+]) {
+  const option = yanOptions.find((candidate) => candidate.performanceId === performanceId);
+  assert.ok(option, `${performanceId} 应属于当前票务候选`);
+  const offer = option.offers[0];
+  const actualProjectionSvg = createTicketSvg({
+    performance: option,
+    basketItem: {
+      performanceId: option.performanceId,
+      zone: offer.zone,
+      basePrice: offer.basePrice,
+    },
+    number: '321098765432',
+    endingHistory: artifactEndingHistory,
+    endingLabels: artifactEndingLabels,
+    journeyTags: artifactJourneyTags,
+    projection: option.artifact,
+  });
+  assert.ok(
+    actualProjectionSvg.includes(`data-ticket-language="primary" lang="${expectedPrimaryLocale}"`),
+  );
+  if (expectedSecondaryLocale) {
+    assert.ok(
+      actualProjectionSvg.includes(
+        `data-ticket-language="secondary" lang="${expectedSecondaryLocale}"`,
+      ),
+    );
+  } else {
+    assert.ok(!actualProjectionSvg.includes('data-ticket-language="secondary"'));
+  }
+}
+assert.deepEqual(
+  Object.keys(yanOptions[0].artifact.primary).sort(),
+  ['dateTime', 'editionId', 'kind', 'locale', 'messages', 'place', 'title', 'zoneLabels'],
+  '客户端票面投影不得携带完整辅助语言包',
+);
+const artifactProjection = {
+  primary: {
+    editionId: 'yan',
+    locale: 'zh-CN',
+    title: artifactPerformance.title,
+    kind: artifactPerformance.kind,
+    dateTime: artifactPerformance.dateTime,
+    place: artifactPerformance.place,
+    zoneLabels: { A: 'A 区' },
+    messages: yanLocalization.messages.ticketing.artifact,
+  },
+  secondary: {
+    editionId: 'victoria',
+    locale: 'en-GB',
+    title: 'Candidate Review',
+    kind: 'Test production',
+    dateTime: '1102 · 09/17 · 19:30',
+    place: 'Trimount Grand Theatre',
+    zoneLabels: { A: 'Zone A' },
+    messages: getLocalization(editions.victoria, previewSnapshot).messages.ticketing.artifact,
+  },
+};
 const svg = createTicketSvg({
   performance: artifactPerformance,
   basketItem: basketA,
-  zoneLabel: 'A 区',
   number: '123456789012',
-  stamps: artifactStamps,
-  messages: yanLocalization.messages.ticketing.artifact,
-  locale: 'zh-CN',
+  endingHistory: artifactEndingHistory,
+  endingLabels: artifactEndingLabels,
+  journeyTags: artifactJourneyTags,
+  projection: artifactProjection,
 });
 assert.equal(matrix.length, 21 * 21);
 for (const requiredText of [
@@ -912,28 +1325,60 @@ for (const requiredText of [
   'A 区',
   `${basketA.basePrice} LMD`,
   '123456789012',
-  '确认入场',
-  '优先线路',
-  '网络恢复',
-  '挽留报价',
-  '人工复核',
 ]) {
   assert.ok(svg.includes(requiredText), `票面缺少必要字段：${requiredText}`);
 }
-for (const stamp of artifactStamps) {
-  assert.ok(svg.includes(`data-stamp-id="${stamp.id}"`));
+for (const fieldGroup of ['production', 'date-time', 'venue', 'zone']) {
+  assert.ok(svg.includes(`data-ticket-field-group="${fieldGroup}"`));
 }
+const ticketFieldOrder = [
+  'data-ticket-field="title"',
+  'data-ticket-field="secondary-title"',
+  'data-ticket-field="kind"',
+  'data-ticket-field="date-time"',
+  'data-ticket-field="secondary-date-time"',
+  'data-ticket-field="place"',
+  'data-ticket-field="secondary-place"',
+].map((field) => svg.indexOf(field));
+assert.ok(
+  ticketFieldOrder.every((index) => index >= 0),
+  '双语票面字段组必须完整',
+);
+assert.deepEqual(
+  [...ticketFieldOrder].sort((left, right) => left - right),
+  ticketFieldOrder,
+  '主辅标题、日期和场馆必须按字段成组排列',
+);
+for (const endingId of [
+  'ENDING_NETWORK_ERROR',
+  'ENDING_NORMAL_SUCCESS',
+  'ENDING_REJECT_RESCALPER',
+  'ENDING_SCALPER_SUCCESS',
+  'ENDING_SCALPER_FAILED',
+  'ENDING_DISCOUNT_SUCCESS',
+  'ENDING_DISCOUNT_FAILED',
+]) {
+  assert.ok(svg.includes(`data-ending-component="${endingId}"`));
+  assert.ok(
+    svg.includes(
+      `data-ending-component="${endingId}" data-active="${artifactEndingHistory.includes(endingId)}"`,
+    ),
+  );
+}
+assert.ok(svg.includes('data-ticket-composite-stamp=""'));
+assert.doesNotMatch(svg, /<[^>]+\sdata-[\w-]+(?:\s|>)/u, 'SVG 数据属性必须具有 XML 合法值');
+assert.ok(!svg.includes('data-stamp-id='));
 assert.ok(svg.includes(`data-ticket-pattern="${texture.signature}"`));
 assert.equal(
   svg,
   createTicketSvg({
     performance: artifactPerformance,
     basketItem: basketA,
-    zoneLabel: 'A 区',
     number: '123456789012',
-    stamps: artifactStamps,
-    messages: yanLocalization.messages.ticketing.artifact,
-    locale: 'zh-CN',
+    endingHistory: artifactEndingHistory,
+    endingLabels: artifactEndingLabels,
+    journeyTags: artifactJourneyTags,
+    projection: artifactProjection,
   }),
 );
 
@@ -957,6 +1402,7 @@ for (const sample of unicodeTicketSamples) {
   assert.ok(graphemes.every((grapheme) => !/^\p{Mark}/u.test(grapheme)));
   const layout = layoutTicketText(sample.value, sample.locale, {
     maxWidth: 770,
+    maxHeight: 102,
     preferredFontSize: 54,
     minimumFontSize: 30,
     maxLines: 3,
@@ -964,7 +1410,19 @@ for (const sample of unicodeTicketSamples) {
   assert.ok(layout.fontSize >= 30);
   assert.ok(layout.lines.length <= 3);
   assert.equal(layout.lines.join('').replaceAll(/\s/gu, ''), sample.value.replaceAll(/\s/gu, ''));
+  assert.ok(128 + layout.lines.length * layout.lineHeight <= 230, '票面标题不得侵入下一字段区域');
 }
+assert.throws(
+  () =>
+    layoutTicketText('W'.repeat(400), 'en-US', {
+      maxWidth: 770,
+      maxHeight: 102,
+      preferredFontSize: 54,
+      minimumFontSize: 30,
+      maxLines: 3,
+    }),
+  /最小字号 30 下仍超过 3 行或 102 像素高度/u,
+);
 
 const unicodeArtifactSvg = createTicketSvg({
   performance: {
@@ -975,22 +1433,52 @@ const unicodeArtifactSvg = createTicketSvg({
     place: unicodeTicketSamples[2].value,
   },
   basketItem: basketA,
-  zoneLabel: 'Α 区',
   number: '123456789012',
-  stamps: artifactStamps,
-  messages: yanLocalization.messages.ticketing.artifact,
-  locale: 'el',
+  endingHistory: artifactEndingHistory,
+  endingLabels: artifactEndingLabels,
+  journeyTags: artifactJourneyTags,
+  projection: {
+    primary: {
+      ...artifactProjection.primary,
+      editionId: 'higashi',
+      locale: 'ja-JP',
+      title: unicodeTicketSamples[0].value,
+      kind: '特別上演',
+      dateTime: '1102.09.17 / 19:30',
+      place: '極東巡回劇場',
+      zoneLabels: { A: 'A区' },
+    },
+    secondary: {
+      ...artifactProjection.secondary,
+      title: 'The Theatre That Lost Its Name Beneath Falling Stars',
+      place: 'Higashi Touring Theatre',
+    },
+  },
 });
 assert.ok(unicodeArtifactSvg.includes('data-ticket-field="title"'));
 assert.ok(unicodeArtifactSvg.includes('data-ticket-field="place"'));
+assert.ok(unicodeArtifactSvg.includes('data-ticket-language="secondary"'));
+assert.ok(unicodeArtifactSvg.includes('lang="ja-JP"'));
+assert.ok(unicodeArtifactSvg.includes('lang="en-GB"'));
 assert.ok(unicodeArtifactSvg.includes('data-ticket-line="2"'));
 assert.ok(!unicodeArtifactSvg.includes('…'));
 assert.ok(unicodeArtifactSvg.includes('<rect x="920"'));
+
+const coveredTicketingEndings = new Set([
+  networkFailure.currentEndingId,
+  standardSuccess.currentEndingId,
+  retentionDeclined.currentEndingId,
+  premiumSuccess.currentEndingId,
+  premiumFailure.currentEndingId,
+  retainedSuccess.currentEndingId,
+  retainedFailure.currentEndingId,
+]);
+assert.equal(coveredTicketingEndings.size, 7, '七种票务 Ending 必须全部可确定性复现');
 
 console.log(
   `state validation passed: pollution=${pollutionTriggers.length} triggers, p12-events=${(
     probabilityAtLeastThreeInTen * 100
   ).toFixed(
     4,
-  )}%, p10-events=${(probabilityAtLeastThreeInFirstTenEvents * 100).toFixed(4)}%, ticket outcomes=5, matrix=${matrix.length}`,
+  )}%, p10-events=${(probabilityAtLeastThreeInFirstTenEvents * 100).toFixed(4)}%, ticket outcomes=${coveredTicketingEndings.size}, matrix=${matrix.length}`,
 );

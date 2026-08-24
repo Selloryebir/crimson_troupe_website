@@ -1,5 +1,6 @@
 ---
 import { formatMessage } from '../../data/localized/format';
+import { buildSnapshot } from '../../data/content/resolve.ts';
 import {
   getLocalizedProduction,
   type ResolvedLocalization,
@@ -18,7 +19,10 @@ interface Props {
 const { localization, performances, emptyMessage, variant = 'catalog' } = Astro.props;
 const { edition, messages } = localization;
 const projection = localization.archiveProjection.performance;
-const projectionProduction = getLocalizedProduction(localization, 'the-carnival');
+const projectionProduction = getLocalizedProduction(
+  localization,
+  buildSnapshot.archiveProjectionProductionId,
+);
 ---
 
 {

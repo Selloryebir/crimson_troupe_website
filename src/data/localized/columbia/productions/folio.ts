@@ -141,4 +141,4 @@ export const columbiaFolioProductions = {
       ['Stage', 'Long Gallery Workshop'],
     ],
   },
-} as const satisfies Record<FolioProductionId, ProductionContent>;
+} as const satisfies Partial<Record<FolioProductionId, ProductionContent>>;

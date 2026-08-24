@@ -1,7 +1,11 @@
 import type { ArchiveProjectionContent } from '../schema.ts';
 
 export const ursusArchiveProjection = {
-  statusAnnouncement: 'Все записи на странице одновременно исправили место назначения.',
+  statusAnnouncements: [
+    'В архиве появилась аномалия.',
+    'Связи между записями меняются.',
+    'Все записи на странице теперь указывают в одно место.',
+  ],
   performance: {
     title: 'Ликование',
     kind: 'Последнее представление',

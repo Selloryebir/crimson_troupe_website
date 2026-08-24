@@ -18,13 +18,16 @@ import type {
 } from '../performances.ts';
 import type { Production, ProductionId } from '../productions/index.ts';
 import type { SiteWorld } from '../site-routes';
+import type { TicketingPlatformId } from '../ticketing-platforms.ts';
 import type {
   ArchiveProjectionContent,
   LocalizedRecord,
   LocationContent,
   PerformanceContent,
   ProductionContent,
+  TicketingPlatformContent,
 } from './schema';
+import { formatTerraDateTime } from './format.ts';
 import { sourceLocalizationPackage, type PartialLocalizationPackage } from './packages.ts';
 import type { WebsiteLocalizationPackage } from './yan/index.ts';
 
@@ -40,11 +43,13 @@ export interface ResolvedLocalization {
   site: WebsiteLocalizationPackage['site'];
   programs: ResolvedProgramContent;
   messages: WebsiteLocalizationPackage['messages'];
+  platforms: Readonly<Record<TicketingPlatformId, TicketingPlatformContent>>;
   archiveProjection: ArchiveProjectionContent;
   sources: {
     site: LocalizedRecord<WebsiteLocalizationPackage['site']>;
     programs: LocalizedRecord<ResolvedProgramContent>;
     messages: LocalizedRecord<WebsiteLocalizationPackage['messages']>;
+    platforms: LocalizedRecord<Readonly<Record<TicketingPlatformId, TicketingPlatformContent>>>;
     archiveProjection: LocalizedRecord<ArchiveProjectionContent>;
   };
 }
@@ -71,6 +76,7 @@ export interface ResolvedPerformance
   extends Omit<SnapshotPerformance, 'effectiveDateTime'>, PerformanceContent {
   cityLabel: string;
   dateTime: Performance['effectiveDateTime'] & { display: string };
+  previousDateTimeDisplay?: string;
   place: string;
 }
 
@@ -79,6 +85,11 @@ interface LocalizationRequirement {
   sourceValue: unknown;
   targetValue: unknown;
 }
+
+const resolvedLocalizationCache = new WeakMap<
+  ContentSnapshot,
+  Map<BuiltEdition['editionId'], ResolvedLocalization>
+>();
 
 function objectRecord(value: unknown): Record<string, unknown> {
   return value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
@@ -107,6 +118,8 @@ function localizationRequirements(
   const targetSite = objectRecord(target?.site);
   const sourceMessages = objectRecord(source.messages);
   const targetMessages = objectRecord(target?.messages);
+  const sourcePlatforms = objectRecord(source.platforms);
+  const targetPlatforms = objectRecord(target?.platforms);
   const requirements: LocalizationRequirement[] = [
     ...Object.keys(sourceSite).map((recordId) => ({
       path: `site.${recordId}`,
@@ -124,6 +137,13 @@ function localizationRequirements(
       targetValue: target?.archiveProjection,
     },
   ];
+  for (const [platformId] of snapshot.ticketingPlatformEntries) {
+    requirements.push({
+      path: `platforms.${platformId}`,
+      sourceValue: sourcePlatforms[platformId],
+      targetValue: targetPlatforms[platformId],
+    });
+  }
   for (const [locationId] of snapshot.locationEntries) {
     requirements.push({
       path: `locations.${locationId}`,
@@ -198,6 +218,10 @@ export function getLocalization(
   edition: BuiltEdition,
   snapshot: ContentSnapshot = buildSnapshot,
 ): ResolvedLocalization {
+  const cached = resolvedLocalizationCache.get(snapshot)?.get(edition.editionId);
+  if (cached) {
+    return cached;
+  }
   const target = snapshot.localizationPackages[edition.editionId];
   if (!target) {
     throw new Error(`国家版本 ${edition.editionId} 不属于当前内容快照。`);
@@ -214,6 +238,9 @@ export function getLocalization(
 
   const site = target.site as WebsiteLocalizationPackage['site'];
   const messages = target.messages as WebsiteLocalizationPackage['messages'];
+  const platforms = Object.freeze(target.platforms) as Readonly<
+    Record<TicketingPlatformId, TicketingPlatformContent>
+  >;
   const archiveProjection = target.archiveProjection as ArchiveProjectionContent;
   const programs: ResolvedProgramContent = Object.freeze({
     locations: scopedRecord(snapshot.locationEntries, target.programs?.locations),
@@ -223,24 +250,33 @@ export function getLocalization(
       Record<TicketZone, string>
     >,
   });
-  const strictRecord = <T>(value: T): LocalizedRecord<T> => ({
-    value,
-    sourceLocale: edition.locale,
-    usedFallback: false,
-  });
-  return {
+  const strictRecord = <T>(value: T): LocalizedRecord<T> =>
+    Object.freeze({
+      value,
+      sourceLocale: edition.locale,
+      usedFallback: false,
+    });
+  const resolved = Object.freeze({
     edition,
     site,
     programs,
     messages,
+    platforms,
     archiveProjection,
-    sources: {
+    sources: Object.freeze({
       site: strictRecord(site),
       programs: strictRecord(programs),
       messages: strictRecord(messages),
+      platforms: strictRecord(platforms),
       archiveProjection: strictRecord(archiveProjection),
-    },
-  };
+    }),
+  });
+  const snapshotCache =
+    resolvedLocalizationCache.get(snapshot) ??
+    new Map<BuiltEdition['editionId'], ResolvedLocalization>();
+  snapshotCache.set(edition.editionId, resolved);
+  resolvedLocalizationCache.set(snapshot, snapshotCache);
+  return resolved;
 }
 
 export function getLocalizedProduction(
@@ -288,7 +324,13 @@ export function getLocalizedPerformance(
     ...performance,
     ...content,
     cityLabel: location.cityLabel,
-    dateTime: { ...performance.effectiveDateTime, display: content.dateTimeDisplay },
+    dateTime: {
+      ...performance.effectiveDateTime,
+      display: formatTerraDateTime(performance.effectiveDateTime, localization.edition.locale),
+    },
+    previousDateTimeDisplay: performance.previousDateTime
+      ? formatTerraDateTime(performance.previousDateTime, localization.edition.locale)
+      : undefined,
     place: content.venue,
   };
 }
@@ -300,9 +342,6 @@ export function assertPerformanceContentFresh(
 ): asserts content is PerformanceContent {
   if (!content) {
     throw new Error(`场次 ${performanceId} 缺少本地化内容。`);
-  }
-  if (performance.previousDateTime && !content.previousDateTimeDisplay?.trim()) {
-    throw new Error(`场次 ${performanceId} 缺少原定排期译文。`);
   }
   if (!performance.notice) {
     return;

@@ -40,7 +40,7 @@ export const higashiSite = {
       troupeTitle: '劇団',
       troupeKeywords: '劇団 創作 方針 巡演',
       ticketsTitle: 'チケット',
-      ticketsSummary: '今季の公演と座席区分を選び、模擬購入体験へ進みます。',
+      ticketsSummary: '今季の公演と座席区分を選び、提携窓口へ座席申請を送信します。',
       ticketsKeywords: 'チケット 座席 購入 区分 記念券',
     },
     home: {

@@ -119,4 +119,4 @@ export const leithanienOriginalProductions = {
       ['Laufende Reihenfolge', 'Old Troupe Bücherzimmer'],
     ],
   },
-} as const satisfies Record<OriginalProductionId, ProductionContent>;
+} as const satisfies Partial<Record<OriginalProductionId, ProductionContent>>;

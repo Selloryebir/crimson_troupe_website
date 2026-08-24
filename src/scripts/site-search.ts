@@ -1,9 +1,64 @@
-import type { SiteSearchEntry, SiteSearchProjection } from '../data/site-search-index';
-import { formatMessage } from '../data/localized/format';
-import type { SearchMessages } from '../data/localized/schema';
+import type { SiteSearchEntry, SiteSearchProjection } from '../data/site-search-index.ts';
+import { formatMessage } from '../data/localized/format.ts';
+import type { SearchMessages } from '../data/localized/schema.ts';
 
-const normalize = (value: string, locale: string) =>
+export const normalizeSearchQuery = (value: string, locale: string) =>
   value.normalize('NFKC').trim().toLocaleLowerCase(locale);
+
+export function countSearchGraphemes(value: string, locale: string): number {
+  return Array.from(new Intl.Segmenter(locale, { granularity: 'grapheme' }).segment(value)).length;
+}
+
+export type SiteSearchMatchKind = 'title' | 'detail';
+
+export interface SiteSearchMatch {
+  entry: SiteSearchEntry;
+  matchKind: SiteSearchMatchKind;
+  startsTypeGroup: boolean;
+}
+
+const entryTypeOrder: Readonly<Record<SiteSearchEntry['type'], number>> = Object.freeze({
+  page: 0,
+  performance: 1,
+  production: 2,
+});
+
+export function searchSiteEntries(
+  entries: readonly SiteSearchEntry[],
+  rawQuery: string,
+  locale: string,
+): SiteSearchMatch[] {
+  const query = normalizeSearchQuery(rawQuery, locale);
+  if (!query) {
+    return [];
+  }
+
+  const matches = entries.flatMap((entry, sourceIndex) => {
+    const titleMatches = normalizeSearchQuery(entry.title, locale).includes(query);
+    const detailMatches = normalizeSearchQuery(
+      `${entry.summary} ${entry.keywords}`,
+      locale,
+    ).includes(query);
+    return titleMatches || detailMatches
+      ? [{ entry, matchKind: titleMatches ? ('title' as const) : ('detail' as const), sourceIndex }]
+      : [];
+  });
+  matches.sort(
+    (left, right) =>
+      Number(left.matchKind === 'detail') - Number(right.matchKind === 'detail') ||
+      entryTypeOrder[left.entry.type] - entryTypeOrder[right.entry.type] ||
+      left.sourceIndex - right.sourceIndex,
+  );
+
+  return matches.map(({ entry, matchKind }, index) => ({
+    entry,
+    matchKind,
+    startsTypeGroup:
+      index === 0 ||
+      matches[index - 1].matchKind !== matchKind ||
+      matches[index - 1].entry.type !== entry.type,
+  }));
+}
 
 function appendProjectedText(
   element: HTMLElement,
@@ -29,6 +84,8 @@ function appendProjectedText(
 
 function createResult(
   entry: SiteSearchEntry,
+  matchKind: SiteSearchMatchKind,
+  startsTypeGroup: boolean,
   archiveProjection: SiteSearchProjection | undefined,
 ): HTMLLIElement {
   const item = document.createElement('li');
@@ -38,6 +95,12 @@ function createResult(
   const summary = document.createElement('p');
 
   link.href = entry.href;
+  item.dataset.searchResult = '';
+  item.dataset.searchMatch = matchKind;
+  item.dataset.searchResultType = entry.type;
+  if (startsTypeGroup) {
+    item.dataset.searchGroupStart = '';
+  }
   appendProjectedText(type, entry.typeLabel, archiveProjection?.typeLabel, 'search-type');
   appendProjectedText(title, entry.title, archiveProjection?.title, 'search-title');
   appendProjectedText(summary, entry.summary, archiveProjection?.summary, 'search-summary');
@@ -74,36 +137,51 @@ export function initSiteSearch(): void {
     } catch {
       return;
     }
-    if (typeof messages.unavailable !== 'string' || typeof messages.prompt !== 'string') {
+    if (
+      typeof messages.unavailable !== 'string' ||
+      typeof messages.prompt !== 'string' ||
+      typeof messages.minimumQuery !== 'string'
+    ) {
       return;
     }
     const locale = root.dataset.searchLocale ?? document.documentElement.lang;
+    const minimumQueryGraphemes = Number(root.dataset.searchMinimumGraphemes);
+    if (!Number.isSafeInteger(minimumQueryGraphemes) || minimumQueryGraphemes < 1) {
+      return;
+    }
 
-    const search = (rawQuery: string) => {
-      const query = normalize(rawQuery, locale);
+    const search = (rawQuery: string): boolean => {
+      const query = normalizeSearchQuery(rawQuery, locale);
       results.replaceChildren();
 
       if (!query) {
         feedback.textContent = messages.prompt;
-        return;
+        return false;
       }
 
-      const matches = entries.filter((entry) =>
-        normalize(`${entry.title} ${entry.summary} ${entry.keywords}`, locale).includes(query),
-      );
+      if (countSearchGraphemes(query, locale) < minimumQueryGraphemes) {
+        feedback.textContent = formatMessage(messages.minimumQuery, {
+          count: minimumQueryGraphemes,
+        });
+        return false;
+      }
+
+      const matches = searchSiteEntries(entries, query, locale);
 
       feedback.textContent =
         matches.length > 0
           ? formatMessage(messages.resultCount, { count: matches.length })
           : messages.noResults;
-      results.append(...matches.map((entry) => createResult(entry, archiveProjection)));
+      results.append(
+        ...matches.map(({ entry, matchKind, startsTypeGroup }) =>
+          createResult(entry, matchKind, startsTypeGroup, archiveProjection),
+        ),
+      );
+      return true;
     };
 
     form.addEventListener('submit', (event) => {
       event.preventDefault();
-      if (root.classList.contains('search-workspace--archive')) {
-        document.dispatchEvent(new CustomEvent('crimson:archive-search-submit'));
-      }
       const query = input.value.trim();
       const url = new URL(window.location.href);
       if (query) {
@@ -112,7 +190,10 @@ export function initSiteSearch(): void {
         url.searchParams.delete('q');
       }
       window.history.replaceState({}, '', url);
-      search(query);
+      const executed = search(query);
+      if (executed && root.classList.contains('search-workspace--archive')) {
+        document.dispatchEvent(new CustomEvent('crimson:archive-search-submit'));
+      }
     });
 
     const initialQuery = new URL(window.location.href).searchParams.get('q') ?? '';

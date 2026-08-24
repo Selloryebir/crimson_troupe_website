@@ -11,11 +11,11 @@ export type ArchiveVenuePricingKey =
   | 'londinium-main-stage'
   | 'zwillingsturme-golden-hall';
 
-type PerformanceOfferMatrix = Readonly<
+export type PerformanceOfferMatrix = Readonly<
   Partial<Record<ProductionId, Readonly<Partial<Record<ArchiveVenuePricingKey, PriceTuple>>>>>
 >;
 
-const ticketZoneOrder = ['C', 'B', 'A', 'S', 'BOX'] as const satisfies readonly TicketZone[];
+export const ticketZoneOrder = ['C', 'B', 'A', 'S', 'BOX'] as const satisfies readonly TicketZone[];
 
 export const performanceOfferMatrix = {
   'der-ring': {
@@ -59,8 +59,10 @@ function assertPriceTuple(tuple: PriceTuple, path: string): void {
   }
 }
 
-export function assertPerformanceOfferMatrix(): void {
-  const matrixEntries = Object.entries(performanceOfferMatrix) as ReadonlyArray<
+export function assertPerformanceOfferMatrix(
+  matrix: PerformanceOfferMatrix = performanceOfferMatrix,
+): void {
+  const matrixEntries = Object.entries(matrix) as ReadonlyArray<
     readonly [string, Readonly<Record<string, PriceTuple>>]
   >;
   for (const [productionId, venueOffers] of matrixEntries) {

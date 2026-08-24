@@ -7,7 +7,6 @@ import type { BuiltEdition } from '../../../../../data/editions.ts';
 import {
   getLocalization,
   getLocalizedPerformance,
-  getLocalizedPerformances,
   getLocalizedProduction,
 } from '../../../../../data/localized/resolve';
 import { sitePath, siteRoot } from '../../../../../data/site-routes';
@@ -26,7 +25,9 @@ const { edition } = Astro.props;
 const localization = getLocalization(edition);
 const copy = localization.site.archive.home;
 const canonicalPath = siteRoot(edition, 'archive');
-const currentPerformances = getLocalizedPerformances(localization, 'archive', 'current');
+const homepagePerformances = buildSnapshot.homepagePerformanceIds.archive.map((performanceId) =>
+  getLocalizedPerformance(localization, performanceId),
+);
 const featuredPerformance = getLocalizedPerformance(
   localization,
   buildSnapshot.featuredPerformanceIds.archive,
@@ -35,7 +36,10 @@ const featuredProduction = featuredPerformance
   ? getLocalizedProduction(localization, featuredPerformance.productionIds[0])
   : undefined;
 const projection = localization.archiveProjection.performance;
-const projectionProduction = getLocalizedProduction(localization, 'the-carnival');
+const projectionProduction = getLocalizedProduction(
+  localization,
+  buildSnapshot.archiveProjectionProductionId,
+);
 ---
 
 <ArchiveLayout
@@ -105,7 +109,7 @@ const projectionProduction = getLocalizedProduction(localization, 'the-carnival'
     </header>
     <ArchivePerformanceList
       localization={localization}
-      performances={currentPerformances}
+      performances={homepagePerformances}
       emptyMessage={copy.empty}
       variant="home-editorial"
     />

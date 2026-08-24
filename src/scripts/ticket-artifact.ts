@@ -1,21 +1,15 @@
 import { formatMessage } from '../data/localized/format.ts';
-import type { TicketArtifactMessages, TicketStampId } from '../data/localized/schema.ts';
-import type { TicketingPerformanceOption } from '../data/ticketing.ts';
-import type { TicketBasketItem } from './ticketing-state.ts';
-
-export interface TicketArtifactStamp {
-  id: TicketStampId;
-  label: string;
-}
+import type { TicketArtifactProjection, TicketingPerformanceOption } from '../data/ticketing.ts';
+import type { JourneyTag, TicketBasketItem, TicketingEndingId } from './ticketing-state.ts';
 
 export interface TicketArtifactInput {
   performance: TicketingPerformanceOption;
   basketItem: TicketBasketItem;
-  zoneLabel: string;
   number: string;
-  stamps: readonly TicketArtifactStamp[];
-  messages: TicketArtifactMessages;
-  locale: string;
+  endingHistory: readonly TicketingEndingId[];
+  endingLabels: Readonly<Record<TicketingEndingId, string>>;
+  journeyTags: readonly JourneyTag[];
+  projection: TicketArtifactProjection;
 }
 
 export interface TicketTexture {
@@ -33,6 +27,7 @@ export interface TicketTextLayout {
 
 export interface TicketTextLayoutOptions {
   maxWidth: number;
+  maxHeight?: number;
   preferredFontSize: number;
   minimumFontSize: number;
   maxLines: number;
@@ -148,21 +143,35 @@ export function layoutTicketText(
   locale: string,
   options: TicketTextLayoutOptions,
 ): TicketTextLayout {
-  const { maxWidth, preferredFontSize, minimumFontSize, maxLines } = options;
+  const {
+    maxWidth,
+    maxHeight = Number.POSITIVE_INFINITY,
+    preferredFontSize,
+    minimumFontSize,
+    maxLines,
+  } = options;
   for (let fontSize = preferredFontSize; fontSize >= minimumFontSize; fontSize -= 2) {
     const lines = wrapTicketText(value, locale, maxWidth / fontSize);
-    if (lines.length <= maxLines || fontSize === minimumFontSize) {
+    const lineHeight = Math.round(fontSize * 1.12);
+    if (lines.length <= maxLines && lines.length * lineHeight <= maxHeight) {
       return {
         lines,
         fontSize,
-        lineHeight: Math.round(fontSize * 1.12),
+        lineHeight,
       };
     }
   }
-  throw new Error('无法为票面文字生成布局。');
+  throw new Error(
+    `票面文字在最小字号 ${minimumFontSize} 下仍超过 ${maxLines} 行或 ${maxHeight} 像素高度。`,
+  );
 }
 
-function createTextMarkup(
+interface TicketTextBlock {
+  markup: string;
+  bottomY: number;
+}
+
+function createTicketTextBlock(
   field: string,
   value: string,
   locale: string,
@@ -170,7 +179,7 @@ function createTextMarkup(
   y: number,
   options: TicketTextLayoutOptions,
   attributes: string,
-): string {
+): TicketTextBlock {
   const layout = layoutTicketText(value, locale, options);
   const lines = layout.lines
     .map(
@@ -178,7 +187,10 @@ function createTextMarkup(
         `<tspan x="${x}" y="${y + index * layout.lineHeight}" data-ticket-line="${index + 1}">${escapeXml(line)}</tspan>`,
     )
     .join('');
-  return `<text data-ticket-field="${field}" font-size="${layout.fontSize}" ${attributes}>${lines}</text>`;
+  return {
+    markup: `<text data-ticket-field="${field}" font-size="${layout.fontSize}" ${attributes}>${lines}</text>`,
+    bottomY: y + (layout.lines.length - 1) * layout.lineHeight,
+  };
 }
 
 function seedFromNumber(number: string): number {
@@ -238,45 +250,56 @@ export function createTicketTexture(number: string): TicketTexture {
   return { signature, lineYs, lineSlants, punchXs };
 }
 
-function createStampShape(id: TicketStampId): string {
-  if (id === 'admission-confirmed') {
-    return '<ellipse rx="70" ry="21"/><ellipse rx="64" ry="16"/>';
-  }
-  if (id === 'priority-route') {
-    return '<path d="M0-24 72 0 0 24-72 0Z"/><path d="M0-18 61 0 0 18-61 0Z"/>';
-  }
-  if (id === 'network-recovered') {
-    return '<rect x="-68" y="-20" width="136" height="40"/><rect x="-64" y="-16" width="136" height="40" stroke-dasharray="5 4" opacity=".55"/>';
-  }
-  if (id === 'returned-seat') {
-    return '<rect x="-70" y="-21" width="140" height="42"/><path d="M-62-14h18m-18 7h12m100 14h-18m18 7h-12"/>';
-  }
-  if (id === 'retention-offer') {
-    return '<path d="M-70-21h50l8 8 8-8h74v42H18l-8-8-8 8h-72Z" stroke-dasharray="7 4"/>';
-  }
-  if (id === 'manual-review') {
-    return '<rect x="-70" y="-21" width="140" height="42"/><path d="M-60-12h18m-18 8h12m90-8h18m-12 8h12"/><circle cx="-59" cy="13" r="3"/><circle cx="59" cy="13" r="3"/>';
-  }
-  return '<rect x="-70" y="-21" width="140" height="42"/>';
-}
+const endingComponents: Readonly<Record<TicketingEndingId, string>> = {
+  ENDING_NETWORK_ERROR:
+    '<path d="M-91-4a94 64 0 0 1 29-43M-41-58a94 64 0 0 1 110 15M83-25a94 64 0 0 1 1 49" stroke-dasharray="15 7"/>',
+  ENDING_NORMAL_SUCCESS:
+    '<ellipse rx="45" ry="29"/><path d="M-22 0-7 15 25-17M-34-17h14m40 34h14"/>',
+  ENDING_REJECT_RESCALPER:
+    '<circle cx="-76" cy="31" r="7"/><circle cx="76" cy="-31" r="7"/><path d="M-67 25 67-25"/>',
+  ENDING_SCALPER_SUCCESS:
+    '<path d="M0-49 31-14 18-14 18 30-18 30-18-14-31-14Z"/><path d="M-12 13h24"/>',
+  ENDING_SCALPER_FAILED:
+    '<path d="M-69-32h33v18h-33zm105 46h33v18H36z"/><path d="M-58-23 58 23" stroke-dasharray="5 5"/>',
+  ENDING_DISCOUNT_SUCCESS:
+    '<path d="M-82 10q23-31 50-37M82-10Q59 21 32 27M-78 17l18-2-7-17M78-17l-18 2 7 17"/>',
+  ENDING_DISCOUNT_FAILED:
+    '<path d="M-94-17h19v-19M94 17H75v19M-94 17h19v19M94-17H75v-19"/><path d="M-15-8 15 8M-15 8 15-8"/>',
+};
 
-function createStampMarkup(stamps: readonly TicketArtifactStamp[], accent: string): string {
-  return stamps
-    .map((stamp, index) => {
-      const x = 630 + index * 118;
-      const y = 482;
-      const rotation = [-4, 2, -2, 3, -3][index] ?? 0;
-      const graphemeCount = segmentTicketGraphemes(stamp.label, 'und').length;
-      const fontSize = Math.max(9, Math.min(12, 130 / Math.max(graphemeCount, 1)));
-      const fittedText =
-        graphemeCount > 10 ? ' textLength="96" lengthAdjust="spacingAndGlyphs"' : '';
-      return `<g data-stamp-id="${stamp.id}" transform="translate(${x} ${y}) rotate(${rotation})" fill="none" stroke="${accent}" stroke-width="2.4"><title>${escapeXml(stamp.label)}</title><g transform="scale(.78 1)">${createStampShape(stamp.id)}</g><text x="0" y="4" fill="${accent}" stroke="none" font-family="sans-serif" font-size="${fontSize}" font-weight="700" text-anchor="middle"${fittedText}>${escapeXml(stamp.label)}</text></g>`;
+function createCompositeStampMarkup(
+  endingHistory: readonly TicketingEndingId[],
+  endingLabels: Readonly<Record<TicketingEndingId, string>>,
+  journeyTags: readonly JourneyTag[],
+  accent: string,
+): string {
+  const activeEndings = new Set(endingHistory);
+  const uniqueHistory = [...activeEndings];
+  const accessibleHistory = uniqueHistory.map((endingId) => endingLabels[endingId]).join(' / ');
+  const components = Object.entries(endingComponents)
+    .map(([endingId, shape]) => {
+      const active = activeEndings.has(endingId as TicketingEndingId);
+      return `<g data-ending-component="${endingId}" data-active="${active}" opacity="${active ? '1' : '.1'}">${shape}</g>`;
     })
     .join('');
+  const administrativeTexture = journeyTags.includes('returned-seat')
+    ? '<path data-journey-mark="returned-seat" d="M-58 45h116M-43 51h86" stroke-dasharray="4 5"/>'
+    : journeyTags.includes('manual-review')
+      ? '<path data-journey-mark="manual-review" d="M-58 45h18m8 0h24m8 0h18m8 0h32M-48 51h96"/>'
+      : '';
+  return `<g data-ticket-composite-stamp="" data-ending-components="${escapeXml(uniqueHistory.join(' '))}" transform="translate(1020 445) rotate(-3) scale(.78)" fill="none" stroke="${accent}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><title>${escapeXml(accessibleHistory)}</title><ellipse rx="102" ry="66" opacity=".7"/><ellipse rx="97" ry="61" stroke-dasharray="3 5" opacity=".52"/>${components}${administrativeTexture}</g>`;
 }
 
 export function createTicketSvg(input: TicketArtifactInput): string {
-  const { performance, basketItem, zoneLabel, number, stamps, messages, locale } = input;
+  const { performance, basketItem, number, endingHistory, endingLabels, journeyTags, projection } =
+    input;
+  const { primary, secondary } = projection;
+  const zoneLabel = primary.zoneLabels[basketItem.zone];
+  if (!zoneLabel) {
+    throw new Error(`票面主语言 ${primary.editionId} 缺少 ${basketItem.zone} 分区标签。`);
+  }
+  const messages = primary.messages;
+  const locale = primary.locale;
   const accent = visualColors[performance.visual];
   const matrix = createTicketMatrix(number);
   const texture = createTicketTexture(number);
@@ -296,64 +319,162 @@ export function createTicketSvg(input: TicketArtifactInput): string {
   const punches = texture.punchXs
     .map((x) => `<circle cx="${x}" cy="32" r="3"/><circle cx="${x}" cy="508" r="3"/>`)
     .join('');
-  const stampMarkup = createStampMarkup(stamps, accent);
-  const titleMarkup = createTextMarkup(
+  const stampMarkup = createCompositeStampMarkup(endingHistory, endingLabels, journeyTags, accent);
+  let contentCursorY = 120;
+  const titleBlock = createTicketTextBlock(
     'title',
-    performance.title,
+    primary.title,
     locale,
     70,
-    128,
-    { maxWidth: 770, preferredFontSize: 54, minimumFontSize: 30, maxLines: 3 },
+    contentCursorY,
+    {
+      maxWidth: 770,
+      maxHeight: 100,
+      preferredFontSize: 52,
+      minimumFontSize: 28,
+      maxLines: 2,
+    },
     'font-family="serif" font-weight="600" fill="#211713"',
   );
-  const kindMarkup = createTextMarkup(
+  contentCursorY = titleBlock.bottomY + 20;
+  const secondaryTitleBlock = secondary
+    ? createTicketTextBlock(
+        'secondary-title',
+        secondary.title,
+        secondary.locale,
+        70,
+        contentCursorY,
+        {
+          maxWidth: 770,
+          maxHeight: 44,
+          preferredFontSize: 18,
+          minimumFontSize: 13,
+          maxLines: 2,
+        },
+        'font-family="serif" font-weight="600" fill="#4f4540"',
+      )
+    : undefined;
+  if (secondaryTitleBlock) {
+    contentCursorY = secondaryTitleBlock.bottomY + 20;
+  }
+  const kindBlock = createTicketTextBlock(
     'kind',
-    performance.kind,
+    primary.kind,
     locale,
     70,
-    224,
-    { maxWidth: 770, preferredFontSize: 22, minimumFontSize: 16, maxLines: 2 },
+    contentCursorY,
+    { maxWidth: 770, maxHeight: 40, preferredFontSize: 20, minimumFontSize: 14, maxLines: 2 },
     'font-family="sans-serif" fill="#6d625b"',
   );
-  const dateTimeMarkup = createTextMarkup(
+  const dateTimeLabelY = Math.max(kindBlock.bottomY + 34, 248);
+  const dateTimeBlock = createTicketTextBlock(
     'date-time',
-    performance.dateTime,
+    primary.dateTime,
     locale,
     70,
-    304,
-    { maxWidth: 770, preferredFontSize: 29, minimumFontSize: 18, maxLines: 2 },
+    dateTimeLabelY + 30,
+    { maxWidth: 770, maxHeight: 48, preferredFontSize: 27, minimumFontSize: 17, maxLines: 2 },
     'font-family="serif" fill="#211713"',
   );
-  const placeMarkup = createTextMarkup(
+  const secondaryDateTimeBlock = secondary
+    ? createTicketTextBlock(
+        'secondary-date-time',
+        secondary.dateTime,
+        secondary.locale,
+        70,
+        dateTimeBlock.bottomY + 22,
+        {
+          maxWidth: 770,
+          maxHeight: 22,
+          preferredFontSize: 14,
+          minimumFontSize: 12,
+          maxLines: 1,
+        },
+        'font-family="sans-serif" fill="#6d625b"',
+      )
+    : undefined;
+  const dateTimeGroupBottom = secondaryDateTimeBlock?.bottomY ?? dateTimeBlock.bottomY;
+  const placeY = Math.max(dateTimeGroupBottom + 34, 370);
+  const placeBlock = createTicketTextBlock(
     'place',
-    performance.place,
+    primary.place,
     locale,
     70,
-    370,
-    { maxWidth: 770, preferredFontSize: 20, minimumFontSize: 16, maxLines: 2 },
+    placeY,
+    { maxWidth: 770, maxHeight: 42, preferredFontSize: 20, minimumFontSize: 15, maxLines: 2 },
     'font-family="sans-serif" fill="#6d625b"',
   );
+  const secondaryPlaceBlock = secondary
+    ? createTicketTextBlock(
+        'secondary-place',
+        secondary.place,
+        secondary.locale,
+        70,
+        placeBlock.bottomY + 21,
+        {
+          maxWidth: 770,
+          maxHeight: 22,
+          preferredFontSize: 14,
+          minimumFontSize: 12,
+          maxLines: 1,
+        },
+        'font-family="sans-serif" fill="#6d625b"',
+      )
+    : undefined;
+  const contentBottom = secondaryPlaceBlock?.bottomY ?? placeBlock.bottomY;
+  if (contentBottom > 424) {
+    throw new Error(`票面字段组超过可用内容高度：${contentBottom}。`);
+  }
+
+  const primaryLanguage = `data-ticket-language="primary" lang="${escapeXml(primary.locale)}"`;
+  const secondaryLanguage = secondary
+    ? `data-ticket-language="secondary" lang="${escapeXml(secondary.locale)}" opacity=".78"`
+    : '';
+  const productionGroupMarkup = `<g data-ticket-field-group="production">
+  <g ${primaryLanguage}>${titleBlock.markup}</g>
+  ${secondaryTitleBlock ? `<g ${secondaryLanguage}>${secondaryTitleBlock.markup}</g>` : ''}
+  <g ${primaryLanguage}>${kindBlock.markup}</g>
+</g>`;
+  const dateTimeGroupMarkup = `<g data-ticket-field-group="date-time">
+  <g ${primaryLanguage}>
+    <text data-ticket-field="date-time-label" x="70" y="${dateTimeLabelY}" font-family="sans-serif" font-size="18" fill="#6d625b">${escapeXml(messages.dateTime)}</text>
+    ${dateTimeBlock.markup}
+  </g>
+  ${secondaryDateTimeBlock ? `<g ${secondaryLanguage}>${secondaryDateTimeBlock.markup}</g>` : ''}
+</g>`;
+  const venueGroupMarkup = `<g data-ticket-field-group="venue">
+  <g ${primaryLanguage}>${placeBlock.markup}</g>
+  ${secondaryPlaceBlock ? `<g ${secondaryLanguage}>${secondaryPlaceBlock.markup}</g>` : ''}
+</g>`;
+  const zoneGroupMarkup = `<g data-ticket-field-group="zone">
+  <g ${primaryLanguage}>
+    <text data-ticket-field="zone-label" x="70" y="456" font-family="sans-serif" font-size="18" fill="#6d625b">${escapeXml(messages.zone)}</text>
+    <text data-ticket-field="zone" x="150" y="480" font-family="serif" font-size="29" fill="#211713">${escapeXml(zoneLabel)}</text>
+  </g>
+  ${secondary ? `<g ${secondaryLanguage}><text data-ticket-field="secondary-zone-label" x="70" y="478" font-family="sans-serif" font-size="12" fill="#6d625b">${escapeXml(secondary.messages.zone)}</text></g>` : ''}
+</g>`;
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 540" width="1200" height="540" role="img" lang="${escapeXml(locale)}" aria-labelledby="title description" data-ticket-pattern="${texture.signature}">
-  <title id="title">${escapeXml(formatMessage(messages.title, { title: performance.title }))}</title>
-  <desc id="description">${escapeXml(formatMessage(messages.description, { dateTime: performance.dateTime, place: performance.place, zone: zoneLabel, price: basketItem.basePrice, number }))}</desc>
+  <title id="title">${escapeXml(formatMessage(messages.title, { title: primary.title }))}</title>
+  <desc id="description">${escapeXml(formatMessage(messages.description, { dateTime: primary.dateTime, place: primary.place, zone: zoneLabel, price: basketItem.basePrice, number }))}</desc>
   <rect width="1200" height="540" fill="#f2ede3"/>
   <g fill="none" stroke="${accent}" stroke-width="1" opacity=".075">${textureLines}</g>
   <rect width="28" height="540" fill="${accent}"/>
   <rect x="42" y="32" width="1126" height="476" fill="none" stroke="#251a16" stroke-width="2"/>
   <g fill="#f2ede3" stroke="${accent}" stroke-width="1.5">${punches}</g>
   <path d="M880 32V508" stroke="#9a8e82" stroke-dasharray="8 8"/>
+  <g ${primaryLanguage}>
   <text x="70" y="72" font-family="sans-serif" font-size="18" letter-spacing="5" fill="${accent}">${escapeXml(messages.header)}</text>
-  ${titleMarkup}
-  ${kindMarkup}
-  <text x="70" y="274" font-family="sans-serif" font-size="20" fill="#6d625b">${escapeXml(messages.dateTime)}</text>
-  ${dateTimeMarkup}
-  ${placeMarkup}
-  <text x="70" y="440" font-family="sans-serif" font-size="20" fill="#6d625b">${escapeXml(messages.zone)}</text>
-  <text x="150" y="440" font-family="serif" font-size="31" fill="#211713">${escapeXml(zoneLabel)}</text>
-  <text x="350" y="410" font-family="sans-serif" font-size="20" fill="#6d625b">${escapeXml(messages.faceValue)}</text>
-  <text x="350" y="444" font-family="serif" font-size="31" fill="#211713">${basketItem.basePrice} LMD</text>
+  </g>
+  ${productionGroupMarkup}
+  ${dateTimeGroupMarkup}
+  ${venueGroupMarkup}
+  ${zoneGroupMarkup}
+  <g ${primaryLanguage}>
+    <text data-ticket-field="face-value-label" x="350" y="450" font-family="sans-serif" font-size="18" fill="#6d625b">${escapeXml(messages.faceValue)}</text>
+    <text data-ticket-field="face-value" x="350" y="480" font-family="serif" font-size="29" fill="#211713">${basketItem.basePrice} LMD</text>
+  </g>
   <g fill="#171310">${modules}</g>
   <text x="920" y="354" font-family="sans-serif" font-size="14" letter-spacing="2" fill="#6d625b">${escapeXml(messages.ticketNumber)}</text>
   <text x="920" y="382" font-family="monospace" font-size="22" fill="#211713">${number}</text>

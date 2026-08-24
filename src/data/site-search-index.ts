@@ -50,11 +50,10 @@ function getPerformanceEntries(
   return getLocalizedPerformanceEntries(localization, snapshot)
     .filter(([, performance]) => performance.world === world)
     .map(([, performance]) => {
-      const leadProduction = getLocalizedProduction(
-        localization,
-        performance.productionIds[0],
-        snapshot,
+      const productions = performance.productionIds.map((productionId) =>
+        getLocalizedProduction(localization, productionId, snapshot),
       );
+      const leadProduction = productions[0];
       const statusCopy =
         world === 'front'
           ? localization.site.front.performanceDetail
@@ -72,7 +71,17 @@ function getPerformanceEntries(
         ]
           .filter(Boolean)
           .join(' · '),
-        keywords: `${leadProduction.title} ${leadProduction.kind} ${leadProduction.tagline} ${performance.searchKeywords} ${statusLabel} ${performance.operationalNotice?.text ?? ''}`,
+        keywords: [
+          performance.dateTime.display,
+          performance.cityLabel,
+          performance.place,
+          statusLabel,
+          performance.operationalNotice?.text,
+          performance.searchKeywords,
+          ...productions.map((production) => production.title),
+        ]
+          .filter(Boolean)
+          .join(' '),
         href: performancePath(edition, world, performance.performanceId),
       };
     });
@@ -94,7 +103,17 @@ function getProductionEntries(
       typeLabel,
       title: production.title,
       summary: production.heading,
-      keywords: `${production.kind} ${production.tagline}`,
+      keywords: [
+        production.kind,
+        production.tagline,
+        production.heading,
+        production.synopsis,
+        production.guidance,
+        production.duration,
+        production.durationShort,
+        production.language,
+        ...production.creatives.flatMap(([role, name]) => [role, name]),
+      ].join(' '),
       href: productionPath(edition, world, productionId),
     }));
 }

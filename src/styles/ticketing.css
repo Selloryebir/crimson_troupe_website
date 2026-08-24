@@ -26,7 +26,7 @@
 .ticket-fallback h2,
 .ticketing-app h2,
 .ticket-flow h3,
-.ticket-result h3 {
+.ticket-result h2 {
   margin: 0;
   font: 500 clamp(1.9rem, 4vw, 4rem) / 1.15 var(--serif);
 }
@@ -462,7 +462,7 @@
   max-width: 760px;
 }
 
-.ticket-receipt__heading h3 {
+.ticket-receipt__heading h2 {
   font-size: clamp(2.2rem, 5vw, 4.8rem);
 }
 
@@ -473,7 +473,12 @@
   list-style: none;
 }
 
-.ticket-receipt__lines li,
+.ticket-receipt__lines li {
+  padding: 24px 4px;
+  border-bottom: 1px solid var(--line);
+}
+
+.ticket-receipt__meta div,
 .ticket-receipt__totals div {
   display: flex;
   gap: 24px;
@@ -482,9 +487,58 @@
   border-bottom: 1px solid var(--line);
 }
 
-.ticket-receipt__lines span,
+.ticket-receipt__meta dt,
 .ticket-receipt__totals dt {
   color: var(--muted);
+}
+
+.ticket-receipt__meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 32px 0 0;
+  border-top: 1px solid var(--line);
+}
+
+.ticket-receipt__meta div {
+  display: block;
+}
+
+.ticket-receipt__meta dd {
+  margin: 8px 0 0;
+  font-family: var(--serif);
+}
+
+.ticket-receipt__line-heading {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.24fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: baseline;
+}
+
+.ticket-receipt__line-heading span,
+.ticket-receipt__line-details dt {
+  color: var(--muted);
+}
+
+.ticket-receipt__line-heading h3 {
+  margin: 0;
+  font: 500 clamp(1.35rem, 3vw, 2rem) / 1.25 var(--serif);
+}
+
+.ticket-receipt__line-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 24px;
+  margin: 20px 0 0 calc(24% + 24px);
+}
+
+.ticket-receipt__line-details div {
+  min-width: 0;
+}
+
+.ticket-receipt__line-details dd {
+  margin: 5px 0 0;
+  overflow-wrap: anywhere;
 }
 
 .ticket-receipt__totals {
@@ -536,44 +590,38 @@
   align-self: center;
 }
 
-.issued-ticket__caption h4 {
-  margin: 0 0 18px;
+.issued-ticket__caption h3 {
+  margin: 0;
   font: 500 1.55rem / 1.25 var(--serif);
 }
 
 .issued-ticket__caption p {
-  margin: 6px 0;
+  margin: 4px 0;
   font-size: 0.75rem;
 }
 
-.issued-ticket__stamps {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-  padding: 0;
-  margin: 14px 0 0;
-  color: var(--crimson);
-  list-style: none;
+.issued-ticket__field-group + .issued-ticket__field-group {
+  margin-top: 18px;
 }
 
-.issued-ticket__stamps li {
-  padding: 5px 8px;
-  border: 1px solid currentcolor;
-  font-size: 0.64rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+.issued-ticket__caption .issued-ticket__secondary-language {
+  color: var(--muted);
+  font-size: 0.68rem;
 }
 
-.issued-ticket__stamps li[data-ticket-stamp="admission-confirmed"] {
-  border-radius: 999px;
+.issued-ticket__caption .issued-ticket__kind {
+  margin-top: 10px;
+  color: var(--muted);
 }
 
-.issued-ticket__stamps li[data-ticket-stamp="network-recovered"] {
-  border-style: double;
+.issued-ticket__facts {
+  margin-top: 18px !important;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
 }
 
-.issued-ticket__stamps li[data-ticket-stamp="retention-offer"] {
-  border-style: dashed;
+.issued-ticket__number {
+  font-variant-numeric: tabular-nums;
 }
 
 .issued-ticket__controls {
@@ -795,7 +843,17 @@ html[data-world="front"] .issued-ticket__caption {
     font-size: 0.44rem;
   }
 
-  .ticket-receipt__lines li,
+  .ticket-receipt__meta,
+  .ticket-receipt__line-heading,
+  .ticket-receipt__line-details {
+    grid-template-columns: 1fr;
+  }
+
+  .ticket-receipt__line-details {
+    margin-left: 0;
+  }
+
+  .ticket-receipt__meta div,
   .ticket-receipt__totals div,
   .ticket-flow__ledger > div {
     align-items: flex-start;
@@ -826,14 +884,18 @@ html[data-world="front"] .issued-ticket__caption {
 
   body.is-printing-ticket .site-main,
   body.is-printing-ticket .ticketing-app,
+  body.is-printing-ticket .partner-ticketing,
+  body.is-printing-ticket .partner-ticketing-flow,
   body.is-printing-ticket .ticket-result,
   body.is-printing-ticket .issued-tickets,
   body.is-printing-ticket .issued-ticket.is-print-target {
     display: block !important;
   }
 
-  body.is-printing-ticket .site-main > *:not(.ticketing-app),
+  body.is-printing-ticket .site-main > *:not(.ticketing-app):not(.partner-ticketing),
   body.is-printing-ticket .ticketing-app > *:not(.ticket-result),
+  body.is-printing-ticket .partner-ticketing > *:not(.partner-ticketing-flow),
+  body.is-printing-ticket .partner-ticketing-flow > *:not(.ticket-result),
   body.is-printing-ticket .ticket-result > *:not(.issued-tickets),
   body.is-printing-ticket .issued-ticket:not(.is-print-target),
   body.is-printing-ticket .issued-ticket__caption {

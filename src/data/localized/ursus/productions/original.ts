@@ -116,4 +116,4 @@ export const ursusOriginalProductions = {
       ['Программка', 'Книжный зал старого театра'],
     ],
   },
-} as const satisfies Record<OriginalProductionId, ProductionContent>;
+} as const satisfies Partial<Record<OriginalProductionId, ProductionContent>>;

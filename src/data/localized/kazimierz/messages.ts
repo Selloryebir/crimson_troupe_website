@@ -1,5 +1,11 @@
 import type { LocalizedShape } from '../schema';
 import type { yanMessages } from '../yan/messages';
+import type { yanTicketingPlatforms } from '../yan/messages';
+
+export const kazimierzTicketingPlatforms = {
+  'rice-network': { displayName: 'Sieć Ryżowa', logoAlt: 'Tymczasowy znak Sieci Ryżowej' },
+  'drop-tower': { displayName: 'Wieża Spadku', logoAlt: 'Tymczasowy znak Wieży Spadku' },
+} as const satisfies LocalizedShape<typeof yanTicketingPlatforms>;
 
 export const kazimierzMessages = {
   filters: {
@@ -18,6 +24,7 @@ export const kazimierzMessages = {
     scope: 'Zakres wyszukiwania: {scope}',
     unavailable: 'Indeks wyszukiwania jest chwilowo niedostępny. Kontynuuj główną nawigację.',
     prompt: 'Wprowadź termin, aby znaleźć spektakle, produkcje i strony internetowe.',
+    minimumQuery: 'Wprowadź co najmniej {count} znaki.',
     resultCount: 'Znaleziono wyniki {count}.',
     noResults: 'Nie znaleziono pasującej treści.',
     noscriptTitle: 'Wyszukiwanie wymaga JavaScript',
@@ -25,6 +32,14 @@ export const kazimierzMessages = {
       'Ta strona nie wysyła żadnych zapytań i nie ładuje żadnych usług zdalnych. Nadal możesz przeglądać występy i informacje o firmie za pomocą głównej nawigacji.',
   },
   ticketing: {
+    partnerPageEyebrow: 'OFICJALNY PARTNER BILETOWY',
+    partnerPageTitle: 'Obsługa miejsc {platform}',
+    partnerPageIntroduction:
+      'Strona trupy przekazała koszyk partnerowi biletowemu. Dokończ tutaj wniosek o miejsca albo wróć do koszyka przed potwierdzeniem.',
+    partnerUnavailableTitle: 'Połączenie nie jest jeszcze dostępne',
+    partnerUnavailableCopy:
+      'Sieć Ryżowa obecnie nie przyjmuje nowych wniosków o miejsca. Koszyk pozostaje na stronie trupy.',
+    returnToBasket: 'Wróć do oficjalnego koszyka',
     selectedCount: 'Wybrano wydajność {count}',
     emptyBasket: 'Nie wybrano żadnych wykonań',
     selectionReady: 'Strefa wydajności i siedzenia znajdują się w tym koszyku.',
@@ -38,13 +53,20 @@ export const kazimierzMessages = {
     seatingPlanNotice:
       'Tylko schemat stref, a nie indywidualny wybór miejsc. Diagram i selektor korzystają z tych samych cen.',
     selectSeatingZone: 'Wybierz {zone}, cena podstawowa {price} LMD',
-    receiptEyebrow: 'SYMULOWANY ODBIÓR',
+    receiptEyebrow: 'REJESTR PRZYDZIAŁU MIEJSC',
     receiptTitle: 'Potwierdzenie rejestracji miejsca',
-    receiptCopy:
-      'To żądanie zostało potwierdzone. Poniższe kwoty i miejsca dotyczą wyłącznie tego symulowanego doświadczenia.',
-    baseTotal: 'Suma podstawowa',
-    adjustmentNone: 'Brak',
-    settledTotal: 'Symulowana suma rozliczenia',
+    receiptCopy: 'Wniosek został potwierdzony. Sprawdź przydzielone miejsca i kwotę należną.',
+    receiptAcceptedAt: 'Czas przyjęcia',
+    receiptChannel: 'Kanał przydziału',
+    receiptStatus: 'Status przyjęcia',
+    receiptStatusAllocated: 'Miejsca przydzielone',
+    receiptPerformance: 'Miejsce na występ',
+    receiptSchedule: 'Termin występu',
+    receiptVenue: 'Miejsce występu',
+    receiptZone: 'Strefa miejsc',
+    receiptFaceValue: 'Cena miejsca',
+    ticketSubtotal: 'Suma częściowa biletów',
+    amountDue: 'Łączna kwota należna',
     disclaimer: 'Tylko zawartość gry. Pokwitowanie to nie powoduje obowiązku wykupu.',
     ticketNumber: 'Numer biletu {number}',
     downloadSvg: 'Pobierz plik SVG',
@@ -58,14 +80,14 @@ export const kazimierzMessages = {
     premiumAttemptCopy:
       'Kanał twierdzi, że poprawia Twoją pozycję w kolejce i dodaje korektę usługi, jeśli się powiedzie. To nadal może się nie udać.',
     submitRequest: 'Potwierdź i prześlij',
-    backToBasket: 'Powrót do koszyka',
+    backToBasket: 'Wróć do oficjalnego koszyka',
     networkTitle: 'Sieć przestała odpowiadać przed potwierdzeniem',
     networkCopy:
-      'Nie utworzono żadnej osady, a Twój koszyk pozostaje nienaruszony. Spróbuj ponownie na tej samej trasie.',
-    retryBasket: 'Zachowaj koszyk i spróbuj ponownie',
+      'Nie przydzielono miejsc, a koszyk pozostał bez zmian. Wyślij wniosek ponownie przez Sieć Ryżową.',
+    retryBasket: 'Wyślij ponownie przez Sieć Ryżową',
     premiumFailureTitle: 'Kanał priorytetowy nadal nie znalazł wolnych miejsc',
     premiumFailureCopy:
-      'Kanał nie znalazł żadnych miejsc, ale wystawił symulowany rekord usługi wyszukiwania. Ceny koszyka i ceny bazowe pozostają niezmienione.',
+      'Kanał nie znalazł miejsc, ale wystawił rejestr przyjęcia wyszukiwania. Koszyk i ceny biletów pozostają bez zmian.',
     premiumOfferTitle: 'Wspólny kanał zwrotu miejsc oferuje inne wyszukiwanie',
     premiumOfferCopy:
       'Kanał odnotuje Twoje zamówienie i w przypadku powodzenia doda korektę usługi równą 50% wartości koszyka. Nie może zagwarantować miejsca.',
@@ -75,50 +97,41 @@ export const kazimierzMessages = {
     standardFailureTitle: 'Duży ruch: żądanie biletu nie powiodło się',
     standardFailureCopy:
       'Zachowaj koszyk i prześlij ponownie lub wypróbuj trasę priorytetową, która w przypadku powodzenia dodaje opłatę.',
-    retryStandard: 'Ponów próbę trasy standardowej',
-    tryPremium: 'Przejrzyj wycenę zwrotu miejsca',
+    retryStandard: 'Ponów przez „Sieć Ryżowa” po cenie pierwotnej',
+    tryPremium: 'Zobacz plan z dopłatą od „Wieża Spadku”',
     acceptPremium: 'Zaakceptuj wycenę 150% i wyszukaj ponownie',
     declinePremium: 'Odrzuć tę wycenę',
     acceptRetention: 'Zaakceptuj wycenę utrzymania na poziomie 148%.',
     declineRetention: 'Nadal odrzuć i wróć do koszyka',
-    retryPremium: 'Ponów próbę trasy priorytetowej',
-    returnStandard: 'Anuluj oznaczanie i wróć do standardu',
-    offerBaseTotal: 'Suma podstawowa koszyka',
-    offerAdjustment: 'Symulowana regulacja usługi',
-    offerFinalTotal: 'Bieżąca symulowana wycena',
-    failureRecordTitle: 'Zapis usługi zakończonej niepowodzeniem',
+    retryPremium: 'Ponów bieżący plan Wieży Spadku',
+    returnStandard: 'Odrzuć dopłatę i wróć do Sieci Ryżowej',
+    offerBaseTotal: 'Suma częściowa biletów',
+    offerAdjustment: 'Priorytetowa usługa przydziału miejsc',
+    offerFinalTotal: 'Kwota należna według wyceny',
+    failureRecordTitle: 'Rejestr przyjęcia wyszukiwania miejsc',
     allocatedSeats: 'Przydzielone miejsca',
-    failureServiceFee: 'Symulowana opłata za usługę wyszukiwania',
+    failureServiceFee: 'Opłata za przyjęcie wyszukiwania miejsc',
     failureRecordDisclaimer:
       'Nie nastąpiło żadne rzeczywiste ładowanie. Zapis ten nie powoduje powstania pokwitowania, biletu pamiątkowego ani obowiązku wykupu.',
     startRequired: 'Najpierw wybierz przynajmniej jeden występ.',
-    submitted: 'Koszyk przesłany. Wejście do symulowanego przepływu biletów.',
+    submitted: 'Koszyk przesłany. Sieć Ryżowa sprawdza dostępność miejsc.',
     success: 'Wystawienie biletu powiodło się. Twoje pamiątkowe bilety są gotowe.',
-    stateUpdated: 'Stan sprzedaży biletów został zaktualizowany.',
+    stateUpdated: 'Stan wniosku o miejsca został zaktualizowany.',
     downloadStarted: 'Rozpoczęło się pobieranie {title}.',
-    newRound: 'Poprzednia runda dobiegła końca. Możesz ponownie wybrać występy.',
+    newRound: 'Poprzedni wniosek o miejsca został zakończony. Możesz wybrać ponownie.',
     adjustments: {
-      'priority-service': 'Dostosowanie usługi trasy priorytetowej',
-      'retention-service': 'Korekta usługi przechowywania wyceny',
-    },
-    stamps: {
-      'admission-confirmed': 'WSTĘP POTWIERDZONY',
-      'standard-route': 'TRASA STANDARDOWA',
-      'priority-route': 'TRASA PRIORYTETOWA',
-      'network-recovered': 'SIEĆ ODZYSKANA',
-      'returned-seat': 'MIEJSCE ZWRÓCONE',
-      'retention-offer': 'WYCENA ZATRZYMANIA',
-      'manual-review': 'PRZEGLĄD INSTRUKCJI',
+      'priority-service': 'Priorytetowa usługa przydziału miejsc',
+      'retention-service': 'Obniżka za natychmiastowe potwierdzenie',
     },
     artifact: {
       title: 'Bilet pamiątkowy {title}',
       description: '{dateTime}, {place}, {zone}, {price} LMD, numer biletu {number}',
       header: 'SZMARAŃCZOWA TRUPA · WSTĘP PAMIĘCIOWY',
-      dateTime: 'TERRA DATA I CZAS',
+      dateTime: 'DATA I CZAS',
       zone: 'STREFA',
       faceValue: 'PODSTAWOWA WARTOŚĆ NOMINALNA',
       ticketNumber: 'NUMER BILETU',
-      alt: 'Bilet pamiątkowy {title}: {dateTime}, {place}, {zone}, {price} LMD, numer biletu i matrycy {number}',
+      alt: 'Bilet pamiątkowy {title}: {dateTime}, {place}, {zone}, {price} LMD, numer biletu {number}',
     },
   },
   programs: {

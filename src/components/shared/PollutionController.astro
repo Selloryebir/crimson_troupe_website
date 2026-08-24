@@ -34,6 +34,19 @@ const view = content && profile ? content.views[profile] : undefined;
     )
   }
 </div>
+{
+  content && (
+    <p
+      class="visually-hidden"
+      data-pollution-status
+      data-pollution-announcement-level1={content.statusAnnouncements[0]}
+      data-pollution-announcement-level2={content.statusAnnouncements[1]}
+      data-pollution-announcement-level3={content.statusAnnouncements[2]}
+      aria-live="polite"
+      aria-atomic="true"
+    />
+  )
+}
 
 <script>
   import { initPollutionController } from '../../scripts/pollution-controller';

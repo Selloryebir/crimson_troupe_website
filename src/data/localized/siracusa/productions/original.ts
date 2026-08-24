@@ -117,4 +117,4 @@ export const siracusaOriginalProductions = {
       ['Ordine di esecuzione', 'Stanza del libro della vecchia troupe'],
     ],
   },
-} as const satisfies Record<OriginalProductionId, ProductionContent>;
+} as const satisfies Partial<Record<OriginalProductionId, ProductionContent>>;

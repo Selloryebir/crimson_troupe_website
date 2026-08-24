@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img">
+  <title>Drop Tower preview mark</title>
+  <rect width="128" height="128" rx="12" fill="#341d45" />
+  <path d="M64 18v60" stroke="#f3dfbc" stroke-width="8" />
+  <path d="m41 52 23 25 23-25" fill="none" stroke="#ef6b4d" stroke-linecap="square" stroke-linejoin="miter" stroke-width="10" />
+  <path d="M27 88h74l-9 22H36z" fill="#f3dfbc" />
+  <path d="M39 88v22m17-22v22m17-22v22m17-22v22" stroke="#341d45" stroke-width="4" />
+  <circle cx="64" cy="24" r="8" fill="#ef6b4d" />
+</svg>

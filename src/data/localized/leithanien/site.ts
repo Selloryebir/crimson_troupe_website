@@ -43,7 +43,7 @@ export const leithanienSite = {
       troupeKeywords: 'Führung durch die kreative Praxis des Unternehmens',
       ticketsTitle: 'Tickets',
       ticketsSummary:
-        'Wählen Sie Vorstellungen und Sitzbereiche aus, um an dem simulierten Ticketverkaufserlebnis teilzunehmen.',
+        'Wählen Sie Vorstellungen und Sitzbereiche und senden Sie die Platzanfrage über unseren Ticketpartner.',
       ticketsKeywords: 'Tickets Sitzplätze Buchungszone Gedenkticket',
     },
     home: {

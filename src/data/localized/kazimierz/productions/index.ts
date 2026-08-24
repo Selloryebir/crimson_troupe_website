@@ -6,4 +6,4 @@ import { kazimierzOriginalProductions } from './original.ts';
 export const kazimierzProductions = {
   ...kazimierzFolioProductions,
   ...kazimierzOriginalProductions,
-} satisfies Record<ProductionId, ProductionContent>;
+} satisfies Partial<Record<ProductionId, ProductionContent>>;

@@ -135,4 +135,4 @@ export const higashiFolioProductions = {
       ['舞台', '長廊工房'],
     ],
   },
-} as const satisfies Record<FolioProductionId, ProductionContent>;
+} as const satisfies Partial<Record<FolioProductionId, ProductionContent>>;

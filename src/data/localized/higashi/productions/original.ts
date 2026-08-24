@@ -110,4 +110,4 @@ export const higashiOriginalProductions = {
       ['進行', '旧劇団制作室'],
     ],
   },
-} as const satisfies Record<OriginalProductionId, ProductionContent>;
+} as const satisfies Partial<Record<OriginalProductionId, ProductionContent>>;

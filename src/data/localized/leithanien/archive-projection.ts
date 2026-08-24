@@ -1,7 +1,11 @@
 import type { ArchiveProjectionContent } from '../schema.ts';
 
 export const leithanienArchiveProjection = {
-  statusAnnouncement: 'Jeder Datensatz auf der Seite hat sein Ziel auf einmal korrigiert.',
+  statusAnnouncements: [
+    'Im Archiv ist eine Unregelmäßigkeit erschienen.',
+    'Die Beziehungen zwischen den Einträgen verändern sich.',
+    'Alle Einträge der Seite weisen nun auf dasselbe Ziel.',
+  ],
   performance: {
     title: 'Der Karneval',
     kind: 'Endgültige Leistung',

@@ -36,7 +36,7 @@ const copy = localization.site.front.tickets;
   data-ticketing-app
   data-ticketing-options={JSON.stringify(options)}
   data-ticketing-messages={JSON.stringify(messages.ticketing)}
-  data-ticketing-locale={edition.locale}
+  data-ticketing-partner-path={sitePath(edition, 'front', 'tickets/partner')}
   hidden
 >
   <header class="ticketing-app__header">
@@ -109,22 +109,6 @@ const copy = localization.site.front.tickets;
       <p data-ticket-selection-feedback>{copy.selectionRequired}</p>
     </aside>
   </form>
-
-  <section class="ticket-flow" data-ticket-flow aria-labelledby="ticket-flow-title" hidden>
-    <p class="eyebrow" data-ticket-flow-label>QUEUE STATUS</p>
-    <h3 id="ticket-flow-title" data-ticket-flow-title tabindex="-1"></h3>
-    <p data-ticket-flow-copy></p>
-    <div class="ticket-flow__details" data-ticket-flow-details></div>
-    <div class="actions" data-ticket-flow-actions></div>
-  </section>
-
-  <section class="ticket-result" data-ticket-result aria-labelledby="ticket-result-title" hidden>
-    <div data-ticket-receipt></div>
-    <div class="issued-tickets" data-issued-tickets></div>
-    <div class="actions">
-      <button class="text-button" type="button" data-ticket-new-round>{copy.newRound}</button>
-    </div>
-  </section>
 
   <p class="ticketing-live" data-ticketing-live aria-live="polite"></p>
 </section>

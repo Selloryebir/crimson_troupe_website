@@ -1,11 +1,16 @@
 import type { PerformanceId, TerraDateTime } from '../performances.ts';
 import type { SiteWorld } from '../site-routes.ts';
 import type { BuildContext } from './build-context.ts';
-import { getSiteTerraNow, isWithinPerformanceVisibilityWindow } from '../site-time.ts';
+import {
+  derivePerformanceCollection,
+  getSiteTerraNow,
+  isWithinPerformanceVisibilityWindow,
+} from '../site-time.ts';
 
 export interface WorldPerformanceRoots {
   performanceIds: readonly PerformanceId[];
   featuredPerformanceId: PerformanceId;
+  homepagePerformanceIds: readonly PerformanceId[];
 }
 
 export type ContentRootSetId = 'current-showcase';
@@ -35,6 +40,15 @@ export const currentRootSet = Object.freeze({
         'uncrowned-qingsui-1103-0404',
       ] satisfies PerformanceId[]),
       featuredPerformanceId: 'uncrowned-trimount-1102',
+      homepagePerformanceIds: Object.freeze([
+        'red-banquet-montelupe-1102-0606',
+        'uncrowned-trimount-1102',
+        'caged-fire-wiesheim-1102',
+        'second-snow-norport-1102',
+        'seventh-lantern-linqu-1102-1212',
+        'procession-of-masks-londinium-1103-0214',
+        'uncrowned-qingsui-1103-0404',
+      ] satisfies PerformanceId[]),
     }),
     archive: Object.freeze({
       performanceIds: Object.freeze([
@@ -57,6 +71,17 @@ export const currentRootSet = Object.freeze({
         'light-of-heria-trimount-1085-0530',
       ] satisfies PerformanceId[]),
       featuredPerformanceId: 'der-ring-zwillingsturme-1084-0817',
+      homepagePerformanceIds: Object.freeze([
+        'lone-wander-linqu-1084-0719',
+        'der-ring-zwillingsturme-1084-0817',
+        'one-hundred-and-one-days-londinium-1084-0903',
+        'the-carnival-montelupe-1084-0921',
+        'the-carnival-londinium-1084-1009',
+        'ode-au-triomphe-zwillingsturme-1084-1028',
+        'wonderland-in-dream-qingsui-1084-1116',
+        'frost-deer-and-snow-doe-jiangdu-1085-0122',
+        'light-of-heria-trimount-1085-0530',
+      ] satisfies PerformanceId[]),
     }),
   }),
 } as const satisfies ContentRootSet);
@@ -92,7 +117,8 @@ export function validateContentRootSet(
       }
     >
   >,
-  context?: BuildContext,
+  knownProductions: Readonly<Record<string, { sourceKind: 'folio' | 'original' }>>,
+  context: BuildContext,
 ): void {
   const allIds = getRootPerformanceIds(rootSet);
   const duplicates = allIds.filter((id, index) => allIds.indexOf(id) !== index);
@@ -123,22 +149,59 @@ export function validateContentRootSet(
       );
     }
 
+    const homepageDuplicates = roots.homepagePerformanceIds.filter(
+      (performanceId, index) => roots.homepagePerformanceIds.indexOf(performanceId) !== index,
+    );
+    if (homepageDuplicates.length > 0) {
+      throw new Error(
+        `根集合 ${rootSet.rootSetId} 的 ${world} 首页策展含重复场次：${[...new Set(homepageDuplicates)].join('、')}`,
+      );
+    }
+    const homepageNonMembers = roots.homepagePerformanceIds.filter(
+      (performanceId) => !roots.performanceIds.includes(performanceId),
+    );
+    if (homepageNonMembers.length > 0) {
+      throw new Error(
+        `根集合 ${rootSet.rootSetId} 的 ${world} 首页策展不属于该时间层根集合：${homepageNonMembers.join('、')}`,
+      );
+    }
+
     const productionAppearances = new Map<string, number>();
-    const siteTerraNow = context ? getSiteTerraNow(world, context) : undefined;
+    const siteTerraNow = getSiteTerraNow(world, context);
+    const homepageNonCurrent = roots.homepagePerformanceIds.filter((performanceId) => {
+      const performance = knownPerformances[performanceId];
+      return (
+        performance &&
+        derivePerformanceCollection(performance.effectiveDateTime, siteTerraNow) !== 'current'
+      );
+    });
+    if (homepageNonCurrent.length > 0) {
+      throw new Error(
+        `根集合 ${rootSet.rootSetId} 的 ${world} 首页策展含非本季场次：${homepageNonCurrent.join('、')}`,
+      );
+    }
     for (const performanceId of roots.performanceIds) {
       const performance = knownPerformances[performanceId];
       if (!performance) {
         continue;
       }
-      if (
-        siteTerraNow &&
-        !isWithinPerformanceVisibilityWindow(performance.effectiveDateTime, siteTerraNow)
-      ) {
+      if (!isWithinPerformanceVisibilityWindow(performance.effectiveDateTime, siteTerraNow)) {
         throw new Error(
           `根集合 ${rootSet.rootSetId} 的 ${performanceId} 超出 ${world} 前后一年窗口。`,
         );
       }
       for (const productionId of performance.productionIds) {
+        const production = knownProductions[productionId];
+        if (!production) {
+          throw new Error(
+            `根集合 ${rootSet.rootSetId} 的 ${performanceId} 引用未知剧目：${productionId}`,
+          );
+        }
+        if (world === 'archive' && production.sourceKind !== 'folio') {
+          throw new Error(
+            `根集合 ${rootSet.rootSetId} 的里站场次 ${performanceId} 只能引用 folio 剧目：${productionId}`,
+          );
+        }
         productionAppearances.set(productionId, (productionAppearances.get(productionId) ?? 0) + 1);
       }
     }
