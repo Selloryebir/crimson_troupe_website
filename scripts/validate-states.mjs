@@ -1273,7 +1273,8 @@ for (const endingId of [
     ),
   );
 }
-assert.ok(svg.includes('data-ticket-composite-stamp'));
+assert.ok(svg.includes('data-ticket-composite-stamp=""'));
+assert.doesNotMatch(svg, /<[^>]+\sdata-[\w-]+(?:\s|>)/u, 'SVG 数据属性必须具有 XML 合法值');
 assert.ok(!svg.includes('data-stamp-id='));
 assert.ok(svg.includes(`data-ticket-pattern="${texture.signature}"`));
 assert.equal(

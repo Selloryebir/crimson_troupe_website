@@ -279,7 +279,7 @@ function createCompositeStampMarkup(
     : journeyTags.includes('manual-review')
       ? '<path data-journey-mark="manual-review" d="M-58 45h18m8 0h24m8 0h18m8 0h32M-48 51h96"/>'
       : '';
-  return `<g data-ticket-composite-stamp data-ending-components="${escapeXml(uniqueHistory.join(' '))}" transform="translate(1020 445) rotate(-3) scale(.78)" fill="none" stroke="${accent}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><title>${escapeXml(accessibleHistory)}</title><ellipse rx="102" ry="66" opacity=".7"/><ellipse rx="97" ry="61" stroke-dasharray="3 5" opacity=".52"/>${components}${administrativeTexture}</g>`;
+  return `<g data-ticket-composite-stamp="" data-ending-components="${escapeXml(uniqueHistory.join(' '))}" transform="translate(1020 445) rotate(-3) scale(.78)" fill="none" stroke="${accent}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><title>${escapeXml(accessibleHistory)}</title><ellipse rx="102" ry="66" opacity=".7"/><ellipse rx="97" ry="61" stroke-dasharray="3 5" opacity=".52"/>${components}${administrativeTexture}</g>`;
 }
 
 export function createTicketSvg(input: TicketArtifactInput): string {

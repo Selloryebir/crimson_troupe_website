@@ -1036,13 +1036,24 @@ try {
       .evaluate((element) => element === document.activeElement),
     true,
   );
-  const ticketSource = await ticketPage.locator('.issued-ticket > img').getAttribute('src');
+  const ticketImage = ticketPage.locator('.issued-ticket > img');
+  const ticketSource = await ticketImage.getAttribute('src');
   assert.match(ticketSource ?? '', /^data:image\/svg\+xml/u);
-  const decodedTicketSource = decodeURIComponent(ticketSource ?? '');
+  const decodedTicketSource = decodeURIComponent((ticketSource ?? '').split(',', 2)[1] ?? '');
+  const ticketImageSize = await ticketImage.evaluate(async (image) => {
+    await image.decode();
+    return { width: image.naturalWidth, height: image.naturalHeight };
+  });
+  assert.deepEqual(ticketImageSize, { width: 1200, height: 540 });
+  const ticketParserError = await ticketPage.evaluate((source) => {
+    const document_ = new globalThis.DOMParser().parseFromString(source, 'image/svg+xml');
+    return document_.querySelector('parsererror')?.textContent ?? null;
+  }, decodedTicketSource);
+  assert.equal(ticketParserError, null, '纪念票 SVG 应通过独立 XML 解析');
   assert.match(decodedTicketSource, /data-ticket-field="title"/u);
   assert.match(decodedTicketSource, /data-ticket-language="primary" lang="en-US"/u);
   assert.doesNotMatch(decodedTicketSource, /data-ticket-language="secondary"/u);
-  assert.match(decodedTicketSource, /data-ticket-composite-stamp/u);
+  assert.match(decodedTicketSource, /data-ticket-composite-stamp=""/u);
   assert.equal(
     await ticketPage.locator('[data-ticket-receipt] .ticket-receipt__lines li').count(),
     1,
