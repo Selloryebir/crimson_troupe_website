@@ -1,4 +1,4 @@
-import { formatMessage } from '../data/localized/format.ts';
+import { formatMessage, formatTerraDateTime } from '../data/localized/format.ts';
 import type { TicketingMessages } from '../data/localized/schema.ts';
 import type { TicketingPerformanceOption } from '../data/ticketing.ts';
 import { createTicketSvg, type TicketArtifactInput } from './ticket-artifact.ts';
@@ -71,6 +71,7 @@ export function renderTicketingResult(
   result: TicketingResult,
   options: readonly TicketingPerformanceOption[],
   messages: TicketingMessages,
+  locale: string,
   elements: TicketingResultElements,
 ): void {
   const { receipt, issuedTickets } = elements;
@@ -90,6 +91,16 @@ export function renderTicketingResult(
   copy.textContent = messages.receiptCopy;
   heading.append(eyebrow, title, copy);
 
+  const meta = document.createElement('dl');
+  meta.className = 'ticket-receipt__meta';
+  addDefinition(meta, messages.receiptAcceptedAt, formatTerraDateTime(result.acceptedAt, locale));
+  addDefinition(
+    meta,
+    messages.receiptChannel,
+    result.route === 'premium' ? messages.priorityChannel : messages.standardChannel,
+  );
+  addDefinition(meta, messages.receiptStatus, messages.receiptStatusAllocated);
+
   const lines = document.createElement('ol');
   lines.className = 'ticket-receipt__lines';
   for (const item of result.basket) {
@@ -99,34 +110,39 @@ export function renderTicketingResult(
       continue;
     }
     const line = document.createElement('li');
-    const name = document.createElement('span');
-    const price = document.createElement('strong');
-    name.textContent = `${option.title} · ${zoneLabel}`;
-    price.textContent = `${item.basePrice} LMD`;
-    line.append(name, price);
+    const lineHeading = document.createElement('div');
+    lineHeading.className = 'ticket-receipt__line-heading';
+    const lineLabel = document.createElement('span');
+    lineLabel.textContent = messages.receiptPerformance;
+    const name = document.createElement('h3');
+    name.textContent = option.title;
+    lineHeading.append(lineLabel, name);
+    const lineDetails = document.createElement('dl');
+    lineDetails.className = 'ticket-receipt__line-details';
+    addDefinition(lineDetails, messages.receiptSchedule, option.dateTime);
+    addDefinition(lineDetails, messages.receiptVenue, option.place);
+    addDefinition(lineDetails, messages.receiptZone, zoneLabel);
+    addDefinition(lineDetails, messages.receiptFaceValue, `${item.basePrice} LMD`);
+    line.append(lineHeading, lineDetails);
     lines.append(line);
   }
 
   const totals = document.createElement('dl');
   totals.className = 'ticket-receipt__totals';
-  addDefinition(totals, messages.baseTotal, `${result.baseTotal} LMD`);
-  if (result.adjustments.length === 0) {
-    addDefinition(totals, messages.offerAdjustment, messages.adjustmentNone);
-  } else {
-    for (const adjustment of result.adjustments) {
-      addDefinition(totals, messages.adjustments[adjustment.id], `+ ${adjustment.amount} LMD`);
-    }
+  addDefinition(totals, messages.ticketSubtotal, `${result.baseTotal} LMD`);
+  for (const adjustment of result.adjustments) {
+    const sign = adjustment.amount < 0 ? '−' : '+';
+    addDefinition(
+      totals,
+      messages.adjustments[adjustment.id],
+      `${sign} ${Math.abs(adjustment.amount)} LMD`,
+    );
   }
+  addDefinition(totals, messages.amountDue, `${result.settledTotal} LMD`);
   const endingLabels = getTicketEndingLabels(messages);
-  addDefinition(
-    totals,
-    result.route === 'premium' ? messages.priorityChannel : messages.standardChannel,
-    endingLabels[result.endingId],
-  );
-  addDefinition(totals, messages.settledTotal, `${result.settledTotal} LMD`);
   const disclaimer = document.createElement('small');
   disclaimer.textContent = messages.disclaimer;
-  receipt.append(heading, lines, totals, disclaimer);
+  receipt.append(heading, meta, lines, totals, disclaimer);
 
   for (const issued of result.tickets) {
     const option = optionFor(options, issued.performanceId);

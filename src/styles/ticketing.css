@@ -473,7 +473,12 @@
   list-style: none;
 }
 
-.ticket-receipt__lines li,
+.ticket-receipt__lines li {
+  padding: 24px 4px;
+  border-bottom: 1px solid var(--line);
+}
+
+.ticket-receipt__meta div,
 .ticket-receipt__totals div {
   display: flex;
   gap: 24px;
@@ -482,9 +487,58 @@
   border-bottom: 1px solid var(--line);
 }
 
-.ticket-receipt__lines span,
+.ticket-receipt__meta dt,
 .ticket-receipt__totals dt {
   color: var(--muted);
+}
+
+.ticket-receipt__meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 32px 0 0;
+  border-top: 1px solid var(--line);
+}
+
+.ticket-receipt__meta div {
+  display: block;
+}
+
+.ticket-receipt__meta dd {
+  margin: 8px 0 0;
+  font-family: var(--serif);
+}
+
+.ticket-receipt__line-heading {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.24fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: baseline;
+}
+
+.ticket-receipt__line-heading span,
+.ticket-receipt__line-details dt {
+  color: var(--muted);
+}
+
+.ticket-receipt__line-heading h3 {
+  margin: 0;
+  font: 500 clamp(1.35rem, 3vw, 2rem) / 1.25 var(--serif);
+}
+
+.ticket-receipt__line-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 24px;
+  margin: 20px 0 0 calc(24% + 24px);
+}
+
+.ticket-receipt__line-details div {
+  min-width: 0;
+}
+
+.ticket-receipt__line-details dd {
+  margin: 5px 0 0;
+  overflow-wrap: anywhere;
 }
 
 .ticket-receipt__totals {
@@ -772,7 +826,17 @@ html[data-world="front"] .issued-ticket__caption {
     font-size: 0.44rem;
   }
 
-  .ticket-receipt__lines li,
+  .ticket-receipt__meta,
+  .ticket-receipt__line-heading,
+  .ticket-receipt__line-details {
+    grid-template-columns: 1fr;
+  }
+
+  .ticket-receipt__line-details {
+    margin-left: 0;
+  }
+
+  .ticket-receipt__meta div,
   .ticket-receipt__totals div,
   .ticket-flow__ledger > div {
     align-items: flex-start;

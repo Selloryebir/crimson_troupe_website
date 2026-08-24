@@ -1,7 +1,7 @@
-import type { TicketOffer, TicketZone } from '../data/performances.ts';
+import type { TerraDateTime, TicketOffer, TicketZone } from '../data/performances.ts';
 import type { TicketAdjustmentId } from '../data/localized/schema.ts';
 
-export const TICKETING_STATE_VERSION = 5 as const;
+export const TICKETING_STATE_VERSION = 6 as const;
 export const STANDARD_SUCCESS_THRESHOLD = 0.32;
 export const STANDARD_FAILURE_THRESHOLD = 0.68;
 export const PREMIUM_SUCCESS_THRESHOLD = 0.58;
@@ -56,6 +56,7 @@ export interface TicketingResult {
   settledTotal: number;
   journeyTags: readonly JourneyTag[];
   tickets: readonly IssuedTicket[];
+  acceptedAt: TerraDateTime;
 }
 
 interface TicketingStateBase {
@@ -167,6 +168,32 @@ export function calculateFailureServiceFee(baseTotal: number): number {
   return Math.ceil(baseTotal * FAILURE_SERVICE_RATE);
 }
 
+export function isValidTicketingTerraDateTime(value: unknown): value is TerraDateTime {
+  if (!value || typeof value !== 'object') {
+    return false;
+  }
+  const candidate = value as Partial<TerraDateTime>;
+  return (
+    candidate.calendar === 'terra' &&
+    Number.isInteger(candidate.year) &&
+    Number.isInteger(candidate.month) &&
+    (candidate.month as number) >= 1 &&
+    (candidate.month as number) <= 12 &&
+    Number.isInteger(candidate.day) &&
+    (candidate.day as number) >= 1 &&
+    (candidate.day as number) <= 31 &&
+    typeof candidate.time === 'string' &&
+    /^(?:[01]\d|2[0-3]):[0-5]\d$/u.test(candidate.time)
+  );
+}
+
+function copyTerraDateTime(value: TerraDateTime): TerraDateTime {
+  if (!isValidTicketingTerraDateTime(value)) {
+    throw new Error('Ticketing acceptance time is invalid');
+  }
+  return Object.freeze({ ...value });
+}
+
 export function updateBasket(
   state: TicketingState,
   item: TicketBasketItem | null,
@@ -195,17 +222,34 @@ function recordEnding(state: TicketingState, endingId: TicketingEndingId): Ticke
   };
 }
 
-function createResult(state: TicketingState, ticketNumberFactory: () => string): TicketingResult {
+function createResult(
+  state: TicketingState,
+  ticketNumberFactory: () => string,
+  acceptedAt: TerraDateTime,
+): TicketingResult {
   const basket = state.basket.map((item) => ({ ...item }));
   const baseTotal = calculateBaseTotal(basket);
   const adjustments: readonly TicketAdjustment[] =
     state.route === 'premium'
-      ? [
-          {
-            id: state.offerVariant === 'retention' ? 'retention-service' : 'priority-service',
-            amount: calculateAdjustmentAmount(baseTotal, state.offerVariant),
-          },
-        ]
+      ? state.offerVariant === 'retention'
+        ? [
+            {
+              id: 'priority-service',
+              amount: calculateAdjustmentAmount(baseTotal, 'full'),
+            },
+            {
+              id: 'retention-service',
+              amount:
+                calculateAdjustmentAmount(baseTotal, 'retention') -
+                calculateAdjustmentAmount(baseTotal, 'full'),
+            },
+          ]
+        : [
+            {
+              id: 'priority-service',
+              amount: calculateAdjustmentAmount(baseTotal, 'full'),
+            },
+          ]
       : [];
   const settledTotal = baseTotal + adjustments.reduce((total, item) => total + item.amount, 0);
   const tickets = basket.map((item) => ({
@@ -223,12 +267,14 @@ function createResult(state: TicketingState, ticketNumberFactory: () => string):
     settledTotal,
     journeyTags: [...state.journeyTags],
     tickets,
+    acceptedAt: copyTerraDateTime(acceptedAt),
   };
 }
 
 function completeAttempt(
   state: TicketingState,
   ticketNumberFactory: () => string,
+  acceptedAt: TerraDateTime,
   forcedTag?: 'returned-seat' | 'manual-review',
 ): TicketingState {
   const journeyTags = forcedTag
@@ -250,13 +296,17 @@ function completeAttempt(
         : 'ENDING_SCALPER_SUCCESS'
       : 'ENDING_NORMAL_SUCCESS',
   );
-  return { ...completedState, result: createResult(completedState, ticketNumberFactory) };
+  return {
+    ...completedState,
+    result: createResult(completedState, ticketNumberFactory, acceptedAt),
+  };
 }
 
 export function resolveTicketingAttempt(
   state: TicketingState,
   random: () => number,
   ticketNumberFactory: () => string,
+  acceptedAt: TerraDateTime,
 ): TicketingState {
   if (state.phase !== 'attempt') {
     return state;
@@ -266,7 +316,7 @@ export function resolveTicketingAttempt(
     const forcedTag = state.journeyTags.includes('priority-refused')
       ? 'returned-seat'
       : 'manual-review';
-    return completeAttempt(state, ticketNumberFactory, forcedTag);
+    return completeAttempt(state, ticketNumberFactory, acceptedAt, forcedTag);
   }
 
   const value = random();
@@ -288,7 +338,7 @@ export function resolveTicketingAttempt(
     outcome = 'unavailable';
   }
   if (outcome === 'success') {
-    return completeAttempt(state, ticketNumberFactory);
+    return completeAttempt(state, ticketNumberFactory, acceptedAt);
   }
   const failedState = {
     ...state,
@@ -612,11 +662,15 @@ export function restoreTicketingState(
     }
 
     const issuedNumbers = restoreIssuedNumbers(value.result, basket);
-    if (!issuedNumbers) {
+    const acceptedAt =
+      value.result && typeof value.result === 'object'
+        ? (value.result as Partial<TicketingResult>).acceptedAt
+        : undefined;
+    if (!issuedNumbers || !isValidTicketingTerraDateTime(acceptedAt)) {
       return createTicketingState();
     }
     const pendingNumbers = [...issuedNumbers];
-    const result = createResult(state, () => pendingNumbers.shift() ?? '000000000000');
+    const result = createResult(state, () => pendingNumbers.shift() ?? '000000000000', acceptedAt);
     return { ...state, result };
   } catch {
     return createTicketingState();

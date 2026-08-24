@@ -66,7 +66,7 @@ import {
   declineRetentionOffer,
   enterPremiumRoute,
   openPremiumOffer,
-  resolveTicketingAttempt,
+  resolveTicketingAttempt as resolveTicketingAttemptAt,
   restoreTicketingState,
   retryTicketingAttempt,
   returnToSelection,
@@ -883,6 +883,15 @@ const catalog = [
 ];
 const basketA = { performanceId: 'performance-a', zone: 'A', basePrice: 420 };
 const basketB = { performanceId: 'performance-b', zone: 'S', basePrice: 680 };
+const ticketAcceptedAt = {
+  calendar: 'terra',
+  year: 1102,
+  month: 4,
+  day: 15,
+  time: '00:00',
+};
+const resolveTicketingAttempt = (state, random, ticketNumberFactory) =>
+  resolveTicketingAttemptAt(state, random, ticketNumberFactory, ticketAcceptedAt);
 
 let selection = createTicketingState();
 selection = updateBasket(selection, basketA, basketA.performanceId);
@@ -909,6 +918,7 @@ const networkFailure = resolveTicketingAttempt(
 assert.equal(standardSuccess.phase, 'success');
 assert.equal(standardSuccess.currentEndingId, 'ENDING_NORMAL_SUCCESS');
 assert.deepEqual(standardSuccess.endingHistory, ['ENDING_NORMAL_SUCCESS']);
+assert.deepEqual(standardSuccess.result?.acceptedAt, ticketAcceptedAt);
 assert.equal(standardFailure.phase, 'failure');
 assert.equal(standardFailure.currentEndingId, null);
 assert.equal(standardFailure.attemptCount, 1);
@@ -996,8 +1006,16 @@ const retainedFailure = resolveTicketingAttempt(
 );
 assert.equal(retainedSuccess.currentEndingId, 'ENDING_DISCOUNT_SUCCESS');
 assert.equal(retainedFailure.currentEndingId, 'ENDING_DISCOUNT_FAILED');
-assert.deepEqual(retainedSuccess.result?.adjustments, [{ id: 'retention-service', amount: 528 }]);
+assert.deepEqual(retainedSuccess.result?.adjustments, [
+  { id: 'priority-service', amount: 550 },
+  { id: 'retention-service', amount: -22 },
+]);
 assert.equal(retainedSuccess.result?.settledTotal, 1628);
+assert.equal(
+  retainedSuccess.result?.baseTotal +
+    retainedSuccess.result?.adjustments.reduce((total, item) => total + item.amount, 0),
+  retainedSuccess.result?.settledTotal,
+);
 assert.deepEqual(retainedSuccess.result?.endingHistory, ['ENDING_DISCOUNT_SUCCESS']);
 const retainedFailureThenSuccess = resolveTicketingAttempt(
   retryTicketingAttempt(retainedFailure),
@@ -1099,6 +1117,13 @@ assert.equal(restored.phase, 'success');
 assert.deepEqual(restored.result?.tickets, premiumSuccess.result?.tickets);
 assert.deepEqual(restored.result?.journeyTags, premiumSuccess.result?.journeyTags);
 assert.deepEqual(restored.result?.endingHistory, premiumSuccess.result?.endingHistory);
+assert.deepEqual(restored.result?.acceptedAt, ticketAcceptedAt);
+const missingAcceptanceTime = structuredClone(premiumSuccess);
+delete missingAcceptanceTime.result.acceptedAt;
+assert.deepEqual(
+  restoreTicketingState(JSON.stringify(missingAcceptanceTime), catalog),
+  createTicketingState(),
+);
 const invalidForcedCombination = {
   ...forcedReturnedSeat,
   journeyTags: [...forcedReturnedSeat.journeyTags, 'manual-review'],
@@ -1110,6 +1135,7 @@ assert.deepEqual(
 assert.deepEqual(restoreTicketingState('{"version":2}', catalog), createTicketingState());
 assert.deepEqual(restoreTicketingState('{"version":3}', catalog), createTicketingState());
 assert.deepEqual(restoreTicketingState('{"version":4}', catalog), createTicketingState());
+assert.deepEqual(restoreTicketingState('{"version":5}', catalog), createTicketingState());
 assert.deepEqual(restoreTicketingState('{"version":999}', catalog), createTicketingState());
 
 const previewLocalizations = previewEditionIds.map((editionId) =>
@@ -1127,6 +1153,11 @@ const crossLocaleState = updateBasket(
   crossLocaleItem,
   crossLocaleItem.performanceId,
 );
+const crossLocaleSuccess = resolveTicketingAttempt(
+  startTicketingAttempt(crossLocaleState),
+  () => 0.1,
+  () => '777777777777',
+);
 for (const localization of previewLocalizations.slice(1)) {
   const targetOptions = getTicketingOptions(localization, previewSnapshot);
   const crossLocaleRestored = restoreTicketingState(
@@ -1134,6 +1165,16 @@ for (const localization of previewLocalizations.slice(1)) {
     targetOptions.map((option) => ({ performanceId: option.performanceId, offers: option.offers })),
   );
   assert.deepEqual(crossLocaleRestored, crossLocaleState);
+  const crossLocaleSuccessRestored = restoreTicketingState(
+    JSON.stringify(crossLocaleSuccess),
+    targetOptions.map((option) => ({ performanceId: option.performanceId, offers: option.offers })),
+  );
+  assert.deepEqual(crossLocaleSuccessRestored.result?.acceptedAt, ticketAcceptedAt);
+  assert.deepEqual(crossLocaleSuccessRestored.result?.tickets, crossLocaleSuccess.result?.tickets);
+  assert.equal(
+    crossLocaleSuccessRestored.result?.settledTotal,
+    crossLocaleSuccess.result?.settledTotal,
+  );
   assert.notEqual(yanOptions[0].offers[0].label, targetOptions[0].offers[0].label);
   assert.deepEqual(
     targetOptions[0].artifact.primary,

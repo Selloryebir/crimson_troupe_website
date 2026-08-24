@@ -1,4 +1,5 @@
 import type { TicketingMessages } from '../data/localized/schema.ts';
+import type { TerraDateTime } from '../data/performances.ts';
 import type { TicketingPerformanceOption } from '../data/ticketing.ts';
 import {
   clearTicketingSession,
@@ -16,6 +17,7 @@ import {
   declinePremiumOffer,
   declineRetentionOffer,
   enterPremiumRoute,
+  isValidTicketingTerraDateTime,
   openPremiumOffer,
   resolveTicketingAttempt,
   retryTicketingAttempt,
@@ -69,6 +71,14 @@ function parseMessages(rawValue: string | undefined): TicketingMessages {
   return messages as TicketingMessages;
 }
 
+function parseAcceptedAt(rawValue: string | undefined): TerraDateTime {
+  const acceptedAt: unknown = JSON.parse(rawValue ?? 'null');
+  if (!isValidTicketingTerraDateTime(acceptedAt)) {
+    throw new Error('Partner ticketing acceptance time is unavailable');
+  }
+  return acceptedAt;
+}
+
 export function initPartnerTicketingExperience(
   dependencies: PartnerTicketingDependencies = {},
 ): void {
@@ -115,14 +125,20 @@ export function initPartnerTicketingExperience(
 
   let options: readonly TicketingPerformanceOption[];
   let messages: TicketingMessages;
+  let acceptedAt: TerraDateTime;
   try {
     options = parseOptions(app.dataset.ticketingOptions);
     messages = parseMessages(app.dataset.ticketingMessages);
+    acceptedAt = parseAcceptedAt(app.dataset.ticketingAcceptedAt);
   } catch {
     return;
   }
 
   const officialPath = app.dataset.ticketingOfficialPath;
+  const locale = app.dataset.ticketingLocale;
+  if (!locale) {
+    return;
+  }
   const catalog = options.map((option) => ({
     performanceId: option.performanceId,
     offers: option.offers,
@@ -176,7 +192,7 @@ export function initPartnerTicketingExperience(
     progress.hidden = true;
     review.hidden = true;
     result.hidden = false;
-    renderTicketingResult(state.result, options, messages, { receipt, issuedTickets });
+    renderTicketingResult(state.result, options, messages, locale, { receipt, issuedTickets });
     live.textContent = messages.success;
     if (focusStage) {
       result.querySelector<HTMLElement>('#ticket-result-title')?.focus();
@@ -265,7 +281,7 @@ export function initPartnerTicketingExperience(
       return;
     }
     processing = true;
-    state = resolveTicketingAttempt(state, random, ticketNumberFactory);
+    state = resolveTicketingAttempt(state, random, ticketNumberFactory, acceptedAt);
     save();
     if (dialog.open) {
       suppressCloseFocus = true;

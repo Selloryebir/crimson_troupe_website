@@ -1,5 +1,6 @@
 ---
 import type { ResolvedLocalization } from '../../data/localized/resolve.ts';
+import type { TerraDateTime } from '../../data/performances.ts';
 import type {
   TicketingPerformanceOption,
   TicketingPlatformPresentation,
@@ -12,9 +13,10 @@ interface Props {
   riceNetwork: TicketingPlatformPresentation;
   dropTower: TicketingPlatformPresentation;
   officialPath: string;
+  acceptedAt: TerraDateTime;
 }
 
-const { localization, options, riceNetwork, dropTower, officialPath } = Astro.props;
+const { localization, options, riceNetwork, dropTower, officialPath, acceptedAt } = Astro.props;
 const messages = localization.messages.ticketing;
 ---
 
@@ -30,6 +32,8 @@ const messages = localization.messages.ticketing;
   data-ticketing-options={JSON.stringify(options)}
   data-ticketing-messages={JSON.stringify(messages)}
   data-ticketing-official-path={officialPath}
+  data-ticketing-accepted-at={JSON.stringify(acceptedAt)}
+  data-ticketing-locale={localization.edition.locale}
   hidden
 >
   <div class="partner-ticketing-progress" data-partner-progress hidden>

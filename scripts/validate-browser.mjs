@@ -1052,12 +1052,30 @@ try {
   assert.equal(ticketParserError, null, '纪念票 SVG 应通过独立 XML 解析');
   assert.match(decodedTicketSource, /data-ticket-field="title"/u);
   assert.match(decodedTicketSource, /data-ticket-language="primary" lang="en-US"/u);
-  assert.doesNotMatch(decodedTicketSource, /data-ticket-language="secondary"/u);
+  assert.match(decodedTicketSource, /data-ticket-language="secondary" lang="zh-CN"/u);
   assert.match(decodedTicketSource, /data-ticket-composite-stamp=""/u);
   assert.equal(
     await ticketPage.locator('[data-ticket-receipt] .ticket-receipt__lines li').count(),
     1,
   );
+  assert.equal(
+    await ticketPage.locator('[data-ticket-receipt] .ticket-receipt__meta > div').count(),
+    3,
+  );
+  assert.match(
+    (await ticketPage.locator('[data-ticket-receipt] .ticket-receipt__meta').textContent()) ?? '',
+    /受理时间.*1102.*配发渠道.*STANDARD CHANNEL.*受理状态.*席位已配发/su,
+  );
+  assert.equal(
+    await ticketPage.locator('[data-ticket-receipt] .ticket-receipt__line-details > div').count(),
+    4,
+  );
+  assert.equal(
+    await ticketPage.locator('[data-ticket-receipt] .ticket-receipt__totals > div').count(),
+    2,
+    '普通成功只显示票款小计与应付合计',
+  );
+  assert.equal(await ticketPage.locator('[data-ticket-receipt] > small').count(), 1);
   await assertNoHorizontalLoss(ticketPage, '320px 炎国票务结果');
   await ticketPage.locator('[data-ticket-new-round]').click();
   await ticketPage.waitForURL(`${origin}/yan/tickets/`);
@@ -1092,7 +1110,7 @@ try {
   const returnToBasket = branchDialog.locator('[data-partner-action="back"]');
   assert.match((await standardRetry.textContent()) ?? '', /水稻网.*原价/u);
   assert.match((await premiumOfferAction.textContent()) ?? '', /跳楼机.*加价/u);
-  assert.match((await returnToBasket.textContent()) ?? '', /官方票篮/u);
+  assert.match((await returnToBasket.textContent()) ?? '', /官网.*票篮/u);
   assert.equal(await standardRetry.getAttribute('class'), 'button');
   assert.equal(await premiumOfferAction.getAttribute('class'), 'button');
   const [retryBox, offerBox] = await Promise.all([
@@ -1143,6 +1161,43 @@ try {
   await assertNoHorizontalLoss(partnerBranchPage, '320px 跳楼机邀请与挽留路径');
   assertPartnerBranchErrors();
   await partnerBranchContext.close();
+
+  for (const priorityPath of ['full', 'retention']) {
+    const priorityContext = await browser.newContext({ viewport: { width: 320, height: 800 } });
+    await priorityContext.addInitScript(() => {
+      Math.random = () => 0.5;
+    });
+    const priorityPage = await priorityContext.newPage();
+    const assertPriorityErrors = trackUnexpectedErrors(priorityPage);
+    await priorityPage.goto(`${origin}/yan/tickets/`);
+    await priorityPage.locator('[data-ticketing-app]:not([hidden])').waitFor();
+    await priorityPage.locator('[data-ticket-select]').first().check();
+    await priorityPage.locator('[data-ticket-start]').click();
+    await priorityPage.waitForURL(`${origin}/yan/tickets/partner/`);
+    await priorityPage.locator('[data-partner-dialog][open]').waitFor();
+    await priorityPage.locator('[data-partner-action="offer"]').click();
+    if (priorityPath === 'retention') {
+      await priorityPage.locator('[data-partner-action="decline-premium"]').click();
+      await priorityPage.locator('[data-partner-action="accept-retention"]').click();
+    } else {
+      await priorityPage.locator('[data-partner-action="accept-premium"]').click();
+    }
+    await priorityPage.locator('[data-partner-dialog][open]').waitFor();
+    await priorityPage.locator('[data-partner-action="receipt"]').click();
+    await priorityPage.locator('[data-ticket-result]:not([hidden])').waitFor();
+    const priorityTotals = priorityPage.locator('[data-ticket-receipt] .ticket-receipt__totals');
+    assert.match((await priorityTotals.textContent()) ?? '', /优先席位调度服务.*\+/su);
+    if (priorityPath === 'retention') {
+      assert.equal(await priorityTotals.locator(':scope > div').count(), 4);
+      assert.match((await priorityTotals.textContent()) ?? '', /即时确认减让.*−/su);
+    } else {
+      assert.equal(await priorityTotals.locator(':scope > div').count(), 3);
+      assert.doesNotMatch((await priorityTotals.textContent()) ?? '', /即时确认减让/u);
+    }
+    await assertNoHorizontalLoss(priorityPage, `320px ${priorityPath} 优先线路凭单`);
+    assertPriorityErrors();
+    await priorityContext.close();
+  }
 
   const minosContext = await browser.newContext({
     viewport: { width: 320, height: 800 },
