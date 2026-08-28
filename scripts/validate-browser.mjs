@@ -1045,6 +1045,59 @@ try {
       .evaluate((element) => element === document.activeElement),
     true,
   );
+  assert.equal(
+    await ticketPage.locator('[data-ticket-journey-steps] > li').count(),
+    1,
+    '直接成功应在受理簿留下一个结果节点',
+  );
+  assert.equal(
+    await ticketPage
+      .locator('[data-ticket-journey-ending]')
+      .first()
+      .getAttribute('data-ticket-journey-ending'),
+    'ENDING_NORMAL_SUCCESS',
+  );
+  assert.equal(await ticketPage.locator('.ticket-journey__empty').count(), 1);
+  assert.equal(
+    await ticketPage.locator('.ticket-journey__totals > div').count(),
+    3,
+    '受理簿应同时说明渠道、票款小计与应付合计',
+  );
+  const stampInspector = ticketPage.locator('[data-ticket-stamp-inspector]');
+  await stampInspector.locator('summary').focus();
+  await ticketPage.keyboard.press('Enter');
+  assert.notEqual(await stampInspector.getAttribute('open'), null, '印章检视镜应可由键盘展开');
+  const stampPreviewSource = await stampInspector
+    .locator('.ticket-stamp-inspector__preview')
+    .getAttribute('src');
+  const decodedStampPreview = decodeURIComponent((stampPreviewSource ?? '').split(',', 2)[1] ?? '');
+  assert.match(decodedStampPreview, /data-ending-component="ENDING_NORMAL_SUCCESS"/u);
+  assert.doesNotMatch(
+    decodedStampPreview,
+    /data-ending-component="ENDING_NETWORK_ERROR"/u,
+    '检视镜不得陈列未经历路线',
+  );
+  const finishInputs = ticketPage.locator('input[data-ticket-finish]');
+  assert.equal(await finishInputs.count(), 3);
+  assert.equal(
+    await ticketPage.locator('[data-ticket-action^="download:"]').isDisabled(),
+    true,
+    '未选择票面整理前不得下载未定稿票面',
+  );
+  const deckleFinish = ticketPage.locator('input[data-ticket-finish="deckle-edge"]');
+  await deckleFinish.focus();
+  await ticketPage.keyboard.press('Space');
+  await ticketPage.waitForFunction(
+    () => document.querySelector('input[data-ticket-finish="deckle-edge"]')?.checked === true,
+  );
+  assert.equal(
+    await ticketPage
+      .locator('input[data-ticket-finish="deckle-edge"]')
+      .evaluate((element) => element === document.activeElement),
+    true,
+    '重绘后焦点应回到已选整理项',
+  );
+  assert.equal(await ticketPage.locator('[data-ticket-action^="download:"]').isEnabled(), true);
   const ticketImage = ticketPage.locator('.issued-ticket > img');
   const ticketSource = await ticketImage.getAttribute('src');
   assert.match(ticketSource ?? '', /^data:image\/svg\+xml/u);
@@ -1081,6 +1134,8 @@ try {
     downloadedFieldOrder,
   );
   assert.match(decodedTicketSource, /data-ticket-composite-stamp=""/u);
+  assert.match(decodedTicketSource, /data-ticket-finish="deckle-edge"/u);
+  assert.match(decodedTicketSource, /<path data-ticket-finish="deckle-edge"/u);
   const screenFieldGroups = await ticketPage
     .locator('.issued-ticket__caption [data-ticket-field-group]')
     .evaluateAll((elements) =>
@@ -1129,6 +1184,29 @@ try {
   );
   assert.equal(await ticketPage.locator('[data-ticket-receipt] > small').count(), 1);
   await assertNoHorizontalLoss(ticketPage, '320px 炎国票务结果');
+  await ticketPage.reload();
+  await ticketPage.locator('[data-ticket-result]:not([hidden])').waitFor();
+  assert.equal(
+    await ticketPage.locator('input[data-ticket-finish="deckle-edge"]').isChecked(),
+    true,
+    '刷新后应恢复票面整理选择',
+  );
+  assert.equal(
+    await ticketPage.evaluate(
+      () =>
+        JSON.parse(sessionStorage.getItem('crimson-troupe:ticketing:v7') ?? 'null')?.result
+          ?.artifactFinishId,
+    ),
+    'deckle-edge',
+  );
+  await ticketPage.emulateMedia({ reducedMotion: 'reduce' });
+  assert.equal(await ticketPage.locator('[data-ticket-finish-workshop]').isVisible(), true);
+  await ticketPage.setViewportSize({ width: 1280, height: 900 });
+  await assertNoHorizontalLoss(ticketPage, '1280px 炎国票务结果');
+  const finishChoiceTops = await ticketPage
+    .locator('.ticket-finish-option')
+    .evaluateAll((items) => items.map((item) => Math.round(item.getBoundingClientRect().top)));
+  assert.equal(new Set(finishChoiceTops).size, 1, '桌面票面整理应保持三列并排');
   await ticketPage.locator('[data-ticket-new-round]').click();
   await ticketPage.waitForURL(`${origin}/yan/tickets/`);
   await ticketPage.goto(`${origin}/yan/tickets/partner/`);
@@ -1277,8 +1355,13 @@ try {
   await minosPage.locator('[data-partner-action="receipt"]').click();
   await minosPage.locator('[data-ticket-result]:not([hidden])').waitFor();
   assert.equal(new URL(minosPage.url()).pathname, '/min/tickets/partner/');
+  await minosPage.locator('input[data-ticket-finish="registration-shift"]').check();
   const minosTicketSource = await minosPage.locator('.issued-ticket > img').getAttribute('src');
   assert.match(decodeURIComponent(minosTicketSource ?? ''), /\p{Script=Greek}/u);
+  assert.match(
+    decodeURIComponent(minosTicketSource ?? ''),
+    /data-ticket-finish="registration-shift"/u,
+  );
   const downloadPromise = minosPage.waitForEvent('download');
   await minosPage.locator('[data-ticket-action^="download:"]').click();
   const download = await downloadPromise;
@@ -1292,6 +1375,11 @@ try {
   await minosSelector.locator('a[lang="zh-CN"]').click();
   await minosPage.locator('[data-ticket-result]:not([hidden])').waitFor();
   assert.match(new URL(minosPage.url()).pathname, /^\/yan\/tickets\/partner\/$/u);
+  assert.equal(
+    await minosPage.locator('input[data-ticket-finish="registration-shift"]').isChecked(),
+    true,
+    '切换国家版本后应恢复相同票面整理 ID',
+  );
   assertMinosErrors();
   await minosContext.close();
 
@@ -1376,6 +1464,7 @@ try {
   await ursusPage.locator('[data-partner-dialog][open]').waitFor();
   await ursusPage.locator('[data-partner-action="receipt"]').click();
   await ursusPage.locator('[data-ticket-result]:not([hidden])').waitFor();
+  await ursusPage.locator('input[data-ticket-finish="ticket-punch"]').check();
   const editionRouteSequence = builtEditions.map(({ routePrefix }) => routePrefix);
   for (const routePrefix of editionRouteSequence) {
     const editionSelector = ursusPage.locator('[data-edition-selector]');
@@ -1391,6 +1480,11 @@ try {
   await returnToUrsusSelector.locator('summary').click();
   await returnToUrsusSelector.locator('a[href^="/urs/tickets/"]').click();
   await ursusPage.locator('[data-ticket-result]:not([hidden])').waitFor();
+  assert.equal(
+    await ursusPage.locator('input[data-ticket-finish="ticket-punch"]').isChecked(),
+    true,
+    '轮换全部国家版本后应保留票面整理',
+  );
   const ursusTicketSource = await ursusPage.locator('.issued-ticket > img').getAttribute('src');
   assert.match(decodeURIComponent(ursusTicketSource ?? ''), /\p{Script=Cyrillic}/u);
   const ursusDownloadPromise = ursusPage.waitForEvent('download');

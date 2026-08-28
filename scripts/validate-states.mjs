@@ -49,6 +49,7 @@ import {
 } from '../src/scripts/pollution-state.ts';
 import {
   createTicketMatrix,
+  createTicketStampPreviewSvg,
   createTicketSvg,
   createTicketTexture,
   layoutTicketText,
@@ -71,6 +72,7 @@ import {
   retryTicketingAttempt,
   returnToSelection,
   returnToStandardRoute,
+  selectTicketArtifactFinish,
   startTicketingAttempt,
   updateBasket,
 } from '../src/scripts/ticketing-state.ts';
@@ -919,6 +921,7 @@ assert.equal(standardSuccess.phase, 'success');
 assert.equal(standardSuccess.currentEndingId, 'ENDING_NORMAL_SUCCESS');
 assert.deepEqual(standardSuccess.endingHistory, ['ENDING_NORMAL_SUCCESS']);
 assert.deepEqual(standardSuccess.result?.acceptedAt, ticketAcceptedAt);
+assert.equal(standardSuccess.result?.artifactFinishId, null);
 assert.equal(standardFailure.phase, 'failure');
 assert.equal(standardFailure.currentEndingId, null);
 assert.equal(standardFailure.attemptCount, 1);
@@ -1118,6 +1121,24 @@ assert.deepEqual(restored.result?.tickets, premiumSuccess.result?.tickets);
 assert.deepEqual(restored.result?.journeyTags, premiumSuccess.result?.journeyTags);
 assert.deepEqual(restored.result?.endingHistory, premiumSuccess.result?.endingHistory);
 assert.deepEqual(restored.result?.acceptedAt, ticketAcceptedAt);
+assert.equal(restored.result?.artifactFinishId, null);
+const finishedPremiumSuccess = selectTicketArtifactFinish(premiumSuccess, 'registration-shift');
+assert.equal(finishedPremiumSuccess.result?.artifactFinishId, 'registration-shift');
+assert.equal(premiumSuccess.result?.artifactFinishId, null, '票面整理不得修改原冻结结果对象');
+assert.equal(
+  selectTicketArtifactFinish(standardFailure, 'deckle-edge'),
+  standardFailure,
+  '非成功阶段不得选择票面整理',
+);
+const restoredFinished = restoreTicketingState(JSON.stringify(finishedPremiumSuccess), catalog);
+assert.equal(restoredFinished.result?.artifactFinishId, 'registration-shift');
+const invalidFinish = structuredClone(finishedPremiumSuccess);
+invalidFinish.result.artifactFinishId = 'rare-random-finish';
+assert.deepEqual(
+  restoreTicketingState(JSON.stringify(invalidFinish), catalog),
+  createTicketingState(),
+  '未知票面整理必须安全重置会话',
+);
 const missingAcceptanceTime = structuredClone(premiumSuccess);
 delete missingAcceptanceTime.result.acceptedAt;
 assert.deepEqual(
@@ -1136,6 +1157,7 @@ assert.deepEqual(restoreTicketingState('{"version":2}', catalog), createTicketin
 assert.deepEqual(restoreTicketingState('{"version":3}', catalog), createTicketingState());
 assert.deepEqual(restoreTicketingState('{"version":4}', catalog), createTicketingState());
 assert.deepEqual(restoreTicketingState('{"version":5}', catalog), createTicketingState());
+assert.deepEqual(restoreTicketingState('{"version":6}', catalog), createTicketingState());
 assert.deepEqual(restoreTicketingState('{"version":999}', catalog), createTicketingState());
 
 const previewLocalizations = previewEditionIds.map((editionId) =>
@@ -1272,6 +1294,7 @@ for (const [performanceId, expectedPrimaryLocale, expectedSecondaryLocale] of [
     endingLabels: artifactEndingLabels,
     journeyTags: artifactJourneyTags,
     projection: option.artifact,
+    artifactFinishId: 'deckle-edge',
   });
   assert.ok(
     actualProjectionSvg.includes(`data-ticket-language="primary" lang="${expectedPrimaryLocale}"`),
@@ -1321,6 +1344,7 @@ const svg = createTicketSvg({
   endingLabels: artifactEndingLabels,
   journeyTags: artifactJourneyTags,
   projection: artifactProjection,
+  artifactFinishId: 'registration-shift',
 });
 assert.equal(matrix.length, 21 * 21);
 for (const requiredText of [
@@ -1371,6 +1395,7 @@ for (const endingId of [
   );
 }
 assert.ok(svg.includes('data-ticket-composite-stamp=""'));
+assert.ok(svg.includes('data-ticket-finish="registration-shift"'));
 assert.doesNotMatch(svg, /<[^>]+\sdata-[\w-]+(?:\s|>)/u, 'SVG 数据属性必须具有 XML 合法值');
 assert.ok(!svg.includes('data-stamp-id='));
 assert.ok(svg.includes(`data-ticket-pattern="${texture.signature}"`));
@@ -1384,8 +1409,33 @@ assert.equal(
     endingLabels: artifactEndingLabels,
     journeyTags: artifactJourneyTags,
     projection: artifactProjection,
+    artifactFinishId: 'registration-shift',
   }),
 );
+
+for (const finishId of ['deckle-edge', 'registration-shift', 'ticket-punch']) {
+  const finishedSvg = createTicketSvg({
+    performance: artifactPerformance,
+    basketItem: basketA,
+    number: '123456789012',
+    endingHistory: artifactEndingHistory,
+    endingLabels: artifactEndingLabels,
+    journeyTags: artifactJourneyTags,
+    projection: artifactProjection,
+    artifactFinishId: finishId,
+  });
+  assert.ok(finishedSvg.includes(`data-ticket-finish="${finishId}"`));
+}
+
+const activeStampPreview = createTicketStampPreviewSvg(
+  ['ENDING_NETWORK_ERROR', 'ENDING_NORMAL_SUCCESS'],
+  artifactEndingLabels,
+  ['returned-seat'],
+);
+assert.ok(activeStampPreview.includes('data-ending-component="ENDING_NETWORK_ERROR"'));
+assert.ok(activeStampPreview.includes('data-ending-component="ENDING_NORMAL_SUCCESS"'));
+assert.ok(!activeStampPreview.includes('data-ending-component="ENDING_SCALPER_SUCCESS"'));
+assert.ok(activeStampPreview.includes('data-journey-mark="returned-seat"'));
 
 const unicodeTicketSamples = [
   {
@@ -1442,6 +1492,7 @@ const unicodeArtifactSvg = createTicketSvg({
   endingHistory: artifactEndingHistory,
   endingLabels: artifactEndingLabels,
   journeyTags: artifactJourneyTags,
+  artifactFinishId: 'ticket-punch',
   projection: {
     primary: {
       ...artifactProjection.primary,
