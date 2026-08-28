@@ -2,6 +2,7 @@ import type { TerraDateTime, TicketOffer, TicketZone } from '../data/performance
 import type { TicketAdjustmentId } from '../data/localized/schema.ts';
 
 export const TICKETING_STATE_VERSION = 6 as const;
+export const STANDARD_INITIAL_SUCCESS_THRESHOLD = 0.12;
 export const STANDARD_SUCCESS_THRESHOLD = 0.32;
 export const STANDARD_FAILURE_THRESHOLD = 0.68;
 export const PREMIUM_SUCCESS_THRESHOLD = 0.58;
@@ -326,7 +327,12 @@ export function resolveTicketingAttempt(
       Number.isFinite(value) && value >= 0 && value < PREMIUM_SUCCESS_THRESHOLD
         ? 'success'
         : 'unavailable';
-  } else if (Number.isFinite(value) && value >= 0 && value < STANDARD_SUCCESS_THRESHOLD) {
+  } else if (
+    Number.isFinite(value) &&
+    value >= 0 &&
+    value <
+      (state.attemptCount === 0 ? STANDARD_INITIAL_SUCCESS_THRESHOLD : STANDARD_SUCCESS_THRESHOLD)
+  ) {
     outcome = 'success';
   } else if (Number.isFinite(value) && value >= 0 && value < STANDARD_FAILURE_THRESHOLD) {
     outcome = 'unavailable';

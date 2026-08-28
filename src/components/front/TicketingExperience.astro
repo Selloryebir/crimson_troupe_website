@@ -3,6 +3,7 @@ import { formatMessage } from '../../data/localized/format';
 import type { ResolvedLocalization } from '../../data/localized/resolve';
 import type { TicketingPerformanceOption } from '../../data/ticketing';
 import { sitePath } from '../../data/site-routes';
+import '../../styles/ticketing.css';
 import ProductionVisual from './ProductionVisual.astro';
 import TicketSeatingPlan from './TicketSeatingPlan.astro';
 
@@ -55,6 +56,7 @@ const copy = localization.site.front.tickets;
               title={option.title}
               index={String(index + 1).padStart(2, '0')}
               compact
+              priority={index === 0}
             />
             <div class="ticket-basket__copy">
               <div>

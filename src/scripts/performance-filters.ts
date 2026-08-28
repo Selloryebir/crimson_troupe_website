@@ -31,7 +31,9 @@ export function initPerformanceFilters(): void {
       return;
     }
 
-    filters.hidden = false;
+    city.disabled = false;
+    month.disabled = false;
+    reset.disabled = false;
 
     const update = () => {
       let visibleCount = 0;

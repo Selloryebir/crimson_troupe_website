@@ -32,4 +32,4 @@
 
 文档按独立变化原因拆分，不按行数、标题数或文件大小拆分。只有当一部分可以独立增删、更换，面向不同使用者或频率，已经有更合适的唯一责任方，或结构化草稿无法定位唯一落点时才拆分；同一决策树、同一生命周期或同一机器事实源保持集中。不得为追求短文件、平均体量或形式整齐建立周期性全文审计。
 
-开发命令见 [`guides/development.md`](guides/development.md)；一次性计划的自动执行决策边界见 [`drafts/plans/README.md`](drafts/plans/README.md)；长期分支职责、允许的同步方向、逐切片闭环与 Git 人工门禁以 [`guides/git-branch-workflow.md`](guides/git-branch-workflow.md) 为唯一完整说明。
+开发命令见 [`guides/development.md`](guides/development.md)；一次性计划的自动执行决策边界见 [`drafts/plans/README.md`](drafts/plans/README.md)；正式功能、创意实验、未来专业工作通道及 `dev_code -> dev -> main` 的晋级方向、逐切片规则与 Git 人工门禁，以 [`guides/git-branch-workflow.md`](guides/git-branch-workflow.md) 为唯一完整说明。

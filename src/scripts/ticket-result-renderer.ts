@@ -2,7 +2,7 @@ import { formatMessage, formatTerraDateTime } from '../data/localized/format.ts'
 import type { TicketingMessages } from '../data/localized/schema.ts';
 import type { TicketingPerformanceOption } from '../data/ticketing.ts';
 import { createTicketSvg, type TicketArtifactInput } from './ticket-artifact.ts';
-import type { TicketBasketItem, TicketingEndingId, TicketingResult } from './ticketing-state.ts';
+import type { TicketBasketItem, TicketingResult } from './ticketing-state.ts';
 
 export interface TicketingResultElements {
   receipt: HTMLElement;
@@ -28,20 +28,6 @@ function addDefinition(list: HTMLDListElement, term: string, description: string
   list.append(row);
 }
 
-export function getTicketEndingLabels(
-  messages: TicketingMessages,
-): Readonly<Record<TicketingEndingId, string>> {
-  return {
-    ENDING_NETWORK_ERROR: messages.networkTitle,
-    ENDING_NORMAL_SUCCESS: `${messages.standardChannel}: ${messages.success}`,
-    ENDING_REJECT_RESCALPER: messages.returnStandard,
-    ENDING_SCALPER_SUCCESS: `${messages.priorityChannel}: ${messages.success}`,
-    ENDING_SCALPER_FAILED: `${messages.priorityChannel}: ${messages.premiumFailureTitle}`,
-    ENDING_DISCOUNT_SUCCESS: `${messages.retentionOfferTitle}: ${messages.success}`,
-    ENDING_DISCOUNT_FAILED: `${messages.retentionOfferTitle}: ${messages.premiumFailureTitle}`,
-  };
-}
-
 function optionFor(
   options: readonly TicketingPerformanceOption[],
   performanceId: string,
@@ -54,14 +40,12 @@ function artifactInputFor(
   option: TicketingPerformanceOption,
   basketItem: TicketBasketItem,
   number: string,
-  messages: TicketingMessages,
 ): TicketArtifactInput {
   return {
     performance: option,
     basketItem,
     number,
     endingHistory: result.endingHistory,
-    endingLabels: getTicketEndingLabels(messages),
     journeyTags: result.journeyTags,
     projection: option.artifact,
   };
@@ -84,7 +68,7 @@ export function renderTicketingResult(
   eyebrow.className = 'eyebrow';
   eyebrow.textContent = messages.receiptEyebrow;
   const title = document.createElement('h2');
-  title.id = 'ticket-result-title';
+  title.id = 'ticket-receipt-title';
   title.tabIndex = -1;
   title.textContent = messages.receiptTitle;
   const copy = document.createElement('p');
@@ -139,7 +123,6 @@ export function renderTicketingResult(
     );
   }
   addDefinition(totals, messages.amountDue, `${result.settledTotal} LMD`);
-  const endingLabels = getTicketEndingLabels(messages);
   const disclaimer = document.createElement('small');
   disclaimer.textContent = messages.disclaimer;
   receipt.append(heading, meta, lines, totals, disclaimer);
@@ -156,7 +139,7 @@ export function renderTicketingResult(
     if (!artifactZoneLabel) {
       continue;
     }
-    const artifact = artifactInputFor(result, option, basketItem, issued.number, messages);
+    const artifact = artifactInputFor(result, option, basketItem, issued.number);
     const article = document.createElement('article');
     article.className = 'issued-ticket';
     article.dataset.issuedTicket = issued.performanceId;
@@ -229,27 +212,12 @@ export function renderTicketingResult(
     const ticketNumber = document.createElement('p');
     ticketNumber.className = 'issued-ticket__number';
     ticketNumber.textContent = formatMessage(messages.ticketNumber, { number: issued.number });
-    const journey = document.createElement('p');
-    journey.className = 'visually-hidden';
-    journey.dataset.ticketEndingHistory = '';
-    journey.textContent = result.endingHistory
-      .map((endingId) => endingLabels[endingId])
-      .join(' → ');
     const controls = document.createElement('div');
     controls.className = 'issued-ticket__controls';
-    controls.append(
-      createButton(`download:${issued.performanceId}`, messages.downloadSvg),
-      createButton(`print:${issued.performanceId}`, messages.printTicket),
-    );
-    caption.append(
-      productionGroup,
-      dateTimeGroup,
-      venueGroup,
-      facts,
-      ticketNumber,
-      journey,
-      controls,
-    );
+    const download = createButton(`download:${issued.performanceId}`, messages.downloadSvg);
+    const print = createButton(`print:${issued.performanceId}`, messages.printTicket);
+    controls.append(download, print);
+    caption.append(productionGroup, dateTimeGroup, venueGroup, facts, ticketNumber, controls);
     article.append(image, caption);
     issuedTickets.append(article);
   }
@@ -280,9 +248,7 @@ export function handleTicketArtifactAction(
     return;
   }
   if (kind === 'download') {
-    const svg = createTicketSvg(
-      artifactInputFor(result, option, basketItem, issued.number, messages),
-    );
+    const svg = createTicketSvg(artifactInputFor(result, option, basketItem, issued.number));
     const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml;charset=utf-8' }));
     const link = document.createElement('a');
     link.href = url;

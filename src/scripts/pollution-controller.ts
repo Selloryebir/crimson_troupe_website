@@ -5,6 +5,7 @@ import {
   derivePollutionComposition,
   MAX_POLLUTION_LEVEL,
   parsePollutionState,
+  POLLUTION_STATE_STORAGE_KEY,
   type PollutionLevel,
   type PollutionState,
   type PollutionTransition,
@@ -12,9 +13,9 @@ import {
   type PollutionVariant,
 } from './pollution-state.ts';
 
-const STATE_KEY = 'crimson-troupe:archive-pollution:v2';
 const PENDING_KEY = 'crimson-troupe:archive-navigation:v2';
 const PENDING_LIFETIME_MS = 30_000;
+const PROJECTION_PRELOAD_DELAY_MS = 1_200;
 
 interface PendingNavigation {
   targetPath: string;
@@ -25,6 +26,10 @@ interface PendingNavigation {
 interface ConsumedNavigation {
   matched: boolean;
   announcementLevel?: PollutionLevel;
+}
+
+interface ProjectionPreloader {
+  apply(state: PollutionState): void;
 }
 
 function randomVariant(): PollutionVariant {
@@ -39,7 +44,7 @@ function randomVariant(): PollutionVariant {
 
 function getSessionStorage(): Storage | null {
   try {
-    const probe = `${STATE_KEY}:probe`;
+    const probe = `${POLLUTION_STATE_STORAGE_KEY}:probe`;
     sessionStorage.setItem(probe, '1');
     sessionStorage.removeItem(probe);
     return sessionStorage;
@@ -52,7 +57,7 @@ function readState(storage: Storage | null): PollutionState {
   if (!storage) {
     return createPollutionState();
   }
-  return parsePollutionState(storage.getItem(STATE_KEY), randomVariant());
+  return parsePollutionState(storage.getItem(POLLUTION_STATE_STORAGE_KEY), randomVariant());
 }
 
 function hasStoredState(storage: Storage | null): boolean {
@@ -60,7 +65,7 @@ function hasStoredState(storage: Storage | null): boolean {
     return false;
   }
   try {
-    return storage.getItem(STATE_KEY) !== null;
+    return storage.getItem(POLLUTION_STATE_STORAGE_KEY) !== null;
   } catch {
     return false;
   }
@@ -71,7 +76,7 @@ function writeState(storage: Storage | null, state: PollutionState): void {
     return;
   }
   try {
-    storage.setItem(STATE_KEY, JSON.stringify(state));
+    storage.setItem(POLLUTION_STATE_STORAGE_KEY, JSON.stringify(state));
   } catch {
     // The archive remains usable at level 0 when tab storage is unavailable.
   }
@@ -89,7 +94,7 @@ function clearState(storage: Storage | null): void {
     return;
   }
   try {
-    storage.removeItem(STATE_KEY);
+    storage.removeItem(POLLUTION_STATE_STORAGE_KEY);
     storage.removeItem(PENDING_KEY);
   } catch {
     // Clearing is best-effort; front-site rendering never reads the archive state.
@@ -98,11 +103,117 @@ function clearState(storage: Storage | null): void {
 
 function applyState(state: PollutionState): void {
   const root = document.documentElement;
-  root.dataset.pollutionLevel = String(state.level);
-  root.dataset.pollutionVariant = String(state.variant);
-  root.dataset.pollutionComposition = String(
+  const level = String(state.level);
+  const variant = String(state.variant);
+  const composition = String(
     derivePollutionComposition(state, root.dataset.pageType ?? 'archive', window.location.pathname),
   );
+  if (root.dataset.pollutionLevel !== level) {
+    root.dataset.pollutionLevel = level;
+  }
+  if (root.dataset.pollutionVariant !== variant) {
+    root.dataset.pollutionVariant = variant;
+  }
+  if (root.dataset.pollutionComposition !== composition) {
+    root.dataset.pollutionComposition = composition;
+  }
+}
+
+function createProjectionPreloader(root: HTMLElement): ProjectionPreloader {
+  const posters = [...document.querySelectorAll<HTMLElement>('[data-archive-projection-poster]')];
+  let started = false;
+  let scheduled = false;
+  let observer: IntersectionObserver | undefined;
+
+  const updateProgressiveState = () => {
+    if (posters.every((poster) => poster.hasAttribute('data-archive-projection-ready'))) {
+      root.removeAttribute('data-pollution-projection-progressive');
+      observer?.disconnect();
+    }
+  };
+
+  const prepare = async (poster: HTMLElement) => {
+    if (poster.hasAttribute('data-archive-projection-ready')) {
+      return;
+    }
+    const image = poster.querySelector<HTMLImageElement>(
+      '.archive-projection-level3.archive-poster__image',
+    );
+    if (!image) {
+      poster.setAttribute('data-archive-projection-ready', '');
+      updateProgressiveState();
+      return;
+    }
+
+    image.loading = 'eager';
+    try {
+      await image.decode();
+      poster.setAttribute('data-archive-projection-ready', '');
+      updateProgressiveState();
+    } catch {
+      // Keep the readable source poster if the optional projection cannot be decoded.
+    }
+  };
+
+  const start = () => {
+    if (started || posters.length === 0) {
+      return;
+    }
+    started = true;
+    if (!('IntersectionObserver' in window)) {
+      for (const poster of posters) {
+        poster.setAttribute('data-archive-projection-ready', '');
+      }
+      return;
+    }
+
+    observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) {
+            continue;
+          }
+          observer?.unobserve(entry.target);
+          void prepare(entry.target as HTMLElement);
+        }
+      },
+      { rootMargin: '100% 0px' },
+    );
+    for (const poster of posters) {
+      observer.observe(poster);
+    }
+  };
+
+  const schedule = () => {
+    if (scheduled || started || posters.length === 0) {
+      return;
+    }
+    scheduled = true;
+    const defer = () => {
+      window.setTimeout(start, PROJECTION_PRELOAD_DELAY_MS);
+    };
+    if (document.readyState === 'complete') {
+      defer();
+    } else {
+      window.addEventListener('load', defer, { once: true });
+    }
+  };
+
+  return {
+    apply(state) {
+      const enteringLevel3 = root.dataset.pollutionLevel !== '3' && state.level === 3;
+      if (enteringLevel3) {
+        start();
+      } else if (state.level === 2) {
+        schedule();
+      }
+      if (enteringLevel3 && observer) {
+        root.setAttribute('data-pollution-projection-progressive', '');
+      }
+      applyState(state);
+      updateProgressiveState();
+    },
+  };
 }
 
 function announcePollutionLevel(level: PollutionLevel): void {
@@ -260,6 +371,7 @@ export function initPollutionController(): void {
     return;
   }
 
+  const projectionPreloader = createProjectionPreloader(root);
   const pendingNavigation = consumePending(storage, window.location.pathname);
   const navigationType = getNavigationType();
   const entryTransition = shouldRequestArchiveEntry(
@@ -270,7 +382,7 @@ export function initPollutionController(): void {
     ? requestTransition(storage, 'direct-entry')
     : undefined;
   const initialState = entryTransition?.state ?? readState(storage);
-  applyState(initialState);
+  projectionPreloader.apply(initialState);
   const initialAnnouncementLevel = entryTransition?.advanced
     ? entryTransition.state.level
     : pendingNavigation.announcementLevel;
@@ -288,7 +400,7 @@ export function initPollutionController(): void {
         ? requestTransition(storage, 'direct-entry')
         : undefined;
       const restoredState = restoredTransition?.state ?? readState(storage);
-      applyState(restoredState);
+      projectionPreloader.apply(restoredState);
       if (restoredTransition?.advanced) {
         announcePollutionLevel(restoredTransition.state.level);
       }
@@ -343,7 +455,7 @@ export function initPollutionController(): void {
 
   document.addEventListener('crimson:archive-search-submit', () => {
     const transition = requestTransition(storage, 'archive-search');
-    applyState(transition.state);
+    projectionPreloader.apply(transition.state);
     if (transition.advanced) {
       announcePollutionLevel(transition.state.level);
     }

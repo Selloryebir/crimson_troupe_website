@@ -571,8 +571,8 @@
 
 .issued-ticket {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(230px, 0.32fr);
-  gap: 28px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
   padding: 22px;
   border: 1px solid var(--line);
   background: var(--paper-raised);
@@ -587,7 +587,10 @@
 }
 
 .issued-ticket__caption {
-  align-self: center;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 20px 28px;
+  padding-top: 24px;
 }
 
 .issued-ticket__caption h3 {
@@ -600,8 +603,16 @@
   font-size: 0.75rem;
 }
 
-.issued-ticket__field-group + .issued-ticket__field-group {
-  margin-top: 18px;
+.issued-ticket__production {
+  grid-column: 1 / -1;
+}
+
+.issued-ticket__field-group[data-ticket-field-group="date-time"] {
+  grid-column: 1 / span 6;
+}
+
+.issued-ticket__field-group[data-ticket-field-group="venue"] {
+  grid-column: 7 / -1;
 }
 
 .issued-ticket__caption .issued-ticket__secondary-language {
@@ -615,20 +626,30 @@
 }
 
 .issued-ticket__facts {
-  margin-top: 18px !important;
+  grid-column: 1 / span 4;
+  margin-top: 0 !important;
   padding-top: 12px;
   border-top: 1px solid var(--line);
 }
 
 .issued-ticket__number {
+  grid-column: 5 / span 4;
+  margin-top: 0 !important;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
   font-variant-numeric: tabular-nums;
 }
 
 .issued-ticket__controls {
   display: flex;
+  grid-column: 9 / -1;
   flex-wrap: wrap;
+  align-content: flex-start;
+  justify-content: flex-end;
   gap: 12px 20px;
-  margin-top: 24px;
+  margin-top: 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
 }
 
 .ticketing-live {
@@ -769,21 +790,16 @@ html[data-world="front"] .issued-ticket {
 }
 
 html[data-world="front"] .issued-ticket__caption {
-  padding: 28px 28px 28px 0;
+  padding: 28px;
 }
 
 @media (max-width: 960px) {
-  .ticket-basket,
-  .issued-ticket {
+  .ticket-basket {
     grid-template-columns: 1fr;
   }
 
   .ticket-basket__summary {
     position: static;
-  }
-
-  html[data-world="front"] .issued-ticket__caption {
-    padding: 0 24px 28px;
   }
 }
 
@@ -863,6 +879,24 @@ html[data-world="front"] .issued-ticket__caption {
 
   .ticket-receipt__totals {
     margin-left: 0;
+  }
+
+  .issued-ticket__caption {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .issued-ticket__production,
+  .issued-ticket__field-group[data-ticket-field-group="date-time"],
+  .issued-ticket__field-group[data-ticket-field-group="venue"],
+  .issued-ticket__facts,
+  .issued-ticket__number,
+  .issued-ticket__controls {
+    grid-column: 1;
+  }
+
+  .issued-ticket__controls {
+    justify-content: flex-start;
   }
 
   .ticket-result [data-ticket-receipt] > small {

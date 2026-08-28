@@ -211,6 +211,11 @@
       "related": ["BP-FND-EXPERIENCE", "BP-FND-DOMAIN", "BP-MOD-TERRA-TIME", "BP-I18N-CORE"]
     },
     {
+      "path": "src/components/shared/EarlyPollutionState.astro",
+      "primary": "BP-FND-NARRATIVE",
+      "related": ["BP-MOD-ARCHIVE", "BP-FND-EXPERIENCE"]
+    },
+    {
       "path": "src/components/shared/PollutionController.astro",
       "primary": "BP-FND-NARRATIVE",
       "related": ["BP-MOD-ARCHIVE", "BP-FND-EXPERIENCE"]

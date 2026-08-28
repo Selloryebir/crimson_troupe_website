@@ -1,6 +1,6 @@
 # 开发指南
 
-执行 Git 写操作或开始新的蓝图、源码阶段前，先阅读 [`git-branch-workflow.md`](git-branch-workflow.md)，确认当前分支职责和允许的同步方向。
+执行 Git 写操作，或开始新的蓝图、源码、创意原型和专业资产阶段前，先阅读 [`git-branch-workflow.md`](git-branch-workflow.md)，确认当前工作分支类别、审核门禁和允许的晋级方向。日常工作从最新已确认的 `dev_code` 创建目标有限的工作分支，不直接在长期集成分支展开。
 
 ## 本地运行
 
@@ -13,15 +13,17 @@ npm run dev
 
 访问终端输出的本地地址。不要直接打开生成前的 `.astro` 文件。
 
-`dev` 与 `build` 默认使用 `showcase`，构建炎国未批准预览。有限构建预设及入口如下：
+日常 `dev` 默认使用九国家版本 `preview`，确保国家版本选择器和跨版本状态可以直接验收；默认 `build` 仍使用单版本 `showcase`，不扩大可部署展示范围。有限构建预设及入口如下：
 
-| 预设       | 开发命令              | 构建命令                | 当前用途                                         |
-| ---------- | --------------------- | ----------------------- | ------------------------------------------------ |
-| `showcase` | `npm run dev`         | `npm run build`         | 默认炎国可部署展示                               |
-| `preview`  | `npm run dev:preview` | `npm run build:preview` | 炎国、东国、哥伦比亚、米诺斯与乌萨斯完整预览     |
-| `release`  | `npm run dev:release` | `npm run build:release` | 只接受已批准内容；当前会列出未批准稳定 ID 并停止 |
+| 预设       | 开发命令                              | 构建命令                                   | 当前用途                                         |
+| ---------- | ------------------------------------- | ------------------------------------------ | ------------------------------------------------ |
+| `showcase` | `npm run dev:showcase`                | `npm run build` / `npm run build:showcase` | 炎国可部署展示                                   |
+| `preview`  | `npm run dev` / `npm run dev:preview` | `npm run build:preview`                    | 九国家版本完整开发预览                           |
+| `release`  | `npm run dev:release`                 | `npm run build:release`                    | 只接受已批准内容；当前会列出未批准稳定 ID 并停止 |
 
 不得另设自由组合环境变量改变国家版本、根集合或内容资格。`release` 的当前失败是内容资格门禁，不是开发环境故障。
+
+`npm run preview` 只服务当前 `dist/`，不选择或重建预设。需要验收九版本静态产物时，先运行 `npm run build:preview`；若其后又运行 `npm run build` 或 `npm run verify`，`dist/` 会恢复为单版本 `showcase`，此时应重新执行一次 `build:preview`。
 
 锁文件未变化时，自动化环境和全新工作区应优先使用 `npm ci`，避免安装结果漂移。
 
@@ -50,6 +52,7 @@ npm run quality -- --plan docs/blueprint/modules/search.md
 | `npm run quality:code`              | 显式检查全部 Astro/TypeScript、ESLint 与源码格式         |
 | `npm run quality:styles`            | 显式检查全部 CSS                                         |
 | `npm run quality:full`              | 执行一次蓝图、类型、代码、样式与全仓格式检查，不执行构建 |
+| `npm run measure:performance`       | 对正在运行的本地站点执行限速、限频性能取样               |
 | `npm run build`                     | 只生成 `dist/`，不调用质量命令                           |
 | `npm run build:showcase`            | 显式生成炎国未批准展示产物                               |
 | `npm run build:preview`             | 生成当前九国家版本预览产物                               |
@@ -86,6 +89,8 @@ npm run quality -- --plan docs/blueprint/modules/search.md
 Astro/TypeScript 类型关系可能跨文件，因此代码变更仍使用项目级 `astro check`；ESLint、Stylelint 和 Prettier 可以安全地限制为变更文件。`quality` 不负责运行普通构建或浏览器验收；运行时源码完成一个可交付切片后，先通过相关质量检查，再单独运行一次 `npm run build`。
 
 `validate:browser:preview` 不自行构建，也不生成截图或报告；应在一次 preview 构建及产物检查后运行。首次使用 Playwright 的环境可执行 `npx playwright install --with-deps chromium` 安装唯一浏览器驱动。本入口只覆盖五项选择器、日/希/俄长文本、320px 票务与里站、搜索隔离、跨国家版本状态、下载与打印、三级污染与退出、减少动态效果、无脚本和搜索初始化失败等代表任务，不替代人工视觉验收。
+
+`measure:performance` 默认对 `http://127.0.0.1:4321` 的代表性表站、里站与污染 `0—3` 场景各取样五次，模拟四倍 CPU 限速、1.6 Mbps 下行与 150 ms RTT，并输出中位数、P95 和原始样本 JSON。可用 `PERF_BASE_URL` 指向静态预览，以 `PERF_RUNS`、`PERF_CPU_RATE` 和逗号分隔的 `PERF_SCENARIOS` 控制复测；它只提供版本间相对证据，不替代真实设备和浏览器体验验收。
 
 只有工具链变更、跨层集成、准备合并或发布、进入正式候选阶段才执行完整门禁：
 
@@ -128,7 +133,7 @@ npm run blueprint:impact -- BP-MOD-SEARCH
 - 将稳定内容放入 `data/`，构建期结构放入 `components/`，DOM 行为放入最接近用户能力的 `scripts/` 模块；
 - 新模块只导出其他模块真正需要的接口，并由当前页面的明确客户端入口初始化；页面没有该能力的根节点时安全跳过；
 - 不使用未声明的全局变量，不从一个功能模块直接修改另一个模块的私有状态；
-- `main.css` 只装配样式；共享基础、表站、里站、票务和污染规则分别进入同名职责文件，不跨文件保存平行令牌事实；
+- `main.css` 只装配共享基础；表站、里站、票务和污染规则分别进入同名职责文件，并由对应布局或能力组件按需装配，不跨文件保存平行令牌事实；
 - 同时处理键盘操作、焦点、减少动态效果和 JavaScript 失败路径。
 
 ## 最小验证
