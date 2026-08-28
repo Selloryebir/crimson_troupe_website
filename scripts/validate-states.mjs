@@ -58,6 +58,9 @@ import {
 import { getTicketEndingLabels } from '../src/scripts/ticket-result-renderer.ts';
 import {
   MAX_REQUIRING_RESUBMIT_RESULTS,
+  STANDARD_FAILURE_THRESHOLD,
+  STANDARD_INITIAL_SUCCESS_THRESHOLD,
+  STANDARD_SUCCESS_THRESHOLD,
   acceptRetentionOffer,
   calculateAdjustmentAmount,
   calculateBaseTotal,
@@ -902,6 +905,41 @@ assert.equal(selection.basket.length, 2);
 assert.equal(calculateBaseTotal(selection.basket), 1100);
 
 const started = startTicketingAttempt(selection);
+assert.equal(STANDARD_INITIAL_SUCCESS_THRESHOLD, 0.12);
+assert.equal(STANDARD_SUCCESS_THRESHOLD, 0.32);
+assert.equal(STANDARD_FAILURE_THRESHOLD, 0.68);
+assert.equal(
+  resolveTicketingAttempt(
+    started,
+    () => 0.119,
+    () => '000000000000',
+  ).phase,
+  'success',
+);
+assert.equal(
+  resolveTicketingAttempt(
+    started,
+    () => 0.12,
+    () => '000000000000',
+  ).phase,
+  'failure',
+);
+assert.equal(
+  resolveTicketingAttempt(
+    started,
+    () => 0.679,
+    () => '000000000000',
+  ).phase,
+  'failure',
+);
+assert.equal(
+  resolveTicketingAttempt(
+    started,
+    () => 0.68,
+    () => '000000000000',
+  ).phase,
+  'network',
+);
 const standardSuccess = resolveTicketingAttempt(
   started,
   () => 0.1,
@@ -933,6 +971,23 @@ assert.equal(networkFailure.attemptCount, 1);
 const networkRetry = retryTicketingAttempt(networkFailure);
 assert.deepEqual(networkRetry.basket, selection.basket);
 assert.deepEqual(networkRetry.journeyTags, ['network-retry']);
+assert.equal(
+  resolveTicketingAttempt(
+    networkRetry,
+    () => 0.319,
+    () => '000000000000',
+  ).phase,
+  'success',
+  '普通线路重试仍应保留原有成功阈值',
+);
+assert.equal(
+  resolveTicketingAttempt(
+    networkRetry,
+    () => 0.32,
+    () => '000000000000',
+  ).phase,
+  'failure',
+);
 const networkThenSuccess = resolveTicketingAttempt(
   networkRetry,
   () => 0.1,
@@ -1425,6 +1480,23 @@ for (const finishId of ['deckle-edge', 'registration-shift', 'ticket-punch']) {
     artifactFinishId: finishId,
   });
   assert.ok(finishedSvg.includes(`data-ticket-finish="${finishId}"`));
+  if (finishId === 'deckle-edge') {
+    assert.ok(finishedSvg.includes('<clipPath id="ticket-finish-shape"'));
+    assert.ok(finishedSvg.includes('clip-path="url(#ticket-finish-shape)"'));
+  }
+  if (finishId === 'registration-shift') {
+    assert.ok(finishedSvg.includes('stroke="#2f6b76"'));
+    assert.ok(!finishedSvg.includes('transform="rotate('));
+  }
+  if (finishId === 'ticket-punch') {
+    assert.ok(finishedSvg.includes('<mask id="ticket-finish-shape"'));
+    assert.ok(finishedSvg.includes('mask="url(#ticket-finish-shape)"'));
+    assert.ok(
+      finishedSvg.indexOf('<rect width="28" height="540"') <
+        finishedSvg.indexOf('<g data-ticket-finish="ticket-punch"'),
+      '票钳孔轮廓必须绘制在左侧色带之后',
+    );
+  }
 }
 
 const activeStampPreview = createTicketStampPreviewSvg(

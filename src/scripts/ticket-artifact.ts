@@ -312,18 +312,56 @@ export function createTicketStampPreviewSvg(
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-120 -84 240 168" width="480" height="336" role="img"><rect x="-120" y="-84" width="240" height="168" rx="12" fill="#f2ede3"/>${stampMarkup}</svg>`;
 }
 
+const deckleEdgeXs = [
+  1189, 1195, 1187, 1192, 1186, 1194, 1188, 1196, 1187, 1193, 1185, 1194, 1189, 1196, 1188, 1192,
+  1186, 1195, 1187, 1193, 1185, 1194, 1188, 1196, 1187, 1192, 1186, 1195, 1188, 1193, 1189,
+] as const;
+
+const deckleEdgePath = deckleEdgeXs
+  .map((x, index) => `${index === 0 ? 'M' : 'L'}${x} ${index * 18}`)
+  .join('');
+const deckleShapePath = `M0 0H${deckleEdgeXs[0]}${deckleEdgeXs
+  .slice(1)
+  .map((x, index) => `L${x} ${(index + 1) * 18}`)
+  .join('')}H0Z`;
+
+function createTicketFinishDefinition(artifactFinishId: TicketArtifactFinishId | null): string {
+  if (artifactFinishId === 'deckle-edge') {
+    return `<defs><clipPath id="ticket-finish-shape" clipPathUnits="userSpaceOnUse"><path d="${deckleShapePath}"/></clipPath></defs>`;
+  }
+  if (artifactFinishId === 'ticket-punch') {
+    return '<defs><mask id="ticket-finish-shape" x="0" y="0" width="1200" height="540" maskUnits="userSpaceOnUse"><rect width="1200" height="540" fill="white"/><g fill="black"><circle cx="14" cy="142" r="9"/><circle cx="14" cy="270" r="9"/><circle cx="14" cy="398" r="9"/></g></mask></defs>';
+  }
+  return '';
+}
+
+function getTicketFinishGroupAttribute(artifactFinishId: TicketArtifactFinishId | null): string {
+  if (artifactFinishId === 'deckle-edge') {
+    return ' clip-path="url(#ticket-finish-shape)"';
+  }
+  if (artifactFinishId === 'ticket-punch') {
+    return ' mask="url(#ticket-finish-shape)"';
+  }
+  return '';
+}
+
 function createTicketFinishMarkup(
   artifactFinishId: TicketArtifactFinishId | null,
   accent: string,
 ): string {
   if (artifactFinishId === 'deckle-edge') {
-    return `<path data-ticket-finish="deckle-edge" d="M1167 40l6 18-7 18 7 18-7 18 7 18-7 18 7 18-7 18 7 18-7 18 7 18-7 18 7 18-7 18 7 18-7 18 7 18-7 18 7 18-7 18 7 18-7 18" fill="none" stroke="${accent}" stroke-width="3" opacity=".72"/>`;
+    return `<path data-ticket-finish="deckle-edge" d="${deckleEdgePath}" fill="none" stroke="${accent}" stroke-width="2" stroke-linejoin="round" opacity=".72"/>`;
   }
   if (artifactFinishId === 'registration-shift') {
-    return `<rect data-ticket-finish="registration-shift" x="48" y="38" width="1126" height="476" fill="none" stroke="${accent}" stroke-width="3" opacity=".38" transform="rotate(.35 611 270)"/>`;
+    return `<g data-ticket-finish="registration-shift" fill="none" stroke-width="1.5" opacity=".58">
+      <path d="M42 29H1168M42 505H1168" stroke="#2f6b76"/>
+      <path d="M45 32V508M1171 32V508" stroke="${accent}"/>
+      <g transform="translate(1184 166)"><circle cx="-2" cy="-2" r="5" stroke="#2f6b76"/><circle cx="2" cy="2" r="5" stroke="${accent}"/><path d="M-9-2H5M-2-9V5" stroke="#2f6b76"/><path d="M-5 2H9M2-5V9" stroke="${accent}"/></g>
+      <g transform="translate(1184 374)"><circle cx="-2" cy="-2" r="5" stroke="#2f6b76"/><circle cx="2" cy="2" r="5" stroke="${accent}"/><path d="M-9-2H5M-2-9V5" stroke="#2f6b76"/><path d="M-5 2H9M2-5V9" stroke="${accent}"/></g>
+    </g>`;
   }
   if (artifactFinishId === 'ticket-punch') {
-    return `<g data-ticket-finish="ticket-punch" fill="#f2ede3" stroke="${accent}" stroke-width="2"><circle cx="14" cy="142" r="7"/><circle cx="14" cy="270" r="7"/><circle cx="14" cy="398" r="7"/></g>`;
+    return `<g data-ticket-finish="ticket-punch" fill="none" stroke="#211713" stroke-width="2" opacity=".62"><circle cx="14" cy="142" r="11"/><circle cx="14" cy="270" r="11"/><circle cx="14" cy="398" r="11"/></g>`;
   }
   return '';
 }
@@ -366,6 +404,8 @@ export function createTicketSvg(input: TicketArtifactInput): string {
     .map((x) => `<circle cx="${x}" cy="32" r="3"/><circle cx="${x}" cy="508" r="3"/>`)
     .join('');
   const stampMarkup = createCompositeStampMarkup(endingHistory, endingLabels, journeyTags, accent);
+  const finishDefinition = createTicketFinishDefinition(artifactFinishId);
+  const finishGroupAttribute = getTicketFinishGroupAttribute(artifactFinishId);
   const finishMarkup = createTicketFinishMarkup(artifactFinishId, accent);
   let contentCursorY = 120;
   const titleBlock = createTicketTextBlock(
@@ -505,9 +545,10 @@ export function createTicketSvg(input: TicketArtifactInput): string {
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 540" width="1200" height="540" role="img" lang="${escapeXml(locale)}" aria-labelledby="title description" data-ticket-pattern="${texture.signature}" data-ticket-finish="${artifactFinishId ?? 'none'}">
   <title id="title">${escapeXml(formatMessage(messages.title, { title: primary.title }))}</title>
   <desc id="description">${escapeXml(formatMessage(messages.description, { dateTime: primary.dateTime, place: primary.place, zone: zoneLabel, price: basketItem.basePrice, number }))}</desc>
+  ${finishDefinition}
+  <g${finishGroupAttribute}>
   <rect width="1200" height="540" fill="#f2ede3"/>
   <g fill="none" stroke="${accent}" stroke-width="1" opacity=".075">${textureLines}</g>
-  ${finishMarkup}
   <rect width="28" height="540" fill="${accent}"/>
   <rect x="42" y="32" width="1126" height="476" fill="none" stroke="#251a16" stroke-width="2"/>
   <g fill="#f2ede3" stroke="${accent}" stroke-width="1.5">${punches}</g>
@@ -527,5 +568,7 @@ export function createTicketSvg(input: TicketArtifactInput): string {
   <text x="920" y="354" font-family="sans-serif" font-size="14" letter-spacing="2" fill="#6d625b">${escapeXml(messages.ticketNumber)}</text>
   <text x="920" y="382" font-family="monospace" font-size="22" fill="#211713">${number}</text>
   ${stampMarkup}
+  ${finishMarkup}
+  </g>
 </svg>`;
 }
