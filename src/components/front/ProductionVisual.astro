@@ -11,9 +11,10 @@ interface Props {
   title: string;
   index?: string;
   compact?: boolean;
+  priority?: boolean;
 }
 
-const { productionId, visual, title, index, compact = false } = Astro.props;
+const { productionId, visual, title, index, compact = false, priority = false } = Astro.props;
 const artwork = getSnapshotProductionArtwork(buildSnapshot, productionId, 'front');
 const artworkAsset = getSnapshotProductionArtworkAsset(buildSnapshot, productionId, 'front');
 const artworkStyle = artwork
@@ -41,7 +42,8 @@ const artworkStyle = artwork
             ? '(max-width: 620px) calc(100vw - 28px), (max-width: 960px) 45vw, 30vw'
             : '(max-width: 620px) calc(100vw - 28px), (max-width: 960px) min(620px, calc(100vw - 36px)), 42vw'
         }
-        loading={compact ? 'lazy' : 'eager'}
+        loading={priority || !compact ? 'eager' : 'lazy'}
+        fetchpriority={priority ? 'high' : compact ? 'low' : undefined}
         decoding="async"
       />
     )

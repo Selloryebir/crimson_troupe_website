@@ -38,10 +38,10 @@ const months = [...new Set(performances.map((item) => item.dateTime.month))];
       data-filter-messages={filterable ? JSON.stringify(messages.filters) : undefined}
     >
       {filterable && (
-        <div class="performance-filters" data-performance-filters hidden>
+        <div class="performance-filters" data-performance-filters>
           <div>
             <label for="performance-city">{messages.filters.city}</label>
-            <select id="performance-city" data-performance-city>
+            <select id="performance-city" data-performance-city disabled>
               <option value="all">{messages.filters.allCities}</option>
               {cities.map(([value, label]) => (
                 <option value={value}>{label}</option>
@@ -50,7 +50,7 @@ const months = [...new Set(performances.map((item) => item.dateTime.month))];
           </div>
           <div>
             <label for="performance-month">{messages.filters.month}</label>
-            <select id="performance-month" data-performance-month>
+            <select id="performance-month" data-performance-month disabled>
               <option value="all">{messages.filters.allMonths}</option>
               {months.map((month) => (
                 <option value={String(month)}>
@@ -59,7 +59,7 @@ const months = [...new Set(performances.map((item) => item.dateTime.month))];
               ))}
             </select>
           </div>
-          <button type="button" class="filter-reset" data-performance-reset>
+          <button type="button" class="filter-reset" data-performance-reset disabled>
             {messages.filters.reset}
           </button>
           <p class="filter-count" aria-live="polite" data-performance-count>
@@ -71,7 +71,7 @@ const months = [...new Set(performances.map((item) => item.dateTime.month))];
         class:list={['front-performance-grid', `front-performance-grid--${variant}`]}
         data-performance-list
       >
-        {performances.map((performance) => {
+        {performances.map((performance, index) => {
           const leadProduction = getLocalizedProduction(localization, performance.productionIds[0]);
           return (
             <li
@@ -86,6 +86,7 @@ const months = [...new Set(performances.map((item) => item.dateTime.month))];
                   title={leadProduction.title}
                   index={performance.index}
                   compact
+                  priority={variant === 'catalog' && index === 0}
                 />
                 <span class="front-performance-card__copy">
                   <small>{leadProduction.kind}</small>

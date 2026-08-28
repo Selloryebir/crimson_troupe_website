@@ -5,6 +5,8 @@ import type {
   TicketingPerformanceOption,
   TicketingPlatformPresentation,
 } from '../../data/ticketing.ts';
+import '../../styles/ticketing.css';
+import '../../styles/partner-ticketing.css';
 import TicketingPlatformBrand from './TicketingPlatformBrand.astro';
 
 interface Props {
@@ -65,7 +67,7 @@ const messages = localization.messages.ticketing;
   <section
     class="ticket-result partner-ticketing-result"
     data-ticket-result
-    aria-labelledby="ticket-result-title"
+    aria-labelledby="ticket-receipt-title"
     hidden
   >
     <div data-ticket-receipt></div>

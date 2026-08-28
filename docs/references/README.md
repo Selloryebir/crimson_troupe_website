@@ -9,6 +9,7 @@
 - [`performance-location-reference.md`](performance-location-reference.md)：演出地点候选池、跨语言名称、地点性质与内部创作备注。
 - [`realm-badge-reference.md`](realm-badge-reference.md)：九个国家版本徽章的本地参考边界、官方设定依据及项目转译限制。
 - [`realm-badge-color-previews/`](realm-badge-color-previews/)：与单色母版共用几何的九枚上色视觉候选，仅供非运行时比较。
+- [`ticketing-gameplay-reference.md`](ticketing-gameplay-reference.md)：票务小游戏拓展使用的游戏设计、现实票务、可访问性与设定来源，以及抽象转译和排除项。
 
 ## 新增要求
 

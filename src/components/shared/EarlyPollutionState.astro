@@ -1,0 +1,49 @@
+---
+import { POLLUTION_STATE_STORAGE_KEY } from '../../scripts/pollution-state';
+---
+
+<script is:inline define:vars={{ pollutionStateStorageKey: POLLUTION_STATE_STORAGE_KEY }}>
+  function restorePollutionState() {
+    try {
+      const rawState = sessionStorage.getItem(pollutionStateStorageKey);
+      if (!rawState) return;
+      const state = JSON.parse(rawState);
+      if (
+        state?.version !== 2 ||
+        !Number.isInteger(state.level) ||
+        state.level < 0 ||
+        state.level > 3 ||
+        !Number.isSafeInteger(state.eventCount) ||
+        state.eventCount < 0 ||
+        !Number.isInteger(state.variant) ||
+        state.variant < 0 ||
+        state.variant > 2
+      ) {
+        return;
+      }
+
+      const root = document.documentElement;
+      const normalizedPath =
+        window.location.pathname.replace(/\/{2,}/gu, '/').replace(/\/$/u, '') || '/';
+      const input = [
+        state.variant,
+        state.eventCount,
+        state.level,
+        root.dataset.pageType ?? 'archive',
+        normalizedPath,
+      ].join('|');
+      let hash = 0x811c9dc5;
+      for (const character of input) {
+        hash ^= character.codePointAt(0) ?? 0;
+        hash = Math.imul(hash, 0x01000193);
+      }
+
+      root.dataset.pollutionLevel = String(state.level);
+      root.dataset.pollutionVariant = String(state.variant);
+      root.dataset.pollutionComposition = String((hash >>> 0) % 3);
+    } catch {
+      // The archive remains at its readable level 0 when tab state is unavailable.
+    }
+  }
+  restorePollutionState();
+</script>
