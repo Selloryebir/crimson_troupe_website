@@ -1041,42 +1041,12 @@ try {
   assert.equal(new URL(ticketPage.url()).pathname, '/yan/tickets/partner/');
   assert.equal(
     await ticketPage
-      .locator('#ticket-result-title')
+      .locator('#ticket-receipt-title')
       .evaluate((element) => element === document.activeElement),
     true,
   );
-  assert.equal(
-    await ticketPage.locator('[data-ticket-journey-steps] > li').count(),
-    1,
-    '直接成功应在受理簿留下一个结果节点',
-  );
-  assert.equal(
-    await ticketPage
-      .locator('[data-ticket-journey-ending]')
-      .first()
-      .getAttribute('data-ticket-journey-ending'),
-    'ENDING_NORMAL_SUCCESS',
-  );
-  assert.equal(await ticketPage.locator('.ticket-journey__empty').count(), 1);
-  assert.equal(
-    await ticketPage.locator('.ticket-journey__totals > div').count(),
-    3,
-    '受理簿应同时说明渠道、票款小计与应付合计',
-  );
-  const stampInspector = ticketPage.locator('[data-ticket-stamp-inspector]');
-  await stampInspector.locator('summary').focus();
-  await ticketPage.keyboard.press('Enter');
-  assert.notEqual(await stampInspector.getAttribute('open'), null, '印章检视镜应可由键盘展开');
-  const stampPreviewSource = await stampInspector
-    .locator('.ticket-stamp-inspector__preview')
-    .getAttribute('src');
-  const decodedStampPreview = decodeURIComponent((stampPreviewSource ?? '').split(',', 2)[1] ?? '');
-  assert.match(decodedStampPreview, /data-ending-component="ENDING_NORMAL_SUCCESS"/u);
-  assert.doesNotMatch(
-    decodedStampPreview,
-    /data-ending-component="ENDING_NETWORK_ERROR"/u,
-    '检视镜不得陈列未经历路线',
-  );
+  assert.equal(await ticketPage.locator('[data-ticket-journey]').count(), 0);
+  assert.equal(await ticketPage.locator('[data-ticket-stamp-inspector]').count(), 0);
   const finishInputs = ticketPage.locator('input[data-ticket-finish]');
   assert.equal(await finishInputs.count(), 3);
   assert.equal(

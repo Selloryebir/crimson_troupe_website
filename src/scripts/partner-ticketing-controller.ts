@@ -101,7 +101,6 @@ export function initPartnerTicketingExperience(
   const details = app.querySelector<HTMLElement>('[data-partner-details]');
   const actions = app.querySelector<HTMLElement>('[data-partner-actions]');
   const result = app.querySelector<HTMLElement>('[data-ticket-result]');
-  const journey = app.querySelector<HTMLElement>('[data-ticket-journey]');
   const receipt = app.querySelector<HTMLElement>('[data-ticket-receipt]');
   const finishWorkshop = app.querySelector<HTMLElement>('[data-ticket-finish-workshop]');
   const issuedTickets = app.querySelector<HTMLElement>('[data-issued-tickets]');
@@ -119,7 +118,6 @@ export function initPartnerTicketingExperience(
     !details ||
     !actions ||
     !result ||
-    !journey ||
     !receipt ||
     !finishWorkshop ||
     !issuedTickets ||
@@ -199,14 +197,13 @@ export function initPartnerTicketingExperience(
     review.hidden = true;
     result.hidden = false;
     renderTicketingResult(state.result, options, messages, locale, {
-      journey,
       receipt,
       finishWorkshop,
       issuedTickets,
     });
     live.textContent = messages.success;
     if (focusStage) {
-      result.querySelector<HTMLElement>('#ticket-result-title')?.focus();
+      result.querySelector<HTMLElement>('#ticket-receipt-title')?.focus();
     }
   };
 

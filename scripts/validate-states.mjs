@@ -49,13 +49,11 @@ import {
 } from '../src/scripts/pollution-state.ts';
 import {
   createTicketMatrix,
-  createTicketStampPreviewSvg,
   createTicketSvg,
   createTicketTexture,
   layoutTicketText,
   segmentTicketGraphemes,
 } from '../src/scripts/ticket-artifact.ts';
-import { getTicketEndingLabels } from '../src/scripts/ticket-result-renderer.ts';
 import {
   MAX_REQUIRING_RESUBMIT_RESULTS,
   STANDARD_FAILURE_THRESHOLD,
@@ -1328,7 +1326,6 @@ const artifactEndingHistory = [
   'ENDING_DISCOUNT_SUCCESS',
 ];
 const artifactJourneyTags = ['network-retry', 'priority-refused', 'retention-accepted'];
-const artifactEndingLabels = getTicketEndingLabels(yanLocalization.messages.ticketing);
 for (const [performanceId, expectedPrimaryLocale, expectedSecondaryLocale] of [
   ['uncrowned-trimount-1102', 'en-US', 'zh-CN'],
   ['caged-fire-wiesheim-1102', 'de', 'zh-CN'],
@@ -1346,7 +1343,6 @@ for (const [performanceId, expectedPrimaryLocale, expectedSecondaryLocale] of [
     },
     number: '321098765432',
     endingHistory: artifactEndingHistory,
-    endingLabels: artifactEndingLabels,
     journeyTags: artifactJourneyTags,
     projection: option.artifact,
     artifactFinishId: 'deckle-edge',
@@ -1396,7 +1392,6 @@ const svg = createTicketSvg({
   basketItem: basketA,
   number: '123456789012',
   endingHistory: artifactEndingHistory,
-  endingLabels: artifactEndingLabels,
   journeyTags: artifactJourneyTags,
   projection: artifactProjection,
   artifactFinishId: 'registration-shift',
@@ -1461,7 +1456,6 @@ assert.equal(
     basketItem: basketA,
     number: '123456789012',
     endingHistory: artifactEndingHistory,
-    endingLabels: artifactEndingLabels,
     journeyTags: artifactJourneyTags,
     projection: artifactProjection,
     artifactFinishId: 'registration-shift',
@@ -1474,7 +1468,6 @@ for (const finishId of ['deckle-edge', 'registration-shift', 'ticket-punch']) {
     basketItem: basketA,
     number: '123456789012',
     endingHistory: artifactEndingHistory,
-    endingLabels: artifactEndingLabels,
     journeyTags: artifactJourneyTags,
     projection: artifactProjection,
     artifactFinishId: finishId,
@@ -1498,16 +1491,6 @@ for (const finishId of ['deckle-edge', 'registration-shift', 'ticket-punch']) {
     );
   }
 }
-
-const activeStampPreview = createTicketStampPreviewSvg(
-  ['ENDING_NETWORK_ERROR', 'ENDING_NORMAL_SUCCESS'],
-  artifactEndingLabels,
-  ['returned-seat'],
-);
-assert.ok(activeStampPreview.includes('data-ending-component="ENDING_NETWORK_ERROR"'));
-assert.ok(activeStampPreview.includes('data-ending-component="ENDING_NORMAL_SUCCESS"'));
-assert.ok(!activeStampPreview.includes('data-ending-component="ENDING_SCALPER_SUCCESS"'));
-assert.ok(activeStampPreview.includes('data-journey-mark="returned-seat"'));
 
 const unicodeTicketSamples = [
   {
@@ -1562,7 +1545,6 @@ const unicodeArtifactSvg = createTicketSvg({
   basketItem: basketA,
   number: '123456789012',
   endingHistory: artifactEndingHistory,
-  endingLabels: artifactEndingLabels,
   journeyTags: artifactJourneyTags,
   artifactFinishId: 'ticket-punch',
   projection: {

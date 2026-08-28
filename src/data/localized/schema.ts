@@ -156,25 +156,6 @@ export type TicketJourneyTagId =
 
 export type TicketArtifactFinishId = 'deckle-edge' | 'registration-shift' | 'ticket-punch';
 
-export interface TicketJourneyMessages {
-  eyebrow: string;
-  title: string;
-  copy: string;
-  routeTitle: string;
-  marksTitle: string;
-  noMarks: string;
-  tags: Record<TicketJourneyTagId, string>;
-}
-
-export interface TicketStampInspectorMessages {
-  summary: string;
-  title: string;
-  copy: string;
-  previewAlt: string;
-  endingComponent: string;
-  journeyComponent: string;
-}
-
 export interface TicketFinishChoiceMessages {
   title: string;
   description: string;
@@ -278,8 +259,6 @@ export interface TicketingMessages {
   stateUpdated: string;
   downloadStarted: string;
   newRound: string;
-  journey: TicketJourneyMessages;
-  stampInspector: TicketStampInspectorMessages;
   finishWorkshop: TicketFinishWorkshopMessages;
   adjustments: Record<TicketAdjustmentId, string>;
   artifact: TicketArtifactMessages;

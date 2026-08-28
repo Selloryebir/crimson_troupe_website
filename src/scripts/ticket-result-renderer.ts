@@ -1,15 +1,10 @@
 import { formatMessage, formatTerraDateTime } from '../data/localized/format.ts';
 import type { TicketArtifactFinishId, TicketingMessages } from '../data/localized/schema.ts';
 import type { TicketingPerformanceOption } from '../data/ticketing.ts';
-import {
-  createTicketStampPreviewSvg,
-  createTicketSvg,
-  type TicketArtifactInput,
-} from './ticket-artifact.ts';
-import type { TicketBasketItem, TicketingEndingId, TicketingResult } from './ticketing-state.ts';
+import { createTicketSvg, type TicketArtifactInput } from './ticket-artifact.ts';
+import type { TicketBasketItem, TicketingResult } from './ticketing-state.ts';
 
 export interface TicketingResultElements {
-  journey: HTMLElement;
   receipt: HTMLElement;
   finishWorkshop: HTMLElement;
   issuedTickets: HTMLElement;
@@ -34,143 +29,6 @@ function addDefinition(list: HTMLDListElement, term: string, description: string
   list.append(row);
 }
 
-function renderJourneyLedger(
-  result: TicketingResult,
-  messages: TicketingMessages,
-  target: HTMLElement,
-): void {
-  const endingLabels = getTicketEndingLabels(messages);
-  const header = document.createElement('div');
-  header.className = 'ticket-journey__header';
-  const eyebrow = document.createElement('p');
-  eyebrow.className = 'eyebrow';
-  eyebrow.textContent = messages.journey.eyebrow;
-  const title = document.createElement('h2');
-  title.id = 'ticket-result-title';
-  title.tabIndex = -1;
-  title.textContent = messages.journey.title;
-  const copy = document.createElement('p');
-  copy.textContent = messages.journey.copy;
-  header.append(eyebrow, title, copy);
-
-  const route = document.createElement('section');
-  route.className = 'ticket-journey__route';
-  const routeTitle = document.createElement('h3');
-  routeTitle.textContent = messages.journey.routeTitle;
-  const steps = document.createElement('ol');
-  steps.className = 'ticket-journey__steps';
-  steps.dataset.ticketJourneySteps = '';
-  for (const endingId of result.endingHistory) {
-    const item = document.createElement('li');
-    item.dataset.ticketJourneyEnding = endingId;
-    item.textContent = endingLabels[endingId];
-    steps.append(item);
-  }
-  route.append(routeTitle, steps);
-
-  const marks = document.createElement('section');
-  marks.className = 'ticket-journey__marks';
-  const marksTitle = document.createElement('h3');
-  marksTitle.textContent = messages.journey.marksTitle;
-  marks.append(marksTitle);
-  if (result.journeyTags.length === 0) {
-    const noMarks = document.createElement('p');
-    noMarks.className = 'ticket-journey__empty';
-    noMarks.textContent = messages.journey.noMarks;
-    marks.append(noMarks);
-  } else {
-    const tagList = document.createElement('ul');
-    tagList.className = 'ticket-journey__tag-list';
-    for (const tag of result.journeyTags) {
-      const item = document.createElement('li');
-      item.dataset.ticketJourneyTag = tag;
-      item.textContent = messages.journey.tags[tag];
-      tagList.append(item);
-    }
-    marks.append(tagList);
-  }
-
-  const totals = document.createElement('dl');
-  totals.className = 'ticket-journey__totals';
-  addDefinition(
-    totals,
-    messages.receiptChannel,
-    result.route === 'premium' ? messages.priorityChannel : messages.standardChannel,
-  );
-  addDefinition(totals, messages.ticketSubtotal, `${result.baseTotal} LMD`);
-  for (const adjustment of result.adjustments) {
-    const sign = adjustment.amount < 0 ? '−' : '+';
-    addDefinition(
-      totals,
-      messages.adjustments[adjustment.id],
-      `${sign} ${Math.abs(adjustment.amount)} LMD`,
-    );
-  }
-  addDefinition(totals, messages.amountDue, `${result.settledTotal} LMD`);
-
-  const body = document.createElement('div');
-  body.className = 'ticket-journey__body';
-  body.append(route, marks, totals);
-
-  const inspector = document.createElement('details');
-  inspector.className = 'ticket-stamp-inspector';
-  inspector.dataset.ticketStampInspector = '';
-  const summary = document.createElement('summary');
-  summary.textContent = messages.stampInspector.summary;
-  const inspectorBody = document.createElement('div');
-  inspectorBody.className = 'ticket-stamp-inspector__body';
-  const visual = document.createElement('img');
-  visual.className = 'ticket-stamp-inspector__preview';
-  visual.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
-    createTicketStampPreviewSvg(result.endingHistory, endingLabels, result.journeyTags),
-  )}`;
-  visual.alt = messages.stampInspector.previewAlt;
-  const explanation = document.createElement('div');
-  const inspectorTitle = document.createElement('h3');
-  inspectorTitle.textContent = messages.stampInspector.title;
-  const inspectorCopy = document.createElement('p');
-  inspectorCopy.textContent = messages.stampInspector.copy;
-  const componentList = document.createElement('ul');
-  componentList.className = 'ticket-stamp-inspector__components';
-  for (const endingId of new Set(result.endingHistory)) {
-    const item = document.createElement('li');
-    item.dataset.ticketStampComponent = endingId;
-    item.textContent = formatMessage(messages.stampInspector.endingComponent, {
-      label: endingLabels[endingId],
-    });
-    componentList.append(item);
-  }
-  for (const tag of result.journeyTags) {
-    if (tag !== 'returned-seat' && tag !== 'manual-review') {
-      continue;
-    }
-    const item = document.createElement('li');
-    item.dataset.ticketStampComponent = tag;
-    item.textContent = formatMessage(messages.stampInspector.journeyComponent, {
-      label: messages.journey.tags[tag],
-    });
-    componentList.append(item);
-  }
-  explanation.append(inspectorTitle, inspectorCopy, componentList);
-  inspectorBody.append(visual, explanation);
-  inspector.append(summary, inspectorBody);
-  target.append(header, body, inspector);
-}
-
-export function getTicketEndingLabels(
-  messages: TicketingMessages,
-): Readonly<Record<TicketingEndingId, string>> {
-  return {
-    ENDING_NETWORK_ERROR: messages.networkTitle,
-    ENDING_NORMAL_SUCCESS: `${messages.standardChannel}: ${messages.success}`,
-    ENDING_REJECT_RESCALPER: messages.returnStandard,
-    ENDING_SCALPER_SUCCESS: `${messages.priorityChannel}: ${messages.success}`,
-    ENDING_SCALPER_FAILED: `${messages.priorityChannel}: ${messages.premiumFailureTitle}`,
-    ENDING_DISCOUNT_SUCCESS: `${messages.retentionOfferTitle}: ${messages.success}`,
-    ENDING_DISCOUNT_FAILED: `${messages.retentionOfferTitle}: ${messages.premiumFailureTitle}`,
-  };
-}
-
 function optionFor(
   options: readonly TicketingPerformanceOption[],
   performanceId: string,
@@ -183,14 +41,12 @@ function artifactInputFor(
   option: TicketingPerformanceOption,
   basketItem: TicketBasketItem,
   number: string,
-  messages: TicketingMessages,
 ): TicketArtifactInput {
   return {
     performance: option,
     basketItem,
     number,
     endingHistory: result.endingHistory,
-    endingLabels: getTicketEndingLabels(messages),
     journeyTags: result.journeyTags,
     projection: option.artifact,
     artifactFinishId: result.artifactFinishId,
@@ -255,13 +111,10 @@ export function renderTicketingResult(
   locale: string,
   elements: TicketingResultElements,
 ): void {
-  const { journey, receipt, finishWorkshop, issuedTickets } = elements;
-  journey.replaceChildren();
+  const { receipt, finishWorkshop, issuedTickets } = elements;
   receipt.replaceChildren();
   finishWorkshop.replaceChildren();
   issuedTickets.replaceChildren();
-  journey.className = 'ticket-journey';
-  renderJourneyLedger(result, messages, journey);
   renderFinishWorkshop(result, messages, finishWorkshop);
 
   const heading = document.createElement('div');
@@ -271,6 +124,7 @@ export function renderTicketingResult(
   eyebrow.textContent = messages.receiptEyebrow;
   const title = document.createElement('h2');
   title.id = 'ticket-receipt-title';
+  title.tabIndex = -1;
   title.textContent = messages.receiptTitle;
   const copy = document.createElement('p');
   copy.textContent = messages.receiptCopy;
@@ -324,7 +178,6 @@ export function renderTicketingResult(
     );
   }
   addDefinition(totals, messages.amountDue, `${result.settledTotal} LMD`);
-  const endingLabels = getTicketEndingLabels(messages);
   const disclaimer = document.createElement('small');
   disclaimer.textContent = messages.disclaimer;
   receipt.append(heading, meta, lines, totals, disclaimer);
@@ -341,7 +194,7 @@ export function renderTicketingResult(
     if (!artifactZoneLabel) {
       continue;
     }
-    const artifact = artifactInputFor(result, option, basketItem, issued.number, messages);
+    const artifact = artifactInputFor(result, option, basketItem, issued.number);
     const article = document.createElement('article');
     article.className = 'issued-ticket';
     article.dataset.issuedTicket = issued.performanceId;
@@ -414,12 +267,6 @@ export function renderTicketingResult(
     const ticketNumber = document.createElement('p');
     ticketNumber.className = 'issued-ticket__number';
     ticketNumber.textContent = formatMessage(messages.ticketNumber, { number: issued.number });
-    const journey = document.createElement('p');
-    journey.className = 'visually-hidden';
-    journey.dataset.ticketEndingHistory = '';
-    journey.textContent = result.endingHistory
-      .map((endingId) => endingLabels[endingId])
-      .join(' → ');
     const controls = document.createElement('div');
     controls.className = 'issued-ticket__controls';
     const download = createButton(`download:${issued.performanceId}`, messages.downloadSvg);
@@ -427,15 +274,7 @@ export function renderTicketingResult(
     download.disabled = result.artifactFinishId === null;
     print.disabled = result.artifactFinishId === null;
     controls.append(download, print);
-    caption.append(
-      productionGroup,
-      dateTimeGroup,
-      venueGroup,
-      facts,
-      ticketNumber,
-      journey,
-      controls,
-    );
+    caption.append(productionGroup, dateTimeGroup, venueGroup, facts, ticketNumber, controls);
     article.append(image, caption);
     issuedTickets.append(article);
   }
@@ -469,9 +308,7 @@ export function handleTicketArtifactAction(
     return;
   }
   if (kind === 'download') {
-    const svg = createTicketSvg(
-      artifactInputFor(result, option, basketItem, issued.number, messages),
-    );
+    const svg = createTicketSvg(artifactInputFor(result, option, basketItem, issued.number));
     const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml;charset=utf-8' }));
     const link = document.createElement('a');
     link.href = url;
