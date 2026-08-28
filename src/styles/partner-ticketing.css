@@ -124,8 +124,7 @@
 }
 
 .partner-ticketing-dialog::backdrop {
-  background: rgb(13 24 30 / 62%);
-  backdrop-filter: blur(0.25rem);
+  background: rgb(13 24 30 / 68%);
 }
 
 .partner-ticketing-dialog__brand .ticketing-platform-brand__logo {
