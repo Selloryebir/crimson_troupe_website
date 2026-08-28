@@ -1,15 +1,16 @@
 html[data-world="archive"] {
-  --archive-corridor: #100a09;
-  --archive-soot: #17100e;
-  --archive-lacquer: #211714;
-  --archive-paper: #d8c9ad;
-  --archive-ink: #33251d;
-  --archive-faded: #9d8d77;
-  --archive-curtain: #7d1722;
+  --archive-corridor: #0d0908;
+  --archive-soot: #17110e;
+  --archive-lacquer: #241713;
+  --archive-paper: #d6c6a7;
+  --archive-ink: #30231c;
+  --archive-faded: #a08f75;
+  --archive-curtain: #741822;
   --archive-blood: #bb2835;
-  --archive-gold: #9a6a32;
-  --archive-candle: #d09a55;
-  --archive-smoke: #66555f;
+  --archive-gold: #a57436;
+  --archive-candle: #d5a45d;
+  --archive-smoke: #62555e;
+  --archive-patina: #3d5b51;
   --surface-environment: var(--archive-soot);
   --surface-content: var(--archive-lacquer);
   --surface-focus: var(--archive-paper);
@@ -32,9 +33,8 @@ html[data-world="archive"] {
 
 html[data-world="archive"] body {
   background:
-    radial-gradient(circle at 50% 12%, rgb(208 154 85 / 10%), transparent 26rem),
-    radial-gradient(ellipse at 50% 55%, transparent 0 38%, rgb(16 10 9 / 42%) 78%),
-    repeating-linear-gradient(97deg, transparent 0 47px, rgb(216 201 173 / 1.8%) 48px 49px),
+    radial-gradient(circle at 50% 12%, rgb(213 164 93 / 10%), transparent 26rem),
+    repeating-linear-gradient(97deg, transparent 0 47px, rgb(214 198 167 / 2.2%) 48px 49px),
     var(--archive-soot);
   font-family: var(--serif);
 }
@@ -53,10 +53,33 @@ html[data-world="archive"] .site-footer {
 
 html[data-world="archive"] .site-header {
   border-block: 3px double var(--structure);
+  background:
+    linear-gradient(90deg, transparent 0 8%, rgb(165 116 54 / 5%) 8% 8.2%, transparent 8.2% 91.8%, rgb(165 116 54 / 5%) 91.8% 92%, transparent 92%),
+    var(--archive-corridor);
+  box-shadow: 0 7px 0 rgb(13 9 8 / 72%);
 }
 
 html[data-world="archive"] .header-inner {
+  position: relative;
   min-height: 116px;
+}
+
+html[data-world="archive"] .header-inner::before,
+html[data-world="archive"] .header-inner::after {
+  position: absolute;
+  bottom: -3px;
+  width: 48px;
+  border-top: 3px double var(--archive-gold);
+  content: "";
+  pointer-events: none;
+}
+
+html[data-world="archive"] .header-inner::before {
+  left: 0;
+}
+
+html[data-world="archive"] .header-inner::after {
+  right: 0;
 }
 
 html[data-world="archive"] .brand-name small,
@@ -70,6 +93,10 @@ html[data-world="archive"] .brand-mark {
   filter: sepia(0.15) drop-shadow(0 8px 12px rgb(0 0 0 / 32%));
 }
 
+html[data-world="archive"] .brand-name small {
+  color: var(--archive-candle);
+}
+
 html[data-world="archive"] .main-nav a {
   color: var(--archive-faded);
 }
@@ -81,6 +108,17 @@ html[data-world="archive"] .main-nav a[aria-current="page"] {
 
 html[data-world="archive"] .main-nav a[aria-current="page"] {
   box-shadow: inset 0 -1px var(--archive-gold), inset 0 -4px var(--archive-corridor);
+}
+
+html[data-world="archive"] .main-nav a::before {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-right: 8px;
+  border: 1px solid currentcolor;
+  content: "";
+  opacity: 0.42;
+  transform: rotate(45deg) translateY(-1px);
 }
 
 html[data-world="archive"] .edition-selector ul {
@@ -111,9 +149,16 @@ html[data-world="archive"] .ticket-link:hover {
 .archive-register {
   position: relative;
   padding: 9px 24px;
-  border-bottom: 1px solid rgb(216 201 173 / 10%);
+  border-bottom: 1px solid rgb(214 198 167 / 13%);
   color: #a99579;
-  background: #0d0908;
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0 50%,
+      color-mix(in srgb, var(--archive-patina) 12%, transparent) 50% 50.12%,
+      transparent 50.12%
+    ),
+    #0d0908;
   font: 0.65rem / 1.4 monospace;
   letter-spacing: 0.16em;
   text-align: center;
@@ -156,10 +201,10 @@ html[data-world="archive"] .ticket-link:hover {
 .archive-home::before {
   inset: 32px 0;
   border: 1px solid var(--structure);
+  border-radius: 48% 48% 0 0 / 13% 13% 0 0;
   box-shadow:
     inset 0 0 0 9px var(--archive-soot),
-    inset 0 0 0 10px rgb(154 106 50 / 36%),
-    inset 0 0 100px rgb(0 0 0 / 42%);
+    inset 0 0 0 10px rgb(165 116 54 / 38%);
 }
 
 .archive-home::after {
@@ -167,7 +212,9 @@ html[data-world="archive"] .ticket-link:hover {
   bottom: 48px;
   left: 50%;
   width: min(76%, 680px);
+  border-top: 1px solid rgb(213 164 93 / 18%);
   border-inline: 1px solid rgb(208 154 85 / 18%);
+  border-radius: 48% 48% 0 0 / 12% 12% 0 0;
   transform: translateX(-50%);
 }
 
@@ -194,6 +241,17 @@ html[data-world="archive"] .ticket-link:hover {
   text-transform: uppercase;
 }
 
+.archive-kicker::before,
+.archive-kicker::after {
+  display: inline-block;
+  width: clamp(24px, 5vw, 54px);
+  margin-inline: 14px;
+  border-top: 3px double var(--structure);
+  content: "";
+  pointer-events: none;
+  vertical-align: 0.22em;
+}
+
 html[data-world="archive"] .eyebrow {
   color: var(--archive-candle);
 }
@@ -212,7 +270,6 @@ html[data-world="archive"] .eyebrow {
   font: 400 clamp(2.8rem, 5.7vw, 6.2rem) / 1.08 var(--serif);
   hyphens: auto;
   letter-spacing: -0.035em;
-  text-shadow: 0 4px 40px rgb(208 154 85 / 15%);
   overflow-wrap: anywhere;
 }
 
@@ -252,13 +309,12 @@ html[data-world="archive"] :is(.text-link, .back-link):hover {
   width: min(100% - 72px, 590px);
   margin: 26px auto 0;
   padding: 14px;
-  border: 1px solid var(--archive-gold);
+  border: 3px double var(--archive-gold);
   color: inherit;
   background: var(--archive-corridor);
   box-shadow:
-    0 0 0 7px var(--archive-soot),
-    0 0 0 8px rgb(216 201 173 / 16%),
-    0 35px 80px rgb(0 0 0 / 52%);
+    0 0 0 6px var(--archive-soot),
+    0 0 0 7px rgb(214 198 167 / 18%);
   text-decoration: none;
 }
 
@@ -490,9 +546,16 @@ html[data-world="archive"] :is(.text-link, .back-link):hover {
 }
 
 .archive-notice-strip {
+  border-block: 3px double rgb(48 35 28 / 34%);
   color: var(--archive-ink);
   background:
-    repeating-linear-gradient(2deg, rgb(51 37 29 / 4%) 0 1px, transparent 1px 8px),
+    linear-gradient(
+      90deg,
+      rgb(116 24 34 / 8%) 0 7px,
+      transparent 7px calc(100% - 7px),
+      color-mix(in srgb, var(--archive-patina) 8%, transparent) calc(100% - 7px)
+    ),
+    repeating-linear-gradient(2deg, rgb(48 35 28 / 4%) 0 1px, transparent 1px 8px),
     var(--archive-paper);
   box-shadow:
     inset 0 8px 22px rgb(16 10 9 / 20%),
@@ -500,6 +563,7 @@ html[data-world="archive"] :is(.text-link, .back-link):hover {
 }
 
 .archive-notice-strip > div {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(150px, 0.3fr) minmax(0, 1fr);
   gap: 45px;
@@ -507,6 +571,19 @@ html[data-world="archive"] :is(.text-link, .back-link):hover {
   padding-block: 48px;
   border-inline: 3px double rgb(51 37 29 / 24%);
   padding-inline: clamp(24px, 5vw, 64px);
+}
+
+.archive-notice-strip > div::before {
+  position: absolute;
+  top: -8px;
+  left: calc(50% - 7px);
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--archive-curtain);
+  background: var(--archive-paper);
+  content: "";
+  pointer-events: none;
+  transform: rotate(45deg);
 }
 
 .archive-notice-strip > div > p {
@@ -536,12 +613,26 @@ html[data-world="archive"] :is(.text-link, .back-link):hover {
 }
 
 .archive-register-section > header {
+  position: relative;
   display: grid;
   grid-template-columns: 150px minmax(0, 1fr) auto;
   gap: 24px;
   align-items: baseline;
   padding: 0 0 26px;
-  border-bottom: 3px double var(--archive-gold);
+  border-bottom: 3px double var(--structure);
+}
+
+.archive-register-section > header::after {
+  position: absolute;
+  right: 0;
+  bottom: -7px;
+  width: 12px;
+  height: 12px;
+  border: 1px solid var(--structure);
+  background: var(--archive-soot);
+  content: "";
+  pointer-events: none;
+  transform: rotate(45deg);
 }
 
 .archive-register-section > header p,
@@ -559,7 +650,20 @@ html[data-world="archive"] :is(.text-link, .back-link):hover {
 }
 
 .archive-performance-list > li {
+  position: relative;
   border-bottom: 1px solid var(--structure);
+}
+
+.archive-performance-list > li::before {
+  position: absolute;
+  top: 24px;
+  bottom: 24px;
+  left: 0;
+  width: 3px;
+  background: linear-gradient(var(--archive-gold), var(--archive-curtain));
+  content: "";
+  opacity: 0.42;
+  pointer-events: none;
 }
 
 .archive-performance-list > li > a {
@@ -603,6 +707,7 @@ html[data-world="archive"] :is(.text-link, .back-link):hover {
     "poster date";
   gap: 10px clamp(38px, 7vw, 96px);
   padding-block: clamp(40px, 6vw, 76px);
+  background: linear-gradient(90deg, rgb(214 198 167 / 3.5%), transparent 24%);
 }
 
 .archive-performance-list--home-editorial > li:nth-child(even) > a {
@@ -610,6 +715,11 @@ html[data-world="archive"] :is(.text-link, .back-link):hover {
     "register poster"
     "date poster";
   grid-template-columns: minmax(0, 1.18fr) minmax(260px, 0.82fr);
+  background: linear-gradient(
+    270deg,
+    color-mix(in srgb, var(--archive-patina) 4.5%, transparent),
+    transparent 24%
+  );
 }
 
 .archive-performance-list--home-editorial .archive-poster {
@@ -627,22 +737,64 @@ html[data-world="archive"] :is(.text-link, .back-link):hover {
 .archive-performance-list--home-editorial .archive-performance-list__date {
   grid-area: date;
   align-self: start;
+  padding-top: 4px;
+  font-variant-numeric: tabular-nums;
 }
 
 html[data-world="archive"] .page-intro {
   position: relative;
   max-width: min(860px, calc(100% - 48px));
   padding-block: clamp(86px, 12vw, 150px);
-  border-bottom: 3px double var(--archive-gold);
+  border-bottom: 3px double var(--structure);
   text-align: center;
 }
 
 html[data-world="archive"] .page-intro::before {
   position: absolute;
   inset: 32px 7%;
-  border-inline: 1px solid rgb(208 154 85 / 18%);
+  border-inline: 1px solid var(--structure);
   content: "";
   pointer-events: none;
+}
+
+html[data-world="archive"][data-page-type="search"] .page-intro,
+html[data-world="archive"][data-page-type="tickets"] .page-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 0.72fr) minmax(260px, 0.28fr);
+  gap: 18px clamp(40px, 8vw, 110px);
+  max-width: var(--page);
+  padding-block: clamp(68px, 8vw, 104px) clamp(44px, 6vw, 70px);
+  text-align: left;
+}
+
+html[data-world="archive"][data-page-type="search"] .page-intro::before,
+html[data-world="archive"][data-page-type="tickets"] .page-intro::before {
+  inset: 24px 0 24px 54%;
+  border: 3px double var(--structure);
+  border-radius: 48% 48% 0 0 / 18% 18% 0 0;
+  background: linear-gradient(
+    135deg,
+    transparent 49%,
+    color-mix(in srgb, var(--archive-patina) 13%, transparent) 49.5% 50.5%,
+    transparent 51%
+  );
+}
+
+html[data-world="archive"][data-page-type="search"] .page-intro :is(.eyebrow, h1),
+html[data-world="archive"][data-page-type="tickets"] .page-intro :is(.eyebrow, h1) {
+  position: relative;
+  z-index: 1;
+  grid-column: 1;
+}
+
+html[data-world="archive"][data-page-type="search"] .page-intro > p:last-child,
+html[data-world="archive"][data-page-type="tickets"] .page-intro > p:last-child {
+  position: relative;
+  z-index: 1;
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  align-self: end;
+  margin: 0;
 }
 
 html[data-world="archive"] .page-intro::after {
@@ -651,9 +803,10 @@ html[data-world="archive"] .page-intro::after {
   left: calc(50% - 11px);
   width: 22px;
   height: 22px;
-  border: 3px double var(--archive-gold);
+  border: 3px double var(--structure);
   background: var(--archive-soot);
   content: "";
+  pointer-events: none;
   transform: rotate(45deg);
 }
 
@@ -677,7 +830,7 @@ html[data-world="archive"] .detail {
   grid-template-columns: minmax(0, 1fr) minmax(280px, 0.55fr);
   gap: clamp(44px, 9vw, 110px);
   align-items: center;
-  border-bottom: 3px double var(--archive-gold);
+  border-bottom: 3px double var(--structure);
 }
 
 .archive-detail-header .archive-poster {
@@ -685,7 +838,7 @@ html[data-world="archive"] .detail {
 }
 
 html[data-world="archive"] :is(.fact-grid, .archive-credit-list) {
-  border: 3px double var(--archive-gold);
+  border: 3px double rgb(48 35 28 / 36%);
   background: var(--archive-paper);
 }
 
@@ -744,7 +897,7 @@ html[data-world="archive"] :is(.program-order li, .related-links li) {
 
 .archive-company > dl {
   margin: 0;
-  border-top: 3px double var(--archive-gold);
+  border-top: 3px double var(--structure);
 }
 
 .archive-company > dl > div {
@@ -875,19 +1028,20 @@ html[data-world="archive"] :is(.program-order li, .related-links li) {
   display: block;
   width: 90px;
   margin: 0 auto 46px;
-  border-top: 5px double var(--archive-gold);
+  border-top: 3px double var(--structure);
   content: "";
+  pointer-events: none;
 }
 
 .search-workspace--archive .search-form {
   max-width: none;
   padding: clamp(28px, 6vw, 64px);
-  border: 5px double var(--archive-gold);
+  border: 3px double rgb(48 35 28 / 46%);
   color: var(--archive-ink);
   background:
     repeating-linear-gradient(2deg, rgb(51 37 29 / 4%) 0 1px, transparent 1px 8px),
     var(--archive-paper);
-  box-shadow: 0 28px 70px rgb(0 0 0 / 38%);
+  box-shadow: 10px 12px 0 rgb(13 9 8 / 56%);
 }
 
 .search-workspace--archive .search-form > label {
@@ -912,7 +1066,7 @@ html[data-world="archive"] :is(.program-order li, .related-links li) {
 
 .search-workspace--archive .search-results {
   margin-top: 44px;
-  border-top: 3px double var(--archive-gold);
+  border-top: 3px double var(--structure);
 }
 
 .search-workspace--archive .search-results li {
@@ -922,7 +1076,10 @@ html[data-world="archive"] :is(.program-order li, .related-links li) {
 html[data-world="archive"] .site-footer {
   position: relative;
   z-index: 6;
-  border-top: 5px double var(--archive-gold);
+  border-top: 5px double var(--structure);
+  background:
+    linear-gradient(90deg, transparent 0 8%, rgb(165 116 54 / 5%) 8% 8.2%, transparent 8.2% 91.8%, rgb(165 116 54 / 5%) 91.8% 92%, transparent 92%),
+    var(--archive-corridor);
 }
 
 html[data-world="archive"] .footer-inner {
@@ -958,6 +1115,18 @@ html[data-world="archive"] :is(a, button, input, select, textarea):focus-visible
   .archive-performance-list--home-editorial .archive-performance-list__date {
     grid-column: auto;
   }
+
+  html[data-world="archive"][data-page-type="search"] .page-intro,
+  html[data-world="archive"][data-page-type="tickets"] .page-intro {
+    grid-template-columns: 1fr;
+  }
+
+  html[data-world="archive"][data-page-type="search"] .page-intro > p:last-child,
+  html[data-world="archive"][data-page-type="tickets"] .page-intro > p:last-child {
+    grid-row: auto;
+    grid-column: 1;
+    max-width: var(--reading);
+  }
 }
 
 @media (max-width: 620px) {
@@ -973,16 +1142,24 @@ html[data-world="archive"] :is(a, button, input, select, textarea):focus-visible
 
   .archive-home::before {
     inset: 18px 0;
+    border-radius: 46% 46% 0 0 / 8% 8% 0 0;
   }
 
   .archive-home::after {
     top: 30px;
     bottom: 30px;
     width: calc(100% - 28px);
+    border-radius: 44% 44% 0 0 / 7% 7% 0 0;
   }
 
   .archive-home__copy {
     padding-inline: 30px;
+  }
+
+  .archive-kicker::before,
+  .archive-kicker::after {
+    width: 20px;
+    margin-inline: 8px;
   }
 
   .archive-feature {
@@ -1054,5 +1231,17 @@ html[data-world="archive"] :is(a, button, input, select, textarea):focus-visible
 
   .search-workspace--archive .search-form {
     padding: 24px 18px;
+    box-shadow: 5px 7px 0 rgb(13 9 8 / 56%);
+  }
+
+  html[data-world="archive"][data-page-type="search"] .page-intro,
+  html[data-world="archive"][data-page-type="tickets"] .page-intro {
+    padding-block: 58px 44px;
+  }
+
+  html[data-world="archive"][data-page-type="search"] .page-intro::before,
+  html[data-world="archive"][data-page-type="tickets"] .page-intro::before {
+    inset: 18px 0;
+    border-radius: 44% 44% 0 0 / 8% 8% 0 0;
   }
 }
