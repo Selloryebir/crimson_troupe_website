@@ -7,7 +7,6 @@ export interface TicketArtifactInput {
   basketItem: TicketBasketItem;
   number: string;
   endingHistory: readonly TicketingEndingId[];
-  endingLabels: Readonly<Record<TicketingEndingId, string>>;
   journeyTags: readonly JourneyTag[];
   projection: TicketArtifactProjection;
 }
@@ -269,14 +268,15 @@ const endingComponents: Readonly<Record<TicketingEndingId, string>> = {
 
 function createCompositeStampMarkup(
   endingHistory: readonly TicketingEndingId[],
-  endingLabels: Readonly<Record<TicketingEndingId, string>>,
   journeyTags: readonly JourneyTag[],
   accent: string,
+  transform = 'translate(1020 445) rotate(-3) scale(.78)',
+  includeInactive = true,
 ): string {
   const activeEndings = new Set(endingHistory);
   const uniqueHistory = [...activeEndings];
-  const accessibleHistory = uniqueHistory.map((endingId) => endingLabels[endingId]).join(' / ');
   const components = Object.entries(endingComponents)
+    .filter(([endingId]) => includeInactive || activeEndings.has(endingId as TicketingEndingId))
     .map(([endingId, shape]) => {
       const active = activeEndings.has(endingId as TicketingEndingId);
       return `<g data-ending-component="${endingId}" data-active="${active}" opacity="${active ? '1' : '.1'}">${shape}</g>`;
@@ -287,12 +287,18 @@ function createCompositeStampMarkup(
     : journeyTags.includes('manual-review')
       ? '<path data-journey-mark="manual-review" d="M-58 45h18m8 0h24m8 0h18m8 0h32M-48 51h96"/>'
       : '';
-  return `<g data-ticket-composite-stamp="" data-ending-components="${escapeXml(uniqueHistory.join(' '))}" transform="translate(1020 445) rotate(-3) scale(.78)" fill="none" stroke="${accent}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><title>${escapeXml(accessibleHistory)}</title><ellipse rx="102" ry="66" opacity=".7"/><ellipse rx="97" ry="61" stroke-dasharray="3 5" opacity=".52"/>${components}${administrativeTexture}</g>`;
+  const transformAttribute = transform ? ` transform="${transform}"` : '';
+  return `<g data-ticket-composite-stamp="" data-ending-components="${escapeXml(uniqueHistory.join(' '))}"${transformAttribute} aria-hidden="true" fill="none" stroke="${accent}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><ellipse rx="102" ry="66" opacity=".7"/><ellipse rx="97" ry="61" stroke-dasharray="3 5" opacity=".52"/>${components}${administrativeTexture}</g>`;
 }
 
+const ticketPunchDefinition =
+  '<defs><mask id="ticket-finish-shape" x="0" y="0" width="1200" height="540" maskUnits="userSpaceOnUse"><rect width="1200" height="540" fill="white"/><g fill="black"><circle cx="14" cy="142" r="9"/><circle cx="14" cy="270" r="9"/><circle cx="14" cy="398" r="9"/></g></mask></defs>';
+
+const ticketPunchMarkup =
+  '<g data-ticket-finish="ticket-punch" fill="none" stroke="#211713" stroke-width="2" opacity=".62"><circle cx="14" cy="142" r="11"/><circle cx="14" cy="270" r="11"/><circle cx="14" cy="398" r="11"/></g>';
+
 export function createTicketSvg(input: TicketArtifactInput): string {
-  const { performance, basketItem, number, endingHistory, endingLabels, journeyTags, projection } =
-    input;
+  const { performance, basketItem, number, endingHistory, journeyTags, projection } = input;
   const { primary, secondary } = projection;
   const zoneLabel = primary.zoneLabels[basketItem.zone];
   if (!zoneLabel) {
@@ -319,7 +325,7 @@ export function createTicketSvg(input: TicketArtifactInput): string {
   const punches = texture.punchXs
     .map((x) => `<circle cx="${x}" cy="32" r="3"/><circle cx="${x}" cy="508" r="3"/>`)
     .join('');
-  const stampMarkup = createCompositeStampMarkup(endingHistory, endingLabels, journeyTags, accent);
+  const stampMarkup = createCompositeStampMarkup(endingHistory, journeyTags, accent);
   let contentCursorY = 120;
   const titleBlock = createTicketTextBlock(
     'title',
@@ -455,9 +461,11 @@ export function createTicketSvg(input: TicketArtifactInput): string {
 </g>`;
 
   return `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 540" width="1200" height="540" role="img" lang="${escapeXml(locale)}" aria-labelledby="title description" data-ticket-pattern="${texture.signature}">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 540" width="1200" height="540" role="img" lang="${escapeXml(locale)}" aria-labelledby="title description" data-ticket-pattern="${texture.signature}" data-ticket-finish="ticket-punch">
   <title id="title">${escapeXml(formatMessage(messages.title, { title: primary.title }))}</title>
   <desc id="description">${escapeXml(formatMessage(messages.description, { dateTime: primary.dateTime, place: primary.place, zone: zoneLabel, price: basketItem.basePrice, number }))}</desc>
+  ${ticketPunchDefinition}
+  <g mask="url(#ticket-finish-shape)">
   <rect width="1200" height="540" fill="#f2ede3"/>
   <g fill="none" stroke="${accent}" stroke-width="1" opacity=".075">${textureLines}</g>
   <rect width="28" height="540" fill="${accent}"/>
@@ -479,5 +487,7 @@ export function createTicketSvg(input: TicketArtifactInput): string {
   <text x="920" y="354" font-family="sans-serif" font-size="14" letter-spacing="2" fill="#6d625b">${escapeXml(messages.ticketNumber)}</text>
   <text x="920" y="382" font-family="monospace" font-size="22" fill="#211713">${number}</text>
   ${stampMarkup}
+  ${ticketPunchMarkup}
+  </g>
 </svg>`;
 }

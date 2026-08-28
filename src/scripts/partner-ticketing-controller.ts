@@ -192,10 +192,13 @@ export function initPartnerTicketingExperience(
     progress.hidden = true;
     review.hidden = true;
     result.hidden = false;
-    renderTicketingResult(state.result, options, messages, locale, { receipt, issuedTickets });
+    renderTicketingResult(state.result, options, messages, locale, {
+      receipt,
+      issuedTickets,
+    });
     live.textContent = messages.success;
     if (focusStage) {
-      result.querySelector<HTMLElement>('#ticket-result-title')?.focus();
+      result.querySelector<HTMLElement>('#ticket-receipt-title')?.focus();
     }
   };
 

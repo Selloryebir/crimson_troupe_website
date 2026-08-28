@@ -54,9 +54,11 @@ import {
   layoutTicketText,
   segmentTicketGraphemes,
 } from '../src/scripts/ticket-artifact.ts';
-import { getTicketEndingLabels } from '../src/scripts/ticket-result-renderer.ts';
 import {
   MAX_REQUIRING_RESUBMIT_RESULTS,
+  STANDARD_FAILURE_THRESHOLD,
+  STANDARD_INITIAL_SUCCESS_THRESHOLD,
+  STANDARD_SUCCESS_THRESHOLD,
   acceptRetentionOffer,
   calculateAdjustmentAmount,
   calculateBaseTotal,
@@ -900,6 +902,41 @@ assert.equal(selection.basket.length, 2);
 assert.equal(calculateBaseTotal(selection.basket), 1100);
 
 const started = startTicketingAttempt(selection);
+assert.equal(STANDARD_INITIAL_SUCCESS_THRESHOLD, 0.12);
+assert.equal(STANDARD_SUCCESS_THRESHOLD, 0.32);
+assert.equal(STANDARD_FAILURE_THRESHOLD, 0.68);
+assert.equal(
+  resolveTicketingAttempt(
+    started,
+    () => 0.119,
+    () => '000000000000',
+  ).phase,
+  'success',
+);
+assert.equal(
+  resolveTicketingAttempt(
+    started,
+    () => 0.12,
+    () => '000000000000',
+  ).phase,
+  'failure',
+);
+assert.equal(
+  resolveTicketingAttempt(
+    started,
+    () => 0.679,
+    () => '000000000000',
+  ).phase,
+  'failure',
+);
+assert.equal(
+  resolveTicketingAttempt(
+    started,
+    () => 0.68,
+    () => '000000000000',
+  ).phase,
+  'network',
+);
 const standardSuccess = resolveTicketingAttempt(
   started,
   () => 0.1,
@@ -919,6 +956,7 @@ assert.equal(standardSuccess.phase, 'success');
 assert.equal(standardSuccess.currentEndingId, 'ENDING_NORMAL_SUCCESS');
 assert.deepEqual(standardSuccess.endingHistory, ['ENDING_NORMAL_SUCCESS']);
 assert.deepEqual(standardSuccess.result?.acceptedAt, ticketAcceptedAt);
+assert.equal('artifactFinishId' in standardSuccess.result, false);
 assert.equal(standardFailure.phase, 'failure');
 assert.equal(standardFailure.currentEndingId, null);
 assert.equal(standardFailure.attemptCount, 1);
@@ -930,6 +968,23 @@ assert.equal(networkFailure.attemptCount, 1);
 const networkRetry = retryTicketingAttempt(networkFailure);
 assert.deepEqual(networkRetry.basket, selection.basket);
 assert.deepEqual(networkRetry.journeyTags, ['network-retry']);
+assert.equal(
+  resolveTicketingAttempt(
+    networkRetry,
+    () => 0.319,
+    () => '000000000000',
+  ).phase,
+  'success',
+  '普通线路重试仍应保留原有成功阈值',
+);
+assert.equal(
+  resolveTicketingAttempt(
+    networkRetry,
+    () => 0.32,
+    () => '000000000000',
+  ).phase,
+  'failure',
+);
 const networkThenSuccess = resolveTicketingAttempt(
   networkRetry,
   () => 0.1,
@@ -1118,6 +1173,7 @@ assert.deepEqual(restored.result?.tickets, premiumSuccess.result?.tickets);
 assert.deepEqual(restored.result?.journeyTags, premiumSuccess.result?.journeyTags);
 assert.deepEqual(restored.result?.endingHistory, premiumSuccess.result?.endingHistory);
 assert.deepEqual(restored.result?.acceptedAt, ticketAcceptedAt);
+assert.equal('artifactFinishId' in restored.result, false);
 const missingAcceptanceTime = structuredClone(premiumSuccess);
 delete missingAcceptanceTime.result.acceptedAt;
 assert.deepEqual(
@@ -1251,7 +1307,6 @@ const artifactEndingHistory = [
   'ENDING_DISCOUNT_SUCCESS',
 ];
 const artifactJourneyTags = ['network-retry', 'priority-refused', 'retention-accepted'];
-const artifactEndingLabels = getTicketEndingLabels(yanLocalization.messages.ticketing);
 for (const [performanceId, expectedPrimaryLocale, expectedSecondaryLocale] of [
   ['uncrowned-trimount-1102', 'en-US', 'zh-CN'],
   ['caged-fire-wiesheim-1102', 'de', 'zh-CN'],
@@ -1269,7 +1324,6 @@ for (const [performanceId, expectedPrimaryLocale, expectedSecondaryLocale] of [
     },
     number: '321098765432',
     endingHistory: artifactEndingHistory,
-    endingLabels: artifactEndingLabels,
     journeyTags: artifactJourneyTags,
     projection: option.artifact,
   });
@@ -1318,7 +1372,6 @@ const svg = createTicketSvg({
   basketItem: basketA,
   number: '123456789012',
   endingHistory: artifactEndingHistory,
-  endingLabels: artifactEndingLabels,
   journeyTags: artifactJourneyTags,
   projection: artifactProjection,
 });
@@ -1371,6 +1424,7 @@ for (const endingId of [
   );
 }
 assert.ok(svg.includes('data-ticket-composite-stamp=""'));
+assert.ok(svg.includes('data-ticket-finish="ticket-punch"'));
 assert.doesNotMatch(svg, /<[^>]+\sdata-[\w-]+(?:\s|>)/u, 'SVG 数据属性必须具有 XML 合法值');
 assert.ok(!svg.includes('data-stamp-id='));
 assert.ok(svg.includes(`data-ticket-pattern="${texture.signature}"`));
@@ -1381,10 +1435,17 @@ assert.equal(
     basketItem: basketA,
     number: '123456789012',
     endingHistory: artifactEndingHistory,
-    endingLabels: artifactEndingLabels,
     journeyTags: artifactJourneyTags,
     projection: artifactProjection,
   }),
+);
+
+assert.ok(svg.includes('<mask id="ticket-finish-shape"'));
+assert.ok(svg.includes('mask="url(#ticket-finish-shape)"'));
+assert.ok(
+  svg.indexOf('<rect width="28" height="540"') <
+    svg.indexOf('<g data-ticket-finish="ticket-punch"'),
+  '票钳孔轮廓必须绘制在左侧色带之后',
 );
 
 const unicodeTicketSamples = [
@@ -1440,7 +1501,6 @@ const unicodeArtifactSvg = createTicketSvg({
   basketItem: basketA,
   number: '123456789012',
   endingHistory: artifactEndingHistory,
-  endingLabels: artifactEndingLabels,
   journeyTags: artifactJourneyTags,
   projection: {
     primary: {

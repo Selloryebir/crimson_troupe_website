@@ -1041,10 +1041,15 @@ try {
   assert.equal(new URL(ticketPage.url()).pathname, '/yan/tickets/partner/');
   assert.equal(
     await ticketPage
-      .locator('#ticket-result-title')
+      .locator('#ticket-receipt-title')
       .evaluate((element) => element === document.activeElement),
     true,
   );
+  assert.equal(await ticketPage.locator('[data-ticket-journey]').count(), 0);
+  assert.equal(await ticketPage.locator('[data-ticket-stamp-inspector]').count(), 0);
+  assert.equal(await ticketPage.locator('[data-ticket-finish-workshop]').count(), 0);
+  assert.equal(await ticketPage.locator('input[data-ticket-finish]').count(), 0);
+  assert.equal(await ticketPage.locator('[data-ticket-action^="download:"]').isEnabled(), true);
   const ticketImage = ticketPage.locator('.issued-ticket > img');
   const ticketSource = await ticketImage.getAttribute('src');
   assert.match(ticketSource ?? '', /^data:image\/svg\+xml/u);
@@ -1081,6 +1086,8 @@ try {
     downloadedFieldOrder,
   );
   assert.match(decodedTicketSource, /data-ticket-composite-stamp=""/u);
+  assert.match(decodedTicketSource, /data-ticket-finish="ticket-punch"/u);
+  assert.match(decodedTicketSource, /<g data-ticket-finish="ticket-punch"/u);
   const screenFieldGroups = await ticketPage
     .locator('.issued-ticket__caption [data-ticket-field-group]')
     .evaluateAll((elements) =>
@@ -1128,7 +1135,63 @@ try {
     '普通成功只显示票款小计与应付合计',
   );
   assert.equal(await ticketPage.locator('[data-ticket-receipt] > small').count(), 1);
+  const mobileTicketLayout = await ticketPage.locator('.issued-ticket').evaluate((article) => {
+    const image = article.querySelector(':scope > img');
+    const caption = article.querySelector('.issued-ticket__caption');
+    if (!image || !caption) {
+      return null;
+    }
+    const articleRect = article.getBoundingClientRect();
+    const imageRect = image.getBoundingClientRect();
+    const captionRect = caption.getBoundingClientRect();
+    return {
+      articleWidth: articleRect.width,
+      imageWidth: imageRect.width,
+      imageBottom: imageRect.bottom,
+      captionTop: captionRect.top,
+    };
+  });
+  assert.ok(mobileTicketLayout, '窄屏纪念票应包含票面和下方信息区');
+  assert.ok(
+    Math.abs(mobileTicketLayout.articleWidth - mobileTicketLayout.imageWidth) <= 2,
+    '窄屏票面应占满票券卡片宽度',
+  );
+  assert.ok(
+    mobileTicketLayout.captionTop >= mobileTicketLayout.imageBottom,
+    '窄屏购票信息应排在完整票面下方',
+  );
   await assertNoHorizontalLoss(ticketPage, '320px 炎国票务结果');
+  await ticketPage.reload();
+  await ticketPage.locator('[data-ticket-result]:not([hidden])').waitFor();
+  assert.equal(await ticketPage.locator('[data-ticket-finish-workshop]').count(), 0);
+  await ticketPage.emulateMedia({ reducedMotion: 'reduce' });
+  await ticketPage.setViewportSize({ width: 1280, height: 900 });
+  await assertNoHorizontalLoss(ticketPage, '1280px 炎国票务结果');
+  const desktopTicketLayout = await ticketPage.locator('.issued-ticket').evaluate((article) => {
+    const image = article.querySelector(':scope > img');
+    const caption = article.querySelector('.issued-ticket__caption');
+    if (!image || !caption) {
+      return null;
+    }
+    const articleRect = article.getBoundingClientRect();
+    const imageRect = image.getBoundingClientRect();
+    const captionRect = caption.getBoundingClientRect();
+    return {
+      articleWidth: articleRect.width,
+      imageWidth: imageRect.width,
+      imageBottom: imageRect.bottom,
+      captionTop: captionRect.top,
+    };
+  });
+  assert.ok(desktopTicketLayout, '桌面纪念票应包含票面和下方信息区');
+  assert.ok(
+    Math.abs(desktopTicketLayout.articleWidth - desktopTicketLayout.imageWidth) <= 2,
+    '桌面票面应占满票券卡片宽度',
+  );
+  assert.ok(
+    desktopTicketLayout.captionTop >= desktopTicketLayout.imageBottom,
+    '桌面购票信息应排在完整票面下方',
+  );
   await ticketPage.locator('[data-ticket-new-round]').click();
   await ticketPage.waitForURL(`${origin}/yan/tickets/`);
   await ticketPage.goto(`${origin}/yan/tickets/partner/`);
@@ -1279,6 +1342,7 @@ try {
   assert.equal(new URL(minosPage.url()).pathname, '/min/tickets/partner/');
   const minosTicketSource = await minosPage.locator('.issued-ticket > img').getAttribute('src');
   assert.match(decodeURIComponent(minosTicketSource ?? ''), /\p{Script=Greek}/u);
+  assert.match(decodeURIComponent(minosTicketSource ?? ''), /data-ticket-finish="ticket-punch"/u);
   const downloadPromise = minosPage.waitForEvent('download');
   await minosPage.locator('[data-ticket-action^="download:"]').click();
   const download = await downloadPromise;
@@ -1292,6 +1356,7 @@ try {
   await minosSelector.locator('a[lang="zh-CN"]').click();
   await minosPage.locator('[data-ticket-result]:not([hidden])').waitFor();
   assert.match(new URL(minosPage.url()).pathname, /^\/yan\/tickets\/partner\/$/u);
+  assert.equal(await minosPage.locator('[data-ticket-finish-workshop]').count(), 0);
   assertMinosErrors();
   await minosContext.close();
 
@@ -1393,6 +1458,7 @@ try {
   await ursusPage.locator('[data-ticket-result]:not([hidden])').waitFor();
   const ursusTicketSource = await ursusPage.locator('.issued-ticket > img').getAttribute('src');
   assert.match(decodeURIComponent(ursusTicketSource ?? ''), /\p{Script=Cyrillic}/u);
+  assert.match(decodeURIComponent(ursusTicketSource ?? ''), /data-ticket-finish="ticket-punch"/u);
   const ursusDownloadPromise = ursusPage.waitForEvent('download');
   await ursusPage.locator('[data-ticket-action^="download:"]').click();
   const ursusDownload = await ursusDownloadPromise;
