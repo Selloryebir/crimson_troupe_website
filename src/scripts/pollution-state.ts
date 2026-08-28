@@ -1,5 +1,6 @@
 export const POLLUTION_PROBABILITY = 0.42;
 export const MAX_POLLUTION_LEVEL = 3;
+export const POLLUTION_STATE_STORAGE_KEY = 'crimson-troupe:archive-pollution:v2';
 
 export type PollutionLevel = 0 | 1 | 2 | 3;
 export type PollutionVariant = 0 | 1 | 2;

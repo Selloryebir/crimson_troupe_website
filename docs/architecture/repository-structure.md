@@ -68,6 +68,7 @@ crimson_troupe_website/
         ├── foundation.css
         ├── front.css
         ├── ticketing.css
+        ├── partner-ticketing.css
         ├── archive.css
         └── pollution.css
 ```
@@ -78,9 +79,9 @@ crimson_troupe_website/
 
 ## 当前实现快照
 
-当前源码通过默认炎国 `showcase`、九国家版本 `preview` 与显式炎国 `release` 三个有限构建预设生成同一套页面。`src/pages/index.astro` 只负责进入 `/yan/`，表站与 1084 里站使用独立页面树；`src/data/editions.ts` 拥有国家版本注册，`src/data/locations.ts`、`src/data/performances.ts` 和 `src/data/productions/` 保存语言无关事实，`src/data/localized/` 保存类型化国家版本内容包。完整基线、有序根集合、构建预设与内容资格经过唯一解析边界形成不可变构建快照，路由、页面、搜索、票务和验证器统一消费该快照；浏览器交互由 `src/scripts/` 中的原生 TypeScript 按页面装配。
+当前源码通过默认构建使用的炎国 `showcase`、日常开发使用的九国家版本 `preview` 与显式炎国 `release` 三个有限构建预设生成同一套页面。`src/pages/index.astro` 只负责进入 `/yan/`，表站与 1084 里站使用独立页面树；`src/data/editions.ts` 拥有国家版本注册，`src/data/locations.ts`、`src/data/performances.ts` 和 `src/data/productions/` 保存语言无关事实，`src/data/localized/` 保存类型化国家版本内容包。完整基线、有序根集合、构建预设与内容资格经过唯一解析边界形成不可变构建快照，路由、页面、搜索、票务和验证器统一消费该快照；浏览器交互由 `src/scripts/` 中的原生 TypeScript 按页面装配。
 
-默认 `showcase` 只包含 `yan / zh-CN`，当前生成 86 个静态页面；九国家版本 `preview` 额外包含 `victoria / en-GB`、`ursus / ru`、`siracusa / it`、`minos / el`、`leithanien / de`、`kazimierz / pl`、`higashi / ja-JP` 与 `columbia / en-US` 等价页面，共生成 766 个页面。八种目标语言内容只用于技术与视觉预览，不代表翻译已通过人工审核。当前批准摘要为空，因此 `release` 会在生成页面前列出不合格稳定 ID 并停止，不会把预览内容静默提升为正式内容。具体行为契约由 active 蓝图拥有，下文只解释源码职责与依赖方向。
+默认构建的 `showcase` 只包含 `yan / zh-CN`，当前生成 87 个静态页面；九国家版本 `preview` 额外包含 `victoria / en-GB`、`ursus / ru`、`siracusa / it`、`minos / el`、`leithanien / de`、`kazimierz / pl`、`higashi / ja-JP` 与 `columbia / en-US` 等价页面，共生成 775 个页面。八种目标语言内容只用于技术与视觉预览，不代表翻译已通过人工审核。当前批准摘要为空，因此 `release` 会在生成页面前列出不合格稳定 ID 并停止，不会把预览内容静默提升为正式内容。具体行为契约由 active 蓝图拥有，下文只解释源码职责与依赖方向。
 
 当前实现处于 `candidate`，正式发布仍需人工内容与发布审核。未来语言或创意模组只有经过独立规划后才进入实现；不得恢复单页锚点、混合模型或双世界同页 DOM 作为第二套正式架构。
 
@@ -153,13 +154,14 @@ Astro 组件只负责构建期结构和内容装配，不在组件之间建立�
 
 ## 样式层
 
-`src/styles/main.css` 是唯一装配入口，按固定顺序导入以下职责文件：
+`src/styles/main.css` 是共享样式入口，只导入 `foundation.css`；其余职责文件由对应布局或能力组件按需装配，避免无关页面下载和解析。各文件职责如下：
 
-1. `foundation.css`：共享尺度、重置、外壳、任务基础、无障碍和全局响应式；
-2. `front.css`：表站令牌、当代编辑系统、电影舞台、页面族和表站响应式；
-3. `ticketing.css`：票务流程、存单、纪念票、票务响应式和打印；
-4. `archive.css`：里站令牌、等级 `0` 仪式档案剧场、页面族和里站响应式；
-5. `pollution.css`：污染等级、变体、装饰层及其窄屏与减少动态效果约束。
+1. `foundation.css`：由 `main.css` 装配，负责共享尺度、重置、外壳、任务基础、无障碍和全局响应式；
+2. `front.css`：由 `FrontLayout.astro` 装配，负责表站令牌、当代编辑系统、电影舞台、页面族和表站响应式；
+3. `ticketing.css`：由票务体验组件装配，负责票务流程、存单、纪念票、票务响应式和打印；
+4. `partner-ticketing.css`：由合作平台票务组件装配，负责平台流程与对话框；
+5. `archive.css`：由 `ArchiveLayout.astro` 装配，负责里站令牌、等级 `0` 仪式档案剧场、页面族和里站响应式；
+6. `pollution.css`：由 `ArchiveLayout.astro` 装配，负责污染等级、变体、装饰层及其窄屏与减少动态效果约束。
 
 真正共享的基础才进入 `foundation.css`，世界视觉不能以共享之名收敛为同一布局换色。只有规则完全属于单个可复用组件时才迁入组件作用域。污染样式不得随机删除或移动语义 DOM；打印样式不得裁切票面必要信息。
 

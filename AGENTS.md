@@ -43,7 +43,7 @@
 - `src/components/`：当前存放双站真正共享的 Astro 组件，后续按真实页面或能力边界拆分；
 - `src/data/`：不依赖 DOM 的稳定领域事实、国家版本注册与类型化本地化内容；
 - `src/scripts/`：搜索、筛选、污染与票务等原生 TypeScript 渐进增强模块；
-- `src/styles/main.css`：只按顺序装配 `foundation.css`、`front.css`、`ticketing.css`、`archive.css` 与 `pollution.css`；
+- `src/styles/main.css`：只装配双站共享的 `foundation.css`；表站、里站、票务与污染样式由对应布局或能力组件按需装配，避免无关页面下载和解析；
 - `src/assets/`：拥有使用权的运行时静态资产；
 - `docs/`：架构、正式蓝图、临时草稿、指南和参考，不作为运行时输入；
 - `README.md`：面向人员的仓库入口。
