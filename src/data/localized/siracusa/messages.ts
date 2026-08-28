@@ -143,6 +143,32 @@ export const siracusaMessages = {
       endingComponent: 'Elemento di percorso per {label}',
       journeyComponent: 'Trama di procedura per {label}',
     },
+    finishWorkshop: {
+      eyebrow: 'FINITURA DEL BIGLIETTO',
+      title: 'Finitura della bottega biglietti',
+      copy: 'Scegli un trattamento di stampa che non modifica i dati del biglietto. Sarà applicato a tutti i biglietti commemorativi di questo turno.',
+      legend: 'Scegli la finitura di questo turno',
+      requiredHint:
+        'Scegli una finitura per scaricare o stampare. Puoi cambiarla prima di chiudere il turno.',
+      selectedAnnouncement: 'Selezione: {label}. I biglietti di questo turno sono stati rifiniti.',
+      choices: {
+        'deckle-edge': {
+          title: 'Taglio sfrangiato',
+          description:
+            'Aggiunge una linea di taglio irregolare sul bordo destro senza spostare i dati.',
+        },
+        'registration-shift': {
+          title: 'Fuori registro',
+          description:
+            'Sposta appena una seconda cornice, come una stampa manuale della bottega della troupe.',
+        },
+        'ticket-punch': {
+          title: 'Tripla punzonatura',
+          description:
+            'Aggiunge tre fori sulla fascia sinistra, lontani dal numero e dal timbro composito.',
+        },
+      },
+    },
     adjustments: {
       'priority-service': 'Servizio prioritario di assegnazione posti',
       'retention-service': 'Riduzione per conferma immediata',

@@ -1,3 +1,4 @@
+import { formatMessage } from '../data/localized/format.ts';
 import type { TicketingMessages } from '../data/localized/schema.ts';
 import type { TerraDateTime } from '../data/performances.ts';
 import type { TicketingPerformanceOption } from '../data/ticketing.ts';
@@ -23,6 +24,7 @@ import {
   retryTicketingAttempt,
   returnToSelection,
   returnToStandardRoute,
+  selectTicketArtifactFinish,
 } from './ticketing-state.ts';
 
 export const PARTNER_PROCESSING_DELAYS_MS = [450, 650, 600] as const;
@@ -101,6 +103,7 @@ export function initPartnerTicketingExperience(
   const result = app.querySelector<HTMLElement>('[data-ticket-result]');
   const journey = app.querySelector<HTMLElement>('[data-ticket-journey]');
   const receipt = app.querySelector<HTMLElement>('[data-ticket-receipt]');
+  const finishWorkshop = app.querySelector<HTMLElement>('[data-ticket-finish-workshop]');
   const issuedTickets = app.querySelector<HTMLElement>('[data-issued-tickets]');
   const newRound = app.querySelector<HTMLButtonElement>('[data-ticket-new-round]');
   const live = app.querySelector<HTMLElement>('[data-partner-live]');
@@ -118,6 +121,7 @@ export function initPartnerTicketingExperience(
     !result ||
     !journey ||
     !receipt ||
+    !finishWorkshop ||
     !issuedTickets ||
     !newRound ||
     !live
@@ -197,6 +201,7 @@ export function initPartnerTicketingExperience(
     renderTicketingResult(state.result, options, messages, locale, {
       journey,
       receipt,
+      finishWorkshop,
       issuedTickets,
     });
     live.textContent = messages.success;
@@ -363,6 +368,28 @@ export function initPartnerTicketingExperience(
     if (state.result) {
       handleTicketArtifactAction(event, state.result, options, messages, issuedTickets, live);
     }
+  });
+  finishWorkshop.addEventListener('change', (event) => {
+    const input =
+      event.target instanceof HTMLInputElement && event.target.matches('[data-ticket-finish]')
+        ? event.target
+        : null;
+    const finishId = input?.dataset.ticketFinish;
+    if (
+      !finishId ||
+      (finishId !== 'deckle-edge' &&
+        finishId !== 'registration-shift' &&
+        finishId !== 'ticket-punch')
+    ) {
+      return;
+    }
+    state = selectTicketArtifactFinish(state, finishId);
+    save();
+    showResult();
+    finishWorkshop.querySelector<HTMLInputElement>(`[data-ticket-finish="${finishId}"]`)?.focus();
+    live.textContent = formatMessage(messages.finishWorkshop.selectedAnnouncement, {
+      label: messages.finishWorkshop.choices[finishId].title,
+    });
   });
   newRound.addEventListener('click', () => {
     clearTicketingSession(storage);

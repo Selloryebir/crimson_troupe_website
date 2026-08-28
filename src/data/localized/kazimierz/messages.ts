@@ -142,6 +142,29 @@ export const kazimierzMessages = {
       endingComponent: 'Element ścieżki dla {label}',
       journeyComponent: 'Tekstura obsługi dla {label}',
     },
+    finishWorkshop: {
+      eyebrow: 'WYKOŃCZENIE BILETU',
+      title: 'Wykończenie w pracowni biletów',
+      copy: 'Wybierz jedną obróbkę druku, która nie zmienia danych biletu. Zostanie zastosowana do wszystkich biletów pamiątkowych tej rundy.',
+      legend: 'Wybierz wykończenie tej rundy',
+      requiredHint:
+        'Po wyborze możesz pobrać lub wydrukować bilet. Wybór można zmienić przed końcem rundy.',
+      selectedAnnouncement: 'Wybrano {label}. Bilety tej rundy zostały ponownie wykończone.',
+      choices: {
+        'deckle-edge': {
+          title: 'Postrzępione cięcie',
+          description: 'Dodaje nieregularną linię cięcia po prawej bez przesuwania danych.',
+        },
+        'registration-shift': {
+          title: 'Przesunięcie pasowania',
+          description: 'Lekko przesuwa drugą ramkę jak w ręcznym druku pracowni trupy.',
+        },
+        'ticket-punch': {
+          title: 'Potrójne przedziurkowanie',
+          description: 'Dodaje trzy otwory na lewym pasie, z dala od numeru i złożonej pieczęci.',
+        },
+      },
+    },
     adjustments: {
       'priority-service': 'Priorytetowa usługa przydziału miejsc',
       'retention-service': 'Obniżka za natychmiastowe potwierdzenie',

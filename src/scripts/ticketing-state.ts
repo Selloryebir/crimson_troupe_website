@@ -1,7 +1,11 @@
 import type { TerraDateTime, TicketOffer, TicketZone } from '../data/performances.ts';
-import type { TicketAdjustmentId, TicketJourneyTagId } from '../data/localized/schema.ts';
+import type {
+  TicketAdjustmentId,
+  TicketArtifactFinishId,
+  TicketJourneyTagId,
+} from '../data/localized/schema.ts';
 
-export const TICKETING_STATE_VERSION = 6 as const;
+export const TICKETING_STATE_VERSION = 7 as const;
 export const STANDARD_SUCCESS_THRESHOLD = 0.32;
 export const STANDARD_FAILURE_THRESHOLD = 0.68;
 export const PREMIUM_SUCCESS_THRESHOLD = 0.58;
@@ -56,6 +60,7 @@ export interface TicketingResult {
   journeyTags: readonly JourneyTag[];
   tickets: readonly IssuedTicket[];
   acceptedAt: TerraDateTime;
+  artifactFinishId: TicketArtifactFinishId | null;
 }
 
 interface TicketingStateBase {
@@ -113,6 +118,11 @@ const endingIds: readonly TicketingEndingId[] = [
   'ENDING_SCALPER_FAILED',
   'ENDING_DISCOUNT_SUCCESS',
   'ENDING_DISCOUNT_FAILED',
+];
+const artifactFinishIds: readonly TicketArtifactFinishId[] = [
+  'deckle-edge',
+  'registration-shift',
+  'ticket-punch',
 ];
 
 function withStandardRoute(
@@ -225,6 +235,7 @@ function createResult(
   state: TicketingState,
   ticketNumberFactory: () => string,
   acceptedAt: TerraDateTime,
+  artifactFinishId: TicketArtifactFinishId | null = null,
 ): TicketingResult {
   const basket = state.basket.map((item) => ({ ...item }));
   const baseTotal = calculateBaseTotal(basket);
@@ -267,6 +278,23 @@ function createResult(
     journeyTags: [...state.journeyTags],
     tickets,
     acceptedAt: copyTerraDateTime(acceptedAt),
+    artifactFinishId,
+  };
+}
+
+export function selectTicketArtifactFinish(
+  state: TicketingState,
+  artifactFinishId: TicketArtifactFinishId,
+): TicketingState {
+  if (state.phase !== 'success' || !state.result || !artifactFinishIds.includes(artifactFinishId)) {
+    return state;
+  }
+  return {
+    ...state,
+    result: {
+      ...state.result,
+      artifactFinishId,
+    },
   };
 }
 
@@ -665,11 +693,25 @@ export function restoreTicketingState(
       value.result && typeof value.result === 'object'
         ? (value.result as Partial<TicketingResult>).acceptedAt
         : undefined;
-    if (!issuedNumbers || !isValidTicketingTerraDateTime(acceptedAt)) {
+    const artifactFinishId =
+      value.result && typeof value.result === 'object'
+        ? (value.result as Partial<TicketingResult>).artifactFinishId
+        : undefined;
+    if (
+      !issuedNumbers ||
+      !isValidTicketingTerraDateTime(acceptedAt) ||
+      (artifactFinishId !== null &&
+        !artifactFinishIds.includes(artifactFinishId as TicketArtifactFinishId))
+    ) {
       return createTicketingState();
     }
     const pendingNumbers = [...issuedNumbers];
-    const result = createResult(state, () => pendingNumbers.shift() ?? '000000000000', acceptedAt);
+    const result = createResult(
+      state,
+      () => pendingNumbers.shift() ?? '000000000000',
+      acceptedAt,
+      artifactFinishId,
+    );
     return { ...state, result };
   } catch {
     return createTicketingState();

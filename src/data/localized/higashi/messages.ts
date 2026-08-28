@@ -142,6 +142,29 @@ export const higashiMessages = {
       endingComponent: '{label}に対応する経路要素',
       journeyComponent: '{label}に対応する処理模様',
     },
+    finishWorkshop: {
+      eyebrow: 'チケット仕上げ',
+      title: '票券工房の後仕上げ',
+      copy: '券面の事実を変えない印刷処理を一つ選びます。今回の記念券すべてに同じ処理が施されます。',
+      legend: '今回の仕上げを選択',
+      requiredHint:
+        '仕上げを選ぶとダウンロードと印刷ができます。今回を終了する前なら変更できます。',
+      selectedAnnouncement: '{label}を選択しました。今回の記念券を仕上げ直しました。',
+      choices: {
+        'deckle-edge': {
+          title: '裁断の毛羽',
+          description: '主要情報を動かさず、右端に不規則な裁断線を加えます。',
+        },
+        'registration-shift': {
+          title: '見当ずれ',
+          description: '劇団工房の手刷りのように、二重目の枠をわずかにずらします。',
+        },
+        'ticket-punch': {
+          title: '三連改札孔',
+          description: '券番号と合成印を避け、左の色帯に三つの孔を加えます。',
+        },
+      },
+    },
     adjustments: {
       'priority-service': '優先座席配分サービス',
       'retention-service': '即時確認減額',

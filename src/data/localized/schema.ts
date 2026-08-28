@@ -154,6 +154,8 @@ export type TicketAdjustmentId = 'priority-service' | 'retention-service';
 export type TicketJourneyTagId =
   'network-retry' | 'priority-refused' | 'retention-accepted' | 'returned-seat' | 'manual-review';
 
+export type TicketArtifactFinishId = 'deckle-edge' | 'registration-shift' | 'ticket-punch';
+
 export interface TicketJourneyMessages {
   eyebrow: string;
   title: string;
@@ -171,6 +173,21 @@ export interface TicketStampInspectorMessages {
   previewAlt: string;
   endingComponent: string;
   journeyComponent: string;
+}
+
+export interface TicketFinishChoiceMessages {
+  title: string;
+  description: string;
+}
+
+export interface TicketFinishWorkshopMessages {
+  eyebrow: string;
+  title: string;
+  copy: string;
+  legend: string;
+  requiredHint: string;
+  selectedAnnouncement: string;
+  choices: Record<TicketArtifactFinishId, TicketFinishChoiceMessages>;
 }
 
 export interface TicketArtifactMessages {
@@ -263,6 +280,7 @@ export interface TicketingMessages {
   newRound: string;
   journey: TicketJourneyMessages;
   stampInspector: TicketStampInspectorMessages;
+  finishWorkshop: TicketFinishWorkshopMessages;
   adjustments: Record<TicketAdjustmentId, string>;
   artifact: TicketArtifactMessages;
 }
