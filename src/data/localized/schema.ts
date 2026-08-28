@@ -164,6 +164,15 @@ export interface TicketJourneyMessages {
   tags: Record<TicketJourneyTagId, string>;
 }
 
+export interface TicketStampInspectorMessages {
+  summary: string;
+  title: string;
+  copy: string;
+  previewAlt: string;
+  endingComponent: string;
+  journeyComponent: string;
+}
+
 export interface TicketArtifactMessages {
   title: string;
   description: string;
@@ -253,6 +262,7 @@ export interface TicketingMessages {
   downloadStarted: string;
   newRound: string;
   journey: TicketJourneyMessages;
+  stampInspector: TicketStampInspectorMessages;
   adjustments: Record<TicketAdjustmentId, string>;
   artifact: TicketArtifactMessages;
 }

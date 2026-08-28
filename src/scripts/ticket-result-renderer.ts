@@ -1,7 +1,11 @@
 import { formatMessage, formatTerraDateTime } from '../data/localized/format.ts';
 import type { TicketingMessages } from '../data/localized/schema.ts';
 import type { TicketingPerformanceOption } from '../data/ticketing.ts';
-import { createTicketSvg, type TicketArtifactInput } from './ticket-artifact.ts';
+import {
+  createTicketStampPreviewSvg,
+  createTicketSvg,
+  type TicketArtifactInput,
+} from './ticket-artifact.ts';
 import type { TicketBasketItem, TicketingEndingId, TicketingResult } from './ticketing-state.ts';
 
 export interface TicketingResultElements {
@@ -106,7 +110,50 @@ function renderJourneyLedger(
   const body = document.createElement('div');
   body.className = 'ticket-journey__body';
   body.append(route, marks, totals);
-  target.append(header, body);
+
+  const inspector = document.createElement('details');
+  inspector.className = 'ticket-stamp-inspector';
+  inspector.dataset.ticketStampInspector = '';
+  const summary = document.createElement('summary');
+  summary.textContent = messages.stampInspector.summary;
+  const inspectorBody = document.createElement('div');
+  inspectorBody.className = 'ticket-stamp-inspector__body';
+  const visual = document.createElement('img');
+  visual.className = 'ticket-stamp-inspector__preview';
+  visual.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
+    createTicketStampPreviewSvg(result.endingHistory, endingLabels, result.journeyTags),
+  )}`;
+  visual.alt = messages.stampInspector.previewAlt;
+  const explanation = document.createElement('div');
+  const inspectorTitle = document.createElement('h3');
+  inspectorTitle.textContent = messages.stampInspector.title;
+  const inspectorCopy = document.createElement('p');
+  inspectorCopy.textContent = messages.stampInspector.copy;
+  const componentList = document.createElement('ul');
+  componentList.className = 'ticket-stamp-inspector__components';
+  for (const endingId of new Set(result.endingHistory)) {
+    const item = document.createElement('li');
+    item.dataset.ticketStampComponent = endingId;
+    item.textContent = formatMessage(messages.stampInspector.endingComponent, {
+      label: endingLabels[endingId],
+    });
+    componentList.append(item);
+  }
+  for (const tag of result.journeyTags) {
+    if (tag !== 'returned-seat' && tag !== 'manual-review') {
+      continue;
+    }
+    const item = document.createElement('li');
+    item.dataset.ticketStampComponent = tag;
+    item.textContent = formatMessage(messages.stampInspector.journeyComponent, {
+      label: messages.journey.tags[tag],
+    });
+    componentList.append(item);
+  }
+  explanation.append(inspectorTitle, inspectorCopy, componentList);
+  inspectorBody.append(visual, explanation);
+  inspector.append(summary, inspectorBody);
+  target.append(header, body, inspector);
 }
 
 export function getTicketEndingLabels(

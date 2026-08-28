@@ -134,6 +134,14 @@ export const kazimierzMessages = {
         'manual-review': 'Przydzielono po ręcznej weryfikacji',
       },
     },
+    stampInspector: {
+      summary: 'Obejrzyj złożoną pieczęć tej rundy',
+      title: 'Naniesione znaki',
+      copy: 'Powiększenie nakłada wyłącznie elementy faktycznie przeżytych zdarzeń. Nieodwiedzone ścieżki nie są pustymi polami.',
+      previewAlt: 'Powiększony podgląd złożonej pieczęci tej rundy',
+      endingComponent: 'Element ścieżki dla {label}',
+      journeyComponent: 'Tekstura obsługi dla {label}',
+    },
     adjustments: {
       'priority-service': 'Priorytetowa usługa przydziału miejsc',
       'retention-service': 'Obniżka za natychmiastowe potwierdzenie',

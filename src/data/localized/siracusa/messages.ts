@@ -135,6 +135,14 @@ export const siracusaMessages = {
         'manual-review': 'Assegnato dopo verifica manuale',
       },
     },
+    stampInspector: {
+      summary: 'Esamina il timbro composito di questo turno',
+      title: 'Segni applicati',
+      copy: 'La vista ingrandita sovrappone solo gli elementi degli eventi avvenuti. I percorsi non visitati non compaiono come caselle vuote.',
+      previewAlt: 'Anteprima ingrandita del timbro composito di questo turno',
+      endingComponent: 'Elemento di percorso per {label}',
+      journeyComponent: 'Trama di procedura per {label}',
+    },
     adjustments: {
       'priority-service': 'Servizio prioritario di assegnazione posti',
       'retention-service': 'Riduzione per conferma immediata',

@@ -134,6 +134,14 @@ export const victoriaMessages = {
         'manual-review': 'Allocated after manual review',
       },
     },
+    stampInspector: {
+      summary: 'Inspect This Round’s Composite Stamp',
+      title: 'Marks Applied',
+      copy: 'The enlarged view layers only components from events that occurred. Unvisited routes are not shown as empty slots.',
+      previewAlt: 'Enlarged preview of this round’s composite stamp',
+      endingComponent: 'Route component for {label}',
+      journeyComponent: 'Processing texture for {label}',
+    },
     adjustments: {
       'priority-service': 'Priority Seat Allocation Service',
       'retention-service': 'Immediate Confirmation Concession',

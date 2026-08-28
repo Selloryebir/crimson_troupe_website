@@ -272,11 +272,14 @@ function createCompositeStampMarkup(
   endingLabels: Readonly<Record<TicketingEndingId, string>>,
   journeyTags: readonly JourneyTag[],
   accent: string,
+  transform = 'translate(1020 445) rotate(-3) scale(.78)',
+  includeInactive = true,
 ): string {
   const activeEndings = new Set(endingHistory);
   const uniqueHistory = [...activeEndings];
   const accessibleHistory = uniqueHistory.map((endingId) => endingLabels[endingId]).join(' / ');
   const components = Object.entries(endingComponents)
+    .filter(([endingId]) => includeInactive || activeEndings.has(endingId as TicketingEndingId))
     .map(([endingId, shape]) => {
       const active = activeEndings.has(endingId as TicketingEndingId);
       return `<g data-ending-component="${endingId}" data-active="${active}" opacity="${active ? '1' : '.1'}">${shape}</g>`;
@@ -287,7 +290,24 @@ function createCompositeStampMarkup(
     : journeyTags.includes('manual-review')
       ? '<path data-journey-mark="manual-review" d="M-58 45h18m8 0h24m8 0h18m8 0h32M-48 51h96"/>'
       : '';
-  return `<g data-ticket-composite-stamp="" data-ending-components="${escapeXml(uniqueHistory.join(' '))}" transform="translate(1020 445) rotate(-3) scale(.78)" fill="none" stroke="${accent}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><title>${escapeXml(accessibleHistory)}</title><ellipse rx="102" ry="66" opacity=".7"/><ellipse rx="97" ry="61" stroke-dasharray="3 5" opacity=".52"/>${components}${administrativeTexture}</g>`;
+  const transformAttribute = transform ? ` transform="${transform}"` : '';
+  return `<g data-ticket-composite-stamp="" data-ending-components="${escapeXml(uniqueHistory.join(' '))}"${transformAttribute} fill="none" stroke="${accent}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><title>${escapeXml(accessibleHistory)}</title><ellipse rx="102" ry="66" opacity=".7"/><ellipse rx="97" ry="61" stroke-dasharray="3 5" opacity=".52"/>${components}${administrativeTexture}</g>`;
+}
+
+export function createTicketStampPreviewSvg(
+  endingHistory: readonly TicketingEndingId[],
+  endingLabels: Readonly<Record<TicketingEndingId, string>>,
+  journeyTags: readonly JourneyTag[],
+): string {
+  const stampMarkup = createCompositeStampMarkup(
+    endingHistory,
+    endingLabels,
+    journeyTags,
+    '#a94322',
+    '',
+    false,
+  );
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-120 -84 240 168" width="480" height="336" role="img"><rect x="-120" y="-84" width="240" height="168" rx="12" fill="#f2ede3"/>${stampMarkup}</svg>`;
 }
 
 export function createTicketSvg(input: TicketArtifactInput): string {

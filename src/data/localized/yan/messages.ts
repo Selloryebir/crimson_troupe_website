@@ -130,6 +130,14 @@ export const yanMessages = {
         'manual-review': '人工复核后受理',
       },
     },
+    stampInspector: {
+      summary: '检视本轮组合印章',
+      title: '已落下的印记',
+      copy: '放大图只叠加本轮实际经历的构件；未经历的路线不会显示为空槽。',
+      previewAlt: '本轮组合印章的放大预览',
+      endingComponent: '{label}对应的路线构件',
+      journeyComponent: '{label}对应的处理纹理',
+    },
     adjustments: {
       'priority-service': '优先席位调度服务',
       'retention-service': '即时确认减让',

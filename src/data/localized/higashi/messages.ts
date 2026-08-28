@@ -134,6 +134,14 @@ export const higashiMessages = {
         'manual-review': '手動確認後に配席',
       },
     },
+    stampInspector: {
+      summary: '今回の合成印を確認',
+      title: '押された印',
+      copy: '拡大図には今回実際に経験した要素だけを重ねます。未経験の経路を空欄として表示しません。',
+      previewAlt: '今回の合成印の拡大プレビュー',
+      endingComponent: '{label}に対応する経路要素',
+      journeyComponent: '{label}に対応する処理模様',
+    },
     adjustments: {
       'priority-service': '優先座席配分サービス',
       'retention-service': '即時確認減額',

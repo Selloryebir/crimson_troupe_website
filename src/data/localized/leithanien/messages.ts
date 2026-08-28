@@ -138,6 +138,14 @@ export const leithanienMessages = {
         'manual-review': 'Nach manueller Prüfung zugeteilt',
       },
     },
+    stampInspector: {
+      summary: 'Zusammengesetzten Stempel dieser Runde prüfen',
+      title: 'Gesetzte Zeichen',
+      copy: 'Die Vergrößerung überlagert nur Bestandteile tatsächlich erlebter Vorgänge. Nicht besuchte Wege erscheinen nicht als leere Felder.',
+      previewAlt: 'Vergrößerte Vorschau des zusammengesetzten Stempels dieser Runde',
+      endingComponent: 'Wegbestandteil für {label}',
+      journeyComponent: 'Bearbeitungsstruktur für {label}',
+    },
     adjustments: {
       'priority-service': 'Priorisierte Sitzplatzzuteilung',
       'retention-service': 'Nachlass für sofortige Bestätigung',
