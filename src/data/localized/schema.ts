@@ -151,9 +151,6 @@ export interface FilterMessages {
 
 export type TicketAdjustmentId = 'priority-service' | 'retention-service';
 
-export type TicketJourneyTagId =
-  'network-retry' | 'priority-refused' | 'retention-accepted' | 'returned-seat' | 'manual-review';
-
 export interface TicketArtifactMessages {
   title: string;
   description: string;

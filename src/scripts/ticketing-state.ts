@@ -1,7 +1,7 @@
 import type { TerraDateTime, TicketOffer, TicketZone } from '../data/performances.ts';
-import type { TicketAdjustmentId, TicketJourneyTagId } from '../data/localized/schema.ts';
+import type { TicketAdjustmentId } from '../data/localized/schema.ts';
 
-export const TICKETING_STATE_VERSION = 8 as const;
+export const TICKETING_STATE_VERSION = 6 as const;
 export const STANDARD_INITIAL_SUCCESS_THRESHOLD = 0.12;
 export const STANDARD_SUCCESS_THRESHOLD = 0.32;
 export const STANDARD_FAILURE_THRESHOLD = 0.68;
@@ -24,7 +24,8 @@ export type TicketingEndingId =
   | 'ENDING_SCALPER_FAILED'
   | 'ENDING_DISCOUNT_SUCCESS'
   | 'ENDING_DISCOUNT_FAILED';
-export type JourneyTag = TicketJourneyTagId;
+export type JourneyTag =
+  'network-retry' | 'priority-refused' | 'retention-accepted' | 'returned-seat' | 'manual-review';
 
 export interface TicketBasketItem {
   performanceId: string;
@@ -115,6 +116,7 @@ const endingIds: readonly TicketingEndingId[] = [
   'ENDING_DISCOUNT_SUCCESS',
   'ENDING_DISCOUNT_FAILED',
 ];
+
 function withStandardRoute(
   state: TicketingState,
   changes: Partial<TicketingStateBase> = {},

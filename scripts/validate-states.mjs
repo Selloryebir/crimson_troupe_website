@@ -1192,8 +1192,6 @@ assert.deepEqual(restoreTicketingState('{"version":2}', catalog), createTicketin
 assert.deepEqual(restoreTicketingState('{"version":3}', catalog), createTicketingState());
 assert.deepEqual(restoreTicketingState('{"version":4}', catalog), createTicketingState());
 assert.deepEqual(restoreTicketingState('{"version":5}', catalog), createTicketingState());
-assert.deepEqual(restoreTicketingState('{"version":6}', catalog), createTicketingState());
-assert.deepEqual(restoreTicketingState('{"version":7}', catalog), createTicketingState());
 assert.deepEqual(restoreTicketingState('{"version":999}', catalog), createTicketingState());
 
 const previewLocalizations = previewEditionIds.map((editionId) =>
