@@ -2,6 +2,8 @@
 
 `docs/drafts/` 集中保存临时且不构成正式产品事实源的材料，包括尚未获得人工采纳的蓝图、建议与创意草稿，以及获准执行但完成后应删除的一次性开发计划。这里的内容不直接约束产品或源码，也不属于 `docs/blueprint/traceability.json` 的追踪对象。
 
+草稿目录不替代 Git 隔离。人工明确提出并准备正式实现的事项在 `dev_feature_<slug>` 编写蓝图草稿和一次性计划；需要原型才能判断的创意在独立 `dev_experiment_<slug>` 编写创意草稿、专属研究和实验实现。目录位置、分支存在或原型可运行都不构成人工采纳；完整晋级和废止规则见 [`../guides/git-branch-workflow.md`](../guides/git-branch-workflow.md)。
+
 ## 目录职责
 
 ```text
@@ -19,11 +21,13 @@ docs/drafts/
 
 - `blueprint/` 可以从头搭建新蓝图，也可以针对现有正式蓝图提出修改；正文中的单项结论可以已经过讨论确认，但整份草稿在人工明确要求正式迁移前仍不是正式蓝图，具体格式见 [`blueprint/README.md`](blueprint/README.md)；
 - `recommendations/` 保存更宏观的候选建议，例如下一步考虑什么、为什么值得做以及最小如何落地，不因优先级或写入正文而自动获得效力，具体格式见 [`recommendations/README.md`](recommendations/README.md)；
-- `creative/` 保存尚未采纳的文案、叙事蓝本、表现概念和内容创意，具体格式见 [`creative/README.md`](creative/README.md)；
-- `plans/` 保存一次性开发计划；计划即使获准执行，也只能编排已经批准的工作，不能覆盖正式蓝图或产生新的产品决策，具体格式见 [`plans/README.md`](plans/README.md)；
+- `creative/` 保存尚未采纳的文案、叙事蓝本、表现概念和内容创意；新建或实质修改实际创意草稿时必须位于对应 `dev_experiment_<slug>`，具体格式见 [`creative/README.md`](creative/README.md)；
+- `plans/` 保存一次性开发计划；计划在所属 `dev_feature_<slug>` 内编排已经批准的工作，即使获准执行也不能覆盖正式蓝图或产生新的产品决策，具体格式见 [`plans/README.md`](plans/README.md)；
 - 普通功能开发只读取正式蓝图。只有任务涉及规划、草稿评审、已获授权的一次性计划、正式迁移，或用户明确指定草稿时，才读取本目录。
 
 四个子目录的 `README.md` 是长期职责与格式入口，不属于随阶段完成而删除的草稿。清理最后一份实际草稿时保留对应 README，使目录职责在 Git 中持续存在。
+
+`dev_blueprint` 退役迁移期间，既有草稿可以暂留原工作区等待逐项审计；这不授权继续扩写。尚未采纳的创意及其专属参考和原型应进入对应实验分支，正式功能的蓝图草稿和计划应进入对应功能分支，且不得借迁移自动提升内容资格。
 
 草稿内容获人工采纳后按责任迁移：
 

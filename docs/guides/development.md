@@ -1,6 +1,6 @@
 # 开发指南
 
-执行 Git 写操作或开始新的蓝图、源码阶段前，先阅读 [`git-branch-workflow.md`](git-branch-workflow.md)，确认当前分支职责和允许的同步方向。
+执行 Git 写操作，或开始新的蓝图、源码、创意原型和专业资产阶段前，先阅读 [`git-branch-workflow.md`](git-branch-workflow.md)，确认当前工作分支类别、审核门禁和允许的晋级方向。日常工作从最新已确认的 `dev_code` 创建目标有限的工作分支，不直接在长期集成分支展开。
 
 ## 本地运行
 
