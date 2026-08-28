@@ -119,6 +119,21 @@ export const kazimierzMessages = {
     stateUpdated: 'Stan wniosku o miejsca został zaktualizowany.',
     downloadStarted: 'Rozpoczęło się pobieranie {title}.',
     newRound: 'Poprzedni wniosek o miejsca został zakończony. Możesz wybrać ponownie.',
+    journey: {
+      eyebrow: 'REJESTR ŚCIEŻKI',
+      title: 'Przebieg tego zgłoszenia',
+      copy: 'Potwierdzenie zapisuje końcowy przydział. Tutaj zachowano kolejno odpowiedzi systemu i ślady obsługi.',
+      routeTitle: 'Kolejność odpowiedzi systemu',
+      marksTitle: 'Ślady obsługi z tej rundy',
+      noMarks: 'Ta runda nie pozostawiła dodatkowych śladów obsługi.',
+      tags: {
+        'network-retry': 'Ponowiono po utracie połączenia',
+        'priority-refused': 'Odrzucono kanał priorytetowy',
+        'retention-accepted': 'Przyjęto ofertę zatrzymania',
+        'returned-seat': 'Miejsce wróciło do kanału standardowego',
+        'manual-review': 'Przydzielono po ręcznej weryfikacji',
+      },
+    },
     adjustments: {
       'priority-service': 'Priorytetowa usługa przydziału miejsc',
       'retention-service': 'Obniżka za natychmiastowe potwierdzenie',

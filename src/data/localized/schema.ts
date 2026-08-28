@@ -151,6 +151,19 @@ export interface FilterMessages {
 
 export type TicketAdjustmentId = 'priority-service' | 'retention-service';
 
+export type TicketJourneyTagId =
+  'network-retry' | 'priority-refused' | 'retention-accepted' | 'returned-seat' | 'manual-review';
+
+export interface TicketJourneyMessages {
+  eyebrow: string;
+  title: string;
+  copy: string;
+  routeTitle: string;
+  marksTitle: string;
+  noMarks: string;
+  tags: Record<TicketJourneyTagId, string>;
+}
+
 export interface TicketArtifactMessages {
   title: string;
   description: string;
@@ -239,6 +252,7 @@ export interface TicketingMessages {
   stateUpdated: string;
   downloadStarted: string;
   newRound: string;
+  journey: TicketJourneyMessages;
   adjustments: Record<TicketAdjustmentId, string>;
   artifact: TicketArtifactMessages;
 }

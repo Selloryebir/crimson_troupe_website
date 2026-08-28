@@ -5,6 +5,7 @@ import { createTicketSvg, type TicketArtifactInput } from './ticket-artifact.ts'
 import type { TicketBasketItem, TicketingEndingId, TicketingResult } from './ticketing-state.ts';
 
 export interface TicketingResultElements {
+  journey: HTMLElement;
   receipt: HTMLElement;
   issuedTickets: HTMLElement;
 }
@@ -26,6 +27,86 @@ function addDefinition(list: HTMLDListElement, term: string, description: string
   dd.textContent = description;
   row.append(dt, dd);
   list.append(row);
+}
+
+function renderJourneyLedger(
+  result: TicketingResult,
+  messages: TicketingMessages,
+  target: HTMLElement,
+): void {
+  const endingLabels = getTicketEndingLabels(messages);
+  const header = document.createElement('div');
+  header.className = 'ticket-journey__header';
+  const eyebrow = document.createElement('p');
+  eyebrow.className = 'eyebrow';
+  eyebrow.textContent = messages.journey.eyebrow;
+  const title = document.createElement('h2');
+  title.id = 'ticket-result-title';
+  title.tabIndex = -1;
+  title.textContent = messages.journey.title;
+  const copy = document.createElement('p');
+  copy.textContent = messages.journey.copy;
+  header.append(eyebrow, title, copy);
+
+  const route = document.createElement('section');
+  route.className = 'ticket-journey__route';
+  const routeTitle = document.createElement('h3');
+  routeTitle.textContent = messages.journey.routeTitle;
+  const steps = document.createElement('ol');
+  steps.className = 'ticket-journey__steps';
+  steps.dataset.ticketJourneySteps = '';
+  for (const endingId of result.endingHistory) {
+    const item = document.createElement('li');
+    item.dataset.ticketJourneyEnding = endingId;
+    item.textContent = endingLabels[endingId];
+    steps.append(item);
+  }
+  route.append(routeTitle, steps);
+
+  const marks = document.createElement('section');
+  marks.className = 'ticket-journey__marks';
+  const marksTitle = document.createElement('h3');
+  marksTitle.textContent = messages.journey.marksTitle;
+  marks.append(marksTitle);
+  if (result.journeyTags.length === 0) {
+    const noMarks = document.createElement('p');
+    noMarks.className = 'ticket-journey__empty';
+    noMarks.textContent = messages.journey.noMarks;
+    marks.append(noMarks);
+  } else {
+    const tagList = document.createElement('ul');
+    tagList.className = 'ticket-journey__tag-list';
+    for (const tag of result.journeyTags) {
+      const item = document.createElement('li');
+      item.dataset.ticketJourneyTag = tag;
+      item.textContent = messages.journey.tags[tag];
+      tagList.append(item);
+    }
+    marks.append(tagList);
+  }
+
+  const totals = document.createElement('dl');
+  totals.className = 'ticket-journey__totals';
+  addDefinition(
+    totals,
+    messages.receiptChannel,
+    result.route === 'premium' ? messages.priorityChannel : messages.standardChannel,
+  );
+  addDefinition(totals, messages.ticketSubtotal, `${result.baseTotal} LMD`);
+  for (const adjustment of result.adjustments) {
+    const sign = adjustment.amount < 0 ? '−' : '+';
+    addDefinition(
+      totals,
+      messages.adjustments[adjustment.id],
+      `${sign} ${Math.abs(adjustment.amount)} LMD`,
+    );
+  }
+  addDefinition(totals, messages.amountDue, `${result.settledTotal} LMD`);
+
+  const body = document.createElement('div');
+  body.className = 'ticket-journey__body';
+  body.append(route, marks, totals);
+  target.append(header, body);
 }
 
 export function getTicketEndingLabels(
@@ -74,9 +155,12 @@ export function renderTicketingResult(
   locale: string,
   elements: TicketingResultElements,
 ): void {
-  const { receipt, issuedTickets } = elements;
+  const { journey, receipt, issuedTickets } = elements;
+  journey.replaceChildren();
   receipt.replaceChildren();
   issuedTickets.replaceChildren();
+  journey.className = 'ticket-journey';
+  renderJourneyLedger(result, messages, journey);
 
   const heading = document.createElement('div');
   heading.className = 'ticket-receipt__heading';
@@ -84,8 +168,7 @@ export function renderTicketingResult(
   eyebrow.className = 'eyebrow';
   eyebrow.textContent = messages.receiptEyebrow;
   const title = document.createElement('h2');
-  title.id = 'ticket-result-title';
-  title.tabIndex = -1;
+  title.id = 'ticket-receipt-title';
   title.textContent = messages.receiptTitle;
   const copy = document.createElement('p');
   copy.textContent = messages.receiptCopy;

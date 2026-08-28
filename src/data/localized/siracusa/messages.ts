@@ -120,6 +120,21 @@ export const siracusaMessages = {
     stateUpdated: 'Lo stato della richiesta posti è stato aggiornato.',
     downloadStarted: 'Il download per {title} è iniziato.',
     newRound: 'La precedente richiesta posti è terminata. Puoi selezionare di nuovo.',
+    journey: {
+      eyebrow: 'REGISTRO DEL PERCORSO',
+      title: 'Percorso di questa richiesta',
+      copy: "La ricevuta registra l'assegnazione finale. Qui restano, in ordine, le risposte del sistema e i segni della procedura.",
+      routeTitle: 'Sequenza delle risposte del sistema',
+      marksTitle: 'Segni lasciati in questo turno',
+      noMarks: 'Questo turno non ha lasciato altri segni di procedura.',
+      tags: {
+        'network-retry': 'Nuovo invio dopo la perdita di connessione',
+        'priority-refused': 'Canale prioritario rifiutato',
+        'retention-accepted': 'Offerta di permanenza accettata',
+        'returned-seat': 'Posto rientrato nel canale standard',
+        'manual-review': 'Assegnato dopo verifica manuale',
+      },
+    },
     adjustments: {
       'priority-service': 'Servizio prioritario di assegnazione posti',
       'retention-service': 'Riduzione per conferma immediata',

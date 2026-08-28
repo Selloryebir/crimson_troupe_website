@@ -119,6 +119,21 @@ export const higashiMessages = {
     stateUpdated: '座席申請の状態を更新しました。',
     downloadStarted: '{title}の記念券をダウンロードします。',
     newRound: '前回の座席受付は終了しました。新しく公演を選択できます。',
+    journey: {
+      eyebrow: '受付経路記録',
+      title: '今回の受付経路',
+      copy: '受領票は最終配席を記録します。ここにはシステムの応答と処理の痕跡を発生順に残します。',
+      routeTitle: 'システム応答の順序',
+      marksTitle: '今回残った処理の痕跡',
+      noMarks: '今回は追加の処理痕跡がありません。',
+      tags: {
+        'network-retry': '切断後に再送信',
+        'priority-refused': '優先経路を拒否',
+        'retention-accepted': '引き留め提示を承諾',
+        'returned-seat': '通常経路へ座席が戻った',
+        'manual-review': '手動確認後に配席',
+      },
+    },
     adjustments: {
       'priority-service': '優先座席配分サービス',
       'retention-service': '即時確認減額',

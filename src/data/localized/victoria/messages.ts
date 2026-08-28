@@ -119,6 +119,21 @@ export const victoriaMessages = {
     stateUpdated: 'The seat request status has been updated.',
     downloadStarted: 'The download for {title} has started.',
     newRound: 'The previous seat request has ended. You may select performances again.',
+    journey: {
+      eyebrow: 'ROUTE LEDGER',
+      title: 'Route of This Request',
+      copy: 'The receipt records the final allocation. This ledger preserves each system response and processing mark in the order it occurred.',
+      routeTitle: 'System Response Sequence',
+      marksTitle: 'Processing Marks from This Round',
+      noMarks: 'This round left no additional processing marks.',
+      tags: {
+        'network-retry': 'Resubmitted after a lost connection',
+        'priority-refused': 'Priority channel declined',
+        'retention-accepted': 'Retention quote accepted',
+        'returned-seat': 'Seat returned to the standard channel',
+        'manual-review': 'Allocated after manual review',
+      },
+    },
     adjustments: {
       'priority-service': 'Priority Seat Allocation Service',
       'retention-service': 'Immediate Confirmation Concession',

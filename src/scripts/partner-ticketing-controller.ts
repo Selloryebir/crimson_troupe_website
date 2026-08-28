@@ -99,6 +99,7 @@ export function initPartnerTicketingExperience(
   const details = app.querySelector<HTMLElement>('[data-partner-details]');
   const actions = app.querySelector<HTMLElement>('[data-partner-actions]');
   const result = app.querySelector<HTMLElement>('[data-ticket-result]');
+  const journey = app.querySelector<HTMLElement>('[data-ticket-journey]');
   const receipt = app.querySelector<HTMLElement>('[data-ticket-receipt]');
   const issuedTickets = app.querySelector<HTMLElement>('[data-issued-tickets]');
   const newRound = app.querySelector<HTMLButtonElement>('[data-ticket-new-round]');
@@ -115,6 +116,7 @@ export function initPartnerTicketingExperience(
     !details ||
     !actions ||
     !result ||
+    !journey ||
     !receipt ||
     !issuedTickets ||
     !newRound ||
@@ -192,7 +194,11 @@ export function initPartnerTicketingExperience(
     progress.hidden = true;
     review.hidden = true;
     result.hidden = false;
-    renderTicketingResult(state.result, options, messages, locale, { receipt, issuedTickets });
+    renderTicketingResult(state.result, options, messages, locale, {
+      journey,
+      receipt,
+      issuedTickets,
+    });
     live.textContent = messages.success;
     if (focusStage) {
       result.querySelector<HTMLElement>('#ticket-result-title')?.focus();

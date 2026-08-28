@@ -123,6 +123,21 @@ export const leithanienMessages = {
     stateUpdated: 'Der Status der Platzanfrage wurde aktualisiert.',
     downloadStarted: 'Der Download für {title} hat begonnen.',
     newRound: 'Die vorherige Platzanfrage ist beendet. Sie können erneut auswählen.',
+    journey: {
+      eyebrow: 'WEGBUCH',
+      title: 'Verlauf dieser Anfrage',
+      copy: 'Der Beleg hält die endgültige Zuteilung fest. Hier bleiben Systemantworten und Bearbeitungsspuren in ihrer Reihenfolge erhalten.',
+      routeTitle: 'Abfolge der Systemantworten',
+      marksTitle: 'Bearbeitungsspuren dieser Runde',
+      noMarks: 'Diese Runde hat keine zusätzlichen Bearbeitungsspuren hinterlassen.',
+      tags: {
+        'network-retry': 'Nach Verbindungsabbruch erneut eingereicht',
+        'priority-refused': 'Prioritätskanal abgelehnt',
+        'retention-accepted': 'Rückhalteangebot angenommen',
+        'returned-seat': 'Platz in den Standardkanal zurückgekehrt',
+        'manual-review': 'Nach manueller Prüfung zugeteilt',
+      },
+    },
     adjustments: {
       'priority-service': 'Priorisierte Sitzplatzzuteilung',
       'retention-service': 'Nachlass für sofortige Bestätigung',
