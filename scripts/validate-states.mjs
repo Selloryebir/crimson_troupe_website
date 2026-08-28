@@ -73,7 +73,6 @@ import {
   retryTicketingAttempt,
   returnToSelection,
   returnToStandardRoute,
-  selectTicketArtifactFinish,
   startTicketingAttempt,
   updateBasket,
 } from '../src/scripts/ticketing-state.ts';
@@ -957,7 +956,7 @@ assert.equal(standardSuccess.phase, 'success');
 assert.equal(standardSuccess.currentEndingId, 'ENDING_NORMAL_SUCCESS');
 assert.deepEqual(standardSuccess.endingHistory, ['ENDING_NORMAL_SUCCESS']);
 assert.deepEqual(standardSuccess.result?.acceptedAt, ticketAcceptedAt);
-assert.equal(standardSuccess.result?.artifactFinishId, null);
+assert.equal('artifactFinishId' in standardSuccess.result, false);
 assert.equal(standardFailure.phase, 'failure');
 assert.equal(standardFailure.currentEndingId, null);
 assert.equal(standardFailure.attemptCount, 1);
@@ -1174,24 +1173,7 @@ assert.deepEqual(restored.result?.tickets, premiumSuccess.result?.tickets);
 assert.deepEqual(restored.result?.journeyTags, premiumSuccess.result?.journeyTags);
 assert.deepEqual(restored.result?.endingHistory, premiumSuccess.result?.endingHistory);
 assert.deepEqual(restored.result?.acceptedAt, ticketAcceptedAt);
-assert.equal(restored.result?.artifactFinishId, null);
-const finishedPremiumSuccess = selectTicketArtifactFinish(premiumSuccess, 'registration-shift');
-assert.equal(finishedPremiumSuccess.result?.artifactFinishId, 'registration-shift');
-assert.equal(premiumSuccess.result?.artifactFinishId, null, '票面整理不得修改原冻结结果对象');
-assert.equal(
-  selectTicketArtifactFinish(standardFailure, 'deckle-edge'),
-  standardFailure,
-  '非成功阶段不得选择票面整理',
-);
-const restoredFinished = restoreTicketingState(JSON.stringify(finishedPremiumSuccess), catalog);
-assert.equal(restoredFinished.result?.artifactFinishId, 'registration-shift');
-const invalidFinish = structuredClone(finishedPremiumSuccess);
-invalidFinish.result.artifactFinishId = 'rare-random-finish';
-assert.deepEqual(
-  restoreTicketingState(JSON.stringify(invalidFinish), catalog),
-  createTicketingState(),
-  '未知票面整理必须安全重置会话',
-);
+assert.equal('artifactFinishId' in restored.result, false);
 const missingAcceptanceTime = structuredClone(premiumSuccess);
 delete missingAcceptanceTime.result.acceptedAt;
 assert.deepEqual(
@@ -1211,6 +1193,7 @@ assert.deepEqual(restoreTicketingState('{"version":3}', catalog), createTicketin
 assert.deepEqual(restoreTicketingState('{"version":4}', catalog), createTicketingState());
 assert.deepEqual(restoreTicketingState('{"version":5}', catalog), createTicketingState());
 assert.deepEqual(restoreTicketingState('{"version":6}', catalog), createTicketingState());
+assert.deepEqual(restoreTicketingState('{"version":7}', catalog), createTicketingState());
 assert.deepEqual(restoreTicketingState('{"version":999}', catalog), createTicketingState());
 
 const previewLocalizations = previewEditionIds.map((editionId) =>
@@ -1345,7 +1328,6 @@ for (const [performanceId, expectedPrimaryLocale, expectedSecondaryLocale] of [
     endingHistory: artifactEndingHistory,
     journeyTags: artifactJourneyTags,
     projection: option.artifact,
-    artifactFinishId: 'deckle-edge',
   });
   assert.ok(
     actualProjectionSvg.includes(`data-ticket-language="primary" lang="${expectedPrimaryLocale}"`),
@@ -1394,7 +1376,6 @@ const svg = createTicketSvg({
   endingHistory: artifactEndingHistory,
   journeyTags: artifactJourneyTags,
   projection: artifactProjection,
-  artifactFinishId: 'registration-shift',
 });
 assert.equal(matrix.length, 21 * 21);
 for (const requiredText of [
@@ -1445,7 +1426,7 @@ for (const endingId of [
   );
 }
 assert.ok(svg.includes('data-ticket-composite-stamp=""'));
-assert.ok(svg.includes('data-ticket-finish="registration-shift"'));
+assert.ok(svg.includes('data-ticket-finish="ticket-punch"'));
 assert.doesNotMatch(svg, /<[^>]+\sdata-[\w-]+(?:\s|>)/u, 'SVG 数据属性必须具有 XML 合法值');
 assert.ok(!svg.includes('data-stamp-id='));
 assert.ok(svg.includes(`data-ticket-pattern="${texture.signature}"`));
@@ -1458,39 +1439,16 @@ assert.equal(
     endingHistory: artifactEndingHistory,
     journeyTags: artifactJourneyTags,
     projection: artifactProjection,
-    artifactFinishId: 'registration-shift',
   }),
 );
 
-for (const finishId of ['deckle-edge', 'registration-shift', 'ticket-punch']) {
-  const finishedSvg = createTicketSvg({
-    performance: artifactPerformance,
-    basketItem: basketA,
-    number: '123456789012',
-    endingHistory: artifactEndingHistory,
-    journeyTags: artifactJourneyTags,
-    projection: artifactProjection,
-    artifactFinishId: finishId,
-  });
-  assert.ok(finishedSvg.includes(`data-ticket-finish="${finishId}"`));
-  if (finishId === 'deckle-edge') {
-    assert.ok(finishedSvg.includes('<clipPath id="ticket-finish-shape"'));
-    assert.ok(finishedSvg.includes('clip-path="url(#ticket-finish-shape)"'));
-  }
-  if (finishId === 'registration-shift') {
-    assert.ok(finishedSvg.includes('stroke="#2f6b76"'));
-    assert.ok(!finishedSvg.includes('transform="rotate('));
-  }
-  if (finishId === 'ticket-punch') {
-    assert.ok(finishedSvg.includes('<mask id="ticket-finish-shape"'));
-    assert.ok(finishedSvg.includes('mask="url(#ticket-finish-shape)"'));
-    assert.ok(
-      finishedSvg.indexOf('<rect width="28" height="540"') <
-        finishedSvg.indexOf('<g data-ticket-finish="ticket-punch"'),
-      '票钳孔轮廓必须绘制在左侧色带之后',
-    );
-  }
-}
+assert.ok(svg.includes('<mask id="ticket-finish-shape"'));
+assert.ok(svg.includes('mask="url(#ticket-finish-shape)"'));
+assert.ok(
+  svg.indexOf('<rect width="28" height="540"') <
+    svg.indexOf('<g data-ticket-finish="ticket-punch"'),
+  '票钳孔轮廓必须绘制在左侧色带之后',
+);
 
 const unicodeTicketSamples = [
   {
@@ -1546,7 +1504,6 @@ const unicodeArtifactSvg = createTicketSvg({
   number: '123456789012',
   endingHistory: artifactEndingHistory,
   journeyTags: artifactJourneyTags,
-  artifactFinishId: 'ticket-punch',
   projection: {
     primary: {
       ...artifactProjection.primary,

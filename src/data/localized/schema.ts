@@ -154,23 +154,6 @@ export type TicketAdjustmentId = 'priority-service' | 'retention-service';
 export type TicketJourneyTagId =
   'network-retry' | 'priority-refused' | 'retention-accepted' | 'returned-seat' | 'manual-review';
 
-export type TicketArtifactFinishId = 'deckle-edge' | 'registration-shift' | 'ticket-punch';
-
-export interface TicketFinishChoiceMessages {
-  title: string;
-  description: string;
-}
-
-export interface TicketFinishWorkshopMessages {
-  eyebrow: string;
-  title: string;
-  copy: string;
-  legend: string;
-  requiredHint: string;
-  selectedAnnouncement: string;
-  choices: Record<TicketArtifactFinishId, TicketFinishChoiceMessages>;
-}
-
 export interface TicketArtifactMessages {
   title: string;
   description: string;
@@ -259,7 +242,6 @@ export interface TicketingMessages {
   stateUpdated: string;
   downloadStarted: string;
   newRound: string;
-  finishWorkshop: TicketFinishWorkshopMessages;
   adjustments: Record<TicketAdjustmentId, string>;
   artifact: TicketArtifactMessages;
 }

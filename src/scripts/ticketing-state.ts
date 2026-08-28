@@ -1,11 +1,7 @@
 import type { TerraDateTime, TicketOffer, TicketZone } from '../data/performances.ts';
-import type {
-  TicketAdjustmentId,
-  TicketArtifactFinishId,
-  TicketJourneyTagId,
-} from '../data/localized/schema.ts';
+import type { TicketAdjustmentId, TicketJourneyTagId } from '../data/localized/schema.ts';
 
-export const TICKETING_STATE_VERSION = 7 as const;
+export const TICKETING_STATE_VERSION = 8 as const;
 export const STANDARD_INITIAL_SUCCESS_THRESHOLD = 0.12;
 export const STANDARD_SUCCESS_THRESHOLD = 0.32;
 export const STANDARD_FAILURE_THRESHOLD = 0.68;
@@ -61,7 +57,6 @@ export interface TicketingResult {
   journeyTags: readonly JourneyTag[];
   tickets: readonly IssuedTicket[];
   acceptedAt: TerraDateTime;
-  artifactFinishId: TicketArtifactFinishId | null;
 }
 
 interface TicketingStateBase {
@@ -120,12 +115,6 @@ const endingIds: readonly TicketingEndingId[] = [
   'ENDING_DISCOUNT_SUCCESS',
   'ENDING_DISCOUNT_FAILED',
 ];
-const artifactFinishIds: readonly TicketArtifactFinishId[] = [
-  'deckle-edge',
-  'registration-shift',
-  'ticket-punch',
-];
-
 function withStandardRoute(
   state: TicketingState,
   changes: Partial<TicketingStateBase> = {},
@@ -236,7 +225,6 @@ function createResult(
   state: TicketingState,
   ticketNumberFactory: () => string,
   acceptedAt: TerraDateTime,
-  artifactFinishId: TicketArtifactFinishId | null = null,
 ): TicketingResult {
   const basket = state.basket.map((item) => ({ ...item }));
   const baseTotal = calculateBaseTotal(basket);
@@ -279,23 +267,6 @@ function createResult(
     journeyTags: [...state.journeyTags],
     tickets,
     acceptedAt: copyTerraDateTime(acceptedAt),
-    artifactFinishId,
-  };
-}
-
-export function selectTicketArtifactFinish(
-  state: TicketingState,
-  artifactFinishId: TicketArtifactFinishId,
-): TicketingState {
-  if (state.phase !== 'success' || !state.result || !artifactFinishIds.includes(artifactFinishId)) {
-    return state;
-  }
-  return {
-    ...state,
-    result: {
-      ...state.result,
-      artifactFinishId,
-    },
   };
 }
 
@@ -699,25 +670,11 @@ export function restoreTicketingState(
       value.result && typeof value.result === 'object'
         ? (value.result as Partial<TicketingResult>).acceptedAt
         : undefined;
-    const artifactFinishId =
-      value.result && typeof value.result === 'object'
-        ? (value.result as Partial<TicketingResult>).artifactFinishId
-        : undefined;
-    if (
-      !issuedNumbers ||
-      !isValidTicketingTerraDateTime(acceptedAt) ||
-      (artifactFinishId !== null &&
-        !artifactFinishIds.includes(artifactFinishId as TicketArtifactFinishId))
-    ) {
+    if (!issuedNumbers || !isValidTicketingTerraDateTime(acceptedAt)) {
       return createTicketingState();
     }
     const pendingNumbers = [...issuedNumbers];
-    const result = createResult(
-      state,
-      () => pendingNumbers.shift() ?? '000000000000',
-      acceptedAt,
-      artifactFinishId,
-    );
+    const result = createResult(state, () => pendingNumbers.shift() ?? '000000000000', acceptedAt);
     return { ...state, result };
   } catch {
     return createTicketingState();

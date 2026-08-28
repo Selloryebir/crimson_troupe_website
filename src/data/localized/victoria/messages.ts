@@ -119,32 +119,6 @@ export const victoriaMessages = {
     stateUpdated: 'The seat request status has been updated.',
     downloadStarted: 'The download for {title} has started.',
     newRound: 'The previous seat request has ended. You may select performances again.',
-    finishWorkshop: {
-      eyebrow: 'TICKET FINISHING',
-      title: 'Ticket Workshop Finish',
-      copy: 'Choose one print treatment that changes no ticket fact. It will be applied to every commemorative ticket in this round.',
-      legend: 'Choose a finish for this round',
-      requiredHint:
-        'Choose a finish to download or print. You may change it before ending the round.',
-      selectedAnnouncement: '{label} selected. This round’s tickets have been refinished.',
-      choices: {
-        'deckle-edge': {
-          title: 'Deckled Cut',
-          description:
-            'Adds an irregular cut line to the right edge while keeping all facts in place.',
-        },
-        'registration-shift': {
-          title: 'Registration Shift',
-          description:
-            'Offsets a second border slightly, like a hand-set print from the troupe workshop.',
-        },
-        'ticket-punch': {
-          title: 'Triple Ticket Punch',
-          description:
-            'Adds three punches to the left band, away from the number and composite stamp.',
-        },
-      },
-    },
     adjustments: {
       'priority-service': 'Priority Seat Allocation Service',
       'retention-service': 'Immediate Confirmation Concession',

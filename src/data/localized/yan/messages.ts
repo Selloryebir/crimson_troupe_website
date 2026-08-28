@@ -115,28 +115,6 @@ export const yanMessages = {
     stateUpdated: '席位请求状态已更新。',
     downloadStarted: '{title}纪念票下载已开始。',
     newRound: '上一轮席位受理已经结束，可以重新选择场次。',
-    finishWorkshop: {
-      eyebrow: 'TICKET FINISHING',
-      title: '票坊后整理',
-      copy: '选择一种不改动票面事实的印制处理。选择会应用于本轮全部纪念票。',
-      legend: '选择本轮票面整理',
-      requiredHint: '选择后可下载或打印纪念票；结束本轮前可以更换。',
-      selectedAnnouncement: '已选择{label}，本轮纪念票已重新整理。',
-      choices: {
-        'deckle-edge': {
-          title: '裁纸毛边',
-          description: '在票面右缘留下不规则裁纸线，主要信息保持原位。',
-        },
-        'registration-shift': {
-          title: '套印偏移',
-          description: '让第二道边框轻微错位，模拟剧团票坊的手工套印。',
-        },
-        'ticket-punch': {
-          title: '票钳三孔',
-          description: '在左侧色带加上三处票钳孔，不接触票号与组合印章。',
-        },
-      },
-    },
     adjustments: {
       'priority-service': '优先席位调度服务',
       'retention-service': '即时确认减让',

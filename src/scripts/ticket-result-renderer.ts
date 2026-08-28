@@ -1,12 +1,11 @@
 import { formatMessage, formatTerraDateTime } from '../data/localized/format.ts';
-import type { TicketArtifactFinishId, TicketingMessages } from '../data/localized/schema.ts';
+import type { TicketingMessages } from '../data/localized/schema.ts';
 import type { TicketingPerformanceOption } from '../data/ticketing.ts';
 import { createTicketSvg, type TicketArtifactInput } from './ticket-artifact.ts';
 import type { TicketBasketItem, TicketingResult } from './ticketing-state.ts';
 
 export interface TicketingResultElements {
   receipt: HTMLElement;
-  finishWorkshop: HTMLElement;
   issuedTickets: HTMLElement;
 }
 
@@ -49,59 +48,7 @@ function artifactInputFor(
     endingHistory: result.endingHistory,
     journeyTags: result.journeyTags,
     projection: option.artifact,
-    artifactFinishId: result.artifactFinishId,
   };
-}
-
-const ticketArtifactFinishIds: readonly TicketArtifactFinishId[] = [
-  'deckle-edge',
-  'registration-shift',
-  'ticket-punch',
-];
-
-function renderFinishWorkshop(
-  result: TicketingResult,
-  messages: TicketingMessages,
-  target: HTMLElement,
-): void {
-  target.className = 'ticket-finish-workshop';
-  const eyebrow = document.createElement('p');
-  eyebrow.className = 'eyebrow';
-  eyebrow.textContent = messages.finishWorkshop.eyebrow;
-  const title = document.createElement('h2');
-  title.textContent = messages.finishWorkshop.title;
-  const copy = document.createElement('p');
-  copy.textContent = messages.finishWorkshop.copy;
-  const fieldset = document.createElement('fieldset');
-  const legend = document.createElement('legend');
-  legend.textContent = messages.finishWorkshop.legend;
-  const choices = document.createElement('div');
-  choices.className = 'ticket-finish-workshop__choices';
-  for (const finishId of ticketArtifactFinishIds) {
-    const choice = messages.finishWorkshop.choices[finishId];
-    const label = document.createElement('label');
-    label.className = 'ticket-finish-option';
-    const input = document.createElement('input');
-    input.type = 'radio';
-    input.name = 'ticket-artifact-finish';
-    input.value = finishId;
-    input.dataset.ticketFinish = finishId;
-    input.checked = result.artifactFinishId === finishId;
-    const text = document.createElement('span');
-    const choiceTitle = document.createElement('strong');
-    choiceTitle.textContent = choice.title;
-    const description = document.createElement('small');
-    description.textContent = choice.description;
-    text.append(choiceTitle, description);
-    label.append(input, text);
-    choices.append(label);
-  }
-  const hint = document.createElement('p');
-  hint.className = 'ticket-finish-workshop__hint';
-  hint.dataset.ticketFinishHint = '';
-  hint.textContent = messages.finishWorkshop.requiredHint;
-  fieldset.append(legend, choices);
-  target.append(eyebrow, title, copy, fieldset, hint);
 }
 
 export function renderTicketingResult(
@@ -111,11 +58,9 @@ export function renderTicketingResult(
   locale: string,
   elements: TicketingResultElements,
 ): void {
-  const { receipt, finishWorkshop, issuedTickets } = elements;
+  const { receipt, issuedTickets } = elements;
   receipt.replaceChildren();
-  finishWorkshop.replaceChildren();
   issuedTickets.replaceChildren();
-  renderFinishWorkshop(result, messages, finishWorkshop);
 
   const heading = document.createElement('div');
   heading.className = 'ticket-receipt__heading';
@@ -271,8 +216,6 @@ export function renderTicketingResult(
     controls.className = 'issued-ticket__controls';
     const download = createButton(`download:${issued.performanceId}`, messages.downloadSvg);
     const print = createButton(`print:${issued.performanceId}`, messages.printTicket);
-    download.disabled = result.artifactFinishId === null;
-    print.disabled = result.artifactFinishId === null;
     controls.append(download, print);
     caption.append(productionGroup, dateTimeGroup, venueGroup, facts, ticketNumber, controls);
     article.append(image, caption);
@@ -292,9 +235,6 @@ export function handleTicketArtifactAction(
     event.target instanceof Element ? event.target.closest<HTMLButtonElement>('button') : null;
   const action = button?.dataset.ticketAction;
   if (!action) {
-    return;
-  }
-  if (!result.artifactFinishId) {
     return;
   }
   const [kind, performanceId] = action.split(':');

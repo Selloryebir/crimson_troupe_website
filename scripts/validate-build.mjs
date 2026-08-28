@@ -422,6 +422,7 @@ for (const edition of builtEditions) {
     /data-ticket-result[^>]*aria-labelledby="ticket-receipt-title"[^>]*hidden/u,
   );
   assert.doesNotMatch(partnerTicketPage, /data-ticket-journey/u);
+  assert.doesNotMatch(partnerTicketPage, /data-ticket-finish-workshop/u);
   const archiveTicketPage = readFileSync(
     routes.get(sitePath(edition, 'archive', 'tickets')),
     'utf8',

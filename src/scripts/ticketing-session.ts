@@ -4,7 +4,7 @@ import {
   type TicketingState,
 } from './ticketing-state.ts';
 
-export const TICKETING_STORAGE_KEY = 'crimson-troupe:ticketing:v7';
+export const TICKETING_STORAGE_KEY = 'crimson-troupe:ticketing:v8';
 
 export function getTicketingSessionStorage(): Storage | null {
   try {

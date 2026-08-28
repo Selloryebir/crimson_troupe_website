@@ -123,32 +123,6 @@ export const leithanienMessages = {
     stateUpdated: 'Der Status der Platzanfrage wurde aktualisiert.',
     downloadStarted: 'Der Download für {title} hat begonnen.',
     newRound: 'Die vorherige Platzanfrage ist beendet. Sie können erneut auswählen.',
-    finishWorkshop: {
-      eyebrow: 'KARTENVEREDELUNG',
-      title: 'Veredelung der Kartenwerkstatt',
-      copy: 'Wählen Sie eine Druckbehandlung, die keine Kartenangabe verändert. Sie gilt für alle Erinnerungskarten dieser Runde.',
-      legend: 'Veredelung für diese Runde wählen',
-      requiredHint:
-        'Nach der Wahl können Sie herunterladen oder drucken. Bis zum Rundenende lässt sie sich ändern.',
-      selectedAnnouncement: '{label} gewählt. Die Karten dieser Runde wurden neu veredelt.',
-      choices: {
-        'deckle-edge': {
-          title: 'Büttenrand',
-          description:
-            'Fügt rechts eine unregelmäßige Schnittlinie hinzu, ohne Angaben zu verschieben.',
-        },
-        'registration-shift': {
-          title: 'Passerverschiebung',
-          description:
-            'Versetzt einen zweiten Rahmen leicht wie bei einem Handdruck aus der Werkstatt.',
-        },
-        'ticket-punch': {
-          title: 'Dreifache Kartenlochung',
-          description:
-            'Setzt links drei Löcher, fern von Kartennummer und zusammengesetztem Stempel.',
-        },
-      },
-    },
     adjustments: {
       'priority-service': 'Priorisierte Sitzplatzzuteilung',
       'retention-service': 'Nachlass für sofortige Bestätigung',
