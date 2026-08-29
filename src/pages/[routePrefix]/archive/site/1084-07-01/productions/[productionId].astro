@@ -27,6 +27,7 @@ const { edition, productionId } = Astro.props as Props;
 const localization = getLocalization(edition);
 const copy = localization.site.archive.productionDetail;
 const production = getLocalizedProduction(localization, productionId);
+const synopsisParagraphs = production.synopsis.split('\n\n');
 const relatedPerformances = getLocalizedPerformanceEntries(localization)
   .map(([, item]) => item)
   .filter(
@@ -104,7 +105,9 @@ const projectionProduction = getLocalizedProduction(
       class="detail-section prose archive-projection-source"
       data-archive-projection-source
     >
-      <h2>{copy.introduction}</h2><p>{production.synopsis}</p><p>{production.guidance}</p>
+      <h2>{copy.introduction}</h2>{synopsisParagraphs.map((paragraph) => <p>{paragraph}</p>)}<p>
+        {production.guidance}
+      </p>
     </section><section
       class="detail-section prose archive-projection-level3"
       data-archive-projection-level3

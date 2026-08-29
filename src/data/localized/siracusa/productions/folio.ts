@@ -12,7 +12,7 @@ export const siracusaFolioProductions = {
     language: 'Eseguita in Leithaniano · Disponibile ordine di marcia colombiano',
     heading: 'Un gioco fantasy di riflessioni, promesse e tesori senza proprietario.',
     synopsis:
-      'Un guardiano del lago affida un anello a un visitatore, anche se nessuno può portarglielo via. Dopo tre tramonti l’anello rimane, mentre i riflessi dei custodi scendono uno ad uno sott’acqua.',
+      'Anche se per esso crollassero torri e gli uomini si massacrassero a vicenda, il tesoro di Leithanien non resterà mai al dito di un Caprinae. Il basso lago nel bosco è il rifugio che ha sempre sognato.',
     guidance:
       "Luce scarsa, effetti dell'acqua riflessa, foschia teatrale e sussurri ravvicinati ovunque.",
     creatives: [
@@ -32,7 +32,7 @@ export const siracusaFolioProductions = {
     language: 'Eseguita in ordine di marcia vittoriano · colombiano disponibile',
     heading: 'Una lunga cronaca raccolta da cento lettere mai spedite.',
     synopsis:
-      'Un impiegato copia ogni giorno la stessa lettera per un destinatario lontano. Quando la centesima copia sarà terminata, apparirà una seconda scrivania e nessuno dirà chi dovrà firmare il centunesimo giorno.',
+      'Un tempo, un popolano raccontò a un mercante una storia straordinaria. Tramandata di bocca in bocca, dopo centouno giorni giunse all’orecchio del Khagan. Incuriosito, questi viaggiò in incognito per cercarne la fonte, solo per scoprire di avere già fatto giustiziare quel popolano.',
     guidance:
       'Include campanelli, carta che brucia simulata e silenzio prolungato. I posti a sedere in ritardo attendono il prossimo capitolo.',
     creatives: [
@@ -50,8 +50,7 @@ export const siracusaFolioProductions = {
     durationShort: 'Circa 95 minuti',
     language: 'Performance multilingue · Nessuna didascalia',
     heading: 'Tamburi, stelle filanti e un corteo che non può essere dichiarato concluso.',
-    synopsis:
-      "L'araldo annuncia il festival sette volte mentre il confine tra musicisti e pubblico si dissolve ad ogni colpo di tamburo. Quando si alza l'ultimo striscione, coloro che sono ancora seduti sono invitati a completare il sipario.",
+    synopsis: 'Festeggia, amico! Una fortuna simile non capita tutti i giorni.',
     guidance:
       'Gli artisti entrano nelle corsie del pubblico; include tamburi improvvisi, coriandoli, scarsa illuminazione e interazione ravvicinata.',
     creatives: [
@@ -70,7 +69,7 @@ export const siracusaFolioProductions = {
     language: 'Cantato in siracusano e leithaniano · Disponibile ordine di marcia colombiano',
     heading: 'Un dramma corale preparato per un trionfo senza vincitori.',
     synopsis:
-      'La porta della città si apre per una compagnia che non se ne è mai andata, mentre il coro elogia ogni ritornato da un registro vuoto. Prima della campana finale, il pubblico deve decidere se alzarsi per il proprio nome.',
+      'Uniamo le voci in un canto di lode per celebrare il trionfo dell’Imperatore! Viva l’Imperatore! Viva la Gallia!',
     guidance: 'Include coro ad alto volume, saluti simulati, incenso e una breve luce intensa.',
     creatives: [
       ['Musica', 'Società da Camera senza corde'],
@@ -88,7 +87,7 @@ export const siracusaFolioProductions = {
     language: 'Repertorio itinerante · programma disponibile',
     heading: 'Un viandante cerca l’ultima locanda lungo una strada vuota.',
     synopsis:
-      'Ogni notte viene registrato un ospite, ma al mattino il libro mostra due nomi. Al termine il viandante deve scegliere le proprie orme.',
+      'Nelle crepe della terra, sotto le ombre delle città, uno strano solitario osserva ogni cosa. Dentro la brutta maschera a secchio di ferro si nascondono complotto e follia.',
     guidance:
       'Luci basse, fumo scenico e suoni ravvicinati; seguire le indicazioni dell’accompagnatore.',
     creatives: [
@@ -105,7 +104,7 @@ export const siracusaFolioProductions = {
     language: 'Repertorio itinerante · programma disponibile',
     heading: 'Un giardino capovolto, porte di carta e una guida addormentata compongono il corteo.',
     synopsis:
-      'Una ragazza attraversa quattro giardini; dopo ogni risveglio, alla platea manca un’altra fila.',
+      'Anche se non puoi raggiungere il castello lontano, almeno tu hai ancora un compagno, e io ho ancora te.',
     guidance:
       'Luci basse, fumo scenico e suoni ravvicinati; seguire le indicazioni dell’accompagnatore.',
     creatives: [
@@ -122,7 +121,7 @@ export const siracusaFolioProductions = {
     language: 'Repertorio itinerante · programma disponibile',
     heading: 'Un’opera invernale di caccia, veglia e due cervi bianchi.',
     synopsis:
-      'Il cacciatore segue impronte incrociate finché cervo e cerva pronunciano lo stesso addio da lati opposti.',
+      'Come guardie consanguinee del Sacerdote della Neve, desideriamo morire per il ferro gelido.\n\nCome gemelli legati dallo stesso sangue, desideriamo vivere e morire insieme.\n\nAvete troppi desideri. Soltanto uno può essere esaudito, e sarò io a scegliere quale.',
     guidance:
       'Luci basse, fumo scenico e suoni ravvicinati; seguire le indicazioni dell’accompagnatore.',
     creatives: [
@@ -139,7 +138,7 @@ export const siracusaFolioProductions = {
     language: 'Repertorio itinerante · programma disponibile',
     heading: 'Icone d’oro, una lunga scala e lampade spente in sequenza formano il rito.',
     synopsis:
-      'Il guardiano delle lampade sale la torre mentre ogni rintocco cancella una via; l’ultima luce attende chi arriva tardi.',
+      'Nel momento di massimo pericolo, gli eroi discesero dal sole, attraversarono la vetta del monte Heria e giunsero al fianco di Minos.',
     guidance:
       'Luci basse, fumo scenico e suoni ravvicinati; seguire le indicazioni dell’accompagnatore.',
     creatives: [

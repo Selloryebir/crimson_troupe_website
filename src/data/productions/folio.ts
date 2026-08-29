@@ -1,4 +1,5 @@
 import type { Production } from './index.ts';
+import type { FolioSourceProductionId } from './folio-source-records.ts';
 
 export const folioProductions = {
   'der-ring': { productionId: 'der-ring', sourceKind: 'folio', visual: 'moon' },
@@ -29,6 +30,6 @@ export const folioProductions = {
     sourceKind: 'folio',
     visual: 'flame',
   },
-} as const satisfies Record<string, Production>;
+} as const satisfies Partial<Record<FolioSourceProductionId, Production>>;
 
 export type FolioProductionId = keyof typeof folioProductions;

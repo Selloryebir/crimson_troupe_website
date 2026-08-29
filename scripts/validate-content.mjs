@@ -34,11 +34,16 @@ import { performances } from '../src/data/performances.ts';
 import { performanceOfferMatrix } from '../src/data/performance-offers.ts';
 import { productionArtworkManifest } from '../src/data/production-artwork-manifest.ts';
 import { productionArtworkRegistry } from '../src/data/production-artworks.ts';
+import { folioSourceRecords } from '../src/data/productions/folio-source-records.ts';
 import { productions } from '../src/data/productions/index.ts';
 import { ticketSeatingPlans } from '../src/data/ticket-seating-plans.ts';
 import { ticketingPlatforms } from '../src/data/ticketing-platforms.ts';
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const productionTitleReference = readFileSync(
+  path.join(repositoryRoot, 'docs/references/production-title-reference.md'),
+  'utf8',
+);
 
 function cloneArtworkManifest() {
   return Object.fromEntries(
@@ -55,6 +60,7 @@ function createValidationSources(overrides = {}) {
   return {
     performanceVariants: performanceVariantRegistry,
     productions,
+    folioSources: folioSourceRecords,
     locations,
     localizations: localizationPackages,
     artwork: productionArtworkManifest,
@@ -135,6 +141,24 @@ assertArtworkFiles();
 assertTicketingPlatformLogoFiles();
 assert.equal(Object.keys(performances).length, 28, '预备场次目录应包含 28 条记录');
 assert.equal(Object.keys(productions).length, 14, '预备剧目目录应包含 14 条记录');
+assert.equal(Object.keys(folioSourceRecords).length, 13, '活页来源目录应完整保存 13 条记录');
+assert.equal(
+  productionTitleReference.match(/^### `PROD-SRC-\d+`/gmu)?.length,
+  13,
+  '活页来源参考应完整保存 13 条官方描述',
+);
+for (const [productionId, source] of Object.entries(folioSourceRecords)) {
+  const quotedSynopsis = source.synopsis
+    .split('\n\n')
+    .map((paragraph) => `> ${paragraph}`)
+    .join('\n>\n');
+  assert.ok(
+    productionTitleReference.includes(
+      `### \`${source.sourceId}\`｜\`${productionId}\`｜${source.title}\n\n${quotedSynopsis}`,
+    ),
+    `${productionId} 的运行时活页来源与人员参考不一致`,
+  );
+}
 assert.equal(buildSnapshot.performanceEntries.length, 28, '当前根集合应发布 28 个场次');
 assert.equal(buildSnapshot.productionEntries.length, 14, '当前根集合应发布 14 个剧目');
 
@@ -370,6 +394,19 @@ assert.doesNotThrow(() =>
     buildContext,
     createValidationSources({ localizations: packagesWithOutOfScopeChange }),
   ),
+);
+
+const packagesWithRewrittenFolioSynopsis = structuredClone(localizationPackages);
+packagesWithRewrittenFolioSynopsis.yan.programs.productions['der-ring'].synopsis += '测试改写';
+assert.throws(
+  () =>
+    assertContentBundle(
+      ['yan'],
+      currentRootSet,
+      buildContext,
+      createValidationSources({ localizations: packagesWithRewrittenFolioSynopsis }),
+    ),
+  /yan\.productions\.der-ring\.synopsis 未逐字采用活页官方简介/u,
 );
 
 assert.throws(
