@@ -12,7 +12,7 @@ export const leithanienFolioProductions = {
     language: 'Aufgeführt in leithanischer Sprache · Kolumbianische laufende Reihenfolge verfügbar',
     heading: 'Ein Fantasy-Spiel über Reflexionen, Gelübde und herrenlose Schätze.',
     synopsis:
-      'Ein Seewärter vertraut einem Besucher einen Ring an, doch niemand kann ihn wegtragen. Nach drei Monduntergängen bleibt der Ring bestehen, während die Spiegelbilder der Wächter nacheinander unter Wasser sinken.',
+      'Selbst wenn Türme seinetwegen einstürzen und Menschen einander dafür abschlachten, wird Leithaniens Schatz niemals an einem Caprinae-Finger bleiben. Der flache See im Wald ist die Heimat, von der er seit jeher träumt.',
     guidance:
       'Schwaches Licht, reflektierte Wassereffekte, theatralischer Dunst und durchgehendes Flüstern.',
     creatives: [
@@ -31,7 +31,7 @@ export const leithanienFolioProductions = {
     language: 'Aufgeführt im viktorianischen Stil · Kolumbianische laufende Reihenfolge verfügbar',
     heading: 'Eine lange Chronik, zusammengestellt aus hundert Briefen, die nie verschickt wurden.',
     synopsis:
-      'Ein Sachbearbeiter kopiert jeden Tag denselben Brief für einen entfernten Empfänger. Wenn das hundertste Exemplar fertig ist, erscheint ein zweiter Schreibtisch, und niemand wird sagen, wer am hundertsten Tag unterschreiben muss.',
+      'Einst erzählte ein einfacher Bürger einem Händler eine außergewöhnliche Geschichte. Von Mund zu Mund weitergegeben, erreichte sie nach einhunderteinem Tagen den Khagan. Neugierig geworden, reiste er inkognito, um ihren Ursprung zu suchen, und entdeckte schließlich, dass er diesen Bürger bereits hatte hinrichten lassen.',
     guidance:
       'Beinhaltet Glocken, simuliertes brennendes Papier und längere Stille. Späte Sitzplätze warten auf das nächste Kapitel.',
     creatives: [
@@ -51,8 +51,7 @@ export const leithanienFolioProductions = {
     language: 'Mehrsprachige Darbietung · Keine Untertitel',
     heading:
       'Trommeln, Luftschlangen und eine Prozession, die nicht für beendet erklärt werden kann.',
-    synopsis:
-      'Der Herold kündigt das Fest sieben Mal an, während sich die Grenze zwischen Spielern und Publikum mit jedem Trommelschlag auflöst. Wenn das letzte Banner gehisst wird, werden alle, die noch sitzen, eingeladen, den Vorhang zu schließen.',
+    synopsis: 'Feiere, mein Freund! So etwas Gutes erlebt man nicht jeden Tag.',
     guidance:
       'Darsteller betreten die Gänge des Publikums; beinhaltet plötzliche Trommeln, Konfetti, schwaches Licht und enge Interaktion.',
     creatives: [
@@ -72,7 +71,7 @@ export const leithanienFolioProductions = {
       'Gesungen auf Siracusanisch und Leithanisch · Kolumbianische laufende Reihenfolge verfügbar',
     heading: 'Ein Chordrama, das auf einen Triumph ohne Sieger vorbereitet ist.',
     synopsis:
-      'Das Stadttor öffnet sich für eine Gruppe, die nie abgereist ist, während der Chor jeden Rückkehrer aus einem leeren Register lobt. Vor dem Schlussläuten muss das Publikum entscheiden, ob es für seinen eigenen Namen aufsteht.',
+      'Lasst uns gemeinsam einen Lobgesang anstimmen und den Triumph des Kaisers feiern! Lang lebe der Kaiser! Lang lebe Gallien!',
     guidance: 'Enthält lauten Refrain, simulierte Salutschüsse, Weihrauch und kurzes helles Licht.',
     creatives: [
       ['Musik', 'Stringless Chamber Society'],
@@ -90,7 +89,7 @@ export const leithanienFolioProductions = {
     language: 'Tourneerepertoire · Programmblatt erhältlich',
     heading: 'Ein Wanderer sucht auf leerer Straße nach dem letzten Gasthaus.',
     synopsis:
-      'Nachts wird ein Gast verzeichnet, morgens stehen zwei Namen im Buch. Am Ziel muss der Wanderer seine Spur wählen.',
+      'In den Rissen der Erde, unter den Schatten der Städte, beobachtet ein einsamer Sonderling alles. Hinter der hässlichen Maske aus einem eisernen Eimer verbergen sich Verschwörung und Wahnsinn.',
     guidance: 'Gedämpftes Licht, Bühnennebel und naher Klang; folgen Sie der Platzanweisung.',
     creatives: [
       ['Regie', 'Spielraum der alten Truppe'],
@@ -106,7 +105,7 @@ export const leithanienFolioProductions = {
     language: 'Tourneerepertoire · Programmblatt erhältlich',
     heading: 'Ein umgekehrter Garten, Papiertüren und ein schlafender Führer bilden den Zug.',
     synopsis:
-      'Ein Mädchen durchquert vier Gärten; nach jedem Erwachen fehlt im Saal eine weitere Reihe.',
+      'Selbst wenn du das ferne Schloss nicht erreichen kannst, hast du wenigstens noch einen Gefährten, und ich habe wenigstens noch dich.',
     guidance: 'Gedämpftes Licht, Bühnennebel und naher Klang; folgen Sie der Platzanweisung.',
     creatives: [
       ['Regie', 'Spielraum der alten Truppe'],
@@ -122,7 +121,7 @@ export const leithanienFolioProductions = {
     language: 'Tourneerepertoire · Programmblatt erhältlich',
     heading: 'Eine Winteroper über Jagd, Wache und zwei weiße Hirsche.',
     synopsis:
-      'Der Jäger folgt gekreuzten Spuren, bis Hirsch und Hindin von gegenüberliegenden Seiten denselben Abschied sprechen.',
+      'Als blutsverwandte Wächter des Schneepriesters wünschen wir uns, durch kaltes Eisen zu sterben.\n\nAls Zwillinge desselben Blutes wünschen wir uns, gemeinsam zu leben und zu sterben.\n\nIhr habt zu viele Wünsche. Nur einer kann erfüllt werden, und ich werde wählen, welcher.',
     guidance: 'Gedämpftes Licht, Bühnennebel und naher Klang; folgen Sie der Platzanweisung.',
     creatives: [
       ['Regie', 'Spielraum der alten Truppe'],
@@ -139,7 +138,7 @@ export const leithanienFolioProductions = {
     heading:
       'Goldene Ikonen, eine lange Treppe und nacheinander erlöschende Lampen bilden den Ritus.',
     synopsis:
-      'Herias Lampenwart steigt den Turm hinauf, während jeder Glockenschlag eine Straße nimmt; das letzte Licht wartet auf Zuspätkommende.',
+      'Im gefährlichsten Augenblick stiegen die Helden von der Sonne herab, überquerten den Gipfel des Berges Heria und kamen Minos zur Seite.',
     guidance: 'Gedämpftes Licht, Bühnennebel und naher Klang; folgen Sie der Platzanweisung.',
     creatives: [
       ['Regie', 'Spielraum der alten Truppe'],

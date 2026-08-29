@@ -12,7 +12,7 @@ export const columbiaFolioProductions = {
     language: 'Performed in Leithanian · Columbian running order available',
     heading: 'A fantasy play of reflections, vows, and ownerless treasure.',
     synopsis:
-      'A lake keeper entrusts a ring to a visitor, though no one can carry it away. After three moonsets the ring remains, while the keepers’ reflections descend one by one beneath the water.',
+      'Even if towers collapse because of it and people kill one another over it, Leithanien’s treasure will never remain on a Caprinae’s finger. The shallow lake in the forest is the home it has always longed for.',
     guidance: 'Low light, reflected water effects, theatrical haze, and close whispers throughout.',
     creatives: [
       ['Adaptation', 'Old Troupe Book Room'],
@@ -30,7 +30,7 @@ export const columbiaFolioProductions = {
     language: 'Performed in Victorian · Columbian running order available',
     heading: 'A long chronicle assembled from one hundred letters never sent.',
     synopsis:
-      'A clerk copies the same letter for a distant recipient each day. When the hundredth copy is finished, a second desk appears, and no one will say who must sign the hundred-and-first day.',
+      'Once, a commoner told a merchant a magnificent story. Passed from one person to the next, it reached the Khagan one hundred and one days later. Intrigued, he traveled incognito to seek the story’s source, only to discover that he had already had the commoner executed.',
     guidance:
       'Includes bells, simulated burning paper, and extended silence. Late seating waits for the next chapter.',
     creatives: [
@@ -48,8 +48,7 @@ export const columbiaFolioProductions = {
     durationShort: 'About 95 min',
     language: 'Multilingual performance · No captions',
     heading: 'Drums, paper streamers, and a procession that cannot be declared over.',
-    synopsis:
-      'The herald announces the festival seven times as the boundary between players and audience dissolves with each drumbeat. When the final banner rises, those still seated are invited to complete the curtain call.',
+    synopsis: 'Celebrate, my friend! Something this good does not happen every day.',
     guidance:
       'Performers enter audience aisles; includes sudden drums, confetti, low light, and close interaction.',
     creatives: [
@@ -68,7 +67,7 @@ export const columbiaFolioProductions = {
     language: 'Sung in Siracusan and Leithanian · Columbian running order available',
     heading: 'A choral drama prepared for a triumph with no victor.',
     synopsis:
-      'The city gate opens for a company that never departed, while the chorus praises each returnee from a blank register. Before the final bell, the audience must decide whether to rise for their own names.',
+      'Let us join in song to celebrate the Emperor’s triumph! Long live the Emperor! Long live Gaul!',
     guidance: 'Includes loud chorus, simulated salutes, incense, and brief bright light.',
     creatives: [
       ['Music', 'Stringless Chamber Society'],
@@ -86,7 +85,7 @@ export const columbiaFolioProductions = {
     language: 'Touring repertory · programme sheet available',
     heading: 'A traveller searches an empty road for its final inn.',
     synopsis:
-      'Only one guest is entered each night, yet the morning ledger holds two names. At the terminus, the traveller must choose which prints are his.',
+      'In the cracks of the land, beneath the shadows of the cities, a solitary eccentric watches everything. Within the ugly iron-bucket mask lurk conspiracy and madness.',
     guidance: 'Low light, stage haze and close sound are used; follow the usher to your place.',
     creatives: [
       ['Direction', 'Old Troupe Playroom'],
@@ -102,7 +101,7 @@ export const columbiaFolioProductions = {
     language: 'Touring repertory · programme sheet available',
     heading: 'An inverted garden, paper doors and a sleeping guide compose this dream procession.',
     synopsis:
-      'A girl follows backward-growing signs through four gardens; after each waking, the auditorium has lost another row.',
+      'Even if you cannot reach the distant castle, at least you still have a companion, and I still have you.',
     guidance: 'Low light, stage haze and close sound are used; follow the usher to your place.',
     creatives: [
       ['Direction', 'Old Troupe Playroom'],
@@ -118,7 +117,7 @@ export const columbiaFolioProductions = {
     language: 'Touring repertory · programme sheet available',
     heading: 'A winter opera of pursuit, vigil and two white deer.',
     synopsis:
-      'A hunter follows crossed tracks into a silent wood until stag and doe speak the same farewell from opposite directions.',
+      'As the kindred guards of the Snowpriest, our wish is to die by cold iron.\n\nAs twins bound by blood, our wish is to live and die together.\n\nYou have too many wishes. Only one can be granted, and I shall choose which.',
     guidance: 'Low light, stage haze and close sound are used; follow the usher to your place.',
     creatives: [
       ['Direction', 'Old Troupe Playroom'],
@@ -134,7 +133,7 @@ export const columbiaFolioProductions = {
     language: 'Touring repertory · programme sheet available',
     heading: 'Golden icons, a long stair and lamps extinguished in sequence form this rite.',
     synopsis:
-      'Heria’s lamplighter climbs the tower while each bell removes another street; the final light is reserved for late arrivals.',
+      'At the most perilous moment, heroes descended from the sun, crossed the summit of Mount Heria, and came to stand beside Minos.',
     guidance: 'Low light, stage haze and close sound are used; follow the usher to your place.',
     creatives: [
       ['Direction', 'Old Troupe Playroom'],

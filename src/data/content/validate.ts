@@ -14,7 +14,8 @@ import {
   productionArtworkManifest,
   type ProductionArtworkManifest,
 } from '../production-artwork-manifest.ts';
-import { productions, type Production } from '../productions/index.ts';
+import { folioSourceRecords, type FolioSourceRecord } from '../productions/folio-source-records.ts';
+import { productions, type Production, type ProductionId } from '../productions/index.ts';
 import { ticketSeatingPlans, type SeatingPlanDefinition } from '../ticket-seating-plans.ts';
 import {
   ticketingPlatformIds,
@@ -36,6 +37,7 @@ import type { BuildContext } from './build-context.ts';
 export interface ContentValidationSources {
   performanceVariants: PerformanceVariantRegistry;
   productions: Readonly<Record<string, Production>>;
+  folioSources: Readonly<Record<string, FolioSourceRecord>>;
   locations: Readonly<Record<string, Location>>;
   localizations: Readonly<Record<BuildEditionId, PartialLocalizationPackage>>;
   artwork: ProductionArtworkManifest;
@@ -48,6 +50,7 @@ export interface ContentValidationSources {
 const defaultSources: ContentValidationSources = {
   performanceVariants: performanceVariantRegistry,
   productions,
+  folioSources: folioSourceRecords,
   locations,
   localizations: localizationPackages,
   artwork: productionArtworkManifest,
@@ -57,7 +60,7 @@ const defaultSources: ContentValidationSources = {
   archiveProjection: archiveProjectionIdentity,
 };
 
-function assertPresent(value: unknown, path: string): void {
+function assertPresent<Value>(value: Value, path: string): asserts value is NonNullable<Value> {
   if (value === undefined || value === null) {
     throw new Error(`${path} 缺失。`);
   }
@@ -158,6 +161,38 @@ export function assertContentBundle(
   sources: ContentValidationSources = defaultSources,
 ): void {
   assertPerformanceOfferMatrix(sources.offerMatrix);
+  const folioSourceIds = new Set<string>();
+  for (const [sourceProductionId, source] of Object.entries(sources.folioSources)) {
+    assertPresent(source, `folioSource.${sourceProductionId}`);
+    if (source.productionId !== sourceProductionId) {
+      throw new Error(
+        `活页来源稳定 ID 与记录不一致：${sourceProductionId} != ${source.productionId}`,
+      );
+    }
+    if (source.sourceLocale !== 'zh-CN') {
+      throw new Error(`folioSource.${sourceProductionId}.sourceLocale 必须为 zh-CN。`);
+    }
+    if (folioSourceIds.has(source.sourceId)) {
+      throw new Error(`活页来源 ID 重复：${source.sourceId}`);
+    }
+    folioSourceIds.add(source.sourceId);
+  }
+  for (const [productionId, production] of Object.entries(sources.productions)) {
+    if (production.sourceKind !== 'folio') {
+      continue;
+    }
+    const source = sources.folioSources[productionId];
+    assertPresent(source, `folioSource.${productionId}`);
+    const yanContent =
+      sources.localizations.yan.programs?.productions?.[productionId as ProductionId];
+    assertPresent(yanContent, `yan.productions.${productionId}`);
+    if (yanContent.title !== source.title) {
+      throw new Error(`yan.productions.${productionId}.title 未逐字采用活页来源标题。`);
+    }
+    if (yanContent.synopsis !== source.synopsis) {
+      throw new Error(`yan.productions.${productionId}.synopsis 未逐字采用活页官方简介。`);
+    }
+  }
   for (const platformId of ticketingPlatformIds) {
     const platform = sources.ticketingPlatforms[platformId];
     assertPresent(platform, `ticketingPlatform.${platformId}`);

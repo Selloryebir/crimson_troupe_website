@@ -28,6 +28,7 @@ const { edition, productionId } = Astro.props as Props;
 const localization = getLocalization(edition);
 const copy = localization.site.front.productionDetail;
 const production = getLocalizedProduction(localization, productionId);
+const synopsisParagraphs = production.synopsis.split('\n\n');
 const relatedPerformances = getLocalizedPerformanceEntries(localization)
   .map(([, item]) => item)
   .filter(
@@ -62,7 +63,9 @@ const canonicalPath = productionPath(edition, 'front', production.productionId);
       />
     </header>
     <section class="detail-section prose">
-      <h2>{copy.introduction}</h2><p>{production.synopsis}</p><p>{production.guidance}</p>
+      <h2>{copy.introduction}</h2>{synopsisParagraphs.map((paragraph) => <p>{paragraph}</p>)}<p>
+        {production.guidance}
+      </p>
     </section>
     <dl class="fact-grid">
       <div><dt>{copy.duration}</dt><dd>{production.duration}</dd></div><div>
