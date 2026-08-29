@@ -12,7 +12,7 @@ export const kazimierzFolioProductions = {
     language: 'Wykonywane w języku leitańskim · Dostępny porządek kolumbijski',
     heading: 'Fantastyczna gra refleksji, przysięg i skarbów bez właściciela.',
     synopsis:
-      'Opiekun jeziora powierza gościowi pierścień, choć nikt nie może go zabrać. Po trzech zachodach księżyca pierścień pozostaje, a odbicia strażników schodzą jedno po drugim pod wodę.',
+      'Choćby z jego powodu runęły wieże, a ludzie wzajemnie się mordowali, skarb Leithanien nigdy nie pozostanie na palcu Caprinae. Płytkie jezioro w lesie jest przystanią, o której zawsze marzył.',
     guidance: 'Słabe oświetlenie, efekty odbitej wody, teatralna mgła i bliskie szepty.',
     creatives: [
       ['Adaptacja', 'Pokój Księgarni Starej Trupy'],
@@ -30,7 +30,7 @@ export const kazimierzFolioProductions = {
     language: 'Wykonywane w wiktoriańskim · kolumbijskim porządku wykonawczym',
     heading: 'Długa kronika złożona ze stu listów, które nigdy nie zostały wysłane.',
     synopsis:
-      'Urzędnik codziennie kopiuje ten sam list dla odległego odbiorcy. Kiedy setny egzemplarz zostanie ukończony, pojawia się drugie biurko i nikt nie będzie mówił, kto ma podpisać sto pierwszy dzień.',
+      'Pewnego razu prosty człowiek opowiedział kupcowi niezwykłą historię. Przekazywana z ust do ust, po stu jeden dniach dotarła do uszu chagana. Zaintrygowany, wyruszył incognito, by odnaleźć jej źródło, lecz odkrył, że sam zdążył już skazać tego człowieka na śmierć.',
     guidance:
       'Zawiera dzwonki, symulowany płonący papier i przedłużoną ciszę. Spóźnione siedzenia czekają na następny rozdział.',
     creatives: [
@@ -48,8 +48,7 @@ export const kazimierzFolioProductions = {
     durationShort: 'Około 95 min',
     language: 'Wydajność w wielu językach · Brak napisów',
     heading: 'Bębny, papierowe serpentyny i procesja, której zakończenia nie można ogłosić.',
-    synopsis:
-      'Herold ogłasza festiwal siedem razy, a granica między graczami a publicznością zanika z każdym uderzeniem bębna. Kiedy wzniesie się ostatni sztandar, osoby, które nadal siedzą, proszone są o dokończenie wywołania kurtyny.',
+    synopsis: 'Świętuj, przyjacielu! Takie szczęście nie zdarza się codziennie.',
     guidance:
       'Wykonawcy wchodzą do alejek z widownią; obejmuje nagłe bębny, konfetti, słabe oświetlenie i bliską interakcję.',
     creatives: [
@@ -69,7 +68,7 @@ export const kazimierzFolioProductions = {
       'Śpiewane w języku syracuskim i leitańskim · Dostępna kolumbijska kolejność wykonywania',
     heading: 'Dramat chóralny przygotowany na triumf bez zwycięzcy.',
     synopsis:
-      'Brama miasta otwiera się dla kompanii, która nigdy nie wyjechała, a chór chwali każdego powracającego z pustego rejestru. Przed ostatnim dzwonkiem publiczność musi zdecydować, czy wstać, by wyrazić swoje imię.',
+      'Zaśpiewajmy wspólnie pieśń pochwalną i uczcijmy triumf Cesarza! Niech żyje Cesarz! Niech żyje Galia!',
     guidance: 'Zawiera głośny refren, symulowane saluty, kadzidło i krótkie jasne światło.',
     creatives: [
       ['Muzyka', 'Towarzystwo Izb Bez Strun'],
@@ -87,7 +86,7 @@ export const kazimierzFolioProductions = {
     language: 'Repertuar objazdowy · dostępny program',
     heading: 'Wędrowiec szuka ostatniej gospody przy pustej drodze.',
     synopsis:
-      'Każdej nocy wpisuje się jednego gościa, lecz rano księga ma dwa nazwiska. U celu wędrowiec wybiera własne ślady.',
+      'W szczelinach ziemi, pod cieniami miast, samotny dziwak obserwuje wszystko. W szpetnej masce z żelaznego wiadra kryją się spisek i szaleństwo.',
     guidance: 'Niskie światło, dym sceniczny i bliski dźwięk; prosimy podążać za bileterem.',
     creatives: [
       ['Reżyseria', 'Scena starej trupy'],
@@ -103,7 +102,7 @@ export const kazimierzFolioProductions = {
     language: 'Repertuar objazdowy · dostępny program',
     heading: 'Odwrócony ogród, papierowe drzwi i śpiący przewodnik tworzą pochód.',
     synopsis:
-      'Dziewczyna przechodzi cztery ogrody; po każdym przebudzeniu widowni brakuje kolejnego rzędu.',
+      'Nawet jeśli nie możesz dotrzeć do odległego zamku, przynajmniej wciąż masz towarzysza, a ja wciąż mam ciebie.',
     guidance: 'Niskie światło, dym sceniczny i bliski dźwięk; prosimy podążać za bileterem.',
     creatives: [
       ['Reżyseria', 'Scena starej trupy'],
@@ -119,7 +118,7 @@ export const kazimierzFolioProductions = {
     language: 'Repertuar objazdowy · dostępny program',
     heading: 'Zimowa opera o pościgu, czuwaniu i dwóch białych jeleniach.',
     synopsis:
-      'Łowca idzie za skrzyżowanymi tropami, aż jeleń i łania wypowiadają to samo pożegnanie z przeciwnych stron.',
+      'Jako spokrewnieni strażnicy Śnieżnego Kapłana pragniemy zginąć od zimnego żelaza.\n\nJako bliźnięta tej samej krwi pragniemy żyć i umrzeć razem.\n\nMacie zbyt wiele życzeń. Spełnić można tylko jedno, a ja wybiorę które.',
     guidance: 'Niskie światło, dym sceniczny i bliski dźwięk; prosimy podążać za bileterem.',
     creatives: [
       ['Reżyseria', 'Scena starej trupy'],
@@ -135,7 +134,7 @@ export const kazimierzFolioProductions = {
     language: 'Repertuar objazdowy · dostępny program',
     heading: 'Złote ikony, długie schody i kolejno gasnące lampy tworzą obrzęd.',
     synopsis:
-      'Latarnik Herii wspina się na wieżę, a każdy dzwon odbiera jedną ulicę; ostatnie światło czeka na spóźnionych.',
+      'W chwili największego zagrożenia bohaterowie zstąpili ze słońca, przeszli przez szczyt góry Heria i stanęli u boku Minos.',
     guidance: 'Niskie światło, dym sceniczny i bliski dźwięk; prosimy podążać za bileterem.',
     creatives: [
       ['Reżyseria', 'Scena starej trupy'],
