@@ -59,6 +59,8 @@ crimson_troupe_website/
     │   │   ├── original.ts
     │   │   └── index.ts
     │   ├── localized/
+    │   │   ├── folio-source-texts.ts
+    │   │   └── <editionId>/
     │   ├── site-routes.ts
     │   ├── site-search-index.ts
     │   └── ticketing.ts
@@ -131,12 +133,20 @@ Astro 组件只负责构建期结构和内容装配，不在组件之间建立�
 `src/data/` 保存不依赖 DOM 的稳定事实与本地化内容。正式领域模型遵守 `BP-FND-DOMAIN`，国家版本内容遵守 `BP-I18N-CORE`，运行时内容成熟度与构建快照遵守 `BP-CNT-CORE`：
 
 - `Production`、`Performance` 与 `Location` 保存稳定 ID、世界视角、泰拉日期、编排、运营状态、票务及必要视觉事实；本季与历史由网站时钟和有效排期在构建快照中派生，不读取浏览器现实时间；
-- 国家版本注册显式保存 `editionId`、`routePrefix` 与 locale；`localized/<editionId>/` 保存网站文案、消息及领域实体显示内容，页面和客户端只消费解析后的当前版本；
+- 国家版本注册显式保存 `editionId`、`routePrefix` 与 locale；`localized/<editionId>/` 保存该版本的网站文案、消息及普通领域显示内容，跨国家版本共享同一权威来源的活页标题与描述集中在 `localized/folio-source-texts.ts` 按 `productionId -> editionId` 并排维护，页面和客户端只消费解析后的当前版本；
 - 列表、详情、搜索与票务从相同稳定 ID 派生，客户端语义状态不保存显示文字。
 
 内容物理目录只服务查找，不表达批准资格。完整基线、可选完整预览变体、有序根集合、批准摘要与命名构建预设由类型化注册和解析边界协作；页面、路由、搜索、票务与验证只能消费同一快照，不直接把 `docs/drafts/` 或目录名作为运行时输入。
 
-`locations.ts` 与 `performances.ts` 分别拥有地点和场次事实；`productions/folio.ts`、`productions/original.ts` 按来源维护剧目，并由 `productions/index.ts` 合并为唯一消费入口。`localized/<editionId>/` 是显示内容源；各层通过稳定 ID 关联，不得恢复混合 `Show`、在页面中保存可编辑副本，或让翻译复制日期、票价和状态。只有当同构内容扩展到多文件、需要 Markdown 正文或编辑流程时，才整体迁移到 Astro Content Collections。
+`locations.ts` 与 `performances.ts` 分别拥有地点和场次事实；`productions/folio.ts`、`productions/original.ts` 按来源维护剧目，并由 `productions/index.ts` 合并为唯一消费入口。`productions/folio-source-records.ts` 保存三种人工确认标题形式和官方简体中文描述，`localized/folio-source-texts.ts` 将当前采用活页的九版本标题与描述按稳定剧目并排维护并统一派生 `title / tagline / synopsis`；各 `localized/<editionId>/productions/folio.ts` 只补充不受该来源约束的体裁、时长、导语、主创与观演提示。其他国家版本内容仍由各自完整包拥有。各层通过稳定 ID 关联，不得恢复混合 `Show`、在页面中保存可编辑副本，或让翻译复制日期、票价和状态。只有当同构内容扩展到多文件、需要 Markdown 正文或编辑流程时，才整体迁移到 Astro Content Collections。
+
+权威来源与派生值遵守以下维护原则：
+
+- 同一字段若有一个权威来源和多个运行时消费者，权威值只保存一次，消费者通过统一装配或解析能力获取，不允许一个消费者动态引用、其他消费者静态复制；
+- 同一来源的多国家版本译文在需要联动审核时按稳定实体并排维护，国家版本完整包仍是唯一运行时接口，不让页面直接读取作者目录；
+- 同一来源文字映射到多个公开字段时先保存一个语义值，再在装配边界派生；只有字段语义确实独立时才允许分别创作；
+- 本地化源修订、素材 SHA-256 和批准摘要是用于发现漂移的冻结凭据，不是内容副本，不得动态计算后覆盖预期值；它们必须继续由验证器与当前来源比较；
+- 是否集中以“共同权威来源与同步修改需求”为判断标准。普通页面文案、不同语用字段和独立国家版本创作不得为了形式统一塞入巨型全站翻译文件。
 
 ## 客户端交互层
 

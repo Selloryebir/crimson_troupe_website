@@ -1,6 +1,7 @@
 import { archiveProjectionIdentity, type ArchiveProjectionIdentity } from '../archive-pollution.ts';
 import type { BuildEditionId } from '../editions.ts';
 import { locations, type Location } from '../locations.ts';
+import { folioSourceTexts, type FolioSourceText } from '../localized/folio-source-texts.ts';
 import { localizationPackages, type PartialLocalizationPackage } from '../localized/packages.ts';
 import { getTicketArtifactEditionIds } from '../localized/ticket-artifact.ts';
 import {
@@ -38,6 +39,7 @@ export interface ContentValidationSources {
   performanceVariants: PerformanceVariantRegistry;
   productions: Readonly<Record<string, Production>>;
   folioSources: Readonly<Record<string, FolioSourceRecord>>;
+  folioSourceTexts: Readonly<Record<string, Readonly<Record<BuildEditionId, FolioSourceText>>>>;
   locations: Readonly<Record<string, Location>>;
   localizations: Readonly<Record<BuildEditionId, PartialLocalizationPackage>>;
   artwork: ProductionArtworkManifest;
@@ -51,6 +53,7 @@ const defaultSources: ContentValidationSources = {
   performanceVariants: performanceVariantRegistry,
   productions,
   folioSources: folioSourceRecords,
+  folioSourceTexts,
   locations,
   localizations: localizationPackages,
   artwork: productionArtworkManifest,
@@ -169,8 +172,8 @@ export function assertContentBundle(
         `活页来源稳定 ID 与记录不一致：${sourceProductionId} != ${source.productionId}`,
       );
     }
-    if (source.sourceLocale !== 'zh-CN') {
-      throw new Error(`folioSource.${sourceProductionId}.sourceLocale 必须为 zh-CN。`);
+    if (source.synopsis.sourceLocale !== 'zh-CN') {
+      throw new Error(`folioSource.${sourceProductionId}.synopsis.sourceLocale 必须为 zh-CN。`);
     }
     if (folioSourceIds.has(source.sourceId)) {
       throw new Error(`活页来源 ID 重复：${source.sourceId}`);
@@ -183,14 +186,44 @@ export function assertContentBundle(
     }
     const source = sources.folioSources[productionId];
     assertPresent(source, `folioSource.${productionId}`);
-    const yanContent =
-      sources.localizations.yan.programs?.productions?.[productionId as ProductionId];
-    assertPresent(yanContent, `yan.productions.${productionId}`);
-    if (yanContent.title !== source.title) {
-      throw new Error(`yan.productions.${productionId}.title 未逐字采用活页来源标题。`);
+    const sourceTexts = sources.folioSourceTexts[productionId];
+    assertPresent(sourceTexts, `folioSourceTexts.${productionId}`);
+    if (sourceTexts.yan.title !== source.titleForms['zh-CN']) {
+      throw new Error(`folioSourceTexts.${productionId}.yan.title 未逐字采用中文来源标题。`);
     }
-    if (yanContent.synopsis !== source.synopsis) {
-      throw new Error(`yan.productions.${productionId}.synopsis 未逐字采用活页官方简介。`);
+    if (sourceTexts.yan.description !== source.synopsis.text) {
+      throw new Error(`folioSourceTexts.${productionId}.yan.description 未逐字采用官方简介。`);
+    }
+    for (const editionId of ['victoria', 'columbia'] as const) {
+      if (sourceTexts[editionId].title !== source.titleForms.en) {
+        throw new Error(
+          `folioSourceTexts.${productionId}.${editionId}.title 未逐字采用英文来源标题。`,
+        );
+      }
+    }
+    if (sourceTexts.higashi.title !== source.titleForms['ja-JP']) {
+      throw new Error(`folioSourceTexts.${productionId}.higashi.title 未逐字采用日文来源标题。`);
+    }
+    for (const [editionId, package_] of Object.entries(sources.localizations)) {
+      const localizedContent = package_.programs?.productions?.[productionId as ProductionId];
+      const sourceText = sourceTexts[editionId as BuildEditionId];
+      assertPresent(sourceText, `folioSourceTexts.${productionId}.${editionId}`);
+      if (!localizedContent) {
+        continue;
+      }
+      if (localizedContent.title !== sourceText.title) {
+        throw new Error(`${editionId}.productions.${productionId}.title 未采用集中活页来源标题。`);
+      }
+      if (localizedContent.tagline !== sourceText.description) {
+        throw new Error(
+          `${editionId}.productions.${productionId}.tagline 未采用集中活页来源简介。`,
+        );
+      }
+      if (localizedContent.synopsis !== sourceText.description) {
+        throw new Error(
+          `${editionId}.productions.${productionId}.synopsis 未采用集中活页来源简介。`,
+        );
+      }
     }
   }
   for (const platformId of ticketingPlatformIds) {

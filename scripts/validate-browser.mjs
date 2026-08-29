@@ -563,6 +563,38 @@ try {
     expectedArchiveCurrentCount,
     '里站完整本季列表不得被首页策展集合裁剪',
   );
+  const yanLocalization = getLocalization(editions.yan, buildSnapshot);
+  const loneWanderPath = archivePath(
+    editions.yan.routePrefix,
+    'performances/lone-wander-linqu-1084-0719',
+  );
+  const expectedLoneWanderDescription =
+    yanLocalization.programs.productions['lone-wander'].synopsis;
+  const loneWanderCard = desktopPage.locator(
+    `.archive-performance-list a[href="${loneWanderPath}"]`,
+  );
+  assert.equal(await loneWanderCard.count(), 1, '里站本季列表应保留独行客场次');
+  assert.equal(
+    (
+      await loneWanderCard
+        .locator('.archive-performance-list__register > span > [data-archive-projection-source]')
+        .textContent()
+    )?.trim(),
+    expectedLoneWanderDescription,
+    '里站场次列表应显示独行客官方描述，不得回退概念宣传短句',
+  );
+  await desktopPage.goto(`${origin}${loneWanderPath}`);
+  const detailTagline = desktopPage.locator(
+    '.archive-detail-header > div > p:not(.eyebrow) > [data-archive-projection-source]',
+  );
+  assert.equal(
+    (await detailTagline.textContent())?.trim(),
+    expectedLoneWanderDescription,
+    '里站场次详情标题区应显示独行客官方描述',
+  );
+  await assertNoHorizontalLoss(desktopPage, '1280px 炎国独行客官方描述详情');
+  await desktopPage.setViewportSize({ width: 320, height: 800 });
+  await assertNoHorizontalLoss(desktopPage, '320px 炎国独行客官方描述详情');
   assertDesktopErrors();
   await desktop.close();
 
