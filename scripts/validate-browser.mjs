@@ -7,7 +7,7 @@ import { existsSync } from 'node:fs';
 import net from 'node:net';
 import { fileURLToPath } from 'node:url';
 
-import { chromium } from 'playwright';
+import { chromium, firefox, webkit } from 'playwright';
 
 import { currentArchiveSnapshot } from '../src/data/archive-snapshots.ts';
 import { buildSnapshot } from '../src/data/content/resolve.ts';
@@ -16,6 +16,9 @@ import { getLocalization } from '../src/data/localized/resolve.ts';
 import { derivePollutionComposition } from '../src/scripts/pollution-state.ts';
 
 const serverHost = '127.0.0.1';
+const browserEngine = process.env.BROWSER_ENGINE ?? 'chromium';
+const chromeExecutablePath = process.env.BROWSER_CHROME_EXECUTABLE_PATH;
+const edgeExecutablePath = process.env.BROWSER_EDGE_EXECUTABLE_PATH;
 const repositoryRoot = fileURLToPath(new URL('..', import.meta.url));
 const astroBin = fileURLToPath(new URL('../node_modules/astro/bin/astro.mjs', import.meta.url));
 const expectedArchiveSeatCount = buildSnapshot.performanceEntries.filter(
@@ -269,6 +272,35 @@ function startPreviewServer(port) {
 }
 
 async function launchBrowser() {
+  if (browserEngine === 'firefox') {
+    return { browser: await firefox.launch({ headless: true }), cleanup: () => {} };
+  }
+  if (browserEngine === 'webkit') {
+    return { browser: await webkit.launch({ headless: true }), cleanup: () => {} };
+  }
+  if (browserEngine === 'chrome') {
+    return {
+      browser: await chromium.launch({
+        headless: true,
+        ...(chromeExecutablePath
+          ? { executablePath: chromeExecutablePath }
+          : { channel: 'chrome' }),
+      }),
+      cleanup: () => {},
+    };
+  }
+  if (browserEngine === 'edge') {
+    return {
+      browser: await chromium.launch({
+        headless: true,
+        ...(edgeExecutablePath ? { executablePath: edgeExecutablePath } : { channel: 'msedge' }),
+      }),
+      cleanup: () => {},
+    };
+  }
+  if (browserEngine !== 'chromium') {
+    throw new Error('BROWSER_ENGINE 只能是 chromium、chrome、firefox、webkit 或 edge');
+  }
   try {
     return { browser: await chromium.launch({ headless: true }), cleanup: () => {} };
   } catch (nativeError) {
@@ -728,7 +760,7 @@ try {
   await assertNoHorizontalLoss(archiveVisualPage, '320px 炎国二级污染静态席位页');
   await archiveVisualPage.setViewportSize({ width: 1280, height: 900 });
   await archiveVisualPage.goto(`${origin}${archivePath('yan')}`);
-  const collapseTransforms = new Set();
+  const environmentCompositions = new Set();
   for (const composition of [0, 1, 2]) {
     const state = pollutionStateForComposition(3, 'home', archivePath('yan'), composition);
     await archiveVisualPage.evaluate((nextState) => {
@@ -738,10 +770,11 @@ try {
     await archiveVisualPage
       .locator(`html[data-pollution-level="3"][data-pollution-composition="${composition}"]`)
       .waitFor();
-    collapseTransforms.add(
-      await archiveVisualPage
-        .locator('main')
-        .evaluate((element) => window.getComputedStyle(element, '::before').transform),
+    environmentCompositions.add(
+      await archiveVisualPage.locator('.archive-pollution-stage').evaluate((element) => {
+        const style = window.getComputedStyle(element);
+        return `${style.backgroundPosition} / ${style.backgroundSize}`;
+      }),
     );
     assert.notEqual(
       await archiveVisualPage
@@ -761,7 +794,7 @@ try {
       `三级污染构图 ${composition} 不得扭曲保护能力`,
     );
   }
-  assert.equal(collapseTransforms.size, 3, '三级污染应提供三种同强度的页面环境接管构图');
+  assert.equal(environmentCompositions.size, 3, '三级污染应提供三种同强度的页面环境接管构图');
   await archiveVisualPage.evaluate(() => {
     sessionStorage.setItem(
       'crimson-troupe:archive-pollution:v2',
@@ -1865,7 +1898,7 @@ try {
   await failedSearchContext.close();
 
   console.log(
-    'browser validation passed: editorial home alternation/mobile order, full-list isolation, ranked/grouped search keyboard path, seven venue level maps/zones, build-scoped edition selector, long-script 320px headers, ticket focus/artifact, Minos search/download/print, Ursus search isolation/download/cross-edition state/archive exit, archive four-level visual escalation/cross-edition level 3/reduced motion, 320/768 protected controls, localized pollution live status, keyboard invitation exit/continue, no-JS fallback/static archive seats, search failure fallback',
+    `browser validation passed (${browserEngine}): editorial home alternation/mobile order, full-list isolation, ranked/grouped search keyboard path, seven venue level maps/zones, build-scoped edition selector, long-script 320px headers, ticket focus/artifact, Minos search/download/print, Ursus search isolation/download/cross-edition state/archive exit, archive four-level visual escalation/cross-edition level 3/reduced motion, 320/768 protected controls, localized pollution live status, keyboard invitation exit/continue, no-JS fallback/static archive seats, search failure fallback`,
   );
 } catch (error) {
   const serverOutput = preview.output.join('').trim();

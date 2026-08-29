@@ -44,34 +44,38 @@ npm run quality -- --plan docs/blueprint/modules/search.md
 
 各命令的职责如下：
 
-| 命令                                | 职责                                                     |
-| ----------------------------------- | -------------------------------------------------------- |
-| `npm run quality -- <路径>`         | 按实际改动调度最小必要检查                               |
-| `npm run quality:docs`              | 显式检查全部受管文档格式                                 |
-| `npm run quality:blueprint`         | 显式检查正式蓝图格式及追踪关系                           |
-| `npm run quality:code`              | 显式检查全部 Astro/TypeScript、ESLint 与源码格式         |
-| `npm run quality:styles`            | 显式检查全部 CSS                                         |
-| `npm run quality:full`              | 执行一次蓝图、类型、代码、样式与全仓格式检查，不执行构建 |
-| `npm run measure:performance`       | 对正在运行的本地站点执行限速、限频性能取样               |
-| `npm run build`                     | 只生成 `dist/`，不调用质量命令                           |
-| `npm run build:showcase`            | 显式生成炎国未批准展示产物                               |
-| `npm run build:preview`             | 生成当前九国家版本预览产物                               |
-| `npm run build:release`             | 生成批准内容正式产物；当前应因无批准内容而停止           |
-| `npm run validate:content`          | 检查九国家版本内容闭包、源修订、素材摘要与批准漂移       |
-| `npm run validate:content:showcase` | 只对炎国展示集合执行同一聚焦内容门禁                     |
-| `npm run validate:content:preview`  | 显式对九国家版本预览执行同一聚焦内容门禁                 |
-| `npm run validate:content:release`  | 对正式集合执行内容门禁；当前应列出全部无批准摘要对象     |
-| `npm run validate:states`           | 确定性检查污染、票务状态与纪念票字段                     |
-| `npm run validate:locales`          | 检查默认炎国 `showcase` 的本地化覆盖                     |
-| `npm run validate:locales:preview`  | 检查九国家版本预览构建的本地化覆盖                       |
-| `npm run validate:build`            | 检查已生成页面的路由、元数据、链接、资源与发布范围       |
-| `npm run validate:build:preview`    | 检查九国家版本预览产物的路由、元数据、链接与隔离范围     |
-| `npm run validate:browser:preview`  | 对已生成 preview 运行单一代表性浏览器冒烟矩阵            |
-| `npm run verify`                    | 依次执行完整质量、状态、一次构建与静态产物门禁           |
-| `npm run lint:code:fix`             | 自动修复 ESLint 明确支持的代码问题                       |
-| `npm run lint:styles:fix`           | 自动修复 Stylelint 明确支持的样式问题                    |
-| `npm run format`                    | 格式化 Astro、TypeScript、配置和文档，不改手工组织的 CSS |
-| `npm run blueprint:check`           | 检查蓝图 ID、依赖、路径和源码覆盖关系                    |
+| 命令                                       | 职责                                                     |
+| ------------------------------------------ | -------------------------------------------------------- |
+| `npm run quality -- <路径>`                | 按实际改动调度最小必要检查                               |
+| `npm run quality:docs`                     | 显式检查全部受管文档格式                                 |
+| `npm run quality:blueprint`                | 显式检查正式蓝图格式及追踪关系                           |
+| `npm run quality:code`                     | 显式检查全部 Astro/TypeScript、ESLint 与源码格式         |
+| `npm run quality:styles`                   | 显式检查全部 CSS                                         |
+| `npm run quality:full`                     | 执行一次蓝图、类型、代码、样式与全仓格式检查，不执行构建 |
+| `npm run measure:performance`              | 对正在运行的本地站点执行限速、限频性能取样               |
+| `npm run build`                            | 只生成 `dist/`，不调用质量命令                           |
+| `npm run build:showcase`                   | 显式生成炎国未批准展示产物                               |
+| `npm run build:preview`                    | 生成当前九国家版本预览产物                               |
+| `npm run build:release`                    | 生成批准内容正式产物；当前应因无批准内容而停止           |
+| `npm run validate:content`                 | 检查九国家版本内容闭包、源修订、素材摘要与批准漂移       |
+| `npm run validate:content:showcase`        | 只对炎国展示集合执行同一聚焦内容门禁                     |
+| `npm run validate:content:preview`         | 显式对九国家版本预览执行同一聚焦内容门禁                 |
+| `npm run validate:content:release`         | 对正式集合执行内容门禁；当前应列出全部无批准摘要对象     |
+| `npm run validate:states`                  | 确定性检查污染、票务状态与纪念票字段                     |
+| `npm run validate:locales`                 | 检查默认炎国 `showcase` 的本地化覆盖                     |
+| `npm run validate:locales:preview`         | 检查九国家版本预览构建的本地化覆盖                       |
+| `npm run validate:build`                   | 检查已生成页面的路由、元数据、链接、资源与发布范围       |
+| `npm run validate:build:preview`           | 检查九国家版本预览产物的路由、元数据、链接与隔离范围     |
+| `npm run validate:browser:preview`         | 对已生成 preview 运行 Chromium 代表性冒烟矩阵            |
+| `npm run validate:browser:preview:chrome`  | 以同一断言运行 Google Chrome 冒烟矩阵                    |
+| `npm run validate:browser:preview:firefox` | 以同一断言运行 Firefox 冒烟矩阵                          |
+| `npm run validate:browser:preview:webkit`  | 以同一断言运行 WebKit 冒烟矩阵                           |
+| `npm run validate:browser:preview:edge`    | 以同一断言运行 Microsoft Edge 冒烟矩阵                   |
+| `npm run verify`                           | 依次执行完整质量、状态、一次构建与静态产物门禁           |
+| `npm run lint:code:fix`                    | 自动修复 ESLint 明确支持的代码问题                       |
+| `npm run lint:styles:fix`                  | 自动修复 Stylelint 明确支持的样式问题                    |
+| `npm run format`                           | 格式化 Astro、TypeScript、配置和文档，不改手工组织的 CSS |
+| `npm run blueprint:check`                  | 检查蓝图 ID、依赖、路径和源码覆盖关系                    |
 
 `quality` 的最小调度规则如下：
 
@@ -88,9 +92,9 @@ npm run quality -- --plan docs/blueprint/modules/search.md
 
 Astro/TypeScript 类型关系可能跨文件，因此代码变更仍使用项目级 `astro check`；ESLint、Stylelint 和 Prettier 可以安全地限制为变更文件。`quality` 不负责运行普通构建或浏览器验收；运行时源码完成一个可交付切片后，先通过相关质量检查，再单独运行一次 `npm run build`。
 
-`validate:browser:preview` 不自行构建，也不生成截图或报告；应在一次 preview 构建及产物检查后运行。首次使用 Playwright 的环境可执行 `npx playwright install --with-deps chromium` 安装唯一浏览器驱动。本入口只覆盖五项选择器、日/希/俄长文本、320px 票务与里站、搜索隔离、跨国家版本状态、下载与打印、三级污染与退出、减少动态效果、无脚本和搜索初始化失败等代表任务，不替代人工视觉验收。
+浏览器冒烟命令不自行构建，也不生成截图或报告；应在一次 preview 构建及产物检查后运行。首次使用 Playwright 的环境可执行 `npx playwright install --with-deps chromium chrome firefox webkit msedge` 安装所需驱动与系统依赖。Chrome 与 Edge 默认使用系统品牌通道，也可分别用 `BROWSER_CHROME_EXECUTABLE_PATH` 与 `BROWSER_EDGE_EXECUTABLE_PATH` 指向已确认的稳定版可执行文件。五个命令复用同一组五项选择器、日/希/俄长文本、320px 票务与里站、搜索隔离、跨国家版本状态、下载与打印、三级污染与退出、减少动态效果、无脚本和搜索初始化失败等代表任务，不替代人工视觉验收。Playwright WebKit 可尽早发现 WebKit 问题，但不等于真实 macOS Safari；平台相关正式结论仍需在 Safari 当前稳定版复核。
 
-`measure:performance` 默认对 `http://127.0.0.1:4321` 的代表性表站、里站与污染 `0—3` 场景各取样五次，模拟四倍 CPU 限速、1.6 Mbps 下行与 150 ms RTT，并输出中位数、P95 和原始样本 JSON。可用 `PERF_BASE_URL` 指向静态预览，以 `PERF_RUNS`、`PERF_CPU_RATE` 和逗号分隔的 `PERF_SCENARIOS` 控制复测；它只提供版本间相对证据，不替代真实设备和浏览器体验验收。
+`measure:performance` 默认对 `http://127.0.0.1:4321` 的代表性表站、里站与污染 `0—3` 场景各取样五次，使用 Chromium 模拟四倍 CPU 限速、1.6 Mbps 下行与 150 ms RTT，并输出中位数、P95、滚动帧间隔、功能支持和原始样本 JSON。可用 `PERF_BASE_URL` 指向静态预览，以 `PERF_RUNS`、`PERF_CPU_RATE`、`PERF_FRAME_COUNT`、`PERF_NETWORK_PROFILE=mobile4g|none` 和逗号分隔的 `PERF_SCENARIOS` 控制复测；`PERF_BROWSERS=chromium,chrome,firefox,webkit,edge` 选择引擎，Chrome 与 Edge 路径可分别由 `PERF_CHROME_EXECUTABLE_PATH` 和 `PERF_EDGE_EXECUTABLE_PATH` 指定。跨引擎比较必须使用 `PERF_CPU_RATE=1 PERF_NETWORK_PROFILE=none`，因为 CDP 限频、限速与渲染指标只适用于 Chromium 系。该脚本提供版本间相对证据，不替代真实设备和 Safari 验收。
 
 只有工具链变更、跨层集成、准备合并或发布、进入正式候选阶段才执行完整门禁：
 

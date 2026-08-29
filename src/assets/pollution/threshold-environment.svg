@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <defs>
+    <pattern id="paper-rules" width="72" height="72" patternUnits="userSpaceOnUse">
+      <path d="M0 70h72" stroke="#d0a45b" stroke-opacity=".06" stroke-width="4" />
+    </pattern>
+    <pattern id="folio-rules" width="32" height="32" patternUnits="userSpaceOnUse" patternTransform="rotate(-12)">
+      <path d="M0 30h32" stroke="#9f1c2b" stroke-opacity=".11" stroke-width="4" />
+    </pattern>
+    <linearGradient id="plate-paper" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#160b0c" stop-opacity=".62" />
+      <stop offset=".5" stop-color="#421018" stop-opacity=".32" />
+      <stop offset="1" stop-color="#060304" stop-opacity=".72" />
+    </linearGradient>
+    <linearGradient id="folio-paper" x1="0" y1="0" x2="1" y2=".8">
+      <stop offset="0" stop-color="#741020" stop-opacity=".34" />
+      <stop offset=".56" stop-color="#261212" stop-opacity=".47" />
+      <stop offset="1" stop-color="#070404" stop-opacity=".65" />
+    </linearGradient>
+    <radialGradient id="threshold-shade" cx="50%" cy="8%" r="94%">
+      <stop offset=".18" stop-color="#000" stop-opacity="0" />
+      <stop offset=".72" stop-color="#000" stop-opacity=".24" />
+      <stop offset="1" stop-color="#000" stop-opacity=".72" />
+    </radialGradient>
+    <radialGradient id="vignette">
+      <stop offset=".38" stop-color="#000" stop-opacity="0" />
+      <stop offset="1" stop-color="#000" stop-opacity=".48" />
+    </radialGradient>
+  </defs>
+
+  <path d="M-90 84 1460-30l188 846-354 235L88 1000-78 604Z" fill="#090505" fill-opacity=".26" stroke="#a52837" stroke-opacity=".34" stroke-width="10" />
+  <path d="M-68 108 1438-6l174 804-332 218L112 976-48 594Z" fill="url(#paper-rules)" stroke="#a52837" stroke-opacity=".2" stroke-width="3" />
+
+  <path d="M397 1000V224C397 87 573 18 792 18s395 69 395 206v776Z" fill="url(#threshold-shade)" stroke="#be8d4e" stroke-opacity=".18" stroke-width="3" />
+  <path d="M414 1000V238C414 116 582 36 792 36s378 80 378 202v762" fill="none" stroke="#070404" stroke-opacity=".58" stroke-width="28" />
+  <path d="M792 28v972" stroke="#d0a86d" stroke-opacity=".08" stroke-width="6" />
+  <g fill="none" stroke="#801522" stroke-opacity=".07" stroke-width="5">
+    <ellipse cx="792" cy="92" rx="132" ry="82" />
+    <ellipse cx="792" cy="92" rx="266" ry="164" />
+    <ellipse cx="792" cy="92" rx="400" ry="246" />
+  </g>
+
+  <g transform="translate(1125 -122) rotate(-3)">
+    <rect x="0" y="0" width="600" height="750" fill="#050303" fill-opacity=".5" />
+    <rect x="16" y="16" width="568" height="718" fill="url(#plate-paper)" stroke="#b42a36" stroke-opacity=".4" stroke-width="4" />
+    <rect x="26" y="26" width="548" height="698" fill="url(#paper-rules)" stroke="#b42a36" stroke-opacity=".25" stroke-width="3" />
+    <path d="m30 620 540-360" stroke="#79101d" stroke-opacity=".2" stroke-width="20" />
+  </g>
+
+  <g transform="translate(-72 780) rotate(2)">
+    <rect x="0" y="0" width="720" height="420" fill="#070404" fill-opacity=".48" />
+    <rect x="14" y="14" width="692" height="392" fill="url(#folio-paper)" stroke="#d8c9ad" stroke-opacity=".2" stroke-width="4" />
+    <rect x="24" y="24" width="672" height="372" fill="url(#folio-rules)" stroke="#d8c9ad" stroke-opacity=".13" stroke-width="2" />
+  </g>
+
+  <g transform="rotate(-2 800 500)">
+    <path d="M230 360h1030" stroke="#050303" stroke-opacity=".91" stroke-width="38" />
+    <path d="M390 475h890" stroke="#760c1d" stroke-opacity=".58" stroke-width="30" />
+    <path d="M130 690h1160" stroke="#050303" stroke-opacity=".82" stroke-width="42" />
+    <path d="M480 900h950" stroke="#8b1624" stroke-opacity=".4" stroke-width="34" />
+  </g>
+
+  <path d="M0 0h1600v1000H0z" fill="url(#vignette)" />
+</svg>
