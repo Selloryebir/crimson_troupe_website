@@ -3,6 +3,7 @@ import TicketingPlatformBrand from '../../../../components/ticketing/TicketingPl
 import PartnerTicketingExperience from '../../../../components/ticketing/PartnerTicketingExperience.astro';
 import { buildSnapshot } from '../../../../data/content/resolve.ts';
 import type { BuiltEdition } from '../../../../data/editions.ts';
+import { formatMessage } from '../../../../data/localized/format.ts';
 import { getLocalization } from '../../../../data/localized/resolve.ts';
 import { sitePath } from '../../../../data/site-routes.ts';
 import { getSiteTerraNow } from '../../../../data/site-time.ts';
@@ -28,7 +29,7 @@ const platform = getTicketingPlatformPresentation(localization, 'rice-network', 
 const dropTower = getTicketingPlatformPresentation(localization, 'drop-tower', buildSnapshot);
 const canonicalPath = sitePath(edition, 'front', 'tickets/partner');
 const returnPath = sitePath(edition, 'front', 'tickets');
-const title = copy.partnerPageTitle.replace('{platform}', platform.displayName);
+const title = formatMessage(copy.partnerPageTitle, { platform: platform.displayName });
 const acceptedAt = getSiteTerraNow('front', buildSnapshot.context);
 ---
 

@@ -2,9 +2,9 @@
 
 ## 目标
 
-仓库结构应让人员和智能体快速回答三个问题：信息在哪里、谁负责它、修改会影响什么。Astro 负责构建期静态生成和组件化，浏览器端保持原生 TypeScript；表站与里站最终生成独立页面树，污染与票务以可独立启停的客户端模组增强页面。
+仓库结构应让人员和智能体快速判断信息位置、责任方和影响范围。Astro 负责构建期静态生成与组件化，浏览器端使用原生 TypeScript 渐进增强；表站、里站、内容和交互通过显式接口协作。
 
-## 当前目录树
+## 当前目录
 
 ```text
 crimson_troupe_website/
@@ -14,166 +14,86 @@ crimson_troupe_website/
 ├── package.json
 ├── package-lock.json
 ├── docs/
-│   ├── README.md
 │   ├── architecture/
 │   ├── blueprint/
-│   │   ├── foundation/
-│   │   ├── modules/
-│   │   ├── content/
-│   │   ├── i18n/
-│   │   ├── quality/
-│   │   └── traceability.json
 │   ├── drafts/
-│   │   ├── README.md
-│   │   ├── blueprint/README.md
-│   │   ├── recommendations/README.md
-│   │   ├── creative/README.md
-│   │   └── plans/README.md
 │   ├── guides/
-│   └── references/
-├── scripts/
-│   ├── blueprint.mjs
-│   ├── quality.mjs
-│   ├── validate-build.mjs
-│   ├── validate-locales.mjs
-│   └── validate-states.mjs
+│   ├── project/
+│   ├── research/
+│   └── sources/
+├── scripts/                  # 仓库质量、构建验证与性能工具
 └── src/
-    ├── pages/
-    │   ├── index.astro
-    │   └── [routePrefix]/
-    ├── layouts/
-    │   ├── BaseLayout.astro
-    │   ├── FrontLayout.astro
-    │   └── ArchiveLayout.astro
+    ├── assets/
     ├── components/
     │   ├── archive/
     │   ├── front/
-    │   └── shared/
-    ├── assets/
+    │   ├── shared/
+    │   └── ticketing/
     ├── data/
-    │   ├── editions.ts
-    │   ├── locations.ts
-    │   ├── performances.ts
-    │   ├── productions/
-    │   │   ├── folio.ts
-    │   │   ├── original.ts
-    │   │   └── index.ts
-    │   ├── localized/
-    │   │   ├── folio-source-texts.ts
-    │   │   └── <editionId>/
-    │   ├── site-routes.ts
-    │   ├── site-search-index.ts
-    │   └── ticketing.ts
+    │   ├── content/          # 构建上下文、资格、变体与快照解析
+    │   ├── localized/        # 类型化国家版本内容
+    │   └── productions/      # 语言无关剧目来源
+    ├── layouts/
+    ├── pages/
     ├── scripts/
     └── styles/
-        ├── main.css
-        ├── foundation.css
-        ├── front.css
-        ├── ticketing.css
-        ├── partner-ticketing.css
-        ├── archive.css
-        └── pollution.css
 ```
 
-目录树只展开需要长期识别的职责边界；参数化页面、本地化国家版本包和组件内文件以实际目录为准，不在此复制完整文件清单。
+目录树只展开长期职责；具体文件、参数化页面和国家版本以工作区为准，不在文档复制完整清单。`.astro/`、`dist/`、`node_modules/`、缓存和测试报告属于可重建产物，不进入版本控制；`dist/` 是唯一部署产物。
 
-`.astro/`、`dist/`、`node_modules/`、工具缓存、测试报告和部署平台本地状态都是生成内容，不进入版本控制。`dist/` 是唯一部署产物，不直接部署 `src/`。根目录 `.gitignore` 只排除可重建产物、本地环境与编辑器噪声，不排除源码、锁文件或共享配置。
+## 运行时拓扑
 
-## 当前实现快照
+- `showcase`、`preview` 与 `release` 是有限命名构建预设，共用内容解析和页面装配；构建范围与资格由 `src/data/content/` 解析，页面数量由快照派生；
+- 根路径只进入炎国表站，表站与 1084 里站生成独立页面树；公开路由由 `src/pages/` 与 `src/data/site-routes.ts` 协作，不从翻译标题生成；
+- 页面、搜索、票务和验证器消费同一不可变构建快照，不各自遍历底层注册表；
+- 表站与等级 `0` 里站的核心内容不依赖客户端脚本，搜索、筛选、污染和票务按页面能力增强。
 
-当前源码通过默认构建使用的炎国 `showcase`、日常开发使用的九国家版本 `preview` 与显式炎国 `release` 三个有限构建预设生成同一套页面。`src/pages/index.astro` 只负责进入 `/yan/`，表站与 1084 里站使用独立页面树；`src/data/editions.ts` 拥有国家版本注册，`src/data/locations.ts`、`src/data/performances.ts` 和 `src/data/productions/` 保存语言无关事实，`src/data/localized/` 保存类型化国家版本内容包。完整基线、有序根集合、构建预设与内容资格经过唯一解析边界形成不可变构建快照，路由、页面、搜索、票务和验证器统一消费该快照；浏览器交互由 `src/scripts/` 中的原生 TypeScript 按页面装配。
+具体行为由 active 蓝图拥有，当前命令与构建方式见 [`../guides/development.md`](../guides/development.md)。本文件只定义物理职责和允许的依赖方向。
 
-默认构建的 `showcase` 只包含 `yan / zh-CN`，当前生成 87 个静态页面；九国家版本 `preview` 额外包含 `victoria / en-GB`、`ursus / ru`、`siracusa / it`、`minos / el`、`leithanien / de`、`kazimierz / pl`、`higashi / ja-JP` 与 `columbia / en-US` 等价页面，共生成 775 个页面。八种目标语言内容只用于技术与视觉预览，不代表翻译已通过人工审核。当前批准摘要为空，因此 `release` 会在生成页面前列出不合格稳定 ID 并停止，不会把预览内容静默提升为正式内容。具体行为契约由 active 蓝图拥有，下文只解释源码职责与依赖方向。
+## 源码层职责
 
-当前实现处于 `candidate`，正式发布仍需人工内容与发布审核。未来语言或创意模组只有经过独立规划后才进入实现；不得恢复单页锚点、混合模型或双世界同页 DOM 作为第二套正式架构。
+| 层                | 责任                                                     | 不负责                                       |
+| ----------------- | -------------------------------------------------------- | -------------------------------------------- |
+| `src/pages/`      | 文件路由、静态路径和页面装配                             | 保存业务正文或客户端私有状态                 |
+| `src/layouts/`    | HTML 外壳、元数据、世界级样式和按页客户端入口            | 合并两站完整 DOM 或实现功能状态机            |
+| `src/components/` | 构建期页面结构；按 `front/archive/ticketing/shared` 分责 | 隐式全局状态或重复领域事实                   |
+| `src/data/`       | 领域事实、国家版本内容、内容资格和不可变快照             | DOM、组件或浏览器运行时                      |
+| `src/scripts/`    | 搜索、筛选、污染、票务等渐进增强                         | 重写底层内容或直接修改其他模组私有状态       |
+| `src/styles/`     | 共享基础及表站、里站、票务、污染的按需视觉规则           | 以样式隐藏语义状态或把两站收敛为同一换色布局 |
+| `src/assets/`     | 具有运行时消费者且权利清晰的压缩素材                     | 本地参考、过程稿和未批准比较样张             |
+| `scripts/`        | 仓库维护、蓝图追踪、质量、构建产物、浏览器和性能验证     | 浏览器产物或产品运行逻辑                     |
 
-## 工程质量边界
+只有两个以上页面确有相同语义和状态时才抽取共享组件；只有出现独立职责、明显同构增长、频繁冲突或可独立测试收益时才继续拆分文件。
 
-- `blueprint:check` 检查蓝图 ID、依赖、文档路径和功能源码映射是否漂移；
-- `astro check` 检查 Astro 模板和 TypeScript 类型；
-- ESLint 使用类型信息检查 TypeScript，并通过 Astro 解析器检查组件；Stylelint 检查分层 CSS 的高置信缺陷；Prettier 统一 Astro、TypeScript、配置和文档格式；
-- `.editorconfig` 与 `.gitattributes` 固定 UTF-8、LF、末尾换行和基础缩进；
-- `scripts/quality.mjs` 根据显式路径或当前变更选择补丁空白、蓝图、类型、代码、样式和格式检查，并说明触发原因；
-- `npm run quality` 是日常最小检查入口；`npm run build` 只生成静态产物；`npm run verify` 只编排一次完整质量检查、关键状态验证、一次构建和静态产物验证，用于工具链变更、跨层集成、合并、发布和正式候选阶段。
+## 内容所有权
 
-依赖版本由 `package-lock.json` 固定；锁文件未变化时使用 `npm ci` 获得可复现安装。`.npmrc` 强制 Node 引擎范围，并让未来新增依赖默认精确记录。
+- `src/data/editions.ts` 注册国家版本；语言无关地点、场次和剧目分别由 `locations.ts`、`performances.ts` 与 `productions/` 拥有；
+- `src/data/localized/<editionId>/` 提供完整国家版本接口，页面只消费解析结果；稳定 ID、日期、状态、票价和拓扑不进入翻译；
+- 同一权威字段只保存一次。需要联动审核的多国家版本内容可以按稳定实体并排维护，但仍通过完整国家版本包对外；
+- 官方活页标题与描述是受控跨层镜像：人员来源在 [`../sources/official-folio-productions.md`](../sources/official-folio-productions.md)，构建镜像在 `src/data/productions/folio-source-records.ts`，由 `scripts/validate-content.mjs` 核对；
+- 来源修订、素材摘要和批准摘要是防漂移凭据，不是正文副本；页面数量、测试结果和批准现状由命令或注册表报告，不写入长期结构文档。
 
-## 蓝图追踪层
+内容目录不表达发布资格。根集合、完整变体、批准摘要和构建预设通过唯一解析边界形成快照；`docs/` 不参与构建。只有同构内容确实需要 Markdown 正文或编辑流程时，才整体迁移到唯一的 Content Collections，不与 TypeScript 内容源并存。
 
-`docs/blueprint/` 只描述正式目标、契约、边界和阶段标准，不直接参与网站构建。`traceability.json` 以稳定蓝图 ID 维护蓝图依赖及其与现有功能源码的关系；同一源码有一个主要蓝图，也可以关联实际约束它的辅助蓝图。新功能源码创建、删除或改名时同步维护真实映射，不预填尚未出现的路径。
+## 客户端与样式装配
 
-`scripts/blueprint.mjs` 只检查漂移、从源码反查蓝图、从蓝图列出候选影响范围。它不理解蓝图语义、不自动修改源码，也不要求每个候选文件产生变更。完整规则见 `docs/blueprint/README.md`。
+页面入口只初始化本页存在的能力，缺少根节点时安全跳过。模块通过显式 `import` / `export` 协作；事件只用于真实一对多通知，不建立默认全局事件总线。
 
-## 草稿规划层
+`src/styles/main.css` 只装配共享 `foundation.css`。表站、里站、票务与污染样式由对应布局或组件按需加载；污染和装饰不得改变语义 DOM、焦点、可读状态或可靠退出。
 
-`docs/drafts/` 保存没有正式产品效力的蓝图、建议与创意草稿，以及一次性开发计划。草稿通过人工门禁单向迁入正式责任目录，不加入追踪表，也不在迁移后保留正文副本。已获批准的一次性计划只编排工作，不能覆盖正式蓝图。四个类型子目录各自保留稳定 README 作为职责与格式入口，清理最后一份实际草稿时不得连同目录入口删除。完整生命周期见 `docs/drafts/README.md`。
+## 文档层职责
 
-普通功能开发只读取正式蓝图。规划讨论、草稿评审、已批准计划和正式迁移任务才读取草稿；正式内容规则进入 `docs/blueprint/content/`，实际运行内容进入 `src/data/` 或未来唯一的 `src/content/`，外部依据进入 `docs/references/`。
+| 目录            | 唯一责任                                     |
+| --------------- | -------------------------------------------- |
+| `blueprint/`    | 已采纳的目标、行为契约、边界与阶段标准       |
+| `architecture/` | 当前工程结构与依赖方向                       |
+| `guides/`       | 可重复执行的开发、Git 和制作步骤             |
+| `sources/`      | 官方原文、来源身份与素材权利记录             |
+| `research/`     | 外部资料分析、设计转译与排除项               |
+| `project/`      | 不参与构建的项目作者资料、候选目录和比较样张 |
+| `drafts/`       | 尚未采纳的提案与完成后删除的一次性计划       |
 
-## 页面与布局层
-
-`astro.config.ts` 使用静态输出。`src/pages/` 负责把正式路由生成具体页面；可以复用参数化构建逻辑，但公开 URL 必须符合 `BP-FND-CORE`，不得由翻译标题或显示名推导。
-
-布局负责文档外壳、`lang`、标题、描述、canonical、robots、世界标识、页面类型、全局样式和按页客户端入口。表站与里站使用独立布局或明确分离的布局变体，不在一个 HTML 中同时装配两个完整网站。根路径跳转、合法深层直达和无 JavaScript 导航必须保持。
-
-## Astro 组件层
-
-`src/components/` 按页面与用户能力划分：
-
-- `front/`：表站场次呈现、剧目视觉和票务体验；
-- `archive/`：里站场次呈现与 1084 年代视觉；
-- `shared/`：两个网站真正共享的基础结构、页脚声明和无障碍能力。
-
-只有在出现真实复用或独立职责时才增加新的能力目录；覆盖呈现不得承担本应独立路由的完整页面。
-
-Astro 组件只负责构建期结构和内容装配，不在组件之间建立隐式客户端状态。只有两个以上页面具有相同语义和状态时才抽取共享组件，避免为了形式统一让两站重新耦合。
-
-## 内容数据层
-
-`src/data/` 保存不依赖 DOM 的稳定事实与本地化内容。正式领域模型遵守 `BP-FND-DOMAIN`，国家版本内容遵守 `BP-I18N-CORE`，运行时内容成熟度与构建快照遵守 `BP-CNT-CORE`：
-
-- `Production`、`Performance` 与 `Location` 保存稳定 ID、世界视角、泰拉日期、编排、运营状态、票务及必要视觉事实；本季与历史由网站时钟和有效排期在构建快照中派生，不读取浏览器现实时间；
-- 国家版本注册显式保存 `editionId`、`routePrefix` 与 locale；`localized/<editionId>/` 保存该版本的网站文案、消息及普通领域显示内容，跨国家版本共享同一权威来源的活页标题与描述集中在 `localized/folio-source-texts.ts` 按 `productionId -> editionId` 并排维护，页面和客户端只消费解析后的当前版本；
-- 列表、详情、搜索与票务从相同稳定 ID 派生，客户端语义状态不保存显示文字。
-
-内容物理目录只服务查找，不表达批准资格。完整基线、可选完整预览变体、有序根集合、批准摘要与命名构建预设由类型化注册和解析边界协作；页面、路由、搜索、票务与验证只能消费同一快照，不直接把 `docs/drafts/` 或目录名作为运行时输入。
-
-`locations.ts` 与 `performances.ts` 分别拥有地点和场次事实；`productions/folio.ts`、`productions/original.ts` 按来源维护剧目，并由 `productions/index.ts` 合并为唯一消费入口。`productions/folio-source-records.ts` 保存三种人工确认标题形式和官方简体中文描述，`localized/folio-source-texts.ts` 将当前采用活页的九版本标题与描述按稳定剧目并排维护并统一派生 `title / tagline / synopsis`；各 `localized/<editionId>/productions/folio.ts` 只补充不受该来源约束的体裁、时长、导语、主创与观演提示。其他国家版本内容仍由各自完整包拥有。各层通过稳定 ID 关联，不得恢复混合 `Show`、在页面中保存可编辑副本，或让翻译复制日期、票价和状态。只有当同构内容扩展到多文件、需要 Markdown 正文或编辑流程时，才整体迁移到 Astro Content Collections。
-
-权威来源与派生值遵守以下维护原则：
-
-- 同一字段若有一个权威来源和多个运行时消费者，权威值只保存一次，消费者通过统一装配或解析能力获取，不允许一个消费者动态引用、其他消费者静态复制；
-- 同一来源的多国家版本译文在需要联动审核时按稳定实体并排维护，国家版本完整包仍是唯一运行时接口，不让页面直接读取作者目录；
-- 同一来源文字映射到多个公开字段时先保存一个语义值，再在装配边界派生；只有字段语义确实独立时才允许分别创作；
-- 本地化源修订、素材 SHA-256 和批准摘要是用于发现漂移的冻结凭据，不是内容副本，不得动态计算后覆盖预期值；它们必须继续由验证器与当前来源比较；
-- 是否集中以“共同权威来源与同步修改需求”为判断标准。普通页面文案、不同语用字段和独立国家版本创作不得为了形式统一塞入巨型全站翻译文件。
-
-## 客户端交互层
-
-搜索、筛选、污染和票务分别通过明确的页面入口初始化；页面没有对应模组根节点时安全跳过。表站与等级 `0` 里站的核心内容、导航和退出不以这些脚本成功执行为前提。
-
-目标能力边界包括：
-
-- 普通导航与可选过场：通过真实链接完成路由，过场只是渐进增强；
-- 搜索：只加载当前国家版本、世界和快照范围的构建期索引；
-- 污染：拥有当前标签页的四级状态、单一概率配置和稳定呈现选择，不修改底层内容；
-- 票务：拥有当前标签页的票篮、尝试、结局和生成产物，未启用时由静态页降级；
-- 页面局部交互：筛选、对话框和表单只读取本页 DOM，失败不阻断基础内容。
-
-模块通过显式 `export` / `import` 协作。只有真实一对多通知才使用事件，不建立默认全局事件总线或远端插件系统。
-
-## 样式层
-
-`src/styles/main.css` 是共享样式入口，只导入 `foundation.css`；其余职责文件由对应布局或能力组件按需装配，避免无关页面下载和解析。各文件职责如下：
-
-1. `foundation.css`：由 `main.css` 装配，负责共享尺度、重置、外壳、任务基础、无障碍和全局响应式；
-2. `front.css`：由 `FrontLayout.astro` 装配，负责表站令牌、当代编辑系统、电影舞台、页面族和表站响应式；
-3. `ticketing.css`：由票务体验组件装配，负责票务流程、存单、纪念票、票务响应式和打印；
-4. `partner-ticketing.css`：由合作平台票务组件装配，负责平台流程与对话框；
-5. `archive.css`：由 `ArchiveLayout.astro` 装配，负责里站令牌、等级 `0` 仪式档案剧场、页面族和里站响应式；
-6. `pollution.css`：由 `ArchiveLayout.astro` 装配，负责污染等级、变体、装饰层及其窄屏与减少动态效果约束。
-
-真正共享的基础才进入 `foundation.css`，世界视觉不能以共享之名收敛为同一布局换色。只有规则完全属于单个可复用组件时才迁入组件作用域。污染样式不得随机删除或移动语义 DOM；打印样式不得裁切票面必要信息。
+完整信息归属见 [`../README.md`](../README.md)，蓝图与源码映射只维护在 [`../blueprint/traceability.json`](../blueprint/traceability.json)。
 
 ## 允许的依赖方向
 
@@ -181,18 +101,14 @@ Astro 组件只负责构建期结构和内容装配，不在组件之间建立�
 pages -> layouts + components -> typed data
 layouts -> metadata + styles + page entry
 page entry -> feature modules -> typed data + shared DOM helpers
+content consumers -> immutable build snapshot -> typed registries
 pollution module -> narrative state interface
 ticketing module -> performance data
-content consumers -> immutable build snapshot -> typed registries
 programs + search + ticketing -> site time interface
 ```
 
-- `data/` 不依赖组件、脚本或 DOM；
-- 组件可以消费数据，但不依赖客户端模块私有状态；
-- 搜索、污染与票务不相互修改私有数据；
-- 文档不成为运行时输入；
-- 表站与里站通过 URL 和明确的跨世界导航协作，不共享隐式页面状态。
-
-## 何时继续拆分
-
-仅在出现可观察收益时拆分：一个组件包含多个独立职责、同构内容明显增加、多人修改频繁冲突，或能力可以被独立测试。不要为每个小函数创建文件，不为尚未出现的国家版本复制页面，也不要为了“使用 Astro”引入 React、Vue、服务器渲染或通用插件平台。
+- `data/` 不依赖组件、客户端脚本或 DOM；
+- 组件不读取客户端模组私有状态；搜索、污染与票务不相互改写状态；
+- 表站与里站只通过 URL、共享领域身份和明确导航协作；
+- 文档、研究资料、草稿与作者样张不成为运行时输入；
+- 新框架、服务器能力、全局状态或通用插件平台必须先有真实需求和正式契约。

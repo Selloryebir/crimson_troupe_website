@@ -1,6 +1,6 @@
 # 国家版本徽章制作与复核指南
 
-本指南是九枚已注册国家版本徽章的唯一持久制作规范。它负责视觉身份、母版、颜色候选与制作验收；选择器行为、发布范围和本地化边界以 [`BP-I18N-CORE`](../blueprint/i18n/localization-contract.md) 为准，来源与授权边界以[国家版本徽章参考](../references/realm-badge-reference.md)为准。
+本指南是九枚已注册国家版本徽章的唯一持久制作规范。它负责视觉身份、母版、颜色候选与制作验收；选择器行为、发布范围和本地化边界以 [`BP-I18N-CORE`](../blueprint/i18n/localization-contract.md) 为准，来源与授权边界以[国家版本徽章来源记录](../sources/realm-badge-provenance.md)为准。
 
 ## 制作边界
 
@@ -122,7 +122,7 @@
 | `higashi`    | 朱红 `#a93a33`     | 墨黑 `#1e1b1b`   | 和纸白 `#ddd3bf` | 靛蓝 `#34455f`   | 家纹、霜叶、锋刃与克制火光   |
 | `columbia`   | 电气蓝 `#2f6381`   | 石墨 `#252c31`   | 航空铝 `#bcc6c9` | 警示橙 `#d26a38` | 科研、航空、工业能量与风险   |
 
-候选文件保存在[国家版本徽章上色预览](../references/realm-badge-color-previews/)中。任何颜色版本进入运行时都需要新的人工授权、正式蓝图变更以及主题对比度和双时间层验收。
+候选文件保存在[国家版本徽章上色预览](../project/realm-badge-color-previews/)中。任何颜色版本进入运行时都需要新的人工授权、正式蓝图变更以及主题对比度和双时间层验收。
 
 ## 制作与复核流程
 

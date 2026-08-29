@@ -1,5 +1,6 @@
 import type { LocalizedShape } from '../schema';
 import type { yanSite } from '../yan/site';
+import { minosMessages } from './messages.ts';
 
 export const minosSite = {
   brand: { name: 'Πορφυρός Θίασος', latinName: 'CRIMSON TROUPE' },
@@ -16,7 +17,7 @@ export const minosSite = {
     currentEdition: 'Τρέχουσα έκδοση: {language}',
     chooseEdition: 'Τρέχουσα έκδοση: {language}. Επιλέξτε εθνική έκδοση',
     frontFooter: 'Περιοδείες, έργα και υπηρεσίες επισκεπτών',
-    archiveFooter: 'Στιγμιότυπο συλλογής · 1084-07-01 00:00:00',
+    archiveFooter: 'Στιγμιότυπο συλλογής · {date}',
     archiveCatalog: 'Κατάλογος συλλογής',
     frontToArchive: 'Άνοιγμα εγγραφής συλλογής',
     archiveDamaged: 'Κατεστραμμένη εγγραφή· μη διαθέσιμη',
@@ -170,10 +171,10 @@ export const minosSite = {
       zone: 'Ζώνη Θέσεων',
       basketEyebrow: 'ΤΡΕΧΟΝ ΚΑΛΑΘΙ',
       basketTitle: 'Το Καλάθι σας',
-      emptyBasket: 'Δεν έχουν επιλεγεί παραστάσεις',
+      emptyBasket: minosMessages.ticketing.emptyBasket,
       baseTotal: 'Βασικό Σύνολο',
       start: 'Είσοδος στην Ουρά',
-      selectionRequired: 'Επιλέξτε τουλάχιστον μία παράσταση για να συνεχίσετε.',
+      selectionRequired: minosMessages.ticketing.selectionRequired,
       newRound: 'Έναρξη Νέου Γύρου',
     },
     troupe: {
@@ -266,7 +267,7 @@ export const minosSite = {
       metaDescription: 'Ημερομηνία, τόπος και σειρά προγράμματος για το {title}.',
       backCurrent: '← Επιστροφή στην Τρέχουσα Περίοδο',
       backHistory: '← Επιστροφή στις Προηγούμενες Παραστάσεις',
-      registerNumber: 'Κατάστιχο Περιοδείας Αρ. {index}',
+      registerNumber: minosMessages.programs.archiveRegister,
       visualNumber: 'ΚΑΤΑΣΤΙΧΟ / {index}',
       dateTime: 'Ημερομηνία και Ώρα Terra',
       place: 'Τόπος',

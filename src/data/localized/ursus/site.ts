@@ -1,5 +1,6 @@
 import type { LocalizedShape } from '../schema';
 import type { yanSite } from '../yan/site';
+import { ursusMessages } from './messages.ts';
 
 export const ursusSite = {
   brand: { name: 'Багряная труппа', latinName: 'CRIMSON TROUPE' },
@@ -16,7 +17,7 @@ export const ursusSite = {
     currentEdition: 'Текущая версия: {language}',
     chooseEdition: 'Текущая версия: {language}. Выбрать национальную версию',
     frontFooter: 'Гастроли, постановки и обслуживание зрителей',
-    archiveFooter: 'Снимок коллекции · 1084-07-01 00:00:00',
+    archiveFooter: 'Снимок коллекции · {date}',
     archiveCatalog: 'Каталог коллекции',
     frontToArchive: 'Открыть запись коллекции',
     archiveDamaged: 'Запись повреждена и недоступна',
@@ -169,10 +170,10 @@ export const ursusSite = {
       zone: 'Зона мест',
       basketEyebrow: 'ТЕКУЩАЯ КОРЗИНА',
       basketTitle: 'Ваша корзина',
-      emptyBasket: 'Спектакли не выбраны',
+      emptyBasket: ursusMessages.ticketing.emptyBasket,
       baseTotal: 'Базовая сумма',
       start: 'Встать в очередь',
-      selectionRequired: 'Чтобы продолжить, выберите хотя бы один спектакль.',
+      selectionRequired: ursusMessages.ticketing.selectionRequired,
       newRound: 'Начать новый раунд',
     },
     troupe: {
@@ -264,7 +265,7 @@ export const ursusSite = {
       metaDescription: 'Дата, место и порядок программы спектакля {title}.',
       backCurrent: '← Вернуться к текущему сезону',
       backHistory: '← Вернуться к прошедшим спектаклям',
-      registerNumber: 'Гастрольный реестр № {index}',
+      registerNumber: ursusMessages.programs.archiveRegister,
       visualNumber: 'РЕЕСТР / {index}',
       dateTime: 'Дата и время Terra',
       place: 'Место',
