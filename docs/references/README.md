@@ -10,6 +10,8 @@
 - [`realm-badge-reference.md`](realm-badge-reference.md)：九个国家版本徽章的本地参考边界、官方设定依据及项目转译限制。
 - [`realm-badge-color-previews/`](realm-badge-color-previews/)：与单色母版共用几何的九枚上色视觉候选，仅供非运行时比较。
 - [`ticketing-gameplay-reference.md`](ticketing-gameplay-reference.md)：票务小游戏拓展使用的游戏设计、现实票务、可访问性与设定来源，以及抽象转译和排除项。
+- [`victorian-visual-reference.md`](victorian-visual-reference.md)：维多利亚设计改革、剧场印刷、现实机构与《红丝绒》活动语境在正式双站视觉系统中的转译和排除项。
+- [`browser-compatibility-reference.md`](browser-compatibility-reference.md)：跨引擎工具边界、性能判断来源、测试转译及 Safari 代理限制。
 
 ## 新增要求
 

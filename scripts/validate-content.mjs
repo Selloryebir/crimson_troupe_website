@@ -28,17 +28,56 @@ import {
 } from '../src/data/content/variants.ts';
 import { buildContext, buildContexts, buildEditionIds, editions } from '../src/data/editions.ts';
 import { locations } from '../src/data/locations.ts';
+import { folioSourceTexts } from '../src/data/localized/folio-source-texts.ts';
 import { localizationPackages } from '../src/data/localized/packages.ts';
 import { diagnoseLocalization, getLocalization } from '../src/data/localized/resolve.ts';
 import { performances } from '../src/data/performances.ts';
 import { performanceOfferMatrix } from '../src/data/performance-offers.ts';
 import { productionArtworkManifest } from '../src/data/production-artwork-manifest.ts';
 import { productionArtworkRegistry } from '../src/data/production-artworks.ts';
+import { folioSourceRecords } from '../src/data/productions/folio-source-records.ts';
 import { productions } from '../src/data/productions/index.ts';
 import { ticketSeatingPlans } from '../src/data/ticket-seating-plans.ts';
 import { ticketingPlatforms } from '../src/data/ticketing-platforms.ts';
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const productionTitleReference = readFileSync(
+  path.join(repositoryRoot, 'docs/references/production-title-reference.md'),
+  'utf8',
+);
+
+function assertFolioAuthoringStructure() {
+  const expectedProductionIds = Object.keys(folioSourceTexts).sort();
+  for (const editionId of buildEditionIds) {
+    const authoringPath = path.join(
+      repositoryRoot,
+      'src/data/localized',
+      editionId,
+      'productions/folio.ts',
+    );
+    const source = readFileSync(authoringPath, 'utf8');
+    assert.doesNotMatch(
+      source,
+      /^\s{4}(?:title|tagline|synopsis):/mu,
+      `${editionId} 活页版本文件不得恢复来源标题或描述副本`,
+    );
+    assert.doesNotMatch(
+      source,
+      /folioSourceRecords/u,
+      `${editionId} 活页版本文件不得绕过集中来源文本目录`,
+    );
+    const assembledProductionIds = [
+      ...source.matchAll(/createFolioProductionContent\(\s*'[^']+',\s*'([^']+)'/gu),
+    ]
+      .map((match) => match[1])
+      .sort();
+    assert.deepEqual(
+      assembledProductionIds,
+      expectedProductionIds,
+      `${editionId} 活页版本文件必须通过统一装配 API 覆盖全部当前剧目`,
+    );
+  }
+}
 
 function cloneArtworkManifest() {
   return Object.fromEntries(
@@ -55,6 +94,8 @@ function createValidationSources(overrides = {}) {
   return {
     performanceVariants: performanceVariantRegistry,
     productions,
+    folioSources: folioSourceRecords,
+    folioSourceTexts,
     locations,
     localizations: localizationPackages,
     artwork: productionArtworkManifest,
@@ -131,10 +172,47 @@ function assertTicketingPlatformLogoFiles() {
 }
 
 assert.doesNotThrow(() => assertContentBundle(buildEditionIds, currentRootSet, buildContext));
+assertFolioAuthoringStructure();
 assertArtworkFiles();
 assertTicketingPlatformLogoFiles();
 assert.equal(Object.keys(performances).length, 28, '预备场次目录应包含 28 条记录');
 assert.equal(Object.keys(productions).length, 14, '预备剧目目录应包含 14 条记录');
+assert.equal(Object.keys(folioSourceRecords).length, 13, '活页来源目录应完整保存 13 条记录');
+assert.equal(
+  productionTitleReference.match(/^### `PROD-SRC-\d+`/gmu)?.length,
+  13,
+  '活页来源参考应完整保存 13 条官方描述',
+);
+for (const [productionId, source] of Object.entries(folioSourceRecords)) {
+  const titleRow = productionTitleReference
+    .split('\n')
+    .find((line) => line.includes(`| \`${source.sourceId}\` | \`${productionId}\``));
+  assert.ok(titleRow, `${productionId} 的人员参考缺少标题来源行`);
+  assert.deepEqual(
+    titleRow
+      .split('|')
+      .slice(1, -1)
+      .map((cell) => cell.trim()),
+    [
+      `\`${source.sourceId}\``,
+      `\`${productionId}\``,
+      source.titleForms['zh-CN'],
+      source.titleForms.en,
+      source.titleForms['ja-JP'],
+    ],
+    `${productionId} 的运行时标题来源与人员参考不一致`,
+  );
+  const quotedSynopsis = source.synopsis.text
+    .split('\n\n')
+    .map((paragraph) => `> ${paragraph}`)
+    .join('\n>\n');
+  assert.ok(
+    productionTitleReference.includes(
+      `### \`${source.sourceId}\`｜\`${productionId}\`｜${source.titleForms['zh-CN']}\n\n${quotedSynopsis}`,
+    ),
+    `${productionId} 的运行时活页来源与人员参考不一致`,
+  );
+}
 assert.equal(buildSnapshot.performanceEntries.length, 28, '当前根集合应发布 28 个场次');
 assert.equal(buildSnapshot.productionEntries.length, 14, '当前根集合应发布 14 个剧目');
 
@@ -370,6 +448,32 @@ assert.doesNotThrow(() =>
     buildContext,
     createValidationSources({ localizations: packagesWithOutOfScopeChange }),
   ),
+);
+
+const packagesWithRewrittenFolioSynopsis = structuredClone(localizationPackages);
+packagesWithRewrittenFolioSynopsis.yan.programs.productions['der-ring'].synopsis += '测试改写';
+assert.throws(
+  () =>
+    assertContentBundle(
+      ['yan'],
+      currentRootSet,
+      buildContext,
+      createValidationSources({ localizations: packagesWithRewrittenFolioSynopsis }),
+    ),
+  /yan\.productions\.der-ring\.synopsis 未采用集中活页来源简介/u,
+);
+
+const packagesWithRewrittenFolioTagline = structuredClone(localizationPackages);
+packagesWithRewrittenFolioTagline.yan.programs.productions['lone-wander'].tagline += '测试改写';
+assert.throws(
+  () =>
+    assertContentBundle(
+      ['yan'],
+      currentRootSet,
+      buildContext,
+      createValidationSources({ localizations: packagesWithRewrittenFolioTagline }),
+    ),
+  /yan\.productions\.lone-wander\.tagline 未采用集中活页来源简介/u,
 );
 
 assert.throws(

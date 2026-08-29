@@ -22,6 +22,8 @@ npm run dev
 
 然后访问终端给出的本地地址。`npm run dev` 默认启动九国家版本开发预览，使国家版本选择器和跨版本状态可直接验证；只需炎国单版本时使用 `npm run dev:showcase`。日常开发使用 `npm run quality -- <本次改动路径...>`，只执行与实际变更有关的检查；不提供路径时自动读取工作区变更。`npm run build` 仍只生成单版本 `showcase` 的 `dist/`，不重复运行质量门禁。工具链变更、跨层集成、合并、发布和正式候选阶段使用 `npm run verify`，由它执行一次完整检查、关键状态验证、一次构建和静态产物验证。运行时输出变化后再使用 `npm run preview` 验收构建结果。
 
+九版本 preview 构建后的默认浏览器冒烟为 `npm run validate:browser:preview`（Chromium）；需要品牌与跨引擎复核时，继续运行带 `:chrome`、`:firefox`、`:webkit` 与 `:edge` 后缀的同名命令。Playwright WebKit 是 Safari 的前置兼容代理，不等于真实 macOS Safari 验收。安装方式、品牌浏览器可执行文件覆盖和跨引擎性能取样参数见 [`docs/guides/development.md`](docs/guides/development.md)。
+
 构建只使用三个命名预设：默认 `showcase` 构建炎国未批准预览，`preview` 构建国家版本矩阵内九个版本的未批准预览，`release` 只接受已经人工批准的正式内容。需要检查九国家版本架构时，使用 `npm run dev`、`npm run dev:preview` 或 `npm run build:preview`；构建后使用 `npm run validate:build:preview` 检查 775 个页面的路由、元数据和搜索隔离。`npm run preview` 只服务最近一次生成的 `dist/`，因此九版本静态验收必须先执行 `build:preview`。当前全部运行时内容均未获正式批准，因此 `npm run build:release` 会列出不合格稳定 ID 并按预期停止，不应以 `release` 代替日常预览。
 
 ## 正式产品边界
