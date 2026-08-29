@@ -15,13 +15,13 @@ npm run dev
 
 日常 `dev` 默认使用九国家版本 `preview`，确保国家版本选择器和跨版本状态可以直接验收；默认 `build` 仍使用单版本 `showcase`，不扩大可部署展示范围。有限构建预设及入口如下：
 
-| 预设       | 开发命令                              | 构建命令                                   | 当前用途                                         |
-| ---------- | ------------------------------------- | ------------------------------------------ | ------------------------------------------------ |
-| `showcase` | `npm run dev:showcase`                | `npm run build` / `npm run build:showcase` | 炎国可部署展示                                   |
-| `preview`  | `npm run dev` / `npm run dev:preview` | `npm run build:preview`                    | 九国家版本完整开发预览                           |
-| `release`  | `npm run dev:release`                 | `npm run build:release`                    | 只接受已批准内容；当前会列出未批准稳定 ID 并停止 |
+| 预设       | 开发命令                              | 构建命令                                   | 当前用途                   |
+| ---------- | ------------------------------------- | ------------------------------------------ | -------------------------- |
+| `showcase` | `npm run dev:showcase`                | `npm run build` / `npm run build:showcase` | 炎国可部署展示             |
+| `preview`  | `npm run dev` / `npm run dev:preview` | `npm run build:preview`                    | 九国家版本完整开发预览     |
+| `release`  | `npm run dev:release`                 | `npm run build:release`                    | 只接受摘要匹配的已批准内容 |
 
-不得另设自由组合环境变量改变国家版本、根集合或内容资格。`release` 的当前失败是内容资格门禁，不是开发环境故障。
+不得另设自由组合环境变量改变国家版本、根集合或内容资格。`release` 失败时以内容门禁列出的稳定 ID 和原因为准。
 
 `npm run preview` 只服务当前 `dist/`，不选择或重建预设。需要验收九版本静态产物时，先运行 `npm run build:preview`；若其后又运行 `npm run build` 或 `npm run verify`，`dist/` 会恢复为单版本 `showcase`，此时应重新执行一次 `build:preview`。
 
@@ -56,11 +56,11 @@ npm run quality -- --plan docs/blueprint/modules/search.md
 | `npm run build`                            | 只生成 `dist/`，不调用质量命令                           |
 | `npm run build:showcase`                   | 显式生成炎国未批准展示产物                               |
 | `npm run build:preview`                    | 生成当前九国家版本预览产物                               |
-| `npm run build:release`                    | 生成批准内容正式产物；当前应因无批准内容而停止           |
+| `npm run build:release`                    | 生成摘要匹配的批准内容正式产物                           |
 | `npm run validate:content`                 | 检查九国家版本内容闭包、源修订、素材摘要与批准漂移       |
 | `npm run validate:content:showcase`        | 只对炎国展示集合执行同一聚焦内容门禁                     |
 | `npm run validate:content:preview`         | 显式对九国家版本预览执行同一聚焦内容门禁                 |
-| `npm run validate:content:release`         | 对正式集合执行内容门禁；当前应列出全部无批准摘要对象     |
+| `npm run validate:content:release`         | 对正式集合执行内容与批准摘要门禁                         |
 | `npm run validate:states`                  | 确定性检查污染、票务状态与纪念票字段                     |
 | `npm run validate:locales`                 | 检查默认炎国 `showcase` 的本地化覆盖                     |
 | `npm run validate:locales:preview`         | 检查九国家版本预览构建的本地化覆盖                       |

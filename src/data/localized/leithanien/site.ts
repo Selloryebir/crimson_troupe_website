@@ -1,5 +1,6 @@
 import type { LocalizedShape } from '../schema';
 import type { yanSite } from '../yan/site';
+import { leithanienMessages } from './messages.ts';
 
 export const leithanienSite = {
   brand: { name: 'Crimson Troupe', latinName: 'CRIMSON TROUPE' },
@@ -16,7 +17,7 @@ export const leithanienSite = {
     currentEdition: 'Aktuelle Ausgabe: {language}',
     chooseEdition: 'Aktuelle Ausgabe: {language}. Wählen Sie eine nationale Ausgabe',
     frontFooter: 'Führungen, Produktionen und Besucherdienste',
-    archiveFooter: 'Sammlungsschnappschuss · 1084-07-01 00:00:00',
+    archiveFooter: 'Sammlungsschnappschuss · {date}',
     archiveCatalog: 'Sammlungsindex',
     frontToArchive: 'Sammlungsdatensatz öffnen',
     archiveDamaged: 'Datensatz beschädigt; nicht verfügbar',
@@ -176,10 +177,10 @@ export const leithanienSite = {
       zone: 'Sitzbereich',
       basketEyebrow: 'AKTUELLER WARENKORB',
       basketTitle: 'Ihr Warenkorb',
-      emptyBasket: 'Keine Auftritte ausgewählt',
+      emptyBasket: leithanienMessages.ticketing.emptyBasket,
       baseTotal: 'Basissumme',
       start: 'Eintritt in die Ticket-Warteschlange',
-      selectionRequired: 'Wählen Sie mindestens eine Aufführung aus, um fortzufahren.',
+      selectionRequired: leithanienMessages.ticketing.selectionRequired,
       newRound: 'Eine weitere Runde starten',
     },
     troupe: {
@@ -280,7 +281,7 @@ export const leithanienSite = {
       metaDescription: 'Datum, Ort und Programmreihenfolge für {title}.',
       backCurrent: '← Zurück zu dieser Saison',
       backHistory: '← Zurück zu früheren Auftritten',
-      registerNumber: 'Touring-Register-Nr. {index}',
+      registerNumber: leithanienMessages.programs.archiveRegister,
       visualNumber: 'REGISTRIEREN / {index}',
       dateTime: 'Terra Datum und Uhrzeit',
       place: 'Ort',

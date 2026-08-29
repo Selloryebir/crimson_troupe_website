@@ -1,5 +1,6 @@
 import type { LocalizedShape } from '../schema.ts';
 import type { yanSite } from '../yan/site.ts';
+import { higashiMessages } from './messages.ts';
 
 export const higashiSite = {
   brand: { name: '猩紅劇団', latinName: 'CRIMSON TROUPE' },
@@ -16,7 +17,7 @@ export const higashiSite = {
     currentEdition: '現在の版：{language}',
     chooseEdition: '現在の版：{language}。国別版を選択',
     frontFooter: '巡演・演目・観劇案内',
-    archiveFooter: '収蔵スナップショット・1084-07-01 00:00:00',
+    archiveFooter: '収蔵スナップショット・{date}',
     archiveCatalog: '収蔵目録',
     frontToArchive: '収蔵記録を開く',
     archiveDamaged: '記録破損・閲覧不可',
@@ -165,10 +166,10 @@ export const higashiSite = {
       zone: '座席区分',
       basketEyebrow: 'CURRENT BASKET',
       basketTitle: '今回のバスケット',
-      emptyBasket: '公演が選択されていません',
+      emptyBasket: higashiMessages.ticketing.emptyBasket,
       baseTotal: '基本合計',
       start: '購入手続きへ',
-      selectionRequired: '続行するには1公演以上を選択してください。',
+      selectionRequired: higashiMessages.ticketing.selectionRequired,
       newRound: '新しい回を始める',
     },
     troupe: {
@@ -255,7 +256,7 @@ export const higashiSite = {
       metaDescription: '{title} の日時、会場、上演演目。',
       backCurrent: '← 今季の公演へ戻る',
       backHistory: '← 過去の公演へ戻る',
-      registerNumber: '巡演簿番号 {index}',
+      registerNumber: higashiMessages.programs.archiveRegister,
       visualNumber: 'REGISTER / {index}',
       dateTime: 'テラの日付と時刻',
       place: '場所',

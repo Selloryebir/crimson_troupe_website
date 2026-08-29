@@ -1,5 +1,6 @@
 import type { LocalizedShape } from '../schema';
 import type { yanSite } from '../yan/site';
+import { columbiaMessages } from './messages.ts';
 
 export const columbiaSite = {
   brand: { name: 'Crimson Troupe', latinName: 'CRIMSON TROUPE' },
@@ -16,7 +17,7 @@ export const columbiaSite = {
     currentEdition: 'Current edition: {language}',
     chooseEdition: 'Current edition: {language}. Choose a national edition',
     frontFooter: 'Tours, productions, and visitor services',
-    archiveFooter: 'Collection snapshot · 1084-07-01 00:00:00',
+    archiveFooter: 'Collection snapshot · {date}',
     archiveCatalog: 'Collection index',
     frontToArchive: 'Open collection record',
     archiveDamaged: 'Record damaged; unavailable',
@@ -170,10 +171,10 @@ export const columbiaSite = {
       zone: 'Seating Zone',
       basketEyebrow: 'CURRENT BASKET',
       basketTitle: 'Your Basket',
-      emptyBasket: 'No performances selected',
+      emptyBasket: columbiaMessages.ticketing.emptyBasket,
       baseTotal: 'Base Total',
       start: 'Enter Ticketing Queue',
-      selectionRequired: 'Select at least one performance to continue.',
+      selectionRequired: columbiaMessages.ticketing.selectionRequired,
       newRound: 'Start Another Round',
     },
     troupe: {
@@ -268,7 +269,7 @@ export const columbiaSite = {
       metaDescription: 'Date, place, and program order for {title}.',
       backCurrent: '← Back to This Season',
       backHistory: '← Back to Past Performances',
-      registerNumber: 'Touring Register No. {index}',
+      registerNumber: columbiaMessages.programs.archiveRegister,
       visualNumber: 'REGISTER / {index}',
       dateTime: 'Terra Date and Time',
       place: 'Place',

@@ -1,3 +1,5 @@
+import { yanMessages } from './messages.ts';
+
 export const yanSite = {
   brand: { name: '猩红剧团', latinName: 'CRIMSON TROUPE' },
   shared: {
@@ -13,7 +15,7 @@ export const yanSite = {
     currentEdition: '当前版本：{language}',
     chooseEdition: '当前版本：{language}；选择国家版本',
     frontFooter: '巡演、剧目与观演事务',
-    archiveFooter: '馆藏快照 · 1084-07-01 00:00:00',
+    archiveFooter: '馆藏快照 · {date}',
     archiveCatalog: '馆藏索引',
     frontToArchive: '打开馆藏快照',
     archiveDamaged: '记录损坏，无法打开',
@@ -160,10 +162,10 @@ export const yanSite = {
       zone: '席位分区',
       basketEyebrow: 'CURRENT BASKET',
       basketTitle: '本次票篮',
-      emptyBasket: '尚未选择场次',
+      emptyBasket: yanMessages.ticketing.emptyBasket,
       baseTotal: '基础总额',
       start: '进入购票流程',
-      selectionRequired: '至少选择一个场次后方可继续。',
+      selectionRequired: yanMessages.ticketing.selectionRequired,
       newRound: '开始新一轮',
     },
     troupe: {
@@ -249,7 +251,7 @@ export const yanSite = {
       metaDescription: '{title}的场次时间、地点与剧目编排。',
       backCurrent: '← 返回本季演出',
       backHistory: '← 返回历史演出',
-      registerNumber: '巡演簿号 {index}',
+      registerNumber: yanMessages.programs.archiveRegister,
       visualNumber: 'REGISTER / {index}',
       dateTime: '泰拉日期与时间',
       place: '地点',

@@ -29,7 +29,7 @@ docs/blueprint/
 
 剧目视觉的长期艺术契约位于 [`content/production-visual-language.md`](content/production-visual-language.md)，按 `productionId` 增长的题义资料位于 [`content/production-visual-catalog.md`](content/production-visual-catalog.md)，具体创作流程与交付模板位于 [`../guides/production-art-authoring.md`](../guides/production-art-authoring.md)。三者分别负责系统结果、已采纳档案与单次制作方法，不复制彼此正文。
 
-临时规划、建议、创意草案和一次性开发计划位于 `docs/drafts/`，外部依据位于 `docs/references/`，运行时内容位于 `src/data/` 或未来唯一的 `src/content/`。实施计划、测试输出、审核记录和翻译覆盖率报告不属于蓝图。
+临时规划、建议、创意草案和一次性开发计划位于 `docs/drafts/`；官方原文、来源身份和权利记录位于 `docs/sources/`，外部资料分析位于 `docs/research/`，非运行时项目作者资料位于 `docs/project/`，运行时内容位于 `src/data/` 或未来唯一的 `src/content/`。实施计划、测试输出、审核记录和翻译覆盖率报告不属于蓝图。
 
 普通功能开发只以本目录和 `traceability.json` 为产品依据。只有任务涉及规划讨论、草稿评审、已获授权的一次性开发计划或人工明确要求正式迁移时，才读取 `docs/drafts/`；一次性计划只补充执行顺序，其他草稿内容不得自行覆盖正式蓝图。
 
