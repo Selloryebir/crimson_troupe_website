@@ -224,7 +224,7 @@ export function createContentApprovalDigests(
   };
 }
 
-// 当前没有任何获人工批准的运行时内容；批准只写入仍匹配当前摘要的稳定单元。
+// 只记录仍匹配当前摘要的人工批准稳定单元。
 export const approvedContentDigests: ApprovedContentDigests = Object.freeze({
   rootSets: Object.freeze({}),
   performances: Object.freeze({}),

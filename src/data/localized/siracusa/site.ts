@@ -1,5 +1,6 @@
 import type { LocalizedShape } from '../schema';
 import type { yanSite } from '../yan/site';
+import { siracusaMessages } from './messages.ts';
 
 export const siracusaSite = {
   brand: { name: 'Compagnia Cremisi', latinName: 'TROUPE CREMISI' },
@@ -16,7 +17,7 @@ export const siracusaSite = {
     currentEdition: 'Edizione attuale: {language}',
     chooseEdition: "Edizione attuale: {language}. Scegli un'edizione nazionale",
     frontFooter: 'Tour, produzioni e servizi per i visitatori',
-    archiveFooter: 'Istantanea della raccolta · 1084-07-01 00:00:00',
+    archiveFooter: 'Istantanea della raccolta · {date}',
     archiveCatalog: 'Indice della raccolta',
     frontToArchive: 'Apri il record della raccolta',
     archiveDamaged: 'Registrazione danneggiata; non disponibile',
@@ -177,10 +178,10 @@ export const siracusaSite = {
       zone: 'Zona salotto',
       basketEyebrow: 'CARRELLO ATTUALE',
       basketTitle: 'Il tuo carrello',
-      emptyBasket: 'Nessuna performance selezionata',
+      emptyBasket: siracusaMessages.ticketing.emptyBasket,
       baseTotal: 'Totale base',
       start: 'Entra nella coda di ticketing',
-      selectionRequired: 'Seleziona almeno una performance per continuare.',
+      selectionRequired: siracusaMessages.ticketing.selectionRequired,
       newRound: 'Inizia un altro round',
     },
     troupe: {
@@ -279,7 +280,7 @@ export const siracusaSite = {
       metaDescription: 'Data, luogo e ordine del programma per {title}.',
       backCurrent: '← Ritorno a questa stagione',
       backHistory: '← Torna alle performance passate',
-      registerNumber: 'Registro del Turismo N. {index}',
+      registerNumber: siracusaMessages.programs.archiveRegister,
       visualNumber: 'REGISTRATI / {index}',
       dateTime: 'Data e ora di Terra',
       place: 'Luogo',

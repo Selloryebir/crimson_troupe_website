@@ -42,7 +42,7 @@ import { ticketingPlatforms } from '../src/data/ticketing-platforms.ts';
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const productionTitleReference = readFileSync(
-  path.join(repositoryRoot, 'docs/references/production-title-reference.md'),
+  path.join(repositoryRoot, 'docs/sources/official-folio-productions.md'),
   'utf8',
 );
 
@@ -261,8 +261,7 @@ assert.equal(selectedPreview.variantId, 'preview-v2');
 assert.equal(selectedPreview.value.status, 'pending');
 const persistentFixture = getPerformanceVariantUnit(fixtureId);
 assert.ok(persistentFixture);
-assert.equal(persistentFixture.preview?.variantId, 'current-preview');
-assert.equal(persistentFixture.preview?.value, persistentFixture.baseline.value);
+assert.equal(persistentFixture.preview, undefined);
 assert.equal(
   localizationPackages.columbia.programs.locations['calais-blason'],
   undefined,

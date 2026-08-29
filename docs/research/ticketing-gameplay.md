@@ -1,4 +1,4 @@
-# 票务小游戏拓展参考与转译记录
+# 票务小游戏研究与转译分析
 
 记录日期：2026-08-28
 
@@ -52,7 +52,7 @@
 | `TGP-SRC-19` | [Arknights Terra Wiki：《傀影与猩红孤钻》剧情梗概](https://arknights.wiki.gg/wiki/Phantom_%26_Crimson_Solitaire/Synopsis)，B 级                                                  | 社区梳理古堡、猩红剧团、傀影与多个结局的关系，并明确提醒读者这是社区贡献梗概。                                     | 支持“剧本、即兴、循环与结局回看”的隐喻；不得把社区对正史／非正史的判断直接写成本站官方事实。                                                       |
 | `TGP-SRC-20` | [PRTS：《红丝绒》活动整理](https://prts.wiki/w/%E7%BA%A2%E4%B8%9D%E7%BB%92) 与 [Arknights Terra Wiki：Act or Die 梗概](https://arknights.wiki.gg/wiki/Act_or_Die/Synopsis)，B 级 | 社区转录和整理蓝卡坞片场、拍摄、旧案、戏剧与影像媒介冲突，以及傀影后续阶段的剧情。                                 | 支持把“处理记录复盘”表现成剪辑／场记语言，并把玩家拒绝既定高价路线理解为一次可回看的即兴；首次候选不引入角色出场、角色口吻或对剧情因果的公开断言。 |
 
-## 建议采用的抽象母题
+## 研究归纳的抽象母题
 
 ### 1. 剧本与即兴
 
