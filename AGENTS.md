@@ -97,6 +97,7 @@ Astro 只负责构建期组件化和静态生成；客户端默认使用原生 T
 - 正式蓝图或追踪表：文档检查及一次 `blueprint:check`，契约变化时另按第 5 节运行一次 `blueprint:impact`；
 - Astro/TypeScript：项目级类型检查、变更文件 ESLint 与格式检查；类型依赖图不能缩小为单文件检查；
 - CSS：变更文件 Stylelint，以及与视觉风险相称的浏览器检查；
+- 浏览器兼容或性能改动：默认 Chromium 快速门禁之外，按实际范围使用 `validate:browser:preview:chrome`、`:firefox`、`:webkit` 与 `:edge` 复用同一断言；Playwright WebKit 只作为 Safari 前置代理，不能写成真实 macOS Safari 已验收；
 - 新增、删除或重命名功能源码：在对应源码检查之外增加一次 `blueprint:check`；
 - 运行时源码影响构建产物时，在相关质量检查通过后运行一次 `npm run build`；该命令只构建，不隐式重复质量门禁；
 - 工具链或质量配置变更、正式蓝图与运行时实现同时变更、运行时跨层集成、准备合并或发布、进入正式候选阶段：只运行一次 `npm run verify`。它依次执行完整质量、关键状态、一次构建和静态产物门禁，不得在同一轮前后重复运行这些子命令。
