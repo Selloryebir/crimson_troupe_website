@@ -9,7 +9,7 @@
 - **表站 / `front`：** 《红丝绒》事件后重新组建的新猩红剧团官网，时间定义为叙事语义上的“现在”，克制、现代、庄重且专业；
 - **里站 / `archive`：** 泰拉历 1084 年旧剧团官网的历史快照，年代化、阴暗、怪异，并可以在浏览过程中逐级污染。
 
-表站与里站共享工程基础，但使用独立 URL、页面装配和内容节奏，不是同一页面的明暗换肤。默认 `showcase` 当前生成 87 个静态页面（含根路径入口与炎国简体中文双站）；九国家版本 `preview` 生成 775 个页面，加入维多利亚、乌萨斯、叙拉古、米诺斯、莱塔尼亚、卡西米尔、东国与哥伦比亚等价页面。两种预览构建均包含独立场次与剧目、分域搜索、四级污染和表站模拟购票体验。
+表站与里站共享工程基础，但使用独立 URL、页面装配和内容节奏，不是同一页面的明暗换肤。默认 `showcase` 构建炎国简体中文双站；九国家版本 `preview` 加入维多利亚、乌萨斯、叙拉古、米诺斯、莱塔尼亚、卡西米尔、东国与哥伦比亚等价页面。两种预览均包含独立场次与剧目、分域搜索、四级污染和表站模拟购票体验；页面数量由当前内容快照机械派生，不在说明文档写死。
 
 ## 运行
 
@@ -24,7 +24,7 @@ npm run dev
 
 九版本 preview 构建后的默认浏览器冒烟为 `npm run validate:browser:preview`（Chromium）；需要品牌与跨引擎复核时，继续运行带 `:chrome`、`:firefox`、`:webkit` 与 `:edge` 后缀的同名命令。Playwright WebKit 是 Safari 的前置兼容代理，不等于真实 macOS Safari 验收。安装方式、品牌浏览器可执行文件覆盖和跨引擎性能取样参数见 [`docs/guides/development.md`](docs/guides/development.md)。
 
-构建只使用三个命名预设：默认 `showcase` 构建炎国未批准预览，`preview` 构建国家版本矩阵内九个版本的未批准预览，`release` 只接受已经人工批准的正式内容。需要检查九国家版本架构时，使用 `npm run dev`、`npm run dev:preview` 或 `npm run build:preview`；构建后使用 `npm run validate:build:preview` 检查 775 个页面的路由、元数据和搜索隔离。`npm run preview` 只服务最近一次生成的 `dist/`，因此九版本静态验收必须先执行 `build:preview`。当前全部运行时内容均未获正式批准，因此 `npm run build:release` 会列出不合格稳定 ID 并按预期停止，不应以 `release` 代替日常预览。
+构建只使用三个命名预设：默认 `showcase` 构建炎国预览，`preview` 构建国家版本矩阵，`release` 只接受摘要匹配的人工批准内容。九版本开发使用 `npm run dev`，静态验收依次使用 `npm run build:preview` 与 `npm run validate:build:preview`；`npm run preview` 只服务最近一次生成的 `dist/`。发布资格由内容门禁报告，不在 README 保存批准现状。
 
 ## 正式产品边界
 
@@ -40,7 +40,7 @@ npm run dev
 ## 仓库结构
 
 ```text
-├── docs/           # 架构、正式蓝图、临时草稿、指南和外部参考
+├── docs/           # 架构、正式蓝图、作者资料、来源、研究、草稿和指南
 ├── scripts/        # 仓库维护和蓝图追踪工具，不进入浏览器产物
 ├── src/
 │   ├── components/ # 可复用的 Astro 页面结构
@@ -48,6 +48,7 @@ npm run dev
 │   ├── pages/      # Astro 文件路由入口
 │   ├── assets/     # 拥有使用权的运行时静态资产
 │   ├── data/       # 稳定领域事实、国家版本注册及分版本本地化内容包
+│   ├── scripts/    # 搜索、筛选、污染与票务的渐进增强模块
 │   └── styles/     # 共享基础、表站、里站、票务与污染的职责化样式
 ├── astro.config.ts # Astro 静态输出配置
 ├── package.json    # 唯一推荐的开发、质量检查和构建命令
@@ -61,14 +62,14 @@ npm run dev
 
 规划讨论、候选建议、创意草稿和一次性开发计划集中位于 [`docs/drafts/`](docs/drafts/README.md)。草稿不直接约束产品或源码；只有人工明确提出正式迁移后，才按影响定位拆入正式责任文件并删除已经迁移的草稿来源。一次性计划获得端到端自动执行授权后，技术决策由智能体在正式契约内完成，影响产品方向的选择仍由人工决定，具体边界见 [`docs/drafts/plans/README.md`](docs/drafts/plans/README.md)。
 
-Git 工作分支、晋级方向、逐切片规则和人工门禁见 [`docs/guides/git-branch-workflow.md`](docs/guides/git-branch-workflow.md)。正式功能使用 `dev_feature_<slug>`，创意原型使用 `dev_experiment_<slug>`，未来专业通道也必须先回到 `dev_code`；唯一发布主干为 `dev_code -> dev -> main`，多个计划切片不得压缩为同一个代码提交。原 `dev_blueprint` 只进行审计迁移，不再接收新事项。
+Git 工作分支、晋级方向、逐切片规则和人工门禁见 [`docs/guides/git-branch-workflow.md`](docs/guides/git-branch-workflow.md)。正式功能使用 `dev_feature_<slug>`，创意原型使用 `dev_experiment_<slug>`，未来专业通道也必须先回到 `dev_code`；唯一发布主干为 `dev_code -> dev -> main`。
 
 ## 当前实现阶段
 
-当前候选已经实现根路径跳转、炎国版表站与 1084 里站独立页面树、`Production` / `Performance` 领域数据、双站独立视觉语法、分域搜索、四级污染及带存单和逐场纪念票的模拟购票体验。页面、路由、搜索、票务和验证器消费同一不可变内容快照；本季与历史由各时间层固定泰拉时钟派生。表站与等级 `0` 里站的核心内容不依赖客户端 JavaScript；污染状态在当前标签页保存事件数和稳定变体，前两次有效事件保持等级 `0`。默认展示只生成 `yan / zh-CN`；其余八个国家版本只进入九国家版本技术预览，均未经过人工翻译审核。当前九种国家版本内容均为运行时预览，不标记为 `formal`；显式正式构建会因批准摘要为空而停止。
+当前候选包含表站与 1084 里站独立页面树、类型化领域数据、双站视觉、分域搜索、四级污染和模拟购票体验；所有消费者读取同一内容快照，基础内容在无 JavaScript 时仍可用。默认展示只生成 `yan / zh-CN`，其余八个国家版本用于未经过人工译审的技术预览。实现成熟度由蓝图追踪表记录，内容发布资格由批准摘要和 `release` 门禁决定。
 
-参考网站与具体转译方式记录在 [`docs/references/design-reference.md`](docs/references/design-reference.md)。
+官方来源、项目作者资料与研究分析分别从 [`docs/sources/`](docs/sources/README.md)、[`docs/project/`](docs/project/README.md) 和 [`docs/research/`](docs/research/README.md) 进入；文化机构网站的具体分析见 [`docs/research/design-and-service.md`](docs/research/design-and-service.md)。
 
 ## 版权说明
 
-本项目为个人学习与同人创作概念，不代表《明日方舟》或其版权方。当前视觉由项目原创 HTML/CSS、SVG 与生成图像构成，运行时未使用游戏官方素材。
+本项目为个人学习与同人创作概念，不代表《明日方舟》或其版权方。运行时使用了项目负责人确认的官方活页剧目标题与简体中文描述，以及依据本地授权参考重新实现的国家徽章轮廓；不直接打包游戏官方原始图片、视频、音频、字体或代码。其他视觉由项目原创 HTML/CSS、SVG 与生成图像构成，具体来源和权利边界见 [`docs/sources/`](docs/sources/README.md)。

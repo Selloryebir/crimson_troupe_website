@@ -7,7 +7,7 @@
 ## 边界
 
 - 本蓝图只保存按 `productionId` 增长的视觉身份档案；剧团出版制度、时间层装帧、猩红印版、污染接口、素材权利和运行时验收由 `BP-CNT-PRODUCTION-VISUAL` 负责；
-- 标题形式与来源映射以 `docs/references/production-title-reference.md` 为准，实际创作步骤以 `docs/guides/production-art-authoring.md` 为准；
+- 标题形式与来源映射以 `docs/sources/official-folio-productions.md` 为准，实际创作步骤以 `docs/guides/production-art-authoring.md` 为准；
 - 艺术史名称只描述视觉近似，不是官方来源、真实媒介或剧情事实；档案不自动生成运行时实体、页面或资产；
 - 新增剧目时成组增加一项身份、题义、构图机制与记忆色，不为每项剧目建立独立蓝图。
 

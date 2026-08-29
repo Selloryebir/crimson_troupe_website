@@ -1,5 +1,6 @@
 import type { LocalizedShape } from '../schema';
 import type { yanSite } from '../yan/site';
+import { kazimierzMessages } from './messages.ts';
 
 export const kazimierzSite = {
   brand: { name: 'Karmazynowa Trupa', latinName: 'SZkarłatna trupa' },
@@ -16,7 +17,7 @@ export const kazimierzSite = {
     currentEdition: 'Aktualne wydanie: {language}',
     chooseEdition: 'Aktualne wydanie: {language}. Wybierz wydanie krajowe',
     frontFooter: 'Wycieczki, produkcje i usługi dla gości',
-    archiveFooter: 'Migawka kolekcji · 1084-07-01 00:00:00',
+    archiveFooter: 'Migawka kolekcji · {date}',
     archiveCatalog: 'Indeks kolekcji',
     frontToArchive: 'Otwórz rekord kolekcji',
     archiveDamaged: 'Zapis uszkodzony; niedostępne',
@@ -171,10 +172,10 @@ export const kazimierzSite = {
       zone: 'Strefa Wypoczynkowa',
       basketEyebrow: 'AKTUALNY KOSZYK',
       basketTitle: 'Twój koszyk',
-      emptyBasket: 'Nie wybrano żadnych wykonań',
+      emptyBasket: kazimierzMessages.ticketing.emptyBasket,
       baseTotal: 'Suma podstawowa',
       start: 'Wejdź do kolejki po bilety',
-      selectionRequired: 'Wybierz przynajmniej jeden występ, aby kontynuować.',
+      selectionRequired: kazimierzMessages.ticketing.selectionRequired,
       newRound: 'Rozpocznij kolejną rundę',
     },
     troupe: {
@@ -273,7 +274,7 @@ export const kazimierzSite = {
       metaDescription: 'Data, miejsce i zamówienie programu dla {title}.',
       backCurrent: '← Powrót do tego sezonu',
       backHistory: '← Powrót do poprzednich występów',
-      registerNumber: 'Rejestr objazdowy nr {index}',
+      registerNumber: kazimierzMessages.programs.archiveRegister,
       visualNumber: 'REJESTRACJA / {index}',
       dateTime: 'Data i godzina Terra',
       place: 'Miejsce',
