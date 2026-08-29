@@ -318,6 +318,11 @@
       "related": ["BP-CNT-CORE", "BP-MOD-TERRA-TIME", "BP-MOD-TICKETING"]
     },
     {
+      "path": "src/data/localized/folio-source-texts.ts",
+      "primary": "BP-I18N-CORE",
+      "related": ["BP-CNT-CORE", "BP-I18N-TERMS", "BP-FND-DOMAIN", "BP-MOD-PROGRAMS"]
+    },
+    {
       "path": "src/data/localized/packages.ts",
       "primary": "BP-I18N-CORE",
       "related": ["BP-CNT-CORE"]
