@@ -642,26 +642,27 @@ const currentApprovals = {
   rootSets: { [currentRootSet.rootSetId]: currentDigests.rootSet },
   performances: currentDigests.performances,
 };
-assert.throws(
-  () => assertContentContextEligible(buildContexts.release, currentRootSet, currentApprovals),
-  /ticketing-platform\.rice-network\.logo（正式 Logo 缺失）.*ticketing-platform\.drop-tower\.logo（正式 Logo 缺失）/u,
-);
-const approvedTicketingPlatforms = Object.fromEntries(
+const unapprovedTicketingPlatforms = Object.fromEntries(
   Object.entries(ticketingPlatforms).map(([platformId, platform]) => [
     platformId,
     {
       ...platform,
-      logo: { ...platform.logo, maturity: 'formal', approvalStatus: 'approved' },
+      logo: { ...platform.logo, maturity: 'preview', approvalStatus: 'preview-only' },
     },
   ]),
 );
+assert.throws(
+  () =>
+    assertContentContextEligible(
+      buildContexts.release,
+      currentRootSet,
+      currentApprovals,
+      unapprovedTicketingPlatforms,
+    ),
+  /ticketing-platform\.rice-network\.logo（正式 Logo 缺失）.*ticketing-platform\.drop-tower\.logo（正式 Logo 缺失）/u,
+);
 assert.doesNotThrow(() =>
-  assertContentContextEligible(
-    buildContexts.release,
-    currentRootSet,
-    currentApprovals,
-    approvedTicketingPlatforms,
-  ),
+  assertContentContextEligible(buildContexts.release, currentRootSet, currentApprovals),
 );
 assert.throws(
   () => assertContentContextEligible(buildContexts.release, currentRootSet),

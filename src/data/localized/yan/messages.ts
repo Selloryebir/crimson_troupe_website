@@ -6,8 +6,8 @@ import type {
 } from '../schema';
 
 export const yanTicketingPlatforms = {
-  'rice-network': { displayName: '水稻网', logoAlt: '水稻网临时标识' },
-  'drop-tower': { displayName: '跳楼机', logoAlt: '跳楼机临时标识' },
+  'rice-network': { displayName: '水稻网', logoAlt: '水稻网标识' },
+  'drop-tower': { displayName: '跳楼机', logoAlt: '跳楼机标识' },
 } as const satisfies Record<string, TicketingPlatformContent>;
 
 export const yanMessages = {

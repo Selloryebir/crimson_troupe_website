@@ -3,8 +3,8 @@ import type { yanMessages } from '../yan/messages';
 import type { yanTicketingPlatforms } from '../yan/messages';
 
 export const minosTicketingPlatforms = {
-  'rice-network': { displayName: 'Δίκτυο Ρυζιού', logoAlt: 'Προσωρινό σήμα του Δικτύου Ρυζιού' },
-  'drop-tower': { displayName: 'Πύργος Πτώσης', logoAlt: 'Προσωρινό σήμα του Πύργου Πτώσης' },
+  'rice-network': { displayName: 'Δίκτυο Ρυζιού', logoAlt: 'Σήμα του Δικτύου Ρυζιού' },
+  'drop-tower': { displayName: 'Πύργος Πτώσης', logoAlt: 'Σήμα του Πύργου Πτώσης' },
 } as const satisfies LocalizedShape<typeof yanTicketingPlatforms>;
 
 export const minosMessages = {

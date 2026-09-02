@@ -5,7 +5,8 @@
 ## 当前记录
 
 - [`official-folio-productions.md`](official-folio-productions.md)：人工确认的 13 项官方活页剧目中／英／日标题、官方简体中文描述及稳定 `productionId` 映射；
-- [`realm-badge-provenance.md`](realm-badge-provenance.md)：九枚国家徽章本地参考的来源与权利边界，以及用于核实国家语境的官方公开来源。
+- [`realm-badge-provenance.md`](realm-badge-provenance.md)：九枚国家徽章本地参考的来源与权利边界，以及用于核实国家语境的官方公开来源；
+- [`ticketing-platform-logo-provenance.md`](ticketing-platform-logo-provenance.md)：现实票务平台本地参考、水稻网与跳楼机正式原创 SVG 的来源、权利和采用边界。
 
 ## 维护规则
 
