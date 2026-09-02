@@ -160,9 +160,9 @@ a {
 
 .brand-mark {
   display: block;
-  width: 46px;
-  height: 46px;
-  flex: 0 0 46px;
+  width: 58px;
+  height: 58px;
+  flex: 0 0 58px;
 }
 
 .troupe-mark {
@@ -767,6 +767,12 @@ a {
     grid-template-columns: minmax(0, 1fr) auto;
     width: 100%;
     padding-inline: 14px;
+  }
+
+  .brand-mark {
+    width: 54px;
+    height: 54px;
+    flex-basis: 54px;
   }
 
   .brand-name small,
