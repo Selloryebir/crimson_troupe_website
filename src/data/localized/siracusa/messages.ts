@@ -3,8 +3,8 @@ import type { yanMessages } from '../yan/messages';
 import type { yanTicketingPlatforms } from '../yan/messages';
 
 export const siracusaTicketingPlatforms = {
-  'rice-network': { displayName: 'Rete Riso', logoAlt: 'Marchio provvisorio di Rete Riso' },
-  'drop-tower': { displayName: 'Torre a Caduta', logoAlt: 'Marchio provvisorio di Torre a Caduta' },
+  'rice-network': { displayName: 'Rete Riso', logoAlt: 'Marchio di Rete Riso' },
+  'drop-tower': { displayName: 'Torre a Caduta', logoAlt: 'Marchio di Torre a Caduta' },
 } as const satisfies LocalizedShape<typeof yanTicketingPlatforms>;
 
 export const siracusaMessages = {

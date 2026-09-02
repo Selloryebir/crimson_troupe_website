@@ -3,8 +3,8 @@ import type { yanMessages } from '../yan/messages';
 import type { yanTicketingPlatforms } from '../yan/messages';
 
 export const columbiaTicketingPlatforms = {
-  'rice-network': { displayName: 'RiceNet', logoAlt: 'RiceNet preview mark' },
-  'drop-tower': { displayName: 'Drop Tower', logoAlt: 'Drop Tower preview mark' },
+  'rice-network': { displayName: 'RiceNet', logoAlt: 'RiceNet mark' },
+  'drop-tower': { displayName: 'Drop Tower', logoAlt: 'Drop Tower mark' },
 } as const satisfies LocalizedShape<typeof yanTicketingPlatforms>;
 
 export const columbiaMessages = {
