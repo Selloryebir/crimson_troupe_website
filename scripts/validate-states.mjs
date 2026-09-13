@@ -37,6 +37,10 @@ import {
 } from '../src/data/site-time.ts';
 import { getTicketingOptions, getTicketingPlatformPresentation } from '../src/data/ticketing.ts';
 import { shouldRequestArchiveEntry } from '../src/scripts/pollution-controller.ts';
+import {
+  redactNarrativeText,
+  selectCrimsonFolioIds,
+} from '../src/scripts/archive-folio-effects.ts';
 import { countSearchGraphemes, searchSiteEntries } from '../src/scripts/site-search.ts';
 import {
   MAX_POLLUTION_LEVEL,
@@ -737,6 +741,46 @@ const pollutionTriggers = [
   'archive-locale',
   'archive-search',
 ];
+
+const folioCatalog = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+const selectedFolios = selectCrimsonFolioIds(folioCatalog, 42);
+assert.equal(selectedFolios.size, 3, '当前八个剧目应抽取三个而非按页面卡片重新抽取');
+assert.deepEqual(
+  selectCrimsonFolioIds([...folioCatalog].reverse().concat('a'), 42),
+  selectedFolios,
+);
+assert.equal(selectCrimsonFolioIds([], 42).size, 0);
+assert.ok(
+  new Set(
+    Array.from({ length: 32 }, (_, seed) =>
+      [...selectCrimsonFolioIds(folioCatalog, seed)].join(','),
+    ),
+  ).size > 3,
+);
+const seededState = { version: 2, level: 2, eventCount: 8, variant: 1, seed: 4294967295 };
+assert.deepEqual(parsePollutionState(JSON.stringify(seededState)), seededState);
+assert.equal(advancePollution(seededState, 'archive-search', () => 1).state.seed, seededState.seed);
+for (const seed of [-1, 4294967296, 0.1, '42', null]) {
+  assert.equal(parsePollutionState(JSON.stringify({ ...seededState, seed })).seed, undefined);
+}
+const narrative =
+  '剧场仍在等待观众，旧纸上的姓名不再完整。The company awaits its audience.\n请沿长廊继续前行。👁️';
+assert.equal(redactNarrativeText(narrative, 0, 42), narrative);
+const graphemes = (value) =>
+  [...new Intl.Segmenter(undefined, { granularity: 'grapheme' }).segment(value)].map(
+    ({ segment }) => segment,
+  );
+let previousRedaction = graphemes(narrative);
+for (const level of [1, 2, 3]) {
+  const current = graphemes(redactNarrativeText(narrative, level, 42));
+  assert.equal(current.length, previousRedaction.length);
+  assert.ok(current.includes('█'), '叙事遮挡必须是真实字符');
+  previousRedaction.forEach((character, index) => {
+    if (character === '█' || !/[\p{L}\p{N}]/u.test(character))
+      assert.equal(current[index], character);
+  });
+  previousRedaction = current;
+}
 
 for (const trigger of pollutionTriggers) {
   let randomCalls = 0;

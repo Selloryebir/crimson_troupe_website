@@ -33,7 +33,10 @@ import { localizationPackages } from '../src/data/localized/packages.ts';
 import { diagnoseLocalization, getLocalization } from '../src/data/localized/resolve.ts';
 import { performances } from '../src/data/performances.ts';
 import { performanceOfferMatrix } from '../src/data/performance-offers.ts';
-import { productionArtworkManifest } from '../src/data/production-artwork-manifest.ts';
+import {
+  archiveFolioCrimsonManifest,
+  productionArtworkManifest,
+} from '../src/data/production-artwork-manifest.ts';
 import { productionArtworkRegistry } from '../src/data/production-artworks.ts';
 import { folioSourceRecords } from '../src/data/productions/folio-source-records.ts';
 import { productions } from '../src/data/productions/index.ts';
@@ -99,6 +102,7 @@ function createValidationSources(overrides = {}) {
     locations,
     localizations: localizationPackages,
     artwork: productionArtworkManifest,
+    folioCrimson: archiveFolioCrimsonManifest,
     seatingPlans: ticketSeatingPlans,
     ticketingPlatforms,
     offerMatrix: performanceOfferMatrix,
@@ -114,6 +118,8 @@ function createApprovalSources(overrides = {}) {
     locations,
     localizations: localizationPackages,
     artwork: productionArtworkRegistry,
+    folioCrimson: archiveFolioCrimsonManifest,
+    folioSources: folioSourceRecords,
     seatingPlans: ticketSeatingPlans,
     ticketingPlatforms,
     archiveProjection: archiveProjectionIdentity,
@@ -145,16 +151,16 @@ function withPreviewVariant(performanceId, value, variantId = 'test-preview') {
 }
 
 function assertArtworkFiles() {
-  for (const worlds of Object.values(productionArtworkManifest)) {
-    for (const entry of Object.values(worlds)) {
-      if (!entry) {
-        continue;
-      }
-      const digest = `sha256:${createHash('sha256')
-        .update(readFileSync(path.join(repositoryRoot, entry.assetPath)))
-        .digest('hex')}`;
-      assert.equal(digest, entry.sourceRevision, `${entry.assetPath} 与素材修订摘要不一致`);
-    }
+  const entries = [
+    ...Object.values(productionArtworkManifest).flatMap((worlds) => Object.values(worlds)),
+    ...Object.values(archiveFolioCrimsonManifest),
+  ];
+  for (const entry of entries) {
+    if (!entry) continue;
+    const digest = `sha256:${createHash('sha256')
+      .update(readFileSync(path.join(repositoryRoot, entry.assetPath)))
+      .digest('hex')}`;
+    assert.equal(digest, entry.sourceRevision, `${entry.assetPath} 与素材修订摘要不一致`);
   }
 }
 
@@ -174,6 +180,13 @@ function assertTicketingPlatformLogoFiles() {
 assert.doesNotThrow(() => assertContentBundle(buildEditionIds, currentRootSet, buildContext));
 assertFolioAuthoringStructure();
 assertArtworkFiles();
+assert.equal(buildSnapshot.archiveProjectionSourceId, 'the-lullaby');
+assert.equal(buildSnapshot.productions['the-lullaby'], undefined);
+assert.equal(buildSnapshot.archiveFolioProductionIds.length, 8);
+assert.deepEqual(
+  Object.keys(buildSnapshot.archiveFolioCrimson).sort(),
+  [...buildSnapshot.archiveFolioProductionIds, 'the-lullaby'].sort(),
+);
 assertTicketingPlatformLogoFiles();
 assert.equal(Object.keys(performances).length, 28, '预备场次目录应包含 28 条记录');
 assert.equal(Object.keys(productions).length, 14, '预备剧目目录应包含 14 条记录');
@@ -481,9 +494,34 @@ assert.throws(
       ['yan'],
       currentRootSet,
       buildContext,
-      createValidationSources({ archiveProjection: { productionId: 'uncrowned' } }),
+      createValidationSources({ archiveProjection: { sourceId: 'uncrowned' } }),
     ),
-  /archiveProjection\.artwork\.uncrowned\.archive 缺失/u,
+  /archiveProjection\.folioSource\.uncrowned 缺失/u,
+);
+
+const missingCrimson = { ...archiveFolioCrimsonManifest };
+delete missingCrimson['der-ring'];
+assert.throws(
+  () =>
+    assertContentBundle(
+      ['yan'],
+      currentRootSet,
+      buildContext,
+      createValidationSources({ folioCrimson: missingCrimson }),
+    ),
+  /folioCrimson\.der-ring 缺失/u,
+);
+const missingLullaby = { ...archiveFolioCrimsonManifest };
+delete missingLullaby['the-lullaby'];
+assert.throws(
+  () =>
+    assertContentBundle(
+      ['yan'],
+      currentRootSet,
+      buildContext,
+      createValidationSources({ folioCrimson: missingLullaby }),
+    ),
+  /archiveProjection\.crimson\.the-lullaby 缺失/u,
 );
 
 const offersFixtureId = 'uncrowned-trimount-1102';
@@ -711,6 +749,40 @@ assert.notEqual(
   changedAssetDigests.performances[fixtureId],
   currentDigests.performances[fixtureId],
 );
+
+const changedCrimsonManifest = structuredClone(archiveFolioCrimsonManifest);
+changedCrimsonManifest['der-ring'].sourceRevision =
+  'sha256:0000000000000000000000000000000000000000000000000000000000000000';
+const changedCrimsonDigests = createContentApprovalDigests(
+  buildContexts.release.editionIds,
+  currentRootSet,
+  createApprovalSources({ folioCrimson: changedCrimsonManifest }),
+);
+assert.notEqual(
+  changedCrimsonDigests.performances['der-ring-londinium-1084-0308'],
+  currentDigests.performances['der-ring-londinium-1084-0308'],
+);
+const movedCrimsonManifest = structuredClone(archiveFolioCrimsonManifest);
+movedCrimsonManifest['der-ring'].assetPath =
+  'src/assets/images/archive/folio/crimson/relocated-der-ring.webp';
+const movedCrimsonDigests = createContentApprovalDigests(
+  buildContexts.release.editionIds,
+  currentRootSet,
+  createApprovalSources({ folioCrimson: movedCrimsonManifest }),
+);
+assert.equal(
+  movedCrimsonDigests.performances['der-ring-londinium-1084-0308'],
+  currentDigests.performances['der-ring-londinium-1084-0308'],
+);
+const changedLullabyManifest = structuredClone(archiveFolioCrimsonManifest);
+changedLullabyManifest['the-lullaby'].sourceRevision =
+  'sha256:0000000000000000000000000000000000000000000000000000000000000000';
+const changedLullabyDigests = createContentApprovalDigests(
+  buildContexts.release.editionIds,
+  currentRootSet,
+  createApprovalSources({ folioCrimson: changedLullabyManifest }),
+);
+assert.notEqual(changedLullabyDigests.site, currentDigests.site);
 
 const movedArtworkRegistry = cloneProductionArtworkRegistry();
 movedArtworkRegistry.uncrowned.front.assetPath =

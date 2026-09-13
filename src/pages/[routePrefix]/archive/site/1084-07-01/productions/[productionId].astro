@@ -38,10 +38,6 @@ const relatedPerformances = getLocalizedPerformanceEntries(localization)
 const canonicalPath = productionPath(edition, 'archive', production.productionId);
 const projection = localization.archiveProjection.performance;
 const projectionView = localization.archiveProjection.views['production-record'];
-const projectionProduction = getLocalizedProduction(
-  localization,
-  buildSnapshot.archiveProjectionProductionId,
-);
 ---
 
 <ArchiveLayout
@@ -94,12 +90,6 @@ const projectionProduction = getLocalizedProduction(
         title={production.title}
         subtitle={production.kind}
         number={copy.visualNumber}
-        projection={{
-          productionId: projectionProduction.productionId,
-          title: projection.title,
-          subtitle: projection.kind,
-          number: projection.registerCode,
-        }}
       />
     </header><section
       class="detail-section prose archive-projection-source"

@@ -36,10 +36,6 @@ const featuredProduction = featuredPerformance
   ? getLocalizedProduction(localization, featuredPerformance.productionIds[0])
   : undefined;
 const projection = localization.archiveProjection.performance;
-const projectionProduction = getLocalizedProduction(
-  localization,
-  buildSnapshot.archiveProjectionProductionId,
-);
 ---
 
 <ArchiveLayout
@@ -76,12 +72,6 @@ const projectionProduction = getLocalizedProduction(
             title={featuredProduction.title}
             subtitle={featuredProduction.kind}
             number={copy.featuredNumber}
-            projection={{
-              productionId: projectionProduction.productionId,
-              title: projection.title,
-              subtitle: projection.kind,
-              number: projection.registerCode,
-            }}
           />
           <span class="archive-feature__caption">
             <span class="archive-projection-source" data-archive-projection-source>

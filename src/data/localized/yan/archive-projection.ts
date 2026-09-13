@@ -3,7 +3,7 @@ import type { ArchiveProjectionContent } from '../schema.ts';
 export const yanArchiveProjection = {
   statusAnnouncements: ['档案出现一处异常。', '档案关系正在改写。', '页面记录已统一更正去向。'],
   performance: {
-    title: '欢欣鼓舞',
+    title: '摇篮曲',
     kind: '终场演出',
     tagline: '席位仍为持柬者保留',
     dateTime: '1084-11-11 23:49:00 · 第三次钟声以前',
@@ -23,7 +23,7 @@ export const yanArchiveProjection = {
     venueLabel: '地点',
     attendanceLabel: '到场',
     role: '持柬来宾',
-    production: '欢欣鼓舞',
+    production: '摇篮曲',
     venue: '克莱布拉松林地城堡',
     attendance: '第三次钟声以前',
     closing: '继续后，原记录仍会打开。请不要因此以为城堡位于记录之后；它只是比这份快照更早看见您。',

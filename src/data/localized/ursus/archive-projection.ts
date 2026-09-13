@@ -7,7 +7,7 @@ export const ursusArchiveProjection = {
     'Все записи на странице теперь указывают в одно место.',
   ],
   performance: {
-    title: 'Ликование',
+    title: 'Колыбельная',
     kind: 'Последнее представление',
     tagline: 'Место всё ещё сохранено за предъявителем',
     dateTime: '1084-11-11 23:49:00 · до третьего колокола',
@@ -27,7 +27,7 @@ export const ursusArchiveProjection = {
     venueLabel: 'Место',
     attendanceLabel: 'Явка',
     role: 'Предъявитель приглашения',
-    production: 'Ликование',
+    production: 'Колыбельная',
     venue: 'Лесной замок Calais-Blason',
     attendance: 'До третьего колокола',
     closing:

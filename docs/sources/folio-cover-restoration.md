@@ -8,6 +8,7 @@
 - `local-reference-materials/normal-folio-sr/` 与 `local-reference-materials/crimson-folio-sr/` 为 DeepAI SRGAN 放大参考，不作为文字、Logo、撕口 Alpha 或其他语义真值。
 - 普通版经逐图与跨图审计的最终 RGBA 母版位于本地忽略目录 `.agent-work/folio-cover-restoration/optimized-normal-folio-v5/final/covers/`；猩红版母版位于 `.agent-work/folio-cover-restoration/optimized-crimson-folio-v1/final/covers/`。两套同名成对，最终 WebP 与母版解码后逐像素一致。
 - 2026-09-13，项目负责人明确要求将两套修复结果纳入项目文件、让里站当前剧目引用普通版，并允许上传到公开项目仓库及按 `dev_experiment → dev_code → dev` 流程晋级。普通版与猩红版均归里站；猩红版的页面使用时机留待后续开发策略决定。
+- 后续获准的里站污染设计将等级 0—3 分别对应普通版、约三分之一剧目的对应猩红版、全部对应猩红版及全部猩红版《摇篮曲》。配对图与投影专用图由当前快照显式引用，等级 3 投影不新建普通《摇篮曲》实体或路由；此次使用策略不改变图像母版及下述文件摘要。
 
 ## 仓库存放与使用
 

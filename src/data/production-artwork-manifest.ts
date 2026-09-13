@@ -1,4 +1,5 @@
 import type { ProductionId } from './productions/index.ts';
+import type { FolioSourceProductionId } from './productions/folio-source-records.ts';
 import type { SiteWorld } from './site-routes.ts';
 
 export interface ProductionArtworkManifestEntry {
@@ -116,3 +117,54 @@ export const productionArtworkManifest: ProductionArtworkManifest = {
     },
   },
 };
+
+// 污染版是可逆的页面投影，不是新剧目或独立场次；摇篮曲只作为三级视觉来源。
+export const archiveFolioCrimsonManifest = {
+  'der-ring': {
+    assetPath: 'src/assets/images/archive/folio/crimson/der-ring.webp',
+    sourceRevision: 'sha256:fffa0908c84205ed0248b888d8d2357ffb5d84556f95b40964e46adb696a2eed',
+    rights: 'local-folio-restoration-preview',
+  },
+  'frost-deer-and-snow-doe': {
+    assetPath: 'src/assets/images/archive/folio/crimson/frost-deer-and-snow-doe.webp',
+    sourceRevision: 'sha256:18ceff009cb20c0a562b6b140fa3f2f093f9c078da134518ff1a036c55dbb678',
+    rights: 'local-folio-restoration-preview',
+  },
+  'light-of-heria': {
+    assetPath: 'src/assets/images/archive/folio/crimson/light-of-heria.webp',
+    sourceRevision: 'sha256:e678f2c51fb0dd5fa2537059088c1964b8c656185782cf814d0d26bb6e299276',
+    rights: 'local-folio-restoration-preview',
+  },
+  'lone-wander': {
+    assetPath: 'src/assets/images/archive/folio/crimson/lone-wander.webp',
+    sourceRevision: 'sha256:2fad3556e45c70b61d75de968f0b27b3fa93becec30bd9c275fb4396b8b9505a',
+    rights: 'local-folio-restoration-preview',
+  },
+  'ode-au-triomphe': {
+    assetPath: 'src/assets/images/archive/folio/crimson/ode-au-triomphe.webp',
+    sourceRevision: 'sha256:69762f747ee0039ce0912a116708524c6c7305dcd362ccefa2117e3b6f0b621d',
+    rights: 'local-folio-restoration-preview',
+  },
+  'one-hundred-and-one-days': {
+    assetPath: 'src/assets/images/archive/folio/crimson/one-hundred-and-one-days.webp',
+    sourceRevision: 'sha256:172cd4a02f2a677422c4db9c9f1a7feaa369b915088648ad7c1d310eb514f2ec',
+    rights: 'local-folio-restoration-preview',
+  },
+  'the-carnival': {
+    assetPath: 'src/assets/images/archive/folio/crimson/the-carnival.webp',
+    sourceRevision: 'sha256:8007714fbf0274f388a68dabaea23072f74a0437c8bdc12165560ec1f6d6e7bd',
+    rights: 'local-folio-restoration-preview',
+  },
+  'the-lullaby': {
+    assetPath: 'src/assets/images/archive/folio/crimson/the-lullaby.webp',
+    sourceRevision: 'sha256:606a8ab4ea736924f58eebc23c7d25417e69c3d79c1cdc8e774c13ab7696f613',
+    rights: 'local-folio-restoration-preview',
+  },
+  'wonderland-in-dream': {
+    assetPath: 'src/assets/images/archive/folio/crimson/wonderland-in-dream.webp',
+    sourceRevision: 'sha256:53caa56c53a304066c123aa606ab76372c648d616f7f39ddec8070df599dbb75',
+    rights: 'local-folio-restoration-preview',
+  },
+} as const satisfies Partial<Record<FolioSourceProductionId, ProductionArtworkManifestEntry>>;
+
+export type ArchiveFolioCrimsonId = keyof typeof archiveFolioCrimsonManifest;
