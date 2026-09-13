@@ -7,7 +7,7 @@ export const siracusaArchiveProjection = {
     'Tutte le registrazioni della pagina indicano ora la stessa destinazione.',
   ],
   performance: {
-    title: 'Il Carnevale',
+    title: 'La Ninnananna',
     kind: 'Performance finale',
     tagline: 'Un posto resta riservato al portatore',
     dateTime: '1084-11-11 23:49:00 · prima della terza campana',
@@ -28,7 +28,7 @@ export const siracusaArchiveProjection = {
     venueLabel: 'Sede',
     attendanceLabel: 'Presenze',
     role: 'Latore del presente invito',
-    production: 'Il Carnevale',
+    production: 'La Ninnananna',
     venue: 'Castello nel bosco di Calais-Blason',
     attendance: 'Prima della terza campana',
     closing:

@@ -37,10 +37,6 @@ const collectionPath =
 const backLabel = performance.collection === 'history' ? copy.backHistory : copy.backCurrent;
 const projection = localization.archiveProjection.performance;
 const projectionView = localization.archiveProjection.views['performance-record'];
-const projectionProduction = getLocalizedProduction(
-  localization,
-  buildSnapshot.archiveProjectionProductionId,
-);
 ---
 
 <ArchiveLayout
@@ -97,12 +93,6 @@ const projectionProduction = getLocalizedProduction(
         title={leadProduction.title}
         subtitle={leadProduction.kind}
         number={formatMessage(copy.visualNumber, { index: performance.index })}
-        projection={{
-          productionId: projectionProduction.productionId,
-          title: projection.title,
-          subtitle: projection.kind,
-          number: projection.registerCode,
-        }}
       />
     </header><dl class="fact-grid">
       <div>

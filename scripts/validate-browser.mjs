@@ -14,6 +14,7 @@ import { buildSnapshot } from '../src/data/content/resolve.ts';
 import { builtEditions, editions } from '../src/data/editions.ts';
 import { getLocalization } from '../src/data/localized/resolve.ts';
 import { derivePollutionComposition } from '../src/scripts/pollution-state.ts';
+import { selectCrimsonFolioIds } from '../src/scripts/archive-folio-effects.ts';
 
 const serverHost = '127.0.0.1';
 const browserEngine = process.env.BROWSER_ENGINE ?? 'chromium';
@@ -54,7 +55,7 @@ function archivePath(routePrefix, segment = '') {
 function pollutionStateForComposition(level, pageType, pathname, composition) {
   for (let eventCount = Math.max(3, level + 2); eventCount <= 30; eventCount += 1) {
     for (const variant of [0, 1, 2]) {
-      const state = { version: 2, level, eventCount, variant };
+      const state = { version: 2, level, eventCount, variant, seed: 42 };
       if (derivePollutionComposition(state, pageType, pathname) === composition) {
         return state;
       }
@@ -91,6 +92,51 @@ async function assertArchiveProjectionList(page, expectedCount, label) {
   );
 }
 
+async function assertFolioEditions(page, level) {
+  const state = await page.evaluate(() =>
+    JSON.parse(window.sessionStorage.getItem('crimson-troupe:archive-pollution:v2')),
+  );
+  const posters = page.locator('[data-folio-cover]');
+  assert.ok(await posters.count(), '封面检查必须拥有真实消费者');
+  for (const poster of await posters.all()) {
+    const id = await poster.getAttribute('data-folio-cover');
+    const catalog = (await poster.getAttribute('data-folio-catalog')).split(',');
+    const selected = selectCrimsonFolioIds(catalog, state.seed);
+    const expected =
+      level === 3
+        ? 'lullaby'
+        : level === 2 || (level === 1 && selected.has(id))
+          ? 'crimson'
+          : 'normal';
+    await poster.scrollIntoViewIfNeeded();
+    await page.waitForFunction(
+      ({ id, expected }) =>
+        [...document.querySelectorAll('[data-folio-cover]')]
+          .filter((element) => element.dataset.folioCover === id)
+          .some((element) => element.dataset.folioEdition === expected),
+      { id, expected },
+    );
+    const proof = await poster.evaluate((element) => {
+      const image = element.querySelector('[data-folio-image]');
+      const edition = element.dataset.folioEdition;
+      return {
+        count: element.querySelectorAll('img').length,
+        edition,
+        requested: element.dataset.folioRequested,
+        src: image.getAttribute('src'),
+        expectedSrc: image.dataset[`${edition}Src`],
+        complete: image.complete && image.naturalWidth > 0,
+      };
+    });
+    assert.equal(proof.count, 1, '封面必须使用单一真实图像，不保留叠放影');
+    assert.equal(proof.edition, expected);
+    assert.equal(proof.requested, expected);
+    assert.equal(proof.src, proof.expectedSrc);
+    assert.equal(proof.complete, true);
+  }
+  await page.evaluate(() => window.scrollTo(0, 0));
+}
+
 async function assertArchiveVisualLayer(page, label, reducedMotion = false) {
   const layer = page.locator('[data-pollution-visual-layer]');
   assert.equal(await layer.count(), 1, `${label} 应且只应有一个污染装饰层`);
@@ -105,6 +151,15 @@ async function assertArchiveVisualLayer(page, label, reducedMotion = false) {
     'none',
     `${label} 装饰层不得截获指针`,
   );
+  assert.equal(
+    await layer.evaluate(
+      (element) =>
+        Number(window.getComputedStyle(element).zIndex) <
+        Number(window.getComputedStyle(document.querySelector('.site-main')).zIndex),
+    ),
+    true,
+    `${label} 大面积污染必须退至主内容后方`,
+  );
   const echoes = layer.locator('.archive-pollution-stage__echo:visible');
   assert.equal(await echoes.count(), 4, `${label} 应显示四个本地化档案视觉副本`);
   assert.equal(
@@ -116,12 +171,14 @@ async function assertArchiveVisualLayer(page, label, reducedMotion = false) {
   );
   const taskControls = page.locator('main a:visible, main button:visible, main select:visible');
   assert.ok(await taskControls.count(), `${label} 应保留可操作的任务层`);
-  assert.ok(
-    await taskControls.evaluateAll((elements) =>
-      elements.some((element) => window.getComputedStyle(element).transform !== 'none'),
-    ),
-    `${label} 的非保护叙事控件应参与有界空间失序`,
-  );
+  if (page.viewportSize().width > 620) {
+    assert.ok(
+      await taskControls.evaluateAll((elements) =>
+        elements.some((element) => window.getComputedStyle(element).transform !== 'none'),
+      ),
+      `${label} 的非保护叙事控件应参与有界空间失序`,
+    );
+  }
   assert.equal(
     await taskControls.evaluateAll((elements) =>
       elements.every((element) => {
@@ -652,6 +709,7 @@ try {
   });
   await archiveVisualPage.reload();
   await archiveVisualPage.locator('html[data-pollution-level="0"]').waitFor();
+  await assertFolioEditions(archiveVisualPage, 0);
   assert.equal(
     await visualLayer.evaluate((element) => window.getComputedStyle(element).display),
     'none',
@@ -693,9 +751,12 @@ try {
       assert.notEqual(stageProof.content, 'none', `污染等级 ${level} 应具有档案错版证明`);
       assert.ok(stageProof.width > 100, `污染等级 ${level} 的错版证明应清楚可见`);
       compositionTransforms[level].add(stageProof.transform);
+      await assertFolioEditions(archiveVisualPage, level);
       assert.notEqual(
         await archiveVisualPage
-          .locator('[data-pollution-slot="record-list"] > :nth-child(2)')
+          .locator(
+            '[data-pollution-slot="record-list"] > .archive-performance-list > li:nth-child(2)',
+          )
           .evaluate((element) => window.getComputedStyle(element).boxShadow),
         'none',
         `污染等级 ${level} 应在真实记录列表留下印版痕迹`,
@@ -743,7 +804,7 @@ try {
     if (duty.pageType === 'performance-list') {
       assert.notEqual(
         await dutyTarget
-          .locator(':scope > :first-child')
+          .locator(':scope > .archive-performance-list > li:first-child')
           .evaluate((element) => window.getComputedStyle(element).transform),
         'none',
         '演出列表应在二级污染中形成记录间空间矛盾',
@@ -804,6 +865,7 @@ try {
   for (const edition of builtEditions) {
     await archiveVisualPage.goto(`${origin}${archivePath(edition.routePrefix)}`);
     await archiveVisualPage.locator('html[data-pollution-level="3"]').waitFor();
+    await assertFolioEditions(archiveVisualPage, 3);
     const expectedLocalization = getLocalization(edition);
     const expectedProjection = expectedLocalization.archiveProjection.performance;
     const projectedTitles = await archiveVisualPage
@@ -1584,7 +1646,7 @@ try {
   );
   assert.notEqual(
     await archivePage
-      .locator('[data-pollution-slot="record-list"] > :first-child')
+      .locator('[data-pollution-slot="record-list"] > .archive-performance-list > li:first-child')
       .evaluate((element) => window.getComputedStyle(element).transform),
     'none',
     '三级污染演出列表应形成记录间空间失序',

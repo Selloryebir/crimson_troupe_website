@@ -944,6 +944,11 @@
       "related": ["BP-FND-EXPERIENCE", "BP-FND-DOMAIN", "BP-MOD-TERRA-TIME", "BP-I18N-CORE"]
     },
     {
+      "path": "src/scripts/archive-folio-effects.ts",
+      "primary": "BP-MOD-ARCHIVE",
+      "related": ["BP-FND-NARRATIVE", "BP-CNT-PRODUCTION-VISUAL"]
+    },
+    {
       "path": "src/scripts/pollution-controller.ts",
       "primary": "BP-FND-NARRATIVE",
       "related": ["BP-MOD-ARCHIVE", "BP-MOD-SEARCH", "BP-I18N-CORE"]

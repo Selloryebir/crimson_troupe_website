@@ -12,4 +12,4 @@
 
 `pollution/` 保存项目原创的污染环境视觉母版。纯装饰且不随内容变化的大型画板应优先合并为单一矢量资产，由 CSS 保留位置与显示状态，避免在滚动期间反复绘制多层渐变、裁切与模糊阴影；文本投影和可交互内容不得烧录进资产。
 
-`images/archive/folio/normal/` 与 `images/archive/folio/crimson/` 是归属里站的成对活页高清修复资源，各 13 张无损 WebP。它们保留官方参考原版的独特设计，不属于项目原创资产；仅 8 张普通版被当前里站内容快照引用，猩红版的页面使用策略待定。项目负责人已允许公开仓库存放与开发分支晋级，但未提供权利方发布许可；具体来源、SHA-256 和权利边界见 `docs/sources/folio-cover-restoration.md`。
+`images/archive/folio/normal/` 与 `images/archive/folio/crimson/` 是归属里站的成对活页高清修复资源，各 13 张无损 WebP。它们保留官方参考原版的独特设计，不属于项目原创资产。当前快照引用 8 个活页剧目的普通／猩红配对资源，并单独引用猩红版《摇篮曲》作为等级 3 投影；其余库存不生成页面。污染等级 0—3 的切换遵循 `BP-CNT-PRODUCTION-VISUAL`。项目负责人已允许公开仓库存放与开发分支晋级，但未提供权利方发布许可；具体来源、SHA-256 和权利边界见 `docs/sources/folio-cover-restoration.md`。

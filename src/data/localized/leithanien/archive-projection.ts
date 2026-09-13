@@ -7,7 +7,7 @@ export const leithanienArchiveProjection = {
     'Alle Einträge der Seite weisen nun auf dasselbe Ziel.',
   ],
   performance: {
-    title: 'Der Karneval',
+    title: 'Das Wiegenlied',
     kind: 'Endgültige Leistung',
     tagline: 'Ein Sitzplatz bleibt für den Inhaber reserviert',
     dateTime: '1084-11-11 23:49:00 · vor dem dritten Glockenschlag',
@@ -27,7 +27,7 @@ export const leithanienArchiveProjection = {
     venueLabel: 'Veranstaltungsort',
     attendanceLabel: 'Anwesenheit',
     role: 'Träger dieser Einladung',
-    production: 'Der Karneval',
+    production: 'Das Wiegenlied',
     venue: 'Waldschloss Calais-Blason',
     attendance: 'Vor der dritten Glocke',
     closing:

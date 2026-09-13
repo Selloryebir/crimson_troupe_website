@@ -13,6 +13,7 @@ export interface PollutionState {
   level: PollutionLevel;
   eventCount: number;
   variant: PollutionVariant;
+  seed?: number;
 }
 
 export interface PollutionTransition {
@@ -81,7 +82,20 @@ export function parsePollutionState(
     ) {
       return createPollutionState(fallbackVariant);
     }
-    return { version: 2, level: value.level, eventCount: value.eventCount, variant: value.variant };
+    const state: PollutionState = {
+      version: 2,
+      level: value.level,
+      eventCount: value.eventCount,
+      variant: value.variant,
+    };
+    if (
+      Number.isInteger(value.seed) &&
+      Number(value.seed) >= 0 &&
+      Number(value.seed) <= 0xffffffff
+    ) {
+      state.seed = value.seed;
+    }
+    return state;
   } catch {
     return createPollutionState(fallbackVariant);
   }
