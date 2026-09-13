@@ -27,6 +27,12 @@ npm run dev
 
 锁文件未变化时，自动化环境和全新工作区应优先使用 `npm ci`，避免安装结果漂移。
 
+### 开发热更新排障
+
+开发服务器或 HMR 相关改动使用 `npm run validate:dev:hmr`。命令启动独立临时端口的开发服务器，三轮触碰双站 CSS 与海报组件的修改时间（不改文件内容），检查真实浏览器更新消息、页面响应和服务端错误日志，最后核对源码摘要并关闭测试进程。运行时不要并行编辑这些文件；它不替换已有开发服务器，也不参与每次静态构建。
+
+浏览器未报错与 HTTP 200 不能证明 HMR 正常：Astro 可能捕获路由更新异常后继续服务既有页面。若出现 `Failed to update routes via HMR`，应保存终端日志并检查框架版本，而不是隐藏错误或关闭文件监听。Astro 7.2.3 的路由虚拟模块循环依赖已有[上游修复](https://github.com/withastro/astro/pull/17787)，本项目锁定包含该修复的 7.2.10。依赖安装完成后先停止旧开发进程，再执行 `npm run dev`；安装新版本不会替换已加载的旧进程模块。
+
 ## 质量命令
 
 日常开发只检查本次实际修改的路径：
@@ -62,6 +68,7 @@ npm run quality -- --plan docs/blueprint/modules/search.md
 | `npm run validate:content:preview`         | 显式对九国家版本预览执行同一聚焦内容门禁                 |
 | `npm run validate:content:release`         | 对正式集合执行内容与批准摘要门禁                         |
 | `npm run validate:states`                  | 确定性检查污染、票务状态与纪念票字段                     |
+| `npm run validate:dev:hmr`                 | 检查开发端三轮热更新、服务端日志与浏览器响应             |
 | `npm run validate:locales`                 | 检查默认炎国 `showcase` 的本地化覆盖                     |
 | `npm run validate:locales:preview`         | 检查九国家版本预览构建的本地化覆盖                       |
 | `npm run validate:build`                   | 检查已生成页面的路由、元数据、链接、资源与发布范围       |

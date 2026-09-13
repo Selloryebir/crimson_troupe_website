@@ -186,8 +186,7 @@ html[data-world="archive"] .ticket-link:hover {
   display: grid;
   grid-template-columns: minmax(0, 820px);
   justify-content: center;
-  min-height: 940px;
-  padding-block: clamp(92px, 12vw, 168px);
+  padding-block: clamp(48px, 5vw, 72px);
   text-align: center;
 }
 
@@ -229,7 +228,7 @@ html[data-world="archive"] .ticket-link:hover {
   width: 100%;
   max-width: 700px;
   margin-inline: auto;
-  padding: clamp(26px, 5vw, 56px);
+  padding: 20px 28px;
 }
 
 .archive-kicker {
@@ -267,18 +266,19 @@ html[data-world="archive"] .eyebrow {
 .archive-home h1 {
   margin: 0;
   color: #eadcc0;
-  font: 400 clamp(2.8rem, 5.7vw, 6.2rem) / 1.08 var(--serif);
+  font: 400 clamp(2.25rem, 4vw, 3.75rem) / 1.18 var(--serif);
   hyphens: auto;
   letter-spacing: -0.035em;
   overflow-wrap: anywhere;
+  text-wrap: balance;
 }
 
 .archive-home__copy > p:not(.archive-kicker) {
   max-width: 610px;
-  margin: 30px auto 0;
-  color: var(--archive-faded);
-  font-size: 1rem;
-  line-height: 2;
+  margin: 22px auto 0;
+  color: var(--archive-paper);
+  font-size: 1.0625rem;
+  line-height: 1.85;
 }
 
 html[data-world="archive"] .actions {
@@ -306,9 +306,9 @@ html[data-world="archive"] :is(.text-link, .back-link):hover {
 
 .archive-feature {
   display: block;
-  width: min(100% - 72px, 590px);
-  margin: 26px auto 0;
-  padding: 14px;
+  width: min(100% - 48px, 326px);
+  margin: 14px auto 0;
+  padding: 10px;
   border: 3px double var(--archive-gold);
   color: inherit;
   background: var(--archive-corridor);
@@ -730,12 +730,12 @@ html[data-world="archive"] :is(.text-link, .back-link):hover {
 }
 
 .archive-performance-list--home-editorial > li > a {
-  grid-template-columns: minmax(260px, 0.82fr) minmax(0, 1.18fr);
+  grid-template-columns: 320px minmax(0, 1fr);
   grid-template-areas:
     "poster register"
     "poster date";
-  gap: 10px clamp(38px, 7vw, 96px);
-  padding-block: clamp(40px, 6vw, 76px);
+  gap: 10px clamp(32px, 5vw, 72px);
+  padding-block: clamp(28px, 4vw, 48px);
   background: linear-gradient(90deg, rgb(214 198 167 / 3.5%), transparent 24%);
 }
 
@@ -743,7 +743,7 @@ html[data-world="archive"] :is(.text-link, .back-link):hover {
   grid-template-areas:
     "register poster"
     "date poster";
-  grid-template-columns: minmax(0, 1.18fr) minmax(260px, 0.82fr);
+  grid-template-columns: minmax(0, 1fr) 320px;
   background: linear-gradient(
     270deg,
     color-mix(in srgb, var(--archive-patina) 4.5%, transparent),
@@ -754,6 +754,7 @@ html[data-world="archive"] :is(.text-link, .back-link):hover {
 .archive-performance-list--home-editorial .archive-poster {
   grid-area: poster;
   width: 100%;
+  max-width: 320px;
 }
 
 .archive-performance-list--home-editorial .archive-performance-list__register {
@@ -767,7 +768,40 @@ html[data-world="archive"] :is(.text-link, .back-link):hover {
   grid-area: date;
   align-self: start;
   padding-top: 4px;
+  font-size: 1rem;
+  line-height: 1.7;
   font-variant-numeric: tabular-nums;
+}
+
+.archive-performance-list--home-editorial .archive-performance-list__register > span {
+  max-width: 58ch;
+  color: var(--archive-paper);
+  font-size: 1.0625rem;
+  line-height: 1.85;
+}
+
+.archive-performance-list--home-editorial :is(.archive-performance-list__register, .archive-performance-list__date) small {
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+.archive-home .archive-kicker {
+  margin-bottom: 16px;
+  font-size: 0.875rem;
+}
+
+.archive-home .archive-ornament {
+  width: 44px;
+  height: 44px;
+  margin-bottom: 16px;
+}
+
+html[data-world="archive"][data-page-type="home"] .archive-register-section {
+  padding-block: 56px 80px;
+}
+
+html[data-world="archive"][data-page-type="home"] :is(.archive-register-section > header p, .archive-register-section > header a, .archive-notice-strip > div > p) {
+  font-size: 0.875rem;
 }
 
 html[data-world="archive"] .page-intro {
@@ -1134,11 +1168,11 @@ html[data-world="archive"] :is(a, button, input, select, textarea):focus-visible
   }
 
   .archive-performance-list--home-editorial > li > a {
-    grid-template-columns: minmax(200px, 0.75fr) minmax(0, 1.25fr);
+    grid-template-columns: 280px minmax(0, 1fr);
   }
 
   .archive-performance-list--home-editorial > li:nth-child(even) > a {
-    grid-template-columns: minmax(0, 1.25fr) minmax(200px, 0.75fr);
+    grid-template-columns: minmax(0, 1fr) 280px;
   }
 
   .archive-performance-list--home-editorial .archive-performance-list__date {
@@ -1166,7 +1200,7 @@ html[data-world="archive"] :is(a, button, input, select, textarea):focus-visible
 
   .archive-home {
     min-height: auto;
-    padding-block: 68px 84px;
+    padding-block: 42px 48px;
   }
 
   .archive-home::before {
@@ -1182,7 +1216,7 @@ html[data-world="archive"] :is(a, button, input, select, textarea):focus-visible
   }
 
   .archive-home__copy {
-    padding-inline: 30px;
+    padding-inline: 18px;
   }
 
   .archive-kicker::before,
@@ -1192,8 +1226,7 @@ html[data-world="archive"] :is(a, button, input, select, textarea):focus-visible
   }
 
   .archive-feature {
-    width: calc(100% - 48px);
-    padding: 8px;
+    width: min(100% - 48px, 326px);
   }
 
   .archive-poster {
@@ -1236,6 +1269,11 @@ html[data-world="archive"] :is(a, button, input, select, textarea):focus-visible
 
   .archive-performance-list--home-editorial .archive-performance-list__register {
     padding-block: 24px 18px;
+  }
+
+  .archive-performance-list--home-editorial .archive-poster {
+    justify-self: center;
+    max-width: 260px;
   }
 
   .archive-performance-list--home-editorial .archive-performance-list__date {

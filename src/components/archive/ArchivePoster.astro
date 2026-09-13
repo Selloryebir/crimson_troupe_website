@@ -16,6 +16,7 @@ interface Props {
   subtitle?: string;
   number?: string;
   compact?: boolean;
+  placement?: 'default' | 'home-editorial' | 'home-feature';
 }
 
 const {
@@ -25,15 +26,30 @@ const {
   subtitle,
   number = 'CT / 1084',
   compact = false,
+  placement = 'default',
 } = Astro.props;
 const artwork = getSnapshotProductionArtwork(buildSnapshot, productionId, 'archive');
 const artworkAsset = getSnapshotProductionArtworkAsset(buildSnapshot, productionId, 'archive');
 const isFolioCover = artwork?.rights === 'local-folio-restoration-preview';
-const widths = isFolioCover && !compact ? [240, 480, 768, 1200] : [240, 480, 768];
-const sizes = compact
-  ? '(max-width: 620px) calc(100vw - 28px), (max-width: 960px) 160px, 180px'
-  : '(max-width: 620px) calc(100vw - 48px), (max-width: 960px) min(590px, calc(100vw - 36px)), 590px';
-const normalImage = artworkAsset ? await getImage({ src: artworkAsset, widths, sizes }) : undefined;
+const isHomepage = placement !== 'default';
+const widths = isHomepage
+  ? [240, 480, 640, 960]
+  : isFolioCover && !compact
+    ? [240, 480, 768, 1200]
+    : [240, 480, 768];
+// 首页尺寸与 archive.css 的封面上限一致，不沿用目录缩略图的 180px。
+const sizes =
+  placement === 'home-editorial'
+    ? '(max-width: 620px) min(260px, calc(100vw - 28px)), (max-width: 960px) 280px, 320px'
+    : placement === 'home-feature'
+      ? 'min(300px, calc(100vw - 102px))'
+      : compact
+        ? '(max-width: 620px) calc(100vw - 28px), (max-width: 960px) 160px, 180px'
+        : '(max-width: 620px) calc(100vw - 48px), (max-width: 960px) min(590px, calc(100vw - 36px)), 590px';
+const quality = isHomepage ? 95 : undefined;
+const normalImage = artworkAsset
+  ? await getImage({ src: artworkAsset, widths, sizes, quality })
+  : undefined;
 const crimsonImage = isFolioCover
   ? await getImage({
       src: getSnapshotArchiveFolioCrimsonAsset(
@@ -42,6 +58,7 @@ const crimsonImage = isFolioCover
       ),
       widths,
       sizes,
+      quality,
     })
   : undefined;
 const lullabyImage = isFolioCover
@@ -52,6 +69,7 @@ const lullabyImage = isFolioCover
       ),
       widths,
       sizes,
+      quality,
     })
   : undefined;
 ---
