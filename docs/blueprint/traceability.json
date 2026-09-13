@@ -865,8 +865,8 @@
     },
     {
       "path": "src/pages/[routePrefix]/archive/site/1084-07-01/tickets/index.astro",
-      "primary": "BP-MOD-TICKETING",
-      "related": ["BP-MOD-ARCHIVE", "BP-FND-CORE", "BP-MOD-PROGRAMS"]
+      "primary": "BP-MOD-ARCHIVE",
+      "related": ["BP-MOD-TICKETING", "BP-FND-CORE", "BP-MOD-PROGRAMS"]
     },
     {
       "path": "src/pages/[routePrefix]/archive/site/1084-07-01/troupe/index.astro",
