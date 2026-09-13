@@ -791,9 +791,10 @@ html[data-world="archive"] :is(.text-link, .back-link):hover {
 }
 
 .archive-home .archive-ornament {
-  width: 44px;
-  height: 44px;
-  margin-bottom: 16px;
+  width: min(100%, clamp(220px, 26vw, 320px));
+  height: auto;
+  margin-bottom: 24px;
+  filter: none;
 }
 
 html[data-world="archive"][data-page-type="home"] .archive-register-section {
