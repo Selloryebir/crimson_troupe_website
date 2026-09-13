@@ -6,6 +6,7 @@
 
 - [`design-and-service.md`](design-and-service.md)：文化机构网站的信息架构、服务能力和泰拉化转译；
 - [`ticketing-gameplay.md`](ticketing-gameplay.md)：重复体验、现实票务、可访问性与《明日方舟》玩法语境分析；
+- [`ticketing-platform-logo-study.md`](ticketing-platform-logo-study.md)：现实票务平台 Logo 的视觉拆解，以及水稻网与跳楼机正式原创 SVG 的转译依据；
 - [`victorian-visual-system.md`](victorian-visual-system.md)：维多利亚设计改革、剧场印刷、现实机构和官方活动语境的视觉分析；
 - [`browser-compatibility.md`](browser-compatibility.md)：跨引擎测试能力、渲染性能判断和 Safari 代理边界。
 

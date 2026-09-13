@@ -318,6 +318,14 @@ html[data-world="archive"] :is(.text-link, .back-link):hover {
   text-decoration: none;
 }
 
+.archive-feature__caption {
+  display: block;
+  padding: 16px 8px 6px;
+  color: var(--archive-paper);
+  font: 500 clamp(1rem, 1.8vw, 1.4rem) / 1.35 var(--serif);
+  text-align: center;
+}
+
 .archive-poster {
   --poster-accent: #7d1722;
   --poster-paper: #cbb992;
@@ -341,6 +349,13 @@ html[data-world="archive"] :is(.text-link, .back-link):hover {
   min-height: 0;
 }
 
+.archive-poster.has-folio-cover,
+.archive-poster.is-compact.has-folio-cover {
+  aspect-ratio: 336 / 460;
+  border: 0;
+  background: transparent;
+}
+
 .archive-poster__image {
   position: absolute;
   z-index: 0;
@@ -353,6 +368,15 @@ html[data-world="archive"] :is(.text-link, .back-link):hover {
 
 .archive-poster.has-artwork {
   background: var(--archive-soot);
+}
+
+.archive-poster.has-folio-cover.has-artwork {
+  background: transparent;
+}
+
+.archive-poster.has-folio-cover .archive-poster__image {
+  object-fit: contain;
+  object-position: center;
 }
 
 .archive-poster.has-artwork .archive-poster__frame {
@@ -411,6 +435,11 @@ html[data-world="archive"] :is(.text-link, .back-link):hover {
 }
 
 .archive-poster.has-artwork::after {
+  display: none;
+}
+
+.archive-poster.has-folio-cover::before,
+.archive-poster.has-folio-cover::after {
   display: none;
 }
 

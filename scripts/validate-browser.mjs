@@ -1263,7 +1263,7 @@ try {
   const partnerBrand = ticketPage.locator('[data-ticketing-platform="rice-network"]:has(h1)');
   await partnerBrand.waitFor();
   assert.equal(await partnerBrand.locator('h1').textContent(), '水稻网');
-  assert.equal(await partnerBrand.locator('img').first().getAttribute('alt'), '水稻网临时标识');
+  assert.equal(await partnerBrand.locator('img').first().getAttribute('alt'), '水稻网标识');
   assert.equal(
     await ticketPage.locator('.partner-ticketing__fallback a').getAttribute('href'),
     '/yan/tickets/',

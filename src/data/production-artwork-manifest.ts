@@ -8,7 +8,8 @@ export interface ProductionArtworkManifestEntry {
     | 'project-generated-art-00'
     | 'project-generated-art-01'
     | 'project-generated-code-03'
-    | 'project-generated-code-04';
+    | 'project-generated-code-04'
+    | 'local-folio-restoration-preview';
 }
 
 export type ProductionArtworkManifest = Partial<
@@ -39,30 +40,30 @@ export const productionArtworkManifest: ProductionArtworkManifest = {
   },
   'der-ring': {
     archive: {
-      assetPath: 'src/assets/images/productions/der-ring-archive.webp',
-      sourceRevision: 'sha256:c5185db9ba4fc46cef6b9ad5b510805788a09583a113fc15d6812bf244f2cef2',
-      rights: 'project-generated-code-04',
+      assetPath: 'src/assets/images/archive/folio/normal/der-ring.webp',
+      sourceRevision: 'sha256:99a76a607f2350e0f420af2944c46196d0e694a0cd1d2324e2eacd1224de2de1',
+      rights: 'local-folio-restoration-preview',
     },
   },
   'one-hundred-and-one-days': {
     archive: {
-      assetPath: 'src/assets/images/productions/one-hundred-and-one-days-archive.webp',
-      sourceRevision: 'sha256:cc91c15cab40099907b53becbf00a6be428b9d93f44ee0f3b2f64dd32541e1a2',
-      rights: 'project-generated-code-04',
+      assetPath: 'src/assets/images/archive/folio/normal/one-hundred-and-one-days.webp',
+      sourceRevision: 'sha256:a2a11b87aac282f9beb66b3fea54552a2cf0ecb8921fc406d0f96df860261f73',
+      rights: 'local-folio-restoration-preview',
     },
   },
   'the-carnival': {
     archive: {
-      assetPath: 'src/assets/images/productions/the-carnival-archive.webp',
-      sourceRevision: 'sha256:074e7e68207d78e80661a8296d954c142ea6726569390967472d5d80fe21072f',
-      rights: 'project-generated-code-04',
+      assetPath: 'src/assets/images/archive/folio/normal/the-carnival.webp',
+      sourceRevision: 'sha256:3c50ab6a1dd782bcc95bdcaff8939268960964dca767331c98c9292e2d64ae6d',
+      rights: 'local-folio-restoration-preview',
     },
   },
   'ode-au-triomphe': {
     archive: {
-      assetPath: 'src/assets/images/productions/ode-au-triomphe-archive.webp',
-      sourceRevision: 'sha256:3445bf769727d4aedbf38248b77ab5c224a31e0fac4e197be64f33d551105276',
-      rights: 'project-generated-code-04',
+      assetPath: 'src/assets/images/archive/folio/normal/ode-au-triomphe.webp',
+      sourceRevision: 'sha256:b29f12742735a873e0adb4ce53e682ea6b80066a56a153181caae3caefb7921e',
+      rights: 'local-folio-restoration-preview',
     },
   },
   'red-banquet': {
@@ -88,30 +89,30 @@ export const productionArtworkManifest: ProductionArtworkManifest = {
   },
   'lone-wander': {
     archive: {
-      assetPath: 'src/assets/images/productions/lone-wander-archive.webp',
-      sourceRevision: 'sha256:842575d06b1219a5c7f7638ae0bebedeb6924dee8a992cb9b37b913b2715ace3',
-      rights: 'project-generated-art-01',
+      assetPath: 'src/assets/images/archive/folio/normal/lone-wander.webp',
+      sourceRevision: 'sha256:5c18e4063bd2d1b066e0806d2d66ba4ec3a6ed765b17c9ba0b6035ece2ae5730',
+      rights: 'local-folio-restoration-preview',
     },
   },
   'wonderland-in-dream': {
     archive: {
-      assetPath: 'src/assets/images/productions/wonderland-in-dream-archive.webp',
-      sourceRevision: 'sha256:bf3bd0024c019c3ed2feccef7ee79da1bf16754cc05bd7ac353c97d1884097c2',
-      rights: 'project-generated-art-01',
+      assetPath: 'src/assets/images/archive/folio/normal/wonderland-in-dream.webp',
+      sourceRevision: 'sha256:b6b4075c806e07fa09c1be8c31445e6664403df387d910291bd57081f97a2c88',
+      rights: 'local-folio-restoration-preview',
     },
   },
   'frost-deer-and-snow-doe': {
     archive: {
-      assetPath: 'src/assets/images/productions/frost-deer-and-snow-doe-archive.webp',
-      sourceRevision: 'sha256:623f067c767bc2ec67182a680c7e13a3f3c9431e6d5ebb5426820bc816feee7c',
-      rights: 'project-generated-art-01',
+      assetPath: 'src/assets/images/archive/folio/normal/frost-deer-and-snow-doe.webp',
+      sourceRevision: 'sha256:6ae2e6f769a453b72388676cf0a6c92db2ef4ba5147fa5c663f46b7d443deefe',
+      rights: 'local-folio-restoration-preview',
     },
   },
   'light-of-heria': {
     archive: {
-      assetPath: 'src/assets/images/productions/light-of-heria-archive.webp',
-      sourceRevision: 'sha256:e90aa6e3ac771b6c20272b9068ff9f21e6b4675279b595c18c68bb9873f42e0c',
-      rights: 'project-generated-art-01',
+      assetPath: 'src/assets/images/archive/folio/normal/light-of-heria.webp',
+      sourceRevision: 'sha256:d8a408ef2fc76af692a7f2e0feccbf870f4c7ac3cb9028253c80a9cd8e32efb8',
+      rights: 'local-folio-restoration-preview',
     },
   },
 };

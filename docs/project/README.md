@@ -5,7 +5,8 @@
 ## 当前记录
 
 - [`performance-location-catalog.md`](performance-location-catalog.md)：非排他的演出地点候选、跨语言显示形式与内部创作备注；
-- [`realm-badge-color-previews/`](realm-badge-color-previews/)：九枚国家版本徽章的非运行时上色比较样张。
+- [`realm-badge-color-previews/`](realm-badge-color-previews/)：九枚国家版本徽章的非运行时上色比较样张；
+- [`troupe-logo-alternates/`](troupe-logo-alternates/)：已保留但不作为默认运行时团标的 A 版舞台印章与三种 D 版环境光变体。
 
 ## 维护规则
 

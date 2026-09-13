@@ -3,8 +3,8 @@ import type { yanMessages } from '../yan/messages';
 import type { yanTicketingPlatforms } from '../yan/messages';
 
 export const leithanienTicketingPlatforms = {
-  'rice-network': { displayName: 'Reisnetz', logoAlt: 'Vorläufiges Zeichen des Reisnetzes' },
-  'drop-tower': { displayName: 'Fallturm', logoAlt: 'Vorläufiges Zeichen des Fallturms' },
+  'rice-network': { displayName: 'Reisnetz', logoAlt: 'Zeichen des Reisnetzes' },
+  'drop-tower': { displayName: 'Fallturm', logoAlt: 'Zeichen des Fallturms' },
 } as const satisfies LocalizedShape<typeof yanTicketingPlatforms>;
 
 export const leithanienMessages = {

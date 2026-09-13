@@ -1,5 +1,6 @@
 ---
-import seal from '../../assets/brand/troupe-publication-seal.svg';
+import { Image } from 'astro:assets';
+import seal from '../../assets/brand/troupe-logo-primary.png';
 
 interface Props {
   class?: string;
@@ -8,11 +9,14 @@ interface Props {
 const { class: className } = Astro.props;
 ---
 
-<img
+<Image
   class:list={['troupe-mark', className]}
-  src={seal.src}
-  width="128"
-  height="128"
+  src={seal}
+  width={270}
+  height={270}
+  densities={[1, 2]}
+  format="webp"
+  quality={82}
   alt=""
   aria-hidden="true"
   loading="eager"
