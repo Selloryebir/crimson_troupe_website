@@ -1,25 +1,25 @@
 # 活页剧目封面修复素材来源与权利边界
 
-记录日期：2026-09-13。本记录只说明本地来源、处理链、内部预览用途与未解决的权利问题；不构成权利方授权。
+记录日期：2026-09-13。本记录说明本地来源、处理链、开发阶段的公开仓库存放范围与未解决的权利问题；不构成权利方授权。
 
 ## 来源与处理链
 
 - 项目负责人在 `local-reference-materials/normal-folio/` 与 `local-reference-materials/crimson-folio/` 各提供 13 张低清 RGBA 图，并说明其为活页剧目封面官方原版设计图；原始取得渠道和原始版权声明尚未记录。
 - `local-reference-materials/normal-folio-sr/` 与 `local-reference-materials/crimson-folio-sr/` 为 DeepAI SRGAN 放大参考，不作为文字、Logo、撕口 Alpha 或其他语义真值。
 - 普通版经逐图与跨图审计的最终 RGBA 母版位于本地忽略目录 `.agent-work/folio-cover-restoration/optimized-normal-folio-v5/final/covers/`；猩红版母版位于 `.agent-work/folio-cover-restoration/optimized-crimson-folio-v1/final/covers/`。两套同名成对，最终 WebP 与母版解码后逐像素一致。
-- 2026-09-13，项目负责人明确要求将两套当前修复结果纳入项目文件，并让里站引用普通版。此次仅在 `dev_experiment_folio_cover_restoration` 实验分支作为内部预览接入，不扩大为正式发布或外部再分发授权。
+- 2026-09-13，项目负责人明确要求将两套修复结果纳入项目文件、让里站当前剧目引用普通版，并允许上传到公开项目仓库及按 `dev_experiment → dev_code → dev` 流程晋级。普通版与猩红版均归里站；猩红版的页面使用时机留待后续开发策略决定。
 
 ## 仓库存放与使用
 
-- `src/assets/images/folio/normal/<productionId>.webp`：13 张，`1344×1840 RGBA`；当前构建快照实际采用的 8 张由 `src/data/production-artwork-manifest.ts` 与 `production-artwork-assets.ts` 引入里站。
-- `src/assets/images/folio/crimson/<productionId>.webp`：13 张，`1372×1880 RGBA`；目前仅为成对项目素材，不被页面导入或打包进网站产物。
+- `src/assets/images/archive/folio/normal/<productionId>.webp`：13 张，`1344×1840 RGBA`；当前构建快照实际采用的 8 张由 `src/data/production-artwork-manifest.ts` 与 `production-artwork-assets.ts` 引入里站。
+- `src/assets/images/archive/folio/crimson/<productionId>.webp`：13 张，`1372×1880 RGBA`；目前仅为里站成对资源，不被页面导入或打包进网站产物。
 - 两套均为无损 WebP。原始低清图、SRGAN JPEG、PNG 母版、过程稿和审计证据继续只留在忽略目录，不进入运行时或版本控制。
 - 旧的原创里站预览图暂留在 `src/assets/images/productions/` 以便恢复；当前 8 个活页剧目不再引用它们。除这次显式实验外，其他剧目视觉仍遵守原创资产契约。
 
 ## 权利与署名状态
 
 - 这些修复图保留参考原版的独特构图、字形、徽记和细节，**不是项目原创图像**；超分、重绘和格式转换本身不产生可自由再分发的许可。
-- 当前没有可核验的公开使用许可、署名条款或权利方再分发授权记录；也不宣称获得鹰角网络、Hypergryph 或其他权利方认可。项目负责人的内部采用指令仅支持本地实验，不替代权利方许可。
+- 当前没有可核验的权利方公开使用许可、署名条款或再分发授权记录；也不宣称获得鹰角网络、Hypergryph 或其他权利方认可。项目负责人允许上传到公开项目仓库及开发分支晋级，不替代权利方许可，也不自动批准网站公开部署。
 - 在确认许可、署名与可部署范围并完成相应人工审查前，本素材不得视为正式发布合格资产；`rights: local-folio-restoration-preview` 表示这一未决状态，不能写成 `project-original` 或 `project-generated-art`。
 
 ## 完整性清单
