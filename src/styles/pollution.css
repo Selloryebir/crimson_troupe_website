@@ -143,6 +143,50 @@ html[data-world="archive"][data-pollution-level="3"] .archive-projection-level3 
 }
 
 /* Level 1: the same archive has been printed twice, a few millimetres apart. */
+html[data-world="archive"][data-pollution-level="1"] {
+  --pollution-type-proof: 4px 2px 0 rgb(131 27 39 / 78%);
+  --pollution-paper-proof: 6px 4px 0 rgb(117 24 34 / 42%);
+  --pollution-edge-proof: rgb(117 24 34 / 58%);
+}
+
+html[data-world="archive"][data-pollution-level="2"] {
+  --pollution-type-proof: 7px 4px 0 rgb(131 27 39 / 86%), -3px -2px 0 rgb(208 154 85 / 42%);
+  --pollution-paper-proof: 9px 6px 0 rgb(117 24 34 / 58%), -4px -3px 0 rgb(165 116 54 / 28%);
+  --pollution-edge-proof: rgb(117 24 34 / 78%);
+}
+
+html[data-world="archive"]:is([data-pollution-level="1"], [data-pollution-level="2"])
+  .site-main {
+  background: none;
+}
+
+html[data-world="archive"]:is([data-pollution-level="1"], [data-pollution-level="2"])
+  .site-header .brand-mark {
+  filter: drop-shadow(var(--pollution-shift-x) 3px 0 var(--pollution-edge-proof));
+}
+
+html[data-world="archive"]:is([data-pollution-level="1"], [data-pollution-level="2"])
+  :is(.archive-home h1, .page-intro h1, .archive-register-section > header h2) {
+  text-shadow: var(--pollution-type-proof);
+}
+
+html[data-world="archive"]:is([data-pollution-level="1"], [data-pollution-level="2"])
+  :is(
+    .archive-register-section,
+    .content-section.page-width,
+    .detail,
+    .archive-company,
+    .search-workspace--archive .search-form,
+    .archive-seat-register > ol
+  ) {
+  box-shadow: var(--pollution-paper-proof);
+}
+
+html[data-world="archive"]:is([data-pollution-level="1"], [data-pollution-level="2"])
+  .archive-notice-strip > div {
+  box-shadow: inset 6px 0 var(--pollution-edge-proof);
+}
+
 html[data-world="archive"]:is(
     [data-pollution-level="1"],
     [data-pollution-level="2"],
@@ -260,6 +304,24 @@ html[data-world="archive"][data-pollution-level="1"][data-pollution-composition=
 }
 
 /* Level 2: loose plates and folios begin to disagree with the page that contains them. */
+html[data-world="archive"][data-pollution-level="2"]
+  :is(.archive-detail-header h1, .archive-company h2, .archive-seat-register > header h2) {
+  text-shadow: 5px 3px 0 rgb(117 24 34 / 62%);
+}
+
+html[data-world="archive"][data-pollution-level="2"]
+  :is(
+    .archive-performance-list > li:nth-child(3n + 2),
+    .fact-grid,
+    .archive-credit-list,
+    .archive-company > dl,
+    .search-feedback,
+    .search-results,
+    .archive-settlement
+  ) {
+  box-shadow: inset 7px 0 rgb(117 24 34 / 50%), 6px 4px 0 rgb(165 116 54 / 22%);
+}
+
 html[data-world="archive"][data-pollution-level="2"] body {
   background:
     radial-gradient(circle at 22% 28%, rgb(112 15 28 / 18%), transparent 30rem),

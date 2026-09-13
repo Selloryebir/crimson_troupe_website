@@ -1,4 +1,5 @@
 import type { PollutionLevel, PollutionState } from './pollution-state.ts';
+import { loadFolioEdition, type FolioEdition } from './archive-folio-loading.ts';
 
 function hash(value: string): number {
   let result = 0x811c9dc5;
@@ -38,15 +39,11 @@ export function redactNarrativeText(text: string, level: PollutionLevel, seed: n
     .join('');
 }
 
-type Edition = 'normal' | 'crimson' | 'lullaby';
-
 export function createArchiveFolioEffects(root: HTMLElement): {
   apply(state: PollutionState): void;
 } {
   const posters = [...root.querySelectorAll<HTMLElement>('[data-folio-cover]')];
   const visible = new Set<HTMLElement>();
-  const requests = new WeakMap<HTMLElement, number>();
-  const decoded = new Map<string, Promise<void>>();
   const originals = new Map<Text, string>();
   const paragraphs = [
     ...root.querySelectorAll<HTMLElement>(
@@ -68,42 +65,10 @@ export function createArchiveFolioEffects(root: HTMLElement): {
     }
   }
 
-  const prepare = async (poster: HTMLElement) => {
-    const image = poster.querySelector<HTMLImageElement>('[data-folio-image]');
-    const edition = poster.dataset.folioRequested as Edition;
-    if (!image || !edition || poster.dataset.folioEdition === edition) {
-      return;
-    }
-    const src = image.dataset[`${edition}Src`];
-    const srcset = image.dataset[`${edition}Srcset`] ?? '';
-    if (!src) {
-      return;
-    }
-    const request = (requests.get(poster) ?? 0) + 1;
-    requests.set(poster, request);
-    const key = `${src}|${srcset}|${image.sizes}`;
-    try {
-      if (edition !== 'normal') {
-        let pending = decoded.get(key);
-        if (!pending) {
-          const candidate = new Image();
-          candidate.sizes = image.sizes;
-          candidate.srcset = srcset;
-          candidate.src = src;
-          pending = candidate.decode();
-          decoded.set(key, pending);
-        }
-        await pending;
-      }
-      if (requests.get(poster) !== request || poster.dataset.folioRequested !== edition) {
-        return;
-      }
-      image.srcset = srcset;
-      image.src = src;
-      poster.dataset.folioEdition = edition;
-    } catch {
-      decoded.delete(key);
-      // 可选污染图失败时保留已可读的封面，下一次应用状态可重试。
+  const prepare = (poster: HTMLElement) => {
+    const edition = poster.dataset.folioRequested as FolioEdition | undefined;
+    if (edition) {
+      loadFolioEdition(poster, edition);
     }
   };
 
@@ -129,10 +94,11 @@ export function createArchiveFolioEffects(root: HTMLElement): {
 
   return {
     apply(state) {
+      root.dataset.folioBootstrap = '';
       const seed = state.seed ?? state.variant;
       for (const poster of posters) {
         const chosen = selectCrimsonFolioIds((poster.dataset.folioCatalog ?? '').split(','), seed);
-        const edition: Edition =
+        const edition: FolioEdition =
           state.level === 3
             ? 'lullaby'
             : state.level === 2 ||
@@ -140,6 +106,10 @@ export function createArchiveFolioEffects(root: HTMLElement): {
               ? 'crimson'
               : 'normal';
         poster.dataset.folioRequested = edition;
+        // 离屏图也立即失效，不能等滚动加载时才撤下上一等级的封面。
+        if (poster.dataset.folioEdition !== edition) {
+          poster.dataset.folioConcealed = '';
+        }
         if (edition === 'normal' || visible.has(poster)) {
           void prepare(poster);
         }

@@ -1,5 +1,10 @@
 ---
 import { POLLUTION_STATE_STORAGE_KEY } from '../../scripts/pollution-state';
+import { initEarlyFolioCovers, loadFolioEdition } from '../../scripts/archive-folio-loading';
+import { selectCrimsonFolioIds } from '../../scripts/archive-folio-effects';
+
+// 构建期序列化自包含函数，不使用 eval、远端请求或第二套持久状态。
+const folioBootstrap = `(${initEarlyFolioCovers.toString()})(${loadFolioEdition.toString()}, ${selectCrimsonFolioIds.toString()}, ${JSON.stringify(POLLUTION_STATE_STORAGE_KEY)});`;
 ---
 
 <script is:inline define:vars={{ pollutionStateStorageKey: POLLUTION_STATE_STORAGE_KEY }}>
@@ -47,3 +52,56 @@ import { POLLUTION_STATE_STORAGE_KEY } from '../../scripts/pollution-state';
   }
   restorePollutionState();
 </script>
+
+{
+  /* eslint-disable astro/no-set-html-directive -- 仅序列化仓库静态函数，无用户输入、翻译或 URL 插值。 */
+}
+<script is:inline set:html={folioBootstrap} />
+{/* eslint-enable astro/no-set-html-directive */}
+
+<style is:global>
+  /* 全局减少动态规则仍有非零过渡时长，封面的 visibility 必须立即生效。 */
+  [data-folio-image] {
+    transition-property: none;
+  }
+
+  /* 等级是展示边界：即使图片失败、离屏或旧请求仍在完成，也不显示其他等级封面。 */
+  html[data-folio-bootstrap][data-pollution-level='2']
+    [data-folio-cover]:not([data-folio-edition='crimson'])
+    [data-folio-image],
+  html[data-folio-bootstrap][data-pollution-level='3']
+    [data-folio-cover]:not([data-folio-edition='lullaby'])
+    [data-folio-image],
+  html[data-folio-bootstrap]:is(
+      [data-pollution-level='1'],
+      [data-pollution-level='2'],
+      [data-pollution-level='3']
+    )
+    [data-folio-cover][data-folio-edition='normal']:not([data-folio-requested]):not(
+      [data-folio-fallback]
+    )
+    [data-folio-image],
+  [data-folio-concealed] [data-folio-image] {
+    visibility: hidden;
+  }
+
+  [data-folio-placeholder] {
+    display: none;
+    position: absolute;
+    inset: 12px;
+    border: 1px dashed currentColor;
+    color: var(--archive-gold);
+    background: repeating-linear-gradient(-45deg, rgb(170 136 85 / 8%) 0 1px, transparent 1px 12px);
+    pointer-events: none;
+  }
+
+  [data-folio-concealed] [data-folio-placeholder],
+  html[data-folio-bootstrap][data-pollution-level='2']
+    [data-folio-cover]:not([data-folio-edition='crimson'])
+    [data-folio-placeholder],
+  html[data-folio-bootstrap][data-pollution-level='3']
+    [data-folio-cover]:not([data-folio-edition='lullaby'])
+    [data-folio-placeholder] {
+    display: block;
+  }
+</style>

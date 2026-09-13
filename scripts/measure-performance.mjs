@@ -183,6 +183,7 @@ async function installProbe(page, scenario) {
         stateApplied: null,
         stateSettled: null,
         cls: 0,
+        lcp: null,
         longTasks: [],
       };
 
@@ -216,6 +217,14 @@ async function installProbe(page, scenario) {
 
       try {
         new PerformanceObserver((list) => {
+          window.__crimsonPerformance.lcp = list.getEntries().at(-1)?.startTime ?? null;
+        }).observe({ type: 'largest-contentful-paint', buffered: true });
+      } catch {
+        // 不支持 LCP 的引擎保持 null，不把缺失指标误报为零耗时。
+      }
+
+      try {
+        new PerformanceObserver((list) => {
           for (const entry of list.getEntries()) {
             if (!entry.hadRecentInput) {
               window.__crimsonPerformance.cls += entry.value;
@@ -242,7 +251,7 @@ async function installProbe(page, scenario) {
       if (level === undefined) {
         return;
       }
-      const state = { version: 2, level, eventCount: Math.max(3, level + 2), variant: 0 };
+      const state = { version: 2, level, eventCount: Math.max(3, level + 2), variant: 0, seed: 42 };
       sessionStorage.setItem(pollutionStateKey, JSON.stringify(state));
       sessionStorage.setItem(
         navigationPendingKey,
@@ -302,10 +311,30 @@ async function measureScenario(browser, browserDefinition, scenario) {
         const fcp = performance.getEntriesByName('first-contentful-paint')[0];
         const probe = window.__crimsonPerformance;
         const resources = performance.getEntriesByType('resource');
+        const visibleFolios = [...document.querySelectorAll('[data-folio-cover]')].filter(
+          (poster) => {
+            const bounds = poster.getBoundingClientRect();
+            return bounds.top < window.innerHeight && bounds.bottom > 0;
+          },
+        );
         return {
           domContentLoaded: navigation?.domContentLoadedEventEnd ?? 0,
           load: navigation?.loadEventEnd ?? 0,
           fcp: fcp?.startTime ?? 0,
+          lcp: probe.lcp,
+          // load 和等级属性就绪不等于污染图片已呈现，独立记录首屏图片状态。
+          folioPendingCount: visibleFolios.filter((poster) => {
+            const image = poster.querySelector('[data-folio-image]');
+            return (
+              !image?.complete ||
+              !image.naturalWidth ||
+              poster.hasAttribute('data-folio-concealed') ||
+              poster.dataset.folioEdition !== poster.dataset.folioRequested
+            );
+          }).length,
+          folioFallbackCount: visibleFolios.filter((poster) =>
+            poster.hasAttribute('data-folio-fallback'),
+          ).length,
           stateApplied: probe.stateApplied ?? 0,
           stateSettleDuration:
             probe.stateApplied !== null && probe.stateSettled !== null
@@ -377,6 +406,9 @@ async function measureScenario(browser, browserDefinition, scenario) {
     'domContentLoaded',
     'load',
     'fcp',
+    'lcp',
+    'folioPendingCount',
+    'folioFallbackCount',
     'stateApplied',
     'stateSettleDuration',
     'layoutDuration',

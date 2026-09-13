@@ -95,7 +95,9 @@ const projectionView = localization.archiveProjection.views['production-record']
       class="detail-section prose archive-projection-source"
       data-archive-projection-source
     >
-      <h2>{copy.introduction}</h2>{synopsisParagraphs.map((paragraph) => <p>{paragraph}</p>)}<p>
+      <h2>{copy.introduction}</h2>{
+        synopsisParagraphs.map((paragraph) => <p class="archive-source-linebreaks">{paragraph}</p>)
+      }<p>
         {production.guidance}
       </p>
     </section><section
@@ -166,3 +168,10 @@ const projectionView = localization.archiveProjection.views['production-record']
     </section>
   </article>
 </ArchiveLayout>
+
+<style>
+  .archive-source-linebreaks {
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+  }
+</style>

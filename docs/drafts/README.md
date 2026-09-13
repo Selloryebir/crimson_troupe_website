@@ -17,6 +17,7 @@
 
 当前实际草稿：
 
+- [`creative/archive-period-design.md`](creative/archive-period-design.md)：已获准制作 Demo、待人工判断的里站年代视觉实验；
 - [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md)：延期的里站异常购票构想；
 - [`creative/performance-pricing-method.md`](creative/performance-pricing-method.md)：延期且未启用的正式定价候选。
 

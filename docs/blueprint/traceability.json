@@ -944,6 +944,11 @@
       "related": ["BP-FND-EXPERIENCE", "BP-FND-DOMAIN", "BP-MOD-TERRA-TIME", "BP-I18N-CORE"]
     },
     {
+      "path": "src/scripts/archive-folio-loading.ts",
+      "primary": "BP-MOD-ARCHIVE",
+      "related": ["BP-FND-NARRATIVE", "BP-CNT-PRODUCTION-VISUAL"]
+    },
+    {
       "path": "src/scripts/archive-folio-effects.ts",
       "primary": "BP-MOD-ARCHIVE",
       "related": ["BP-FND-NARRATIVE", "BP-CNT-PRODUCTION-VISUAL"]
@@ -987,6 +992,11 @@
       "path": "src/scripts/ticketing-state.ts",
       "primary": "BP-MOD-TICKETING",
       "related": ["BP-FND-DOMAIN", "BP-MOD-TERRA-TIME", "BP-QLT-STAGES"]
+    },
+    {
+      "path": "src/styles/archive-services.css",
+      "primary": "BP-MOD-ARCHIVE",
+      "related": ["BP-MOD-SEARCH", "BP-FND-EXPERIENCE", "BP-I18N-CORE"]
     },
     {
       "path": "src/styles/archive.css",
