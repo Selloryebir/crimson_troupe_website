@@ -31,6 +31,7 @@ const {
 } = Astro.props;
 const artwork = getSnapshotProductionArtwork(buildSnapshot, productionId, 'archive');
 const artworkAsset = getSnapshotProductionArtworkAsset(buildSnapshot, productionId, 'archive');
+const isFolioCover = artwork?.rights === 'local-folio-restoration-preview';
 const projectionArtwork = projection
   ? getSnapshotProductionArtwork(buildSnapshot, projection.productionId, 'archive')
   : undefined;
@@ -43,9 +44,14 @@ const projectionArtworkAsset = projection
   class:list={[
     'archive-poster',
     `archive-poster--${visual}`,
-    { 'is-compact': compact, 'has-artwork': artwork && artworkAsset },
+    {
+      'is-compact': compact,
+      'has-artwork': artwork && artworkAsset,
+      'has-folio-cover': isFolioCover,
+    },
   ]}
   data-pollution-slot="poster"
+  data-folio-cover={isFolioCover ? productionId : undefined}
   data-archive-projection-poster={projection ? true : undefined}
   data-title-tone={artwork?.titleTone}
   style={artwork
@@ -59,7 +65,7 @@ const projectionArtworkAsset = projection
         data-archive-projection-source={projection ? true : undefined}
         src={artworkAsset}
         alt=""
-        widths={[240, 480, 768]}
+        widths={isFolioCover && !compact ? [240, 480, 768, 1200] : [240, 480, 768]}
         sizes={
           compact
             ? '(max-width: 620px) calc(100vw - 28px), (max-width: 960px) 160px, 180px'
@@ -92,7 +98,10 @@ const projectionArtworkAsset = projection
     )
   }
   <div class="archive-poster__frame" aria-hidden="true"><i></i><b></b><em></em></div><span
-    class:list={['archive-poster__number', { 'archive-projection-source': projection }]}
+    class:list={[
+      'archive-poster__number',
+      { 'archive-projection-source': projection, 'visually-hidden': isFolioCover },
+    ]}
     data-archive-projection-source={projection ? true : undefined}>{number}</span
   >{
     projection && (
@@ -105,7 +114,10 @@ const projectionArtworkAsset = projection
       </span>
     )
   }<div
-    class:list={['archive-poster__title', { 'archive-projection-source': projection }]}
+    class:list={[
+      'archive-poster__title',
+      { 'archive-projection-source': projection, 'visually-hidden': isFolioCover },
+    ]}
     data-archive-projection-source={projection ? true : undefined}
   >
     <strong>{title}</strong>{subtitle && <small>{subtitle}</small>}
@@ -126,5 +138,5 @@ const projectionArtworkAsset = projection
       </div>
     )
   }
-  {artwork && artworkAsset && <TroupeMark class="archive-poster__mark" />}
+  {artwork && artworkAsset && !isFolioCover && <TroupeMark class="archive-poster__mark" />}
 </div>
