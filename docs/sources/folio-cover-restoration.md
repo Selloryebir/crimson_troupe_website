@@ -13,7 +13,7 @@
 ## 仓库存放与使用
 
 - `src/assets/images/archive/folio/normal/<productionId>.webp`：13 张，`1344×1840 RGBA`；当前构建快照实际采用的 8 张由 `src/data/production-artwork-manifest.ts` 与 `production-artwork-assets.ts` 引入里站。
-- `src/assets/images/archive/folio/crimson/<productionId>.webp`：13 张，`1372×1880 RGBA`；目前仅为里站成对资源，不被页面导入或打包进网站产物。
+- `src/assets/images/archive/folio/crimson/<productionId>.webp`：13 张，`1372×1880 RGBA`；当前构建快照引入 8 张对应猩红版及等级 3 专用的猩红版《摇篮曲》，随里站封面组件进入产物，用于上述污染切换；其余文件仅保留在资源库。
 - 两套均为无损 WebP。原始低清图、SRGAN JPEG、PNG 母版、过程稿和审计证据继续只留在忽略目录，不进入运行时或版本控制。
 - 旧的原创里站预览图暂留在 `src/assets/images/productions/` 以便恢复；当前 8 个活页剧目不再引用它们。除这次显式实验外，其他剧目视觉仍遵守原创资产契约。
 

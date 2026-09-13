@@ -168,12 +168,26 @@ html[data-world="front"] .edition-selector ul {
   padding-right: clamp(12px, 3vw, 46px);
 }
 
-.hero-copy::before {
-  display: block;
-  width: 44px;
-  margin-bottom: 28px;
-  border-top: 3px double var(--stage-copper);
-  content: "";
+.hero-season {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.hero-season__mark {
+  flex: 0 0 auto;
+  width: min(100%, clamp(160px, 16vw, 224px));
+  height: auto;
+}
+
+.hero-season .eyebrow {
+  flex: 1 1 6em;
+  margin: 0;
+  padding-block: 12px;
+  border-block: 1px solid var(--structure);
+  overflow-wrap: anywhere;
 }
 
 .hero-copy h1,
@@ -658,6 +672,12 @@ a:hover .production-visual__image {
   margin-inline: auto;
 }
 
+.troupe-callout__mark {
+  width: min(100% - 48px, 260px);
+  height: auto;
+  margin: 0 auto 28px;
+}
+
 .troupe-callout > p:not(.eyebrow) {
   margin: 18px 0 30px;
   color: var(--text-secondary);
@@ -1028,6 +1048,14 @@ html[data-world="front"] .footer-legal {
 
   .hero-copy h1 {
     font-size: clamp(2.75rem, 12vw, 3.75rem);
+  }
+
+  .hero-season {
+    gap: 16px;
+  }
+
+  .hero-season .eyebrow {
+    letter-spacing: normal;
   }
 
   .hero-feature {
