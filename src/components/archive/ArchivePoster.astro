@@ -1,5 +1,5 @@
 ---
-import { getImage } from 'astro:assets';
+import { getImage, Image } from 'astro:assets';
 import { buildSnapshot, getSnapshotProductionArtwork } from '../../data/content/resolve.ts';
 import {
   getSnapshotArchiveFolioCrimsonAsset,
@@ -47,8 +47,10 @@ const sizes =
         ? '(max-width: 620px) calc(100vw - 28px), (max-width: 960px) 160px, 180px'
         : '(max-width: 620px) calc(100vw - 48px), (max-width: 960px) min(590px, calc(100vw - 36px)), 590px';
 const quality = isHomepage ? 95 : undefined;
+// 回退 src 也按展示职责输出；高 DPR 仍由原有 srcset 选择，不生成无用途的全尺寸回退。
+const imageOptions = { widths, sizes, quality, width: isHomepage ? 640 : compact ? 480 : 1200 };
 const normalImage = artworkAsset
-  ? await getImage({ src: artworkAsset, widths, sizes, quality })
+  ? await getImage({ src: artworkAsset, ...imageOptions })
   : undefined;
 const crimsonImage = isFolioCover
   ? await getImage({
@@ -56,9 +58,7 @@ const crimsonImage = isFolioCover
         buildSnapshot,
         productionId as ArchiveFolioCrimsonId,
       ),
-      widths,
-      sizes,
-      quality,
+      ...imageOptions,
     })
   : undefined;
 const lullabyImage = isFolioCover
@@ -67,9 +67,7 @@ const lullabyImage = isFolioCover
         buildSnapshot,
         buildSnapshot.archiveProjectionSourceId,
       ),
-      widths,
-      sizes,
-      quality,
+      ...imageOptions,
     })
   : undefined;
 ---
@@ -93,9 +91,10 @@ const lullabyImage = isFolioCover
     ? `--art-focus: ${artwork.focalPoint}; --poster-memory: ${artwork.memoryColor}`
     : undefined}
 >
+  {isFolioCover && <span data-folio-placeholder aria-hidden="true" />}
   {
     artwork && artworkAsset && normalImage && (
-      <img
+      <Image
         class="archive-poster__image"
         data-folio-image={isFolioCover ? true : undefined}
         data-normal-src={isFolioCover ? normalImage.src : undefined}
@@ -104,12 +103,9 @@ const lullabyImage = isFolioCover
         data-crimson-srcset={crimsonImage?.srcSet.attribute}
         data-lullaby-src={lullabyImage?.src}
         data-lullaby-srcset={lullabyImage?.srcSet.attribute}
-        src={normalImage.src}
-        srcset={normalImage.srcSet.attribute}
+        src={artworkAsset}
+        {...imageOptions}
         alt=""
-        width={artworkAsset.width}
-        height={artworkAsset.height}
-        sizes={sizes}
         loading={compact ? 'lazy' : 'eager'}
         decoding="async"
       />

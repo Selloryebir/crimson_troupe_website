@@ -5,13 +5,14 @@ import metallicSeal from '../../assets/brand/troupe-logo-metallic.png';
 
 interface Props {
   class?: string;
-  size?: 'standard' | 'home';
+  size?: 'standard' | 'home' | 'seal';
   variant?: 'matte' | 'metallic';
   loading?: 'eager' | 'lazy';
 }
 
 const { class: className, size = 'standard', variant = 'matte', loading = 'eager' } = Astro.props;
-const width = size === 'home' ? 320 : 270;
+// 页头／页尾／海报小标上限为 76 CSS px；请柬的大印章独立取样，避免小标下载大图。
+const width = size === 'home' ? 320 : size === 'seal' ? 280 : 80;
 const seal = variant === 'metallic' ? metallicSeal : matteSeal;
 ---
 
@@ -21,7 +22,7 @@ const seal = variant === 'metallic' ? metallicSeal : matteSeal;
   src={seal}
   width={width}
   height={width}
-  densities={size === 'home' ? [1, 2, 3] : [1, 2]}
+  densities={[1, 2, 3]}
   format="webp"
   quality={95}
   alt=""

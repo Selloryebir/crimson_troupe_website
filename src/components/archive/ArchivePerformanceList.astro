@@ -65,7 +65,10 @@ const projection = localization.archiveProjection.performance;
                   </span>
                 </strong>
                 <span>
-                  <span class="archive-projection-source" data-archive-projection-source>
+                  <span
+                    class="archive-projection-source archive-source-linebreaks"
+                    data-archive-projection-source
+                  >
                     {leadProduction.tagline}
                   </span>
                   <span
@@ -136,3 +139,10 @@ const projection = localization.archiveProjection.performance;
     </div>
   )
 }
+
+<style>
+  .archive-source-linebreaks {
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+  }
+</style>

@@ -75,7 +75,10 @@ const projectionView = localization.archiveProjection.views['performance-record'
             {projection.title}
           </span>
         </h1><p>
-          <span class="archive-projection-source" data-archive-projection-source>
+          <span
+            class="archive-projection-source archive-source-linebreaks"
+            data-archive-projection-source
+          >
             {leadProduction.tagline}
           </span>
           <span
@@ -216,3 +219,10 @@ const projectionView = localization.archiveProjection.views['performance-record'
     </div>
   </article>
 </ArchiveLayout>
+
+<style>
+  .archive-source-linebreaks {
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+  }
+</style>

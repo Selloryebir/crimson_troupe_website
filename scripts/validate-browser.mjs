@@ -512,6 +512,111 @@ function trackUnexpectedErrors(page, allowed = []) {
   return () => assert.deepEqual(errors, [], `浏览器页面出现未预期异常：${errors.join(' | ')}`);
 }
 
+async function assertEarlyFolioPaint(browser, origin) {
+  for (const { width, delay } of [
+    { width: 1280, delay: 450 },
+    { width: 320, delay: 450 },
+    { width: 1280, delay: 6500 },
+  ]) {
+    const context = await browser.newContext({
+      viewport: { width, height: 900 },
+      reducedMotion: 'reduce',
+    });
+    await context.addInitScript(() => {
+      Math.random = () => 0.99;
+      sessionStorage.setItem(
+        'crimson-troupe:archive-pollution:v2',
+        JSON.stringify({ version: 2, level: 3, eventCount: 8, variant: 1, seed: 42 }),
+      );
+      window.folioPaintAudit = { frames: 0, normalFrames: 0 };
+      const sample = () => {
+        for (const poster of document.querySelectorAll('[data-folio-cover]')) {
+          const image = poster.querySelector('[data-folio-image]');
+          if (image && image.complete && image.naturalWidth > 0) {
+            window.folioPaintAudit.frames += 1;
+            if (
+              window.getComputedStyle(image).visibility === 'visible' &&
+              (poster.dataset.folioEdition !== 'lullaby' ||
+                image.getAttribute('src') !== image.dataset.lullabySrc)
+            ) {
+              window.folioPaintAudit.normalFrames += 1;
+            }
+          }
+        }
+        window.requestAnimationFrame(sample);
+      };
+      window.requestAnimationFrame(sample);
+    });
+    // 主模块不可用时也应在解析阶段恢复正确首屏，不能只断言最终等级。
+    await context.route('**/*', async (route) => {
+      if (route.request().resourceType() === 'script') {
+        await route.abort();
+        return;
+      }
+      if (
+        route.request().resourceType() === 'image' &&
+        route.request().url().includes('the-lullaby')
+      ) {
+        await new Promise((resolve) => setTimeout(resolve, delay));
+      }
+      await route.continue();
+    });
+    const page = await context.newPage();
+    const assertErrors = trackUnexpectedErrors(page);
+    try {
+      for (const attempt of ['entry', 'reload']) {
+        if (attempt === 'entry') {
+          await page.goto(`${origin}${archivePath('yan')}`);
+        } else {
+          await page.reload();
+        }
+        await page.waitForFunction(() => {
+          const poster = document.querySelector('[data-folio-cover]');
+          const image = poster?.querySelector('[data-folio-image]');
+          return (
+            poster?.dataset.folioEdition === 'lullaby' &&
+            image?.complete &&
+            image.naturalWidth > 0 &&
+            window.getComputedStyle(image).visibility === 'visible'
+          );
+        });
+        await page.evaluate(() => new Promise((resolve) => window.requestAnimationFrame(resolve)));
+        assert.equal(
+          await page.locator('[data-folio-cover]').first().getAttribute('data-folio-fallback'),
+          null,
+          `${width}px ${attempt}：即使图片延迟 ${delay}ms，成功后也必须完成换图并清除回退`,
+        );
+        const frames = await page.evaluate(() => window.folioPaintAudit);
+        assert.ok(frames.frames > 0, `${width}px ${attempt} 必须采到已解码图像帧`);
+        assert.equal(
+          frames.normalFrames,
+          0,
+          `${width}px ${attempt} 包括超时后也不得显示非三级封面`,
+        );
+        // 即使网络加载器还没有开始工作，等级边界也必须同步撤下旧图。
+        const staleCovers = await page.evaluate(() => {
+          const root = document.documentElement;
+          root.dataset.pollutionLevel = '2';
+          const stale = [...document.querySelectorAll('[data-folio-cover]')].filter((poster) => {
+            const image = poster.querySelector('[data-folio-image]');
+            return (
+              image &&
+              poster.dataset.folioEdition !== 'crimson' &&
+              window.getComputedStyle(image).visibility === 'visible'
+            );
+          }).length;
+          root.dataset.pollutionLevel = '3';
+          return stale;
+        });
+        assert.equal(staleCovers, 0, `${width}px ${attempt} 等级边界不得受可见性过渡延迟`);
+        assertErrors();
+      }
+    } finally {
+      await context.close();
+    }
+  }
+}
+
 const port = await getFreePort();
 const origin = `http://${serverHost}:${port}`;
 const preview = startPreviewServer(port);
@@ -521,6 +626,8 @@ try {
   await waitForHttp(`${origin}/yan/`, 'Astro preview');
   browserSession = await launchBrowser();
   const { browser } = browserSession;
+
+  await assertEarlyFolioPaint(browser, origin);
 
   const desktop = await browser.newContext({ viewport: { width: 1280, height: 900 } });
   const desktopPage = await desktop.newPage();
