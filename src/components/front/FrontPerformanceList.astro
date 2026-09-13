@@ -86,6 +86,7 @@ const months = [...new Set(performances.map((item) => item.dateTime.month))];
                   title={leadProduction.title}
                   index={performance.index}
                   compact
+                  placement={variant === 'home-editorial' ? 'home-editorial' : 'default'}
                   priority={variant === 'catalog' && index === 0}
                 />
                 <span class="front-performance-card__copy">
