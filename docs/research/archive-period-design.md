@@ -1,6 +1,6 @@
 # 里站年代设计的参考与转译
 
-本研究服务 `dev_experiment_archive_period_design` 的隔离 Demo，不为正式蓝图增加约束，也不主张泰拉年代与现实互联网年份一一对应。
+本研究记录里站年代设计的参考与转译依据，不独立约束源码，也不主张泰拉年代与现实互联网年份一一对应。已采纳的艺术与功能边界分别由 [`BP-FND-EXPERIENCE`](../blueprint/foundation/experience-system.md) 和 [`BP-MOD-ARCHIVE`](../blueprint/modules/archive.md) 维护。
 
 记录日期：2026-09-14。
 
