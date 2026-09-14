@@ -2,6 +2,7 @@ import type { AuthoringProgramContent } from '../schema.ts';
 
 export const ursusPrograms = {
   locations: {
+    volsinii: { cityLabel: 'Старый Вольсиний', archiveCityLabel: 'Вольсиний' },
     trimount: { cityLabel: 'Trimounts' },
     wiesheim: { cityLabel: 'Vyseheim' },
     norport: { cityLabel: 'Графство Norport' },
@@ -15,6 +16,16 @@ export const ursusPrograms = {
     'nuova-volsinii': { cityLabel: 'Nuova Volsinii' },
   },
   performances: {
+    'volsinii-courtyard-1102': {
+      index: '12',
+      venue: 'Старый Вольсиний · Дворовый театр · Открытая сцена',
+      searchKeywords: 'Старый Вольсиний Вольсиний',
+    },
+    'nuova-volsinii-civic-1102': {
+      index: '13',
+      venue: 'Nuova Volsinii · Городской театр · Большой зал',
+      searchKeywords: 'Nuova Volsinii',
+    },
     'uncrowned-trimount-1102': {
       index: '01',
       venue: 'Большой театр Trimounts · Главная сцена',
@@ -47,8 +58,8 @@ export const ursusPrograms = {
     },
     'ode-au-triomphe-nuova-volsinii-1084-0623': {
       index: '04',
-      venue: 'Городская опера Nuova Volsinii · Главный зал',
-      searchKeywords: 'Nuova Volsinii триумф городская опера июнь',
+      venue: 'Вольсиний · Гастрольный театр · Главная сцена',
+      searchKeywords: 'Вольсиний',
     },
     'der-ring-zwillingsturme-1084-0817': {
       index: '05',
@@ -127,8 +138,8 @@ export const ursusPrograms = {
     },
     'frost-deer-and-snow-doe-nuova-volsinii-1084-0125': {
       index: '12',
-      venue: 'Nuova Volsinii · Гастрольный театр · Главная сцена',
-      searchKeywords: 'Nuova Volsinii Морозный олень и снежная лань 1084-01-25',
+      venue: 'Вольсиний · Гастрольный театр · Главная сцена',
+      searchKeywords: 'Вольсиний',
     },
     'light-of-heria-zwillingsturme-1084-0608': {
       index: '13',

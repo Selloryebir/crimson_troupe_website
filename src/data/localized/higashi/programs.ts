@@ -2,6 +2,7 @@ import type { AuthoringProgramContent } from '../schema.ts';
 
 export const higashiPrograms = {
   locations: {
+    volsinii: { cityLabel: '旧ヴォルシーニ', archiveCityLabel: 'ヴォルシーニ' },
     trimount: { cityLabel: 'トリマウンツ' },
     wiesheim: { cityLabel: 'ヴィシェハイム' },
     norport: { cityLabel: 'ノーポート郡' },
@@ -15,6 +16,16 @@ export const higashiPrograms = {
     'nuova-volsinii': { cityLabel: 'ヌオーヴァ・ウォルシーニ' },
   },
   performances: {
+    'volsinii-courtyard-1102': {
+      index: '12',
+      venue: '旧ヴォルシーニ · 中庭劇場 · 野外舞台',
+      searchKeywords: '旧ヴォルシーニ ヴォルシーニ',
+    },
+    'nuova-volsinii-civic-1102': {
+      index: '13',
+      venue: 'ヌオーヴァ・ウォルシーニ · 市民劇場 · 大ホール',
+      searchKeywords: 'ヌオーヴァ・ウォルシーニ',
+    },
     'uncrowned-trimount-1102': {
       index: '01',
       venue: 'トリマウンツ大劇場・メインステージ',
@@ -47,8 +58,8 @@ export const higashiPrograms = {
     },
     'ode-au-triomphe-nuova-volsinii-1084-0623': {
       index: '04',
-      venue: 'ヌオーヴァ・ウォルシーニ市立歌劇場・大ホール',
-      searchKeywords: 'ヌオーヴァ ウォルシーニ 凱旋の讃歌 歌劇場 6月',
+      venue: 'ヴォルシーニ · 巡演劇場・主舞台',
+      searchKeywords: 'ヴォルシーニ',
     },
     'der-ring-zwillingsturme-1084-0817': {
       index: '05',
@@ -127,8 +138,8 @@ export const higashiPrograms = {
     },
     'frost-deer-and-snow-doe-nuova-volsinii-1084-0125': {
       index: '12',
-      venue: 'ヌオーヴァ・ウォルシーニ · 巡演劇場・主舞台',
-      searchKeywords: 'ヌオーヴァ・ウォルシーニ 霜の牡鹿と雪の牝鹿 1084-01-25',
+      venue: 'ヴォルシーニ · 巡演劇場・主舞台',
+      searchKeywords: 'ヴォルシーニ',
     },
     'light-of-heria-zwillingsturme-1084-0608': {
       index: '13',

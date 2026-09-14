@@ -2,6 +2,7 @@ import type { AuthoringProgramContent } from '../schema.ts';
 
 export const columbiaPrograms = {
   locations: {
+    volsinii: { cityLabel: 'Old Volsinii', archiveCityLabel: 'Volsinii' },
     trimount: { cityLabel: 'Trimounts' },
     wiesheim: { cityLabel: 'Vyseheim' },
     norport: { cityLabel: 'Norport County' },
@@ -14,6 +15,16 @@ export const columbiaPrograms = {
     'nuova-volsinii': { cityLabel: 'Nuova Volsinii' },
   },
   performances: {
+    'volsinii-courtyard-1102': {
+      index: '12',
+      venue: 'Old Volsinii · Courtyard Theater · Open-air Stage',
+      searchKeywords: 'Old Volsinii Volsinii',
+    },
+    'nuova-volsinii-civic-1102': {
+      index: '13',
+      venue: 'Nuova Volsinii · Civic Theater · Grand Hall',
+      searchKeywords: 'Nuova Volsinii',
+    },
     'uncrowned-trimount-1102': {
       index: '01',
       venue: 'Trimounts Grand Theater · Main Stage',
@@ -46,8 +57,8 @@ export const columbiaPrograms = {
     },
     'ode-au-triomphe-nuova-volsinii-1084-0623': {
       index: '04',
-      venue: 'Nuova Volsinii Civic Opera · Main Hall',
-      searchKeywords: 'Nuova Volsinii Ode au Triomphe civic opera June',
+      venue: 'Volsinii · Touring Theatre · Main Stage',
+      searchKeywords: 'Volsinii',
     },
     'der-ring-zwillingsturme-1084-0817': {
       index: '05',
@@ -126,8 +137,8 @@ export const columbiaPrograms = {
     },
     'frost-deer-and-snow-doe-nuova-volsinii-1084-0125': {
       index: '12',
-      venue: 'Nuova Volsinii · Touring Theatre · Main Stage',
-      searchKeywords: 'Nuova Volsinii Frost Deer and Snow Doe 1084-01-25',
+      venue: 'Volsinii · Touring Theatre · Main Stage',
+      searchKeywords: 'Volsinii',
     },
     'light-of-heria-zwillingsturme-1084-0608': {
       index: '13',

@@ -302,11 +302,11 @@ const showcaseSnapshot = resolveContent(buildContexts.showcase);
 const previewSnapshot = resolveContent(buildContexts.preview);
 assert.doesNotThrow(() => assertPerformanceOfferMatrix());
 assert.equal(showcaseSnapshot.maturity, 'preview');
-assert.equal(showcaseSnapshot.performanceEntries.length, 28);
+assert.equal(showcaseSnapshot.performanceEntries.length, 30);
 assert.equal(showcaseSnapshot.productionEntries.length, 14);
-assert.equal(showcaseSnapshot.locationEntries.length, 10);
+assert.equal(showcaseSnapshot.locationEntries.length, 11);
 assert.equal(showcaseSnapshot.artworkEntries.length, 14);
-assert.equal(showcaseSnapshot.seatingPlanEntries.length, 7);
+assert.equal(showcaseSnapshot.seatingPlanEntries.length, 9);
 assert.deepEqual(showcaseSnapshot.editionIds, ['yan']);
 assert.deepEqual(
   new Set(showcaseSnapshot.localizationPackageEditionIds),
@@ -352,7 +352,7 @@ assert.equal(
   showcaseSnapshot.performanceEntries.filter(
     ([, performance]) => performance.world === 'front' && performance.collection === 'current',
   ).length,
-  7,
+  9,
 );
 assert.equal(
   showcaseSnapshot.performanceEntries.filter(
@@ -1302,8 +1302,13 @@ const yanLocalization = previewLocalizations[0];
 const yanOptions = getTicketingOptions(yanLocalization, previewSnapshot);
 assert.deepEqual(
   yanOptions.map(({ performanceId }) => performanceId),
-  previewSnapshot.homepagePerformanceIds.front,
-  '当前表站首页策展场次与票务候选必须保持相同顺序',
+  getLocalizedPerformances(yanLocalization, 'front', 'current', previewSnapshot)
+    .filter(
+      ({ status, ticketAvailability }) =>
+        status === 'scheduled' && ticketAvailability.state === 'on-sale',
+    )
+    .map(({ performanceId }) => performanceId),
+  '票务候选按可售本季场次派生，不受首页精选数量限制',
 );
 const crossLocaleItem = {
   performanceId: yanOptions[0].performanceId,

@@ -2,6 +2,7 @@ import type { AuthoringProgramContent } from '../schema.ts';
 
 export const kazimierzPrograms = {
   locations: {
+    volsinii: { cityLabel: 'Stare Volsinii', archiveCityLabel: 'Volsinii' },
     trimount: { cityLabel: 'Trimounty' },
     wiesheim: { cityLabel: 'Vyseheim' },
     norport: { cityLabel: 'Hrabstwo Norport' },
@@ -15,6 +16,16 @@ export const kazimierzPrograms = {
     'nuova-volsinii': { cityLabel: 'Nuova Volsinii' },
   },
   performances: {
+    'volsinii-courtyard-1102': {
+      index: '12',
+      venue: 'Stare Volsinii · Teatr na Dziedzińcu · Scena Plenerowa',
+      searchKeywords: 'Stare Volsinii Volsinii',
+    },
+    'nuova-volsinii-civic-1102': {
+      index: '13',
+      venue: 'Nuova Volsinii · Teatr Miejski · Wielka Sala',
+      searchKeywords: 'Nuova Volsinii',
+    },
     'uncrowned-trimount-1102': {
       index: '01',
       venue: 'Teatr Wielki Trimounts · Scena Główna',
@@ -47,8 +58,8 @@ export const kazimierzPrograms = {
     },
     'ode-au-triomphe-nuova-volsinii-1084-0623': {
       index: '04',
-      venue: 'Opera Obywatelska Nuova Volsinii · Sala główna',
-      searchKeywords: 'Nuova Volsinii Ode au Triomphe opera obywatelska Czerwiec',
+      venue: 'Volsinii · Teatr objazdowy · Scena główna',
+      searchKeywords: 'Volsinii',
     },
     'der-ring-zwillingsturme-1084-0817': {
       index: '05',
@@ -127,8 +138,8 @@ export const kazimierzPrograms = {
     },
     'frost-deer-and-snow-doe-nuova-volsinii-1084-0125': {
       index: '12',
-      venue: 'Nuova Volsinii · Teatr objazdowy · Scena główna',
-      searchKeywords: 'Nuova Volsinii Jeleń szronu i łania śniegu 1084-01-25',
+      venue: 'Volsinii · Teatr objazdowy · Scena główna',
+      searchKeywords: 'Volsinii',
     },
     'light-of-heria-zwillingsturme-1084-0608': {
       index: '13',

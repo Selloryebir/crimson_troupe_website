@@ -52,6 +52,9 @@ export function createLocalizationSourceRevision(
 
 // 目标语言记录所依据的炎语修订。新增或修改炎语记录时只更新已完成复核的对应路径。
 const acceptedYanSourceRevision: LocalizationSourceRevision = Object.freeze({
+  'performances.nuova-volsinii-civic-1102': 'fnv1a64:14b01c2a98592c33',
+  'performances.volsinii-courtyard-1102': 'fnv1a64:d62004f23f6f0441',
+  'locations.volsinii': 'fnv1a64:a2bded3df693fec1',
   'site.brand': 'fnv1a64:03d196aa49398779',
   'site.shared': 'fnv1a64:1409b8393cb451e8',
   'site.front': 'fnv1a64:cfe2fbfc3c6353ec',
@@ -80,7 +83,7 @@ const acceptedYanSourceRevision: LocalizationSourceRevision = Object.freeze({
   'performances.der-ring-londinium-1084-0308': 'fnv1a64:d004ba9d26617c1b',
   'performances.one-hundred-and-one-days-norport-1084-0419': 'fnv1a64:7c8fd6beed6f0e8a',
   'performances.the-carnival-wiesheim-1084-0511': 'fnv1a64:c71bdd7b2c18a053',
-  'performances.ode-au-triomphe-nuova-volsinii-1084-0623': 'fnv1a64:d1958840c73ce741',
+  'performances.ode-au-triomphe-nuova-volsinii-1084-0623': 'fnv1a64:d3ecc2cf826ee37a',
   'performances.der-ring-zwillingsturme-1084-0817': 'fnv1a64:dfd59102aaedc6e7',
   'performances.one-hundred-and-one-days-londinium-1084-0903': 'fnv1a64:16a1eec6be47cf41',
   'performances.the-carnival-montelupe-1084-0921': 'fnv1a64:63654a90ab3c1e99',
@@ -96,7 +99,7 @@ const acceptedYanSourceRevision: LocalizationSourceRevision = Object.freeze({
   'performances.uncrowned-qingsui-1103-0404': 'fnv1a64:94bbcd1ef6b59ae2',
   'performances.lone-wander-wiesheim-1083-0814': 'fnv1a64:1442bcffe892ae2e',
   'performances.wonderland-in-dream-londinium-1083-1109': 'fnv1a64:86e330b7c46be6b4',
-  'performances.frost-deer-and-snow-doe-nuova-volsinii-1084-0125': 'fnv1a64:23c08df5f12ce29f',
+  'performances.frost-deer-and-snow-doe-nuova-volsinii-1084-0125': 'fnv1a64:9445690a9b6b2a27',
   'performances.light-of-heria-zwillingsturme-1084-0608': 'fnv1a64:0af1a03c4c53cb86',
   'performances.lone-wander-linqu-1084-0719': 'fnv1a64:3d431febeb0ad529',
   'performances.wonderland-in-dream-qingsui-1084-1116': 'fnv1a64:75ac74300c178331',

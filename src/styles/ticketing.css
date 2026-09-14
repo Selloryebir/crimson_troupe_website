@@ -282,8 +282,8 @@
 
 .ticket-seating__zone-button {
   position: absolute;
-  top: var(--zone-y);
-  left: var(--zone-x);
+  top: clamp(24px, var(--zone-y), calc(100% - 24px));
+  left: clamp(36px, var(--zone-x), calc(100% - 36px));
   display: grid;
   min-width: 52px;
   min-height: 42px;

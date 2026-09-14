@@ -2,6 +2,7 @@ import type { AuthoringProgramContent } from '../schema.ts';
 
 export const siracusaPrograms = {
   locations: {
+    volsinii: { cityLabel: 'Vecchia Volsinii', archiveCityLabel: 'Volsinii' },
     trimount: { cityLabel: 'Trimount' },
     wiesheim: { cityLabel: 'Vyseheim' },
     norport: { cityLabel: 'Contea di Norport' },
@@ -15,6 +16,16 @@ export const siracusaPrograms = {
     'nuova-volsinii': { cityLabel: 'Nuova Volsinii' },
   },
   performances: {
+    'volsinii-courtyard-1102': {
+      index: '12',
+      venue: 'Vecchia Volsinii · Teatro del Cortile · Palco all’aperto',
+      searchKeywords: 'Vecchia Volsinii Volsinii',
+    },
+    'nuova-volsinii-civic-1102': {
+      index: '13',
+      venue: 'Nuova Volsinii · Teatro Civico · Sala Grande',
+      searchKeywords: 'Nuova Volsinii',
+    },
     'uncrowned-trimount-1102': {
       index: '01',
       venue: 'Trimounts Grand Theatre · Palco principale',
@@ -48,8 +59,8 @@ export const siracusaPrograms = {
     },
     'ode-au-triomphe-nuova-volsinii-1084-0623': {
       index: '04',
-      venue: 'Opera Civica Nuova Volsinii · Sala Grande',
-      searchKeywords: 'Nuova Volsinii Ode au Triomphe opera civica giugno',
+      venue: 'Volsinii · Teatro itinerante · Palcoscenico principale',
+      searchKeywords: 'Volsinii',
     },
     'der-ring-zwillingsturme-1084-0817': {
       index: '05',
@@ -128,8 +139,8 @@ export const siracusaPrograms = {
     },
     'frost-deer-and-snow-doe-nuova-volsinii-1084-0125': {
       index: '12',
-      venue: 'Nuova Volsinii · Teatro itinerante · Palcoscenico principale',
-      searchKeywords: 'Nuova Volsinii Cervo di brina e cerva di neve 1084-01-25',
+      venue: 'Volsinii · Teatro itinerante · Palcoscenico principale',
+      searchKeywords: 'Volsinii',
     },
     'light-of-heria-zwillingsturme-1084-0608': {
       index: '13',

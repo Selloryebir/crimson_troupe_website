@@ -2,6 +2,7 @@ import type { AuthoringProgramContent } from '../schema.ts';
 
 export const minosPrograms = {
   locations: {
+    volsinii: { cityLabel: 'Παλαιό Βολσίνι', archiveCityLabel: 'Βολσίνι' },
     trimount: { cityLabel: 'Trimounts' },
     wiesheim: { cityLabel: 'Vyseheim' },
     norport: { cityLabel: 'Κομητεία Norport' },
@@ -15,6 +16,16 @@ export const minosPrograms = {
     'nuova-volsinii': { cityLabel: 'Nuova Volsinii' },
   },
   performances: {
+    'volsinii-courtyard-1102': {
+      index: '12',
+      venue: 'Παλαιό Βολσίνι · Θέατρο της Αυλής · Υπαίθρια Σκηνή',
+      searchKeywords: 'Παλαιό Βολσίνι Βολσίνι',
+    },
+    'nuova-volsinii-civic-1102': {
+      index: '13',
+      venue: 'Nuova Volsinii · Δημοτικό Θέατρο · Μεγάλη Αίθουσα',
+      searchKeywords: 'Nuova Volsinii',
+    },
     'uncrowned-trimount-1102': {
       index: '01',
       venue: 'Μεγάλο Θέατρο Trimounts · Κύρια Σκηνή',
@@ -47,8 +58,8 @@ export const minosPrograms = {
     },
     'ode-au-triomphe-nuova-volsinii-1084-0623': {
       index: '04',
-      venue: 'Δημοτική Όπερα Nuova Volsinii · Κύρια Αίθουσα',
-      searchKeywords: 'Nuova Volsinii θρίαμβος δημοτική όπερα Ιούνιος',
+      venue: 'Βολσίνι · Περιοδεύον θέατρο · Κεντρική σκηνή',
+      searchKeywords: 'Βολσίνι',
     },
     'der-ring-zwillingsturme-1084-0817': {
       index: '05',
@@ -127,8 +138,8 @@ export const minosPrograms = {
     },
     'frost-deer-and-snow-doe-nuova-volsinii-1084-0125': {
       index: '12',
-      venue: 'Nuova Volsinii · Περιοδεύον θέατρο · Κεντρική σκηνή',
-      searchKeywords: 'Nuova Volsinii Ελάφι της πάχνης και ελαφίνα του χιονιού 1084-01-25',
+      venue: 'Βολσίνι · Περιοδεύον θέατρο · Κεντρική σκηνή',
+      searchKeywords: 'Βολσίνι',
     },
     'light-of-heria-zwillingsturme-1084-0608': {
       index: '13',

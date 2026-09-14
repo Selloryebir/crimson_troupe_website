@@ -2,6 +2,7 @@ import type { ProgramContentBase } from '../schema.ts';
 
 export const yanPrograms = {
   locations: {
+    volsinii: { cityLabel: '旧沃尔西尼', archiveCityLabel: '沃尔西尼' },
     trimount: { cityLabel: '特里蒙' },
     wiesheim: { cityLabel: '维谢海姆' },
     norport: { cityLabel: '诺伯特郡' },
@@ -15,6 +16,16 @@ export const yanPrograms = {
     'nuova-volsinii': { cityLabel: '新沃尔西尼' },
   },
   performances: {
+    'volsinii-courtyard-1102': {
+      index: '12',
+      venue: '旧沃尔西尼 · 庭院剧场 · 露天舞台',
+      searchKeywords: '旧沃尔西尼 沃尔西尼',
+    },
+    'nuova-volsinii-civic-1102': {
+      index: '13',
+      venue: '新沃尔西尼 · 市民剧院 · 大厅',
+      searchKeywords: '新沃尔西尼',
+    },
     'uncrowned-trimount-1102': {
       index: '01',
       venue: '特里蒙大剧院 · 主舞台',
@@ -47,8 +58,8 @@ export const yanPrograms = {
     },
     'ode-au-triomphe-nuova-volsinii-1084-0623': {
       index: '04',
-      venue: '新沃尔西尼市政歌剧院 · 主厅',
-      searchKeywords: '新沃尔西尼 凯旋颂 歌剧院 六月',
+      venue: '沃尔西尼 · 巡演剧场 · 主厅',
+      searchKeywords: '沃尔西尼',
     },
     'der-ring-zwillingsturme-1084-0817': {
       index: '05',
@@ -127,8 +138,8 @@ export const yanPrograms = {
     },
     'frost-deer-and-snow-doe-nuova-volsinii-1084-0125': {
       index: '12',
-      venue: '新沃尔西尼 · 巡演剧场 · 主厅',
-      searchKeywords: '新沃尔西尼 霜牡与雪牝 1084-01-25',
+      venue: '沃尔西尼 · 巡演剧场 · 主厅',
+      searchKeywords: '沃尔西尼',
     },
     'light-of-heria-zwillingsturme-1084-0608': {
       index: '13',

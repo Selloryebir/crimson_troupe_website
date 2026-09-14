@@ -267,9 +267,18 @@ const frontTicketingPerformances = Object.values(performances).filter(
 );
 assert.ok(frontTicketingPerformances.length > 0, '表站当前快照没有可售场次');
 assert.deepEqual(
-  frontTicketingPerformances.map(({ performanceId }) => performanceId),
-  buildSnapshot.homepagePerformanceIds.front,
-  '当前表站首页策展场次与票务候选必须保持相同顺序',
+  new Set(frontTicketingPerformances.map(({ performanceId }) => performanceId)),
+  new Set(
+    buildSnapshot.performanceEntries
+      .filter(
+        ([, performance]) =>
+          performance.world === 'front' &&
+          performance.collection === 'current' &&
+          performance.ticketAvailability.state === 'on-sale',
+      )
+      .map(([performanceId]) => performanceId),
+  ),
+  '票务候选从场次资格派生，不以首页策展作为第二份开票清单',
 );
 for (const performance of frontTicketingPerformances) {
   const { seatingPlanId, offers } = performance.ticketAvailability;
@@ -316,6 +325,8 @@ for (const zone of ['C', 'B', 'A']) {
   );
 }
 const seatingPlanExpectations = {
+  'volsinii-courtyard': { levels: 1, zones: ['C', 'B', 'A'] },
+  'nuova-volsinii-civic': { levels: 2, zones: ['C', 'B', 'A', 'S', 'BOX'] },
   'trimount-grand-fan': { levels: 3, zones: ['C', 'B', 'A', 'S', 'BOX'] },
   'wiesheim-mirror-horseshoe': { levels: 3, zones: ['C', 'B', 'A', 'S', 'BOX'] },
   'norport-temporary-stand': { levels: 1, zones: ['C', 'B', 'A'] },
@@ -345,6 +356,26 @@ for (const [seatingPlanId, expectation] of Object.entries(seatingPlanExpectation
 
 for (const edition of builtEditions) {
   const localization = getLocalization(edition);
+  const localizedEntries = getLocalizedPerformanceEntries(localization);
+  const oldCity = localization.programs.locations.volsinii;
+  assert.ok(oldCity.archiveCityLabel, `${edition.editionId} 缺少沃尔西尼时代名`);
+  for (const [, performance] of localizedEntries.filter(
+    ([, entry]) => entry.locationId === 'volsinii',
+  )) {
+    assert.equal(
+      performance.cityLabel,
+      performance.world === 'archive' ? oldCity.archiveCityLabel : oldCity.cityLabel,
+    );
+  }
+  assert.ok(
+    !localizedEntries.some(
+      ([, entry]) => entry.world === 'archive' && entry.locationId === 'nuova-volsinii',
+    ),
+    '1084不得采用新沃尔西尼',
+  );
+  const oldVenue = localization.programs.performances['volsinii-courtyard-1102'].venue;
+  const newVenue = localization.programs.performances['nuova-volsinii-civic-1102'].venue;
+  assert.notEqual(oldVenue, newVenue, `${edition.editionId} 新旧城剧场不得混用`);
   for (const id of yaneseServiceProductions) {
     assert.match(
       localization.programs.productions[id].language,

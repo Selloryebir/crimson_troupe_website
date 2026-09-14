@@ -13,6 +13,7 @@ import { currentArchiveSnapshot } from '../src/data/archive-snapshots.ts';
 import { buildSnapshot } from '../src/data/content/resolve.ts';
 import { builtEditions, editions } from '../src/data/editions.ts';
 import { getLocalization } from '../src/data/localized/resolve.ts';
+import { getTicketingOptions } from '../src/data/ticketing.ts';
 import { derivePollutionComposition } from '../src/scripts/pollution-state.ts';
 import { selectCrimsonFolioIds } from '../src/scripts/archive-folio-effects.ts';
 
@@ -1277,6 +1278,8 @@ try {
   await ticketPage.locator('[data-ticketing-app]:not([hidden])').waitFor();
   await assertNoHorizontalLoss(ticketPage, '320px 炎国票务');
   const seatingPlans = [
+    { id: 'volsinii-courtyard', levels: 1, zones: ['C', 'B', 'A'] },
+    { id: 'nuova-volsinii-civic', levels: 2, zones: ['C', 'B', 'A', 'S', 'BOX'] },
     { id: 'trimount-grand-fan', levels: 3, zones: ['C', 'B', 'A', 'S', 'BOX'] },
     { id: 'wiesheim-mirror-horseshoe', levels: 3, zones: ['C', 'B', 'A', 'S', 'BOX'] },
     { id: 'norport-temporary-stand', levels: 1, zones: ['C', 'B', 'A'] },
@@ -1289,6 +1292,34 @@ try {
     const details = ticketPage.locator(`[data-seating-plan="${expected.id}"]`);
     assert.equal(await details.count(), 1, `${expected.id} 应且只应出现一次`);
     await details.locator('summary').click();
+    for (const diagram of await details.locator('.ticket-seating__diagram').all()) {
+      const aligned = await diagram.evaluate((element) => {
+        const stage = element.querySelector('.ticket-seating__stage')?.getBoundingClientRect();
+        const label = element
+          .querySelector('.ticket-seating__stage-label')
+          ?.getBoundingClientRect();
+        return (
+          !stage ||
+          (label &&
+            Math.abs(stage.x + stage.width / 2 - label.x - label.width / 2) < 1 &&
+            Math.abs(stage.y + stage.height / 2 - label.y - label.height / 2) < 1)
+        );
+      });
+      assert.equal(aligned, true, `${expected.id} 舞台与文字坐标必须对齐`);
+      const contained = await diagram.evaluate((element) => {
+        const bounds = element.getBoundingClientRect();
+        return [...element.querySelectorAll('[data-ticket-zone-map]')].every((button) => {
+          const box = button.getBoundingClientRect();
+          return (
+            box.left >= bounds.left - 1 &&
+            box.right <= bounds.right + 1 &&
+            box.top >= bounds.top - 1 &&
+            box.bottom <= bounds.bottom + 1
+          );
+        });
+      });
+      assert.equal(contained, true, `${expected.id} 分区按钮不得被示意容器裁切`);
+    }
     assert.equal(
       await details.locator('[data-seating-level]').count(),
       expected.levels,
@@ -1357,8 +1388,10 @@ try {
   const ticketRows = ticketPage.locator('[data-ticket-option]');
   assert.deepEqual(
     await ticketRows.evaluateAll((rows) => rows.map((row) => row.dataset.ticketOption)),
-    buildSnapshot.homepagePerformanceIds.front,
-    '票务页场次应与表站首页策展顺序一致',
+    getTicketingOptions(getLocalization(editions.yan, buildSnapshot), buildSnapshot).map(
+      ({ performanceId }) => performanceId,
+    ),
+    '票务页应包含全部可售场次，独立于首页策展集合',
   );
   const firstTicketRow = ticketPage.locator('[data-ticket-option="uncrowned-trimount-1102"]');
   const firstTicketSelect = firstTicketRow.locator('[data-ticket-zone]');

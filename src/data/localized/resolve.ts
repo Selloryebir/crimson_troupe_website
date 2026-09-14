@@ -324,7 +324,10 @@ export function getLocalizedPerformance(
   return {
     ...performance,
     ...content,
-    cityLabel: location.cityLabel,
+    cityLabel:
+      performance.world === 'archive'
+        ? (location.archiveCityLabel ?? location.cityLabel)
+        : location.cityLabel,
     dateTime: {
       ...performance.effectiveDateTime,
       display: formatTerraDateTime(performance.effectiveDateTime, localization.edition.locale),

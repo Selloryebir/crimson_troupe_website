@@ -95,6 +95,42 @@ export interface Performance {
 }
 
 export const performances = {
+  'volsinii-courtyard-1102': {
+    performanceId: 'volsinii-courtyard-1102',
+    world: 'front',
+    status: 'scheduled',
+    locationId: 'volsinii',
+    effectiveDateTime: { calendar: 'terra', year: 1102, month: 7, day: 20, time: '19:00' },
+    productionIds: ['seventh-lantern'],
+    ticketAvailability: {
+      state: 'on-sale',
+      seatingPlanId: 'volsinii-courtyard',
+      offers: [
+        { zone: 'C', basePrice: 100 },
+        { zone: 'B', basePrice: 180 },
+        { zone: 'A', basePrice: 280 },
+      ],
+    },
+  },
+  'nuova-volsinii-civic-1102': {
+    performanceId: 'nuova-volsinii-civic-1102',
+    world: 'front',
+    status: 'scheduled',
+    locationId: 'nuova-volsinii',
+    effectiveDateTime: { calendar: 'terra', year: 1102, month: 8, day: 24, time: '20:00' },
+    productionIds: ['second-snow'],
+    ticketAvailability: {
+      state: 'on-sale',
+      seatingPlanId: 'nuova-volsinii-civic',
+      offers: [
+        { zone: 'C', basePrice: 200 },
+        { zone: 'B', basePrice: 340 },
+        { zone: 'A', basePrice: 540 },
+        { zone: 'S', basePrice: 820 },
+        { zone: 'BOX', basePrice: 1360 },
+      ],
+    },
+  },
   'caged-fire-jiangdu-1101-0521': {
     performanceId: 'caged-fire-jiangdu-1101-0521',
     world: 'front',
@@ -244,7 +280,7 @@ export const performances = {
     performanceId: 'frost-deer-and-snow-doe-nuova-volsinii-1084-0125',
     world: 'archive',
     status: 'completed',
-    locationId: 'nuova-volsinii',
+    locationId: 'volsinii',
     effectiveDateTime: { calendar: 'terra', year: 1084, month: 1, day: 25, time: '18:45' },
     productionIds: ['frost-deer-and-snow-doe'],
     ticketAvailability: { state: 'not-on-sale' },
@@ -289,7 +325,7 @@ export const performances = {
     performanceId: 'ode-au-triomphe-nuova-volsinii-1084-0623',
     world: 'archive',
     status: 'completed',
-    locationId: 'nuova-volsinii',
+    locationId: 'volsinii',
     effectiveDateTime: { calendar: 'terra', year: 1084, month: 6, day: 23, time: '19:30' },
     productionIds: ['ode-au-triomphe'],
     ticketAvailability: { state: 'not-on-sale' },

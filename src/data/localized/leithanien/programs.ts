@@ -2,6 +2,7 @@ import type { AuthoringProgramContent } from '../schema.ts';
 
 export const leithanienPrograms = {
   locations: {
+    volsinii: { cityLabel: 'Alt-Volsinii', archiveCityLabel: 'Volsinii' },
     trimount: { cityLabel: 'Trimounts' },
     wiesheim: { cityLabel: 'Vyseheim' },
     norport: { cityLabel: 'Norport County' },
@@ -15,6 +16,16 @@ export const leithanienPrograms = {
     'nuova-volsinii': { cityLabel: 'Nuova Volsinii' },
   },
   performances: {
+    'volsinii-courtyard-1102': {
+      index: '12',
+      venue: 'Alt-Volsinii · Hoftheater · Freilichtbühne',
+      searchKeywords: 'Alt-Volsinii Volsinii',
+    },
+    'nuova-volsinii-civic-1102': {
+      index: '13',
+      venue: 'Nuova Volsinii · Stadttheater · Großer Saal',
+      searchKeywords: 'Nuova Volsinii',
+    },
     'uncrowned-trimount-1102': {
       index: '01',
       venue: 'Trimounts Grand Theater · Hauptbühne',
@@ -47,8 +58,8 @@ export const leithanienPrograms = {
     },
     'ode-au-triomphe-nuova-volsinii-1084-0623': {
       index: '04',
-      venue: 'Bürgeroper Nuova Volsinii · Hauptsaal',
-      searchKeywords: 'Bürgeroper Nuova Volsinii Ode au Triomphe Juni',
+      venue: 'Volsinii · Tourneetheater · Hauptbühne',
+      searchKeywords: 'Volsinii',
     },
     'der-ring-zwillingsturme-1084-0817': {
       index: '05',
@@ -127,8 +138,8 @@ export const leithanienPrograms = {
     },
     'frost-deer-and-snow-doe-nuova-volsinii-1084-0125': {
       index: '12',
-      venue: 'Nuova Volsinii · Tourneetheater · Hauptbühne',
-      searchKeywords: 'Nuova Volsinii Frosthirsch und Schneehindin 1084-01-25',
+      venue: 'Volsinii · Tourneetheater · Hauptbühne',
+      searchKeywords: 'Volsinii',
     },
     'light-of-heria-zwillingsturme-1084-0608': {
       index: '13',

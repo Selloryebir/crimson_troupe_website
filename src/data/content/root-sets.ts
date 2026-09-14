@@ -32,6 +32,8 @@ export const currentRootSet = Object.freeze({
         'red-banquet-nuova-volsinii-1101-1119',
         'seventh-lantern-norport-1102-0202',
         'red-banquet-montelupe-1102-0606',
+        'volsinii-courtyard-1102',
+        'nuova-volsinii-civic-1102',
         'uncrowned-trimount-1102',
         'caged-fire-wiesheim-1102',
         'second-snow-norport-1102',

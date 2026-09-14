@@ -1,6 +1,8 @@
 import type { TicketZone } from './performances.ts';
 
 export type SeatingPlanId =
+  | 'volsinii-courtyard'
+  | 'nuova-volsinii-civic'
   | 'trimount-grand-fan'
   | 'wiesheim-mirror-horseshoe'
   | 'norport-temporary-stand'
@@ -29,6 +31,110 @@ export interface SeatingPlanDefinition {
 }
 
 export const ticketSeatingPlans = {
+  'volsinii-courtyard': {
+    seatingPlanId: 'volsinii-courtyard',
+    levels: [
+      {
+        levelId: 'courtyard',
+        stage: { x: 240, y: 16, width: 160, height: 30 },
+        regions: [
+          {
+            regionId: 'courtyard-front',
+            zone: 'A',
+            path: 'M220 66 H420 L440 116 H200 Z',
+            labelX: 320,
+            labelY: 92,
+          },
+          {
+            regionId: 'courtyard-middle',
+            zone: 'B',
+            path: 'M190 130 H450 L470 190 H170 Z',
+            labelX: 320,
+            labelY: 160,
+          },
+          {
+            regionId: 'courtyard-left',
+            zone: 'C',
+            path: 'M70 92 H142 V222 H70 Z',
+            labelX: 106,
+            labelY: 157,
+          },
+          {
+            regionId: 'courtyard-right',
+            zone: 'C',
+            path: 'M498 92 H570 V222 H498 Z',
+            labelX: 534,
+            labelY: 157,
+          },
+        ],
+      },
+    ],
+  },
+  'nuova-volsinii-civic': {
+    seatingPlanId: 'nuova-volsinii-civic',
+    levels: [
+      {
+        levelId: 'orchestra',
+        stage: { x: 210, y: 16, width: 220, height: 30 },
+        regions: [
+          {
+            regionId: 'orchestra-center',
+            zone: 'S',
+            path: 'M250 60 H390 L420 114 Q320 140 220 114 Z',
+            labelX: 320,
+            labelY: 96,
+          },
+          {
+            regionId: 'orchestra-left',
+            zone: 'A',
+            path: 'M150 66 L235 60 L202 125 L114 151 Z',
+            labelX: 168,
+            labelY: 107,
+          },
+          {
+            regionId: 'orchestra-right',
+            zone: 'A',
+            path: 'M490 66 L405 60 L438 125 L526 151 Z',
+            labelX: 472,
+            labelY: 107,
+          },
+          {
+            regionId: 'orchestra-rear',
+            zone: 'B',
+            path: 'M110 168 Q320 205 530 168 L560 236 H80 Z',
+            labelX: 320,
+            labelY: 220,
+          },
+        ],
+      },
+      {
+        levelId: 'gallery',
+        regions: [
+          {
+            regionId: 'gallery-center',
+            zone: 'C',
+            path: 'M168 134 Q320 200 472 134 L500 198 Q320 264 140 198 Z',
+            labelX: 320,
+            labelY: 218,
+          },
+          {
+            regionId: 'gallery-box-left',
+            zone: 'BOX',
+            path: 'M88 40 H168 V116 H88 Z',
+            labelX: 128,
+            labelY: 79,
+          },
+          {
+            regionId: 'gallery-box-right',
+            zone: 'BOX',
+            path: 'M472 40 H552 V116 H472 Z',
+            labelX: 512,
+            labelY: 79,
+          },
+        ],
+      },
+    ],
+  },
   'trimount-grand-fan': {
     seatingPlanId: 'trimount-grand-fan',
     levels: [
@@ -491,7 +597,7 @@ export const ticketSeatingPlans = {
             regionId: 'grand-orchestra-rear',
             zone: 'C',
             path: 'M66 202 Q320 274 574 202 L620 238 H20 Z',
-            labelX: 320,
+            labelX: 470,
             labelY: 230,
           },
         ],
