@@ -5,6 +5,10 @@ import { kazimierzMessages } from './messages.ts';
 export const kazimierzSite = {
   brand: { name: 'Karmazynowa Trupa', latinName: 'SZkarłatna trupa' },
   shared: {
+    archiveSnapshot: 'Migawka {date}',
+    archiveDamageDescription:
+      'Ta strona nie zachowała się w całości. Data i zapisy przedstawień są już nieczytelne; można ustalić jedynie rok archiwizacji. Wróć do katalogu, aby otworzyć nadal dostępną migawkę.',
+    archiveDamageClose: 'Powrót do katalogu migawek',
     skipToContent: 'Przejdź do głównej treści',
     mainNavigation: 'Główna nawigacja',
     brandHome: 'Dom Karmazynowej Trupy',

@@ -294,7 +294,9 @@ for (const [route, filePath] of routes) {
       );
       for (const snapshot of archiveSnapshots) {
         assert.ok(
-          html.includes(snapshot.displayCapturedAt),
+          html.includes(
+            snapshot.state === 'available' ? snapshot.routeSegment : snapshot.displayCapturedAt,
+          ),
           `${route} 缺少馆藏记录 ${snapshot.snapshotId}`,
         );
       }
@@ -526,7 +528,7 @@ assert.equal(
 );
 for (const snapshot of archiveSnapshots) {
   if (snapshot.state === 'damaged') {
-    const damagedYear = snapshot.displayCapturedAt.slice(0, 4);
+    const damagedYear = snapshot.year;
     assert.equal(
       [...routes.keys()].some((route) => route.includes(`/archive/site/${damagedYear}`)),
       false,

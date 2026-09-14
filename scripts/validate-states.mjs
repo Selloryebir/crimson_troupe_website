@@ -586,13 +586,13 @@ assert.deepEqual(
     routeSegment,
   })),
   [
+    { snapshotId: '1096-damaged', state: 'damaged', routeSegment: null },
+    { snapshotId: '1093-damaged', state: 'damaged', routeSegment: null },
     {
       snapshotId: '1084-07-01T00:00:00',
       state: 'available',
       routeSegment: '1084-07-01',
     },
-    { snapshotId: '1093-damaged', state: 'damaged', routeSegment: null },
-    { snapshotId: '1096-damaged', state: 'damaged', routeSegment: null },
   ],
 );
 assert.deepEqual(archiveNow, currentArchiveSnapshot.capturedAt);

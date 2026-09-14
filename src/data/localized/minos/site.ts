@@ -5,6 +5,10 @@ import { minosMessages } from './messages.ts';
 export const minosSite = {
   brand: { name: 'Πορφυρός Θίασος', latinName: 'CRIMSON TROUPE' },
   shared: {
+    archiveSnapshot: 'Στιγμιότυπο {date}',
+    archiveDamageDescription:
+      'Αυτή η σελίδα δεν διασώθηκε ακέραιη. Η ημερομηνία και οι καταγραφές παραστάσεων δεν διαβάζονται πλέον· μπορεί να εξακριβωθεί μόνο το έτος αρχειοθέτησης. Επιστρέψτε στον κατάλογο για να ανοίξετε ένα διαθέσιμο στιγμιότυπο.',
+    archiveDamageClose: 'Επιστροφή στον κατάλογο στιγμιοτύπων',
     skipToContent: 'Μετάβαση στο κύριο περιεχόμενο',
     mainNavigation: 'Κύρια πλοήγηση',
     brandHome: 'Αρχική σελίδα του Πορφυρού Θιάσου',

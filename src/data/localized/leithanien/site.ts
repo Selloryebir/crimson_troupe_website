@@ -5,6 +5,10 @@ import { leithanienMessages } from './messages.ts';
 export const leithanienSite = {
   brand: { name: 'Crimson Troupe', latinName: 'CRIMSON TROUPE' },
   shared: {
+    archiveSnapshot: 'Momentaufnahme {date}',
+    archiveDamageDescription:
+      'Diese Seite ist nicht vollständig erhalten. Das Datum und die Aufführungsaufzeichnungen sind nicht mehr lesbar; nur das Archivjahr lässt sich noch bestimmen. Kehren Sie zum Verzeichnis zurück, um eine noch zugängliche Momentaufnahme zu öffnen.',
+    archiveDamageClose: 'Zurück zum Verzeichnis',
     skipToContent: 'Zum Hauptinhalt springen',
     mainNavigation: 'Hauptnavigation',
     brandHome: 'Zuhause der Crimson Troupe',

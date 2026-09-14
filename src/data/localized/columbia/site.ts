@@ -5,6 +5,10 @@ import { columbiaMessages } from './messages.ts';
 export const columbiaSite = {
   brand: { name: 'Crimson Troupe', latinName: 'CRIMSON TROUPE' },
   shared: {
+    archiveSnapshot: 'Snapshot {date}',
+    archiveDamageDescription:
+      'This page has not survived intact. Its date and performance records are no longer legible; only the archive year can be established. Return to the catalog to consult a snapshot that can still be opened.',
+    archiveDamageClose: 'Return to snapshot catalog',
     skipToContent: 'Skip to main content',
     mainNavigation: 'Main navigation',
     brandHome: 'Crimson Troupe home',

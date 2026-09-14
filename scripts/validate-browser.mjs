@@ -746,8 +746,8 @@ try {
     '表站首页应只装配显式策展集合',
   );
   const archiveCatalog = desktopPage.locator('.archive-catalog');
-  const catalogDetails = archiveCatalog.locator('details');
-  const catalogSummary = catalogDetails.locator('summary');
+  const catalogDetails = archiveCatalog.locator('[data-archive-catalog]');
+  const catalogSummary = catalogDetails.locator(':scope > summary');
   assert.equal(await catalogDetails.getAttribute('open'), null, '快照下拉默认收起');
   await catalogSummary.scrollIntoViewIfNeeded();
   const catalogBefore = await desktopPage.evaluate(() => ({
@@ -781,17 +781,31 @@ try {
   assert.equal(await archiveCatalog.locator('li').count(), 3, '表站页脚应显示三条馆藏记录');
   assert.equal(await archiveCatalog.locator('a').count(), 1, '只有当前快照可以进入');
   assert.equal(await archiveCatalog.locator('.archive-catalog__damaged').count(), 2);
+  assert.deepEqual(
+    await archiveCatalog
+      .locator('[data-snapshot-id]')
+      .evaluateAll((items) => items.map((item) => item.dataset.snapshotId)),
+    ['1096-damaged', '1093-damaged', currentArchiveSnapshot.snapshotId],
+  );
   for (const damaged of await archiveCatalog.locator('.archive-catalog__damaged').all()) {
     const corruption = damaged.locator('.archive-catalog__corruption');
-    assert.match(await corruption.innerText(), /^109[36]-[?#%]+-[?#%]+ /u);
+    assert.match(await corruption.innerText(), /[█▓▒░]/u);
+    assert.match(await corruption.innerText(), /�/u);
+    assert.doesNotMatch(await corruption.innerText(), /\d/u);
     assert.equal(await corruption.getAttribute('aria-hidden'), 'true');
-    assert.match(await damaged.locator('.visually-hidden').innerText(), /^109[36]$/u);
-    assert.ok((await damaged.locator('small').innerText()).trim());
-    assert.equal(await damaged.locator('a, button, [tabindex]').count(), 0);
+    assert.match(await damaged.locator('.visually-hidden').innerText(), /109[36]/u);
+    const trigger = damaged.locator('summary');
+    await trigger.click();
+    const dialog = desktopPage.locator('[data-archive-damage-dialog]');
+    assert.equal(await dialog.evaluate((element) => element.open), true);
+    assert.ok((await dialog.locator('#archive-damage-description').innerText()).trim());
+    await desktopPage.keyboard.press('Escape');
+    assert.equal(await dialog.evaluate((element) => element.open), false);
+    assert.equal(await trigger.evaluate((element) => element === document.activeElement), true);
   }
-  assert.equal(
+  assert.match(
     await archiveCatalog.locator('a').evaluate((link) => window.getComputedStyle(link).cursor),
-    'help',
+    /url\(.+\) 2 1, help/u,
   );
   assert.match(
     (await archiveCatalog.locator('a').getAttribute('href')) ?? '',

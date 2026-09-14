@@ -56,29 +56,56 @@ const copy = localization.site.shared;
           <summary class="archive-catalog__title">{copy.archiveCatalog}</summary>
           <ul>
             {archiveSnapshots.map((snapshot) => (
-              <li>
+              <li data-snapshot-id={snapshot.snapshotId}>
                 {snapshot.state === 'available' ? (
                   <a
                     href={siteRoot(edition, 'archive')}
                     data-world-switch="archive"
                     data-pollution-safe
                   >
-                    <span>{snapshot.displayCapturedAt}</span>
-                    <small>{copy.frontToArchive}</small>
+                    {formatMessage(copy.archiveSnapshot, { date: snapshot.routeSegment })}
                   </a>
                 ) : (
-                  <span class="archive-catalog__damaged">
-                    <span class="archive-catalog__corruption" aria-hidden="true">
-                      {snapshot.displayCapturedAt}
-                    </span>
-                    <span class="visually-hidden">{snapshot.displayCapturedAt.slice(0, 4)}</span>
-                    <small>{copy.archiveDamaged}</small>
-                  </span>
+                  <details class="archive-catalog__damaged">
+                    <summary
+                      class="archive-catalog__damage-trigger"
+                      data-damaged-snapshot
+                      data-snapshot-label={formatMessage(copy.archiveSnapshot, {
+                        date: String(snapshot.year),
+                      })}
+                    >
+                      <span class="archive-catalog__corruption" aria-hidden="true">
+                        {formatMessage(copy.archiveSnapshot, { date: snapshot.displayCapturedAt })}
+                      </span>
+                      <span class="visually-hidden">
+                        {formatMessage(copy.archiveSnapshot, { date: String(snapshot.year) })}
+                        {copy.editionSeparator}
+                        {copy.archiveDamaged}
+                      </span>
+                    </summary>
+                    <p>{copy.archiveDamageDescription}</p>
+                  </details>
                 )}
               </li>
             ))}
           </ul>
         </details>
+        <dialog
+          id="archive-damage-dialog"
+          class="archive-damage-dialog"
+          data-archive-damage-dialog
+          aria-labelledby="archive-damage-title"
+          aria-describedby="archive-damage-description"
+        >
+          <p class="archive-damage-dialog__record" data-damage-record />
+          <h2 id="archive-damage-title">{copy.archiveDamaged}</h2>
+          <p id="archive-damage-description">{copy.archiveDamageDescription}</p>
+          <form method="dialog">
+            <button type="submit" class="button">
+              {copy.archiveDamageClose}
+            </button>
+          </form>
+        </dialog>
       </nav>
     )
   }
@@ -86,6 +113,37 @@ const copy = localization.site.shared;
 
 <script>
   document.querySelectorAll<HTMLDetailsElement>('[data-archive-catalog]').forEach((catalog) => {
+    const dialog = catalog.parentElement?.querySelector<HTMLDialogElement>(
+      '[data-archive-damage-dialog]',
+    );
+    const record = dialog?.querySelector<HTMLElement>('[data-damage-record]');
+    let trigger: HTMLElement | undefined;
+    // 原生 details 是无脚本降级；增强成功后才改为模态说明，不增加污染事件。
+    if (dialog && record && typeof dialog.showModal === 'function') {
+      catalog.querySelectorAll<HTMLElement>('[data-damaged-snapshot]').forEach((item) => {
+        item.setAttribute('aria-haspopup', 'dialog');
+        item.setAttribute('aria-controls', 'archive-damage-dialog');
+        item.addEventListener('click', (event) => {
+          event.preventDefault();
+          trigger = item;
+          record.textContent = item.dataset.snapshotLabel ?? '';
+          dialog.showModal();
+        });
+      });
+      dialog.addEventListener('close', () => trigger?.focus());
+      dialog.addEventListener('click', (event) => {
+        const bounds = dialog.getBoundingClientRect();
+        if (
+          event.target === dialog &&
+          (event.clientX < bounds.left ||
+            event.clientX > bounds.right ||
+            event.clientY < bounds.top ||
+            event.clientY > bounds.bottom)
+        ) {
+          dialog.close();
+        }
+      });
+    }
     catalog.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && catalog.open) {
         catalog.open = false;
@@ -93,6 +151,7 @@ const copy = localization.site.shared;
       }
     });
     document.addEventListener('pointerdown', (event) => {
+      if (dialog?.open) return;
       if (event.target instanceof Node && !catalog.contains(event.target)) {
         catalog.open = false;
       }
