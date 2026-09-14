@@ -18,7 +18,7 @@ export const ursusSite = {
     chooseEdition: 'Текущая версия: {language}. Выбрать национальную версию',
     frontFooter: 'Гастроли, постановки и обслуживание зрителей',
     archiveFooter: 'Снимок коллекции · {date}',
-    archiveCatalog: 'Каталог коллекции',
+    archiveCatalog: 'Исторические снимки сайта',
     frontToArchive: 'Открыть запись коллекции',
     archiveDamaged: 'Запись повреждена и недоступна',
     archiveToFront: 'Вернуться на современный сайт труппы',

@@ -21,6 +21,7 @@ import {
   assertPerformanceContentFresh,
   getLocalization,
   getLocalizedPerformanceEntries,
+  getLocalizedPerformances,
 } from '../src/data/localized/resolve.ts';
 import { assertPerformanceOfferMatrix } from '../src/data/performance-offers.ts';
 import { performances } from '../src/data/performances.ts';
@@ -1241,6 +1242,62 @@ assert.deepEqual(restoreTicketingState('{"version":999}', catalog), createTicket
 const previewLocalizations = previewEditionIds.map((editionId) =>
   getLocalization(editions[editionId], previewSnapshot),
 );
+// 打乱输入，防止本季偶然沿用作者顺序而让日期排序回归漏检。
+const reversedPerformanceSnapshot = {
+  ...previewSnapshot,
+  performanceEntries: [...previewSnapshot.performanceEntries].reverse(),
+};
+for (const localization of previewLocalizations) {
+  for (const world of ['front', 'archive']) {
+    for (const collection of ['current', 'history']) {
+      const ordered = getLocalizedPerformances(localization, world, collection, previewSnapshot);
+      assert.ok(ordered.length > 1);
+      for (let index = 1; index < ordered.length; index += 1) {
+        const comparison = compareTerraDateTime(
+          ordered[index - 1].dateTime,
+          ordered[index].dateTime,
+        );
+        assert.ok(collection === 'history' ? comparison >= 0 : comparison <= 0);
+      }
+      assert.deepEqual(
+        getLocalizedPerformances(localization, world, collection, reversedPerformanceSnapshot),
+        ordered,
+        `${localization.edition.editionId}/${world}/${collection} 不应依赖根集合的日期顺序`,
+      );
+    }
+  }
+}
+// 同日不同时刻仍按有效排期比较；相同时刻保留原顺序，且不修改快照。
+for (const collection of ['current', 'history']) {
+  const entries = previewSnapshot.performanceEntries
+    .filter(
+      ([, performance]) => performance.world === 'archive' && performance.collection === collection,
+    )
+    .slice(0, 3);
+  const fixtureEntries = entries.map(([id, performance], index) => [
+    id,
+    {
+      ...performance,
+      effectiveDateTime: {
+        ...entries[0][1].effectiveDateTime,
+        time: index === 1 ? '19:00' : '20:00',
+      },
+    },
+  ]);
+  const fixtureSnapshot = {
+    ...previewSnapshot,
+    performanceEntries: fixtureEntries,
+    performances: Object.fromEntries(fixtureEntries),
+  };
+  const before = structuredClone(fixtureSnapshot);
+  assert.deepEqual(
+    getLocalizedPerformances(previewLocalizations[0], 'archive', collection, fixtureSnapshot).map(
+      ({ performanceId }) => performanceId,
+    ),
+    (collection === 'history' ? [0, 2, 1] : [1, 0, 2]).map((index) => entries[index][0]),
+  );
+  assert.deepEqual(fixtureSnapshot, before);
+}
 const yanLocalization = previewLocalizations[0];
 const yanOptions = getTicketingOptions(yanLocalization, previewSnapshot);
 assert.deepEqual(

@@ -7,7 +7,7 @@ export const higashiFolioProductions = {
     kind: '幻想劇・三幕',
     duration: '約110分、休止1回',
     durationShort: '約110分',
-    language: 'リターニア語上演・極東語進行表あり',
+    language: 'リターニア語上演・炎語進行表あり',
     heading: '映り込み、誓約、持ち主のない宝をめぐる幻想劇。',
     guidance: '低照度、水面反射、舞台煙、観客席近くの囁きを含みます。',
     creatives: [
@@ -21,7 +21,7 @@ export const higashiFolioProductions = {
     kind: '年代記劇・五章',
     duration: '約135分、休止2回',
     durationShort: '約135分',
-    language: 'ヴィクトリア語上演・極東語進行表あり',
+    language: 'ヴィクトリア語上演・炎語進行表あり',
     heading: '送られなかった百通の手紙からなる長い年代記。',
     guidance: '鐘、紙が燃える演出、長い沈黙を含みます。遅刻者は次章まで入場できません。',
     creatives: [
@@ -49,7 +49,7 @@ export const higashiFolioProductions = {
     kind: '頌歌劇・四折',
     duration: '約120分、休止1回',
     durationShort: '約120分',
-    language: 'シラクーザ語とリターニア語歌唱・極東語進行表あり',
+    language: 'シラクーザ語とリターニア語歌唱・炎語進行表あり',
     heading: '勝者のいない凱旋のために用意された頌歌劇。',
     guidance: '大音量の合唱、模擬礼砲、香、短い強光を含みます。',
     creatives: [
@@ -63,7 +63,7 @@ export const higashiFolioProductions = {
     kind: '寓話劇・三景',
     duration: '約105分・休憩1回',
     durationShort: '約105分',
-    language: '旧劇団巡演演目・場序表あり',
+    language: '旧劇団巡演演目・炎語進行表あり',
     heading: '旅人が無人の道で最後の宿を探す寓話劇。',
     guidance: '低照度、舞台煙、近距離音響を使用します。案内係の指示に従ってください。',
     creatives: [
@@ -75,7 +75,7 @@ export const higashiFolioProductions = {
     kind: '夢幻劇・四幕',
     duration: '約105分・休憩1回',
     durationShort: '約105分',
-    language: '旧劇団巡演演目・場序表あり',
+    language: '旧劇団巡演演目・炎語進行表あり',
     heading: '逆さの庭、紙の扉、眠る案内人による夢の行列。',
     guidance: '低照度、舞台煙、近距離音響を使用します。案内係の指示に従ってください。',
     creatives: [
@@ -87,7 +87,7 @@ export const higashiFolioProductions = {
     kind: '冬夜歌劇・三幕',
     duration: '約105分・休憩1回',
     durationShort: '約105分',
-    language: '旧劇団巡演演目・場序表あり',
+    language: '旧劇団巡演演目・炎語進行表あり',
     heading: '狩りと見張り、二頭の白鹿をめぐる冬夜歌劇。',
     guidance: '低照度、舞台煙、近距離音響を使用します。案内係の指示に従ってください。',
     creatives: [
@@ -99,7 +99,7 @@ export const higashiFolioProductions = {
     kind: '聖像劇・五章',
     duration: '約105分・休憩1回',
     durationShort: '約105分',
-    language: '旧劇団巡演演目・場序表あり',
+    language: '旧劇団巡演演目・炎語進行表あり',
     heading: '金の聖像、長い階段、順に消える灯で構成された儀式劇。',
     guidance: '低照度、舞台煙、近距離音響を使用します。案内係の指示に従ってください。',
     creatives: [

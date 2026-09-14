@@ -18,7 +18,7 @@ export const higashiSite = {
     chooseEdition: '現在の版：{language}。国別版を選択',
     frontFooter: '巡演・演目・観劇案内',
     archiveFooter: '収蔵スナップショット・{date}',
-    archiveCatalog: '収蔵目録',
+    archiveCatalog: '過去のサイト',
     frontToArchive: '収蔵記録を開く',
     archiveDamaged: '記録破損・閲覧不可',
     archiveToFront: '現在の劇団サイトへ戻る',

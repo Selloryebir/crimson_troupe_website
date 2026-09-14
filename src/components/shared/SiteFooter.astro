@@ -52,29 +52,50 @@ const copy = localization.site.shared;
   {
     world === 'front' && (
       <nav class="archive-catalog" aria-label={copy.archiveCatalog}>
-        <span class="archive-catalog__title">{copy.archiveCatalog}</span>
-        <ul>
-          {archiveSnapshots.map((snapshot) => (
-            <li>
-              {snapshot.state === 'available' ? (
-                <a
-                  href={siteRoot(edition, 'archive')}
-                  data-world-switch="archive"
-                  data-pollution-safe
-                >
-                  <span>{snapshot.displayCapturedAt}</span>
-                  <small>{copy.frontToArchive}</small>
-                </a>
-              ) : (
-                <span class="archive-catalog__damaged">
-                  <span>{snapshot.displayCapturedAt}</span>
-                  <small>{copy.archiveDamaged}</small>
-                </span>
-              )}
-            </li>
-          ))}
-        </ul>
+        <details class="archive-catalog__selector" data-archive-catalog>
+          <summary class="archive-catalog__title">{copy.archiveCatalog}</summary>
+          <ul>
+            {archiveSnapshots.map((snapshot) => (
+              <li>
+                {snapshot.state === 'available' ? (
+                  <a
+                    href={siteRoot(edition, 'archive')}
+                    data-world-switch="archive"
+                    data-pollution-safe
+                  >
+                    <span>{snapshot.displayCapturedAt}</span>
+                    <small>{copy.frontToArchive}</small>
+                  </a>
+                ) : (
+                  <span class="archive-catalog__damaged">
+                    <span class="archive-catalog__corruption" aria-hidden="true">
+                      {snapshot.displayCapturedAt}
+                    </span>
+                    <span class="visually-hidden">{snapshot.displayCapturedAt.slice(0, 4)}</span>
+                    <small>{copy.archiveDamaged}</small>
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </details>
       </nav>
     )
   }
 </footer>
+
+<script>
+  document.querySelectorAll<HTMLDetailsElement>('[data-archive-catalog]').forEach((catalog) => {
+    catalog.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && catalog.open) {
+        catalog.open = false;
+        catalog.querySelector('summary')?.focus();
+      }
+    });
+    document.addEventListener('pointerdown', (event) => {
+      if (event.target instanceof Node && !catalog.contains(event.target)) {
+        catalog.open = false;
+      }
+    });
+  });
+</script>

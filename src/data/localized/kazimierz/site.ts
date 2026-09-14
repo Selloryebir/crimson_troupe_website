@@ -18,7 +18,7 @@ export const kazimierzSite = {
     chooseEdition: 'Aktualne wydanie: {language}. Wybierz wydanie krajowe',
     frontFooter: 'Wycieczki, produkcje i usługi dla gości',
     archiveFooter: 'Migawka kolekcji · {date}',
-    archiveCatalog: 'Indeks kolekcji',
+    archiveCatalog: 'Historyczne wersje strony',
     frontToArchive: 'Otwórz rekord kolekcji',
     archiveDamaged: 'Zapis uszkodzony; niedostępne',
     archiveToFront: 'Powrót do aktualnej strony internetowej zespołu',

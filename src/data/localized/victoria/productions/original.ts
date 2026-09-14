@@ -8,7 +8,7 @@ export const victoriaOriginalProductions = {
     tagline: 'When the crown strikes the floor, who can prove there ever was a king?',
     duration: '125 minutes, including one intermission',
     durationShort: '125 min',
-    language: 'Performed in Victorian · Projected surtitles available',
+    language: 'Performed in Victorian · Projected Yanese surtitles',
     heading: 'A modern tragedy of power, memory, and the final witness.',
     synopsis:
       'A mobile city wakes after a festival, yet no one remembers the king crowned the night before. The lone herald who continues the ceremony begins searching the audience’s dreams for a crown that never existed.',
@@ -27,7 +27,7 @@ export const victoriaOriginalProductions = {
     tagline: 'The flame cannot leave its cage. The song can.',
     duration: '90 minutes, no intermission',
     durationShort: '90 min',
-    language: 'Sung in Leithanian · Victorian surtitles',
+    language: 'Sung in Leithanian · Yanese and Victorian surtitles',
     heading: 'A chamber opera written for a silent tower.',
     synopsis:
       'A keeper must tend a flame that may never go out and never leave its tower. In seven years he learns its language, only to hear it sing his name on the day he is allowed to depart.',

@@ -8,7 +8,7 @@ export const higashiOriginalProductions = {
     tagline: '王冠が床へ落ちたあと、王が存在したと誰が証明するのか。',
     duration: '125分、休憩1回を含む',
     durationShort: '125分',
-    language: 'ヴィクトリア語上演・極東語投影字幕',
+    language: 'ヴィクトリア語上演・炎語投影字幕',
     heading: '権力、記憶、最後の証人をめぐる現代悲劇。',
     synopsis:
       '祝祭の翌朝、移動都市の誰も前夜に戴冠した王を覚えていない。儀式を続けるただ一人の伝令は、存在しなかった王冠を観客の夢から探し始める。',
@@ -26,7 +26,7 @@ export const higashiOriginalProductions = {
     tagline: '炎は籠を出られない。歌は出られる。',
     duration: '90分、休憩なし',
     durationShort: '90分',
-    language: 'リターニア語歌唱・極東語とヴィクトリア語字幕',
+    language: 'リターニア語歌唱・炎語とヴィクトリア語字幕',
     heading: '沈黙する塔へ捧げる室内歌劇。',
     synopsis:
       '塔守は、消しても持ち出してもならない炎を預かる。七年をかけて炎の言葉を学び、去ることを許された日に、自分の名を歌う声を聞く。',

@@ -18,7 +18,7 @@ export const minosSite = {
     chooseEdition: 'Τρέχουσα έκδοση: {language}. Επιλέξτε εθνική έκδοση',
     frontFooter: 'Περιοδείες, έργα και υπηρεσίες επισκεπτών',
     archiveFooter: 'Στιγμιότυπο συλλογής · {date}',
-    archiveCatalog: 'Κατάλογος συλλογής',
+    archiveCatalog: 'Ιστορικά στιγμιότυπα',
     frontToArchive: 'Άνοιγμα εγγραφής συλλογής',
     archiveDamaged: 'Κατεστραμμένη εγγραφή· μη διαθέσιμη',
     archiveToFront: 'Επιστροφή στον σημερινό ιστότοπο του θιάσου',

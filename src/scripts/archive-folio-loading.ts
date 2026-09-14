@@ -19,7 +19,14 @@ export function loadFolioEdition(
   const request = String(Number(poster.dataset.folioLoadId ?? 0) + 1);
   poster.dataset.folioLoadId = request;
   delete poster.dataset.folioLoading;
-  if (edition === 'normal' || poster.dataset.folioEdition === edition) {
+  if (
+    edition === 'normal' ||
+    (poster.dataset.folioEdition === edition &&
+      image.getAttribute('src') === src &&
+      image.getAttribute('srcset') === srcset &&
+      image.complete &&
+      image.naturalWidth > 0)
+  ) {
     if (image.getAttribute('src') !== src || image.getAttribute('srcset') !== srcset) {
       image.srcset = srcset;
       image.src = src;
@@ -46,44 +53,84 @@ export function loadFolioEdition(
       delete poster.dataset.folioConcealed;
     }
   }, 5000);
-  const candidate = new Image();
-  candidate.sizes = image.sizes;
-  candidate.srcset = srcset;
-  candidate.src = src;
-  void candidate
-    .decode()
-    .then(async () => {
+  // decode 拒绝不只表示坏图；响应式选图或请求变更也会中断它。
+  // 最多三次尝试，不以轮询或永久重试增加图像服务负担。
+  const decode = async (target: HTMLImageElement) => {
+    try {
+      await target.decode();
+    } catch (error) {
+      if (!target.complete || target.naturalWidth === 0) {
+        throw error;
+      }
+    }
+  };
+  const prepare = async () => {
+    for (let attempt = 0; attempt < 3; attempt += 1) {
       if (!current()) {
         return;
       }
-      // 已在临近视口预解码，不能再被原图的原生 lazy 门槛卡住第二次 decode。
-      image.loading = 'eager';
-      image.srcset = srcset;
-      image.src = src;
-      await image.decode();
-      if (!current()) {
+      try {
+        const candidate = new Image();
+        candidate.sizes = image.sizes;
+        candidate.srcset = srcset;
+        candidate.src = src;
+        await decode(candidate);
+        if (!current()) {
+          return;
+        }
+        // 已在临近视口预解码，不能再被原图的 lazy 门槛卡住。
+        // 同值不重写，避免人为取消正在解码的响应式请求。
+        image.loading = 'eager';
+        if (image.getAttribute('srcset') !== srcset) {
+          image.srcset = srcset;
+        }
+        if (image.getAttribute('src') !== src) {
+          image.src = src;
+        }
+        await decode(image);
+        if (!current()) {
+          return;
+        }
+        poster.dataset.folioEdition = edition;
+        delete poster.dataset.folioFallback;
         return;
+      } catch (error) {
+        if (!current()) {
+          return;
+        }
+        if (attempt === 2) {
+          throw error;
+        }
+        await new Promise((resolve) => setTimeout(resolve, 200 * (attempt + 1)));
       }
-      poster.dataset.folioEdition = edition;
-      delete poster.dataset.folioFallback;
-    })
+    }
+  };
+  void prepare()
     .catch(() => {
       if (!current()) {
         return;
       }
-      // 真正的请求／解码失败才结束这次换图，并保留可读原图。
-      image.srcset = image.dataset.normalSrcset ?? '';
-      image.src = image.dataset.normalSrc ?? '';
-      poster.dataset.folioEdition = 'normal';
+      // 耗尽重试后，只有一级允许普通图降级；二／三级保持中性占位。
+      if (document.documentElement.dataset.pollutionLevel === '1') {
+        image.srcset = image.dataset.normalSrcset ?? '';
+        image.src = image.dataset.normalSrc ?? '';
+        poster.dataset.folioEdition = 'normal';
+      }
       poster.dataset.folioFallback = edition;
     })
     .finally(() => {
       clearTimeout(timeout);
-      if (!current()) {
+      // 请求失效但尚未开始新请求时也要清掉 loading，避免旧标记锁死重入。
+      if (poster.dataset.folioLoadId !== request) {
         return;
       }
       delete poster.dataset.folioLoading;
-      delete poster.dataset.folioConcealed;
+      if (
+        current() &&
+        (!poster.dataset.folioFallback || document.documentElement.dataset.pollutionLevel === '1')
+      ) {
+        delete poster.dataset.folioConcealed;
+      }
     });
 }
 

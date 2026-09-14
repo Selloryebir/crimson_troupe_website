@@ -89,7 +89,7 @@ export const folioSourceTexts = {
     leithanien: {
       title: 'Einhundertein Tage',
       description:
-        'Einst erzählte ein einfacher Bürger einem Händler eine außergewöhnliche Geschichte. Von Mund zu Mund weitergegeben, erreichte sie nach einhunderteinem Tagen den Khagan. Neugierig geworden, reiste er inkognito, um ihren Ursprung zu suchen, und entdeckte schließlich, dass er diesen Bürger bereits hatte hinrichten lassen.',
+        'Einst erzählte ein einfacher Bürger einem Händler eine außergewöhnliche Geschichte. Von Mund zu Mund weitergegeben, erreichte sie nach 101 Tagen den Khagan. Neugierig geworden, reiste er inkognito, um ihren Ursprung zu suchen, und entdeckte schließlich, dass er diesen Bürger bereits hatte hinrichten lassen.',
     },
     kazimierz: {
       title: 'Sto jeden dni',

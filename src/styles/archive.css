@@ -93,6 +93,7 @@ html[data-world="archive"] .footer-legal {
 
 html[data-world="archive"] .header-tools {
   grid-area: tools;
+  align-self: stretch;
   justify-self: end;
   padding-block: 4px;
   border-top: 1px solid var(--structure);
@@ -106,6 +107,7 @@ html[data-world="archive"] .brand-name small {
 
 html[data-world="archive"] .main-nav {
   grid-area: nav;
+  align-self: stretch;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0;
@@ -116,10 +118,18 @@ html[data-world="archive"] .main-nav {
 }
 
 html[data-world="archive"] .main-nav a {
+  display: flex;
+  min-width: 0;
+  min-height: 44px;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
   padding: 13px 16px 15px;
   color: var(--archive-faded);
   font-size: 0.9rem;
   line-height: 1.45;
+  overflow-wrap: anywhere;
+  hyphens: manual;
 }
 
 html[data-world="archive"] .main-nav a + a {
@@ -139,7 +149,7 @@ html[data-world="archive"] .main-nav a::before {
   display: inline-block;
   width: 5px;
   height: 5px;
-  margin-right: 8px;
+  flex: 0 0 5px;
   border: 1px solid currentcolor;
   content: "";
   opacity: 0.42;
@@ -776,6 +786,8 @@ html[data-world="archive"] :is(.archive-register-section, .content-section.page-
     "poster date";
   gap: 10px clamp(32px, 5vw, 72px);
   padding-block: clamp(28px, 4vw, 48px);
+  /* 为装订红线及污染内侧阴影留出独立边栏，不让文字或封面贴线。 */
+  padding-inline-start: clamp(18px, 2vw, 28px);
   background: linear-gradient(90deg, rgb(48 35 28 / 5%), transparent 34%);
 }
 
@@ -1053,6 +1065,20 @@ html[data-world="archive"] :is(a, button, input, select, textarea):focus-visible
 }
 
 @media (max-width: 960px) {
+  html[data-world="archive"] .header-inner {
+    grid-template:
+      "brand" auto
+      "nav" auto
+      "tools" auto / minmax(0, 1fr);
+  }
+
+  html[data-world="archive"] .header-tools {
+    width: 100%;
+    justify-content: flex-end;
+    border-left: 0;
+    padding-inline-start: 0;
+  }
+
   .archive-home {
     grid-template-columns: minmax(0, 1fr);
     gap: 0;

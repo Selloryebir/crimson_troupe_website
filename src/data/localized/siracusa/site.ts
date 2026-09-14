@@ -18,7 +18,7 @@ export const siracusaSite = {
     chooseEdition: "Edizione attuale: {language}. Scegli un'edizione nazionale",
     frontFooter: 'Tour, produzioni e servizi per i visitatori',
     archiveFooter: 'Istantanea della raccolta · {date}',
-    archiveCatalog: 'Indice della raccolta',
+    archiveCatalog: 'Versioni storiche del sito',
     frontToArchive: 'Apri il record della raccolta',
     archiveDamaged: 'Registrazione danneggiata; non disponibile',
     archiveToFront: 'Ritorna al sito web corrente della troupe',

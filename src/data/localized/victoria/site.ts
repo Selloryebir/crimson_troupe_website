@@ -18,7 +18,7 @@ export const victoriaSite = {
     chooseEdition: 'Current edition: {language}. Choose a national edition',
     frontFooter: 'Tours, productions, and visitor services',
     archiveFooter: 'Collection snapshot · {date}',
-    archiveCatalog: 'Collection index',
+    archiveCatalog: 'Historical snapshots',
     frontToArchive: 'Open collection record',
     archiveDamaged: 'Record damaged; unavailable',
     archiveToFront: 'Return to the current troupe website',

@@ -8,7 +8,7 @@ export const siracusaOriginalProductions = {
     tagline: 'Quando la corona tocca il pavimento, chi può dimostrare che sia mai esistito un re?',
     duration: '125 minuti compreso un intervallo',
     durationShort: '125 minuti',
-    language: 'Eseguito in didascalie proiettate vittoriane · colombiane',
+    language: 'Recitato in vittoriano · Sovratitoli proiettati in yanese',
     heading: 'Una tragedia moderna di potere, memoria e testimonianza finale.',
     synopsis:
       "Una città mobile si sveglia dopo una festa, ma nessuno ricorda il re incoronato la notte prima. L'araldo solitario che continua la cerimonia inizia a cercare nei sogni del pubblico una corona che non è mai esistita.",
@@ -27,7 +27,7 @@ export const siracusaOriginalProductions = {
     tagline: 'La fiamma non può lasciare la sua gabbia. La canzone può.',
     duration: '90 minuti, senza intervallo',
     durationShort: '90 minuti',
-    language: 'Cantato in leithaniano · Didascalie colombiane e vittoriane',
+    language: 'Cantato in leithaniano · Sovratitoli in yanese e vittoriano',
     heading: "Un'opera da camera scritta per una torre silenziosa.",
     synopsis:
       'Un custode deve prendersi cura di una fiamma che non può mai spegnersi e non lasciare mai la sua torre. In sette anni ne impara la lingua, solo per sentirlo cantare il suo nome il giorno in cui gli sarà permesso di partire.',
@@ -104,7 +104,7 @@ export const siracusaOriginalProductions = {
     tagline: 'Dopo il passaggio del corteo, non contare i volti rimasti indietro.',
     duration: 'Circa 60 minuti, senza intervallo',
     durationShort: 'Circa 60 minuti',
-    language: "Nessun dialogo · Ordine di marcia fornito all'ammissione",
+    language: 'Senza dialoghi · Scaletta distribuita all’ingresso',
     heading: 'Un mimo di maschere, tamburi e una strada che torna indietro per sempre.',
     synopsis:
       'Un corteo senza leader perlustra la città alla ricerca della piazza del festival. Ogni volta che si attraversa lo stesso cancello, i suonatori indossano maschere più simili a quelle del pubblico, finché il tamburino non riesce a distinguere i manifestanti dagli spettatori.',

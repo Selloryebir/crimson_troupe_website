@@ -18,7 +18,7 @@ export const leithanienSite = {
     chooseEdition: 'Aktuelle Ausgabe: {language}. Wählen Sie eine nationale Ausgabe',
     frontFooter: 'Führungen, Produktionen und Besucherdienste',
     archiveFooter: 'Sammlungsschnappschuss · {date}',
-    archiveCatalog: 'Sammlungsindex',
+    archiveCatalog: 'Historische Website-Stände',
     frontToArchive: 'Sammlungsdatensatz öffnen',
     archiveDamaged: 'Datensatz beschädigt; nicht verfügbar',
     archiveToFront: 'Zurück zur aktuellen Truppe-Website',

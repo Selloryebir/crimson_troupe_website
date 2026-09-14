@@ -40,14 +40,14 @@ export const archiveSnapshots = Object.freeze([
     snapshotId: '1093-damaged',
     state: 'damaged',
     capturedAt: null,
-    displayCapturedAt: '1093-██-██ --:--:--',
+    displayCapturedAt: '1093-#?-?% 0?:~#:??',
     routeSegment: null,
   }),
   Object.freeze({
     snapshotId: '1096-damaged',
     state: 'damaged',
     capturedAt: null,
-    displayCapturedAt: '1096-██-██ --:--:--',
+    displayCapturedAt: '1096-?%-#? ??:/!:0?',
     routeSegment: null,
   }),
 ] as const satisfies readonly ArchiveSnapshot[]);
