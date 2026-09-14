@@ -7,7 +7,11 @@ export const higashiSite = {
   shared: {
     archiveSnapshot: 'スナップショット {date}',
     archiveDamageDescription:
-      'このページは完全な形では残されていません。日付欄と公演記録は判読できず、収蔵年のみ確認できます。目録に戻り、閲覧できるスナップショットをお選びください。',
+      'この写しは本文の一部を判読できません。現存する索引だけでは、破損の原因を特定できません。',
+    archiveWarDamageDescription:
+      'この写しはロンディニウムの記録保管拠点に保存されていました。拠点は1098年の戦闘中に損傷し、現存する目録だけではページ全体を復元できません。取得と損傷の正確な月日は、いずれも確認できていません。',
+    archivePreservation:
+      'このページは別途保存された独立の写しに基づいて表示されており、ロンディニウムの損傷した拠点には依存していません。',
     archiveDamageClose: 'スナップショット目録に戻る',
     skipToContent: '本文へ移動',
     mainNavigation: 'メインナビゲーション',

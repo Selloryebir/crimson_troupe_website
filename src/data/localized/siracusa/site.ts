@@ -7,7 +7,11 @@ export const siracusaSite = {
   shared: {
     archiveSnapshot: 'Istantanea {date}',
     archiveDamageDescription:
-      'Questa pagina non si è conservata integralmente. La data e i registri degli spettacoli non sono più leggibili; è accertabile soltanto l’anno di archiviazione. Torna al catalogo per consultare un’istantanea ancora accessibile.',
+      'Parte del testo di questa copia è illeggibile. L’indice superstite non basta a stabilire la causa del danno.',
+    archiveWarDamageDescription:
+      'Questa copia era conservata nel nodo archivistico di Londinio. Il nodo fu danneggiato durante i combattimenti del 1098 e il catalogo superstite non basta a ripristinare la pagina completa. Non è stato possibile verificare i mesi e i giorni esatti della cattura e del danno.',
+    archivePreservation:
+      'Questa pagina è presentata da una copia indipendente, conservata separatamente, e non dipende dal nodo danneggiato di Londinio.',
     archiveDamageClose: 'Torna al catalogo delle istantanee',
     skipToContent: 'Passa al contenuto principale',
     mainNavigation: 'Navigazione principale',

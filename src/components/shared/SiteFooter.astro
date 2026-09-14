@@ -1,5 +1,9 @@
 ---
-import { archiveSnapshots, currentArchiveSnapshot } from '../../data/archive-snapshots.ts';
+import {
+  archiveSnapshots,
+  currentArchiveSnapshot,
+  type DamagedArchiveSnapshot,
+} from '../../data/archive-snapshots.ts';
 import { formatMessage } from '../../data/localized/format.ts';
 import type { ResolvedLocalization } from '../../data/localized/resolve';
 import { siteRoot, type SiteWorld } from '../../data/site-routes';
@@ -13,6 +17,10 @@ interface Props {
 const { localization, world } = Astro.props;
 const { edition } = localization;
 const copy = localization.site.shared;
+const damageDescription = (snapshot: DamagedArchiveSnapshot) =>
+  snapshot.damageReason === 'londinium-war'
+    ? copy.archiveWarDamageDescription
+    : copy.archiveDamageDescription;
 ---
 
 <footer class="site-footer" data-pollution-safe>
@@ -30,6 +38,7 @@ const copy = localization.site.shared;
                 })
           }
         </p>
+        {world === 'archive' && <p data-archive-preservation>{copy.archivePreservation}</p>}
       </div>
     </div>
     {
@@ -70,6 +79,7 @@ const copy = localization.site.shared;
                     <summary
                       class="archive-catalog__damage-trigger"
                       data-damaged-snapshot
+                      data-snapshot-description={damageDescription(snapshot)}
                       data-snapshot-label={formatMessage(copy.archiveSnapshot, {
                         date: String(snapshot.year),
                       })}
@@ -83,7 +93,7 @@ const copy = localization.site.shared;
                         {copy.archiveDamaged}
                       </span>
                     </summary>
-                    <p>{copy.archiveDamageDescription}</p>
+                    <p>{damageDescription(snapshot)}</p>
                   </details>
                 )}
               </li>
@@ -117,9 +127,10 @@ const copy = localization.site.shared;
       '[data-archive-damage-dialog]',
     );
     const record = dialog?.querySelector<HTMLElement>('[data-damage-record]');
+    const description = dialog?.querySelector<HTMLElement>('#archive-damage-description');
     let trigger: HTMLElement | undefined;
     // 原生 details 是无脚本降级；增强成功后才改为模态说明，不增加污染事件。
-    if (dialog && record && typeof dialog.showModal === 'function') {
+    if (dialog && record && description && typeof dialog.showModal === 'function') {
       catalog.querySelectorAll<HTMLElement>('[data-damaged-snapshot]').forEach((item) => {
         item.setAttribute('aria-haspopup', 'dialog');
         item.setAttribute('aria-controls', 'archive-damage-dialog');
@@ -127,6 +138,7 @@ const copy = localization.site.shared;
           event.preventDefault();
           trigger = item;
           record.textContent = item.dataset.snapshotLabel ?? '';
+          description.textContent = item.dataset.snapshotDescription ?? '';
           dialog.showModal();
         });
       });

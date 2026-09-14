@@ -611,8 +611,9 @@ assert.deepEqual(
     routeSegment,
   })),
   [
-    { snapshotId: '1096-damaged', state: 'damaged', routeSegment: null },
+    { snapshotId: '1098-damaged', state: 'damaged', routeSegment: null },
     { snapshotId: '1093-damaged', state: 'damaged', routeSegment: null },
+    { snapshotId: '1089-damaged', state: 'damaged', routeSegment: null },
     {
       snapshotId: '1084-07-01T00:00:00',
       state: 'available',
@@ -621,6 +622,16 @@ assert.deepEqual(
   ],
 );
 assert.deepEqual(archiveNow, currentArchiveSnapshot.capturedAt);
+assert.deepEqual(
+  archiveSnapshots
+    .filter(({ state }) => state === 'damaged')
+    .map(({ year, damageReason }) => [year, damageReason]),
+  [
+    [1098, 'londinium-war'],
+    [1093, 'unknown'],
+    [1089, 'unknown'],
+  ],
+);
 assert.equal(getSiteSearchScope(editions.yan, 'front'), 'yan:front');
 assert.equal(
   getSiteSearchScope(editions.yan, 'archive'),

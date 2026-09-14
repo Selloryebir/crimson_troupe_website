@@ -7,7 +7,11 @@ export const victoriaSite = {
   shared: {
     archiveSnapshot: 'Snapshot {date}',
     archiveDamageDescription:
-      'This page has not survived intact. Its date and performance records are no longer legible; only the archive year can be established. Return to the catalogue to consult a snapshot that can still be opened.',
+      'Parts of this copy’s text cannot be read. The surviving index is insufficient to establish the cause of the damage.',
+    archiveWarDamageDescription:
+      'This copy was held at the Londinium archive node. The node was damaged during the fighting in 1098, and the surviving catalogue is insufficient to restore the complete page. The exact months and days of capture and damage could not be verified.',
+    archivePreservation:
+      'This page is presented from a separately preserved, independent copy and does not depend on the damaged Londinium node.',
     archiveDamageClose: 'Return to snapshot catalogue',
     skipToContent: 'Skip to main content',
     mainNavigation: 'Main navigation',

@@ -4,8 +4,10 @@ export const yanSite = {
   brand: { name: '猩红剧团', latinName: 'CRIMSON TROUPE' },
   shared: {
     archiveSnapshot: '快照 {date}',
-    archiveDamageDescription:
-      '这一页未能完整留存。日期栏与演出记录已无法辨认，仅余馆藏年份可考。请返回目录，查阅仍可开启的快照。',
+    archiveDamageDescription: '此副本的部分正文无法读取。现存索引不足以确认损坏原因。',
+    archiveWarDamageDescription:
+      '此副本原存于伦蒂尼姆档案节点。节点在1098年战事期间受损，现存目录不足以恢复完整页面。捕获与受损的具体月日均未能核实。',
+    archivePreservation: '此页面据另行保存的独立副本呈现，不依赖伦蒂尼姆受损节点。',
     archiveDamageClose: '返回快照目录',
     skipToContent: '跳至正文',
     mainNavigation: '主导航',

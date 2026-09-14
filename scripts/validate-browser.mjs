@@ -779,14 +779,14 @@ try {
     true,
   );
   await catalogSummary.click();
-  assert.equal(await archiveCatalog.locator('li').count(), 3, '表站页脚应显示三条馆藏记录');
+  assert.equal(await archiveCatalog.locator('li').count(), 4, '表站页脚应显示四条馆藏记录');
   assert.equal(await archiveCatalog.locator('a').count(), 1, '只有当前快照可以进入');
-  assert.equal(await archiveCatalog.locator('.archive-catalog__damaged').count(), 2);
+  assert.equal(await archiveCatalog.locator('.archive-catalog__damaged').count(), 3);
   assert.deepEqual(
     await archiveCatalog
       .locator('[data-snapshot-id]')
       .evaluateAll((items) => items.map((item) => item.dataset.snapshotId)),
-    ['1096-damaged', '1093-damaged', currentArchiveSnapshot.snapshotId],
+    ['1098-damaged', '1093-damaged', '1089-damaged', currentArchiveSnapshot.snapshotId],
   );
   for (const damaged of await archiveCatalog.locator('.archive-catalog__damaged').all()) {
     const corruption = damaged.locator('.archive-catalog__corruption');
@@ -794,12 +794,15 @@ try {
     assert.match(await corruption.innerText(), /�/u);
     assert.doesNotMatch(await corruption.innerText(), /\d/u);
     assert.equal(await corruption.getAttribute('aria-hidden'), 'true');
-    assert.match(await damaged.locator('.visually-hidden').innerText(), /109[36]/u);
+    assert.match(await damaged.locator('.visually-hidden').innerText(), /1089|1093|1098/u);
     const trigger = damaged.locator('summary');
     await trigger.click();
     const dialog = desktopPage.locator('[data-archive-damage-dialog]');
     assert.equal(await dialog.evaluate((element) => element.open), true);
-    assert.ok((await dialog.locator('#archive-damage-description').innerText()).trim());
+    assert.equal(
+      await dialog.locator('#archive-damage-description').innerText(),
+      await damaged.locator('p').textContent(),
+    );
     await desktopPage.keyboard.press('Escape');
     assert.equal(await dialog.evaluate((element) => element.open), false);
     assert.equal(await trigger.evaluate((element) => element === document.activeElement), true);

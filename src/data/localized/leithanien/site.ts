@@ -7,7 +7,11 @@ export const leithanienSite = {
   shared: {
     archiveSnapshot: 'Momentaufnahme {date}',
     archiveDamageDescription:
-      'Diese Seite ist nicht vollständig erhalten. Das Datum und die Aufführungsaufzeichnungen sind nicht mehr lesbar; nur das Archivjahr lässt sich noch bestimmen. Kehren Sie zum Verzeichnis zurück, um eine noch zugängliche Momentaufnahme zu öffnen.',
+      'Teile des Textes dieser Kopie sind unlesbar. Das erhaltene Verzeichnis reicht nicht aus, um die Ursache des Schadens festzustellen.',
+    archiveWarDamageDescription:
+      'Diese Kopie wurde im Archivknoten von Londinium aufbewahrt. Der Knoten wurde während der Kämpfe im Jahr 1098 beschädigt; der erhaltene Katalog reicht nicht aus, um die vollständige Seite wiederherzustellen. Die genauen Monate und Tage der Erfassung und der Beschädigung ließen sich nicht bestätigen.',
+    archivePreservation:
+      'Diese Seite wird anhand einer separat erhaltenen, unabhängigen Kopie dargestellt und ist nicht vom beschädigten Knoten in Londinium abhängig.',
     archiveDamageClose: 'Zurück zum Verzeichnis',
     skipToContent: 'Zum Hauptinhalt springen',
     mainNavigation: 'Hauptnavigation',
