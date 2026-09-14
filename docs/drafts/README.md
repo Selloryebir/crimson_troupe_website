@@ -17,7 +17,6 @@
 
 当前实际草稿：
 
-- [`plans/temporal-sensitivity.md`](plans/temporal-sensitivity.md)：已批准的时间敏感度逐切片实施计划；
 - [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md)：延期的里站异常购票构想；
 - [`creative/performance-pricing-method.md`](creative/performance-pricing-method.md)：延期且未启用的正式定价候选。
 
