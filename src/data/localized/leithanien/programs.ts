@@ -2,6 +2,7 @@ import type { AuthoringProgramContent } from '../schema.ts';
 
 export const leithanienPrograms = {
   locations: {
+    'propeller-paradise': { cityLabel: 'Propeller Paradise' },
     volsinii: { cityLabel: 'Alt-Volsinii', archiveCityLabel: 'Volsinii' },
     trimount: { cityLabel: 'Trimounts' },
     wiesheim: { cityLabel: 'Vyseheim' },
@@ -16,6 +17,17 @@ export const leithanienPrograms = {
     'nuova-volsinii': { cityLabel: 'Nuova Volsinii' },
   },
   performances: {
+    'propeller-paradise-1102': {
+      index: '14',
+      venue:
+        'Columbia · Stadtrand der Hauptstadt · Temporäres Theater Propeller Paradise · Großer Saal',
+      searchKeywords:
+        'Columbia · Propeller Paradise Stadtrand der Hauptstadt · Temporäres Theater Propeller Paradise · Großer Saal',
+      operationalNotice: {
+        sourceRevision: 'propeller-venue-loss-v1',
+        text: 'Die für den {originalDate} am schwebenden Spielort in Propeller Paradise vorgesehene Aufführung wurde abgesagt. Der ursprüngliche Spielort ist abgestürzt; die Aufführung kann daher nicht wie geplant stattfinden. Diese Seite bewahrt den ursprünglichen Termin ausschließlich zur Einsicht auf.',
+      },
+    },
     'volsinii-courtyard-1102': {
       index: '12',
       venue: 'Alt-Volsinii · Hoftheater · Freilichtbühne',
@@ -74,12 +86,12 @@ export const leithanienPrograms = {
     'red-banquet-nuova-volsinii-1101-1119': {
       index: '06',
       venue: 'Nuova Volsinii · Tourneetheater · Hauptbühne',
-      searchKeywords: 'Nuova Volsinii Das Crimson Bankett 1101-11-19',
+      searchKeywords: 'Nuova Volsinii Das Crimson Bankett 1101-10-04',
     },
     'seventh-lantern-norport-1102-0202': {
       index: '07',
       venue: 'Norport County · Tourneetheater · Hauptbühne',
-      searchKeywords: 'Norport County Die siebte Laterne 1102-02-02',
+      searchKeywords: 'Norport County Die siebte Laterne 1102-04-02',
     },
     'red-banquet-montelupe-1102-0606': {
       index: '08',

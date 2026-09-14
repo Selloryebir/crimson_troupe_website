@@ -6,6 +6,7 @@ export interface Location {
 }
 
 export const locations = {
+  'propeller-paradise': { locationId: 'propeller-paradise', countryEditionId: 'columbia' },
   trimount: { locationId: 'trimount', countryEditionId: 'columbia' },
   wiesheim: { locationId: 'wiesheim', countryEditionId: 'leithanien' },
   norport: { locationId: 'norport', countryEditionId: 'victoria' },

@@ -2,6 +2,7 @@ import type { AuthoringProgramContent } from '../schema.ts';
 
 export const higashiPrograms = {
   locations: {
+    'propeller-paradise': { cityLabel: 'Propeller Paradise' },
     volsinii: { cityLabel: '旧ヴォルシーニ', archiveCityLabel: 'ヴォルシーニ' },
     trimount: { cityLabel: 'トリマウンツ' },
     wiesheim: { cityLabel: 'ヴィシェハイム' },
@@ -16,6 +17,16 @@ export const higashiPrograms = {
     'nuova-volsinii': { cityLabel: 'ヌオーヴァ・ウォルシーニ' },
   },
   performances: {
+    'propeller-paradise-1102': {
+      index: '14',
+      venue: 'クルビア · 首都外縁部 · Propeller Paradise 仮設劇場 · 大ホール',
+      searchKeywords:
+        'クルビア · Propeller Paradise 首都外縁部 · Propeller Paradise 仮設劇場 · 大ホール',
+      operationalNotice: {
+        sourceRevision: 'propeller-venue-loss-v1',
+        text: '{originalDate}にPropeller Paradiseの空中会場で予定されていた公演は中止となりました。元の会場が墜落したため、予定どおりの公演は実施できません。本ページは当初の日程を閲覧用にのみ保存しています。',
+      },
+    },
     'volsinii-courtyard-1102': {
       index: '12',
       venue: '旧ヴォルシーニ · 中庭劇場 · 野外舞台',
@@ -74,12 +85,12 @@ export const higashiPrograms = {
     'red-banquet-nuova-volsinii-1101-1119': {
       index: '06',
       venue: 'ヌオーヴァ・ウォルシーニ · 巡演劇場・主舞台',
-      searchKeywords: 'ヌオーヴァ・ウォルシーニ 猩紅の宴 1101-11-19',
+      searchKeywords: 'ヌオーヴァ・ウォルシーニ 猩紅の宴 1101-10-04',
     },
     'seventh-lantern-norport-1102-0202': {
       index: '07',
       venue: 'ノーポート郡 · 巡演劇場・主舞台',
-      searchKeywords: 'ノーポート郡 七つ目の灯 1102-02-02',
+      searchKeywords: 'ノーポート郡 七つ目の灯 1102-04-02',
     },
     'red-banquet-montelupe-1102-0606': {
       index: '08',

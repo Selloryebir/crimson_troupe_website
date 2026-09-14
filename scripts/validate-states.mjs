@@ -20,10 +20,12 @@ import { currentRootSet, validateContentRootSet } from '../src/data/content/root
 import {
   assertPerformanceContentFresh,
   getLocalization,
+  getLocalizedPerformance,
   getLocalizedPerformanceEntries,
   getLocalizedPerformances,
 } from '../src/data/localized/resolve.ts';
 import { assertPerformanceOfferMatrix } from '../src/data/performance-offers.ts';
+import { formatTerraDate } from '../src/data/localized/format.ts';
 import { performances } from '../src/data/performances.ts';
 import { productions } from '../src/data/productions/index.ts';
 import { getMinimumSearchGraphemes } from '../src/data/search-policy.ts';
@@ -302,9 +304,9 @@ const showcaseSnapshot = resolveContent(buildContexts.showcase);
 const previewSnapshot = resolveContent(buildContexts.preview);
 assert.doesNotThrow(() => assertPerformanceOfferMatrix());
 assert.equal(showcaseSnapshot.maturity, 'preview');
-assert.equal(showcaseSnapshot.performanceEntries.length, 21);
+assert.equal(showcaseSnapshot.performanceEntries.length, 22);
 assert.equal(showcaseSnapshot.productionEntries.length, 14);
-assert.equal(showcaseSnapshot.locationEntries.length, 11);
+assert.equal(showcaseSnapshot.locationEntries.length, 12);
 assert.equal(showcaseSnapshot.artworkEntries.length, 14);
 assert.equal(showcaseSnapshot.seatingPlanEntries.length, 9);
 assert.deepEqual(showcaseSnapshot.editionIds, ['yan']);
@@ -358,7 +360,7 @@ assert.equal(
   showcaseSnapshot.performanceEntries.filter(
     ([, performance]) => performance.world === 'front' && performance.collection === 'history',
   ).length,
-  4,
+  5,
 );
 assert.equal(
   showcaseSnapshot.performanceEntries.filter(
@@ -506,6 +508,66 @@ for (const editionId of previewEditionIds.filter(
 }
 assert.equal(countSearchGraphemes('e\u0301', 'el'), 1, '组合字符应按一个字素计数');
 assert.equal(countSearchGraphemes('👨‍👩‍👧‍👦', 'en-US'), 1, 'ZWJ 字符序列应按一个字素计数');
+
+const cancellationId = 'propeller-paradise-1102';
+const cancelledPerformance = previewSnapshot.performances[cancellationId];
+assert.equal(cancelledPerformance.status, 'cancelled');
+assert.equal(cancelledPerformance.collection, 'history');
+assert.equal(cancelledPerformance.locationId, 'propeller-paradise');
+assert.equal(cancelledPerformance.ticketAvailability.state, 'not-on-sale');
+assert.equal(cancelledPerformance.notice.reason, 'venue-condition');
+assert.equal(cancelledPerformance.previousDateTime, undefined);
+assert.deepEqual(cancelledPerformance.effectiveDateTime, {
+  calendar: 'terra',
+  year: 1102,
+  month: 1,
+  day: 4,
+  time: '19:30',
+});
+assert.ok(!previewSnapshot.homepagePerformanceIds.front.includes(cancellationId));
+for (const editionId of previewEditionIds) {
+  const edition = editions[editionId];
+  const localization = getLocalization(edition, previewSnapshot);
+  const performance = getLocalizedPerformance(localization, cancellationId, previewSnapshot);
+  const notice = performance.operationalNotice.text;
+  assert.ok(
+    notice.includes(formatTerraDate(cancelledPerformance.effectiveDateTime, edition.locale)),
+  );
+  assert.doesNotMatch(notice, /\{originalDate\}/u);
+  assert.ok(
+    getLocalizedPerformances(localization, 'front', 'history', previewSnapshot).some(
+      ({ performanceId }) => performanceId === cancellationId,
+    ),
+  );
+  assert.ok(
+    !getLocalizedPerformances(localization, 'front', 'current', previewSnapshot).some(
+      ({ performanceId }) => performanceId === cancellationId,
+    ),
+  );
+  assert.ok(
+    !getTicketingOptions(localization, previewSnapshot).some(
+      ({ performanceId }) => performanceId === cancellationId,
+    ),
+  );
+  const indexed = getFrontSearchIndex(edition, previewSnapshot).find(
+    ({ id }) => id === `front-performance-${cancellationId}`,
+  );
+  assert.ok(indexed.summary.includes(notice));
+  assert.ok(indexed.summary.includes(localization.site.front.performanceDetail.cancelled));
+  // 只改领域日期，公告必须随之变化，不能依赖另改九份译文。
+  const changedDate = { ...cancelledPerformance.effectiveDateTime, day: 5 };
+  const changedSnapshot = {
+    ...previewSnapshot,
+    performances: {
+      ...previewSnapshot.performances,
+      [cancellationId]: { ...cancelledPerformance, effectiveDateTime: changedDate },
+    },
+  };
+  const changedNotice = getLocalizedPerformance(localization, cancellationId, changedSnapshot)
+    .operationalNotice.text;
+  assert.notEqual(changedNotice, notice);
+  assert.ok(changedNotice.includes(formatTerraDate(changedDate, edition.locale)));
+}
 
 const fullFrontSearch = getFrontSearchIndex(editions.yan, showcaseSnapshot);
 const uncrownedSearchEntry = fullFrontSearch.find(({ id }) => id === 'front-production-uncrowned');

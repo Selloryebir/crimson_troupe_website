@@ -2,6 +2,7 @@ import type { AuthoringProgramContent } from '../schema.ts';
 
 export const minosPrograms = {
   locations: {
+    'propeller-paradise': { cityLabel: 'Propeller Paradise' },
     volsinii: { cityLabel: 'Παλαιό Βολσίνι', archiveCityLabel: 'Βολσίνι' },
     trimount: { cityLabel: 'Trimounts' },
     wiesheim: { cityLabel: 'Vyseheim' },
@@ -16,6 +17,17 @@ export const minosPrograms = {
     'nuova-volsinii': { cityLabel: 'Nuova Volsinii' },
   },
   performances: {
+    'propeller-paradise-1102': {
+      index: '14',
+      venue:
+        'Columbia · Περίχωρα της πρωτεύουσας · Προσωρινό θέατρο Propeller Paradise · Κεντρική αίθουσα',
+      searchKeywords:
+        'Columbia · Propeller Paradise Περίχωρα της πρωτεύουσας · Προσωρινό θέατρο Propeller Paradise · Κεντρική αίθουσα',
+      operationalNotice: {
+        sourceRevision: 'propeller-venue-loss-v1',
+        text: 'Η παράσταση που είχε προγραμματιστεί για {originalDate} στον εναέριο χώρο του Propeller Paradise ακυρώθηκε. Ο αρχικός χώρος κατέπεσε, καθιστώντας αδύνατη την παράσταση όπως είχε προγραμματιστεί. Η σελίδα διατηρεί το αρχικό πρόγραμμα μόνο για ενημέρωση.',
+      },
+    },
     'volsinii-courtyard-1102': {
       index: '12',
       venue: 'Παλαιό Βολσίνι · Θέατρο της Αυλής · Υπαίθρια Σκηνή',
@@ -74,12 +86,12 @@ export const minosPrograms = {
     'red-banquet-nuova-volsinii-1101-1119': {
       index: '06',
       venue: 'Nuova Volsinii · Περιοδεύον θέατρο · Κεντρική σκηνή',
-      searchKeywords: 'Nuova Volsinii Το Πορφυρό Συμπόσιο 1101-11-19',
+      searchKeywords: 'Nuova Volsinii Το Πορφυρό Συμπόσιο 1101-10-04',
     },
     'seventh-lantern-norport-1102-0202': {
       index: '07',
       venue: 'Κομητεία Norport · Περιοδεύον θέατρο · Κεντρική σκηνή',
-      searchKeywords: 'Κομητεία Norport Ο Έβδομος Λύχνος 1102-02-02',
+      searchKeywords: 'Κομητεία Norport Ο Έβδομος Λύχνος 1102-04-02',
     },
     'red-banquet-montelupe-1102-0606': {
       index: '08',

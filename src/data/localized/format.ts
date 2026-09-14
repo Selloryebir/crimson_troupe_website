@@ -10,6 +10,17 @@ export function formatMessage(
   });
 }
 
+export function formatTerraDate(value: TerraDateTime, locale: string): string {
+  const referenceDate = new Date(0);
+  referenceDate.setUTCFullYear(value.year, value.month - 1, value.day);
+  return new Intl.DateTimeFormat(locale, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC',
+  }).format(referenceDate);
+}
+
 export function formatTerraDateTime(value: TerraDateTime, locale: string): string {
   const [hour, minute] = value.time.split(':').map(Number);
   const referenceDate = new Date(Date.UTC(2000, value.month - 1, value.day, hour, minute));

@@ -2,6 +2,7 @@ import type { AuthoringProgramContent } from '../schema.ts';
 
 export const ursusPrograms = {
   locations: {
+    'propeller-paradise': { cityLabel: 'Propeller Paradise' },
     volsinii: { cityLabel: 'Старый Вольсиний', archiveCityLabel: 'Вольсиний' },
     trimount: { cityLabel: 'Trimounts' },
     wiesheim: { cityLabel: 'Vyseheim' },
@@ -16,6 +17,16 @@ export const ursusPrograms = {
     'nuova-volsinii': { cityLabel: 'Nuova Volsinii' },
   },
   performances: {
+    'propeller-paradise-1102': {
+      index: '14',
+      venue: 'Columbia · Окраина столицы · Временный театр Propeller Paradise · Главный зал',
+      searchKeywords:
+        'Columbia · Propeller Paradise Окраина столицы · Временный театр Propeller Paradise · Главный зал',
+      operationalNotice: {
+        sourceRevision: 'propeller-venue-loss-v1',
+        text: 'Представление, запланированное на {originalDate} на воздушной площадке в Propeller Paradise, отменено. Первоначальная площадка потерпела крушение, поэтому провести представление по исходному плану невозможно. Страница сохраняет первоначальное расписание только для ознакомления.',
+      },
+    },
     'volsinii-courtyard-1102': {
       index: '12',
       venue: 'Старый Вольсиний · Дворовый театр · Открытая сцена',
@@ -74,12 +85,12 @@ export const ursusPrograms = {
     'red-banquet-nuova-volsinii-1101-1119': {
       index: '06',
       venue: 'Nuova Volsinii · Гастрольный театр · Главная сцена',
-      searchKeywords: 'Nuova Volsinii Багряный пир 1101-11-19',
+      searchKeywords: 'Nuova Volsinii Багряный пир 1101-10-04',
     },
     'seventh-lantern-norport-1102-0202': {
       index: '07',
       venue: 'Графство Norport · Гастрольный театр · Главная сцена',
-      searchKeywords: 'Графство Norport Седьмой фонарь 1102-02-02',
+      searchKeywords: 'Графство Norport Седьмой фонарь 1102-04-02',
     },
     'red-banquet-montelupe-1102-0606': {
       index: '08',

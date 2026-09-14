@@ -188,7 +188,7 @@ assert.deepEqual(
   [...buildSnapshot.archiveFolioProductionIds, 'the-lullaby'].sort(),
 );
 assertTicketingPlatformLogoFiles();
-assert.equal(Object.keys(performances).length, 21, '预备场次目录应包含 21 条记录');
+assert.equal(Object.keys(performances).length, 22, '预备场次目录应包含 22 条记录');
 assert.equal(Object.keys(productions).length, 14, '预备剧目目录应包含 14 条记录');
 assert.equal(Object.keys(folioSourceRecords).length, 13, '活页来源目录应完整保存 13 条记录');
 assert.equal(
@@ -226,7 +226,7 @@ for (const [productionId, source] of Object.entries(folioSourceRecords)) {
     `${productionId} 的运行时活页来源与人员参考不一致`,
   );
 }
-assert.equal(buildSnapshot.performanceEntries.length, 21, '当前根集合应发布 21 个场次');
+assert.equal(buildSnapshot.performanceEntries.length, 22, '当前根集合应发布 22 个场次');
 assert.equal(buildSnapshot.productionEntries.length, 14, '当前根集合应发布 14 个剧目');
 
 const cachedYanLocalization = getLocalization(editions.yan, buildSnapshot);

@@ -95,6 +95,16 @@ export interface Performance {
 }
 
 export const performances = {
+  'propeller-paradise-1102': {
+    performanceId: 'propeller-paradise-1102',
+    world: 'front',
+    status: 'cancelled',
+    locationId: 'propeller-paradise',
+    effectiveDateTime: { calendar: 'terra', year: 1102, month: 1, day: 4, time: '19:30' },
+    notice: { reason: 'venue-condition', sourceRevision: 'propeller-venue-loss-v1' },
+    productionIds: ['red-banquet'],
+    ticketAvailability: { state: 'not-on-sale' },
+  },
   'volsinii-courtyard-1102': {
     performanceId: 'volsinii-courtyard-1102',
     world: 'front',
@@ -154,7 +164,7 @@ export const performances = {
     world: 'front',
     status: 'completed',
     locationId: 'nuova-volsinii',
-    effectiveDateTime: { calendar: 'terra', year: 1101, month: 11, day: 19, time: '19:00' },
+    effectiveDateTime: { calendar: 'terra', year: 1101, month: 10, day: 4, time: '19:00' },
     productionIds: ['red-banquet'],
     ticketAvailability: { state: 'not-on-sale' },
   },
@@ -163,7 +173,7 @@ export const performances = {
     world: 'front',
     status: 'completed',
     locationId: 'norport',
-    effectiveDateTime: { calendar: 'terra', year: 1102, month: 2, day: 2, time: '18:45' },
+    effectiveDateTime: { calendar: 'terra', year: 1102, month: 4, day: 2, time: '18:45' },
     productionIds: ['seventh-lantern'],
     ticketAvailability: { state: 'not-on-sale' },
   },

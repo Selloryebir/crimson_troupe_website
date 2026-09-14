@@ -2,6 +2,7 @@ import type { AuthoringProgramContent } from '../schema.ts';
 
 export const siracusaPrograms = {
   locations: {
+    'propeller-paradise': { cityLabel: 'Propeller Paradise' },
     volsinii: { cityLabel: 'Vecchia Volsinii', archiveCityLabel: 'Volsinii' },
     trimount: { cityLabel: 'Trimount' },
     wiesheim: { cityLabel: 'Vyseheim' },
@@ -16,6 +17,17 @@ export const siracusaPrograms = {
     'nuova-volsinii': { cityLabel: 'Nuova Volsinii' },
   },
   performances: {
+    'propeller-paradise-1102': {
+      index: '14',
+      venue:
+        'Columbia · Periferia della capitale · Teatro temporaneo Propeller Paradise · Sala principale',
+      searchKeywords:
+        'Columbia · Propeller Paradise Periferia della capitale · Teatro temporaneo Propeller Paradise · Sala principale',
+      operationalNotice: {
+        sourceRevision: 'propeller-venue-loss-v1',
+        text: 'La rappresentazione prevista per il {originalDate} nella sede sospesa di Propeller Paradise è stata annullata. La sede originale è precipitata, rendendo impossibile lo spettacolo previsto. Questa pagina conserva il programma originale solo per consultazione.',
+      },
+    },
     'volsinii-courtyard-1102': {
       index: '12',
       venue: 'Vecchia Volsinii · Teatro del Cortile · Palco all’aperto',
@@ -74,12 +86,12 @@ export const siracusaPrograms = {
     'red-banquet-nuova-volsinii-1101-1119': {
       index: '06',
       venue: 'Nuova Volsinii · Teatro itinerante · Palcoscenico principale',
-      searchKeywords: 'Nuova Volsinii Il banchetto cremisi 1101-11-19',
+      searchKeywords: 'Nuova Volsinii Il banchetto cremisi 1101-10-04',
     },
     'seventh-lantern-norport-1102-0202': {
       index: '07',
       venue: 'Contea di Norport · Teatro itinerante · Palcoscenico principale',
-      searchKeywords: 'Contea di Norport La settima lanterna 1102-02-02',
+      searchKeywords: 'Contea di Norport La settima lanterna 1102-04-02',
     },
     'red-banquet-montelupe-1102-0606': {
       index: '08',

@@ -2,6 +2,7 @@ import type { ProgramContentBase } from '../schema.ts';
 
 export const yanPrograms = {
   locations: {
+    'propeller-paradise': { cityLabel: '螺旋桨天堂' },
     volsinii: { cityLabel: '旧沃尔西尼', archiveCityLabel: '沃尔西尼' },
     trimount: { cityLabel: '特里蒙' },
     wiesheim: { cityLabel: '维谢海姆' },
@@ -16,6 +17,15 @@ export const yanPrograms = {
     'nuova-volsinii': { cityLabel: '新沃尔西尼' },
   },
   performances: {
+    'propeller-paradise-1102': {
+      index: '14',
+      venue: '哥伦比亚 · 麦克斯特区外缘 · 螺旋桨天堂临时剧场 · 主厅',
+      searchKeywords: '哥伦比亚 · 螺旋桨天堂 麦克斯特区外缘 · 螺旋桨天堂临时剧场 · 主厅',
+      operationalNotice: {
+        sourceRevision: 'propeller-venue-loss-v1',
+        text: '原定于{originalDate}在螺旋桨天堂浮空场地举行的演出已取消。因原场地坠毁，演出无法按原计划进行。本页保留原排期，仅供查阅。',
+      },
+    },
     'volsinii-courtyard-1102': {
       index: '12',
       venue: '旧沃尔西尼 · 庭院剧场 · 露天舞台',
@@ -74,12 +84,12 @@ export const yanPrograms = {
     'red-banquet-nuova-volsinii-1101-1119': {
       index: '06',
       venue: '新沃尔西尼 · 巡演剧场 · 主厅',
-      searchKeywords: '新沃尔西尼 《猩红宴》 1101-11-19',
+      searchKeywords: '新沃尔西尼 《猩红宴》 1101-10-04',
     },
     'seventh-lantern-norport-1102-0202': {
       index: '07',
       venue: '诺伯特郡 · 巡演剧场 · 主厅',
-      searchKeywords: '诺伯特郡 《第七盏灯》 1102-02-02',
+      searchKeywords: '诺伯特郡 《第七盏灯》 1102-04-02',
     },
     'red-banquet-montelupe-1102-0606': {
       index: '08',

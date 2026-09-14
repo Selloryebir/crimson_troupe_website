@@ -521,6 +521,19 @@ for (const edition of builtEditions) {
   const archivePerformances = performanceEntries.filter(
     ([, performance]) => performance.world === 'archive',
   );
+  for (const [performanceId, performance] of performanceEntries.filter(
+    ([, entry]) => entry.world === 'front' && entry.status === 'cancelled',
+  )) {
+    const html = readFileSync(routes.get(performancePath(edition, 'front', performanceId)), 'utf8');
+    assert.ok(html.includes(localization.site.front.performanceDetail.cancelled));
+    assert.ok(
+      !html.includes(localization.site.front.performanceDetail.notOnSale),
+      `${performanceId} 已取消，不应暗示尚未开票`,
+    );
+    assert.match(html, /aria-labelledby="performance-notice"/u);
+    assert.doesNotMatch(html, /\{originalDate\}/u);
+    assert.equal(performance.ticketAvailability.state, 'not-on-sale');
+  }
   const multilinePerformances = archivePerformances.filter(([, performance]) =>
     getLocalizedProduction(localization, performance.productionIds[0]).tagline.includes('\n'),
   );

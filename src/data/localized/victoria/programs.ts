@@ -2,6 +2,7 @@ import type { AuthoringProgramContent } from '../schema.ts';
 
 export const victoriaPrograms = {
   locations: {
+    'propeller-paradise': { cityLabel: 'Propeller Paradise' },
     volsinii: { cityLabel: 'Old Volsinii', archiveCityLabel: 'Volsinii' },
     trimount: { cityLabel: 'Trimounts' },
     wiesheim: { cityLabel: 'Vyseheim' },
@@ -16,6 +17,16 @@ export const victoriaPrograms = {
     'nuova-volsinii': { cityLabel: 'Nuova Volsinii' },
   },
   performances: {
+    'propeller-paradise-1102': {
+      index: '14',
+      venue: 'Columbia · Capital outskirts · Propeller Paradise Temporary Theatre · Main Hall',
+      searchKeywords:
+        'Columbia · Propeller Paradise Capital outskirts · Propeller Paradise Temporary Theatre · Main Hall',
+      operationalNotice: {
+        sourceRevision: 'propeller-venue-loss-v1',
+        text: 'The performance scheduled for {originalDate} at the airborne venue in Propeller Paradise has been cancelled. The original venue crashed, making the planned performance impossible. This page retains the original schedule for reference only.',
+      },
+    },
     'volsinii-courtyard-1102': {
       index: '12',
       venue: 'Old Volsinii · Courtyard Theatre · Open-air Stage',
@@ -74,12 +85,12 @@ export const victoriaPrograms = {
     'red-banquet-nuova-volsinii-1101-1119': {
       index: '06',
       venue: 'Nuova Volsinii · Touring Theatre · Main Stage',
-      searchKeywords: 'Nuova Volsinii The Crimson Banquet 1101-11-19',
+      searchKeywords: 'Nuova Volsinii The Crimson Banquet 1101-10-04',
     },
     'seventh-lantern-norport-1102-0202': {
       index: '07',
       venue: 'Norport County · Touring Theatre · Main Stage',
-      searchKeywords: 'Norport County The Seventh Lantern 1102-02-02',
+      searchKeywords: 'Norport County The Seventh Lantern 1102-04-02',
     },
     'red-banquet-montelupe-1102-0606': {
       index: '08',

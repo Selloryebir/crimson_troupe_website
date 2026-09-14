@@ -2,6 +2,7 @@ import type { AuthoringProgramContent } from '../schema.ts';
 
 export const kazimierzPrograms = {
   locations: {
+    'propeller-paradise': { cityLabel: 'Propeller Paradise' },
     volsinii: { cityLabel: 'Stare Volsinii', archiveCityLabel: 'Volsinii' },
     trimount: { cityLabel: 'Trimounty' },
     wiesheim: { cityLabel: 'Vyseheim' },
@@ -16,6 +17,16 @@ export const kazimierzPrograms = {
     'nuova-volsinii': { cityLabel: 'Nuova Volsinii' },
   },
   performances: {
+    'propeller-paradise-1102': {
+      index: '14',
+      venue: 'Columbia · Obrzeża stolicy · Tymczasowy teatr Propeller Paradise · Sala główna',
+      searchKeywords:
+        'Columbia · Propeller Paradise Obrzeża stolicy · Tymczasowy teatr Propeller Paradise · Sala główna',
+      operationalNotice: {
+        sourceRevision: 'propeller-venue-loss-v1',
+        text: 'Przedstawienie zaplanowane na {originalDate} w unoszącym się w powietrzu obiekcie w Propeller Paradise zostało odwołane. Pierwotny obiekt runął, co uniemożliwia realizację przedstawienia zgodnie z planem. Strona zachowuje pierwotny termin wyłącznie do wglądu.',
+      },
+    },
     'volsinii-courtyard-1102': {
       index: '12',
       venue: 'Stare Volsinii · Teatr na Dziedzińcu · Scena Plenerowa',
@@ -74,12 +85,12 @@ export const kazimierzPrograms = {
     'red-banquet-nuova-volsinii-1101-1119': {
       index: '06',
       venue: 'Nuova Volsinii · Teatr objazdowy · Scena główna',
-      searchKeywords: 'Nuova Volsinii Karmazynowa Uczta 1101-11-19',
+      searchKeywords: 'Nuova Volsinii Karmazynowa Uczta 1101-10-04',
     },
     'seventh-lantern-norport-1102-0202': {
       index: '07',
       venue: 'Hrabstwo Norport · Teatr objazdowy · Scena główna',
-      searchKeywords: 'Hrabstwo Norport Siódma latarnia 1102-02-02',
+      searchKeywords: 'Hrabstwo Norport Siódma latarnia 1102-04-02',
     },
     'red-banquet-montelupe-1102-0606': {
       index: '08',

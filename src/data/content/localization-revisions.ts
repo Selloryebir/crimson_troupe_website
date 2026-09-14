@@ -52,6 +52,8 @@ export function createLocalizationSourceRevision(
 
 // 目标语言记录所依据的炎语修订。新增或修改炎语记录时只更新已完成复核的对应路径。
 const acceptedYanSourceRevision: LocalizationSourceRevision = Object.freeze({
+  'locations.propeller-paradise': 'fnv1a64:2ef01a15b87a59f2',
+  'performances.propeller-paradise-1102': 'fnv1a64:4a3bac1de95c52b1',
   'performances.nuova-volsinii-civic-1102': 'fnv1a64:14b01c2a98592c33',
   'performances.volsinii-courtyard-1102': 'fnv1a64:d62004f23f6f0441',
   'locations.volsinii': 'fnv1a64:a2bded3df693fec1',
@@ -86,8 +88,8 @@ const acceptedYanSourceRevision: LocalizationSourceRevision = Object.freeze({
   'performances.the-carnival-londinium-1084-1009': 'fnv1a64:7bb819a530beda23',
   'performances.caged-fire-jiangdu-1101-0521': 'fnv1a64:928e64fe04fa68c9',
   'performances.second-snow-zwillingsturme-1101-0808': 'fnv1a64:023565dd76ef3a4f',
-  'performances.red-banquet-nuova-volsinii-1101-1119': 'fnv1a64:796d31b380ea22cc',
-  'performances.seventh-lantern-norport-1102-0202': 'fnv1a64:cd7f5652280bbeaa',
+  'performances.red-banquet-nuova-volsinii-1101-1119': 'fnv1a64:5a7979154927a54b',
+  'performances.seventh-lantern-norport-1102-0202': 'fnv1a64:485c383499e33a10',
   'performances.red-banquet-montelupe-1102-0606': 'fnv1a64:f84f0de1d9dc42ad',
   'performances.seventh-lantern-linqu-1102-1212': 'fnv1a64:5a67b3b8ef1134a6',
   'performances.procession-of-masks-londinium-1103-0214': 'fnv1a64:7753210ab97bbbe6',
