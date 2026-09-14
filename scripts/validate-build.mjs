@@ -263,9 +263,29 @@ for (const [route, filePath] of routes) {
     assert.ok(html.includes('id="main-content"'), `${route} 缺少正文入口`);
     assert.match(html, /<nav\s+class="main-nav"/u, `${route} 缺少主导航`);
     const localization = getLocalization(edition);
+    const brand = html.match(/<span class="brand-name">([\s\S]*?)<\/span>/u)?.[1];
+    assert.ok(brand, `${route} 缺少页头文字标识`);
+    assert.match(brand, /<strong lang="en-GB">CRIMSON TROUPE<\/strong>/u);
+    assert.ok(
+      brand.includes(`<small>${localization.site.brand.name}</small>`),
+      `${route} 页头小字应为本地化团名`,
+    );
     assert.ok(html.includes(localization.site.shared.fanNotice), `${route} 缺少统一页脚声明`);
     if (builtEditions.length > 1) {
       assert.match(html, /<details[^>]*data-edition-selector/u, `${route} 缺少国家版本选择器`);
+      const selector = html.match(/<details[^>]*data-edition-selector[\s\S]*?<\/details>/u)?.[0];
+      const optionPrefixes = [...selector.matchAll(/<a\s[^>]*href="\/([^/]+)\//gu)].map(
+        (match) => match[1],
+      );
+      const expectedPrefixes = [
+        ...builtEditions.filter((item) => item.editionId === 'victoria'),
+        ...builtEditions
+          .filter((item) => item.editionId !== 'victoria')
+          .toSorted((left, right) =>
+            left.languageName.en.localeCompare(right.languageName.en, 'en-GB'),
+          ),
+      ].map((item) => item.routePrefix);
+      assert.deepEqual(optionPrefixes, expectedPrefixes, `${route} 国家版本选项顺序不正确`);
       for (const targetEdition of builtEditions) {
         const equivalent = `/${targetEdition.routePrefix}/${route.split('/').slice(2).join('/')}`;
         assert.ok(html.includes(`href="${equivalent}"`), `${route} 缺少等价版本链接 ${equivalent}`);

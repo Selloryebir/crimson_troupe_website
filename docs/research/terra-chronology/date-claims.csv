@@ -1,0 +1,16 @@
+claim_id,event_id,source_ids,claim_text,claim_kind,disposition,reason
+D01,T015,S01,1100年,community_date,retained,PRTS按1100年收录红丝绒相关事件。
+D02,T015,S03,约1099年至1100年初,community_estimate,retained,英文年表保留约数；不以两者交集1100冒充已证实年份。
+D03,T015,S03,在1100年8至9月米诺斯与萨尔贡文化交流以前,relative_constraint,retained,脚注11依据新片提及给出先后；电影节放映至商业公映间隔不定。
+D04,T002,S01,9世纪,community_estimate,unresolved,世纪分组与相对时长存在张力，未独立核实AD-8整段对话。
+D05,T002,S14,约两世纪以前,relative_estimate,unresolved,不知取整与精确参照时点；不机械换算成900年。
+D06,T003,S01,11世纪20年代建成,community_estimate,superseded,原请柬只证明102X落款时已完工；不再用此主张限定实际建成年下界。
+D07,T012,S03,未定年事件,undated,retained,年表明确列入Undated events，不采纳相邻段落年份。
+D08,T007,S10,漫画回溯的十四年前,relative_estimate,retained,参照段落没有绝对年，不能用现实出版年或红丝绒年份减14。
+D09,T003,S40,102X年X月X日的请柬称林地城堡已修建完毕,primary_date,retained,1020至1029限定请柬日期；实际完工不晚于请柬但可能早于1020。
+D10,P003,S03|S62,约1101年12月下旬,community_estimate,retained,英文脚注20关联圣诞前与弧光两年前；不等于官方事故确日。
+D11,P003,S47,1102年春,community_estimate,unresolved,日文简易年表如此归类；与D10分歧，未取得同样完整的论证链。
+D12,P003,S44|S45,1102航空博览会前发生,relative_constraint,retained,活动名称本身不能判定事故公历年；表站1102-04-15前后需分别讨论。
+D13,S005,S49|S50,1100年11月5日活动称新城一周年,relative_constraint,retained,支撑约1099新城成立；不把周年庆活动日机械等同精确建城日。
+D14,T017,S42,约两个月后的尾声影院邀请,relative_estimate,retained,首幕两个月后而电影节为其前一天；不可设为至少两个月的严格下界。
+D15,P003,S01|S63,PRTS年表1101年末；莱茵生命条目1101年,community_estimate,retained,中文与英文支持同一候选分支；不凭多数票消除日文1102春主张，不移用其他事故的确日。

@@ -14,17 +14,17 @@
 
 - 候选使用内置 `imagegen` 生成；正式 Logo 只作为身份锚点，蚀刻章集合只用于归纳煤黑底板、旧金蚀刻、深红珐琅、分层边框和旧化语言；
 - D 版“档案凹印”最初进入 `src/assets/brand/troupe-logo-primary.png`，后按下述修形与双版接入授权更新；
-- A 版“舞台印章”进入 `docs/project/troupe-logo-alternates/stage-plate.png`，只在未来人工明确指定时才可以提出运行时用途；
-- 三种 D 版衍生稿使用 `gpt-image-1.5` 图像编辑接口，以 D 版运行时母版为唯一图像输入，分别作为暖幕、舞台亮金和辉光亮金环境版本保存在 `docs/project/troupe-logo-alternates/`；生成所用 API 密钥未写入仓库、图片或来源记录；
-- 三种衍生稿均为 `1024 × 1024` RGBA PNG，但外围暖色环境光仍属于可见画面，不等同于适配任意背景的干净透明切图。它们在获得具体消费者、完成目标背景验收并迁入 `src/assets/brand/` 前不参与运行时构建；
+- A 版“舞台印章”曾进入 `docs/project/troupe-logo-alternates/stage-plate.png`；现已按下述清理要求撤出，历史采用不再构成可用备选；
+- 三种 D 版衍生稿使用 `gpt-image-1.5` 图像编辑接口，以 D 版运行时母版为唯一图像输入，曾作为暖幕、舞台亮金和辉光亮金环境版本保存在 `docs/project/troupe-logo-alternates/`；生成所用 API 密钥未写入仓库、图片或来源记录；
+- 三种衍生稿均为 `1024 × 1024` RGBA PNG，但外围暖色环境光属于可见画面，不等同于干净透明切图；它们未进入运行时，现已与 A 版一并淘汰；
 - B 与 C 未获采用，不进入仓库资产、运行时构建或正式视觉规则；
 - 生成稿中的 `CRIMSON TROUPE` 绶带属于装饰性品牌细节，页面继续以本地化 HTML 品牌名和链接可访问名称表达身份。
 
-| 项目版本           | 仓库文件                                                                    | SHA-256                                                            | 采用身份                       |
-| ------------------ | --------------------------------------------------------------------------- | ------------------------------------------------------------------ | ------------------------------ |
-| D-Warm 暖幕凹印    | `docs/project/troupe-logo-alternates/archive-engraving-warm-ambient.png`    | `d6ee3ab2c1afa7ec9e4437eaceabd6186d943afdb3dc6a33232e9c90f0500319` | 已保留、非默认、无运行时消费者 |
-| D-Bright 舞台亮金  | `docs/project/troupe-logo-alternates/archive-engraving-bright-ambient.png`  | `84d3a0bd2529786e1ba406832d670b3bd7d46e3e7e851fc333a17087a6dc96a8` | 已保留、非默认、无运行时消费者 |
-| D-Radiant 辉光亮金 | `docs/project/troupe-logo-alternates/archive-engraving-radiant-ambient.png` | `66dd6175babf762a2644c9d675bb083a6c930e38ab788a932a423b524bf0264d` | 已保留、非默认、无运行时消费者 |
+| 项目版本           | 仓库文件                                                                    | SHA-256                                                            | 采用身份         |
+| ------------------ | --------------------------------------------------------------------------- | ------------------------------------------------------------------ | ---------------- |
+| D-Warm 暖幕凹印    | `docs/project/troupe-logo-alternates/archive-engraving-warm-ambient.png`    | `d6ee3ab2c1afa7ec9e4437eaceabd6186d943afdb3dc6a33232e9c90f0500319` | 已淘汰；历史路径 |
+| D-Bright 舞台亮金  | `docs/project/troupe-logo-alternates/archive-engraving-bright-ambient.png`  | `84d3a0bd2529786e1ba406832d670b3bd7d46e3e7e851fc333a17087a6dc96a8` | 已淘汰；历史路径 |
+| D-Radiant 辉光亮金 | `docs/project/troupe-logo-alternates/archive-engraving-radiant-ambient.png` | `66dd6175babf762a2644c9d675bb083a6c930e38ab788a932a423b524bf0264d` | 已淘汰；历史路径 |
 
 ## 维护边界
 
@@ -51,9 +51,15 @@
 
 两站小团标默认读取哑光母版；表站首页当前巡演季与下部剧团介绍、里站首页中轴大标显式读取金属母版。全部图片仍经同一个 `TroupeMark` 构建期输出边界生成 WebP；尺寸与变体分开指定，小标不会仅因位于首页而变金属。页面保留 HTML 品牌身份、标题和合法链接；本轮不修改任何官方活页封面内嵌图案。
 
+### 2026-09-14 错误备选清理
+
+项目负责人要求清除 `docs/project/troupe-logo-alternates/` 中仍存在形状错误的设计。经逐图检查，A 版的盾形外板与三种 D 衍生稿的菱形轮廓均不符合当前弧形眼框规则，且后者仍带环境光背景。四张旧图及其展示索引已从项目资料中移除，不再称为可供采用的备选；上表仅保留历史来源路径与摘要。A 版 SHA-256 为 `738d30997e783e79ebf10c6528ee945f6236546bde6d72094fa462625e460f90`。
+
+移除前逐文件校验并移至本地忽略目录 `.agent-work/retired-troupe-logo-alternates-2026-09-14/`，可恢复但不参与构建或提交。当前已采用哑光、金属两份运行时母版未修改，摘要与上表相同。
+
 ### 持续维护规则
 
-1. 未明确指定变体时，新增或现有 `TroupeMark` 消费者都使用哑光版；首页大展示显式使用已批准的金属版，不按时间层、污染等级或语言自动切换。A 与 D 的旧环境光衍生稿仍非默认。
-2. 非默认版本只有在项目负责人指定具体消费者后，才可迁入 `src/assets/brand/` 并由运行时显式引用；不得让页面或构建器直接依赖 `docs/project/`。
+1. 未明确指定变体时，新增或现有 `TroupeMark` 消费者都使用哑光版；首页大展示显式使用已批准的金属版，不按时间层、污染等级或语言自动切换。已淘汰的 A 与 D 旧环境光衍生稿不可采用。
+2. 新候选只有经人工确认形状、权利与具体消费者后，才可迁入 `src/assets/brand/` 并由运行时显式引用；不得让页面或构建器直接依赖 `docs/project/` 或本地恢复目录。
 3. A、D 及其衍生稿不得被描述为游戏官方蚀刻章；不得复制参考章的具体徽记、数字、标题、边框或独特构图。
 4. 若后续获得公开许可、官方矢量源或更明确的署名和再分发条款，应先更新本文件，再判断运行时资产和非官方声明是否需要调整。

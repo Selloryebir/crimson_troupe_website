@@ -1,0 +1,64 @@
+source_id,title,url,language,evidence_kind,access_method,locator,accessed_on,limitation
+S01,泰拉年表,https://prts.wiki/w/泰拉年表,zh-CN,community_timeline,page_text,年代标题及各条目脚注,2026-09-14,页首说明日期系剧情推断；不是官方统一年鉴
+S02,Terra Historicus,https://arknights.wiki.gg/wiki/Terra_Historicus,en,community_index,search_index,Contents：漫画与补充档案,2026-09-14,索引而非年表；正文直连403；索引不等于已阅读全部原作
+S03,Arknights Timeline,https://arknights.wiki.gg/wiki/Timeline,en,community_timeline,search_index,Act or Die；脚注11；Undated events,2026-09-14,正文直连403；保留英文索引摘录给出的不确定性
+S04,泰拉记事官方入口,https://terra-historicus.hypergryph.com/,zh-CN,official_portal,landing_only,重定向至 comic.hypergryph.com,2026-09-14,动态漫画入口；未取得全部漫画画面；不用于独立确认剧情日期
+S05,Terra,https://arknights.wiki.gg/wiki/Terra,en,community_article,search_index,Calendar；脚注40—41,2026-09-14,历法概括是百科表述；未独立核验所引设定集原页
+S06,Lugalszargus,https://arknights.wiki.gg/wiki/Lugalszargus,en,community_article,search_index,统一纪元起源,2026-09-14,二手设定整理；不提供地球公历换算基点
+S07,Twin Moons,https://arknights.wiki.gg/wiki/Twin_Moons,en,community_article,search_index,炎国阴阳历及双月,2026-09-14,不提供可执行置闰或朔望算法
+S08,Crimson Troupe,https://arknights.wiki.gg/wiki/Crimson_Troupe,en,community_article,search_index,Background；History；补充调查与漫画脚注,2026-09-14,团体历史综述；创立时间不明
+S09,Supplemental Investigation Report,https://arknights.wiki.gg/wiki/Supplemental_Investigation_Report,en,official_text_reproduced,search_index,MLD-WW-035；Previous Cases；Origins,2026-09-14,官方衍生档案的Wiki转载；只核查索引文字；报告本身含调查者判断且无确定落款年
+S10,Prelude Suite: Blood Diamond,https://arknights.wiki.gg/wiki/Prelude_Suite%3A_Blood_Diamond,en,community_synopsis,search_index,第1—2话剧情梗概,2026-09-14,未逐格核验漫画；十四年前缺少绝对参照年
+S11,序言组曲：猩红血钻,https://prts.wiki/w/序言组曲：猩红血钻,zh-CN,community_index,page_text_and_search_index,漫画身份；两话及多语言标题,2026-09-14,页面出版日期是现实时间；不能填入泰拉事件日期
+S12,傀影,https://prts.wiki/w/傀影,zh-CN,official_text_reproduced,page_text_and_search_index,基础档案；客观履历；Phantom与ファントム同页别名检索,2026-09-14,生日只有月日；战斗经验不是年龄；履历保留未知事项
+S13,酒神,https://prts.wiki/w/酒神,zh-CN,official_text_reproduced,page_text_and_search_index,档案；Tragodia同页别名检索,2026-09-14,干员酒神为卢西恩；不能与旧剧团长视作同一个人
+S14,Tragodia (NPC),https://arknights.wiki.gg/wiki/Tragodia_%28NPC%29,en,community_article,search_index,History；AD-8 After引用,2026-09-14,旧长生者团长；约两世纪前是相对叙述
+S15,Calais-Blason,https://arknights.wiki.gg/wiki/Calais-Blason,en,community_article,search_index,城堡来历；时间异常；词名变体,2026-09-14,旧译Celaiblaison是地名别名；异常空间不能映射线性年表
+S16,红丝绒,https://prts.wiki/w/红丝绒,zh-CN,community_index,page_text,关卡与活动信息,2026-09-14,2025活动上线时间与剧情时间分离
+S17,情报处理室,https://prts.wiki/w/情报处理室,zh-CN,official_synopsis_reproduced,search_index,红丝绒：AD-7；AD-8；AD-ST-3关卡梗概,2026-09-14,使用已检索到的梗概；未宣称完整通读每份关卡对话
+S18,War of the Four Nations,https://arknights.wiki.gg/wiki/War_of_the_Four_Nations,en,community_article,search_index,日期与参战阶段,2026-09-14,战争跨度不意味着每个附属事件都有同样精度
+S19,Lingones,https://arknights.wiki.gg/wiki/Lingones,en,community_article,search_index,1031年10月21日陷落,2026-09-14,城市史二手归纳
+S20,Palace of Westhaleg,https://arknights.wiki.gg/wiki/Palace_of_Westhaleg,en,community_article,search_index,1072革命；1094政变,2026-09-14,宫廷史二手归纳
+S21,"A Top Classified Archive From July, 1098",https://arknights.wiki.gg/wiki/A_Top_Classified_Archive_From_July%2C_1098,en,official_text_reproduced,search_index,标记1098/07/■■的通信,2026-09-14,日被遮盖；不得补成月初或月末
+S22,10-19,https://arknights.wiki.gg/wiki/10-19,en,official_text_reproduced,search_index,关于泰拉历31年国号的对话,2026-09-14,事件来自剧情人物陈述
+S23,Ursus,https://arknights.wiki.gg/wiki/Ursus,en,community_article,search_index,History：1019—1062；1072；1073；1075,2026-09-14,国家史综述；不代表每一段已有独立原作复验
+S24,Bassline/File,https://arknights.wiki.gg/wiki/Bassline/File,en,official_text_reproduced,search_index,Archive File 3：969年金律与叙拉古,2026-09-14,官方干员档案转载；未核验游戏原始画面
+S25,Siracusa,https://arknights.wiki.gg/wiki/Siracusa,en,community_article,search_index,969独立；1039灰厅与家族秩序,2026-09-14,二手历史归纳
+S26,Siracusa/Overview,https://arknights.wiki.gg/wiki/Siracusa/Overview,en,community_article,search_index,1100年新沃尔西尼狂欢节,2026-09-14,国家概览；不能据此断言剧团在该庆典出演
+S27,Minos,https://arknights.wiki.gg/wiki/Minos,en,community_article,search_index,917春；1039；1041；1042；所引设定集285—289页,2026-09-14,未直接取得所引设定集原页
+S28,Athenius,https://arknights.wiki.gg/wiki/Athenius,en,community_article,search_index,1041—1042解放；1100文化交流,2026-09-14,二手城市史
+S29,Witch King,https://arknights.wiki.gg/wiki/Witch_King,en,community_article,search_index,969即位；1077倒台,2026-09-14,人物历史综述
+S30,Septemberaufstand,https://arknights.wiki.gg/wiki/Septemberaufstand,en,community_article,search_index,1077年9月起义,2026-09-14,正文将969至1077称为两世纪以上存在算术问题；不采纳该时长
+S31,House Nearl,https://arknights.wiki.gg/wiki/House_Nearl,en,community_article,search_index,1072 Golden Prairie,2026-09-14,用于卡西米尔战后语境；不扩写项目人物亲历
+S32,Higashi,https://arknights.wiki.gg/wiki/Higashi,en,community_article,search_index,约400内乱；807两国诏；1072战争,2026-09-14,约数不应变成确日；旧年号换算未获系统核实
+S33,Yan,https://arknights.wiki.gg/wiki/Yan,en,community_article,search_index,698；713；790；845；855；1054制度与交通史,2026-09-14,设定集转述；不是中文地区历法完整算法
+S34,Columbia,https://arknights.wiki.gg/wiki/Columbia,en,community_article,search_index,1019独立建国,2026-09-14,须区分脱离统治与正式建国
+S35,Rhine Lab Research Report,https://arknights.wiki.gg/wiki/Rhine_Lab_Research_Report,en,official_text_reproduced,search_index,Part 01及Part 02年度档案：1083—1099,2026-09-14,档案年份与内部人物回忆精度分开；保留机构登记与早期合办区别
+S36,Neuleopold University Class Notifications,https://arknights.wiki.gg/wiki/Neuleopold_University_Class_Notifications,en,official_text_reproduced,search_index,1100年庆典与国家身份课程,2026-09-14,课程立场与陈述属于世界内材料；无明确落款日
+S37,Mitsukue Paranormal Reports,https://arknights.wiki.gg/wiki/Mitsukue_Paranormal_Reports,en,official_text_reproduced,search_index,东国地区怪谈报告,2026-09-14,怪谈不是已经证实的历史；未定年
+S38,Recent Developments in Ursus,https://arknights.wiki.gg/wiki/Recent_Developments_in_Ursus,en,official_text_reproduced,search_index,乌萨斯源石矿区等近期报告,2026-09-14,近期相对报告语境；没有据此推定统一当前年份
+S39,Pizzeria Martino Nuova Volsinii Branch - Staff Training Memo,https://arknights.wiki.gg/wiki/Pizzeria_Martino_Nuova_Volsinii_Branch_-_Staff_Training_Memo,en,official_text_reproduced,search_index,新沃尔西尼分店员工备忘录,2026-09-14,生活与政治语境；未提供确定落款日期
+S40,傀影与猩红孤钻/猩红珍藏,https://prts.wiki/w/傀影与猩红孤钻/猩红珍藏,zh-CN,official_text_reproduced,page_text,背景故事：子爵请柬102X；帐篷传单；古堡大门,2026-09-14,请柬证明落款时已完工，不证明完工年；云游剧团未指名。
+S41,Operation story: AD-8,https://arknights.wiki.gg/wiki/AD-8/Story,en,official_text_reproduced,search_index,Before旧逃脱与第一次刺杀；After继承,2026-09-14,正文直连受限；区分两次对决与各自组织后果。
+S42,AD-ST-3: A Word to the Audience,https://arknights.wiki.gg/wiki/AD-ST-3,en,official_text_reproduced,search_index,Two months later；One day ago；影院对话,2026-09-14,约两个月后有组团意向，不证明当日正式开业。
+S43,Propeller Paradise,https://arknights.wiki.gg/wiki/Propeller_Paradise,en,community_article,search_index,首都外缘；提案；事故与后续,2026-09-14,设施性质不等于有获准租用的剧团舞台。
+S44,UR-ST-1,https://arknights.wiki.gg/wiki/UR-ST-1,en,official_text_reproduced,search_index,园区不足半年；七日后对接；1102博览会,2026-09-14,展会名中的年份不是事故确年；有票务不证明本团签约。
+S45,Operation story: UR-8,https://arknights.wiki.gg/wiki/UR-8/Story,en,official_text_reproduced,search_index,浮空层破坏与残骸落点,2026-09-14,事故作用于特定层及区域，不证明首都全毁。
+S46,UR-ST-3,https://arknights.wiki.gg/wiki/UR-ST-3,en,official_text_reproduced,search_index,底层板块回首都检修；塞雷娅谈判,2026-09-14,维修不等于正式复开；未见重开确日。
+S47,時系列考察/簡易年表,https://arknights.wikiru.jp/?cmd=read&page=%E6%99%82%E7%B3%BB%E5%88%97%E8%80%83%E5%AF%9F%2F%E7%B0%A1%E6%98%93%E5%B9%B4%E8%A1%A8,ja,community_timeline,search_index,1102春：プロペラパラダイス,2026-09-14,与英文约1101年12月下旬有分歧；未找到同强度逐条推导。
+S48,Volsinii,https://arknights.wiki.gg/wiki/Volsinii,en,community_article,search_index,Nuova Volsinii：约1094规划及1099新城,2026-09-14,旧城、旧城新城区和新独立城市不能仅凭词义合并。
+S49,PV-ST-1: New Urban Management Act,https://arknights.wiki.gg/wiki/PV-ST-1,en,official_text_reproduced,search_index,1100-11-05 20:10；新沃尔西尼一周年,2026-09-14,一周年支撑约1099设城，不推出准确成立日。
+S50,Vigil/File,https://arknights.wiki.gg/wiki/Vigil/File,en,official_text_reproduced,search_index,档案二、三：旧城事件后新城行政安排,2026-09-14,与PV-ST-1和IS故事互证；不提供1084同名新城市。
+S51,Nomadic city,https://arknights.wiki.gg/wiki/Nomadic_city,en,community_article,search_index,起源；地块、对接及加载提示,2026-09-14,移动城市撤离用时不是跨国剧团旅行时间。
+S52,Yan/Overview,https://arknights.wiki.gg/wiki/Yan/Overview,en,community_article,search_index,Chidao：790年开始建设；车马与后续车辆,2026-09-14,道路存在不能保证任意年代的任意跨境路线畅通。
+S53,Operation story: SL-1,https://arknights.wiki.gg/wiki/SL-1/Story,en,official_text_reproduced,search_index,广播：1097迁城计划；预计1099初迁出,2026-09-14,预计不等于已完成；旧址和新移动城需分开。
+S54,Siesta,https://arknights.wiki.gg/wiki/Siesta,en,community_article,search_index,1097火山再活跃；1099迁城；自治与主权,2026-09-14,独立城邦，不因哥伦比亚干预就归为哥伦比亚领土。
+S55,Wolumonde,https://arknights.wiki.gg/wiki/Wolumonde,en,community_article,search_index,大裂隙商路阻断；起义；次春撤并,2026-09-14,商路与聚落的后果，不是莱塔尼亚全国禁演。
+S56,A Light Spark in Darkness/Synopsis,https://arknights.wiki.gg/wiki/A_Light_Spark_in_Darkness/Synopsis,en,community_synopsis,search_index,1097年末卡拉顿火灾与治安事件,2026-09-14,限定涉事街区；不能将整段期间全市视为关闭。
+S57,Londinium,https://arknights.wiki.gg/wiki/Londinium,en,community_article,search_index,1094至1098占领、围城与战后重建,2026-09-14,对普通外来售票巡演不利，不是所有艺术活动均被禁止的法律证据。
+S58,Chernobog Crisis,https://arknights.wiki.gg/wiki/Chernobog_Crisis,en,community_article,search_index,1096-12-23至1097-01-06；切尔诺伯格与龙门,2026-09-14,两城作用不同，危机终止不等于所有街区和场馆复开。
+S59,Yumen,https://arknights.wiki.gg/wiki/Yumen,en,community_article,search_index,1082事件；守城、对接窗口；山海众,2026-09-14,现代城况不能全部回填1084；外国来访需条件。
+S60,Kawalerielki,https://arknights.wiki.gg/wiki/Kawalerielki,en,community_article,search_index,大骑士领赛事与Monthly Catastrophe Forecast,2026-09-14,接待能力是旁证，不是本团获准演出的证据。
+S61,Operation story: PV-9,https://arknights.wiki.gg/wiki/PV-9/Story,en,official_text_reproduced,search_index,1100年狂欢节的地方冲突与秩序,2026-09-14,公众活动与局地危险可以同时存在。
+S62,UR-ST-2: Test Flight,https://arknights.wiki.gg/wiki/UR-ST-2,en,official_text_reproduced,search_index,圣诞前线索；园区树及封锁,2026-09-14,与UR-ST-3、弧光相隔两年是英文年表的推定链，不自动生成确日。
+S63,泰拉大典：组织／莱茵生命,https://prts.wiki/w/泰拉大典:组织/莱茵生命,zh-CN,community_article,search_index,历史1101年：螺旋桨天堂事件,2026-09-14,二手组织年鉴仅支持年份；不把同年其他事件月日当作园区事故确日。

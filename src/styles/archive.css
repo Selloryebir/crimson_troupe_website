@@ -85,7 +85,7 @@ html[data-world="archive"] .brand-mark {
 html[data-world="archive"] .brand-name strong {
   font-size: clamp(1.12rem, 2.5vw, 1.55rem);
   line-height: 1.25;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.025em;
 }
 
 html[data-world="archive"] .brand-name small,

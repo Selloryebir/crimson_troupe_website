@@ -23,6 +23,11 @@ interface Props {
 const { localization, world, currentPath } = Astro.props;
 const { edition } = localization;
 const copy = localization.site.shared;
+// 仅排列当前构建集合的展示顺序，不改变注册表、发布范围或当前项的位置。
+const selectableEditions = buildSnapshot.editions.toSorted((left, right) => {
+  const priority = Number(right.editionId === 'victoria') - Number(left.editionId === 'victoria');
+  return priority || left.languageName.en.localeCompare(right.languageName.en, 'en-GB');
+});
 
 const realmBadgeSources = {
   yan: yanBadge.src,
@@ -55,7 +60,7 @@ function badgeStyle(editionId: EditionId): string {
         </span>
       </summary>
       <ul>
-        {buildSnapshot.editions.map((targetEdition) => (
+        {selectableEditions.map((targetEdition) => (
           <li>
             <a
               href={equivalentEditionPath(currentPath, edition, targetEdition)}
