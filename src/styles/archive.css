@@ -60,14 +60,18 @@ html[data-world="archive"] .header-inner {
   display: grid;
   grid-template:
     "brand brand" auto
-    "nav tools" auto / minmax(0, 1fr) auto;
+    "nav tools" auto / minmax(0, 1fr) 17.5rem;
   gap: 0;
+  width: var(--page);
   min-height: 0;
+  padding: 0;
 }
 
 html[data-world="archive"] .brand {
   grid-area: brand;
   justify-self: center;
+  max-width: 100%;
+  min-height: 5.25rem;
   padding-block: 8px;
 }
 
@@ -93,8 +97,12 @@ html[data-world="archive"] .footer-legal {
 
 html[data-world="archive"] .header-tools {
   grid-area: tools;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 5.5rem;
+  gap: 12px;
   align-self: stretch;
   justify-self: end;
+  width: 17.5rem;
   padding-block: 4px;
   border-top: 1px solid var(--structure);
   border-left: 1px solid var(--structure);
@@ -110,6 +118,8 @@ html[data-world="archive"] .main-nav {
   align-self: stretch;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
+  /* 九版本统一预留双行，常规字形差异不再改变导航栏的高度。 */
+  grid-auto-rows: minmax(4.75rem, auto);
   gap: 0;
   width: 100%;
   border-top: 1px solid var(--structure);
@@ -118,12 +128,13 @@ html[data-world="archive"] .main-nav {
 }
 
 html[data-world="archive"] .main-nav a {
-  display: flex;
+  display: grid;
+  grid-template-columns: 5px minmax(0, 1fr);
   min-width: 0;
   min-height: 44px;
   gap: 8px;
   align-items: center;
-  justify-content: center;
+  align-content: center;
   padding: 13px 16px 15px;
   color: var(--archive-faded);
   font-size: 0.9rem;
@@ -163,6 +174,29 @@ html[data-world="archive"] .edition-selector ul {
   box-shadow: 0 20px 55px rgb(0 0 0 / 42%);
 }
 
+html[data-world="archive"] .edition-selector,
+html[data-world="archive"] .current-language {
+  width: 100%;
+  min-width: 0;
+  font-size: 0.76rem;
+}
+
+html[data-world="archive"] .edition-selector summary {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) 10px;
+  gap: 8px;
+  width: 100%;
+  min-height: 44px;
+}
+
+html[data-world="archive"] .edition-selector summary::after {
+  margin-left: 0;
+}
+
+html[data-world="archive"] .current-language {
+  min-height: 44px;
+}
+
 html[data-world="archive"] .edition-selector a:hover,
 html[data-world="archive"] .edition-selector a[aria-current="page"] {
   color: var(--archive-ink);
@@ -170,9 +204,17 @@ html[data-world="archive"] .edition-selector a[aria-current="page"] {
 }
 
 html[data-world="archive"] .ticket-link {
+  display: flex;
+  width: 100%;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 10px;
   border: 1px solid var(--archive-gold);
   color: var(--archive-paper);
   background: transparent;
+  font-size: 0.78rem;
+  text-align: center;
 }
 
 html[data-world="archive"] .ticket-link:hover {
@@ -1073,8 +1115,7 @@ html[data-world="archive"] :is(a, button, input, select, textarea):focus-visible
   }
 
   html[data-world="archive"] .header-tools {
-    width: 100%;
-    justify-content: flex-end;
+    width: min(100%, 17.5rem);
     border-left: 0;
     padding-inline-start: 0;
   }
