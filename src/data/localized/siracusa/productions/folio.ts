@@ -7,7 +7,7 @@ export const siracusaFolioProductions = {
     kind: 'Gioco fantasy · Tre atti',
     duration: 'Circa 110 minuti, con un intervallo',
     durationShort: 'Circa 110 min',
-    language: 'Eseguita in Leithaniano · Disponibile ordine di marcia colombiano',
+    language: 'Recitato in leithaniano · Scaletta in yanese disponibile',
     heading: 'Un gioco fantasy di riflessioni, promesse e tesori senza proprietario.',
     guidance:
       "Luce scarsa, effetti dell'acqua riflessa, foschia teatrale e sussurri ravvicinati ovunque.",
@@ -22,7 +22,7 @@ export const siracusaFolioProductions = {
     kind: 'Cronaca · Cinque capitoli',
     duration: 'Circa 135 minuti, con due intervalli',
     durationShort: 'Circa 135 min',
-    language: 'Eseguita in ordine di marcia vittoriano · colombiano disponibile',
+    language: 'Recitato in vittoriano · Scaletta in yanese disponibile',
     heading: 'Una lunga cronaca raccolta da cento lettere mai spedite.',
     guidance:
       'Include campanelli, carta che brucia simulata e silenzio prolungato. I posti a sedere in ritardo attendono il prossimo capitolo.',
@@ -37,7 +37,7 @@ export const siracusaFolioProductions = {
     kind: 'Festival Play · Sette scene',
     duration: 'Circa 95 minuti, senza intervallo',
     durationShort: 'Circa 95 minuti',
-    language: 'Performance multilingue · Nessuna didascalia',
+    language: 'Spettacolo multilingue · Senza sovratitoli',
     heading: 'Tamburi, stelle filanti e un corteo che non può essere dichiarato concluso.',
     guidance:
       'Gli artisti entrano nelle corsie del pubblico; include tamburi improvvisi, coriandoli, scarsa illuminazione e interazione ravvicinata.',
@@ -52,7 +52,7 @@ export const siracusaFolioProductions = {
     kind: 'Dramma corale · Quattro parti',
     duration: 'Circa 120 minuti, con un intervallo',
     durationShort: 'Circa 120 min',
-    language: 'Cantato in siracusano e leithaniano · Disponibile ordine di marcia colombiano',
+    language: 'Cantato in siracusano e leithaniano · Scaletta in yanese disponibile',
     heading: 'Un dramma corale preparato per un trionfo senza vincitori.',
     guidance: 'Include coro ad alto volume, saluti simulati, incenso e una breve luce intensa.',
     creatives: [
@@ -66,7 +66,7 @@ export const siracusaFolioProductions = {
     kind: 'Favola teatrale · tre scene',
     duration: 'Circa 105 minuti, con un intervallo',
     durationShort: 'Circa 105 min',
-    language: 'Repertorio itinerante · programma disponibile',
+    language: 'Repertorio itinerante · scaletta in yanese disponibile',
     heading: 'Un viandante cerca l’ultima locanda lungo una strada vuota.',
     guidance:
       'Luci basse, fumo scenico e suoni ravvicinati; seguire le indicazioni dell’accompagnatore.',
@@ -79,7 +79,7 @@ export const siracusaFolioProductions = {
     kind: 'Dramma onirico · quattro atti',
     duration: 'Circa 105 minuti, con un intervallo',
     durationShort: 'Circa 105 min',
-    language: 'Repertorio itinerante · programma disponibile',
+    language: 'Repertorio itinerante · scaletta in yanese disponibile',
     heading: 'Un giardino capovolto, porte di carta e una guida addormentata compongono il corteo.',
     guidance:
       'Luci basse, fumo scenico e suoni ravvicinati; seguire le indicazioni dell’accompagnatore.',
@@ -92,7 +92,7 @@ export const siracusaFolioProductions = {
     kind: 'Opera d’inverno · tre atti',
     duration: 'Circa 105 minuti, con un intervallo',
     durationShort: 'Circa 105 min',
-    language: 'Repertorio itinerante · programma disponibile',
+    language: 'Repertorio itinerante · scaletta in yanese disponibile',
     heading: 'Un’opera invernale di caccia, veglia e due cervi bianchi.',
     guidance:
       'Luci basse, fumo scenico e suoni ravvicinati; seguire le indicazioni dell’accompagnatore.',
@@ -105,7 +105,7 @@ export const siracusaFolioProductions = {
     kind: 'Dramma d’icona · cinque capitoli',
     duration: 'Circa 105 minuti, con un intervallo',
     durationShort: 'Circa 105 min',
-    language: 'Repertorio itinerante · programma disponibile',
+    language: 'Repertorio itinerante · scaletta in yanese disponibile',
     heading: 'Icone d’oro, una lunga scala e lampade spente in sequenza formano il rito.',
     guidance:
       'Luci basse, fumo scenico e suoni ravvicinati; seguire le indicazioni dell’accompagnatore.',

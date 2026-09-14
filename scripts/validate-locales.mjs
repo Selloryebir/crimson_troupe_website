@@ -141,6 +141,54 @@ function assertSnapshotKeysPresent(actual, expected, label) {
   }
 }
 
+// 语法可以随语言变化，参数身份和条目结构不能变化；这不是翻译准确率评分。
+function assertTranslationStructure(source, target, path) {
+  if (typeof source === 'string') {
+    assert.equal(typeof target, 'string', `${path} 应为文本`);
+    const parameters = (text) =>
+      [...new Set(text.match(/\{[a-zA-Z][a-zA-Z0-9]*\}/gu) ?? [])].sort();
+    assert.deepEqual(parameters(target), parameters(source), `${path} 插值参数与炎语不一致`);
+    return;
+  }
+  if (Array.isArray(source)) {
+    assert.ok(Array.isArray(target), `${path} 应保留列表结构`);
+    assert.equal(target.length, source.length, `${path} 条目数量不一致`);
+  }
+  if (source && typeof source === 'object') {
+    assert.ok(target && typeof target === 'object', `${path} 缺少记录`);
+    assert.deepEqual(Object.keys(target).sort(), Object.keys(source).sort(), `${path} 字段不一致`);
+    for (const [key, value] of Object.entries(source)) {
+      assertTranslationStructure(value, target[key], `${path}.${key}`);
+    }
+  }
+}
+
+const sourceLocalization = getLocalization(editions.yan);
+
+// 演出服务的语种是稳定事实，不得随网站显示语言改为当地语言。
+const yaneseLanguagePatterns = {
+  yan: /炎语|中文|中维/u,
+  victoria: /Yanese/u,
+  columbia: /Yanese/u,
+  higashi: /炎語/u,
+  ursus: /янском/u,
+  siracusa: /yanese/u,
+  minos: /Yanese/u,
+  leithanien: /yanesisch/iu,
+  kazimierz: /yanese/u,
+};
+const yaneseServiceProductions = [
+  'uncrowned',
+  'caged-fire',
+  'der-ring',
+  'one-hundred-and-one-days',
+  'ode-au-triomphe',
+  'lone-wander',
+  'wonderland-in-dream',
+  'frost-deer-and-snow-doe',
+  'light-of-heria',
+];
+
 assert.equal(Object.keys(editions).length, 9, '国家版本注册应包含当前九个实体');
 assert.equal(new Set(Object.values(editions).map((edition) => edition.routePrefix)).size, 9);
 assert.equal(new Set(Object.values(editions).map((edition) => edition.badgeCode)).size, 9);
@@ -297,6 +345,36 @@ for (const [seatingPlanId, expectation] of Object.entries(seatingPlanExpectation
 
 for (const edition of builtEditions) {
   const localization = getLocalization(edition);
+  for (const id of yaneseServiceProductions) {
+    assert.match(
+      localization.programs.productions[id].language,
+      yaneseLanguagePatterns[edition.editionId],
+      `${edition.editionId}.${id} 不得改变字幕或场序单的炎语语种`,
+    );
+  }
+  for (const group of ['site', 'programs', 'messages', 'archiveProjection', 'platforms']) {
+    assertTranslationStructure(
+      sourceLocalization[group],
+      localization[group],
+      `${edition.editionId}.${group}`,
+    );
+  }
+  for (const world of ['front', 'archive']) {
+    const indices = buildSnapshot.performanceEntries
+      .filter(([, performance]) => performance.world === world)
+      .map(([id]) => localization.programs.performances[id].index);
+    assert.equal(new Set(indices).size, indices.length, `${edition.editionId}.${world} 簿号重复`);
+  }
+  for (const [id, content] of Object.entries(localization.programs.productions)) {
+    if (productions[id].sourceKind !== 'folio') continue;
+    const expected = sourceLocalization.programs.productions[id].synopsis;
+    assert.equal(content.tagline, content.synopsis, `${edition.editionId}.${id} 摘要与简介不同`);
+    assert.deepEqual(
+      content.synopsis.split('\n\n').map((paragraph) => paragraph.split('\n').length),
+      expected.split('\n\n').map((paragraph) => paragraph.split('\n').length),
+      `${edition.editionId}.${id} 丢失来源段落或换行`,
+    );
+  }
   const expectedTicketArtifact = ticketArtifactExpectations[edition.editionId];
   const exampleTerraDateTime = {
     calendar: 'terra',
@@ -329,6 +407,16 @@ for (const edition of builtEditions) {
     localization,
     buildSnapshot,
   )) {
+    assert.match(
+      performance.index,
+      /^(?:0[1-9]|[1-9]\d+)$/u,
+      `${edition.editionId}.${performanceId} 簿号应使用至少两位阿拉伯数字`,
+    );
+    assert.equal(
+      performance.index,
+      sourceLocalization.programs.performances[performanceId].index,
+      `${edition.editionId}.${performanceId} 簿号身份与炎语不一致`,
+    );
     assert.equal(
       performance.dateTime.display,
       formatTerraDateTime(performances[performanceId].effectiveDateTime, edition.locale),

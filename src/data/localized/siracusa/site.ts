@@ -5,6 +5,10 @@ import { siracusaMessages } from './messages.ts';
 export const siracusaSite = {
   brand: { name: 'Compagnia Cremisi', latinName: 'TROUPE CREMISI' },
   shared: {
+    archiveSnapshot: 'Istantanea {date}',
+    archiveDamageDescription:
+      'Questa pagina non si è conservata integralmente. La data e i registri degli spettacoli non sono più leggibili; è accertabile soltanto l’anno di archiviazione. Torna al catalogo per consultare un’istantanea ancora accessibile.',
+    archiveDamageClose: 'Torna al catalogo delle istantanee',
     skipToContent: 'Passa al contenuto principale',
     mainNavigation: 'Navigazione principale',
     brandHome: 'Casa della Crimson Troupe',
@@ -18,7 +22,7 @@ export const siracusaSite = {
     chooseEdition: "Edizione attuale: {language}. Scegli un'edizione nazionale",
     frontFooter: 'Tour, produzioni e servizi per i visitatori',
     archiveFooter: 'Istantanea della raccolta · {date}',
-    archiveCatalog: 'Indice della raccolta',
+    archiveCatalog: 'Versioni storiche del sito',
     frontToArchive: 'Apri il record della raccolta',
     archiveDamaged: 'Registrazione danneggiata; non disponibile',
     archiveToFront: 'Ritorna al sito web corrente della troupe',

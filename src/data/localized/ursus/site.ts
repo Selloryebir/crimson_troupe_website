@@ -5,6 +5,10 @@ import { ursusMessages } from './messages.ts';
 export const ursusSite = {
   brand: { name: 'Багряная труппа', latinName: 'CRIMSON TROUPE' },
   shared: {
+    archiveSnapshot: 'Снимок {date}',
+    archiveDamageDescription:
+      'Эта страница сохранилась не полностью. Дата и записи о представлениях больше не читаются; установить можно лишь год архивной записи. Вернитесь в каталог и выберите снимок, который ещё можно открыть.',
+    archiveDamageClose: 'Вернуться к каталогу снимков',
     skipToContent: 'Перейти к основному содержанию',
     mainNavigation: 'Основная навигация',
     brandHome: 'Главная страница Багряной труппы',
@@ -18,7 +22,7 @@ export const ursusSite = {
     chooseEdition: 'Текущая версия: {language}. Выбрать национальную версию',
     frontFooter: 'Гастроли, постановки и обслуживание зрителей',
     archiveFooter: 'Снимок коллекции · {date}',
-    archiveCatalog: 'Каталог коллекции',
+    archiveCatalog: 'Исторические снимки сайта',
     frontToArchive: 'Открыть запись коллекции',
     archiveDamaged: 'Запись повреждена и недоступна',
     archiveToFront: 'Вернуться на современный сайт труппы',

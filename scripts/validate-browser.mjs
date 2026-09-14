@@ -109,12 +109,18 @@ async function assertFolioEditions(page, level) {
           ? 'crimson'
           : 'normal';
     await poster.scrollIntoViewIfNeeded();
+    // 同一剧目可以在首页出现多次；另一张完成不能替代当前节点的换图验收。
     await page.waitForFunction(
-      ({ id, expected }) =>
-        [...document.querySelectorAll('[data-folio-cover]')]
-          .filter((element) => element.dataset.folioCover === id)
-          .some((element) => element.dataset.folioEdition === expected),
-      { id, expected },
+      ({ element, expected }) => {
+        const image = element.querySelector('[data-folio-image]');
+        return (
+          element.dataset.folioEdition === expected &&
+          image.complete &&
+          image.naturalWidth > 0 &&
+          window.getComputedStyle(image).visibility === 'visible'
+        );
+      },
+      { element: await poster.elementHandle(), expected },
     );
     const proof = await poster.evaluate((element) => {
       const image = element.querySelector('[data-folio-image]');
@@ -617,6 +623,97 @@ async function assertEarlyFolioPaint(browser, origin) {
   }
 }
 
+async function assertFolioRecovery(browser, origin) {
+  for (const width of [320, 1280]) {
+    for (const fault of ['decode-once', 'request-once', 'request-fails']) {
+      const context = await browser.newContext({ viewport: { width, height: 900 } });
+      await context.addInitScript((fault) => {
+        Math.random = () => 0.99;
+        if (!sessionStorage.getItem('crimson-troupe:archive-pollution:v2')) {
+          sessionStorage.setItem(
+            'crimson-troupe:archive-pollution:v2',
+            JSON.stringify({ version: 2, level: 2, eventCount: 8, variant: 1, seed: 42 }),
+          );
+        }
+        window.folioDecodeInterruptions = 0;
+        const decoded = new WeakSet();
+        const original = window.HTMLImageElement.prototype.decode;
+        window.HTMLImageElement.prototype.decode = function () {
+          if (
+            fault === 'decode-once' &&
+            this.hasAttribute('data-folio-image') &&
+            this.getAttribute('src') === this.dataset.lullabySrc &&
+            !decoded.has(this)
+          ) {
+            decoded.add(this);
+            window.folioDecodeInterruptions += 1;
+            return Promise.reject(
+              new window.DOMException('Interrupted responsive decode', 'EncodingError'),
+            );
+          }
+          return original.call(this);
+        };
+      }, fault);
+      let failedRequests = 0;
+      await context.route('**/*', async (route) => {
+        if (
+          route.request().resourceType() === 'image' &&
+          route.request().url().includes('the-lullaby') &&
+          (fault === 'request-fails' || (fault === 'request-once' && failedRequests === 0))
+        ) {
+          failedRequests += 1;
+          await route.abort();
+        } else {
+          await route.continue();
+        }
+      });
+      const page = await context.newPage();
+      const assertErrors = trackUnexpectedErrors(page);
+      try {
+        await page.goto(`${origin}${archivePath('yan', 'performances')}`);
+        assert.equal(await page.locator('html').getAttribute('data-pollution-level'), '2');
+        await page.evaluate(() => {
+          Math.random = () => 0;
+        });
+        await page.locator('.brand').click();
+        await page.waitForURL(`${origin}${archivePath('yan')}`);
+        assert.equal(await page.locator('html').getAttribute('data-pollution-level'), '3');
+        if (fault === 'request-fails') {
+          await page.waitForFunction(() => {
+            const poster = document.querySelector('[data-folio-cover]');
+            return poster?.dataset.folioFallback === 'lullaby' && !poster.dataset.folioLoading;
+          });
+          assert.equal(
+            await page
+              .locator('[data-folio-image]')
+              .first()
+              .evaluate((image) => window.getComputedStyle(image).visibility),
+            'hidden',
+            '持续断网不得显示错误等级的封面',
+          );
+          assert.ok(failedRequests <= (await page.locator('[data-folio-cover]').count()) * 3);
+          await page.locator('[data-world-switch="front"]').click();
+          await page.waitForURL(`${origin}/yan/`);
+        } else {
+          await assertFolioEditions(page, 3);
+          assert.equal(
+            await page.locator('[data-folio-fallback], [data-folio-concealed]').count(),
+            0,
+          );
+          if (fault === 'decode-once') {
+            assert.ok(await page.evaluate(() => window.folioDecodeInterruptions > 0));
+          } else {
+            assert.equal(failedRequests, 1);
+          }
+        }
+        assertErrors();
+      } finally {
+        await context.close();
+      }
+    }
+  }
+}
+
 const port = await getFreePort();
 const origin = `http://${serverHost}:${port}`;
 const preview = startPreviewServer(port);
@@ -628,6 +725,7 @@ try {
   const { browser } = browserSession;
 
   await assertEarlyFolioPaint(browser, origin);
+  await assertFolioRecovery(browser, origin);
 
   const desktop = await browser.newContext({ viewport: { width: 1280, height: 900 } });
   const desktopPage = await desktop.newPage();
@@ -648,12 +746,66 @@ try {
     '表站首页应只装配显式策展集合',
   );
   const archiveCatalog = desktopPage.locator('.archive-catalog');
+  const catalogDetails = archiveCatalog.locator('[data-archive-catalog]');
+  const catalogSummary = catalogDetails.locator(':scope > summary');
+  assert.equal(await catalogDetails.getAttribute('open'), null, '快照下拉默认收起');
+  await catalogSummary.scrollIntoViewIfNeeded();
+  const catalogBefore = await desktopPage.evaluate(() => ({
+    height: document.documentElement.scrollHeight,
+    scroll: window.scrollY,
+  }));
+  await catalogSummary.focus();
+  await desktopPage.keyboard.press('Enter');
+  assert.notEqual(await catalogDetails.getAttribute('open'), null, '键盘可以展开快照');
+  const catalogBounds = await catalogDetails.evaluate((details) => {
+    const summary = details.querySelector('summary').getBoundingClientRect();
+    const list = details.querySelector('ul').getBoundingClientRect();
+    return {
+      top: list.top,
+      bottom: list.bottom,
+      summaryTop: summary.top,
+      height: document.documentElement.scrollHeight,
+      scroll: window.scrollY,
+    };
+  });
+  assert.ok(catalogBounds.top >= 0 && catalogBounds.bottom <= catalogBounds.summaryTop);
+  assert.equal(catalogBounds.height, catalogBefore.height, '向上展开不增加页面高度');
+  assert.ok(Math.abs(catalogBounds.scroll - catalogBefore.scroll) < 2, '展开后无需重新滚动');
+  await desktopPage.keyboard.press('Escape');
+  assert.equal(await catalogDetails.getAttribute('open'), null);
+  assert.equal(
+    await catalogSummary.evaluate((element) => element === document.activeElement),
+    true,
+  );
+  await catalogSummary.click();
   assert.equal(await archiveCatalog.locator('li').count(), 3, '表站页脚应显示三条馆藏记录');
   assert.equal(await archiveCatalog.locator('a').count(), 1, '只有当前快照可以进入');
   assert.equal(await archiveCatalog.locator('.archive-catalog__damaged').count(), 2);
-  assert.equal(
+  assert.deepEqual(
+    await archiveCatalog
+      .locator('[data-snapshot-id]')
+      .evaluateAll((items) => items.map((item) => item.dataset.snapshotId)),
+    ['1096-damaged', '1093-damaged', currentArchiveSnapshot.snapshotId],
+  );
+  for (const damaged of await archiveCatalog.locator('.archive-catalog__damaged').all()) {
+    const corruption = damaged.locator('.archive-catalog__corruption');
+    assert.match(await corruption.innerText(), /[█▓▒░]/u);
+    assert.match(await corruption.innerText(), /�/u);
+    assert.doesNotMatch(await corruption.innerText(), /\d/u);
+    assert.equal(await corruption.getAttribute('aria-hidden'), 'true');
+    assert.match(await damaged.locator('.visually-hidden').innerText(), /109[36]/u);
+    const trigger = damaged.locator('summary');
+    await trigger.click();
+    const dialog = desktopPage.locator('[data-archive-damage-dialog]');
+    assert.equal(await dialog.evaluate((element) => element.open), true);
+    assert.ok((await dialog.locator('#archive-damage-description').innerText()).trim());
+    await desktopPage.keyboard.press('Escape');
+    assert.equal(await dialog.evaluate((element) => element.open), false);
+    assert.equal(await trigger.evaluate((element) => element === document.activeElement), true);
+  }
+  assert.match(
     await archiveCatalog.locator('a').evaluate((link) => window.getComputedStyle(link).cursor),
-    'help',
+    /url\(.+\) 2 1, help/u,
   );
   assert.match(
     (await archiveCatalog.locator('a').getAttribute('href')) ?? '',

@@ -5,6 +5,10 @@ import { victoriaMessages } from './messages.ts';
 export const victoriaSite = {
   brand: { name: 'Crimson Troupe', latinName: 'CRIMSON TROUPE' },
   shared: {
+    archiveSnapshot: 'Snapshot {date}',
+    archiveDamageDescription:
+      'This page has not survived intact. Its date and performance records are no longer legible; only the archive year can be established. Return to the catalogue to consult a snapshot that can still be opened.',
+    archiveDamageClose: 'Return to snapshot catalogue',
     skipToContent: 'Skip to main content',
     mainNavigation: 'Main navigation',
     brandHome: 'Crimson Troupe home',
@@ -18,7 +22,7 @@ export const victoriaSite = {
     chooseEdition: 'Current edition: {language}. Choose a national edition',
     frontFooter: 'Tours, productions, and visitor services',
     archiveFooter: 'Collection snapshot · {date}',
-    archiveCatalog: 'Collection index',
+    archiveCatalog: 'Historical snapshots',
     frontToArchive: 'Open collection record',
     archiveDamaged: 'Record damaged; unavailable',
     archiveToFront: 'Return to the current troupe website',

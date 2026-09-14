@@ -3,6 +3,10 @@ import { yanMessages } from './messages.ts';
 export const yanSite = {
   brand: { name: '猩红剧团', latinName: 'CRIMSON TROUPE' },
   shared: {
+    archiveSnapshot: '快照 {date}',
+    archiveDamageDescription:
+      '这一页未能完整留存。日期栏与演出记录已无法辨认，仅余馆藏年份可考。请返回目录，查阅仍可开启的快照。',
+    archiveDamageClose: '返回快照目录',
     skipToContent: '跳至正文',
     mainNavigation: '主导航',
     brandHome: '猩红剧团首页',
@@ -16,7 +20,7 @@ export const yanSite = {
     chooseEdition: '当前版本：{language}；选择国家版本',
     frontFooter: '巡演、剧目与观演事务',
     archiveFooter: '馆藏快照 · {date}',
-    archiveCatalog: '馆藏索引',
+    archiveCatalog: '历史快照',
     frontToArchive: '打开馆藏快照',
     archiveDamaged: '记录损坏，无法打开',
     archiveToFront: '返回当前剧团网站',

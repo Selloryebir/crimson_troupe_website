@@ -31,48 +31,48 @@ export const siracusaPrograms = {
       searchKeywords: 'Ottobre Norport balla la neve',
     },
     'der-ring-londinium-1084-0308': {
-      index: 'I',
+      index: '01',
       venue: 'Vecchio teatro reale di Londinium · Mirror Lake Hall',
       searchKeywords: 'Londinium Der Ring Mirror Lake Hall marzo',
     },
     'one-hundred-and-one-days-norport-1084-0419': {
-      index: 'II',
+      index: '02',
       venue: "Teatro della torre dell'orologio della contea di Norport · Galleria ovest",
       searchKeywords:
         "Galleria della torre dell'orologio dei centouno giorni della contea di Norport aprile",
     },
     'the-carnival-wiesheim-1084-0511': {
-      index: 'III',
+      index: '03',
       venue: 'Sala del tramonto di Vyseheim · Palcoscenico',
       searchKeywords: 'Vyseheim Sala del tramonto del CarnevaleMag',
     },
     'ode-au-triomphe-nuova-volsinii-1084-0623': {
-      index: 'IV',
+      index: '04',
       venue: 'Opera Civica Nuova Volsinii · Sala Grande',
       searchKeywords: 'Nuova Volsinii Ode au Triomphe opera civica giugno',
     },
     'der-ring-zwillingsturme-1084-0817': {
-      index: 'V',
+      index: '05',
       venue: 'Teatro delle torri gemelle Zwillingstürme · Mirror Lake Hall',
       searchKeywords: 'Zwillingstürme Der Ring Mirror Lake Agosto',
     },
     'one-hundred-and-one-days-londinium-1084-0903': {
-      index: 'VI',
+      index: '06',
       venue: 'Vecchio teatro reale di Londinium · Sala della campana',
       searchKeywords: 'Londinium Teatro Reale dei Centouno Giorni Settembre',
     },
     'the-carnival-montelupe-1084-0921': {
-      index: 'VII',
+      index: '07',
       venue: 'Teatro Centrale di Montelupe · Sala Banchetti',
       searchKeywords: 'Montelupe Il banchetto di Carnevale Settembre',
     },
     'the-carnival-londinium-1084-1009': {
-      index: 'VIII',
+      index: '08',
       venue: 'Londinium Old Royal Theatre · Palco principale',
       searchKeywords: 'Londinium Il Carnevale Teatro Reale Ottobre',
     },
     'ode-au-triomphe-zwillingsturme-1084-1028': {
-      index: 'IX',
+      index: '09',
       venue: "Teatro delle torri gemelle Zwillingstürme · Sala della Misura d'Oro",
       searchKeywords: "Zwillingstürme Ode au Triomphe Misura d'Oro Ottobre",
     },

@@ -8,7 +8,7 @@ export const kazimierzOriginalProductions = {
     tagline: 'Kiedy korona spadnie na podłogę, kto może udowodnić, że kiedykolwiek istniał król?',
     duration: '125 minut, w tym jedna przerwa',
     durationShort: '125 min',
-    language: 'Wykonanie z napisami wyświetlanymi w stylu wiktoriańskim · kolumbijskim',
+    language: 'Spektakl w języku wiktoriańskim · Wyświetlane napisy w języku yanese',
     heading: 'Współczesna tragedia władzy, pamięci i ostatniego świadka.',
     synopsis:
       'Mobilne miasto budzi się po festiwalu, a nikt nie pamięta koronacji króla poprzedniej nocy. Samotny herold, który kontynuuje ceremonię, zaczyna poszukiwać w snach publiczności korony, która nigdy nie istniała.',
@@ -27,7 +27,7 @@ export const kazimierzOriginalProductions = {
     tagline: 'Płomień nie może opuścić swojej klatki. Piosenka może.',
     duration: '90 minut, bez przerwy',
     durationShort: '90 min',
-    language: 'Śpiewane z napisami w języku leitańskim · kolumbijskim i wiktoriańskim',
+    language: 'Śpiew w języku leitańskim · Napisy w językach yanese i wiktoriańskim',
     heading: 'Opera kameralna napisana dla cichej wieży.',
     synopsis:
       'Strażnik musi opiekować się płomieniem, który nigdy nie zgaśnie i nie opuści wieży. W ciągu siedmiu lat uczy się jego języka i słyszy, jak śpiewa jego imię w dniu, w którym pozwolono mu odejść.',
@@ -104,7 +104,7 @@ export const kazimierzOriginalProductions = {
     tagline: 'Po przejściu procesji nie licz pozostawionych twarzy.',
     duration: 'Około 60 minut, bez przerwy',
     durationShort: 'Około 60 min',
-    language: 'Brak dialogu · Kolejność jazdy podawana przy wejściu',
+    language: 'Bez dialogów · Kolejność scen udostępniana przy wejściu',
     heading: 'Mim masek, bębnów i ulicy, która wiecznie się odwraca.',
     synopsis:
       'Procesja bez przywódcy przeszukuje miasto w poszukiwaniu placu festiwalowego. Za każdym razem, gdy przekracza tę samą bramę, gracze noszą maski bardziej przypominające publiczność, dopóki perkusista nie będzie w stanie odróżnić maszerujących od obserwatorów.',

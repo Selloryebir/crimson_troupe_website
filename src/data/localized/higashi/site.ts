@@ -5,6 +5,10 @@ import { higashiMessages } from './messages.ts';
 export const higashiSite = {
   brand: { name: '猩紅劇団', latinName: 'CRIMSON TROUPE' },
   shared: {
+    archiveSnapshot: 'スナップショット {date}',
+    archiveDamageDescription:
+      'このページは完全な形では残されていません。日付欄と公演記録は判読できず、収蔵年のみ確認できます。目録に戻り、閲覧できるスナップショットをお選びください。',
+    archiveDamageClose: 'スナップショット目録に戻る',
     skipToContent: '本文へ移動',
     mainNavigation: 'メインナビゲーション',
     brandHome: '猩紅劇団ホーム',
@@ -18,7 +22,7 @@ export const higashiSite = {
     chooseEdition: '現在の版：{language}。国別版を選択',
     frontFooter: '巡演・演目・観劇案内',
     archiveFooter: '収蔵スナップショット・{date}',
-    archiveCatalog: '収蔵目録',
+    archiveCatalog: '過去のサイト',
     frontToArchive: '収蔵記録を開く',
     archiveDamaged: '記録破損・閲覧不可',
     archiveToFront: '現在の劇団サイトへ戻る',

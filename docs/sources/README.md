@@ -4,6 +4,7 @@
 
 ## 当前记录
 
+- [`terra-chronology/README.md`](terra-chronology/README.md)：泰拉年历、剧团人物与九国历史研究的来源登记，区分官方转载、社区整理与访问限制；
 - [`official-folio-productions.md`](official-folio-productions.md)：人工确认的 13 项官方活页剧目中／英／日标题、官方简体中文描述及稳定 `productionId` 映射；
 - [`folio-cover-restoration.md`](folio-cover-restoration.md)：两套活页封面修复结果的本地来源、逐文件摘要、实验预览用途和未解决的权利边界；
 - [`realm-badge-provenance.md`](realm-badge-provenance.md)：九枚国家徽章本地参考的来源与权利边界，以及用于核实国家语境的官方公开来源；

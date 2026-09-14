@@ -18,6 +18,7 @@ import type {
 } from '../performances.ts';
 import type { Production, ProductionId } from '../productions/index.ts';
 import type { SiteWorld } from '../site-routes';
+import { compareTerraDateTime } from '../site-time.ts';
 import type { TicketingPlatformId } from '../ticketing-platforms.ts';
 import type {
   ArchiveProjectionContent,
@@ -372,5 +373,10 @@ export function getLocalizedPerformances(
 ): ResolvedPerformance[] {
   return getLocalizedPerformanceEntries(localization, snapshot)
     .map(([, performance]) => performance)
-    .filter((performance) => performance.world === world && performance.collection === collection);
+    .filter((performance) => performance.world === world && performance.collection === collection)
+    .sort((left, right) => {
+      // 两类列表均从最接近网站时间的场次开始；同一时刻保留根集合顺序。
+      const chronologicalOrder = compareTerraDateTime(left.dateTime, right.dateTime);
+      return collection === 'history' ? -chronologicalOrder : chronologicalOrder;
+    });
 }

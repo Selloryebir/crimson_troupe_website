@@ -7,7 +7,7 @@ export const victoriaFolioProductions = {
     kind: 'Fantasy Play · Three Acts',
     duration: 'About 110 minutes, with one interval',
     durationShort: 'About 110 min',
-    language: 'Performed in Leithanian · Victorian running order available',
+    language: 'Performed in Leithanian · Yanese running order available',
     heading: 'A fantasy play of reflections, vows, and ownerless treasure.',
     guidance: 'Low light, reflected water effects, theatrical haze, and close whispers throughout.',
     creatives: [
@@ -21,7 +21,7 @@ export const victoriaFolioProductions = {
     kind: 'Chronicle Play · Five Chapters',
     duration: 'About 135 minutes, with two intervals',
     durationShort: 'About 135 min',
-    language: 'Performed in Victorian · Printed running order available',
+    language: 'Performed in Victorian · Yanese running order available',
     heading: 'A long chronicle assembled from one hundred letters never sent.',
     guidance:
       'Includes bells, simulated burning paper, and extended silence. Late seating waits for the next chapter.',
@@ -51,7 +51,7 @@ export const victoriaFolioProductions = {
     kind: 'Choral Drama · Four Parts',
     duration: 'About 120 minutes, with one interval',
     durationShort: 'About 120 min',
-    language: 'Sung in Siracusan and Leithanian · Victorian running order available',
+    language: 'Sung in Siracusan and Leithanian · Yanese running order available',
     heading: 'A choral drama prepared for a triumph with no victor.',
     guidance: 'Includes loud chorus, simulated salutes, incense, and brief bright light.',
     creatives: [
@@ -65,7 +65,7 @@ export const victoriaFolioProductions = {
     kind: 'Fable play · three scenes',
     duration: 'Approx. 105 minutes, with one interval',
     durationShort: 'Approx. 105 min',
-    language: 'Touring repertory · programme sheet available',
+    language: 'Touring repertory · Yanese running order available',
     heading: 'A traveller searches an empty road for its final inn.',
     guidance: 'Low light, stage haze and close sound are used; follow the usher to your place.',
     creatives: [
@@ -77,7 +77,7 @@ export const victoriaFolioProductions = {
     kind: 'Dream play · four acts',
     duration: 'Approx. 105 minutes, with one interval',
     durationShort: 'Approx. 105 min',
-    language: 'Touring repertory · programme sheet available',
+    language: 'Touring repertory · Yanese running order available',
     heading: 'An inverted garden, paper doors and a sleeping guide compose this dream procession.',
     guidance: 'Low light, stage haze and close sound are used; follow the usher to your place.',
     creatives: [
@@ -89,7 +89,7 @@ export const victoriaFolioProductions = {
     kind: 'Winter opera · three acts',
     duration: 'Approx. 105 minutes, with one interval',
     durationShort: 'Approx. 105 min',
-    language: 'Touring repertory · programme sheet available',
+    language: 'Touring repertory · Yanese running order available',
     heading: 'A winter opera of pursuit, vigil and two white deer.',
     guidance: 'Low light, stage haze and close sound are used; follow the usher to your place.',
     creatives: [
@@ -101,7 +101,7 @@ export const victoriaFolioProductions = {
     kind: 'Icon play · five chapters',
     duration: 'Approx. 105 minutes, with one interval',
     durationShort: 'Approx. 105 min',
-    language: 'Touring repertory · programme sheet available',
+    language: 'Touring repertory · Yanese running order available',
     heading: 'Golden icons, a long stair and lamps extinguished in sequence form this rite.',
     guidance: 'Low light, stage haze and close sound are used; follow the usher to your place.',
     creatives: [
