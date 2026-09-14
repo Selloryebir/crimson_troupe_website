@@ -17,7 +17,7 @@
 
 当前实际草稿：
 
-- [`recommendations/temporal-sensitivity.md`](recommendations/temporal-sensitivity.md)：年鉴证据约束下的巡演、地点生命周期、档案与双站时间建议，待人工审核；
+- [`plans/temporal-sensitivity.md`](plans/temporal-sensitivity.md)：已批准的时间敏感度逐切片实施计划；
 - [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md)：延期的里站异常购票构想；
 - [`creative/performance-pricing-method.md`](creative/performance-pricing-method.md)：延期且未启用的正式定价候选。
 
