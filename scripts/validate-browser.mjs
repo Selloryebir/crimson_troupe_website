@@ -913,16 +913,17 @@ try {
     '里站完整本季列表不得被首页策展集合裁剪',
   );
   const yanLocalization = getLocalization(editions.yan, buildSnapshot);
+  await desktopPage.goto(`${origin}${archivePath('yan', 'performances/history')}`);
   const loneWanderPath = archivePath(
     editions.yan.routePrefix,
-    'performances/lone-wander-linqu-1084-0719',
+    'performances/lone-wander-wiesheim-1083-0814',
   );
   const expectedLoneWanderDescription =
     yanLocalization.programs.productions['lone-wander'].synopsis;
   const loneWanderCard = desktopPage.locator(
     `.archive-performance-list a[href="${loneWanderPath}"]`,
   );
-  assert.equal(await loneWanderCard.count(), 1, '里站本季列表应保留独行客场次');
+  assert.equal(await loneWanderCard.count(), 1, '里站历史列表应保留独行客场次');
   assert.equal(
     (
       await loneWanderCard

@@ -302,7 +302,7 @@ const showcaseSnapshot = resolveContent(buildContexts.showcase);
 const previewSnapshot = resolveContent(buildContexts.preview);
 assert.doesNotThrow(() => assertPerformanceOfferMatrix());
 assert.equal(showcaseSnapshot.maturity, 'preview');
-assert.equal(showcaseSnapshot.performanceEntries.length, 30);
+assert.equal(showcaseSnapshot.performanceEntries.length, 21);
 assert.equal(showcaseSnapshot.productionEntries.length, 14);
 assert.equal(showcaseSnapshot.locationEntries.length, 11);
 assert.equal(showcaseSnapshot.artworkEntries.length, 14);
@@ -364,18 +364,50 @@ assert.equal(
   showcaseSnapshot.performanceEntries.filter(
     ([, performance]) => performance.world === 'archive' && performance.collection === 'current',
   ).length,
-  9,
+  4,
 );
 assert.equal(
   showcaseSnapshot.performanceEntries.filter(
     ([, performance]) => performance.world === 'archive' && performance.collection === 'history',
   ).length,
-  8,
+  4,
 );
 
 const archiveOfferEntries = showcaseSnapshot.performanceEntries.filter(
   ([, performance]) =>
     performance.world === 'archive' && performance.ticketAvailability.state === 'on-sale',
+);
+const archiveSchedule = showcaseSnapshot.performanceEntries
+  .filter(([, performance]) => performance.world === 'archive')
+  .map(([, performance]) => performance);
+assert.deepEqual(
+  archiveSchedule.map(({ effectiveDateTime: date }) => [date.year, date.month, date.day]),
+  [
+    [1083, 8, 14],
+    [1083, 11, 9],
+    [1084, 2, 12],
+    [1084, 5, 11],
+    [1084, 8, 17],
+    [1084, 11, 18],
+    [1085, 2, 20],
+    [1085, 5, 22],
+  ],
+  '占位巡演的跨栏目和跨年衔接不得各自漂移',
+);
+assert.equal(
+  archiveSchedule.filter(({ effectiveDateTime }) => effectiveDateTime.year === 1084).length,
+  4,
+);
+assert.equal(
+  archiveSchedule.filter(
+    ({ locationId }) => !['wiesheim', 'londinium', 'zwillingsturme'].includes(locationId),
+  ).length,
+  1,
+);
+assert.equal(new Set(archiveSchedule.flatMap(({ productionIds }) => productionIds)).size, 8);
+assert.ok(
+  archiveSchedule.every(({ status }) => status !== 'cancelled'),
+  '占位删减不生成取消史',
 );
 const offerSignature = (performance) =>
   performance.ticketAvailability.state === 'on-sale'
@@ -383,27 +415,20 @@ const offerSignature = (performance) =>
         .map(({ zone, basePrice }) => `${zone}:${basePrice}`)
         .join('|')
     : '';
-assert.equal(archiveOfferEntries.length, 5);
+assert.equal(archiveOfferEntries.length, 3);
 assert.equal(
   new Set(archiveOfferEntries.map(([, performance]) => offerSignature(performance))).size,
-  5,
+  3,
 );
 assert.deepEqual(
-  performances['the-carnival-montelupe-1084-0921'].ticketAvailability.state === 'on-sale'
-    ? performances['the-carnival-montelupe-1084-0921'].ticketAvailability.offers.map(
-        ({ zone }) => zone,
-      )
-    : [],
+  performances['the-carnival-londinium-1084-1009'].ticketAvailability.offers.map(
+    ({ zone }) => zone,
+  ),
   ['C', 'B', 'A'],
 );
 assert.notEqual(
-  offerSignature(performances['the-carnival-montelupe-1084-0921']),
+  offerSignature(performances['one-hundred-and-one-days-londinium-1084-0903']),
   offerSignature(performances['the-carnival-londinium-1084-1009']),
-  '同剧目异地报价应不同',
-);
-assert.notEqual(
-  offerSignature(performances['der-ring-zwillingsturme-1084-0817']),
-  offerSignature(performances['ode-au-triomphe-zwillingsturme-1084-1028']),
   '同地点异剧目报价应不同',
 );
 

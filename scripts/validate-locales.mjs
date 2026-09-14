@@ -236,12 +236,7 @@ const archiveStaticScheduledPerformances = archiveScheduledPerformances.filter(
 );
 assert.ok(archiveOpenRegistrationPerformances.length > 0, '1084 里站应保留开放登记样本');
 assert.ok(archiveStaticScheduledPerformances.length > 0, '1084 里站应保留静态待演样本');
-for (const performanceId of [
-  'lone-wander-linqu-1084-0719',
-  'wonderland-in-dream-qingsui-1084-1116',
-  'frost-deer-and-snow-doe-jiangdu-1085-0122',
-  'light-of-heria-trimount-1085-0530',
-]) {
+for (const performanceId of ['light-of-heria-trimount-1085-0530']) {
   assert.equal(
     performances[performanceId].ticketAvailability.state,
     'not-on-sale',
