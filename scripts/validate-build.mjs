@@ -485,6 +485,16 @@ for (const edition of builtEditions) {
   );
   const archiveSeatEntries = getArchiveSeatRegisterEntries(getLocalization(edition), buildSnapshot);
   assert.match(archiveTicketPage, /class="[^"]*\barchive-seat-register\b/u);
+  for (const select of archiveTicketPage.matchAll(/<select\b[^>]*>[\s\S]*?<\/select>/gu)) {
+    assert.match(select[0], /<select\b[^>]*\bdisabled\b/u);
+    assert.match(select[0], /<option value="" selected>-----------<\/option>/u);
+    assert.equal([...select[0].matchAll(/<option\b/gu)].length, 1);
+  }
+  assert.equal(
+    [...archiveTicketPage.matchAll(/\bdata-seat-zone=/gu)].length,
+    archiveSeatEntries.reduce((total, entry) => total + entry.offers.length, 0),
+    `${edition.editionId} 必须在禁用控件之外展示全部报价`,
+  );
   assert.equal(
     [...archiveTicketPage.matchAll(/<select\b/gu)].length,
     archiveSeatEntries.length,

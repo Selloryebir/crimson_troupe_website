@@ -319,9 +319,11 @@ export const kazimierzSite = {
       introduction:
         'Sprawdź podział miejsc i ceny rejestracyjne według wydajności. Zasady wstępu znajdują się w każdym zawiadomieniu o trasie zwiedzania.',
       registerEyebrow: 'Książka miejsc na ten sezon',
-      registerTitle: 'Wybierz wykonanie i dywizję',
+      registerTitle: 'Spektakle i strefy miejsc',
       registerIntroduction:
-        'Poniższe podziały odpowiadają aktualnej liczbie miejsc; wybierz jeden podział dla każdego występu.',
+        'Strefy i ceny z rejestru miejsc bieżącego sezonu są dostępne do wglądu.',
+      selectionUnavailable:
+        'Biuro wyboru miejsc i rejestracji nie odpowiada. Strefy i ceny pozostają dostępne do wglądu; wybór miejsca i przesłanie rejestracji są niedostępne.',
       zone: 'Podział siedzib',
       empty: 'W tym sezonie nie prowadzimy żadnych rejestracji miejsc.',
       settlementTitle: 'Prześlij rejestrację miejsca',

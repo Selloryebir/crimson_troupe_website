@@ -327,9 +327,11 @@ export const siracusaSite = {
       introduction:
         'Consulta le divisioni dei posti e i prezzi di registrazione in base alla performance. Le regole di ammissione seguono ogni avviso di tournée.',
       registerEyebrow: 'Libro dei posti di questa stagione',
-      registerTitle: 'Scegli una performance e una divisione',
+      registerTitle: 'Spettacoli e settori',
       registerIntroduction:
-        "Le divisioni seguenti seguono l'attuale registro dei posti; scegli una divisione per ogni esibizione.",
+        'I settori e i prezzi riportati nel registro dei posti della stagione sono consultabili qui.',
+      selectionUnavailable:
+        'L’ufficio di scelta e registrazione dei posti non risponde. Settori e prezzi restano consultabili; non è possibile scegliere un posto o inviare la registrazione.',
       zone: 'Divisione dei seggi',
       empty: 'Per questa stagione non è aperta la registrazione dei posti.',
       settlementTitle: 'Invia la registrazione del posto',

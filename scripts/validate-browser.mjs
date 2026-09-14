@@ -2060,7 +2060,8 @@ try {
     '三级污染席位地点应逐项收束',
   );
   const projectedSeatSelect = projectedSeatEntries.locator('select').first();
-  assert.equal(await projectedSeatSelect.isEnabled(), true, '投影不得破坏静态分区选择');
+  assert.equal(await projectedSeatSelect.isDisabled(), true, '投影不得启用选席');
+  assert.equal(await projectedSeatSelect.inputValue(), '');
   assert.notEqual(
     await archivePage
       .locator('[data-pollution-slot="ticket-record"]')
@@ -2171,21 +2172,25 @@ try {
   for (const { performanceId, offers } of expectedArchiveSeats) {
     const select = noScriptPage.locator(`#archive-zone-${performanceId}`);
     assert.deepEqual(
-      await select.locator('option').evaluateAll((options) =>
-        options.map((option) => ({
-          zone: option.value,
-          text: option.textContent?.trim() ?? '',
-        })),
-      ),
+      await noScriptPage
+        .locator(`[data-archive-seat-offers="${performanceId}"] li`)
+        .evaluateAll((rows) =>
+          rows.map((row) => ({
+            zone: row.getAttribute('data-seat-zone'),
+            text: row.textContent?.trim() ?? '',
+          })),
+        ),
       offers.map(({ zone, basePrice }) => ({
         zone,
         text: `${getLocalization(editions.higashi, buildSnapshot).programs.ticketZones[zone]} · ${basePrice} LMD`,
       })),
       `${performanceId} 应显示唯一矩阵生成的分区和价格`,
     );
+    assert.equal(await select.isDisabled(), true);
+    assert.equal(await select.inputValue(), '');
+    assert.equal(await select.locator('option').count(), 1);
+    assert.equal(await select.locator('option').textContent(), '-----------');
   }
-  await archiveSeatSelects.first().selectOption({ index: 1 });
-  assert.notEqual(await archiveSeatSelects.first().inputValue(), 'C');
   assert.equal(
     await noScriptPage
       .locator('.archive-settlement[data-archive-projection-source] button')

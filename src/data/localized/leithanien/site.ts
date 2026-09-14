@@ -327,9 +327,11 @@ export const leithanienSite = {
       introduction:
         'Sehen Sie sich Sitzplatzaufteilungen und Registrierungspreise nach Leistung an. Die Einlassbestimmungen folgen den jeweiligen Tourausschreibungen.',
       registerEyebrow: 'Das Sitzbuch dieser Saison',
-      registerTitle: 'Wählen Sie eine Leistung und eine Division',
+      registerTitle: 'Vorstellungen und Sitzplatzbereiche',
       registerIntroduction:
-        'Die folgenden Divisionen folgen dem aktuellen Sitzbuch; Wählen Sie für jede Aufführung eine Abteilung.',
+        'Die Zonen und Preise aus dem Sitzplatzverzeichnis der Spielzeit stehen hier zur Einsicht.',
+      selectionUnavailable:
+        'Die Stelle für Platzauswahl und Registrierung antwortet nicht. Zonen und Preise bleiben einsehbar; Auswahl und Übermittlung sind nicht verfügbar.',
       zone: 'Sitzabteilung',
       empty: 'In dieser Saison sind keine Sitzplatzanmeldungen möglich.',
       settlementTitle: 'Sitzplatzregistrierung einreichen',

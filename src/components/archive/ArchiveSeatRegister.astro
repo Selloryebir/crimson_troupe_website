@@ -91,13 +91,29 @@ const projectionView = projection.views.office;
                 {projection.invitation.attendanceLabel}
               </span>
             </label>
-            <select id={`archive-zone-${entry.performanceId}`} name={entry.performanceId}>
-              {entry.offers.map((offer) => (
-                <option value={offer.zone}>
-                  {offer.label} · {offer.basePrice} LMD
-                </option>
-              ))}
+            <select
+              id={`archive-zone-${entry.performanceId}`}
+              name={entry.performanceId}
+              disabled
+              aria-describedby={`archive-selection-status-${entry.performanceId}`}
+            >
+              <option value="" selected>
+                -----------
+              </option>
             </select>
+            <ul class="archive-seat-offers" data-archive-seat-offers={entry.performanceId}>
+              {entry.offers.map((offer) => (
+                <li data-seat-zone={offer.zone}>
+                  {offer.label} · {offer.basePrice} LMD
+                </li>
+              ))}
+            </ul>
+            <p
+              class="archive-selection-status"
+              id={`archive-selection-status-${entry.performanceId}`}
+            >
+              {copy.selectionUnavailable}
+            </p>
           </li>
         ))}
       </ol>

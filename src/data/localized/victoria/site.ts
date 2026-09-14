@@ -314,9 +314,11 @@ export const victoriaSite = {
       introduction:
         'Consult seat divisions and registration prices by performance. Admission rules follow each touring notice.',
       registerEyebrow: 'This Season’s Seat Book',
-      registerTitle: 'Choose a Performance and Division',
+      registerTitle: 'Performances and Seat Divisions',
       registerIntroduction:
-        'The divisions below follow the current seat book; choose one division for each performance.',
+        'The following zones and prices are listed in the season seat register for reference.',
+      selectionUnavailable:
+        'The seat selection and registration desk has not answered. Zones and prices remain available to read; selection and submission are unavailable.',
       zone: 'Seat Division',
       empty: 'No seat registrations are open this season.',
       settlementTitle: 'Submit Seat Registration',

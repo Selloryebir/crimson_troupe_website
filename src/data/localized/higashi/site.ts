@@ -300,9 +300,10 @@ export const higashiSite = {
       title: '座席受付',
       introduction: '公演ごとの座席区分と受付価格を確認できます。入場規定は各巡演告示に従います。',
       registerEyebrow: '今季座席簿',
-      registerTitle: '公演と座席区分を選ぶ',
-      registerIntroduction:
-        '以下は今季座席簿の記載です。公演ごとに一つの座席区分をお選びください。',
+      registerTitle: '公演と座席区分',
+      registerIntroduction: '今季の座席簿に記載された区分と料金を閲覧できます。',
+      selectionUnavailable:
+        '座席選択・受付窓口から応答がありません。区分と料金は閲覧できますが、選択と送信はできません。',
       zone: '座席区分',
       empty: '今季は受付中の座席がありません。',
       settlementTitle: '座席受付を送る',
