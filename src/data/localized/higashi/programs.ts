@@ -2,6 +2,8 @@ import type { AuthoringProgramContent } from '../schema.ts';
 
 export const higashiPrograms = {
   locations: {
+    'propeller-paradise': { cityLabel: 'Propeller Paradise' },
+    volsinii: { cityLabel: '旧ヴォルシーニ', archiveCityLabel: 'ヴォルシーニ' },
     trimount: { cityLabel: 'トリマウンツ' },
     wiesheim: { cityLabel: 'ヴィシェハイム' },
     norport: { cityLabel: 'ノーポート郡' },
@@ -15,6 +17,26 @@ export const higashiPrograms = {
     'nuova-volsinii': { cityLabel: 'ヌオーヴァ・ウォルシーニ' },
   },
   performances: {
+    'propeller-paradise-1102': {
+      index: '14',
+      venue: 'クルビア · 首都外縁部 · Propeller Paradise 仮設劇場 · 大ホール',
+      searchKeywords:
+        'クルビア · Propeller Paradise 首都外縁部 · Propeller Paradise 仮設劇場 · 大ホール',
+      operationalNotice: {
+        sourceRevision: 'propeller-venue-loss-v1',
+        text: '{originalDate}にPropeller Paradiseの空中会場で予定されていた公演は中止となりました。元の会場が墜落したため、予定どおりの公演は実施できません。本ページは当初の日程を閲覧用にのみ保存しています。',
+      },
+    },
+    'volsinii-courtyard-1102': {
+      index: '12',
+      venue: '旧ヴォルシーニ · 中庭劇場 · 野外舞台',
+      searchKeywords: '旧ヴォルシーニ ヴォルシーニ',
+    },
+    'nuova-volsinii-civic-1102': {
+      index: '13',
+      venue: 'ヌオーヴァ・ウォルシーニ · 市民劇場 · 大ホール',
+      searchKeywords: 'ヌオーヴァ・ウォルシーニ',
+    },
     'uncrowned-trimount-1102': {
       index: '01',
       venue: 'トリマウンツ大劇場・メインステージ',
@@ -30,50 +52,25 @@ export const higashiPrograms = {
       venue: 'ノーポート郡旧駅舎・仮設舞台',
       searchKeywords: '10月 ノーポート 舞踊 雪',
     },
-    'der-ring-londinium-1084-0308': {
-      index: '01',
-      venue: 'ロンディニウム旧王立劇場・鏡湖の間',
-      searchKeywords: 'ロンディニウム 湖中の至宝 鏡湖 3月',
-    },
-    'one-hundred-and-one-days-norport-1084-0419': {
-      index: '02',
-      venue: 'ノーポート郡時計塔劇場・西回廊',
-      searchKeywords: 'ノーポート郡 百日一日物語 時計塔 回廊 4月',
-    },
     'the-carnival-wiesheim-1084-0511': {
-      index: '03',
-      venue: 'ヴィシェハイム夕照ホール・大舞台',
-      searchKeywords: 'ヴィシェハイム カーニバル 夕照 5月',
-    },
-    'ode-au-triomphe-nuova-volsinii-1084-0623': {
       index: '04',
-      venue: 'ヌオーヴァ・ウォルシーニ市立歌劇場・大ホール',
-      searchKeywords: 'ヌオーヴァ ウォルシーニ 凱旋の讃歌 歌劇場 6月',
+      venue: 'ヴィシェハイム夕照ホール・大舞台',
+      searchKeywords: 'ヴィシェハイム夕照ホール・大舞台',
     },
     'der-ring-zwillingsturme-1084-0817': {
       index: '05',
       venue: 'ツヴィリングシュトゥルメ双塔劇場・鏡湖の間',
-      searchKeywords: 'ツヴィリングシュトゥルメ Zwillingstürme 湖中の至宝 8月',
+      searchKeywords: 'ツヴィリングシュトゥルメ双塔劇場・鏡湖の間',
     },
     'one-hundred-and-one-days-londinium-1084-0903': {
       index: '06',
       venue: 'ロンディニウム旧王立劇場・鐘の間',
-      searchKeywords: 'ロンディニウム 百日一日物語 王立劇場 9月',
-    },
-    'the-carnival-montelupe-1084-0921': {
-      index: '07',
-      venue: 'モンテルーペ中央劇場・宴会の間',
-      searchKeywords: 'モンテルーペ カーニバル 宴会 9月',
+      searchKeywords: 'ロンディニウム旧王立劇場・鐘の間',
     },
     'the-carnival-londinium-1084-1009': {
-      index: '08',
+      index: '07',
       venue: 'ロンディニウム旧王立劇場・メインステージ',
-      searchKeywords: 'ロンディニウム カーニバル 王立劇場 10月',
-    },
-    'ode-au-triomphe-zwillingsturme-1084-1028': {
-      index: '09',
-      venue: 'ツヴィリングシュトゥルメ双塔劇場・金律の間',
-      searchKeywords: 'ツヴィリングシュトゥルメ Zwillingstürme 凱旋の讃歌 10月',
+      searchKeywords: 'ロンディニウム旧王立劇場・メインステージ',
     },
     'caged-fire-jiangdu-1101-0521': {
       index: '04',
@@ -88,12 +85,12 @@ export const higashiPrograms = {
     'red-banquet-nuova-volsinii-1101-1119': {
       index: '06',
       venue: 'ヌオーヴァ・ウォルシーニ · 巡演劇場・主舞台',
-      searchKeywords: 'ヌオーヴァ・ウォルシーニ 猩紅の宴 1101-11-19',
+      searchKeywords: 'ヌオーヴァ・ウォルシーニ 猩紅の宴 1101-10-04',
     },
     'seventh-lantern-norport-1102-0202': {
       index: '07',
       venue: 'ノーポート郡 · 巡演劇場・主舞台',
-      searchKeywords: 'ノーポート郡 七つ目の灯 1102-02-02',
+      searchKeywords: 'ノーポート郡 七つ目の灯 1102-04-02',
     },
     'red-banquet-montelupe-1102-0606': {
       index: '08',
@@ -116,44 +113,24 @@ export const higashiPrograms = {
       searchKeywords: '青隧 無冠の夜 1103-04-04',
     },
     'lone-wander-wiesheim-1083-0814': {
-      index: '10',
+      index: '01',
       venue: 'ヴィシェハイム · 巡演劇場・主舞台',
-      searchKeywords: 'ヴィシェハイム 独り往く者 1083-08-14',
+      searchKeywords: 'ヴィシェハイム · 巡演劇場・主舞台',
     },
     'wonderland-in-dream-londinium-1083-1109': {
-      index: '11',
+      index: '02',
       venue: 'ロンディニウム · 巡演劇場・主舞台',
-      searchKeywords: 'ロンディニウム 夢の国の冒険譚 1083-11-09',
+      searchKeywords: 'ロンディニウム · 巡演劇場・主舞台',
     },
     'frost-deer-and-snow-doe-nuova-volsinii-1084-0125': {
-      index: '12',
-      venue: 'ヌオーヴァ・ウォルシーニ · 巡演劇場・主舞台',
-      searchKeywords: 'ヌオーヴァ・ウォルシーニ 霜の牡鹿と雪の牝鹿 1084-01-25',
-    },
-    'light-of-heria-zwillingsturme-1084-0608': {
-      index: '13',
-      venue: 'ツヴィリングシュトゥルメ · 巡演劇場・主舞台',
-      searchKeywords: 'ツヴィリングシュトゥルメ ヘリアの輝き 1084-06-08',
-    },
-    'lone-wander-linqu-1084-0719': {
-      index: '14',
-      venue: '臨渠 · 巡演劇場・主舞台',
-      searchKeywords: '臨渠 独り往く者 1084-07-19',
-    },
-    'wonderland-in-dream-qingsui-1084-1116': {
-      index: '15',
-      venue: '青隧 · 巡演劇場・主舞台',
-      searchKeywords: '青隧 夢の国の冒険譚 1084-11-16',
-    },
-    'frost-deer-and-snow-doe-jiangdu-1085-0122': {
-      index: '16',
-      venue: '江渡 · 巡演劇場・主舞台',
-      searchKeywords: '江渡 霜の牡鹿と雪の牝鹿 1085-01-22',
+      index: '03',
+      venue: 'ヴォルシーニ · 巡演劇場・主舞台',
+      searchKeywords: 'ヴォルシーニ · 巡演劇場・主舞台',
     },
     'light-of-heria-trimount-1085-0530': {
-      index: '17',
-      venue: 'トリマウンツ · 巡演劇場・主舞台',
-      searchKeywords: 'トリマウンツ ヘリアの輝き 1085-05-30',
+      index: '08',
+      venue: 'ツヴィリングシュトゥルメ · 巡演劇場・主舞台',
+      searchKeywords: 'ツヴィリングシュトゥルメ · 巡演劇場・主舞台',
     },
   },
   ticketZones: { C: 'C席', B: 'B席', A: 'A席', S: 'S席', BOX: 'ボックス席' },

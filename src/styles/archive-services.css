@@ -287,6 +287,34 @@ html[data-world="archive"] .archive-seat-register select:focus-visible {
   outline-offset: 3px;
 }
 
+html[data-world="archive"] .archive-seat-register select:disabled {
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+html[data-world="archive"] .archive-seat-offers {
+  display: flex;
+  grid-column: 1 / -1;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin: 12px 0 0;
+  padding: 0;
+  font-family: var(--sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  list-style: none;
+}
+
+html[data-world="archive"] .archive-seat-offers li {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+html[data-world="archive"] .archive-selection-status {
+  grid-column: 1 / -1;
+  overflow-wrap: anywhere;
+}
+
 html[data-world="archive"] .archive-seat-register > .empty-state {
   padding: 24px;
   border: 1px solid var(--archive-gold);

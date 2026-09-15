@@ -2,6 +2,8 @@ import type { ProgramContentBase } from '../schema.ts';
 
 export const yanPrograms = {
   locations: {
+    'propeller-paradise': { cityLabel: '螺旋桨天堂' },
+    volsinii: { cityLabel: '旧沃尔西尼', archiveCityLabel: '沃尔西尼' },
     trimount: { cityLabel: '特里蒙' },
     wiesheim: { cityLabel: '维谢海姆' },
     norport: { cityLabel: '诺伯特郡' },
@@ -15,6 +17,25 @@ export const yanPrograms = {
     'nuova-volsinii': { cityLabel: '新沃尔西尼' },
   },
   performances: {
+    'propeller-paradise-1102': {
+      index: '14',
+      venue: '哥伦比亚 · 麦克斯特区外缘 · 螺旋桨天堂临时剧场 · 主厅',
+      searchKeywords: '哥伦比亚 · 螺旋桨天堂 麦克斯特区外缘 · 螺旋桨天堂临时剧场 · 主厅',
+      operationalNotice: {
+        sourceRevision: 'propeller-venue-loss-v1',
+        text: '原定于{originalDate}在螺旋桨天堂浮空场地举行的演出已取消。因原场地坠毁，演出无法按原计划进行。本页保留原排期，仅供查阅。',
+      },
+    },
+    'volsinii-courtyard-1102': {
+      index: '12',
+      venue: '旧沃尔西尼 · 庭院剧场 · 露天舞台',
+      searchKeywords: '旧沃尔西尼 沃尔西尼',
+    },
+    'nuova-volsinii-civic-1102': {
+      index: '13',
+      venue: '新沃尔西尼 · 市民剧院 · 大厅',
+      searchKeywords: '新沃尔西尼',
+    },
     'uncrowned-trimount-1102': {
       index: '01',
       venue: '特里蒙大剧院 · 主舞台',
@@ -30,50 +51,25 @@ export const yanPrograms = {
       venue: '诺伯特郡旧车站 · 临时舞台',
       searchKeywords: '十月 10月 诺伯特 舞剧 雪',
     },
-    'der-ring-londinium-1084-0308': {
-      index: '01',
-      venue: '伦蒂尼姆旧王家剧院 · 镜湖厅',
-      searchKeywords: '伦蒂尼姆 湖中至宝 镜湖厅 三月',
-    },
-    'one-hundred-and-one-days-norport-1084-0419': {
-      index: '02',
-      venue: '诺伯特郡钟楼剧场 · 西廊',
-      searchKeywords: '诺伯特郡 一百零一日 钟楼 西廊 四月',
-    },
     'the-carnival-wiesheim-1084-0511': {
-      index: '03',
-      venue: '维谢海姆夕照厅 · 大舞台',
-      searchKeywords: '维谢海姆 欢欣鼓舞 夕照厅 五月',
-    },
-    'ode-au-triomphe-nuova-volsinii-1084-0623': {
       index: '04',
-      venue: '新沃尔西尼市政歌剧院 · 主厅',
-      searchKeywords: '新沃尔西尼 凯旋颂 歌剧院 六月',
+      venue: '维谢海姆夕照厅 · 大舞台',
+      searchKeywords: '维谢海姆夕照厅 · 大舞台',
     },
     'der-ring-zwillingsturme-1084-0817': {
       index: '05',
       venue: '崔林特尔梅双塔剧院 · 镜湖厅',
-      searchKeywords: '崔林特尔梅 Zwillingstürme 湖中至宝 八月',
+      searchKeywords: '崔林特尔梅双塔剧院 · 镜湖厅',
     },
     'one-hundred-and-one-days-londinium-1084-0903': {
       index: '06',
       venue: '伦蒂尼姆旧王立剧院 · 钟厅',
-      searchKeywords: '伦蒂尼姆 一百零一日 王立剧院 九月',
-    },
-    'the-carnival-montelupe-1084-0921': {
-      index: '07',
-      venue: '蒙特卢佩中央剧场 · 宴会厅',
-      searchKeywords: '蒙特卢佩 欢欣鼓舞 宴会厅 九月',
+      searchKeywords: '伦蒂尼姆旧王立剧院 · 钟厅',
     },
     'the-carnival-londinium-1084-1009': {
-      index: '08',
+      index: '07',
       venue: '伦蒂尼姆旧王立剧院 · 主舞台',
-      searchKeywords: '伦蒂尼姆 欢欣鼓舞 王立剧院 十月',
-    },
-    'ode-au-triomphe-zwillingsturme-1084-1028': {
-      index: '09',
-      venue: '崔林特尔梅双塔剧院 · 金律厅',
-      searchKeywords: '崔林特尔梅 Zwillingstürme 凯旋颂 十月',
+      searchKeywords: '伦蒂尼姆旧王立剧院 · 主舞台',
     },
     'caged-fire-jiangdu-1101-0521': {
       index: '04',
@@ -88,12 +84,12 @@ export const yanPrograms = {
     'red-banquet-nuova-volsinii-1101-1119': {
       index: '06',
       venue: '新沃尔西尼 · 巡演剧场 · 主厅',
-      searchKeywords: '新沃尔西尼 《猩红宴》 1101-11-19',
+      searchKeywords: '新沃尔西尼 《猩红宴》 1101-10-04',
     },
     'seventh-lantern-norport-1102-0202': {
       index: '07',
       venue: '诺伯特郡 · 巡演剧场 · 主厅',
-      searchKeywords: '诺伯特郡 《第七盏灯》 1102-02-02',
+      searchKeywords: '诺伯特郡 《第七盏灯》 1102-04-02',
     },
     'red-banquet-montelupe-1102-0606': {
       index: '08',
@@ -116,44 +112,24 @@ export const yanPrograms = {
       searchKeywords: '青隧 《无冕之夜》 1103-04-04',
     },
     'lone-wander-wiesheim-1083-0814': {
-      index: '10',
+      index: '01',
       venue: '维谢海姆 · 巡演剧场 · 主厅',
-      searchKeywords: '维谢海姆 独行客 1083-08-14',
+      searchKeywords: '维谢海姆 · 巡演剧场 · 主厅',
     },
     'wonderland-in-dream-londinium-1083-1109': {
-      index: '11',
+      index: '02',
       venue: '伦蒂尼姆 · 巡演剧场 · 主厅',
-      searchKeywords: '伦蒂尼姆 梦中奇缘 1083-11-09',
+      searchKeywords: '伦蒂尼姆 · 巡演剧场 · 主厅',
     },
     'frost-deer-and-snow-doe-nuova-volsinii-1084-0125': {
-      index: '12',
-      venue: '新沃尔西尼 · 巡演剧场 · 主厅',
-      searchKeywords: '新沃尔西尼 霜牡与雪牝 1084-01-25',
-    },
-    'light-of-heria-zwillingsturme-1084-0608': {
-      index: '13',
-      venue: '崔林特尔梅 · 巡演剧场 · 主厅',
-      searchKeywords: '崔林特尔梅 赫里亚之辉 1084-06-08',
-    },
-    'lone-wander-linqu-1084-0719': {
-      index: '14',
-      venue: '临渠 · 巡演剧场 · 主厅',
-      searchKeywords: '临渠 独行客 1084-07-19',
-    },
-    'wonderland-in-dream-qingsui-1084-1116': {
-      index: '15',
-      venue: '青隧 · 巡演剧场 · 主厅',
-      searchKeywords: '青隧 梦中奇缘 1084-11-16',
-    },
-    'frost-deer-and-snow-doe-jiangdu-1085-0122': {
-      index: '16',
-      venue: '江渡 · 巡演剧场 · 主厅',
-      searchKeywords: '江渡 霜牡与雪牝 1085-01-22',
+      index: '03',
+      venue: '沃尔西尼 · 巡演剧场 · 主厅',
+      searchKeywords: '沃尔西尼 · 巡演剧场 · 主厅',
     },
     'light-of-heria-trimount-1085-0530': {
-      index: '17',
-      venue: '特里蒙 · 巡演剧场 · 主厅',
-      searchKeywords: '特里蒙 赫里亚之辉 1085-05-30',
+      index: '08',
+      venue: '崔林特尔梅 · 巡演剧场 · 主厅',
+      searchKeywords: '崔林特尔梅 · 巡演剧场 · 主厅',
     },
   },
   ticketZones: { C: 'C 区', B: 'B 区', A: 'A 区', S: 'S 区', BOX: '包厢' },

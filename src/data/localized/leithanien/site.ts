@@ -7,7 +7,11 @@ export const leithanienSite = {
   shared: {
     archiveSnapshot: 'Momentaufnahme {date}',
     archiveDamageDescription:
-      'Diese Seite ist nicht vollständig erhalten. Das Datum und die Aufführungsaufzeichnungen sind nicht mehr lesbar; nur das Archivjahr lässt sich noch bestimmen. Kehren Sie zum Verzeichnis zurück, um eine noch zugängliche Momentaufnahme zu öffnen.',
+      'Teile des Textes dieser Kopie sind unlesbar. Das erhaltene Verzeichnis reicht nicht aus, um die Ursache des Schadens festzustellen.',
+    archiveWarDamageDescription:
+      'Diese Kopie wurde im Archivknoten von Londinium aufbewahrt. Der Knoten wurde während der Kämpfe im Jahr 1098 beschädigt; der erhaltene Katalog reicht nicht aus, um die vollständige Seite wiederherzustellen. Die genauen Monate und Tage der Erfassung und der Beschädigung ließen sich nicht bestätigen.',
+    archivePreservation:
+      'Diese Seite wird anhand einer separat erhaltenen, unabhängigen Kopie dargestellt und ist nicht vom beschädigten Knoten in Londinium abhängig.',
     archiveDamageClose: 'Zurück zum Verzeichnis',
     skipToContent: 'Zum Hauptinhalt springen',
     mainNavigation: 'Hauptnavigation',
@@ -327,9 +331,11 @@ export const leithanienSite = {
       introduction:
         'Sehen Sie sich Sitzplatzaufteilungen und Registrierungspreise nach Leistung an. Die Einlassbestimmungen folgen den jeweiligen Tourausschreibungen.',
       registerEyebrow: 'Das Sitzbuch dieser Saison',
-      registerTitle: 'Wählen Sie eine Leistung und eine Division',
+      registerTitle: 'Vorstellungen und Sitzplatzbereiche',
       registerIntroduction:
-        'Die folgenden Divisionen folgen dem aktuellen Sitzbuch; Wählen Sie für jede Aufführung eine Abteilung.',
+        'Die Zonen und Preise aus dem Sitzplatzverzeichnis der Spielzeit stehen hier zur Einsicht.',
+      selectionUnavailable:
+        'Die Stelle für Platzauswahl und Registrierung antwortet nicht. Zonen und Preise bleiben einsehbar; Auswahl und Übermittlung sind nicht verfügbar.',
       zone: 'Sitzabteilung',
       empty: 'In dieser Saison sind keine Sitzplatzanmeldungen möglich.',
       settlementTitle: 'Sitzplatzregistrierung einreichen',

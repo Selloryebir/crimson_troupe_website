@@ -2,6 +2,8 @@ import type { AuthoringProgramContent } from '../schema.ts';
 
 export const kazimierzPrograms = {
   locations: {
+    'propeller-paradise': { cityLabel: 'Propeller Paradise' },
+    volsinii: { cityLabel: 'Stare Volsinii', archiveCityLabel: 'Volsinii' },
     trimount: { cityLabel: 'Trimounty' },
     wiesheim: { cityLabel: 'Vyseheim' },
     norport: { cityLabel: 'Hrabstwo Norport' },
@@ -15,6 +17,26 @@ export const kazimierzPrograms = {
     'nuova-volsinii': { cityLabel: 'Nuova Volsinii' },
   },
   performances: {
+    'propeller-paradise-1102': {
+      index: '14',
+      venue: 'Columbia · Obrzeża stolicy · Tymczasowy teatr Propeller Paradise · Sala główna',
+      searchKeywords:
+        'Columbia · Propeller Paradise Obrzeża stolicy · Tymczasowy teatr Propeller Paradise · Sala główna',
+      operationalNotice: {
+        sourceRevision: 'propeller-venue-loss-v1',
+        text: 'Przedstawienie zaplanowane na {originalDate} w unoszącym się w powietrzu obiekcie w Propeller Paradise zostało odwołane. Pierwotny obiekt runął, co uniemożliwia realizację przedstawienia zgodnie z planem. Strona zachowuje pierwotny termin wyłącznie do wglądu.',
+      },
+    },
+    'volsinii-courtyard-1102': {
+      index: '12',
+      venue: 'Stare Volsinii · Teatr na Dziedzińcu · Scena Plenerowa',
+      searchKeywords: 'Stare Volsinii Volsinii',
+    },
+    'nuova-volsinii-civic-1102': {
+      index: '13',
+      venue: 'Nuova Volsinii · Teatr Miejski · Wielka Sala',
+      searchKeywords: 'Nuova Volsinii',
+    },
     'uncrowned-trimount-1102': {
       index: '01',
       venue: 'Teatr Wielki Trimounts · Scena Główna',
@@ -30,50 +52,25 @@ export const kazimierzPrograms = {
       venue: 'Stara stacja hrabstwa Norport · Scena tymczasowa',
       searchKeywords: 'Październikowy śnieg taneczny w Norport',
     },
-    'der-ring-londinium-1084-0308': {
-      index: '01',
-      venue: 'Stary Teatr Królewski w Londinium · Sala Mirror Lake',
-      searchKeywords: 'Londinium Der Ring Mirror Lake Hall w marcu',
-    },
-    'one-hundred-and-one-days-norport-1084-0419': {
-      index: '02',
-      venue: 'Teatr z wieżą zegarową hrabstwa Norport · Galeria Zachodnia',
-      searchKeywords: 'Galeria z wieżą zegarową Sto i jeden dzień w hrabstwie Norport, kwiecień',
-    },
     'the-carnival-wiesheim-1084-0511': {
-      index: '03',
-      venue: 'Sala Zachodzącego Słońca w Vyseheim · Wielka Scena',
-      searchKeywords: 'Vyseheim Karnawałowa sala zachodu słońca w maju',
-    },
-    'ode-au-triomphe-nuova-volsinii-1084-0623': {
       index: '04',
-      venue: 'Opera Obywatelska Nuova Volsinii · Sala główna',
-      searchKeywords: 'Nuova Volsinii Ode au Triomphe opera obywatelska Czerwiec',
+      venue: 'Sala Zachodzącego Słońca w Vyseheim · Wielka Scena',
+      searchKeywords: 'Sala Zachodzącego Słońca w Vyseheim · Wielka Scena',
     },
     'der-ring-zwillingsturme-1084-0817': {
       index: '05',
       venue: 'Teatr z dwiema wieżami Zwillingstürme · Sala Mirror Lake',
-      searchKeywords: 'Zwillingstürme Der Ring Mirror Lake sierpień',
+      searchKeywords: 'Teatr z dwiema wieżami Zwillingstürme · Sala Mirror Lake',
     },
     'one-hundred-and-one-days-londinium-1084-0903': {
       index: '06',
       venue: 'Stary Teatr Królewski w Londinium · Bell Hall',
-      searchKeywords: 'Londinium Sto jeden dni Teatr Królewski wrzesień',
-    },
-    'the-carnival-montelupe-1084-0921': {
-      index: '07',
-      venue: 'Teatr Centralny w Montelupe · Sala bankietowa',
-      searchKeywords: 'Montelupe Bankiet karnawałowy wrzesień',
+      searchKeywords: 'Stary Teatr Królewski w Londinium · Bell Hall',
     },
     'the-carnival-londinium-1084-1009': {
-      index: '08',
+      index: '07',
       venue: 'Stary Teatr Królewski w Londinium · Scena Główna',
-      searchKeywords: 'Londinium Karnawałowy Teatr Królewski w październiku',
-    },
-    'ode-au-triomphe-zwillingsturme-1084-1028': {
-      index: '09',
-      venue: 'Teatr z dwiema wieżami Zwillingstürme · Sala Złotej Miarki',
-      searchKeywords: 'Zwillingstürme Oda Triomphe Złota Miara Październik',
+      searchKeywords: 'Stary Teatr Królewski w Londinium · Scena Główna',
     },
     'caged-fire-jiangdu-1101-0521': {
       index: '04',
@@ -88,12 +85,12 @@ export const kazimierzPrograms = {
     'red-banquet-nuova-volsinii-1101-1119': {
       index: '06',
       venue: 'Nuova Volsinii · Teatr objazdowy · Scena główna',
-      searchKeywords: 'Nuova Volsinii Karmazynowa Uczta 1101-11-19',
+      searchKeywords: 'Nuova Volsinii Karmazynowa Uczta 1101-10-04',
     },
     'seventh-lantern-norport-1102-0202': {
       index: '07',
       venue: 'Hrabstwo Norport · Teatr objazdowy · Scena główna',
-      searchKeywords: 'Hrabstwo Norport Siódma latarnia 1102-02-02',
+      searchKeywords: 'Hrabstwo Norport Siódma latarnia 1102-04-02',
     },
     'red-banquet-montelupe-1102-0606': {
       index: '08',
@@ -116,44 +113,24 @@ export const kazimierzPrograms = {
       searchKeywords: 'Qingsui Niekoronowana noc 1103-04-04',
     },
     'lone-wander-wiesheim-1083-0814': {
-      index: '10',
+      index: '01',
       venue: 'Vyseheim · Teatr objazdowy · Scena główna',
-      searchKeywords: 'Vyseheim Samotny wędrowiec 1083-08-14',
+      searchKeywords: 'Vyseheim · Teatr objazdowy · Scena główna',
     },
     'wonderland-in-dream-londinium-1083-1109': {
-      index: '11',
+      index: '02',
       venue: 'Londinium · Teatr objazdowy · Scena główna',
-      searchKeywords: 'Londinium Kraina cudów we śnie 1083-11-09',
+      searchKeywords: 'Londinium · Teatr objazdowy · Scena główna',
     },
     'frost-deer-and-snow-doe-nuova-volsinii-1084-0125': {
-      index: '12',
-      venue: 'Nuova Volsinii · Teatr objazdowy · Scena główna',
-      searchKeywords: 'Nuova Volsinii Jeleń szronu i łania śniegu 1084-01-25',
-    },
-    'light-of-heria-zwillingsturme-1084-0608': {
-      index: '13',
-      venue: 'Zwillingstürme · Teatr objazdowy · Scena główna',
-      searchKeywords: 'Zwillingstürme Światło Herii 1084-06-08',
-    },
-    'lone-wander-linqu-1084-0719': {
-      index: '14',
-      venue: 'Linqu · Teatr objazdowy · Scena główna',
-      searchKeywords: 'Linqu Samotny wędrowiec 1084-07-19',
-    },
-    'wonderland-in-dream-qingsui-1084-1116': {
-      index: '15',
-      venue: 'Qingsui · Teatr objazdowy · Scena główna',
-      searchKeywords: 'Qingsui Kraina cudów we śnie 1084-11-16',
-    },
-    'frost-deer-and-snow-doe-jiangdu-1085-0122': {
-      index: '16',
-      venue: 'Jiangdu · Teatr objazdowy · Scena główna',
-      searchKeywords: 'Jiangdu Jeleń szronu i łania śniegu 1085-01-22',
+      index: '03',
+      venue: 'Volsinii · Teatr objazdowy · Scena główna',
+      searchKeywords: 'Volsinii · Teatr objazdowy · Scena główna',
     },
     'light-of-heria-trimount-1085-0530': {
-      index: '17',
-      venue: 'Trimounty · Teatr objazdowy · Scena główna',
-      searchKeywords: 'Trimounty Światło Herii 1085-05-30',
+      index: '08',
+      venue: 'Zwillingstürme · Teatr objazdowy · Scena główna',
+      searchKeywords: 'Zwillingstürme · Teatr objazdowy · Scena główna',
     },
   },
   ticketZones: { C: 'Strefa C', B: 'Strefa B', A: 'Strefa A', S: 'Strefa S', BOX: 'Pudełko' },

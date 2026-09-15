@@ -20,10 +20,12 @@ import { currentRootSet, validateContentRootSet } from '../src/data/content/root
 import {
   assertPerformanceContentFresh,
   getLocalization,
+  getLocalizedPerformance,
   getLocalizedPerformanceEntries,
   getLocalizedPerformances,
 } from '../src/data/localized/resolve.ts';
 import { assertPerformanceOfferMatrix } from '../src/data/performance-offers.ts';
+import { formatTerraDate } from '../src/data/localized/format.ts';
 import { performances } from '../src/data/performances.ts';
 import { productions } from '../src/data/productions/index.ts';
 import { getMinimumSearchGraphemes } from '../src/data/search-policy.ts';
@@ -302,11 +304,11 @@ const showcaseSnapshot = resolveContent(buildContexts.showcase);
 const previewSnapshot = resolveContent(buildContexts.preview);
 assert.doesNotThrow(() => assertPerformanceOfferMatrix());
 assert.equal(showcaseSnapshot.maturity, 'preview');
-assert.equal(showcaseSnapshot.performanceEntries.length, 28);
+assert.equal(showcaseSnapshot.performanceEntries.length, 22);
 assert.equal(showcaseSnapshot.productionEntries.length, 14);
-assert.equal(showcaseSnapshot.locationEntries.length, 10);
+assert.equal(showcaseSnapshot.locationEntries.length, 12);
 assert.equal(showcaseSnapshot.artworkEntries.length, 14);
-assert.equal(showcaseSnapshot.seatingPlanEntries.length, 7);
+assert.equal(showcaseSnapshot.seatingPlanEntries.length, 9);
 assert.deepEqual(showcaseSnapshot.editionIds, ['yan']);
 assert.deepEqual(
   new Set(showcaseSnapshot.localizationPackageEditionIds),
@@ -352,30 +354,62 @@ assert.equal(
   showcaseSnapshot.performanceEntries.filter(
     ([, performance]) => performance.world === 'front' && performance.collection === 'current',
   ).length,
-  7,
+  9,
 );
 assert.equal(
   showcaseSnapshot.performanceEntries.filter(
     ([, performance]) => performance.world === 'front' && performance.collection === 'history',
   ).length,
-  4,
+  5,
 );
 assert.equal(
   showcaseSnapshot.performanceEntries.filter(
     ([, performance]) => performance.world === 'archive' && performance.collection === 'current',
   ).length,
-  9,
+  4,
 );
 assert.equal(
   showcaseSnapshot.performanceEntries.filter(
     ([, performance]) => performance.world === 'archive' && performance.collection === 'history',
   ).length,
-  8,
+  4,
 );
 
 const archiveOfferEntries = showcaseSnapshot.performanceEntries.filter(
   ([, performance]) =>
     performance.world === 'archive' && performance.ticketAvailability.state === 'on-sale',
+);
+const archiveSchedule = showcaseSnapshot.performanceEntries
+  .filter(([, performance]) => performance.world === 'archive')
+  .map(([, performance]) => performance);
+assert.deepEqual(
+  archiveSchedule.map(({ effectiveDateTime: date }) => [date.year, date.month, date.day]),
+  [
+    [1083, 8, 14],
+    [1083, 11, 9],
+    [1084, 2, 12],
+    [1084, 5, 11],
+    [1084, 8, 17],
+    [1084, 11, 18],
+    [1085, 2, 20],
+    [1085, 5, 22],
+  ],
+  '占位巡演的跨栏目和跨年衔接不得各自漂移',
+);
+assert.equal(
+  archiveSchedule.filter(({ effectiveDateTime }) => effectiveDateTime.year === 1084).length,
+  4,
+);
+assert.equal(
+  archiveSchedule.filter(
+    ({ locationId }) => !['wiesheim', 'londinium', 'zwillingsturme'].includes(locationId),
+  ).length,
+  1,
+);
+assert.equal(new Set(archiveSchedule.flatMap(({ productionIds }) => productionIds)).size, 8);
+assert.ok(
+  archiveSchedule.every(({ status }) => status !== 'cancelled'),
+  '占位删减不生成取消史',
 );
 const offerSignature = (performance) =>
   performance.ticketAvailability.state === 'on-sale'
@@ -383,27 +417,20 @@ const offerSignature = (performance) =>
         .map(({ zone, basePrice }) => `${zone}:${basePrice}`)
         .join('|')
     : '';
-assert.equal(archiveOfferEntries.length, 5);
+assert.equal(archiveOfferEntries.length, 3);
 assert.equal(
   new Set(archiveOfferEntries.map(([, performance]) => offerSignature(performance))).size,
-  5,
+  3,
 );
 assert.deepEqual(
-  performances['the-carnival-montelupe-1084-0921'].ticketAvailability.state === 'on-sale'
-    ? performances['the-carnival-montelupe-1084-0921'].ticketAvailability.offers.map(
-        ({ zone }) => zone,
-      )
-    : [],
+  performances['the-carnival-londinium-1084-1009'].ticketAvailability.offers.map(
+    ({ zone }) => zone,
+  ),
   ['C', 'B', 'A'],
 );
 assert.notEqual(
-  offerSignature(performances['the-carnival-montelupe-1084-0921']),
+  offerSignature(performances['one-hundred-and-one-days-londinium-1084-0903']),
   offerSignature(performances['the-carnival-londinium-1084-1009']),
-  '同剧目异地报价应不同',
-);
-assert.notEqual(
-  offerSignature(performances['der-ring-zwillingsturme-1084-0817']),
-  offerSignature(performances['ode-au-triomphe-zwillingsturme-1084-1028']),
   '同地点异剧目报价应不同',
 );
 
@@ -481,6 +508,66 @@ for (const editionId of previewEditionIds.filter(
 }
 assert.equal(countSearchGraphemes('e\u0301', 'el'), 1, '组合字符应按一个字素计数');
 assert.equal(countSearchGraphemes('👨‍👩‍👧‍👦', 'en-US'), 1, 'ZWJ 字符序列应按一个字素计数');
+
+const cancellationId = 'propeller-paradise-1102';
+const cancelledPerformance = previewSnapshot.performances[cancellationId];
+assert.equal(cancelledPerformance.status, 'cancelled');
+assert.equal(cancelledPerformance.collection, 'history');
+assert.equal(cancelledPerformance.locationId, 'propeller-paradise');
+assert.equal(cancelledPerformance.ticketAvailability.state, 'not-on-sale');
+assert.equal(cancelledPerformance.notice.reason, 'venue-condition');
+assert.equal(cancelledPerformance.previousDateTime, undefined);
+assert.deepEqual(cancelledPerformance.effectiveDateTime, {
+  calendar: 'terra',
+  year: 1102,
+  month: 1,
+  day: 4,
+  time: '19:30',
+});
+assert.ok(!previewSnapshot.homepagePerformanceIds.front.includes(cancellationId));
+for (const editionId of previewEditionIds) {
+  const edition = editions[editionId];
+  const localization = getLocalization(edition, previewSnapshot);
+  const performance = getLocalizedPerformance(localization, cancellationId, previewSnapshot);
+  const notice = performance.operationalNotice.text;
+  assert.ok(
+    notice.includes(formatTerraDate(cancelledPerformance.effectiveDateTime, edition.locale)),
+  );
+  assert.doesNotMatch(notice, /\{originalDate\}/u);
+  assert.ok(
+    getLocalizedPerformances(localization, 'front', 'history', previewSnapshot).some(
+      ({ performanceId }) => performanceId === cancellationId,
+    ),
+  );
+  assert.ok(
+    !getLocalizedPerformances(localization, 'front', 'current', previewSnapshot).some(
+      ({ performanceId }) => performanceId === cancellationId,
+    ),
+  );
+  assert.ok(
+    !getTicketingOptions(localization, previewSnapshot).some(
+      ({ performanceId }) => performanceId === cancellationId,
+    ),
+  );
+  const indexed = getFrontSearchIndex(edition, previewSnapshot).find(
+    ({ id }) => id === `front-performance-${cancellationId}`,
+  );
+  assert.ok(indexed.summary.includes(notice));
+  assert.ok(indexed.summary.includes(localization.site.front.performanceDetail.cancelled));
+  // 只改领域日期，公告必须随之变化，不能依赖另改九份译文。
+  const changedDate = { ...cancelledPerformance.effectiveDateTime, day: 5 };
+  const changedSnapshot = {
+    ...previewSnapshot,
+    performances: {
+      ...previewSnapshot.performances,
+      [cancellationId]: { ...cancelledPerformance, effectiveDateTime: changedDate },
+    },
+  };
+  const changedNotice = getLocalizedPerformance(localization, cancellationId, changedSnapshot)
+    .operationalNotice.text;
+  assert.notEqual(changedNotice, notice);
+  assert.ok(changedNotice.includes(formatTerraDate(changedDate, edition.locale)));
+}
 
 const fullFrontSearch = getFrontSearchIndex(editions.yan, showcaseSnapshot);
 const uncrownedSearchEntry = fullFrontSearch.find(({ id }) => id === 'front-production-uncrowned');
@@ -586,8 +673,9 @@ assert.deepEqual(
     routeSegment,
   })),
   [
-    { snapshotId: '1096-damaged', state: 'damaged', routeSegment: null },
+    { snapshotId: '1098-damaged', state: 'damaged', routeSegment: null },
     { snapshotId: '1093-damaged', state: 'damaged', routeSegment: null },
+    { snapshotId: '1089-damaged', state: 'damaged', routeSegment: null },
     {
       snapshotId: '1084-07-01T00:00:00',
       state: 'available',
@@ -596,6 +684,16 @@ assert.deepEqual(
   ],
 );
 assert.deepEqual(archiveNow, currentArchiveSnapshot.capturedAt);
+assert.deepEqual(
+  archiveSnapshots
+    .filter(({ state }) => state === 'damaged')
+    .map(({ year, damageReason }) => [year, damageReason]),
+  [
+    [1098, 'londinium-war'],
+    [1093, 'unknown'],
+    [1089, 'unknown'],
+  ],
+);
 assert.equal(getSiteSearchScope(editions.yan, 'front'), 'yan:front');
 assert.equal(
   getSiteSearchScope(editions.yan, 'archive'),
@@ -1302,8 +1400,13 @@ const yanLocalization = previewLocalizations[0];
 const yanOptions = getTicketingOptions(yanLocalization, previewSnapshot);
 assert.deepEqual(
   yanOptions.map(({ performanceId }) => performanceId),
-  previewSnapshot.homepagePerformanceIds.front,
-  '当前表站首页策展场次与票务候选必须保持相同顺序',
+  getLocalizedPerformances(yanLocalization, 'front', 'current', previewSnapshot)
+    .filter(
+      ({ status, ticketAvailability }) =>
+        status === 'scheduled' && ticketAvailability.state === 'on-sale',
+    )
+    .map(({ performanceId }) => performanceId),
+  '票务候选按可售本季场次派生，不受首页精选数量限制',
 );
 const crossLocaleItem = {
   performanceId: yanOptions[0].performanceId,

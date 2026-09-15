@@ -2,6 +2,8 @@ import type { AuthoringProgramContent } from '../schema.ts';
 
 export const minosPrograms = {
   locations: {
+    'propeller-paradise': { cityLabel: 'Propeller Paradise' },
+    volsinii: { cityLabel: 'Παλαιό Βολσίνι', archiveCityLabel: 'Βολσίνι' },
     trimount: { cityLabel: 'Trimounts' },
     wiesheim: { cityLabel: 'Vyseheim' },
     norport: { cityLabel: 'Κομητεία Norport' },
@@ -15,6 +17,27 @@ export const minosPrograms = {
     'nuova-volsinii': { cityLabel: 'Nuova Volsinii' },
   },
   performances: {
+    'propeller-paradise-1102': {
+      index: '14',
+      venue:
+        'Columbia · Περίχωρα της πρωτεύουσας · Προσωρινό θέατρο Propeller Paradise · Κεντρική αίθουσα',
+      searchKeywords:
+        'Columbia · Propeller Paradise Περίχωρα της πρωτεύουσας · Προσωρινό θέατρο Propeller Paradise · Κεντρική αίθουσα',
+      operationalNotice: {
+        sourceRevision: 'propeller-venue-loss-v1',
+        text: 'Η παράσταση που είχε προγραμματιστεί για {originalDate} στον εναέριο χώρο του Propeller Paradise ακυρώθηκε. Ο αρχικός χώρος κατέπεσε, καθιστώντας αδύνατη την παράσταση όπως είχε προγραμματιστεί. Η σελίδα διατηρεί το αρχικό πρόγραμμα μόνο για ενημέρωση.',
+      },
+    },
+    'volsinii-courtyard-1102': {
+      index: '12',
+      venue: 'Παλαιό Βολσίνι · Θέατρο της Αυλής · Υπαίθρια Σκηνή',
+      searchKeywords: 'Παλαιό Βολσίνι Βολσίνι',
+    },
+    'nuova-volsinii-civic-1102': {
+      index: '13',
+      venue: 'Nuova Volsinii · Δημοτικό Θέατρο · Μεγάλη Αίθουσα',
+      searchKeywords: 'Nuova Volsinii',
+    },
     'uncrowned-trimount-1102': {
       index: '01',
       venue: 'Μεγάλο Θέατρο Trimounts · Κύρια Σκηνή',
@@ -30,50 +53,25 @@ export const minosPrograms = {
       venue: 'Παλιός Σταθμός Κομητείας Norport · Προσωρινή Σκηνή',
       searchKeywords: 'Οκτώβριος Norport χορός χιόνι',
     },
-    'der-ring-londinium-1084-0308': {
-      index: '01',
-      venue: 'Παλιό Βασιλικό Θέατρο Londinium · Αίθουσα Λίμνης Κατόπτρων',
-      searchKeywords: 'Londinium πετράδι λίμνη κάτοπτρο Μάρτιος',
-    },
-    'one-hundred-and-one-days-norport-1084-0419': {
-      index: '02',
-      venue: 'Θέατρο Πύργου Ρολογιού Norport · Δυτικός Διάδρομος',
-      searchKeywords: 'Norport εκατόν μία ημέρες ρολόι διάδρομος Απρίλιος',
-    },
     'the-carnival-wiesheim-1084-0511': {
-      index: '03',
-      venue: 'Αίθουσα Ηλιοβασιλέματος Vyseheim · Μεγάλη Σκηνή',
-      searchKeywords: 'Vyseheim γιορτή ηλιοβασίλεμα Μάιος',
-    },
-    'ode-au-triomphe-nuova-volsinii-1084-0623': {
       index: '04',
-      venue: 'Δημοτική Όπερα Nuova Volsinii · Κύρια Αίθουσα',
-      searchKeywords: 'Nuova Volsinii θρίαμβος δημοτική όπερα Ιούνιος',
+      venue: 'Αίθουσα Ηλιοβασιλέματος Vyseheim · Μεγάλη Σκηνή',
+      searchKeywords: 'Αίθουσα Ηλιοβασιλέματος Vyseheim · Μεγάλη Σκηνή',
     },
     'der-ring-zwillingsturme-1084-0817': {
       index: '05',
       venue: 'Θέατρο Δίδυμων Πύργων Zwillingstürme · Αίθουσα Λίμνης Κατόπτρων',
-      searchKeywords: 'Zwillingstürme πετράδι λίμνη κάτοπτρο Αύγουστος',
+      searchKeywords: 'Θέατρο Δίδυμων Πύργων Zwillingstürme · Αίθουσα Λίμνης Κατόπτρων',
     },
     'one-hundred-and-one-days-londinium-1084-0903': {
       index: '06',
       venue: 'Παλιό Βασιλικό Θέατρο Londinium · Αίθουσα Καμπάνας',
-      searchKeywords: 'Londinium εκατόν μία ημέρες βασιλικό θέατρο Σεπτέμβριος',
-    },
-    'the-carnival-montelupe-1084-0921': {
-      index: '07',
-      venue: 'Κεντρικό Θέατρο Montelupe · Αίθουσα Συμποσίου',
-      searchKeywords: 'Montelupe γιορτή συμπόσιο Σεπτέμβριος',
+      searchKeywords: 'Παλιό Βασιλικό Θέατρο Londinium · Αίθουσα Καμπάνας',
     },
     'the-carnival-londinium-1084-1009': {
-      index: '08',
+      index: '07',
       venue: 'Παλιό Βασιλικό Θέατρο Londinium · Κύρια Σκηνή',
-      searchKeywords: 'Londinium γιορτή βασιλικό θέατρο Οκτώβριος',
-    },
-    'ode-au-triomphe-zwillingsturme-1084-1028': {
-      index: '09',
-      venue: 'Θέατρο Δίδυμων Πύργων Zwillingstürme · Αίθουσα Χρυσού Μέτρου',
-      searchKeywords: 'Zwillingstürme θρίαμβος χρυσό μέτρο Οκτώβριος',
+      searchKeywords: 'Παλιό Βασιλικό Θέατρο Londinium · Κύρια Σκηνή',
     },
     'caged-fire-jiangdu-1101-0521': {
       index: '04',
@@ -88,12 +86,12 @@ export const minosPrograms = {
     'red-banquet-nuova-volsinii-1101-1119': {
       index: '06',
       venue: 'Nuova Volsinii · Περιοδεύον θέατρο · Κεντρική σκηνή',
-      searchKeywords: 'Nuova Volsinii Το Πορφυρό Συμπόσιο 1101-11-19',
+      searchKeywords: 'Nuova Volsinii Το Πορφυρό Συμπόσιο 1101-10-04',
     },
     'seventh-lantern-norport-1102-0202': {
       index: '07',
       venue: 'Κομητεία Norport · Περιοδεύον θέατρο · Κεντρική σκηνή',
-      searchKeywords: 'Κομητεία Norport Ο Έβδομος Λύχνος 1102-02-02',
+      searchKeywords: 'Κομητεία Norport Ο Έβδομος Λύχνος 1102-04-02',
     },
     'red-banquet-montelupe-1102-0606': {
       index: '08',
@@ -116,44 +114,24 @@ export const minosPrograms = {
       searchKeywords: 'Qingsui Η Αστέφανη Νύχτα 1103-04-04',
     },
     'lone-wander-wiesheim-1083-0814': {
-      index: '10',
+      index: '01',
       venue: 'Vyseheim · Περιοδεύον θέατρο · Κεντρική σκηνή',
-      searchKeywords: 'Vyseheim Μοναχικός οδοιπόρος 1083-08-14',
+      searchKeywords: 'Vyseheim · Περιοδεύον θέατρο · Κεντρική σκηνή',
     },
     'wonderland-in-dream-londinium-1083-1109': {
-      index: '11',
+      index: '02',
       venue: 'Londinium · Περιοδεύον θέατρο · Κεντρική σκηνή',
-      searchKeywords: 'Londinium Χώρα θαυμάτων στο όνειρο 1083-11-09',
+      searchKeywords: 'Londinium · Περιοδεύον θέατρο · Κεντρική σκηνή',
     },
     'frost-deer-and-snow-doe-nuova-volsinii-1084-0125': {
-      index: '12',
-      venue: 'Nuova Volsinii · Περιοδεύον θέατρο · Κεντρική σκηνή',
-      searchKeywords: 'Nuova Volsinii Ελάφι της πάχνης και ελαφίνα του χιονιού 1084-01-25',
-    },
-    'light-of-heria-zwillingsturme-1084-0608': {
-      index: '13',
-      venue: 'Zwillingstürme · Περιοδεύον θέατρο · Κεντρική σκηνή',
-      searchKeywords: 'Zwillingstürme Το φως της Χέρια 1084-06-08',
-    },
-    'lone-wander-linqu-1084-0719': {
-      index: '14',
-      venue: 'Linqu · Περιοδεύον θέατρο · Κεντρική σκηνή',
-      searchKeywords: 'Linqu Μοναχικός οδοιπόρος 1084-07-19',
-    },
-    'wonderland-in-dream-qingsui-1084-1116': {
-      index: '15',
-      venue: 'Qingsui · Περιοδεύον θέατρο · Κεντρική σκηνή',
-      searchKeywords: 'Qingsui Χώρα θαυμάτων στο όνειρο 1084-11-16',
-    },
-    'frost-deer-and-snow-doe-jiangdu-1085-0122': {
-      index: '16',
-      venue: 'Jiangdu · Περιοδεύον θέατρο · Κεντρική σκηνή',
-      searchKeywords: 'Jiangdu Ελάφι της πάχνης και ελαφίνα του χιονιού 1085-01-22',
+      index: '03',
+      venue: 'Βολσίνι · Περιοδεύον θέατρο · Κεντρική σκηνή',
+      searchKeywords: 'Βολσίνι · Περιοδεύον θέατρο · Κεντρική σκηνή',
     },
     'light-of-heria-trimount-1085-0530': {
-      index: '17',
-      venue: 'Trimounts · Περιοδεύον θέατρο · Κεντρική σκηνή',
-      searchKeywords: 'Trimounts Το φως της Χέρια 1085-05-30',
+      index: '08',
+      venue: 'Zwillingstürme · Περιοδεύον θέατρο · Κεντρική σκηνή',
+      searchKeywords: 'Zwillingstürme · Περιοδεύον θέατρο · Κεντρική σκηνή',
     },
   },
   ticketZones: { C: 'Ζώνη C', B: 'Ζώνη B', A: 'Ζώνη A', S: 'Ζώνη S', BOX: 'Θεωρείο' },

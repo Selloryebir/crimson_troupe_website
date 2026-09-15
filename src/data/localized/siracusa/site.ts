@@ -7,7 +7,11 @@ export const siracusaSite = {
   shared: {
     archiveSnapshot: 'Istantanea {date}',
     archiveDamageDescription:
-      'Questa pagina non si è conservata integralmente. La data e i registri degli spettacoli non sono più leggibili; è accertabile soltanto l’anno di archiviazione. Torna al catalogo per consultare un’istantanea ancora accessibile.',
+      'Parte del testo di questa copia è illeggibile. L’indice superstite non basta a stabilire la causa del danno.',
+    archiveWarDamageDescription:
+      'Questa copia era conservata nel nodo archivistico di Londinio. Il nodo fu danneggiato durante i combattimenti del 1098 e il catalogo superstite non basta a ripristinare la pagina completa. Non è stato possibile verificare i mesi e i giorni esatti della cattura e del danno.',
+    archivePreservation:
+      'Questa pagina è presentata da una copia indipendente, conservata separatamente, e non dipende dal nodo danneggiato di Londinio.',
     archiveDamageClose: 'Torna al catalogo delle istantanee',
     skipToContent: 'Passa al contenuto principale',
     mainNavigation: 'Navigazione principale',
@@ -327,9 +331,11 @@ export const siracusaSite = {
       introduction:
         'Consulta le divisioni dei posti e i prezzi di registrazione in base alla performance. Le regole di ammissione seguono ogni avviso di tournée.',
       registerEyebrow: 'Libro dei posti di questa stagione',
-      registerTitle: 'Scegli una performance e una divisione',
+      registerTitle: 'Spettacoli e settori',
       registerIntroduction:
-        "Le divisioni seguenti seguono l'attuale registro dei posti; scegli una divisione per ogni esibizione.",
+        'I settori e i prezzi riportati nel registro dei posti della stagione sono consultabili qui.',
+      selectionUnavailable:
+        'L’ufficio di scelta e registrazione dei posti non risponde. Settori e prezzi restano consultabili; non è possibile scegliere un posto o inviare la registrazione.',
       zone: 'Divisione dei seggi',
       empty: 'Per questa stagione non è aperta la registrazione dei posti.',
       settlementTitle: 'Invia la registrazione del posto',

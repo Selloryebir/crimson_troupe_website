@@ -16,6 +16,7 @@ export interface AvailableArchiveSnapshot extends ArchiveSnapshotBase {
 
 export interface DamagedArchiveSnapshot extends ArchiveSnapshotBase {
   state: 'damaged';
+  damageReason: 'unknown' | 'londinium-war';
   year: number;
   capturedAt: null;
   routeSegment: null;
@@ -38,19 +39,30 @@ const registeredSnapshots = [
     routeSegment: '1084-07-01',
   }),
   Object.freeze({
-    snapshotId: '1093-damaged',
+    snapshotId: '1089-damaged',
     state: 'damaged',
-    year: 1093,
+    damageReason: 'unknown',
+    year: 1089,
     capturedAt: null,
     displayCapturedAt: '▓�╳█-▒#-�░',
     routeSegment: null,
   }),
   Object.freeze({
-    snapshotId: '1096-damaged',
+    snapshotId: '1093-damaged',
     state: 'damaged',
-    year: 1096,
+    damageReason: 'unknown',
+    year: 1093,
     capturedAt: null,
     displayCapturedAt: '�█▒%-░�-█╳',
+    routeSegment: null,
+  }),
+  Object.freeze({
+    snapshotId: '1098-damaged',
+    state: 'damaged',
+    damageReason: 'londinium-war',
+    year: 1098,
+    capturedAt: null,
+    displayCapturedAt: '╳�▓▒-█�-░#',
     routeSegment: null,
   }),
 ] as const satisfies readonly ArchiveSnapshot[];

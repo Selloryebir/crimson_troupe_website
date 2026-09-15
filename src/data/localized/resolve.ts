@@ -28,7 +28,7 @@ import type {
   ProductionContent,
   TicketingPlatformContent,
 } from './schema';
-import { formatTerraDateTime } from './format.ts';
+import { formatMessage, formatTerraDate, formatTerraDateTime } from './format.ts';
 import { sourceLocalizationPackage, type PartialLocalizationPackage } from './packages.ts';
 import type { WebsiteLocalizationPackage } from './yan/index.ts';
 
@@ -324,7 +324,22 @@ export function getLocalizedPerformance(
   return {
     ...performance,
     ...content,
-    cityLabel: location.cityLabel,
+    // 取消公告的原定演出日来自场次，不在各语言中另存一份日期。
+    operationalNotice: content.operationalNotice
+      ? {
+          ...content.operationalNotice,
+          text: formatMessage(content.operationalNotice.text, {
+            originalDate: formatTerraDate(
+              performance.effectiveDateTime,
+              localization.edition.locale,
+            ),
+          }),
+        }
+      : undefined,
+    cityLabel:
+      performance.world === 'archive'
+        ? (location.archiveCityLabel ?? location.cityLabel)
+        : location.cityLabel,
     dateTime: {
       ...performance.effectiveDateTime,
       display: formatTerraDateTime(performance.effectiveDateTime, localization.edition.locale),

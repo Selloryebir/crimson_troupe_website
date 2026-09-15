@@ -20,6 +20,7 @@ export interface LocalizedRecord<T> {
 
 export interface LocationContent {
   cityLabel: string;
+  archiveCityLabel?: string;
 }
 
 export interface PerformanceContent {

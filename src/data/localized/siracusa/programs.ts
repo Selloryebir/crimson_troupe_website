@@ -2,6 +2,8 @@ import type { AuthoringProgramContent } from '../schema.ts';
 
 export const siracusaPrograms = {
   locations: {
+    'propeller-paradise': { cityLabel: 'Propeller Paradise' },
+    volsinii: { cityLabel: 'Vecchia Volsinii', archiveCityLabel: 'Volsinii' },
     trimount: { cityLabel: 'Trimount' },
     wiesheim: { cityLabel: 'Vyseheim' },
     norport: { cityLabel: 'Contea di Norport' },
@@ -15,6 +17,27 @@ export const siracusaPrograms = {
     'nuova-volsinii': { cityLabel: 'Nuova Volsinii' },
   },
   performances: {
+    'propeller-paradise-1102': {
+      index: '14',
+      venue:
+        'Columbia · Periferia della capitale · Teatro temporaneo Propeller Paradise · Sala principale',
+      searchKeywords:
+        'Columbia · Propeller Paradise Periferia della capitale · Teatro temporaneo Propeller Paradise · Sala principale',
+      operationalNotice: {
+        sourceRevision: 'propeller-venue-loss-v1',
+        text: 'La rappresentazione prevista per il {originalDate} nella sede sospesa di Propeller Paradise è stata annullata. La sede originale è precipitata, rendendo impossibile lo spettacolo previsto. Questa pagina conserva il programma originale solo per consultazione.',
+      },
+    },
+    'volsinii-courtyard-1102': {
+      index: '12',
+      venue: 'Vecchia Volsinii · Teatro del Cortile · Palco all’aperto',
+      searchKeywords: 'Vecchia Volsinii Volsinii',
+    },
+    'nuova-volsinii-civic-1102': {
+      index: '13',
+      venue: 'Nuova Volsinii · Teatro Civico · Sala Grande',
+      searchKeywords: 'Nuova Volsinii',
+    },
     'uncrowned-trimount-1102': {
       index: '01',
       venue: 'Trimounts Grand Theatre · Palco principale',
@@ -30,51 +53,25 @@ export const siracusaPrograms = {
       venue: 'Vecchia stazione della contea di Norport · Stadio temporaneo',
       searchKeywords: 'Ottobre Norport balla la neve',
     },
-    'der-ring-londinium-1084-0308': {
-      index: '01',
-      venue: 'Vecchio teatro reale di Londinium · Mirror Lake Hall',
-      searchKeywords: 'Londinium Der Ring Mirror Lake Hall marzo',
-    },
-    'one-hundred-and-one-days-norport-1084-0419': {
-      index: '02',
-      venue: "Teatro della torre dell'orologio della contea di Norport · Galleria ovest",
-      searchKeywords:
-        "Galleria della torre dell'orologio dei centouno giorni della contea di Norport aprile",
-    },
     'the-carnival-wiesheim-1084-0511': {
-      index: '03',
-      venue: 'Sala del tramonto di Vyseheim · Palcoscenico',
-      searchKeywords: 'Vyseheim Sala del tramonto del CarnevaleMag',
-    },
-    'ode-au-triomphe-nuova-volsinii-1084-0623': {
       index: '04',
-      venue: 'Opera Civica Nuova Volsinii · Sala Grande',
-      searchKeywords: 'Nuova Volsinii Ode au Triomphe opera civica giugno',
+      venue: 'Sala del tramonto di Vyseheim · Palcoscenico',
+      searchKeywords: 'Sala del tramonto di Vyseheim · Palcoscenico',
     },
     'der-ring-zwillingsturme-1084-0817': {
       index: '05',
       venue: 'Teatro delle torri gemelle Zwillingstürme · Mirror Lake Hall',
-      searchKeywords: 'Zwillingstürme Der Ring Mirror Lake Agosto',
+      searchKeywords: 'Teatro delle torri gemelle Zwillingstürme · Mirror Lake Hall',
     },
     'one-hundred-and-one-days-londinium-1084-0903': {
       index: '06',
       venue: 'Vecchio teatro reale di Londinium · Sala della campana',
-      searchKeywords: 'Londinium Teatro Reale dei Centouno Giorni Settembre',
-    },
-    'the-carnival-montelupe-1084-0921': {
-      index: '07',
-      venue: 'Teatro Centrale di Montelupe · Sala Banchetti',
-      searchKeywords: 'Montelupe Il banchetto di Carnevale Settembre',
+      searchKeywords: 'Vecchio teatro reale di Londinium · Sala della campana',
     },
     'the-carnival-londinium-1084-1009': {
-      index: '08',
+      index: '07',
       venue: 'Londinium Old Royal Theatre · Palco principale',
-      searchKeywords: 'Londinium Il Carnevale Teatro Reale Ottobre',
-    },
-    'ode-au-triomphe-zwillingsturme-1084-1028': {
-      index: '09',
-      venue: "Teatro delle torri gemelle Zwillingstürme · Sala della Misura d'Oro",
-      searchKeywords: "Zwillingstürme Ode au Triomphe Misura d'Oro Ottobre",
+      searchKeywords: 'Londinium Old Royal Theatre · Palco principale',
     },
     'caged-fire-jiangdu-1101-0521': {
       index: '04',
@@ -89,12 +86,12 @@ export const siracusaPrograms = {
     'red-banquet-nuova-volsinii-1101-1119': {
       index: '06',
       venue: 'Nuova Volsinii · Teatro itinerante · Palcoscenico principale',
-      searchKeywords: 'Nuova Volsinii Il banchetto cremisi 1101-11-19',
+      searchKeywords: 'Nuova Volsinii Il banchetto cremisi 1101-10-04',
     },
     'seventh-lantern-norport-1102-0202': {
       index: '07',
       venue: 'Contea di Norport · Teatro itinerante · Palcoscenico principale',
-      searchKeywords: 'Contea di Norport La settima lanterna 1102-02-02',
+      searchKeywords: 'Contea di Norport La settima lanterna 1102-04-02',
     },
     'red-banquet-montelupe-1102-0606': {
       index: '08',
@@ -117,44 +114,24 @@ export const siracusaPrograms = {
       searchKeywords: 'Qingsui La notte senza corona 1103-04-04',
     },
     'lone-wander-wiesheim-1083-0814': {
-      index: '10',
+      index: '01',
       venue: 'Vyseheim · Teatro itinerante · Palcoscenico principale',
-      searchKeywords: 'Vyseheim Viandante solitario 1083-08-14',
+      searchKeywords: 'Vyseheim · Teatro itinerante · Palcoscenico principale',
     },
     'wonderland-in-dream-londinium-1083-1109': {
-      index: '11',
+      index: '02',
       venue: 'Londinio · Teatro itinerante · Palcoscenico principale',
-      searchKeywords: 'Londinio Meraviglia nel sogno 1083-11-09',
+      searchKeywords: 'Londinio · Teatro itinerante · Palcoscenico principale',
     },
     'frost-deer-and-snow-doe-nuova-volsinii-1084-0125': {
-      index: '12',
-      venue: 'Nuova Volsinii · Teatro itinerante · Palcoscenico principale',
-      searchKeywords: 'Nuova Volsinii Cervo di brina e cerva di neve 1084-01-25',
-    },
-    'light-of-heria-zwillingsturme-1084-0608': {
-      index: '13',
-      venue: 'Zwillingstürme · Teatro itinerante · Palcoscenico principale',
-      searchKeywords: 'Zwillingstürme Luce di Heria 1084-06-08',
-    },
-    'lone-wander-linqu-1084-0719': {
-      index: '14',
-      venue: 'Linqu · Teatro itinerante · Palcoscenico principale',
-      searchKeywords: 'Linqu Viandante solitario 1084-07-19',
-    },
-    'wonderland-in-dream-qingsui-1084-1116': {
-      index: '15',
-      venue: 'Qingsui · Teatro itinerante · Palcoscenico principale',
-      searchKeywords: 'Qingsui Meraviglia nel sogno 1084-11-16',
-    },
-    'frost-deer-and-snow-doe-jiangdu-1085-0122': {
-      index: '16',
-      venue: 'Jiangdu · Teatro itinerante · Palcoscenico principale',
-      searchKeywords: 'Jiangdu Cervo di brina e cerva di neve 1085-01-22',
+      index: '03',
+      venue: 'Volsinii · Teatro itinerante · Palcoscenico principale',
+      searchKeywords: 'Volsinii · Teatro itinerante · Palcoscenico principale',
     },
     'light-of-heria-trimount-1085-0530': {
-      index: '17',
-      venue: 'Trimount · Teatro itinerante · Palcoscenico principale',
-      searchKeywords: 'Trimount Luce di Heria 1085-05-30',
+      index: '08',
+      venue: 'Zwillingstürme · Teatro itinerante · Palcoscenico principale',
+      searchKeywords: 'Zwillingstürme · Teatro itinerante · Palcoscenico principale',
     },
   },
   ticketZones: { C: 'Zona C', B: 'Zona B', A: 'Zona A', S: 'Zona S', BOX: 'Casella' },

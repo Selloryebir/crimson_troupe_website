@@ -13,6 +13,7 @@ import { currentArchiveSnapshot } from '../src/data/archive-snapshots.ts';
 import { buildSnapshot } from '../src/data/content/resolve.ts';
 import { builtEditions, editions } from '../src/data/editions.ts';
 import { getLocalization } from '../src/data/localized/resolve.ts';
+import { getTicketingOptions } from '../src/data/ticketing.ts';
 import { derivePollutionComposition } from '../src/scripts/pollution-state.ts';
 import { selectCrimsonFolioIds } from '../src/scripts/archive-folio-effects.ts';
 
@@ -778,14 +779,14 @@ try {
     true,
   );
   await catalogSummary.click();
-  assert.equal(await archiveCatalog.locator('li').count(), 3, '表站页脚应显示三条馆藏记录');
+  assert.equal(await archiveCatalog.locator('li').count(), 4, '表站页脚应显示四条馆藏记录');
   assert.equal(await archiveCatalog.locator('a').count(), 1, '只有当前快照可以进入');
-  assert.equal(await archiveCatalog.locator('.archive-catalog__damaged').count(), 2);
+  assert.equal(await archiveCatalog.locator('.archive-catalog__damaged').count(), 3);
   assert.deepEqual(
     await archiveCatalog
       .locator('[data-snapshot-id]')
       .evaluateAll((items) => items.map((item) => item.dataset.snapshotId)),
-    ['1096-damaged', '1093-damaged', currentArchiveSnapshot.snapshotId],
+    ['1098-damaged', '1093-damaged', '1089-damaged', currentArchiveSnapshot.snapshotId],
   );
   for (const damaged of await archiveCatalog.locator('.archive-catalog__damaged').all()) {
     const corruption = damaged.locator('.archive-catalog__corruption');
@@ -793,12 +794,15 @@ try {
     assert.match(await corruption.innerText(), /�/u);
     assert.doesNotMatch(await corruption.innerText(), /\d/u);
     assert.equal(await corruption.getAttribute('aria-hidden'), 'true');
-    assert.match(await damaged.locator('.visually-hidden').innerText(), /109[36]/u);
+    assert.match(await damaged.locator('.visually-hidden').innerText(), /1089|1093|1098/u);
     const trigger = damaged.locator('summary');
     await trigger.click();
     const dialog = desktopPage.locator('[data-archive-damage-dialog]');
     assert.equal(await dialog.evaluate((element) => element.open), true);
-    assert.ok((await dialog.locator('#archive-damage-description').innerText()).trim());
+    assert.equal(
+      await dialog.locator('#archive-damage-description').innerText(),
+      await damaged.locator('p').textContent(),
+    );
     await desktopPage.keyboard.press('Escape');
     assert.equal(await dialog.evaluate((element) => element.open), false);
     assert.equal(await trigger.evaluate((element) => element === document.activeElement), true);
@@ -912,16 +916,17 @@ try {
     '里站完整本季列表不得被首页策展集合裁剪',
   );
   const yanLocalization = getLocalization(editions.yan, buildSnapshot);
+  await desktopPage.goto(`${origin}${archivePath('yan', 'performances/history')}`);
   const loneWanderPath = archivePath(
     editions.yan.routePrefix,
-    'performances/lone-wander-linqu-1084-0719',
+    'performances/lone-wander-wiesheim-1083-0814',
   );
   const expectedLoneWanderDescription =
     yanLocalization.programs.productions['lone-wander'].synopsis;
   const loneWanderCard = desktopPage.locator(
     `.archive-performance-list a[href="${loneWanderPath}"]`,
   );
-  assert.equal(await loneWanderCard.count(), 1, '里站本季列表应保留独行客场次');
+  assert.equal(await loneWanderCard.count(), 1, '里站历史列表应保留独行客场次');
   assert.equal(
     (
       await loneWanderCard
@@ -1277,6 +1282,8 @@ try {
   await ticketPage.locator('[data-ticketing-app]:not([hidden])').waitFor();
   await assertNoHorizontalLoss(ticketPage, '320px 炎国票务');
   const seatingPlans = [
+    { id: 'volsinii-courtyard', levels: 1, zones: ['C', 'B', 'A'] },
+    { id: 'nuova-volsinii-civic', levels: 2, zones: ['C', 'B', 'A', 'S', 'BOX'] },
     { id: 'trimount-grand-fan', levels: 3, zones: ['C', 'B', 'A', 'S', 'BOX'] },
     { id: 'wiesheim-mirror-horseshoe', levels: 3, zones: ['C', 'B', 'A', 'S', 'BOX'] },
     { id: 'norport-temporary-stand', levels: 1, zones: ['C', 'B', 'A'] },
@@ -1289,6 +1296,34 @@ try {
     const details = ticketPage.locator(`[data-seating-plan="${expected.id}"]`);
     assert.equal(await details.count(), 1, `${expected.id} 应且只应出现一次`);
     await details.locator('summary').click();
+    for (const diagram of await details.locator('.ticket-seating__diagram').all()) {
+      const aligned = await diagram.evaluate((element) => {
+        const stage = element.querySelector('.ticket-seating__stage')?.getBoundingClientRect();
+        const label = element
+          .querySelector('.ticket-seating__stage-label')
+          ?.getBoundingClientRect();
+        return (
+          !stage ||
+          (label &&
+            Math.abs(stage.x + stage.width / 2 - label.x - label.width / 2) < 1 &&
+            Math.abs(stage.y + stage.height / 2 - label.y - label.height / 2) < 1)
+        );
+      });
+      assert.equal(aligned, true, `${expected.id} 舞台与文字坐标必须对齐`);
+      const contained = await diagram.evaluate((element) => {
+        const bounds = element.getBoundingClientRect();
+        return [...element.querySelectorAll('[data-ticket-zone-map]')].every((button) => {
+          const box = button.getBoundingClientRect();
+          return (
+            box.left >= bounds.left - 1 &&
+            box.right <= bounds.right + 1 &&
+            box.top >= bounds.top - 1 &&
+            box.bottom <= bounds.bottom + 1
+          );
+        });
+      });
+      assert.equal(contained, true, `${expected.id} 分区按钮不得被示意容器裁切`);
+    }
     assert.equal(
       await details.locator('[data-seating-level]').count(),
       expected.levels,
@@ -1357,8 +1392,10 @@ try {
   const ticketRows = ticketPage.locator('[data-ticket-option]');
   assert.deepEqual(
     await ticketRows.evaluateAll((rows) => rows.map((row) => row.dataset.ticketOption)),
-    buildSnapshot.homepagePerformanceIds.front,
-    '票务页场次应与表站首页策展顺序一致',
+    getTicketingOptions(getLocalization(editions.yan, buildSnapshot), buildSnapshot).map(
+      ({ performanceId }) => performanceId,
+    ),
+    '票务页应包含全部可售场次，独立于首页策展集合',
   );
   const firstTicketRow = ticketPage.locator('[data-ticket-option="uncrowned-trimount-1102"]');
   const firstTicketSelect = firstTicketRow.locator('[data-ticket-zone]');
@@ -2060,7 +2097,8 @@ try {
     '三级污染席位地点应逐项收束',
   );
   const projectedSeatSelect = projectedSeatEntries.locator('select').first();
-  assert.equal(await projectedSeatSelect.isEnabled(), true, '投影不得破坏静态分区选择');
+  assert.equal(await projectedSeatSelect.isDisabled(), true, '投影不得启用选席');
+  assert.equal(await projectedSeatSelect.inputValue(), '');
   assert.notEqual(
     await archivePage
       .locator('[data-pollution-slot="ticket-record"]')
@@ -2171,21 +2209,25 @@ try {
   for (const { performanceId, offers } of expectedArchiveSeats) {
     const select = noScriptPage.locator(`#archive-zone-${performanceId}`);
     assert.deepEqual(
-      await select.locator('option').evaluateAll((options) =>
-        options.map((option) => ({
-          zone: option.value,
-          text: option.textContent?.trim() ?? '',
-        })),
-      ),
+      await noScriptPage
+        .locator(`[data-archive-seat-offers="${performanceId}"] li`)
+        .evaluateAll((rows) =>
+          rows.map((row) => ({
+            zone: row.getAttribute('data-seat-zone'),
+            text: row.textContent?.trim() ?? '',
+          })),
+        ),
       offers.map(({ zone, basePrice }) => ({
         zone,
         text: `${getLocalization(editions.higashi, buildSnapshot).programs.ticketZones[zone]} · ${basePrice} LMD`,
       })),
       `${performanceId} 应显示唯一矩阵生成的分区和价格`,
     );
+    assert.equal(await select.isDisabled(), true);
+    assert.equal(await select.inputValue(), '');
+    assert.equal(await select.locator('option').count(), 1);
+    assert.equal(await select.locator('option').textContent(), '-----------');
   }
-  await archiveSeatSelects.first().selectOption({ index: 1 });
-  assert.notEqual(await archiveSeatSelects.first().inputValue(), 'C');
   assert.equal(
     await noScriptPage
       .locator('.archive-settlement[data-archive-projection-source] button')

@@ -4,8 +4,10 @@ export const yanSite = {
   brand: { name: '猩红剧团', latinName: 'CRIMSON TROUPE' },
   shared: {
     archiveSnapshot: '快照 {date}',
-    archiveDamageDescription:
-      '这一页未能完整留存。日期栏与演出记录已无法辨认，仅余馆藏年份可考。请返回目录，查阅仍可开启的快照。',
+    archiveDamageDescription: '此副本的部分正文无法读取。现存索引不足以确认损坏原因。',
+    archiveWarDamageDescription:
+      '此副本原存于伦蒂尼姆档案节点。节点在1098年战事期间受损，现存目录不足以恢复完整页面。捕获与受损的具体月日均未能核实。',
+    archivePreservation: '此页面据另行保存的独立副本呈现，不依赖伦蒂尼姆受损节点。',
     archiveDamageClose: '返回快照目录',
     skipToContent: '跳至正文',
     mainNavigation: '主导航',
@@ -295,8 +297,9 @@ export const yanSite = {
       title: '席位登记',
       introduction: '选择场次可查阅分区与登记价格；每场具体入场章程以巡演告示为准。',
       registerEyebrow: '本季席位簿',
-      registerTitle: '选择场次与分区',
-      registerIntroduction: '以下分区依照本季席位簿列示；每一场次请择一席位分区。',
+      registerTitle: '场次与分区',
+      registerIntroduction: '以下分区与票价依照本季席位簿列示，供查阅。',
+      selectionUnavailable: '选席与登记通道未返回联络；分区和票价可查阅，当前无法选择或提交。',
       zone: '席位分区',
       empty: '本季暂无开放席位登记的场次。',
       settlementTitle: '提交席位登记',

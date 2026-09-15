@@ -6,6 +6,7 @@ export interface Location {
 }
 
 export const locations = {
+  'propeller-paradise': { locationId: 'propeller-paradise', countryEditionId: 'columbia' },
   trimount: { locationId: 'trimount', countryEditionId: 'columbia' },
   wiesheim: { locationId: 'wiesheim', countryEditionId: 'leithanien' },
   norport: { locationId: 'norport', countryEditionId: 'victoria' },
@@ -16,6 +17,7 @@ export const locations = {
   londinium: { locationId: 'londinium', countryEditionId: 'victoria' },
   'calais-blason': { locationId: 'calais-blason', countryEditionId: 'victoria' },
   montelupe: { locationId: 'montelupe', countryEditionId: 'siracusa' },
+  volsinii: { locationId: 'volsinii', countryEditionId: 'siracusa' },
   'nuova-volsinii': { locationId: 'nuova-volsinii', countryEditionId: 'siracusa' },
 } as const satisfies Record<string, Location>;
 

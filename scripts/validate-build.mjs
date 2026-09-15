@@ -305,6 +305,12 @@ for (const [route, filePath] of routes) {
     if (isArchiveRoute) {
       assert.doesNotMatch(html, /class="archive-catalog"/u, `${route} 不应重复显示表站馆藏索引`);
       assert.match(html, /data-world-switch="front"/u, `${route} 缺少可靠的表站返回入口`);
+      assert.match(html, /data-archive-preservation/u, `${route} 缺少独立副本馆藏说明`);
+      assert.doesNotMatch(
+        html.match(/<main\b[\s\S]*?<\/main>/u)?.[0] ?? '',
+        /data-archive-preservation/u,
+        '保存说明不得进入1084同期正文',
+      );
     } else {
       assert.match(html, /class="archive-catalog"/u, `${route} 缺少低干扰馆藏索引`);
       assert.match(
@@ -322,7 +328,7 @@ for (const [route, filePath] of routes) {
       }
       assert.doesNotMatch(
         html,
-        /href="[^"]*\/archive\/site\/(?:1093|1096)/u,
+        /href="[^"]*\/archive\/site\/(?:1089|1093|1096|1098)/u,
         `${route} 不得把损坏快照渲染为链接`,
       );
     }
@@ -485,6 +491,16 @@ for (const edition of builtEditions) {
   );
   const archiveSeatEntries = getArchiveSeatRegisterEntries(getLocalization(edition), buildSnapshot);
   assert.match(archiveTicketPage, /class="[^"]*\barchive-seat-register\b/u);
+  for (const select of archiveTicketPage.matchAll(/<select\b[^>]*>[\s\S]*?<\/select>/gu)) {
+    assert.match(select[0], /<select\b[^>]*\bdisabled\b/u);
+    assert.match(select[0], /<option value="" selected>-----------<\/option>/u);
+    assert.equal([...select[0].matchAll(/<option\b/gu)].length, 1);
+  }
+  assert.equal(
+    [...archiveTicketPage.matchAll(/\bdata-seat-zone=/gu)].length,
+    archiveSeatEntries.reduce((total, entry) => total + entry.offers.length, 0),
+    `${edition.editionId} 必须在禁用控件之外展示全部报价`,
+  );
   assert.equal(
     [...archiveTicketPage.matchAll(/<select\b/gu)].length,
     archiveSeatEntries.length,
@@ -505,6 +521,19 @@ for (const edition of builtEditions) {
   const archivePerformances = performanceEntries.filter(
     ([, performance]) => performance.world === 'archive',
   );
+  for (const [performanceId, performance] of performanceEntries.filter(
+    ([, entry]) => entry.world === 'front' && entry.status === 'cancelled',
+  )) {
+    const html = readFileSync(routes.get(performancePath(edition, 'front', performanceId)), 'utf8');
+    assert.ok(html.includes(localization.site.front.performanceDetail.cancelled));
+    assert.ok(
+      !html.includes(localization.site.front.performanceDetail.notOnSale),
+      `${performanceId} 已取消，不应暗示尚未开票`,
+    );
+    assert.match(html, /aria-labelledby="performance-notice"/u);
+    assert.doesNotMatch(html, /\{originalDate\}/u);
+    assert.equal(performance.ticketAvailability.state, 'not-on-sale');
+  }
   const multilinePerformances = archivePerformances.filter(([, performance]) =>
     getLocalizedProduction(localization, performance.productionIds[0]).tagline.includes('\n'),
   );

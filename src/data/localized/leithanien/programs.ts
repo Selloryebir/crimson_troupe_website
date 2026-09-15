@@ -2,6 +2,8 @@ import type { AuthoringProgramContent } from '../schema.ts';
 
 export const leithanienPrograms = {
   locations: {
+    'propeller-paradise': { cityLabel: 'Propeller Paradise' },
+    volsinii: { cityLabel: 'Alt-Volsinii', archiveCityLabel: 'Volsinii' },
     trimount: { cityLabel: 'Trimounts' },
     wiesheim: { cityLabel: 'Vyseheim' },
     norport: { cityLabel: 'Norport County' },
@@ -15,6 +17,27 @@ export const leithanienPrograms = {
     'nuova-volsinii': { cityLabel: 'Nuova Volsinii' },
   },
   performances: {
+    'propeller-paradise-1102': {
+      index: '14',
+      venue:
+        'Columbia · Stadtrand der Hauptstadt · Temporäres Theater Propeller Paradise · Großer Saal',
+      searchKeywords:
+        'Columbia · Propeller Paradise Stadtrand der Hauptstadt · Temporäres Theater Propeller Paradise · Großer Saal',
+      operationalNotice: {
+        sourceRevision: 'propeller-venue-loss-v1',
+        text: 'Die für den {originalDate} am schwebenden Spielort in Propeller Paradise vorgesehene Aufführung wurde abgesagt. Der ursprüngliche Spielort ist abgestürzt; die Aufführung kann daher nicht wie geplant stattfinden. Diese Seite bewahrt den ursprünglichen Termin ausschließlich zur Einsicht auf.',
+      },
+    },
+    'volsinii-courtyard-1102': {
+      index: '12',
+      venue: 'Alt-Volsinii · Hoftheater · Freilichtbühne',
+      searchKeywords: 'Alt-Volsinii Volsinii',
+    },
+    'nuova-volsinii-civic-1102': {
+      index: '13',
+      venue: 'Nuova Volsinii · Stadttheater · Großer Saal',
+      searchKeywords: 'Nuova Volsinii',
+    },
     'uncrowned-trimount-1102': {
       index: '01',
       venue: 'Trimounts Grand Theater · Hauptbühne',
@@ -30,50 +53,25 @@ export const leithanienPrograms = {
       venue: 'Alter Bahnhof von Norport County · Temporäre Bühne',
       searchKeywords: 'Oktober Norport Tanzschnee',
     },
-    'der-ring-londinium-1084-0308': {
-      index: '01',
-      venue: 'Altes königliches Theater von Londinium · Mirror Lake Hall',
-      searchKeywords: 'Londinium Der Ring Mirror Lake Hall March',
-    },
-    'one-hundred-and-one-days-norport-1084-0419': {
-      index: '02',
-      venue: 'Norport County Clocktower Theater · West Gallery',
-      searchKeywords: 'Norport County One Hundred and One Days Clocktower Gallery April',
-    },
     'the-carnival-wiesheim-1084-0511': {
-      index: '03',
-      venue: 'Vyseheim Sunset Hall · Große Bühne',
-      searchKeywords: 'Vyseheim The Carnival Sunset Hall Mai',
-    },
-    'ode-au-triomphe-nuova-volsinii-1084-0623': {
       index: '04',
-      venue: 'Bürgeroper Nuova Volsinii · Hauptsaal',
-      searchKeywords: 'Bürgeroper Nuova Volsinii Ode au Triomphe Juni',
+      venue: 'Vyseheim Sunset Hall · Große Bühne',
+      searchKeywords: 'Vyseheim Sunset Hall · Große Bühne',
     },
     'der-ring-zwillingsturme-1084-0817': {
       index: '05',
       venue: 'Zwillingstürme Twin-Tower Theater · Mirror Lake Hall',
-      searchKeywords: 'Zwillingstürme Der Ring Mirror Lake August',
+      searchKeywords: 'Zwillingstürme Twin-Tower Theater · Mirror Lake Hall',
     },
     'one-hundred-and-one-days-londinium-1084-0903': {
       index: '06',
       venue: 'Londinium Old Royal Theatre · Bell Hall',
-      searchKeywords: 'Londinium One Hundred and One Days Royal Theatre September',
-    },
-    'the-carnival-montelupe-1084-0921': {
-      index: '07',
-      venue: 'Montelupe Central Theatre · Bankettsaal',
-      searchKeywords: 'Montelupe Das Karnevalsbankett September',
+      searchKeywords: 'Londinium Old Royal Theatre · Bell Hall',
     },
     'the-carnival-londinium-1084-1009': {
-      index: '08',
+      index: '07',
       venue: 'Londinium Old Royal Theatre · Hauptbühne',
-      searchKeywords: 'Londinium Das Carnival Royal Theatre Oktober',
-    },
-    'ode-au-triomphe-zwillingsturme-1084-1028': {
-      index: '09',
-      venue: 'Zwillingstürme Twin-Tower Theater · Golden Measure Hall',
-      searchKeywords: 'Zwillingstürme Ode au Triomphe Golden Measure Oktober',
+      searchKeywords: 'Londinium Old Royal Theatre · Hauptbühne',
     },
     'caged-fire-jiangdu-1101-0521': {
       index: '04',
@@ -88,12 +86,12 @@ export const leithanienPrograms = {
     'red-banquet-nuova-volsinii-1101-1119': {
       index: '06',
       venue: 'Nuova Volsinii · Tourneetheater · Hauptbühne',
-      searchKeywords: 'Nuova Volsinii Das Crimson Bankett 1101-11-19',
+      searchKeywords: 'Nuova Volsinii Das Crimson Bankett 1101-10-04',
     },
     'seventh-lantern-norport-1102-0202': {
       index: '07',
       venue: 'Norport County · Tourneetheater · Hauptbühne',
-      searchKeywords: 'Norport County Die siebte Laterne 1102-02-02',
+      searchKeywords: 'Norport County Die siebte Laterne 1102-04-02',
     },
     'red-banquet-montelupe-1102-0606': {
       index: '08',
@@ -116,44 +114,24 @@ export const leithanienPrograms = {
       searchKeywords: 'Qingsui Die ungekrönte Nacht 1103-04-04',
     },
     'lone-wander-wiesheim-1083-0814': {
-      index: '10',
+      index: '01',
       venue: 'Vyseheim · Tourneetheater · Hauptbühne',
-      searchKeywords: 'Vyseheim Der Einzelwanderer 1083-08-14',
+      searchKeywords: 'Vyseheim · Tourneetheater · Hauptbühne',
     },
     'wonderland-in-dream-londinium-1083-1109': {
-      index: '11',
+      index: '02',
       venue: 'Londinium · Tourneetheater · Hauptbühne',
-      searchKeywords: 'Londinium Wunderland im Traum 1083-11-09',
+      searchKeywords: 'Londinium · Tourneetheater · Hauptbühne',
     },
     'frost-deer-and-snow-doe-nuova-volsinii-1084-0125': {
-      index: '12',
-      venue: 'Nuova Volsinii · Tourneetheater · Hauptbühne',
-      searchKeywords: 'Nuova Volsinii Frosthirsch und Schneehindin 1084-01-25',
-    },
-    'light-of-heria-zwillingsturme-1084-0608': {
-      index: '13',
-      venue: 'Zwillingstürme · Tourneetheater · Hauptbühne',
-      searchKeywords: 'Zwillingstürme Licht von Heria 1084-06-08',
-    },
-    'lone-wander-linqu-1084-0719': {
-      index: '14',
-      venue: 'Linqu · Tourneetheater · Hauptbühne',
-      searchKeywords: 'Linqu Der Einzelwanderer 1084-07-19',
-    },
-    'wonderland-in-dream-qingsui-1084-1116': {
-      index: '15',
-      venue: 'Qingsui · Tourneetheater · Hauptbühne',
-      searchKeywords: 'Qingsui Wunderland im Traum 1084-11-16',
-    },
-    'frost-deer-and-snow-doe-jiangdu-1085-0122': {
-      index: '16',
-      venue: 'Jiangdu · Tourneetheater · Hauptbühne',
-      searchKeywords: 'Jiangdu Frosthirsch und Schneehindin 1085-01-22',
+      index: '03',
+      venue: 'Volsinii · Tourneetheater · Hauptbühne',
+      searchKeywords: 'Volsinii · Tourneetheater · Hauptbühne',
     },
     'light-of-heria-trimount-1085-0530': {
-      index: '17',
-      venue: 'Trimounts · Tourneetheater · Hauptbühne',
-      searchKeywords: 'Trimounts Licht von Heria 1085-05-30',
+      index: '08',
+      venue: 'Zwillingstürme · Tourneetheater · Hauptbühne',
+      searchKeywords: 'Zwillingstürme · Tourneetheater · Hauptbühne',
     },
   },
   ticketZones: { C: 'Zone C', B: 'Zone B', A: 'Zone A', S: 'Zone S', BOX: 'Feld' },

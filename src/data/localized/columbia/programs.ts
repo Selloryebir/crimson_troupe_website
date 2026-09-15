@@ -2,6 +2,8 @@ import type { AuthoringProgramContent } from '../schema.ts';
 
 export const columbiaPrograms = {
   locations: {
+    'propeller-paradise': { cityLabel: 'Propeller Paradise' },
+    volsinii: { cityLabel: 'Old Volsinii', archiveCityLabel: 'Volsinii' },
     trimount: { cityLabel: 'Trimounts' },
     wiesheim: { cityLabel: 'Vyseheim' },
     norport: { cityLabel: 'Norport County' },
@@ -14,6 +16,26 @@ export const columbiaPrograms = {
     'nuova-volsinii': { cityLabel: 'Nuova Volsinii' },
   },
   performances: {
+    'propeller-paradise-1102': {
+      index: '14',
+      venue: 'Columbia · Capital outskirts · Propeller Paradise Temporary Theater · Main Hall',
+      searchKeywords:
+        'Columbia · Propeller Paradise Capital outskirts · Propeller Paradise Temporary Theater · Main Hall',
+      operationalNotice: {
+        sourceRevision: 'propeller-venue-loss-v1',
+        text: 'The performance scheduled for {originalDate} at the airborne venue in Propeller Paradise has been canceled. The original venue crashed, making the planned performance impossible. This page retains the original schedule for reference only.',
+      },
+    },
+    'volsinii-courtyard-1102': {
+      index: '12',
+      venue: 'Old Volsinii · Courtyard Theater · Open-air Stage',
+      searchKeywords: 'Old Volsinii Volsinii',
+    },
+    'nuova-volsinii-civic-1102': {
+      index: '13',
+      venue: 'Nuova Volsinii · Civic Theater · Grand Hall',
+      searchKeywords: 'Nuova Volsinii',
+    },
     'uncrowned-trimount-1102': {
       index: '01',
       venue: 'Trimounts Grand Theater · Main Stage',
@@ -29,50 +51,25 @@ export const columbiaPrograms = {
       venue: 'Norport County Old Station · Temporary Stage',
       searchKeywords: 'October Norport dance snow',
     },
-    'der-ring-londinium-1084-0308': {
-      index: '01',
-      venue: 'Old Royal Theatre of Londinium · Mirror Lake Hall',
-      searchKeywords: 'Londinium Der Ring Mirror Lake Hall March',
-    },
-    'one-hundred-and-one-days-norport-1084-0419': {
-      index: '02',
-      venue: 'Norport County Clocktower Theatre · West Gallery',
-      searchKeywords: 'Norport County One Hundred and One Days clocktower gallery April',
-    },
     'the-carnival-wiesheim-1084-0511': {
-      index: '03',
-      venue: 'Vyseheim Sunset Hall · Grand Stage',
-      searchKeywords: 'Vyseheim The Carnival Sunset Hall May',
-    },
-    'ode-au-triomphe-nuova-volsinii-1084-0623': {
       index: '04',
-      venue: 'Nuova Volsinii Civic Opera · Main Hall',
-      searchKeywords: 'Nuova Volsinii Ode au Triomphe civic opera June',
+      venue: 'Vyseheim Sunset Hall · Grand Stage',
+      searchKeywords: 'Vyseheim Sunset Hall · Grand Stage',
     },
     'der-ring-zwillingsturme-1084-0817': {
       index: '05',
       venue: 'Zwillingstürme Twin-Tower Theater · Mirror Lake Hall',
-      searchKeywords: 'Zwillingstürme Der Ring Mirror Lake August',
+      searchKeywords: 'Zwillingstürme Twin-Tower Theater · Mirror Lake Hall',
     },
     'one-hundred-and-one-days-londinium-1084-0903': {
       index: '06',
       venue: 'Londinium Old Royal Theater · Bell Hall',
-      searchKeywords: 'Londinium One Hundred and One Days Royal Theater September',
-    },
-    'the-carnival-montelupe-1084-0921': {
-      index: '07',
-      venue: 'Montelupe Central Theater · Banquet Hall',
-      searchKeywords: 'Montelupe The Carnival banquet September',
+      searchKeywords: 'Londinium Old Royal Theater · Bell Hall',
     },
     'the-carnival-londinium-1084-1009': {
-      index: '08',
+      index: '07',
       venue: 'Londinium Old Royal Theater · Main Stage',
-      searchKeywords: 'Londinium The Carnival Royal Theater October',
-    },
-    'ode-au-triomphe-zwillingsturme-1084-1028': {
-      index: '09',
-      venue: 'Zwillingstürme Twin-Tower Theater · Golden Measure Hall',
-      searchKeywords: 'Zwillingstürme Ode au Triomphe Golden Measure October',
+      searchKeywords: 'Londinium Old Royal Theater · Main Stage',
     },
     'caged-fire-jiangdu-1101-0521': {
       index: '04',
@@ -87,12 +84,12 @@ export const columbiaPrograms = {
     'red-banquet-nuova-volsinii-1101-1119': {
       index: '06',
       venue: 'Nuova Volsinii · Touring Theatre · Main Stage',
-      searchKeywords: 'Nuova Volsinii The Crimson Banquet 1101-11-19',
+      searchKeywords: 'Nuova Volsinii The Crimson Banquet 1101-10-04',
     },
     'seventh-lantern-norport-1102-0202': {
       index: '07',
       venue: 'Norport County · Touring Theatre · Main Stage',
-      searchKeywords: 'Norport County The Seventh Lantern 1102-02-02',
+      searchKeywords: 'Norport County The Seventh Lantern 1102-04-02',
     },
     'red-banquet-montelupe-1102-0606': {
       index: '08',
@@ -115,44 +112,24 @@ export const columbiaPrograms = {
       searchKeywords: 'Qingsui The Uncrowned Night 1103-04-04',
     },
     'lone-wander-wiesheim-1083-0814': {
-      index: '10',
+      index: '01',
       venue: 'Vyseheim · Touring Theatre · Main Stage',
-      searchKeywords: 'Vyseheim Lone Wander 1083-08-14',
+      searchKeywords: 'Vyseheim · Touring Theatre · Main Stage',
     },
     'wonderland-in-dream-londinium-1083-1109': {
-      index: '11',
+      index: '02',
       venue: 'Londinium · Touring Theatre · Main Stage',
-      searchKeywords: 'Londinium Wonderland in Dream 1083-11-09',
+      searchKeywords: 'Londinium · Touring Theatre · Main Stage',
     },
     'frost-deer-and-snow-doe-nuova-volsinii-1084-0125': {
-      index: '12',
-      venue: 'Nuova Volsinii · Touring Theatre · Main Stage',
-      searchKeywords: 'Nuova Volsinii Frost Deer and Snow Doe 1084-01-25',
-    },
-    'light-of-heria-zwillingsturme-1084-0608': {
-      index: '13',
-      venue: 'Zwillingstürme · Touring Theatre · Main Stage',
-      searchKeywords: 'Zwillingstürme Light of Heria 1084-06-08',
-    },
-    'lone-wander-linqu-1084-0719': {
-      index: '14',
-      venue: 'Linqu · Touring Theatre · Main Stage',
-      searchKeywords: 'Linqu Lone Wander 1084-07-19',
-    },
-    'wonderland-in-dream-qingsui-1084-1116': {
-      index: '15',
-      venue: 'Qingsui · Touring Theatre · Main Stage',
-      searchKeywords: 'Qingsui Wonderland in Dream 1084-11-16',
-    },
-    'frost-deer-and-snow-doe-jiangdu-1085-0122': {
-      index: '16',
-      venue: 'Jiangdu · Touring Theatre · Main Stage',
-      searchKeywords: 'Jiangdu Frost Deer and Snow Doe 1085-01-22',
+      index: '03',
+      venue: 'Volsinii · Touring Theatre · Main Stage',
+      searchKeywords: 'Volsinii · Touring Theatre · Main Stage',
     },
     'light-of-heria-trimount-1085-0530': {
-      index: '17',
-      venue: 'Trimounts · Touring Theatre · Main Stage',
-      searchKeywords: 'Trimounts Light of Heria 1085-05-30',
+      index: '08',
+      venue: 'Zwillingstürme · Touring Theatre · Main Stage',
+      searchKeywords: 'Zwillingstürme · Touring Theatre · Main Stage',
     },
   },
   ticketZones: { C: 'Zone C', B: 'Zone B', A: 'Zone A', S: 'Zone S', BOX: 'Box' },
