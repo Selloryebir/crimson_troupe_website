@@ -1,0 +1,3776 @@
+{
+  "schema_version": 1,
+  "research_date": "2026-09-15",
+  "attestations": [
+    {
+      "form_id": "country-kjerag:F01",
+      "concept_id": "country-kjerag",
+      "locale": "zh-CN",
+      "text": "谢拉格",
+      "origin": "official_reproduced",
+      "source_ids": ["EXP-S01"],
+      "locator": "第208—217页／Chapter 5.8",
+      "notes": "官方设定集目录的社区转载，仅证明名称。"
+    },
+    {
+      "form_id": "country-kjerag:F02",
+      "concept_id": "country-kjerag",
+      "locale": "en",
+      "text": "Kjerag",
+      "origin": "official_reproduced",
+      "source_ids": ["EXP-S01"],
+      "locator": "第208—217页／Chapter 5.8",
+      "notes": "官方设定集目录的社区转载，仅证明名称。"
+    },
+    {
+      "form_id": "country-kjerag:F03",
+      "concept_id": "country-kjerag",
+      "locale": "ja-JP",
+      "text": "イェラグ",
+      "origin": "community_reference",
+      "source_ids": ["EXP-S02"],
+      "locator": "地名表对应国家日文行",
+      "notes": "社区整理，未逐项核验日文客户端原文。"
+    },
+    {
+      "form_id": "country-sargon:F01",
+      "concept_id": "country-sargon",
+      "locale": "zh-CN",
+      "text": "萨尔贡",
+      "origin": "official_reproduced",
+      "source_ids": ["EXP-S01"],
+      "locator": "第272—279页／Chapter 5.13",
+      "notes": "官方设定集目录的社区转载，仅证明名称。"
+    },
+    {
+      "form_id": "country-sargon:F02",
+      "concept_id": "country-sargon",
+      "locale": "en",
+      "text": "Sargon",
+      "origin": "official_reproduced",
+      "source_ids": ["EXP-S01"],
+      "locator": "第272—279页／Chapter 5.13",
+      "notes": "官方设定集目录的社区转载，仅证明名称。"
+    },
+    {
+      "form_id": "country-sargon:F03",
+      "concept_id": "country-sargon",
+      "locale": "ja-JP",
+      "text": "サルゴン",
+      "origin": "community_reference",
+      "source_ids": ["EXP-S02"],
+      "locator": "地名表对应国家日文行",
+      "notes": "社区整理，未逐项核验日文客户端原文。"
+    },
+    {
+      "form_id": "country-laterano:F01",
+      "concept_id": "country-laterano",
+      "locale": "zh-CN",
+      "text": "拉特兰",
+      "origin": "official_reproduced",
+      "source_ids": ["EXP-S01"],
+      "locator": "第166—178页／Chapter 5.5",
+      "notes": "官方设定集目录的社区转载，仅证明名称。"
+    },
+    {
+      "form_id": "country-laterano:F02",
+      "concept_id": "country-laterano",
+      "locale": "en",
+      "text": "Laterano",
+      "origin": "official_reproduced",
+      "source_ids": ["EXP-S01"],
+      "locator": "第166—178页／Chapter 5.5",
+      "notes": "官方设定集目录的社区转载，仅证明名称。"
+    },
+    {
+      "form_id": "country-laterano:F03",
+      "concept_id": "country-laterano",
+      "locale": "ja-JP",
+      "text": "ラテラーノ",
+      "origin": "community_reference",
+      "source_ids": ["EXP-S02"],
+      "locator": "地名表对应国家日文行",
+      "notes": "社区整理，未逐项核验日文客户端原文。"
+    },
+    {
+      "form_id": "country-iberia:F01",
+      "concept_id": "country-iberia",
+      "locale": "zh-CN",
+      "text": "伊比利亚",
+      "origin": "official_reproduced",
+      "source_ids": ["EXP-S01"],
+      "locator": "第182—195页／Chapter 5.6",
+      "notes": "官方设定集目录的社区转载，仅证明名称。"
+    },
+    {
+      "form_id": "country-iberia:F02",
+      "concept_id": "country-iberia",
+      "locale": "en",
+      "text": "Iberia",
+      "origin": "official_reproduced",
+      "source_ids": ["EXP-S01"],
+      "locator": "第182—195页／Chapter 5.6",
+      "notes": "官方设定集目录的社区转载，仅证明名称。"
+    },
+    {
+      "form_id": "country-iberia:F03",
+      "concept_id": "country-iberia",
+      "locale": "ja-JP",
+      "text": "イベリア",
+      "origin": "community_reference",
+      "source_ids": ["EXP-S02"],
+      "locator": "地名表对应国家日文行",
+      "notes": "社区整理，未逐项核验日文客户端原文。"
+    },
+    {
+      "form_id": "country-sami:F01",
+      "concept_id": "country-sami",
+      "locale": "zh-CN",
+      "text": "萨米",
+      "origin": "official_reproduced",
+      "source_ids": ["EXP-S01"],
+      "locator": "第293—305页／Chapter 5.15",
+      "notes": "官方设定集目录的社区转载，仅证明名称。"
+    },
+    {
+      "form_id": "country-sami:F02",
+      "concept_id": "country-sami",
+      "locale": "en",
+      "text": "Sami",
+      "origin": "official_reproduced",
+      "source_ids": ["EXP-S01"],
+      "locator": "第293—305页／Chapter 5.15",
+      "notes": "官方设定集目录的社区转载，仅证明名称。"
+    },
+    {
+      "form_id": "country-sami:F03",
+      "concept_id": "country-sami",
+      "locale": "ja-JP",
+      "text": "サーミ",
+      "origin": "community_reference",
+      "source_ids": ["EXP-S02"],
+      "locator": "地名表对应国家日文行",
+      "notes": "社区整理，未逐项核验日文客户端原文。"
+    },
+    {
+      "form_id": "country-bolivar:F01",
+      "concept_id": "country-bolivar",
+      "locale": "zh-CN",
+      "text": "玻利瓦尔",
+      "origin": "official_reproduced",
+      "source_ids": ["EXP-S01"],
+      "locator": "第249—260页／Chapter 5.11",
+      "notes": "官方设定集目录的社区转载，仅证明名称。"
+    },
+    {
+      "form_id": "country-bolivar:F02",
+      "concept_id": "country-bolivar",
+      "locale": "en",
+      "text": "Bolívar",
+      "origin": "official_reproduced",
+      "source_ids": ["EXP-S01"],
+      "locator": "第249—260页／Chapter 5.11",
+      "notes": "官方设定集目录的社区转载，仅证明名称。"
+    },
+    {
+      "form_id": "country-bolivar:F03",
+      "concept_id": "country-bolivar",
+      "locale": "ja-JP",
+      "text": "ボリバル",
+      "origin": "community_reference",
+      "source_ids": ["EXP-S02"],
+      "locator": "地名表对应国家日文行",
+      "notes": "社区整理，未逐项核验日文客户端原文。"
+    },
+    {
+      "form_id": "country-aegir:F01",
+      "concept_id": "country-aegir",
+      "locale": "zh-CN",
+      "text": "阿戈尔",
+      "origin": "official_reproduced",
+      "source_ids": ["EXP-S01"],
+      "locator": "第198—207页／Chapter 5.7",
+      "notes": "官方设定集目录的社区转载，仅证明名称。"
+    },
+    {
+      "form_id": "country-aegir:F02",
+      "concept_id": "country-aegir",
+      "locale": "en",
+      "text": "Ægir",
+      "origin": "official_reproduced",
+      "source_ids": ["EXP-S01"],
+      "locator": "第198—207页／Chapter 5.7",
+      "notes": "官方设定集目录的社区转载，仅证明名称。"
+    },
+    {
+      "form_id": "country-aegir:F03",
+      "concept_id": "country-aegir",
+      "locale": "ja-JP",
+      "text": "エーギル",
+      "origin": "community_reference",
+      "source_ids": ["EXP-S02"],
+      "locator": "地名表对应国家日文行",
+      "notes": "社区整理，未逐项核验日文客户端原文。"
+    },
+    {
+      "form_id": "country-aegir:F04",
+      "concept_id": "country-aegir",
+      "locale": "en",
+      "text": "Ægir",
+      "origin": "official_reproduced",
+      "source_ids": ["EXP-S11"],
+      "locator": "Thiago 对 Jordi 解释父祖家乡为海底国家的对白",
+      "notes": "明确country语境，与同名族裔称谓分离；同词形不同来源证据保留。"
+    },
+    {
+      "form_id": "country-durin:F01",
+      "concept_id": "country-durin",
+      "locale": "zh-CN",
+      "text": "杜林",
+      "origin": "community_reference",
+      "source_ids": ["EXP-S02"],
+      "locator": "地名表杜林行",
+      "notes": "社区地名表，不从种族行推定国名。"
+    },
+    {
+      "form_id": "country-durin:F02",
+      "concept_id": "country-durin",
+      "locale": "en",
+      "text": "Durin",
+      "origin": "community_reference",
+      "source_ids": ["EXP-S02"],
+      "locator": "地名表杜林行",
+      "notes": "社区地名表，不从种族行推定国名。"
+    },
+    {
+      "form_id": "country-durin:F03",
+      "concept_id": "country-durin",
+      "locale": "ja-JP",
+      "text": "ドゥリン",
+      "origin": "community_reference",
+      "source_ids": ["EXP-S10"],
+      "locator": "Durin (country)／In Other Languages Japanese",
+      "notes": "明确国家条目而非干员或种族条目；只有搜索缓存可见。"
+    },
+    {
+      "form_id": "country-yan:F01",
+      "concept_id": "country-yan",
+      "locale": "zh-CN",
+      "text": "炎",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表对应行",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "country-yan:F02",
+      "concept_id": "country-yan",
+      "locale": "en",
+      "text": "Yan",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S06"],
+      "locator": "条目标题、概述或 In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "country-yan:F03",
+      "concept_id": "country-yan",
+      "locale": "ja-JP",
+      "text": "炎国",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S03"],
+      "locator": "年表 Location 炎国",
+      "notes": "只证明社区沿用日文名。"
+    },
+    {
+      "form_id": "country-victoria:F01",
+      "concept_id": "country-victoria",
+      "locale": "ja-JP",
+      "text": "ヴィクトリア",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表日文栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "country-victoria:F02",
+      "concept_id": "country-victoria",
+      "locale": "zh-CN",
+      "text": "维多利亚",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S02"],
+      "locator": "目录 Chapter 5 国家与地区相应章节",
+      "notes": "官方出版物目录的社区转载；未读取实体书正文。"
+    },
+    {
+      "form_id": "country-victoria:F03",
+      "concept_id": "country-victoria",
+      "locale": "en",
+      "text": "Victoria",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S02"],
+      "locator": "目录 Chapter 5 国家与地区相应章节",
+      "notes": "官方出版物目录的社区转载；未读取实体书正文。"
+    },
+    {
+      "form_id": "country-ursus:F01",
+      "concept_id": "country-ursus",
+      "locale": "zh-CN",
+      "text": "乌萨斯",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S50"],
+      "locator": "语音记录／感染者处境与国家皇帝段",
+      "notes": "本段为国家语境，不是仅由种族名推定。"
+    },
+    {
+      "form_id": "country-ursus:F02",
+      "concept_id": "country-ursus",
+      "locale": "en",
+      "text": "Ursus",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S50"],
+      "locator": "语音记录／感染者处境与国家皇帝段",
+      "notes": "本段为国家语境，不是仅由种族名推定。"
+    },
+    {
+      "form_id": "country-ursus:F03",
+      "concept_id": "country-ursus",
+      "locale": "ja-JP",
+      "text": "ウルサス",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S50"],
+      "locator": "语音记录／感染者处境与国家皇帝段",
+      "notes": "本段为国家语境，不是仅由种族名推定。"
+    },
+    {
+      "form_id": "country-siracusa:F01",
+      "concept_id": "country-siracusa",
+      "locale": "ja-JP",
+      "text": "シラクーザ",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表日文栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "country-siracusa:F02",
+      "concept_id": "country-siracusa",
+      "locale": "zh-CN",
+      "text": "叙拉古",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S02"],
+      "locator": "目录 Chapter 5 国家与地区相应章节",
+      "notes": "官方出版物目录的社区转载；未读取实体书正文。"
+    },
+    {
+      "form_id": "country-siracusa:F03",
+      "concept_id": "country-siracusa",
+      "locale": "en",
+      "text": "Siracusa",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S02"],
+      "locator": "目录 Chapter 5 国家与地区相应章节",
+      "notes": "官方出版物目录的社区转载；未读取实体书正文。"
+    },
+    {
+      "form_id": "country-minos:F01",
+      "concept_id": "country-minos",
+      "locale": "ja-JP",
+      "text": "ミノス",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表日文栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "country-minos:F02",
+      "concept_id": "country-minos",
+      "locale": "zh-CN",
+      "text": "米诺斯",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S02"],
+      "locator": "目录 Chapter 5 国家与地区相应章节",
+      "notes": "官方出版物目录的社区转载；未读取实体书正文。"
+    },
+    {
+      "form_id": "country-minos:F03",
+      "concept_id": "country-minos",
+      "locale": "en",
+      "text": "Minos",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S02"],
+      "locator": "目录 Chapter 5 国家与地区相应章节",
+      "notes": "官方出版物目录的社区转载；未读取实体书正文。"
+    },
+    {
+      "form_id": "country-leithanien:F01",
+      "concept_id": "country-leithanien",
+      "locale": "ja-JP",
+      "text": "リターニア",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表日文栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "country-leithanien:F02",
+      "concept_id": "country-leithanien",
+      "locale": "zh-CN",
+      "text": "莱塔尼亚",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S02"],
+      "locator": "目录 Chapter 5 国家与地区相应章节",
+      "notes": "官方出版物目录的社区转载；未读取实体书正文。"
+    },
+    {
+      "form_id": "country-leithanien:F03",
+      "concept_id": "country-leithanien",
+      "locale": "en",
+      "text": "Leithanien",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S02"],
+      "locator": "目录 Chapter 5 国家与地区相应章节",
+      "notes": "官方出版物目录的社区转载；未读取实体书正文。"
+    },
+    {
+      "form_id": "country-kazimierz:F01",
+      "concept_id": "country-kazimierz",
+      "locale": "ja-JP",
+      "text": "カジミエーシュ",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表日文栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "country-kazimierz:F02",
+      "concept_id": "country-kazimierz",
+      "locale": "zh-CN",
+      "text": "卡西米尔",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S02"],
+      "locator": "目录 Chapter 5 国家与地区相应章节",
+      "notes": "官方出版物目录的社区转载；未读取实体书正文。"
+    },
+    {
+      "form_id": "country-kazimierz:F03",
+      "concept_id": "country-kazimierz",
+      "locale": "en",
+      "text": "Kazimierz",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S02"],
+      "locator": "目录 Chapter 5 国家与地区相应章节",
+      "notes": "官方出版物目录的社区转载；未读取实体书正文。"
+    },
+    {
+      "form_id": "country-higashi:F01",
+      "concept_id": "country-higashi",
+      "locale": "zh-CN",
+      "text": "东国",
+      "origin": "project_approved",
+      "source_ids": ["GEO-S04"],
+      "locator": "条目名称或项目国家栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "country-higashi:F02",
+      "concept_id": "country-higashi",
+      "locale": "en",
+      "text": "Higashi",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S13"],
+      "locator": "条目标题、概述或 In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "country-higashi:F03",
+      "concept_id": "country-higashi",
+      "locale": "ja-JP",
+      "text": "極東",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表日文栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "country-columbia:F01",
+      "concept_id": "country-columbia",
+      "locale": "ja-JP",
+      "text": "クルビア",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表日文栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "country-columbia:F02",
+      "concept_id": "country-columbia",
+      "locale": "zh-CN",
+      "text": "哥伦比亚",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S02"],
+      "locator": "目录 Chapter 5 国家与地区相应章节",
+      "notes": "官方出版物目录的社区转载；未读取实体书正文。"
+    },
+    {
+      "form_id": "country-columbia:F03",
+      "concept_id": "country-columbia",
+      "locale": "en",
+      "text": "Columbia",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S02"],
+      "locator": "目录 Chapter 5 国家与地区相应章节",
+      "notes": "官方出版物目录的社区转载；未读取实体书正文。"
+    },
+    {
+      "form_id": "country-gaul:F01",
+      "concept_id": "country-gaul",
+      "locale": "zh-CN",
+      "text": "高卢",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表对应行",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "country-gaul:F02",
+      "concept_id": "country-gaul",
+      "locale": "en",
+      "text": "Gaul",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S15"],
+      "locator": "条目标题、概述或 In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "country-gaul:F03",
+      "concept_id": "country-gaul",
+      "locale": "ja-JP",
+      "text": "ガリア",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S03"],
+      "locator": "年表 Location 栏（只取地名，不采用年代）",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "country-kazdel:F01",
+      "concept_id": "country-kazdel",
+      "locale": "ja-JP",
+      "text": "カズデル",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表日文栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "country-kazdel:F02",
+      "concept_id": "country-kazdel",
+      "locale": "zh-CN",
+      "text": "卡兹戴尔",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S02"],
+      "locator": "目录 Chapter 5 国家与地区相应章节",
+      "notes": "官方出版物目录的社区转载；未读取实体书正文。"
+    },
+    {
+      "form_id": "country-kazdel:F03",
+      "concept_id": "country-kazdel",
+      "locale": "en",
+      "text": "Kazdel",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S02"],
+      "locator": "目录 Chapter 5 国家与地区相应章节",
+      "notes": "官方出版物目录的社区转载；未读取实体书正文。"
+    },
+    {
+      "form_id": "country-rim-billiton:F01",
+      "concept_id": "country-rim-billiton",
+      "locale": "ja-JP",
+      "text": "レム・ビリトン",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表日文栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "country-rim-billiton:F02",
+      "concept_id": "country-rim-billiton",
+      "locale": "zh-CN",
+      "text": "雷姆必拓",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S02"],
+      "locator": "目录 Chapter 5 国家与地区相应章节",
+      "notes": "官方出版物目录的社区转载；未读取实体书正文。"
+    },
+    {
+      "form_id": "country-rim-billiton:F03",
+      "concept_id": "country-rim-billiton",
+      "locale": "en",
+      "text": "Rim Billiton",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S02"],
+      "locator": "目录 Chapter 5 国家与地区相应章节",
+      "notes": "官方出版物目录的社区转载；未读取实体书正文。"
+    },
+    {
+      "form_id": "place-mitsukue:F01",
+      "concept_id": "place-mitsukue",
+      "locale": "zh-CN",
+      "text": "御机",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表对应行",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-mitsukue:F02",
+      "concept_id": "place-mitsukue",
+      "locale": "en",
+      "text": "Mitsukue",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S18"],
+      "locator": "条目标题、概述或 In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-mitsukue:F03",
+      "concept_id": "place-mitsukue",
+      "locale": "ja-JP",
+      "text": "御机",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S18"],
+      "locator": "In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-trimounts:F01",
+      "concept_id": "place-trimounts",
+      "locale": "zh-CN",
+      "text": "特里蒙",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表对应行",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-trimounts:F02",
+      "concept_id": "place-trimounts",
+      "locale": "en",
+      "text": "Trimounts",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S19"],
+      "locator": "条目标题、概述或 In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-trimounts:F03",
+      "concept_id": "place-trimounts",
+      "locale": "ja-JP",
+      "text": "トリマウンツ",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S03"],
+      "locator": "年表 Location 栏（只取地名，不采用年代）",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-tkaronto:F01",
+      "concept_id": "place-tkaronto",
+      "locale": "en",
+      "text": "Tkaronto",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S20"],
+      "locator": "条目标题、概述或 In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-tkaronto:F02",
+      "concept_id": "place-tkaronto",
+      "locale": "ja-JP",
+      "text": "トカロント",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S20"],
+      "locator": "In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-tkaronto:F03",
+      "concept_id": "place-tkaronto",
+      "locale": "zh-CN",
+      "text": "提卡伦多",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S42"],
+      "locator": "档案资料三：宴会地点",
+      "notes": "原文为哥伦比亚的提卡伦多城，提取专名。"
+    },
+    {
+      "form_id": "place-wrankwood:F01",
+      "concept_id": "place-wrankwood",
+      "locale": "en",
+      "text": "Wrankwood",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S21"],
+      "locator": "条目标题、概述或 In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-wrankwood:F02",
+      "concept_id": "place-wrankwood",
+      "locale": "ja-JP",
+      "text": "ランクウッド",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S21"],
+      "locator": "In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-wrankwood:F03",
+      "concept_id": "place-wrankwood",
+      "locale": "zh-CN",
+      "text": "蓝卡坞",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S42"],
+      "locator": "模组故事及档案资料二：谈及蓝卡坞的观点",
+      "notes": "有反复出现的游戏原文，不支持兰卡坞。"
+    },
+    {
+      "form_id": "place-nuova-volsinii:F01",
+      "concept_id": "place-nuova-volsinii",
+      "locale": "zh-CN",
+      "text": "新沃尔西尼",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S44"],
+      "locator": "关卡描述",
+      "notes": "页面可见新沃尔西尼都市管理法即日施行。"
+    },
+    {
+      "form_id": "place-nuova-volsinii:F02",
+      "concept_id": "place-nuova-volsinii",
+      "locale": "en",
+      "text": "Nuova Volsinii",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S45"],
+      "locator": "November 5th, 1100／Leontuzzo one-year anniversary",
+      "notes": "只推约1099成立，不推精确成立月日。"
+    },
+    {
+      "form_id": "place-nuova-volsinii:F03",
+      "concept_id": "place-nuova-volsinii",
+      "locale": "ja-JP",
+      "text": "ヌオバ・ウォルシーニ",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S47"],
+      "locator": "脚注3：実装イベントでもヌオバ・ウォルシーニ到着以降",
+      "notes": "不得从此升级为官方译名；与仓库ヌオーヴァ逐字保留差异。"
+    },
+    {
+      "form_id": "place-montelupe:F01",
+      "concept_id": "place-montelupe",
+      "locale": "zh-CN",
+      "text": "蒙特卢佩",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表对应行",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-montelupe:F02",
+      "concept_id": "place-montelupe",
+      "locale": "en",
+      "text": "Montelupe",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S09"],
+      "locator": "条目标题、概述或 In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-athenius:F01",
+      "concept_id": "place-athenius",
+      "locale": "zh-CN",
+      "text": "雅赛努斯",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表对应行",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-athenius:F02",
+      "concept_id": "place-athenius",
+      "locale": "en",
+      "text": "Athenius",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S23"],
+      "locator": "条目标题、概述或 In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-athenius:F03",
+      "concept_id": "place-athenius",
+      "locale": "ja-JP",
+      "text": "アテヌス",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S23"],
+      "locator": "In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-athenius:F04",
+      "concept_id": "place-athenius",
+      "locale": "en",
+      "text": "Athenus",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表雅赛努斯行",
+      "notes": "与当前Athenius存在版本差异，未取得可定位的旧版游戏段落。"
+    },
+    {
+      "form_id": "place-kawalerielki:F01",
+      "concept_id": "place-kawalerielki",
+      "locale": "zh-CN",
+      "text": "卡瓦莱利亚基",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表对应行",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-kawalerielki:F02",
+      "concept_id": "place-kawalerielki",
+      "locale": "en",
+      "text": "Kawalerielki",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S24"],
+      "locator": "条目标题、概述或 In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-kawalerielki:F03",
+      "concept_id": "place-kawalerielki",
+      "locale": "ja-JP",
+      "text": "カヴァレリエルキ",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S03"],
+      "locator": "年表 Location 栏（只取地名，不采用年代）",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-vyseheim:F01",
+      "concept_id": "place-vyseheim",
+      "locale": "zh-CN",
+      "text": "维谢海姆",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表对应行",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-vyseheim:F02",
+      "concept_id": "place-vyseheim",
+      "locale": "en",
+      "text": "Vyseheim",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S25"],
+      "locator": "条目标题、概述或 In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-vyseheim:F03",
+      "concept_id": "place-vyseheim",
+      "locale": "ja-JP",
+      "text": "ヴィセハイム",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S48"],
+      "locator": "ヴィセハイム郵便勲章／勋章列表",
+      "notes": "提取勋章标题中的城市专名。"
+    },
+    {
+      "form_id": "place-zwillingsturme:F01",
+      "concept_id": "place-zwillingsturme",
+      "locale": "zh-CN",
+      "text": "崔林特尔梅",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表对应行",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-zwillingsturme:F02",
+      "concept_id": "place-zwillingsturme",
+      "locale": "en",
+      "text": "Zwillingstürme",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S26"],
+      "locator": "条目标题、概述或 In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-zwillingsturme:F03",
+      "concept_id": "place-zwillingsturme",
+      "locale": "ja-JP",
+      "text": "ツヴィリングトゥルム",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S26"],
+      "locator": "In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-zwillingsturme:F04",
+      "concept_id": "place-zwillingsturme",
+      "locale": "en",
+      "text": "Vedunien",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S49"],
+      "locator": "Vedunien's Collapse",
+      "notes": "历史前身名；此形式仅用于旧时期，不与当代名无条件互换。"
+    },
+    {
+      "form_id": "place-londinium:F01",
+      "concept_id": "place-londinium",
+      "locale": "zh-CN",
+      "text": "伦蒂尼姆",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表对应行",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-londinium:F02",
+      "concept_id": "place-londinium",
+      "locale": "en",
+      "text": "Londinium",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S27"],
+      "locator": "条目标题、概述或 In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-londinium:F03",
+      "concept_id": "place-londinium",
+      "locale": "ja-JP",
+      "text": "ロンディニウム",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S03"],
+      "locator": "年表 Location 栏（只取地名，不采用年代）",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-calais-blason:F01",
+      "concept_id": "place-calais-blason",
+      "locale": "en",
+      "text": "Calais-Blason",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S28"],
+      "locator": "条目标题、概述或 In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-calais-blason:F02",
+      "concept_id": "place-calais-blason",
+      "locale": "ja-JP",
+      "text": "セライブラソン",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S28"],
+      "locator": "In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-calais-blason:F03",
+      "concept_id": "place-calais-blason",
+      "locale": "zh-CN",
+      "text": "克莱布拉松",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S40"],
+      "locator": "克莱布拉松月报——林中古堡；林地城堡管家的笔记残片",
+      "notes": "已读取包含名称的标题及历史材料；不将地区和城堡合并。"
+    },
+    {
+      "form_id": "place-calais-blason:F04",
+      "concept_id": "place-calais-blason",
+      "locale": "en",
+      "text": "Celaiblason",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表克莱布拉松行／鹰角英文栏",
+      "notes": "与当前Calais-Blason并列，来源没有给出原文页码；不得将不同拼写静默归一。"
+    },
+    {
+      "form_id": "place-calais-blason:F05",
+      "concept_id": "place-calais-blason",
+      "locale": "en",
+      "text": "Calais-blason",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S41"],
+      "locator": "Human Resources 对话 place of birth",
+      "notes": "小写b按可见游戏对话保留，不静默改为标题大小写。"
+    },
+    {
+      "form_id": "place-deity-grypherburg:F01",
+      "concept_id": "place-deity-grypherburg",
+      "locale": "zh-CN",
+      "text": "圣骏堡",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表对应行",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-deity-grypherburg:F02",
+      "concept_id": "place-deity-grypherburg",
+      "locale": "en",
+      "text": "Deity Grypherburg",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S29"],
+      "locator": "条目标题、概述或 In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-deity-grypherburg:F03",
+      "concept_id": "place-deity-grypherburg",
+      "locale": "ja-JP",
+      "text": "サンクト・グリファーブルク",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S29"],
+      "locator": "In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-baizao:F01",
+      "concept_id": "place-baizao",
+      "locale": "zh-CN",
+      "text": "百灶",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表对应行",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-baizao:F02",
+      "concept_id": "place-baizao",
+      "locale": "en",
+      "text": "Baizao",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S30"],
+      "locator": "条目标题、概述或 In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-baizao:F03",
+      "concept_id": "place-baizao",
+      "locale": "ja-JP",
+      "text": "百灶",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S03"],
+      "locator": "年表 Location 栏（只取地名，不采用年代）",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-lungmen:F01",
+      "concept_id": "place-lungmen",
+      "locale": "zh-CN",
+      "text": "龙门",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表对应行",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-lungmen:F02",
+      "concept_id": "place-lungmen",
+      "locale": "en",
+      "text": "Lungmen",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S31"],
+      "locator": "条目标题、概述或 In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-lungmen:F03",
+      "concept_id": "place-lungmen",
+      "locale": "ja-JP",
+      "text": "龍門",
+      "origin": "official_direct",
+      "source_ids": ["GEO-S51"],
+      "locator": "角色魏彦吾／陣営欄",
+      "notes": "官方页面搜索摘要；不声称已读取动态页面正文。"
+    },
+    {
+      "form_id": "place-shangshu:F01",
+      "concept_id": "place-shangshu",
+      "locale": "zh-CN",
+      "text": "尚蜀",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表对应行",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-shangshu:F02",
+      "concept_id": "place-shangshu",
+      "locale": "en",
+      "text": "Shangshu",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S32"],
+      "locator": "条目标题、概述或 In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-shangshu:F03",
+      "concept_id": "place-shangshu",
+      "locale": "ja-JP",
+      "text": "尚蜀",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S03"],
+      "locator": "年表 Location 栏（只取地名，不采用年代）",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-volsinii:F01",
+      "concept_id": "place-volsinii",
+      "locale": "zh-CN",
+      "text": "沃尔西尼",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表对应行",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-volsinii:F02",
+      "concept_id": "place-volsinii",
+      "locale": "en",
+      "text": "Volsinii",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S22"],
+      "locator": "条目标题、概述或 In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-volsinii:F03",
+      "concept_id": "place-volsinii",
+      "locale": "ja-JP",
+      "text": "ウォルシーニ",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S46"],
+      "locator": "IS-ST-1／IS-ST-3 关卡说明及ウォルシーニ市観光案内",
+      "notes": "逐字保留ウォ；仓库ヴ不是本证据写法。"
+    },
+    {
+      "form_id": "place-max-dc:F01",
+      "concept_id": "place-max-dc",
+      "locale": "en",
+      "text": "Max D.C.",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S14"],
+      "locator": "条目标题、概述或 In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-max-dc:F02",
+      "concept_id": "place-max-dc",
+      "locale": "zh-CN",
+      "text": "麦克斯特区",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S43"],
+      "locator": "全新拓荒区即将开放申请／首段",
+      "notes": "游戏报纸转载中直接出现简称。"
+    },
+    {
+      "form_id": "place-max-dc:F03",
+      "concept_id": "place-max-dc",
+      "locale": "zh-CN",
+      "text": "麦克斯哥伦比亚特区",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表哥伦比亚下方特区行",
+      "notes": "社区提供较长形式，原始出处未列出。"
+    },
+    {
+      "form_id": "place-max-dc:F04",
+      "concept_id": "place-max-dc",
+      "locale": "en",
+      "text": "Max, District of Columbia",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表特区行",
+      "notes": "与Max D.C.区别保留，不把逗号删掉后冒称原文。"
+    },
+    {
+      "form_id": "place-propeller-paradise:F01",
+      "concept_id": "place-propeller-paradise",
+      "locale": "zh-CN",
+      "text": "螺旋桨天堂",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S33"],
+      "locator": "条目名称或项目国家栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-propeller-paradise:F02",
+      "concept_id": "place-propeller-paradise",
+      "locale": "en",
+      "text": "Propeller Paradise",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S33"],
+      "locator": "条目标题、概述或 In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-propeller-paradise:F03",
+      "concept_id": "place-propeller-paradise",
+      "locale": "ja-JP",
+      "text": "プロペラパラダイス",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S33"],
+      "locator": "In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-lingones:F01",
+      "concept_id": "place-lingones",
+      "locale": "zh-CN",
+      "text": "林贡斯",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表对应行",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-lingones:F02",
+      "concept_id": "place-lingones",
+      "locale": "en",
+      "text": "Lingones",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S34"],
+      "locator": "条目标题、概述或 In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-lingones:F03",
+      "concept_id": "place-lingones",
+      "locale": "ja-JP",
+      "text": "リンゴネス",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S34"],
+      "locator": "In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-siesta:F01",
+      "concept_id": "place-siesta",
+      "locale": "zh-CN",
+      "text": "汐斯塔",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表对应行",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-siesta:F02",
+      "concept_id": "place-siesta",
+      "locale": "en",
+      "text": "Siesta",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S35"],
+      "locator": "条目标题、概述或 In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-siesta:F03",
+      "concept_id": "place-siesta",
+      "locale": "ja-JP",
+      "text": "シエスタ",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S35"],
+      "locator": "In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-wolumonde:F01",
+      "concept_id": "place-wolumonde",
+      "locale": "zh-CN",
+      "text": "沃伦姆德",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S01"],
+      "locator": "地名表对应行",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-wolumonde:F02",
+      "concept_id": "place-wolumonde",
+      "locale": "en",
+      "text": "Wolumonde",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S36"],
+      "locator": "条目标题、概述或 In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-wolumonde:F03",
+      "concept_id": "place-wolumonde",
+      "locale": "ja-JP",
+      "text": "ウォルモンド",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S36"],
+      "locator": "In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "place-chernobog:F01",
+      "concept_id": "place-chernobog",
+      "locale": "zh-CN",
+      "text": "切尔诺伯格",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S50"],
+      "locator": "语音记录／阿撒兹勒诊所重建段（各语言相邻）",
+      "notes": "直接对照同一语音的多语专名。"
+    },
+    {
+      "form_id": "place-chernobog:F02",
+      "concept_id": "place-chernobog",
+      "locale": "en",
+      "text": "Chernobog",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S50"],
+      "locator": "语音记录／阿撒兹勒诊所重建段（各语言相邻）",
+      "notes": "直接对照同一语音的多语专名。"
+    },
+    {
+      "form_id": "place-chernobog:F03",
+      "concept_id": "place-chernobog",
+      "locale": "ja-JP",
+      "text": "チェルノボーグ",
+      "origin": "official_reproduced",
+      "source_ids": ["GEO-S50"],
+      "locator": "语音记录／阿撒兹勒诊所重建段（各语言相邻）",
+      "notes": "直接对照同一语音的多语专名。"
+    },
+    {
+      "form_id": "event-war-four-nations:F01",
+      "concept_id": "event-war-four-nations",
+      "locale": "zh-CN",
+      "text": "四国战争",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S38"],
+      "locator": "条目名称或项目国家栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "event-war-four-nations:F02",
+      "concept_id": "event-war-four-nations",
+      "locale": "en",
+      "text": "War of the Four Nations",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S38"],
+      "locator": "条目标题、概述或 In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "event-war-four-nations:F03",
+      "concept_id": "event-war-four-nations",
+      "locale": "ja-JP",
+      "text": "四国戦争",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S38"],
+      "locator": "In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "event-septemberaufstand:F01",
+      "concept_id": "event-septemberaufstand",
+      "locale": "zh-CN",
+      "text": "九月起义",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S39"],
+      "locator": "条目名称或项目国家栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "event-septemberaufstand:F02",
+      "concept_id": "event-septemberaufstand",
+      "locale": "en",
+      "text": "Septemberaufstand",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S39"],
+      "locator": "条目标题、概述或 In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "event-septemberaufstand:F03",
+      "concept_id": "event-septemberaufstand",
+      "locale": "ja-JP",
+      "text": "九月蜂起",
+      "origin": "community_reference",
+      "source_ids": ["GEO-S39"],
+      "locator": "In Other Languages 栏",
+      "notes": "使用本轮可见内容；非官方直发。"
+    },
+    {
+      "form_id": "org-crimson-troupe:F01",
+      "concept_id": "org-crimson-troupe",
+      "locale": "zh-CN",
+      "text": "猩红剧团",
+      "origin": "official_reproduced",
+      "source_ids": ["ORG-S10"],
+      "locator": "戏剧彩排／开演",
+      "notes": "官方结局文本经PRTS转载，摘录含团名；不据此认定整条路线为正史。"
+    },
+    {
+      "form_id": "org-crimson-troupe:F02",
+      "concept_id": "org-crimson-troupe",
+      "locale": "en",
+      "text": "Crimson Troupe",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S11"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-crimson-troupe:F03",
+      "concept_id": "org-crimson-troupe",
+      "locale": "ja-JP",
+      "text": "クリムゾン劇団",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S11"],
+      "locator": "In Other Languages／Japanese",
+      "notes": "当前社区条目搜索摘录已见；不同于本站已接受品牌猩紅劇団，需人工决定用途。"
+    },
+    {
+      "form_id": "person-phantom:F01",
+      "concept_id": "person-phantom",
+      "locale": "zh-CN",
+      "text": "傀影",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S09"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-phantom:F02",
+      "concept_id": "person-phantom",
+      "locale": "en",
+      "text": "Phantom",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S12"],
+      "locator": "标题与In Other Languages",
+      "notes": "当前社区条目搜索摘录已见，替代旧Fandom证据；来源等级不变。"
+    },
+    {
+      "form_id": "person-phantom:F03",
+      "concept_id": "person-phantom",
+      "locale": "ja-JP",
+      "text": "ファントム",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S12"],
+      "locator": "标题与In Other Languages",
+      "notes": "当前社区条目搜索摘录已见，替代旧Fandom证据；来源等级不变。"
+    },
+    {
+      "form_id": "person-phantom:F04",
+      "concept_id": "person-phantom",
+      "locale": "ja-JP",
+      "text": "ファントム",
+      "origin": "official_direct",
+      "source_ids": ["ORG-S03"],
+      "locator": "多言語ボイス／フランス語対象",
+      "notes": "官方公告搜索摘录直接出现。"
+    },
+    {
+      "form_id": "person-lucian:F01",
+      "concept_id": "person-lucian",
+      "locale": "zh-CN",
+      "text": "卢西恩",
+      "origin": "official_reproduced",
+      "source_ids": ["ORG-S08"],
+      "locator": "档案资料三／医疗部随访语音记录／访谈对象",
+      "notes": "明确游戏文字转载中的已见形式；读取范围见来源access，不表示已获项目批准。"
+    },
+    {
+      "form_id": "person-lucian:F02",
+      "concept_id": "person-lucian",
+      "locale": "en",
+      "text": "Lucian",
+      "origin": "community_reference",
+      "source_ids": ["ROOT-S01"],
+      "locator": "人物信息框／In Other Languages",
+      "notes": "当代社区人物条目直接列出的本名形式；不再由敌人长称号拆词。"
+    },
+    {
+      "form_id": "person-lucian:F03",
+      "concept_id": "person-lucian",
+      "locale": "ja-JP",
+      "text": "ルシアン",
+      "origin": "community_reference",
+      "source_ids": ["ROOT-S01"],
+      "locator": "人物信息框／In Other Languages",
+      "notes": "当代社区人物条目直接列出的本名形式；不再由敌人长称号拆词。"
+    },
+    {
+      "form_id": "person-tragodia-predecessor:F01",
+      "concept_id": "person-tragodia-predecessor",
+      "locale": "zh-CN",
+      "text": "“酒神”",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S14"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-tragodia-predecessor:F02",
+      "concept_id": "person-tragodia-predecessor",
+      "locale": "en",
+      "text": "Tragodia",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S14"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-tragodia-predecessor:F03",
+      "concept_id": "person-tragodia-predecessor",
+      "locale": "ja-JP",
+      "text": "酒神",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S14"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-tragodia-predecessor:F04",
+      "concept_id": "person-tragodia-predecessor",
+      "locale": "zh-CN",
+      "text": "剧团长",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S14"],
+      "locator": "Other names / SCN",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-tragodia-predecessor:F05",
+      "concept_id": "person-tragodia-predecessor",
+      "locale": "en",
+      "text": "Troupe Master",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S14"],
+      "locator": "Other names",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-tragodia-predecessor:F06",
+      "concept_id": "person-tragodia-predecessor",
+      "locale": "ja-JP",
+      "text": "劇団長",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S14"],
+      "locator": "Other names / JP",
+      "notes": "去除检索转写的注音，保留文字本体。"
+    },
+    {
+      "form_id": "title-tragodia-lucian:F01",
+      "concept_id": "title-tragodia-lucian",
+      "locale": "zh-CN",
+      "text": "酒神",
+      "origin": "official_direct",
+      "source_ids": ["ORG-S07"],
+      "locator": "戏中身组合包／名片主题可切换角色",
+      "notes": "发行方页面的已见形式；读取范围见来源access，不表示已获项目批准。"
+    },
+    {
+      "form_id": "title-tragodia-lucian:F02",
+      "concept_id": "title-tragodia-lucian",
+      "locale": "en",
+      "text": "Tragodia",
+      "origin": "official_direct",
+      "source_ids": ["ORG-S04"],
+      "locator": "LIMITED-TIME HEADHUNTING／DITHYRAMB UNENDING",
+      "notes": "发行方页面的已见形式；读取范围见来源access，不表示已获项目批准。"
+    },
+    {
+      "form_id": "title-tragodia-lucian:F03",
+      "concept_id": "title-tragodia-lucian",
+      "locale": "ja-JP",
+      "text": "トラゴーディア",
+      "origin": "official_direct",
+      "source_ids": ["ORG-S03"],
+      "locator": "新着オペレーター／訪れぬ幕切れ",
+      "notes": "官方公告搜索摘录；wiki.gg列トラゴディア，缺少长音符，冲突保留待审。"
+    },
+    {
+      "form_id": "title-tragodia-lucian:F04",
+      "concept_id": "title-tragodia-lucian",
+      "locale": "ja-JP",
+      "text": "トラゴディア",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S15"],
+      "locator": "In Other Languages／Japanese",
+      "notes": "与官方トラゴーディア冲突，仅用于保留证据，不应作已批准标准或自动显示别名。"
+    },
+    {
+      "form_id": "person-miss-christine:F01",
+      "concept_id": "person-miss-christine",
+      "locale": "zh-CN",
+      "text": "Miss.Christine",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S09"],
+      "locator": "角色经历",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-miss-christine:F02",
+      "concept_id": "person-miss-christine",
+      "locale": "en",
+      "text": "Miss.Christine",
+      "origin": "official_direct",
+      "source_ids": ["ORG-S04"],
+      "locator": "Backlot Entertainment Projects／REWARDS",
+      "notes": "发行方页面的已见形式；读取范围见来源access，不表示已获项目批准。"
+    },
+    {
+      "form_id": "person-miss-christine:F03",
+      "concept_id": "person-miss-christine",
+      "locale": "ja-JP",
+      "text": "ミス・クリスティーン",
+      "origin": "official_direct",
+      "source_ids": ["ORG-S03"],
+      "locator": "新着オペレーター",
+      "notes": "发行方页面的已见形式；读取范围见来源access，不表示已获项目批准。"
+    },
+    {
+      "form_id": "person-playwright:F01",
+      "concept_id": "person-playwright",
+      "locale": "zh-CN",
+      "text": "剧作家",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S17"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-playwright:F02",
+      "concept_id": "person-playwright",
+      "locale": "en",
+      "text": "Playwright",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S17"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-playwright:F03",
+      "concept_id": "person-playwright",
+      "locale": "ja-JP",
+      "text": "劇作家",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S17"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-troupe-mouthpiece:F01",
+      "concept_id": "person-troupe-mouthpiece",
+      "locale": "zh-CN",
+      "text": "剧团喉舌",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S18"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-troupe-mouthpiece:F02",
+      "concept_id": "person-troupe-mouthpiece",
+      "locale": "en",
+      "text": "Troupe Mouthpiece",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S18"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-troupe-mouthpiece:F03",
+      "concept_id": "person-troupe-mouthpiece",
+      "locale": "ja-JP",
+      "text": "劇団の喉舌",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S18"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-troupe-mouthpiece:F04",
+      "concept_id": "person-troupe-mouthpiece",
+      "locale": "zh-CN",
+      "text": "阿伦茨",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S18"],
+      "locator": "In Other Languages / Real name",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-troupe-mouthpiece:F05",
+      "concept_id": "person-troupe-mouthpiece",
+      "locale": "en",
+      "text": "Ahrendts",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S18"],
+      "locator": "Real name",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-troupe-mouthpiece:F06",
+      "concept_id": "person-troupe-mouthpiece",
+      "locale": "ja-JP",
+      "text": "アーレンツ",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S18"],
+      "locator": "In Other Languages / Japanese",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-shalem:F01",
+      "concept_id": "person-shalem",
+      "locale": "zh-CN",
+      "text": "暮落",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S19"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-shalem:F02",
+      "concept_id": "person-shalem",
+      "locale": "en",
+      "text": "Shalem",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S19"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-shalem:F03",
+      "concept_id": "person-shalem",
+      "locale": "ja-JP",
+      "text": "シャレム",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S19"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-rhodes-island:F01",
+      "concept_id": "org-rhodes-island",
+      "locale": "zh-CN",
+      "text": "罗德岛",
+      "origin": "official_direct",
+      "source_ids": ["ORG-S05"],
+      "locator": "功能介绍／医疗组织",
+      "notes": "发行方页面的已见形式；读取范围见来源access，不表示已获项目批准。"
+    },
+    {
+      "form_id": "org-rhodes-island:F02",
+      "concept_id": "org-rhodes-island",
+      "locale": "en",
+      "text": "Rhodes Island",
+      "origin": "official_direct",
+      "source_ids": ["ORG-S01"],
+      "locator": "Amiya leader／Reception Room clues",
+      "notes": "发行方页面的已见形式；读取范围见来源access，不表示已获项目批准。"
+    },
+    {
+      "form_id": "org-rhodes-island:F03",
+      "concept_id": "org-rhodes-island",
+      "locale": "ja-JP",
+      "text": "ロドス",
+      "origin": "official_direct",
+      "source_ids": ["ORG-S02"],
+      "locator": "応接室／手がかり",
+      "notes": "发行方页面的已见形式；读取范围见来源access，不表示已获项目批准。"
+    },
+    {
+      "form_id": "org-rhodes-island:F04",
+      "concept_id": "org-rhodes-island",
+      "locale": "en",
+      "text": "Rhodes Island Pharmaceuticals Inc.",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S20"],
+      "locator": "首段／正式机构全称",
+      "notes": "全称使用语境区别于陆行舰。"
+    },
+    {
+      "form_id": "org-babel:F01",
+      "concept_id": "org-babel",
+      "locale": "zh-CN",
+      "text": "巴别塔",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S21"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-babel:F02",
+      "concept_id": "org-babel",
+      "locale": "en",
+      "text": "Babel",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S21"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-babel:F03",
+      "concept_id": "org-babel",
+      "locale": "ja-JP",
+      "text": "バベル",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S21"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-rhine-lab:F01",
+      "concept_id": "org-rhine-lab",
+      "locale": "zh-CN",
+      "text": "莱茵生命",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S22"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-rhine-lab:F02",
+      "concept_id": "org-rhine-lab",
+      "locale": "en",
+      "text": "Rhine Lab",
+      "origin": "official_direct",
+      "source_ids": ["ORG-S01"],
+      "locator": "Reception Room clues",
+      "notes": "发行方页面的已见形式；读取范围见来源access，不表示已获项目批准。"
+    },
+    {
+      "form_id": "org-rhine-lab:F03",
+      "concept_id": "org-rhine-lab",
+      "locale": "ja-JP",
+      "text": "ライン生命",
+      "origin": "official_direct",
+      "source_ids": ["ORG-S02"],
+      "locator": "応接室／手がかり",
+      "notes": "发行方页面的已见形式；读取范围见来源access，不表示已获项目批准。"
+    },
+    {
+      "form_id": "org-maylander-foundation:F01",
+      "concept_id": "org-maylander-foundation",
+      "locale": "zh-CN",
+      "text": "梅兰德基金会",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S23"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-maylander-foundation:F02",
+      "concept_id": "org-maylander-foundation",
+      "locale": "en",
+      "text": "Maylander Foundation",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S23"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-maylander-foundation:F03",
+      "concept_id": "org-maylander-foundation",
+      "locale": "ja-JP",
+      "text": "マイレンダー基金",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S23"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-blacksteel-worldwide:F01",
+      "concept_id": "org-blacksteel-worldwide",
+      "locale": "zh-CN",
+      "text": "黑钢国际",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S24"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-blacksteel-worldwide:F02",
+      "concept_id": "org-blacksteel-worldwide",
+      "locale": "en",
+      "text": "Blacksteel Worldwide",
+      "origin": "official_direct",
+      "source_ids": ["ORG-S01"],
+      "locator": "Reception Room clues",
+      "notes": "发行方页面的已见形式；读取范围见来源access，不表示已获项目批准。"
+    },
+    {
+      "form_id": "org-blacksteel-worldwide:F03",
+      "concept_id": "org-blacksteel-worldwide",
+      "locale": "ja-JP",
+      "text": "ブラックスチール・ワールドワイド",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S24"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-penguin-logistics:F01",
+      "concept_id": "org-penguin-logistics",
+      "locale": "zh-CN",
+      "text": "企鹅物流",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S25"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-penguin-logistics:F02",
+      "concept_id": "org-penguin-logistics",
+      "locale": "en",
+      "text": "Penguin Logistics",
+      "origin": "official_direct",
+      "source_ids": ["ORG-S01"],
+      "locator": "Reception Room clues",
+      "notes": "发行方页面的已见形式；读取范围见来源access，不表示已获项目批准。"
+    },
+    {
+      "form_id": "org-penguin-logistics:F03",
+      "concept_id": "org-penguin-logistics",
+      "locale": "ja-JP",
+      "text": "ペンギン急便",
+      "origin": "official_direct",
+      "source_ids": ["ORG-S02"],
+      "locator": "エンペラーがペンギン急便を立ち上げた理由",
+      "notes": "发行方页面的已见形式；读取范围见来源access，不表示已获项目批准。"
+    },
+    {
+      "form_id": "org-karlan-trade:F01",
+      "concept_id": "org-karlan-trade",
+      "locale": "zh-CN",
+      "text": "喀兰贸易",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S26"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-karlan-trade:F02",
+      "concept_id": "org-karlan-trade",
+      "locale": "en",
+      "text": "Karlan Trade",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S26"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-karlan-trade:F03",
+      "concept_id": "org-karlan-trade",
+      "locale": "ja-JP",
+      "text": "カランド貿易",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S26"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-raythean-industries:F01",
+      "concept_id": "org-raythean-industries",
+      "locale": "zh-CN",
+      "text": "雷神重工",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S27"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-raythean-industries:F02",
+      "concept_id": "org-raythean-industries",
+      "locale": "en",
+      "text": "Raythean Industries",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S27"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-raythean-industries:F03",
+      "concept_id": "org-raythean-industries",
+      "locale": "ja-JP",
+      "text": "レイジアン工業",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S27"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-kazimierz-general-chamber:F01",
+      "concept_id": "org-kazimierz-general-chamber",
+      "locale": "zh-CN",
+      "text": "卡西米尔商业联合会",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S28"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-kazimierz-general-chamber:F02",
+      "concept_id": "org-kazimierz-general-chamber",
+      "locale": "en",
+      "text": "Kazimierz General Chamber of Commerce",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S28"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-kazimierz-general-chamber:F03",
+      "concept_id": "org-kazimierz-general-chamber",
+      "locale": "ja-JP",
+      "text": "カジミエーシュ商業連合会",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S28"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-armorless-union:F01",
+      "concept_id": "org-armorless-union",
+      "locale": "zh-CN",
+      "text": "卡西米尔无胄盟",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S29"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-armorless-union:F02",
+      "concept_id": "org-armorless-union",
+      "locale": "en",
+      "text": "Kazimierz Armorless Union",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S29"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-armorless-union:F03",
+      "concept_id": "org-armorless-union",
+      "locale": "ja-JP",
+      "text": "カジミエーシュ無冑盟",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S29"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-reunion:F01",
+      "concept_id": "org-reunion",
+      "locale": "zh-CN",
+      "text": "整合运动",
+      "origin": "official_direct",
+      "source_ids": ["ORG-S05"],
+      "locator": "游戏简介／对抗整合运动",
+      "notes": "发行方页面的已见形式；读取范围见来源access，不表示已获项目批准。"
+    },
+    {
+      "form_id": "org-reunion:F02",
+      "concept_id": "org-reunion",
+      "locale": "en",
+      "text": "Reunion Movement",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S30"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-reunion:F03",
+      "concept_id": "org-reunion",
+      "locale": "ja-JP",
+      "text": "レユニオン・ムーブメント",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S30"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-pinus-sylvestris:F01",
+      "concept_id": "org-pinus-sylvestris",
+      "locale": "zh-CN",
+      "text": "红松骑士团",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S31"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-pinus-sylvestris:F02",
+      "concept_id": "org-pinus-sylvestris",
+      "locale": "en",
+      "text": "Pinus Sylvestris Knightclub",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S31"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-pinus-sylvestris:F03",
+      "concept_id": "org-pinus-sylvestris",
+      "locale": "ja-JP",
+      "text": "レッドパイン騎士団",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S31"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-followers:F01",
+      "concept_id": "org-followers",
+      "locale": "zh-CN",
+      "text": "使徒",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S32"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-followers:F02",
+      "concept_id": "org-followers",
+      "locale": "en",
+      "text": "Followers",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S32"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-followers:F03",
+      "concept_id": "org-followers",
+      "locale": "ja-JP",
+      "text": "使徒",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S32"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-lungmen-guard-department:F01",
+      "concept_id": "org-lungmen-guard-department",
+      "locale": "zh-CN",
+      "text": "龙门近卫局",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S33"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-lungmen-guard-department:F02",
+      "concept_id": "org-lungmen-guard-department",
+      "locale": "en",
+      "text": "Lungmen Guard Department",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S33"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "org-lungmen-guard-department:F03",
+      "concept_id": "org-lungmen-guard-department",
+      "locale": "ja-JP",
+      "text": "龍門近衛局",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S33"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-amiya:F01",
+      "concept_id": "person-amiya",
+      "locale": "zh-CN",
+      "text": "阿米娅",
+      "origin": "official_direct",
+      "source_ids": ["ORG-S05"],
+      "locator": "功能介绍",
+      "notes": "发行方页面的已见形式；读取范围见来源access，不表示已获项目批准。"
+    },
+    {
+      "form_id": "person-amiya:F02",
+      "concept_id": "person-amiya",
+      "locale": "en",
+      "text": "Amiya",
+      "origin": "official_direct",
+      "source_ids": ["ORG-S01"],
+      "locator": "Amiya character design question",
+      "notes": "发行方页面的已见形式；读取范围见来源access，不表示已获项目批准。"
+    },
+    {
+      "form_id": "person-amiya:F03",
+      "concept_id": "person-amiya",
+      "locale": "ja-JP",
+      "text": "アーミヤ",
+      "origin": "official_direct",
+      "source_ids": ["ORG-S02"],
+      "locator": "アーミヤが創作されたきっかけ",
+      "notes": "发行方页面的已见形式；读取范围见来源access，不表示已获项目批准。"
+    },
+    {
+      "form_id": "person-kaltsit:F01",
+      "concept_id": "person-kaltsit",
+      "locale": "zh-CN",
+      "text": "凯尔希",
+      "origin": "official_direct",
+      "source_ids": ["ORG-S06"],
+      "locator": "PROFILE / 凯尔希",
+      "notes": "发行方页面的已见形式；读取范围见来源access，不表示已获项目批准。"
+    },
+    {
+      "form_id": "person-kaltsit:F02",
+      "concept_id": "person-kaltsit",
+      "locale": "en",
+      "text": "Kal'tsit",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S35"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-kaltsit:F03",
+      "concept_id": "person-kaltsit",
+      "locale": "ja-JP",
+      "text": "ケルシー",
+      "origin": "official_direct",
+      "source_ids": ["ORG-S02"],
+      "locator": "医学研究者段落",
+      "notes": "发行方页面的已见形式；读取范围见来源access，不表示已获项目批准。"
+    },
+    {
+      "form_id": "person-doctor:F01",
+      "concept_id": "person-doctor",
+      "locale": "zh-CN",
+      "text": "博士",
+      "origin": "official_direct",
+      "source_ids": ["ORG-S05"],
+      "locator": "功能介绍／从沉睡中苏醒的博士",
+      "notes": "发行方页面的已见形式；读取范围见来源access，不表示已获项目批准。"
+    },
+    {
+      "form_id": "person-doctor:F02",
+      "concept_id": "person-doctor",
+      "locale": "en",
+      "text": "Doctor",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S36"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-doctor:F03",
+      "concept_id": "person-doctor",
+      "locale": "ja-JP",
+      "text": "ドクター",
+      "origin": "official_direct",
+      "source_ids": ["ORG-S02"],
+      "locator": "导言／ドクターの皆さん",
+      "notes": "发行方页面的已见形式；读取范围见来源access，不表示已获项目批准。"
+    },
+    {
+      "form_id": "person-theresa:F01",
+      "concept_id": "person-theresa",
+      "locale": "zh-CN",
+      "text": "特蕾西娅",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S37"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-theresa:F02",
+      "concept_id": "person-theresa",
+      "locale": "en",
+      "text": "Theresa",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S37"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-theresa:F03",
+      "concept_id": "person-theresa",
+      "locale": "ja-JP",
+      "text": "テレジア",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S37"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-theresis:F01",
+      "concept_id": "person-theresis",
+      "locale": "zh-CN",
+      "text": "特雷西斯",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S38"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-theresis:F02",
+      "concept_id": "person-theresis",
+      "locale": "en",
+      "text": "Theresis",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S38"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-theresis:F03",
+      "concept_id": "person-theresis",
+      "locale": "ja-JP",
+      "text": "テレシス",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S38"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-saria:F01",
+      "concept_id": "person-saria",
+      "locale": "zh-CN",
+      "text": "塞雷娅",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S39"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-saria:F02",
+      "concept_id": "person-saria",
+      "locale": "en",
+      "text": "Saria",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S39"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-saria:F03",
+      "concept_id": "person-saria",
+      "locale": "ja-JP",
+      "text": "サリア",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S39"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-silence:F01",
+      "concept_id": "person-silence",
+      "locale": "zh-CN",
+      "text": "赫默",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S40"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-silence:F02",
+      "concept_id": "person-silence",
+      "locale": "en",
+      "text": "Silence",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S40"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-silence:F03",
+      "concept_id": "person-silence",
+      "locale": "ja-JP",
+      "text": "サイレンス",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S40"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-kristen-wright:F01",
+      "concept_id": "person-kristen-wright",
+      "locale": "zh-CN",
+      "text": "克丽斯腾·莱特",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S41"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-kristen-wright:F02",
+      "concept_id": "person-kristen-wright",
+      "locale": "en",
+      "text": "Kristen Wright",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S41"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-kristen-wright:F03",
+      "concept_id": "person-kristen-wright",
+      "locale": "ja-JP",
+      "text": "クリステン・ライト",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S41"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-emperor:F01",
+      "concept_id": "person-emperor",
+      "locale": "zh-CN",
+      "text": "大帝",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S42"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-emperor:F02",
+      "concept_id": "person-emperor",
+      "locale": "en",
+      "text": "Emperor",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S42"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-emperor:F03",
+      "concept_id": "person-emperor",
+      "locale": "ja-JP",
+      "text": "エンペラー",
+      "origin": "official_direct",
+      "source_ids": ["ORG-S02"],
+      "locator": "エンペラーがペンギン急便を立ち上げた理由",
+      "notes": "发行方页面的已见形式；读取范围见来源access，不表示已获项目批准。"
+    },
+    {
+      "form_id": "person-texas:F01",
+      "concept_id": "person-texas",
+      "locale": "zh-CN",
+      "text": "德克萨斯",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S43"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-texas:F02",
+      "concept_id": "person-texas",
+      "locale": "en",
+      "text": "Texas",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S43"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-texas:F03",
+      "concept_id": "person-texas",
+      "locale": "ja-JP",
+      "text": "テキサス",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S43"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-chen:F01",
+      "concept_id": "person-chen",
+      "locale": "zh-CN",
+      "text": "陈",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S44"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-chen:F02",
+      "concept_id": "person-chen",
+      "locale": "en",
+      "text": "Ch'en",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S44"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-chen:F03",
+      "concept_id": "person-chen",
+      "locale": "ja-JP",
+      "text": "チェン",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S44"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-hoshiguma:F01",
+      "concept_id": "person-hoshiguma",
+      "locale": "zh-CN",
+      "text": "星熊",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S45"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-hoshiguma:F02",
+      "concept_id": "person-hoshiguma",
+      "locale": "en",
+      "text": "Hoshiguma",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S45"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-hoshiguma:F03",
+      "concept_id": "person-hoshiguma",
+      "locale": "ja-JP",
+      "text": "ホシグマ",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S45"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-nearl:F01",
+      "concept_id": "person-nearl",
+      "locale": "zh-CN",
+      "text": "临光",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S46"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-nearl:F02",
+      "concept_id": "person-nearl",
+      "locale": "en",
+      "text": "Nearl",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S46"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-nearl:F03",
+      "concept_id": "person-nearl",
+      "locale": "ja-JP",
+      "text": "ニアール",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S46"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-patriot:F01",
+      "concept_id": "person-patriot",
+      "locale": "zh-CN",
+      "text": "爱国者",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S47"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-patriot:F02",
+      "concept_id": "person-patriot",
+      "locale": "en",
+      "text": "Patriot",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S47"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-patriot:F03",
+      "concept_id": "person-patriot",
+      "locale": "ja-JP",
+      "text": "パトリオット",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S47"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-patriot:F04",
+      "concept_id": "person-patriot",
+      "locale": "zh-CN",
+      "text": "博卓卡斯替",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S47"],
+      "locator": "Real name",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-patriot:F05",
+      "concept_id": "person-patriot",
+      "locale": "en",
+      "text": "Buldrokkas'tee",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S47"],
+      "locator": "Real name",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-patriot:F06",
+      "concept_id": "person-patriot",
+      "locale": "ja-JP",
+      "text": "ボジョカスティ",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S47"],
+      "locator": "Real name／JP",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-talulah:F01",
+      "concept_id": "person-talulah",
+      "locale": "zh-CN",
+      "text": "塔露拉·雅特利亚斯",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S48"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-talulah:F02",
+      "concept_id": "person-talulah",
+      "locale": "en",
+      "text": "Talulah Artorius",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S48"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "person-talulah:F03",
+      "concept_id": "person-talulah",
+      "locale": "ja-JP",
+      "text": "タルラ・アルトリウス",
+      "origin": "community_reference",
+      "source_ids": ["ORG-S48"],
+      "locator": "标题；In Other Languages；简介",
+      "notes": "社区整理形式，搜索索引摘录支持；尚非人工批准标准。"
+    },
+    {
+      "form_id": "concept-originium:F01",
+      "concept_id": "concept-originium",
+      "locale": "zh-CN",
+      "text": "源石",
+      "origin": "official_direct",
+      "source_ids": ["WORLD-S01"],
+      "locator": "游戏简介第1段",
+      "notes": ""
+    },
+    {
+      "form_id": "concept-originium:F02",
+      "concept_id": "concept-originium",
+      "locale": "en",
+      "text": "Originium",
+      "origin": "official_direct",
+      "source_ids": ["WORLD-S04"],
+      "locator": "What makes you to design such a game?",
+      "notes": "搜索索引可见"
+    },
+    {
+      "form_id": "concept-originium:F03",
+      "concept_id": "concept-originium",
+      "locale": "ja-JP",
+      "text": "源石",
+      "origin": "official_direct",
+      "source_ids": ["WORLD-S03"],
+      "locator": "アークナイツ产品简介",
+      "notes": ""
+    },
+    {
+      "form_id": "concept-oripathy:F01",
+      "concept_id": "concept-oripathy",
+      "locale": "zh-CN",
+      "text": "矿石病",
+      "origin": "official_direct",
+      "source_ids": ["WORLD-S01"],
+      "locator": "第2段",
+      "notes": ""
+    },
+    {
+      "form_id": "concept-oripathy:F02",
+      "concept_id": "concept-oripathy",
+      "locale": "en",
+      "text": "Oripathy",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S08"],
+      "locator": "标题及开头",
+      "notes": "搜索索引可见；非官方站"
+    },
+    {
+      "form_id": "concept-oripathy:F03",
+      "concept_id": "concept-oripathy",
+      "locale": "ja-JP",
+      "text": "鉱石病",
+      "origin": "official_direct",
+      "source_ids": ["WORLD-S03"],
+      "locator": "アークナイツ产品简介",
+      "notes": ""
+    },
+    {
+      "form_id": "concept-infected:F01",
+      "concept_id": "concept-infected",
+      "locale": "zh-CN",
+      "text": "感染者",
+      "origin": "official_direct",
+      "source_ids": ["WORLD-S01"],
+      "locator": "游戏简介第1段",
+      "notes": ""
+    },
+    {
+      "form_id": "concept-infected:F02",
+      "concept_id": "concept-infected",
+      "locale": "en",
+      "text": "Infected",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S08"],
+      "locator": "Individuals with Oripathy...段",
+      "notes": "搜索索引可见"
+    },
+    {
+      "form_id": "concept-infected:F03",
+      "concept_id": "concept-infected",
+      "locale": "ja-JP",
+      "text": "感染者",
+      "origin": "official_direct",
+      "source_ids": ["WORLD-S42"],
+      "locator": "Talulah角色简介/感染者たち",
+      "notes": "从带复数助词的感染者たち取词干；官方动画页面索引。"
+    },
+    {
+      "form_id": "concept-arts:F01",
+      "concept_id": "concept-arts",
+      "locale": "zh-CN",
+      "text": "源石技艺",
+      "origin": "official_reproduced",
+      "source_ids": ["WORLD-S02"],
+      "locator": "通常/背景",
+      "notes": ""
+    },
+    {
+      "form_id": "concept-arts:F02",
+      "concept_id": "concept-arts",
+      "locale": "en",
+      "text": "Arts",
+      "origin": "official_direct",
+      "source_ids": ["WORLD-S04"],
+      "locator": "Lateranos wings问答",
+      "notes": "搜索索引可见"
+    },
+    {
+      "form_id": "concept-arts:F03",
+      "concept_id": "concept-arts",
+      "locale": "en",
+      "text": "Originium Arts",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S19"],
+      "locator": "页面标题",
+      "notes": "搜索索引可见"
+    },
+    {
+      "form_id": "concept-arts:F04",
+      "concept_id": "concept-arts",
+      "locale": "ja-JP",
+      "text": "アーツ",
+      "origin": "official_direct",
+      "source_ids": ["WORLD-S06"],
+      "locator": "Amiya角色介绍",
+      "notes": "官方动画页面索引；仅作名称证据"
+    },
+    {
+      "form_id": "concept-catastrophe:F01",
+      "concept_id": "concept-catastrophe",
+      "locale": "zh-CN",
+      "text": "天灾",
+      "origin": "official_direct",
+      "source_ids": ["WORLD-S01"],
+      "locator": "游戏简介第1段",
+      "notes": ""
+    },
+    {
+      "form_id": "concept-catastrophe:F02",
+      "concept_id": "concept-catastrophe",
+      "locale": "en",
+      "text": "Catastrophes",
+      "origin": "official_direct",
+      "source_ids": ["WORLD-S04"],
+      "locator": "游戏主题与天灾信使问答",
+      "notes": "索引可见复数"
+    },
+    {
+      "form_id": "concept-catastrophe:F03",
+      "concept_id": "concept-catastrophe",
+      "locale": "ja-JP",
+      "text": "天災",
+      "origin": "official_direct",
+      "source_ids": ["WORLD-S03"],
+      "locator": "アークナイツ产品简介",
+      "notes": ""
+    },
+    {
+      "form_id": "concept-nomadic-city:F01",
+      "concept_id": "concept-nomadic-city",
+      "locale": "zh-CN",
+      "text": "移动城市",
+      "origin": "official_reproduced",
+      "source_ids": ["WORLD-S02"],
+      "locator": "世界观/移动城市",
+      "notes": ""
+    },
+    {
+      "form_id": "concept-nomadic-city:F02",
+      "concept_id": "concept-nomadic-city",
+      "locale": "en",
+      "text": "Nomadic city",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S09"],
+      "locator": "页面标题",
+      "notes": "首字母采用页面标题形式；索引可见"
+    },
+    {
+      "form_id": "role-catastrophe-messenger:F01",
+      "concept_id": "role-catastrophe-messenger",
+      "locale": "zh-CN",
+      "text": "天灾信使",
+      "origin": "official_reproduced",
+      "source_ids": ["WORLD-S11"],
+      "locator": "客观履历及干员报到",
+      "notes": ""
+    },
+    {
+      "form_id": "role-catastrophe-messenger:F02",
+      "concept_id": "role-catastrophe-messenger",
+      "locale": "en",
+      "text": "Catastrophe Messenger",
+      "origin": "official_direct",
+      "source_ids": ["WORLD-S04"],
+      "locator": "job description问答",
+      "notes": "搜索索引可见"
+    },
+    {
+      "form_id": "role-catastrophe-messenger:F03",
+      "concept_id": "role-catastrophe-messenger",
+      "locale": "ja-JP",
+      "text": "天災トランスポーター",
+      "origin": "official_direct",
+      "source_ids": ["WORLD-S05"],
+      "locator": "天災トランスポーターとは问答",
+      "notes": "搜索索引可见"
+    },
+    {
+      "form_id": "concept-oripathy-suppressant:F01",
+      "concept_id": "concept-oripathy-suppressant",
+      "locale": "zh-CN",
+      "text": "矿石病抑制剂",
+      "origin": "official_reproduced",
+      "source_ids": ["WORLD-S13"],
+      "locator": "凯尔希·思衡托信物说明",
+      "notes": ""
+    },
+    {
+      "form_id": "concept-oripathy-suppressant:F02",
+      "concept_id": "concept-oripathy-suppressant",
+      "locale": "en",
+      "text": "Oripathy suppressants",
+      "origin": "official_reproduced",
+      "source_ids": ["WORLD-S14"],
+      "locator": "Company Representative开头台词",
+      "notes": "搜索索引可见复数"
+    },
+    {
+      "form_id": "currency-lmd:F01",
+      "concept_id": "currency-lmd",
+      "locale": "zh-CN",
+      "text": "龙门币",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S07"],
+      "locator": "In Other Languages",
+      "notes": "搜索索引可见"
+    },
+    {
+      "form_id": "currency-lmd:F02",
+      "concept_id": "currency-lmd",
+      "locale": "en",
+      "text": "LMD",
+      "origin": "official_direct",
+      "source_ids": ["WORLD-S04"],
+      "locator": "leveling up Operators问答",
+      "notes": "搜索索引可见"
+    },
+    {
+      "form_id": "currency-lmd:F03",
+      "concept_id": "currency-lmd",
+      "locale": "en",
+      "text": "Lungmen dollar",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S07"],
+      "locator": "开头括注",
+      "notes": "搜索索引可见"
+    },
+    {
+      "form_id": "currency-lmd:F04",
+      "concept_id": "currency-lmd",
+      "locale": "ja-JP",
+      "text": "龍門幣",
+      "origin": "official_direct",
+      "source_ids": ["WORLD-S20"],
+      "locator": "游戏兑换码内容清单",
+      "notes": "搜索索引可见"
+    },
+    {
+      "form_id": "role-operator:F01",
+      "concept_id": "role-operator",
+      "locale": "zh-CN",
+      "text": "干员",
+      "origin": "official_direct",
+      "source_ids": ["WORLD-S01"],
+      "locator": "第2段",
+      "notes": ""
+    },
+    {
+      "form_id": "role-operator:F02",
+      "concept_id": "role-operator",
+      "locale": "en",
+      "text": "Operator",
+      "origin": "official_direct",
+      "source_ids": ["WORLD-S04"],
+      "locator": "training资源回答",
+      "notes": "搜索索引可见单数"
+    },
+    {
+      "form_id": "role-operator:F03",
+      "concept_id": "role-operator",
+      "locale": "ja-JP",
+      "text": "オペレーター",
+      "origin": "official_direct",
+      "source_ids": ["WORLD-S05"],
+      "locator": "角色设计问答",
+      "notes": "搜索索引可见"
+    },
+    {
+      "form_id": "concept-originium-engine:F01",
+      "concept_id": "concept-originium-engine",
+      "locale": "zh-CN",
+      "text": "源石引擎",
+      "origin": "official_reproduced",
+      "source_ids": ["WORLD-S02"],
+      "locator": "世界观/源石及移动城市",
+      "notes": ""
+    },
+    {
+      "form_id": "concept-originium-engine:F02",
+      "concept_id": "concept-originium-engine",
+      "locale": "en",
+      "text": "Originium engine",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S09"],
+      "locator": "Description / birth of the Originium engine",
+      "notes": "主审复核Description可见，但本轮未独立比对其所引官方正文，保守登记为社区参考。"
+    },
+    {
+      "form_id": "concept-infection-monitor:F01",
+      "concept_id": "concept-infection-monitor",
+      "locale": "zh-CN",
+      "text": "感染监控装置",
+      "origin": "official_reproduced",
+      "source_ids": ["WORLD-S02"],
+      "locator": "通常/背景",
+      "notes": ""
+    },
+    {
+      "form_id": "concept-infection-monitor:F02",
+      "concept_id": "concept-infection-monitor",
+      "locale": "en",
+      "text": "Infection monitor",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S10"],
+      "locator": "标题及Loading screen tip",
+      "notes": "搜索索引可见"
+    },
+    {
+      "form_id": "concept-seaborn:F01",
+      "concept_id": "concept-seaborn",
+      "locale": "zh-CN",
+      "text": "海嗣",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S16"],
+      "locator": "In Other Languages",
+      "notes": "搜索索引可见"
+    },
+    {
+      "form_id": "concept-seaborn:F02",
+      "concept_id": "concept-seaborn",
+      "locale": "en",
+      "text": "Seaborn",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S16"],
+      "locator": "标题",
+      "notes": "Wiki对复数有自己的编辑规范"
+    },
+    {
+      "form_id": "concept-seaborn:F03",
+      "concept_id": "concept-seaborn",
+      "locale": "ja-JP",
+      "text": "シーボーン",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S16"],
+      "locator": "In Other Languages",
+      "notes": "搜索索引可见；未直接查日服客户端"
+    },
+    {
+      "form_id": "concept-collapsal:F01",
+      "concept_id": "concept-collapsal",
+      "locale": "zh-CN",
+      "text": "坍缩体",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S17"],
+      "locator": "In Other Languages",
+      "notes": "搜索索引可见"
+    },
+    {
+      "form_id": "concept-collapsal:F02",
+      "concept_id": "concept-collapsal",
+      "locale": "en",
+      "text": "Collapsal",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S17"],
+      "locator": "标题",
+      "notes": "搜索索引可见"
+    },
+    {
+      "form_id": "concept-collapsal:F03",
+      "concept_id": "concept-collapsal",
+      "locale": "ja-JP",
+      "text": "崩壊体",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S17"],
+      "locator": "In Other Languages",
+      "notes": "删除ruby读音保留字面；搜索索引可见"
+    },
+    {
+      "form_id": "concept-originium-slug:F01",
+      "concept_id": "concept-originium-slug",
+      "locale": "zh-CN",
+      "text": "源石虫",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S18"],
+      "locator": "In Other Languages",
+      "notes": "搜索索引可见"
+    },
+    {
+      "form_id": "concept-originium-slug:F02",
+      "concept_id": "concept-originium-slug",
+      "locale": "en",
+      "text": "Originium slug",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S18"],
+      "locator": "标题",
+      "notes": "搜索索引可见"
+    },
+    {
+      "form_id": "concept-originium-slug:F03",
+      "concept_id": "concept-originium-slug",
+      "locale": "ja-JP",
+      "text": "オリジムシ",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S18"],
+      "locator": "In Other Languages",
+      "notes": "搜索索引可见"
+    },
+    {
+      "form_id": "concept-cell-originium-assimilation:F01",
+      "concept_id": "concept-cell-originium-assimilation",
+      "locale": "zh-CN",
+      "text": "体细胞与源石融合率",
+      "origin": "official_reproduced",
+      "source_ids": ["WORLD-S11"],
+      "locator": "临床诊断分析",
+      "notes": ""
+    },
+    {
+      "form_id": "concept-cell-originium-assimilation:F02",
+      "concept_id": "concept-cell-originium-assimilation",
+      "locale": "en",
+      "text": "Cell-Originium Assimilation",
+      "origin": "official_reproduced",
+      "source_ids": ["WORLD-S12"],
+      "locator": "Clinical Analysis",
+      "notes": "搜索索引可见"
+    },
+    {
+      "form_id": "concept-blood-originium-density:F01",
+      "concept_id": "concept-blood-originium-density",
+      "locale": "zh-CN",
+      "text": "血液源石结晶密度",
+      "origin": "official_reproduced",
+      "source_ids": ["WORLD-S11"],
+      "locator": "临床诊断分析",
+      "notes": ""
+    },
+    {
+      "form_id": "concept-blood-originium-density:F02",
+      "concept_id": "concept-blood-originium-density",
+      "locale": "en",
+      "text": "Blood Originium-Crystal Density",
+      "origin": "official_reproduced",
+      "source_ids": ["WORLD-S12"],
+      "locator": "Clinical Analysis",
+      "notes": "搜索索引可见"
+    },
+    {
+      "form_id": "race-sarkaz:F01",
+      "concept_id": "race-sarkaz",
+      "locale": "zh-CN",
+      "text": "萨卡兹",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S21"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-sarkaz:F02",
+      "concept_id": "race-sarkaz",
+      "locale": "en",
+      "text": "Sarkaz",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S21"],
+      "locator": "页面标题",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-sarkaz:F03",
+      "concept_id": "race-sarkaz",
+      "locale": "ja-JP",
+      "text": "サルカズ",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S21"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-sankta:F01",
+      "concept_id": "race-sankta",
+      "locale": "zh-CN",
+      "text": "萨科塔",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S22"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-sankta:F02",
+      "concept_id": "race-sankta",
+      "locale": "en",
+      "text": "Sankta",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S22"],
+      "locator": "页面标题",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-sankta:F03",
+      "concept_id": "race-sankta",
+      "locale": "ja-JP",
+      "text": "サンクタ",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S22"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-feline:F01",
+      "concept_id": "race-feline",
+      "locale": "zh-CN",
+      "text": "菲林",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S23"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-feline:F02",
+      "concept_id": "race-feline",
+      "locale": "en",
+      "text": "Feline",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S23"],
+      "locator": "页面标题",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-feline:F03",
+      "concept_id": "race-feline",
+      "locale": "ja-JP",
+      "text": "フェリーン",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S23"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-caprinae:F01",
+      "concept_id": "race-caprinae",
+      "locale": "zh-CN",
+      "text": "卡普里尼",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S24"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-caprinae:F02",
+      "concept_id": "race-caprinae",
+      "locale": "en",
+      "text": "Caprinae",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S24"],
+      "locator": "页面标题",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-caprinae:F03",
+      "concept_id": "race-caprinae",
+      "locale": "ja-JP",
+      "text": "キャプリニー",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S24"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-lupo:F01",
+      "concept_id": "race-lupo",
+      "locale": "zh-CN",
+      "text": "鲁珀",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S25"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-lupo:F02",
+      "concept_id": "race-lupo",
+      "locale": "en",
+      "text": "Lupo",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S25"],
+      "locator": "页面标题",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-lupo:F03",
+      "concept_id": "race-lupo",
+      "locale": "ja-JP",
+      "text": "ループス",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S25"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-liberi:F01",
+      "concept_id": "race-liberi",
+      "locale": "zh-CN",
+      "text": "黎博利",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S26"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-liberi:F02",
+      "concept_id": "race-liberi",
+      "locale": "en",
+      "text": "Liberi",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S26"],
+      "locator": "页面标题",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-liberi:F03",
+      "concept_id": "race-liberi",
+      "locale": "ja-JP",
+      "text": "リーベリ",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S26"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-vulpo:F01",
+      "concept_id": "race-vulpo",
+      "locale": "zh-CN",
+      "text": "沃尔珀",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S27"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-vulpo:F02",
+      "concept_id": "race-vulpo",
+      "locale": "en",
+      "text": "Vulpo",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S27"],
+      "locator": "页面标题",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-vulpo:F03",
+      "concept_id": "race-vulpo",
+      "locale": "ja-JP",
+      "text": "ヴァルポ",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S27"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-forte:F01",
+      "concept_id": "race-forte",
+      "locale": "zh-CN",
+      "text": "丰蹄",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S28"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-forte:F02",
+      "concept_id": "race-forte",
+      "locale": "en",
+      "text": "Forte",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S28"],
+      "locator": "页面标题",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-forte:F03",
+      "concept_id": "race-forte",
+      "locale": "ja-JP",
+      "text": "フォルテ",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S28"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-aslan:F01",
+      "concept_id": "race-aslan",
+      "locale": "zh-CN",
+      "text": "阿斯兰",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S29"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-aslan:F02",
+      "concept_id": "race-aslan",
+      "locale": "en",
+      "text": "Aslan",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S29"],
+      "locator": "页面标题",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-aslan:F03",
+      "concept_id": "race-aslan",
+      "locale": "ja-JP",
+      "text": "アスラン",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S29"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-kuranta:F01",
+      "concept_id": "race-kuranta",
+      "locale": "zh-CN",
+      "text": "库兰塔",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S30"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-kuranta:F02",
+      "concept_id": "race-kuranta",
+      "locale": "en",
+      "text": "Kuranta",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S30"],
+      "locator": "页面标题",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-kuranta:F03",
+      "concept_id": "race-kuranta",
+      "locale": "ja-JP",
+      "text": "クランタ",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S30"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-elafia:F01",
+      "concept_id": "race-elafia",
+      "locale": "zh-CN",
+      "text": "埃拉菲亚",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S31"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-elafia:F02",
+      "concept_id": "race-elafia",
+      "locale": "en",
+      "text": "Elafia",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S31"],
+      "locator": "页面标题",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-elafia:F03",
+      "concept_id": "race-elafia",
+      "locale": "ja-JP",
+      "text": "エラフィア",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S31"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-zalak:F01",
+      "concept_id": "race-zalak",
+      "locale": "zh-CN",
+      "text": "札拉克",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S32"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-zalak:F02",
+      "concept_id": "race-zalak",
+      "locale": "en",
+      "text": "Zalak",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S32"],
+      "locator": "页面标题",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-zalak:F03",
+      "concept_id": "race-zalak",
+      "locale": "ja-JP",
+      "text": "ザラック",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S32"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-vouivre:F01",
+      "concept_id": "race-vouivre",
+      "locale": "zh-CN",
+      "text": "瓦伊凡",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S33"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-vouivre:F02",
+      "concept_id": "race-vouivre",
+      "locale": "en",
+      "text": "Vouivre",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S33"],
+      "locator": "页面标题",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-vouivre:F03",
+      "concept_id": "race-vouivre",
+      "locale": "ja-JP",
+      "text": "ヴイーヴル",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S33"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-durin:F01",
+      "concept_id": "race-durin",
+      "locale": "zh-CN",
+      "text": "杜林",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S34"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-durin:F02",
+      "concept_id": "race-durin",
+      "locale": "en",
+      "text": "Durin",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S34"],
+      "locator": "页面标题",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-durin:F03",
+      "concept_id": "race-durin",
+      "locale": "ja-JP",
+      "text": "ドゥリン",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S34"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-oni:F01",
+      "concept_id": "race-oni",
+      "locale": "zh-CN",
+      "text": "鬼",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S35"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-oni:F02",
+      "concept_id": "race-oni",
+      "locale": "en",
+      "text": "Oni",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S35"],
+      "locator": "页面标题",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-oni:F03",
+      "concept_id": "race-oni",
+      "locale": "ja-JP",
+      "text": "鬼",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S35"],
+      "locator": "In Other Languages",
+      "notes": "从鬼おに删除ruby读音，保留本字。"
+    },
+    {
+      "form_id": "race-cautus:F01",
+      "concept_id": "race-cautus",
+      "locale": "zh-CN",
+      "text": "卡特斯",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S36"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-cautus:F02",
+      "concept_id": "race-cautus",
+      "locale": "en",
+      "text": "Cautus",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S36"],
+      "locator": "页面标题",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-cautus:F03",
+      "concept_id": "race-cautus",
+      "locale": "ja-JP",
+      "text": "コータス",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S36"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-perro:F01",
+      "concept_id": "race-perro",
+      "locale": "zh-CN",
+      "text": "佩洛",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S37"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-perro:F02",
+      "concept_id": "race-perro",
+      "locale": "en",
+      "text": "Perro",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S37"],
+      "locator": "页面标题",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-perro:F03",
+      "concept_id": "race-perro",
+      "locale": "ja-JP",
+      "text": "ペッロー",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S37"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-draco:F01",
+      "concept_id": "race-draco",
+      "locale": "zh-CN",
+      "text": "德拉克",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S38"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-draco:F02",
+      "concept_id": "race-draco",
+      "locale": "en",
+      "text": "Draco",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S38"],
+      "locator": "页面标题",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-draco:F03",
+      "concept_id": "race-draco",
+      "locale": "ja-JP",
+      "text": "ドラコ",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S38"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-aegir:F01",
+      "concept_id": "race-aegir",
+      "locale": "zh-CN",
+      "text": "阿戈尔",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S39"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-aegir:F02",
+      "concept_id": "race-aegir",
+      "locale": "en",
+      "text": "Aegir",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S39"],
+      "locator": "页面标题",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-aegir:F03",
+      "concept_id": "race-aegir",
+      "locale": "ja-JP",
+      "text": "エーギル",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S39"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-aegir:F04",
+      "concept_id": "race-aegir",
+      "locale": "en",
+      "text": "Ægir",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S39"],
+      "locator": "信息框及简介 Aegir/Ægir",
+      "notes": "主审复核可见搜索正文；与Aegir同页出现的字形，不代表已核客户端或可跨国家／种族合并。"
+    },
+    {
+      "form_id": "race-ursus:F01",
+      "concept_id": "race-ursus",
+      "locale": "zh-CN",
+      "text": "乌萨斯",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S40"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-ursus:F02",
+      "concept_id": "race-ursus",
+      "locale": "en",
+      "text": "Ursus",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S40"],
+      "locator": "页面标题",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-ursus:F03",
+      "concept_id": "race-ursus",
+      "locale": "ja-JP",
+      "text": "ウルサス",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S40"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-petram:F01",
+      "concept_id": "race-petram",
+      "locale": "zh-CN",
+      "text": "匹特拉姆",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S41"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-petram:F02",
+      "concept_id": "race-petram",
+      "locale": "en",
+      "text": "Petram",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S41"],
+      "locator": "页面标题",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    },
+    {
+      "form_id": "race-petram:F03",
+      "concept_id": "race-petram",
+      "locale": "ja-JP",
+      "text": "ペートラム",
+      "origin": "community_reference",
+      "source_ids": ["WORLD-S41"],
+      "locator": "In Other Languages",
+      "notes": "实际搜索索引可见；不是官网直接证据。"
+    }
+  ]
+}

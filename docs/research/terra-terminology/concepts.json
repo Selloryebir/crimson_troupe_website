@@ -1,0 +1,2104 @@
+{
+  "schema_version": 1,
+  "research_date": "2026-09-15",
+  "concepts": [
+    {
+      "concept_id": "country-kjerag",
+      "category": "country",
+      "zh": "谢拉格",
+      "description_zh": "位于高山地区的国家。",
+      "scope_notes": "国家不等于喀兰贸易公司，Kjerag 不替换为 Karlan；通商与制度变化须按具体年代核验。",
+      "source_ids": ["EXP-S03", "EXP-S01", "EXP-S02"],
+      "relations": [
+        {
+          "type": "distinct_from",
+          "target": "org-karlan-trade"
+        }
+      ],
+      "form_ids": ["country-kjerag:F01", "country-kjerag:F02", "country-kjerag:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "country-sargon",
+      "category": "country",
+      "zh": "萨尔贡",
+      "description_zh": "统辖多种地区与部族的南方国家。",
+      "scope_notes": "全国、王酋辖区与雨林部落不能互作同义词；短名与帝国全称分开。",
+      "source_ids": ["EXP-S04", "EXP-S01", "EXP-S02"],
+      "relations": [],
+      "form_ids": ["country-sargon:F01", "country-sargon:F02", "country-sargon:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "country-laterano",
+      "category": "country",
+      "zh": "拉特兰",
+      "description_zh": "围绕圣城与信仰形成的国家。",
+      "scope_notes": "国家、圣城、拉特兰教会及萨科塔种族不同；后续灾变状态不能回填过去。",
+      "source_ids": ["EXP-S05", "EXP-S01", "EXP-S02"],
+      "relations": [],
+      "form_ids": ["country-laterano:F01", "country-laterano:F02", "country-laterano:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "country-iberia",
+      "category": "country",
+      "zh": "伊比利亚",
+      "description_zh": "曾依靠海洋技术兴盛的沿海国家。",
+      "scope_notes": "大静谧前后国家状态分开；境内阿戈尔族居民不等于海底阿戈尔国家的现行政治身份。",
+      "source_ids": ["EXP-S06", "EXP-S01", "EXP-S02"],
+      "relations": [],
+      "form_ids": ["country-iberia:F01", "country-iberia:F02", "country-iberia:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "country-sami",
+      "category": "country",
+      "zh": "萨米",
+      "description_zh": "由北方多个部族构成的地域共同体。",
+      "scope_notes": "国家或地区与同名巨兽不合并；部族联合不强写成中央集权国家。",
+      "source_ids": ["EXP-S07", "EXP-S01", "EXP-S02"],
+      "relations": [],
+      "form_ids": ["country-sami:F01", "country-sami:F02", "country-sami:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "country-bolivar",
+      "category": "country",
+      "zh": "玻利瓦尔",
+      "description_zh": "处于多方政治势力竞争中的国家。",
+      "scope_notes": "国家整体与联合政府、王国、真正玻利瓦尔人等势力分开；保留英文重音符号。",
+      "source_ids": ["EXP-S08", "EXP-S01", "EXP-S02"],
+      "relations": [],
+      "form_ids": ["country-bolivar:F01", "country-bolivar:F02", "country-bolivar:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "country-aegir",
+      "category": "country",
+      "zh": "阿戈尔",
+      "description_zh": "海洋之下的先进文明国家。",
+      "scope_notes": "本项是国家，不是race-aegir种族；国籍、族裔、海底居民与陆上移民不可自动等同。",
+      "source_ids": ["EXP-S09", "EXP-S01", "EXP-S02", "EXP-S11"],
+      "relations": [
+        {
+          "type": "distinct_from",
+          "target": "race-aegir"
+        }
+      ],
+      "form_ids": [
+        "country-aegir:F01",
+        "country-aegir:F02",
+        "country-aegir:F03",
+        "country-aegir:F04"
+      ],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "country-durin",
+      "category": "country",
+      "zh": "杜林",
+      "description_zh": "由地下城市构成的国度或城邦共同体。",
+      "scope_notes": "本项为地下国度，不是race-durin种族，也不是代号杜林的干员；中央统一政府的存在未由本包证明。",
+      "source_ids": ["EXP-S10", "EXP-S02"],
+      "relations": [
+        {
+          "type": "distinct_from",
+          "target": "race-durin"
+        }
+      ],
+      "form_ids": ["country-durin:F01", "country-durin:F02", "country-durin:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "country-yan",
+      "category": "country",
+      "zh": "炎",
+      "description_zh": "以百灶为都城的大炎。",
+      "scope_notes": "炎、炎国、大炎须按上下文区分简称与国号。",
+      "source_ids": ["GEO-S06", "GEO-S01", "GEO-S03"],
+      "relations": [],
+      "form_ids": ["country-yan:F01", "country-yan:F02", "country-yan:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "country-victoria",
+      "category": "country",
+      "zh": "维多利亚",
+      "description_zh": "以伦蒂尼姆为都城的国家。",
+      "scope_notes": "不与高卢历史领土或塔拉身份自动合并。",
+      "source_ids": ["GEO-S07", "GEO-S01", "GEO-S02"],
+      "relations": [],
+      "form_ids": ["country-victoria:F01", "country-victoria:F02", "country-victoria:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "country-ursus",
+      "category": "country",
+      "zh": "乌萨斯",
+      "description_zh": "以圣骏堡为都城的北方国家。",
+      "scope_notes": "国家与同名种族不是同一概念。",
+      "source_ids": ["GEO-S08", "GEO-S01", "GEO-S02", "GEO-S50"],
+      "relations": [],
+      "form_ids": ["country-ursus:F01", "country-ursus:F02", "country-ursus:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "country-siracusa",
+      "category": "country",
+      "zh": "叙拉古",
+      "description_zh": "沃尔西尼等城市所在的国家。",
+      "scope_notes": "城市改制不代表整个国家同日改制。",
+      "source_ids": ["GEO-S09", "GEO-S01", "GEO-S02"],
+      "relations": [],
+      "form_ids": ["country-siracusa:F01", "country-siracusa:F02", "country-siracusa:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "country-minos",
+      "category": "country",
+      "zh": "米诺斯",
+      "description_zh": "以雅赛努斯为都城的城邦联合国家。",
+      "scope_notes": "不将现实希腊词形视作游戏已证名称。",
+      "source_ids": ["GEO-S10", "GEO-S01", "GEO-S02"],
+      "relations": [],
+      "form_ids": ["country-minos:F01", "country-minos:F02", "country-minos:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "country-leithanien",
+      "category": "country",
+      "zh": "莱塔尼亚",
+      "description_zh": "重视音乐与源石技艺的国家。",
+      "scope_notes": "Leithania 是旧版异写线索，不能无条件覆盖当前写法。",
+      "source_ids": ["GEO-S11", "GEO-S01", "GEO-S02"],
+      "relations": [],
+      "form_ids": ["country-leithanien:F01", "country-leithanien:F02", "country-leithanien:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "country-kazimierz",
+      "category": "country",
+      "zh": "卡西米尔",
+      "description_zh": "具有骑士传统的国家。",
+      "scope_notes": "大骑士领是城市群，不是全国的替代国名。",
+      "source_ids": ["GEO-S12", "GEO-S01", "GEO-S02"],
+      "relations": [],
+      "form_ids": ["country-kazimierz:F01", "country-kazimierz:F02", "country-kazimierz:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "country-higashi",
+      "category": "country",
+      "zh": "东国",
+      "description_zh": "存在南北两朝的东方国家。",
+      "scope_notes": "日文使用極東；御机仅为南朝都城，不可泛称两朝共同首都。",
+      "source_ids": ["GEO-S13", "GEO-S04", "GEO-S01"],
+      "relations": [],
+      "form_ids": ["country-higashi:F01", "country-higashi:F02", "country-higashi:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "country-columbia",
+      "category": "country",
+      "zh": "哥伦比亚",
+      "description_zh": "以麦克斯特区为政治中心的国家。",
+      "scope_notes": "Columbian Union 与中文联邦不可机械反推为 Federation。",
+      "source_ids": ["GEO-S14", "GEO-S01", "GEO-S02"],
+      "relations": [],
+      "form_ids": ["country-columbia:F01", "country-columbia:F02", "country-columbia:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "country-gaul",
+      "category": "country",
+      "zh": "高卢",
+      "description_zh": "四国战争后覆亡的历史国家。",
+      "scope_notes": "现代领土归属与历史高卢身份须分开。",
+      "source_ids": ["GEO-S15", "GEO-S01", "GEO-S03"],
+      "relations": [],
+      "form_ids": ["country-gaul:F01", "country-gaul:F02", "country-gaul:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "country-kazdel",
+      "category": "country",
+      "zh": "卡兹戴尔",
+      "description_zh": "与萨卡兹历史和家园认同密切相关的国度。",
+      "scope_notes": "历次重建、政权和城市形态不得当作单一永久实体。",
+      "source_ids": ["GEO-S16", "GEO-S01", "GEO-S02"],
+      "relations": [],
+      "form_ids": ["country-kazdel:F01", "country-kazdel:F02", "country-kazdel:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "country-rim-billiton",
+      "category": "country",
+      "zh": "雷姆必拓",
+      "description_zh": "矿业联合体式的国家。",
+      "scope_notes": "国家与同名企业/矿业组织需按语境区分。",
+      "source_ids": ["GEO-S17", "GEO-S01", "GEO-S02"],
+      "relations": [],
+      "form_ids": [
+        "country-rim-billiton:F01",
+        "country-rim-billiton:F02",
+        "country-rim-billiton:F03"
+      ],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "place-mitsukue",
+      "category": "place",
+      "zh": "御机",
+      "description_zh": "东国南朝的都城。",
+      "scope_notes": "南院行在御机大社是全称线索，不代表北朝。",
+      "source_ids": ["GEO-S18", "GEO-S01"],
+      "relations": [
+        {
+          "type": "located_in",
+          "target": "country-higashi"
+        }
+      ],
+      "form_ids": ["place-mitsukue:F01", "place-mitsukue:F02", "place-mitsukue:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "place-trimounts",
+      "category": "place",
+      "zh": "特里蒙",
+      "description_zh": "哥伦比亚的重要科研城市。",
+      "scope_notes": "Trimounts 尾字母 s 应保留；建城年存在社区叙述冲突，不能仅由十五年前倒推1084为唯一成立年。",
+      "source_ids": ["GEO-S19", "GEO-S01", "GEO-S03"],
+      "relations": [
+        {
+          "type": "located_in",
+          "target": "country-columbia"
+        }
+      ],
+      "form_ids": ["place-trimounts:F01", "place-trimounts:F02", "place-trimounts:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "place-tkaronto",
+      "category": "place",
+      "zh": "提卡伦多",
+      "description_zh": "哥伦比亚的商贸移动城市。",
+      "scope_notes": "不改写为现实 Toronto。",
+      "source_ids": ["GEO-S20", "GEO-S01", "GEO-S42"],
+      "relations": [
+        {
+          "type": "located_in",
+          "target": "country-columbia"
+        }
+      ],
+      "form_ids": ["place-tkaronto:F01", "place-tkaronto:F02", "place-tkaronto:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "place-wrankwood",
+      "category": "place",
+      "zh": "蓝卡坞",
+      "description_zh": "哥伦比亚电影产业集中的城市。",
+      "scope_notes": "本轮证据支持蓝卡坞，不支持兰卡坞。",
+      "source_ids": ["GEO-S21", "GEO-S42"],
+      "relations": [
+        {
+          "type": "located_in",
+          "target": "country-columbia"
+        }
+      ],
+      "form_ids": ["place-wrankwood:F01", "place-wrankwood:F02", "place-wrankwood:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "place-nuova-volsinii",
+      "category": "place",
+      "zh": "新沃尔西尼",
+      "description_zh": "与沃尔西尼相邻的新建城市。",
+      "scope_notes": "与旧城独立建模；1100年周年台词支持约1099成立，不从周年活动日期直接推出精确建城日。",
+      "source_ids": ["GEO-S22", "GEO-S44", "GEO-S45", "GEO-S47", "GEO-S04"],
+      "relations": [
+        {
+          "type": "located_in",
+          "target": "country-siracusa"
+        },
+        {
+          "type": "distinct_from",
+          "target": "place-volsinii"
+        }
+      ],
+      "form_ids": [
+        "place-nuova-volsinii:F01",
+        "place-nuova-volsinii:F02",
+        "place-nuova-volsinii:F03"
+      ],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "place-montelupe",
+      "category": "place",
+      "zh": "蒙特卢佩",
+      "description_zh": "叙拉古的都城。",
+      "scope_notes": "日文形式本轮未取得证据，保留缺失。",
+      "source_ids": ["GEO-S09", "GEO-S01"],
+      "relations": [
+        {
+          "type": "located_in",
+          "target": "country-siracusa"
+        }
+      ],
+      "form_ids": ["place-montelupe:F01", "place-montelupe:F02"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "place-athenius",
+      "category": "place",
+      "zh": "雅赛努斯",
+      "description_zh": "米诺斯的都城。",
+      "scope_notes": "PRTS 记录 Athenus、当前英文社区条目为 Athenius，需保留版本冲突。",
+      "source_ids": ["GEO-S23", "GEO-S01"],
+      "relations": [
+        {
+          "type": "located_in",
+          "target": "country-minos"
+        }
+      ],
+      "form_ids": [
+        "place-athenius:F01",
+        "place-athenius:F02",
+        "place-athenius:F03",
+        "place-athenius:F04"
+      ],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "place-kawalerielki",
+      "category": "place",
+      "zh": "卡瓦莱利亚基",
+      "description_zh": "卡西米尔多座移动城市组成的都城群。",
+      "scope_notes": "大骑士领为别称，不是一个独立国家。",
+      "source_ids": ["GEO-S24", "GEO-S01", "GEO-S03"],
+      "relations": [
+        {
+          "type": "located_in",
+          "target": "country-kazimierz"
+        }
+      ],
+      "form_ids": ["place-kawalerielki:F01", "place-kawalerielki:F02", "place-kawalerielki:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "place-vyseheim",
+      "category": "place",
+      "zh": "维谢海姆",
+      "description_zh": "莱塔尼亚一座具有音乐传统的移动城市。",
+      "scope_notes": "日文不是仓库现存的ヴィシェハイム；待批准后统一展示文案，不必改稳定ID。",
+      "source_ids": ["GEO-S25", "GEO-S01", "GEO-S03", "GEO-S48", "GEO-S05"],
+      "relations": [
+        {
+          "type": "located_in",
+          "target": "country-leithanien"
+        }
+      ],
+      "form_ids": ["place-vyseheim:F01", "place-vyseheim:F02", "place-vyseheim:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "place-zwillingsturme",
+      "category": "place",
+      "zh": "崔林特尔梅",
+      "description_zh": "莱塔尼亚的都城。",
+      "scope_notes": "前身为 Vedunien；1092重建完成并不直接证明城市恰在1092更名，1084显示资格仍需独立审查。",
+      "source_ids": ["GEO-S26", "GEO-S01", "GEO-S49"],
+      "relations": [
+        {
+          "type": "located_in",
+          "target": "country-leithanien"
+        }
+      ],
+      "form_ids": [
+        "place-zwillingsturme:F01",
+        "place-zwillingsturme:F02",
+        "place-zwillingsturme:F03",
+        "place-zwillingsturme:F04"
+      ],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "place-londinium",
+      "category": "place",
+      "zh": "伦蒂尼姆",
+      "description_zh": "维多利亚的都城。",
+      "scope_notes": "需区分占领、战争与正常营运的年代状态。",
+      "source_ids": ["GEO-S27", "GEO-S01", "GEO-S03"],
+      "relations": [
+        {
+          "type": "located_in",
+          "target": "country-victoria"
+        }
+      ],
+      "form_ids": ["place-londinium:F01", "place-londinium:F02", "place-londinium:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "place-calais-blason",
+      "category": "place",
+      "zh": "克莱布拉松",
+      "description_zh": "具有高卢历史背景、现归维多利亚的地区。",
+      "scope_notes": "地区、林地城堡、剧团驻地不是同一实体；克莱布尔松本轮未获支持。",
+      "source_ids": ["GEO-S28", "GEO-S01", "GEO-S40", "GEO-S41"],
+      "relations": [
+        {
+          "type": "located_in",
+          "target": "country-victoria"
+        }
+      ],
+      "form_ids": [
+        "place-calais-blason:F01",
+        "place-calais-blason:F02",
+        "place-calais-blason:F03",
+        "place-calais-blason:F04",
+        "place-calais-blason:F05"
+      ],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "place-deity-grypherburg",
+      "category": "place",
+      "zh": "圣骏堡",
+      "description_zh": "乌萨斯的都城。",
+      "scope_notes": "俄文项目作者输入未由本轮独立核验，不能从日文前缀反造俄语全称。",
+      "source_ids": ["GEO-S29", "GEO-S01"],
+      "relations": [
+        {
+          "type": "located_in",
+          "target": "country-ursus"
+        }
+      ],
+      "form_ids": [
+        "place-deity-grypherburg:F01",
+        "place-deity-grypherburg:F02",
+        "place-deity-grypherburg:F03"
+      ],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "place-baizao",
+      "category": "place",
+      "zh": "百灶",
+      "description_zh": "大炎的都城。",
+      "scope_notes": "保留官方汉字，不以读音自行替换。",
+      "source_ids": ["GEO-S30", "GEO-S01", "GEO-S03"],
+      "relations": [
+        {
+          "type": "located_in",
+          "target": "country-yan"
+        }
+      ],
+      "form_ids": ["place-baizao:F01", "place-baizao:F02", "place-baizao:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "place-lungmen",
+      "category": "place",
+      "zh": "龙门",
+      "description_zh": "隶属炎的自治城市。",
+      "scope_notes": "具有自治地位并不使其成为独立国家。",
+      "source_ids": ["GEO-S31", "GEO-S01", "GEO-S51"],
+      "relations": [
+        {
+          "type": "located_in",
+          "target": "country-yan"
+        }
+      ],
+      "form_ids": ["place-lungmen:F01", "place-lungmen:F02", "place-lungmen:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "place-shangshu",
+      "category": "place",
+      "zh": "尚蜀",
+      "description_zh": "位于群山间的炎国城市。",
+      "scope_notes": "移动城与周边地理环境应分开描述。",
+      "source_ids": ["GEO-S32", "GEO-S01", "GEO-S03"],
+      "relations": [
+        {
+          "type": "located_in",
+          "target": "country-yan"
+        }
+      ],
+      "form_ids": ["place-shangshu:F01", "place-shangshu:F02", "place-shangshu:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "place-volsinii",
+      "category": "place",
+      "zh": "沃尔西尼",
+      "description_zh": "新沃尔西尼建成前即存在的叙拉古城市。",
+      "scope_notes": "1084称沃尔西尼；旧沃尔西尼是后世区分展示语，不是原始专名自动异写。",
+      "source_ids": ["GEO-S22", "GEO-S01", "GEO-S46"],
+      "relations": [
+        {
+          "type": "located_in",
+          "target": "country-siracusa"
+        },
+        {
+          "type": "distinct_from",
+          "target": "place-nuova-volsinii"
+        }
+      ],
+      "form_ids": ["place-volsinii:F01", "place-volsinii:F02", "place-volsinii:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "place-max-dc",
+      "category": "place",
+      "zh": "麦克斯特区",
+      "description_zh": "哥伦比亚的首都特区。",
+      "scope_notes": "不可与位于其周边的螺旋桨天堂或特里蒙等同；日文缺失。",
+      "source_ids": ["GEO-S14", "GEO-S43", "GEO-S01"],
+      "relations": [
+        {
+          "type": "located_in",
+          "target": "country-columbia"
+        }
+      ],
+      "form_ids": ["place-max-dc:F01", "place-max-dc:F02", "place-max-dc:F03", "place-max-dc:F04"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "place-propeller-paradise",
+      "category": "place",
+      "zh": "螺旋桨天堂",
+      "description_zh": "麦克斯特区周边的浮空实验园区。",
+      "scope_notes": "不是哥伦比亚首都；灾后重建及开放时间需按剧情版本另审。",
+      "source_ids": ["GEO-S33"],
+      "relations": [
+        {
+          "type": "located_in",
+          "target": "country-columbia"
+        },
+        {
+          "type": "distinct_from",
+          "target": "place-max-dc"
+        }
+      ],
+      "form_ids": [
+        "place-propeller-paradise:F01",
+        "place-propeller-paradise:F02",
+        "place-propeller-paradise:F03"
+      ],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "place-lingones",
+      "category": "place",
+      "zh": "林贡斯",
+      "description_zh": "高卢覆亡前的都城。",
+      "scope_notes": "废墟或历史幻象不能直接作为现代常规演出城市。",
+      "source_ids": ["GEO-S34", "GEO-S01"],
+      "relations": [
+        {
+          "type": "located_in",
+          "target": "country-gaul"
+        }
+      ],
+      "form_ids": ["place-lingones:F01", "place-lingones:F02", "place-lingones:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "place-siesta",
+      "category": "place",
+      "zh": "汐斯塔",
+      "description_zh": "以旅游业知名的独立城市。",
+      "scope_notes": "旧火山城市与迁移后的移动城市需按年代区分；不能仅因哥伦比亚影响就认定普通省属城市。",
+      "source_ids": ["GEO-S35", "GEO-S01"],
+      "relations": [],
+      "form_ids": ["place-siesta:F01", "place-siesta:F02", "place-siesta:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "place-wolumonde",
+      "category": "place",
+      "zh": "沃伦姆德",
+      "description_zh": "莱塔尼亚冬灵山区的城镇。",
+      "scope_notes": "灾变前、起义后及废弃状态需分别核验。",
+      "source_ids": ["GEO-S36", "GEO-S01"],
+      "relations": [
+        {
+          "type": "located_in",
+          "target": "country-leithanien"
+        }
+      ],
+      "form_ids": ["place-wolumonde:F01", "place-wolumonde:F02", "place-wolumonde:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "place-chernobog",
+      "category": "place",
+      "zh": "切尔诺伯格",
+      "description_zh": "乌萨斯南部的工业城市。",
+      "scope_notes": "1096灾难前后及后续重建名称不可无条件共用。",
+      "source_ids": ["GEO-S37", "GEO-S01", "GEO-S50"],
+      "relations": [
+        {
+          "type": "located_in",
+          "target": "country-ursus"
+        }
+      ],
+      "form_ids": ["place-chernobog:F01", "place-chernobog:F02", "place-chernobog:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "event-war-four-nations",
+      "category": "event",
+      "zh": "四国战争",
+      "description_zh": "导致高卢覆亡的多国战争。",
+      "scope_notes": "四皇会战是战争中的关键战役，不能把两者作为同一概念。",
+      "source_ids": ["GEO-S38"],
+      "relations": [],
+      "form_ids": [
+        "event-war-four-nations:F01",
+        "event-war-four-nations:F02",
+        "event-war-four-nations:F03"
+      ],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "event-septemberaufstand",
+      "category": "event",
+      "zh": "九月起义",
+      "description_zh": "莱塔尼亚推翻巫王统治的起义。",
+      "scope_notes": "不能与1092首都重建完成事件合并。",
+      "source_ids": ["GEO-S39"],
+      "relations": [],
+      "form_ids": [
+        "event-septemberaufstand:F01",
+        "event-septemberaufstand:F02",
+        "event-septemberaufstand:F03"
+      ],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "org-crimson-troupe",
+      "category": "organization",
+      "zh": "猩红剧团",
+      "description_zh": "与傀影经历及猩红孤钻主题相关的巡演剧团，具有旧剧团及后续重组的叙事阶段。",
+      "scope_notes": "官方旧团历史、红丝绒后的重组和本站自创事务不可混为同一事实层；新旧阶段应附时间语境。 当前社区同页另列Scarlet Troupe、猩红歌剧团，作为待核异名线索，不新建组织、不自动覆盖已接受品牌；日文官网原文仍待补证。",
+      "source_ids": ["ORG-S11", "ORG-S10", "ORG-S49"],
+      "relations": [],
+      "form_ids": ["org-crimson-troupe:F01", "org-crimson-troupe:F02", "org-crimson-troupe:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "person-phantom",
+      "category": "person",
+      "zh": "傀影",
+      "description_zh": "维多利亚出身的罗德岛干员，曾在猩红剧团受训并登台。",
+      "scope_notes": "Phantom为干员代号；人物本名卢西恩单列关联；异格代号酒神属于后续阶段。 member_of仅表示引证故事阶段的成员关系，不能解释为当前仍在职。",
+      "source_ids": ["ORG-S12", "ORG-S50", "ORG-S09", "ORG-S03"],
+      "relations": [
+        {
+          "type": "alias_of",
+          "target": "person-lucian"
+        },
+        {
+          "type": "member_of",
+          "target": "org-crimson-troupe"
+        },
+        {
+          "type": "member_of",
+          "target": "org-rhodes-island"
+        }
+      ],
+      "form_ids": [
+        "person-phantom:F01",
+        "person-phantom:F02",
+        "person-phantom:F03",
+        "person-phantom:F04"
+      ],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "person-lucian",
+      "category": "person",
+      "zh": "卢西恩",
+      "description_zh": "傀影的本名；在剧团与红丝绒相关叙事中使用。",
+      "scope_notes": "人物实体与代号需关联，不能将本名归给旧酒神。卢西恩，猩红血钻的敌人全称不等于新的独立人物。 member_of仅表示引证故事阶段的成员关系，不能解释为当前仍在职。",
+      "source_ids": ["ORG-S13", "ORG-S08", "ORG-S50", "ROOT-S01"],
+      "relations": [
+        {
+          "type": "distinct_from",
+          "target": "person-tragodia-predecessor"
+        },
+        {
+          "type": "member_of",
+          "target": "org-crimson-troupe"
+        }
+      ],
+      "form_ids": ["person-lucian:F01", "person-lucian:F02", "person-lucian:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "person-tragodia-predecessor",
+      "category": "person",
+      "zh": "“酒神”",
+      "description_zh": "旧猩红剧团的创立者和剧团长；与作为弟子的卢西恩不是同一个人。",
+      "scope_notes": "加前代／旧团长限定。酒神这一名称发生传承，但旧团长的人物实体不与卢西恩合并；日文酒神与干员トラゴーディア不同语用。 member_of仅表示引证故事阶段的成员关系，不能解释为当前仍在职。",
+      "source_ids": ["ORG-S14"],
+      "relations": [
+        {
+          "type": "member_of",
+          "target": "org-crimson-troupe"
+        }
+      ],
+      "form_ids": [
+        "person-tragodia-predecessor:F01",
+        "person-tragodia-predecessor:F02",
+        "person-tragodia-predecessor:F03",
+        "person-tragodia-predecessor:F04",
+        "person-tragodia-predecessor:F05",
+        "person-tragodia-predecessor:F06"
+      ],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "title-tragodia-lucian",
+      "category": "title",
+      "zh": "酒神",
+      "description_zh": "卢西恩在红丝绒事件后的干员代号，是傀影的异格身份。",
+      "scope_notes": "此记录指后继者卢西恩持有的代号；与前代旧团长保持distinct_from。Dionysus仅可作为神话释义，不能替换官方英译。",
+      "source_ids": ["ORG-S15", "ORG-S03", "ORG-S04", "ORG-S07", "ORG-S08"],
+      "relations": [
+        {
+          "type": "alias_of",
+          "target": "person-lucian"
+        },
+        {
+          "type": "successor_of",
+          "target": "person-tragodia-predecessor"
+        },
+        {
+          "type": "distinct_from",
+          "target": "person-tragodia-predecessor"
+        }
+      ],
+      "form_ids": [
+        "title-tragodia-lucian:F01",
+        "title-tragodia-lucian:F02",
+        "title-tragodia-lucian:F03",
+        "title-tragodia-lucian:F04"
+      ],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "person-miss-christine",
+      "category": "person",
+      "zh": "Miss.Christine",
+      "description_zh": "常与傀影同行的神秘猫形角色，后来以独立干员身份登场。",
+      "scope_notes": "中文也采用拉丁字母名称；不要从现实歌剧女主角直接迁入其身份或故事；句点与空格差异需要按来源记录。",
+      "source_ids": ["ORG-S16", "ORG-S09", "ORG-S04", "ORG-S03"],
+      "relations": [],
+      "form_ids": [
+        "person-miss-christine:F01",
+        "person-miss-christine:F02",
+        "person-miss-christine:F03"
+      ],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "person-playwright",
+      "category": "person",
+      "zh": "剧作家",
+      "description_zh": "猩红剧团的剧本作者角色，参与猩红孤钻及红丝绒相关叙事。",
+      "scope_notes": "称号与普通职业名同形，索引需使用人物ID；肉鸽分支结局不自动当作唯一正史。 member_of仅表示引证故事阶段的成员关系，不能解释为当前仍在职。",
+      "source_ids": ["ORG-S17"],
+      "relations": [
+        {
+          "type": "member_of",
+          "target": "org-crimson-troupe"
+        }
+      ],
+      "form_ids": ["person-playwright:F01", "person-playwright:F02", "person-playwright:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "person-troupe-mouthpiece",
+      "category": "person",
+      "zh": "剧团喉舌",
+      "description_zh": "猩红剧团的报幕和主持者，本名阿伦茨。",
+      "scope_notes": "喉舌是角色称号；不可泛指所有剧团工作人员或翻译成表站机构口吻。 member_of仅表示引证故事阶段的成员关系，不能解释为当前仍在职。",
+      "source_ids": ["ORG-S18"],
+      "relations": [
+        {
+          "type": "member_of",
+          "target": "org-crimson-troupe"
+        }
+      ],
+      "form_ids": [
+        "person-troupe-mouthpiece:F01",
+        "person-troupe-mouthpiece:F02",
+        "person-troupe-mouthpiece:F03",
+        "person-troupe-mouthpiece:F04",
+        "person-troupe-mouthpiece:F05",
+        "person-troupe-mouthpiece:F06"
+      ],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "person-shalem",
+      "category": "person",
+      "zh": "暮落",
+      "description_zh": "有猩红剧团经历的罗德岛干员，与傀影旧事相关。",
+      "scope_notes": "暮落为干员代号；本次未确认沉渊的英日对应，留作待核线索。 member_of仅表示引证故事阶段的成员关系，不能解释为当前仍在职。",
+      "source_ids": ["ORG-S19"],
+      "relations": [
+        {
+          "type": "member_of",
+          "target": "org-crimson-troupe"
+        }
+      ],
+      "form_ids": ["person-shalem:F01", "person-shalem:F02", "person-shalem:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "org-rhodes-island",
+      "category": "organization",
+      "zh": "罗德岛",
+      "description_zh": "救助感染者并研究矿石病的机构，同时组织干员行动。",
+      "scope_notes": "机构与同名陆行舰必须分开建模；全称、简称及舰名不可无条件互换。",
+      "source_ids": ["ORG-S20", "ORG-S05", "ORG-S01", "ORG-S02"],
+      "relations": [
+        {
+          "type": "successor_of",
+          "target": "org-babel"
+        }
+      ],
+      "form_ids": [
+        "org-rhodes-island:F01",
+        "org-rhodes-island:F02",
+        "org-rhodes-island:F03",
+        "org-rhodes-island:F04"
+      ],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "org-babel",
+      "category": "organization",
+      "zh": "巴别塔",
+      "description_zh": "与特蕾西娅及萨卡兹历史相关的组织，早期罗德岛成员与其具有组织沿革关系。",
+      "scope_notes": "原巴别塔、其后重建组织与同名活动分开；不把succession理解为全部成员和目标完全相同。",
+      "source_ids": ["ORG-S21"],
+      "relations": [],
+      "form_ids": ["org-babel:F01", "org-babel:F02", "org-babel:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "org-rhine-lab",
+      "category": "company",
+      "zh": "莱茵生命",
+      "description_zh": "哥伦比亚的科研机构，涉及源石、生物及工程研究。",
+      "scope_notes": "公司名不是现实莱茵河地名；Rhine Lab LLC.为全称形式，未经证据不能写Rhine Life。",
+      "source_ids": ["ORG-S22", "ORG-S01", "ORG-S02"],
+      "relations": [],
+      "form_ids": ["org-rhine-lab:F01", "org-rhine-lab:F02", "org-rhine-lab:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "org-maylander-foundation",
+      "category": "organization",
+      "zh": "梅兰德基金会",
+      "description_zh": "哥伦比亚的基金会组织，在科研资助及政治情报相关叙事中出现。",
+      "scope_notes": "Maylander拼写保留；不要写Mayerlander；人物梅兰德·塞勒涅与基金会分开。",
+      "source_ids": ["ORG-S23"],
+      "relations": [],
+      "form_ids": [
+        "org-maylander-foundation:F01",
+        "org-maylander-foundation:F02",
+        "org-maylander-foundation:F03"
+      ],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "org-blacksteel-worldwide",
+      "category": "company",
+      "zh": "黑钢国际",
+      "description_zh": "提供安保与军事服务的跨国公司。",
+      "scope_notes": "Blacksteel为简称；BlackSteel International Private Security Consultants为社区登记别名，不取代当前主形式。",
+      "source_ids": ["ORG-S24", "ORG-S01"],
+      "relations": [],
+      "form_ids": [
+        "org-blacksteel-worldwide:F01",
+        "org-blacksteel-worldwide:F02",
+        "org-blacksteel-worldwide:F03"
+      ],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "org-penguin-logistics",
+      "category": "company",
+      "zh": "企鹅物流",
+      "description_zh": "大帝经营的物流公司，参与运输、护送与相关委托。",
+      "scope_notes": "机构名称不从中文逐字机器翻译；与普通企鹅动物词分开。",
+      "source_ids": ["ORG-S25", "ORG-S01", "ORG-S02"],
+      "relations": [],
+      "form_ids": [
+        "org-penguin-logistics:F01",
+        "org-penguin-logistics:F02",
+        "org-penguin-logistics:F03"
+      ],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "org-karlan-trade",
+      "category": "company",
+      "zh": "喀兰贸易",
+      "description_zh": "谢拉格的贸易公司，与希瓦艾什家族及当地对外贸易有关。",
+      "scope_notes": "公司名Karlan不能与国家Kjerag等同。Karlan Trade Co., Ltd.与Karlan Commercial是来源不同的全称／别名。",
+      "source_ids": ["ORG-S26"],
+      "relations": [],
+      "form_ids": ["org-karlan-trade:F01", "org-karlan-trade:F02", "org-karlan-trade:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "org-raythean-industries",
+      "category": "company",
+      "zh": "雷神重工",
+      "description_zh": "哥伦比亚的军工企业，制造多种装备及源石相关工业产品。",
+      "scope_notes": "中文雷神工业仅为任务中的待核表述；现有证据中文字段作雷神重工。Raythean不要误写成现实Raytheon。",
+      "source_ids": ["ORG-S27"],
+      "relations": [],
+      "form_ids": [
+        "org-raythean-industries:F01",
+        "org-raythean-industries:F02",
+        "org-raythean-industries:F03"
+      ],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "org-kazimierz-general-chamber",
+      "category": "organization",
+      "zh": "卡西米尔商业联合会",
+      "description_zh": "卡西米尔大型商业利益组织，对经济和竞技骑士事务具有影响。",
+      "scope_notes": "简称KGCC可作检索候选；不能与无胄盟作为同一机构合并。日文去除了检索注音。",
+      "source_ids": ["ORG-S28"],
+      "relations": [],
+      "form_ids": [
+        "org-kazimierz-general-chamber:F01",
+        "org-kazimierz-general-chamber:F02",
+        "org-kazimierz-general-chamber:F03"
+      ],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "org-armorless-union",
+      "category": "organization",
+      "zh": "卡西米尔无胄盟",
+      "description_zh": "卡西米尔的刺客组织，与商业联合会之间存在委托和权力关系。",
+      "scope_notes": "简称无胄盟／Armorless Union；中文胄与日文冑字形不应自动相互覆盖。旧英名Scionless Alliance仅是历史形式。",
+      "source_ids": ["ORG-S29"],
+      "relations": [],
+      "form_ids": ["org-armorless-union:F01", "org-armorless-union:F02", "org-armorless-union:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "org-reunion",
+      "category": "organization",
+      "zh": "整合运动",
+      "description_zh": "由感染者组成、主张反抗压迫的运动组织，在不同时期具有不同领导和行动方式。",
+      "scope_notes": "感染者是人群状态，不等于整合运动成员。对其定性应附故事阶段，避免将后期改革与早期暴力活动混为一谈。",
+      "source_ids": ["ORG-S30", "ORG-S05"],
+      "relations": [],
+      "form_ids": ["org-reunion:F01", "org-reunion:F02", "org-reunion:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "org-pinus-sylvestris",
+      "category": "organization",
+      "zh": "红松骑士团",
+      "description_zh": "由感染者骑士组成的骑士团，在卡西米尔保护和支援受压迫人群。",
+      "scope_notes": "组织与同名活动区别；中文红松的骑士是活动题名，不等于机构全称。",
+      "source_ids": ["ORG-S31"],
+      "relations": [],
+      "form_ids": [
+        "org-pinus-sylvestris:F01",
+        "org-pinus-sylvestris:F02",
+        "org-pinus-sylvestris:F03"
+      ],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "org-followers",
+      "category": "organization",
+      "zh": "使徒",
+      "description_zh": "以行医救助为主要活动的同行团体，与闪灵、夜莺和临光有关。",
+      "scope_notes": "这是特定团体名；勿泛化成所有宗教使徒，英文不是Apostles。",
+      "source_ids": ["ORG-S32"],
+      "relations": [],
+      "form_ids": ["org-followers:F01", "org-followers:F02", "org-followers:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "org-lungmen-guard-department",
+      "category": "organization",
+      "zh": "龙门近卫局",
+      "description_zh": "龙门负责治安与武装执法的机构。",
+      "scope_notes": "L.G.D.为常见英文缩写；历任长官随时间变化，术语记录不冻结当前人事。",
+      "source_ids": ["ORG-S33"],
+      "relations": [],
+      "form_ids": [
+        "org-lungmen-guard-department:F01",
+        "org-lungmen-guard-department:F02",
+        "org-lungmen-guard-department:F03"
+      ],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "person-amiya",
+      "category": "person",
+      "zh": "阿米娅",
+      "description_zh": "罗德岛的领导者及核心干员。",
+      "scope_notes": "本次只登记名称和机构关联，年龄与后续身份变化不纳入稳定词义。 member_of仅表示引证故事阶段的成员关系，不能解释为当前仍在职。",
+      "source_ids": ["ORG-S34", "ORG-S05", "ORG-S01", "ORG-S02"],
+      "relations": [
+        {
+          "type": "member_of",
+          "target": "org-rhodes-island"
+        }
+      ],
+      "form_ids": ["person-amiya:F01", "person-amiya:F02", "person-amiya:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "person-kaltsit",
+      "category": "person",
+      "zh": "凯尔希",
+      "description_zh": "罗德岛的核心管理和医疗人物，参与其历史及行动。",
+      "scope_notes": "英文撇号是名称组成部分；不将俄语词源当成独立已批准译名；不套用后续异格状态。 member_of仅表示引证故事阶段的成员关系，不能解释为当前仍在职。",
+      "source_ids": ["ORG-S35", "ORG-S06", "ORG-S02"],
+      "relations": [
+        {
+          "type": "member_of",
+          "target": "org-rhodes-island"
+        }
+      ],
+      "form_ids": ["person-kaltsit:F01", "person-kaltsit:F02", "person-kaltsit:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "person-doctor",
+      "category": "person",
+      "zh": "博士",
+      "description_zh": "玩家对应的核心角色，在罗德岛负责指挥与研究相关事务。",
+      "scope_notes": "Doctor是称呼而非本次核实的个人本名；不要固定玩家名、性别或称谓带来的真实学历。 member_of仅表示引证故事阶段的成员关系，不能解释为当前仍在职。",
+      "source_ids": ["ORG-S36", "ORG-S05", "ORG-S02"],
+      "relations": [
+        {
+          "type": "member_of",
+          "target": "org-rhodes-island"
+        }
+      ],
+      "form_ids": ["person-doctor:F01", "person-doctor:F02", "person-doctor:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "person-theresa",
+      "category": "person",
+      "zh": "特蕾西娅",
+      "description_zh": "巴别塔的领导人物，与罗德岛前史及萨卡兹历史相关。",
+      "scope_notes": "和特雷西斯是不同人物；与文明的存续等衍生存在不能仅凭外形合并。 member_of仅表示引证故事阶段的成员关系，不能解释为当前仍在职。",
+      "source_ids": ["ORG-S37"],
+      "relations": [
+        {
+          "type": "member_of",
+          "target": "org-babel"
+        }
+      ],
+      "form_ids": ["person-theresa:F01", "person-theresa:F02", "person-theresa:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "person-theresis",
+      "category": "person",
+      "zh": "特雷西斯",
+      "description_zh": "萨卡兹政治与军事领导人物，是特蕾西娅的兄弟。",
+      "scope_notes": "中文不是特蕾西斯；不可与Theresa交换，生死及职务必须附故事时期。",
+      "source_ids": ["ORG-S38"],
+      "relations": [],
+      "form_ids": ["person-theresis:F01", "person-theresis:F02", "person-theresis:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "person-saria",
+      "category": "person",
+      "zh": "塞雷娅",
+      "description_zh": "莱茵生命相关研究者与罗德岛干员。",
+      "scope_notes": "干员名与此前在莱茵生命的具体职务分开；不将已离任职务当永久定义。 member_of仅表示引证故事阶段的成员关系，不能解释为当前仍在职。",
+      "source_ids": ["ORG-S39"],
+      "relations": [
+        {
+          "type": "member_of",
+          "target": "org-rhine-lab"
+        }
+      ],
+      "form_ids": ["person-saria:F01", "person-saria:F02", "person-saria:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "person-silence",
+      "category": "person",
+      "zh": "赫默",
+      "description_zh": "莱茵生命相关研究者与医疗干员。",
+      "scope_notes": "Silence为干员显示名；本名全称奥利维亚·赫默／Olivia Silence另需字段承载，不能强制用于所有署名。 member_of仅表示引证故事阶段的成员关系，不能解释为当前仍在职。",
+      "source_ids": ["ORG-S40"],
+      "relations": [
+        {
+          "type": "member_of",
+          "target": "org-rhine-lab"
+        }
+      ],
+      "form_ids": ["person-silence:F01", "person-silence:F02", "person-silence:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "person-kristen-wright",
+      "category": "person",
+      "zh": "克丽斯腾·莱特",
+      "description_zh": "莱茵生命的共同创立者及重要科研领导人物。",
+      "scope_notes": "全名与克丽斯腾简称分开；不要因中文近音而与Miss.Christine合并。 member_of仅表示引证故事阶段的成员关系，不能解释为当前仍在职。",
+      "source_ids": ["ORG-S41"],
+      "relations": [
+        {
+          "type": "member_of",
+          "target": "org-rhine-lab"
+        }
+      ],
+      "form_ids": [
+        "person-kristen-wright:F01",
+        "person-kristen-wright:F02",
+        "person-kristen-wright:F03"
+      ],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "person-emperor",
+      "category": "person",
+      "zh": "大帝",
+      "description_zh": "企鹅物流的创立者与负责人，同时从事音乐活动。",
+      "scope_notes": "此为企鹅形角色称号，不是乌萨斯或其他国家的皇帝头衔。 member_of仅表示引证故事阶段的成员关系，不能解释为当前仍在职。",
+      "source_ids": ["ORG-S42", "ORG-S02"],
+      "relations": [
+        {
+          "type": "member_of",
+          "target": "org-penguin-logistics"
+        }
+      ],
+      "form_ids": ["person-emperor:F01", "person-emperor:F02", "person-emperor:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "person-texas",
+      "category": "person",
+      "zh": "德克萨斯",
+      "description_zh": "企鹅物流的员工与罗德岛合作干员。",
+      "scope_notes": "人物名称与现实美国州名同形；本研究不从现实地名派生人名。异格代号另附时期。 member_of仅表示引证故事阶段的成员关系，不能解释为当前仍在职。",
+      "source_ids": ["ORG-S43"],
+      "relations": [
+        {
+          "type": "member_of",
+          "target": "org-penguin-logistics"
+        }
+      ],
+      "form_ids": ["person-texas:F01", "person-texas:F02", "person-texas:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "person-chen",
+      "category": "person",
+      "zh": "陈",
+      "description_zh": "曾在龙门近卫局任职、与罗德岛合作的角色。",
+      "scope_notes": "Ch'en的撇号保留；陈是干员短名，人物全名及不同职务不能无条件替换。 member_of仅表示引证故事阶段的成员关系，不能解释为当前仍在职。",
+      "source_ids": ["ORG-S44"],
+      "relations": [
+        {
+          "type": "member_of",
+          "target": "org-lungmen-guard-department"
+        }
+      ],
+      "form_ids": ["person-chen:F01", "person-chen:F02", "person-chen:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "person-hoshiguma",
+      "category": "person",
+      "zh": "星熊",
+      "description_zh": "龙门近卫局相关干员，出身东国。",
+      "scope_notes": "姓名不回译成字面的星与熊；后续异格代号及升任职务分别记录。 member_of仅表示引证故事阶段的成员关系，不能解释为当前仍在职。",
+      "source_ids": ["ORG-S45"],
+      "relations": [
+        {
+          "type": "member_of",
+          "target": "org-lungmen-guard-department"
+        }
+      ],
+      "form_ids": ["person-hoshiguma:F01", "person-hoshiguma:F02", "person-hoshiguma:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "person-nearl",
+      "category": "person",
+      "zh": "临光",
+      "description_zh": "卡西米尔出身的骑士及使徒成员，参与罗德岛行动。",
+      "scope_notes": "临光可能指个人代号或家族，本文限定干员个人；耀骑士称号与异格不用于所有时期。 member_of仅表示引证故事阶段的成员关系，不能解释为当前仍在职。",
+      "source_ids": ["ORG-S46"],
+      "relations": [
+        {
+          "type": "member_of",
+          "target": "org-followers"
+        }
+      ],
+      "form_ids": ["person-nearl:F01", "person-nearl:F02", "person-nearl:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "person-patriot",
+      "category": "person",
+      "zh": "爱国者",
+      "description_zh": "整合运动的重要战士与游击队领导者。",
+      "scope_notes": "爱国者为称号；不泛化成所有忠于国家的人。 member_of仅表示引证故事阶段的成员关系，不能解释为当前仍在职。",
+      "source_ids": ["ORG-S47"],
+      "relations": [
+        {
+          "type": "member_of",
+          "target": "org-reunion"
+        }
+      ],
+      "form_ids": [
+        "person-patriot:F01",
+        "person-patriot:F02",
+        "person-patriot:F03",
+        "person-patriot:F04",
+        "person-patriot:F05",
+        "person-patriot:F06"
+      ],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "person-talulah",
+      "category": "person",
+      "zh": "塔露拉·雅特利亚斯",
+      "description_zh": "整合运动的创立成员和早期领导人物。",
+      "scope_notes": "全名与塔露拉简称按语境使用；不同剧情阶段的意识、领导状态不能由同名自动推定。 member_of仅表示引证故事阶段的成员关系，不能解释为当前仍在职。",
+      "source_ids": ["ORG-S48"],
+      "relations": [
+        {
+          "type": "member_of",
+          "target": "org-reunion"
+        }
+      ],
+      "form_ids": ["person-talulah:F01", "person-talulah:F02", "person-talulah:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "concept-originium",
+      "category": "concept",
+      "zh": "源石",
+      "description_zh": "兼具能源用途与感染风险的特殊物质。",
+      "scope_notes": "区别于商店货币至纯源石及合成玉；此处只定义基础物质。",
+      "source_ids": ["WORLD-S01", "WORLD-S04", "WORLD-S03"],
+      "relations": [
+        {
+          "type": "causes",
+          "target": "concept-oripathy"
+        },
+        {
+          "type": "related_to",
+          "target": "concept-arts"
+        }
+      ],
+      "form_ids": ["concept-originium:F01", "concept-originium:F02", "concept-originium:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "concept-oripathy",
+      "category": "disease",
+      "zh": "矿石病",
+      "description_zh": "源石侵入身体后引发的疾病。",
+      "scope_notes": "输入误称“源石病”应记录为应避免译法，不能设为中文标准；本包不把疾病机制移用于现实医疗。",
+      "source_ids": ["WORLD-S01", "WORLD-S08", "WORLD-S03"],
+      "relations": [
+        {
+          "type": "related_to",
+          "target": "concept-infected"
+        }
+      ],
+      "form_ids": ["concept-oripathy:F01", "concept-oripathy:F02", "concept-oripathy:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "concept-infected",
+      "category": "concept",
+      "zh": "感染者",
+      "description_zh": "在泰拉语境中指矿石病患者。",
+      "scope_notes": "感染者是健康与社会处境，不是种族；不等于敌方阵营。",
+      "source_ids": ["WORLD-S01", "WORLD-S08", "WORLD-S42"],
+      "relations": [
+        {
+          "type": "related_to",
+          "target": "concept-oripathy"
+        }
+      ],
+      "form_ids": ["concept-infected:F01", "concept-infected:F02", "concept-infected:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "concept-arts",
+      "category": "concept",
+      "zh": "源石技艺",
+      "description_zh": "借助源石施行的特殊技术。",
+      "scope_notes": "英文Arts在设定语境指源石技艺；剧团网站普通arts/艺术文案不能全部映射到本概念。",
+      "source_ids": ["WORLD-S02", "WORLD-S04", "WORLD-S19", "WORLD-S06"],
+      "relations": [
+        {
+          "type": "related_to",
+          "target": "concept-originium"
+        }
+      ],
+      "form_ids": ["concept-arts:F01", "concept-arts:F02", "concept-arts:F03", "concept-arts:F04"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "concept-catastrophe",
+      "category": "concept",
+      "zh": "天灾",
+      "description_zh": "泰拉频发的大规模灾害统称。",
+      "scope_notes": "不是任意失误、事故或叙事污染的统一名称；英文原访谈提供复数，保留实际可见字形。",
+      "source_ids": ["WORLD-S01", "WORLD-S04", "WORLD-S03"],
+      "relations": [
+        {
+          "type": "related_to",
+          "target": "concept-nomadic-city"
+        }
+      ],
+      "form_ids": ["concept-catastrophe:F01", "concept-catastrophe:F02", "concept-catastrophe:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "concept-nomadic-city",
+      "category": "concept",
+      "zh": "移动城市",
+      "description_zh": "可整体迁移以避灾的城市系统。",
+      "scope_notes": "不是所有泰拉聚落都可移动；ja-JP形式本包未取得合适锚点，显式缺失，待补。",
+      "source_ids": ["WORLD-S02", "WORLD-S09"],
+      "relations": [
+        {
+          "type": "related_to",
+          "target": "concept-catastrophe"
+        },
+        {
+          "type": "related_to",
+          "target": "concept-originium-engine"
+        }
+      ],
+      "form_ids": ["concept-nomadic-city:F01", "concept-nomadic-city:F02"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "role-catastrophe-messenger",
+      "category": "role",
+      "zh": "天灾信使",
+      "description_zh": "观察灾害环境并传递预警的职业。",
+      "scope_notes": "与一般配送信使相关但不等同；不把英文Messenger自动译成快递员。",
+      "source_ids": ["WORLD-S11", "WORLD-S04", "WORLD-S05"],
+      "relations": [
+        {
+          "type": "related_to",
+          "target": "concept-catastrophe"
+        }
+      ],
+      "form_ids": [
+        "role-catastrophe-messenger:F01",
+        "role-catastrophe-messenger:F02",
+        "role-catastrophe-messenger:F03"
+      ],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "concept-oripathy-suppressant",
+      "category": "concept",
+      "zh": "矿石病抑制剂",
+      "description_zh": "用于抑制矿石病恶化的药物。",
+      "scope_notes": "不是治愈药；普通抑制剂、浓缩抑制剂与抑制器具不可互换。ja-JP通用药名未独立核实；濃縮抑制剤只是具体藏品名称，不截掉修饰词冒充通用官方标签。",
+      "source_ids": ["WORLD-S13", "WORLD-S14"],
+      "relations": [
+        {
+          "type": "related_to",
+          "target": "concept-oripathy"
+        }
+      ],
+      "form_ids": ["concept-oripathy-suppressant:F01", "concept-oripathy-suppressant:F02"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "currency-lmd",
+      "category": "currency",
+      "zh": "龙门币",
+      "description_zh": "由龙门发行并广泛流通的货币。",
+      "scope_notes": "LMD为缩写；勿等同至纯源石、合成玉或现实货币。",
+      "source_ids": ["WORLD-S07", "WORLD-S04", "WORLD-S20"],
+      "relations": [],
+      "form_ids": ["currency-lmd:F01", "currency-lmd:F02", "currency-lmd:F03", "currency-lmd:F04"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "role-operator",
+      "category": "role",
+      "zh": "干员",
+      "description_zh": "组织中承担行动等任务的人员称谓。",
+      "scope_notes": "角色身份词与游戏可操作单位相关；不自动套用于普通剧团员工。",
+      "source_ids": ["WORLD-S01", "WORLD-S04", "WORLD-S05"],
+      "relations": [],
+      "form_ids": ["role-operator:F01", "role-operator:F02", "role-operator:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "concept-originium-engine",
+      "category": "concept",
+      "zh": "源石引擎",
+      "description_zh": "利用源石提供动力的工业装置。",
+      "scope_notes": "是能源用途与移动城市的连接概念；ja-JP未核实，不从中文推音译。",
+      "source_ids": ["WORLD-S02", "WORLD-S09"],
+      "relations": [
+        {
+          "type": "related_to",
+          "target": "concept-originium"
+        },
+        {
+          "type": "related_to",
+          "target": "concept-nomadic-city"
+        }
+      ],
+      "form_ids": ["concept-originium-engine:F01", "concept-originium-engine:F02"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "concept-infection-monitor",
+      "category": "concept",
+      "zh": "感染监控装置",
+      "description_zh": "监测矿石病相关健康状态的装置。",
+      "scope_notes": "监测器不是通用治愈装置；不可把不同型号或角色专用器具合并。ja-JP未核实。",
+      "source_ids": ["WORLD-S02", "WORLD-S10"],
+      "relations": [
+        {
+          "type": "related_to",
+          "target": "concept-oripathy"
+        }
+      ],
+      "form_ids": ["concept-infection-monitor:F01", "concept-infection-monitor:F02"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "concept-seaborn",
+      "category": "race",
+      "zh": "海嗣",
+      "description_zh": "具有异常适应能力的海洋生命群体。",
+      "scope_notes": "不等同阿戈尔种族；海嗣、恐鱼、海怪随叙述语境有范围差别，不能据社区重定向全部当显示别名。",
+      "source_ids": ["WORLD-S16"],
+      "relations": [
+        {
+          "type": "distinct_from",
+          "target": "race-aegir"
+        }
+      ],
+      "form_ids": ["concept-seaborn:F01", "concept-seaborn:F02", "concept-seaborn:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "concept-collapsal",
+      "category": "concept",
+      "zh": "坍缩体",
+      "description_zh": "与异常现实侵蚀有关的实体统称。",
+      "scope_notes": "本包仅收录命名；其高风险认知机制不转写成站点行为。邪魔与坍缩体关系需保留说话人和语境。",
+      "source_ids": ["WORLD-S17"],
+      "relations": [],
+      "form_ids": ["concept-collapsal:F01", "concept-collapsal:F02", "concept-collapsal:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "concept-originium-slug",
+      "category": "concept",
+      "zh": "源石虫",
+      "description_zh": "与源石共生的小型生物统称。",
+      "scope_notes": "生物概念与游戏同名敌人条目分开；不据名称推定任何接触都会传染。",
+      "source_ids": ["WORLD-S18"],
+      "relations": [
+        {
+          "type": "related_to",
+          "target": "concept-originium"
+        }
+      ],
+      "form_ids": [
+        "concept-originium-slug:F01",
+        "concept-originium-slug:F02",
+        "concept-originium-slug:F03"
+      ],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "concept-cell-originium-assimilation",
+      "category": "concept",
+      "zh": "体细胞与源石融合率",
+      "description_zh": "档案中描述体细胞感染程度的指标。",
+      "scope_notes": "保留百分比指标身份，与血液浓度分开；不保存本次来源人物的个体数值。ja-JP未核实。",
+      "source_ids": ["WORLD-S11", "WORLD-S12"],
+      "relations": [
+        {
+          "type": "distinct_from",
+          "target": "concept-blood-originium-density"
+        },
+        {
+          "type": "related_to",
+          "target": "concept-oripathy"
+        }
+      ],
+      "form_ids": [
+        "concept-cell-originium-assimilation:F01",
+        "concept-cell-originium-assimilation:F02"
+      ],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "concept-blood-originium-density",
+      "category": "concept",
+      "zh": "血液源石结晶密度",
+      "description_zh": "档案中衡量血液源石含量的指标。",
+      "scope_notes": "与细胞融合百分比不同；保留u/L单位语境，不换算为现实医学阈值。ja-JP未核实。",
+      "source_ids": ["WORLD-S11", "WORLD-S12"],
+      "relations": [
+        {
+          "type": "distinct_from",
+          "target": "concept-cell-originium-assimilation"
+        },
+        {
+          "type": "related_to",
+          "target": "concept-oripathy"
+        }
+      ],
+      "form_ids": ["concept-blood-originium-density:F01", "concept-blood-originium-density:F02"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "race-sarkaz",
+      "category": "race",
+      "zh": "萨卡兹",
+      "description_zh": "常有角与长耳等特征的泰拉族群。",
+      "scope_notes": "不是邪恶身份标签；与萨科塔分开。",
+      "source_ids": ["WORLD-S21"],
+      "relations": [
+        {
+          "type": "distinct_from",
+          "target": "race-sankta"
+        }
+      ],
+      "form_ids": ["race-sarkaz:F01", "race-sarkaz:F02", "race-sarkaz:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "race-sankta",
+      "category": "race",
+      "zh": "萨科塔",
+      "description_zh": "以光环与光翼为显著特征的族群。",
+      "scope_notes": "与萨卡兹及拉特兰国籍分开。",
+      "source_ids": ["WORLD-S22"],
+      "relations": [
+        {
+          "type": "distinct_from",
+          "target": "race-sarkaz"
+        }
+      ],
+      "form_ids": ["race-sankta:F01", "race-sankta:F02", "race-sankta:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "race-feline",
+      "category": "race",
+      "zh": "菲林",
+      "description_zh": "具有猫型等外观特征的族群。",
+      "scope_notes": "不能把所有猫形角色推定为该族群；阿斯兰另列。",
+      "source_ids": ["WORLD-S23"],
+      "relations": [
+        {
+          "type": "related_to",
+          "target": "race-aslan"
+        }
+      ],
+      "form_ids": ["race-feline:F01", "race-feline:F02", "race-feline:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "race-caprinae",
+      "category": "race",
+      "zh": "卡普里尼",
+      "description_zh": "常以角、耳及短尾辨识的族群。",
+      "scope_notes": "有角不等于萨卡兹；日文不能凭中文推为カプリニー。",
+      "source_ids": ["WORLD-S24"],
+      "relations": [
+        {
+          "type": "distinct_from",
+          "target": "race-sarkaz"
+        }
+      ],
+      "form_ids": ["race-caprinae:F01", "race-caprinae:F02", "race-caprinae:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "race-lupo",
+      "category": "race",
+      "zh": "鲁珀",
+      "description_zh": "具有狼型特征的族群。",
+      "scope_notes": "与佩洛、沃尔珀分开，不把全部叙拉古人当鲁珀。",
+      "source_ids": ["WORLD-S25"],
+      "relations": [],
+      "form_ids": ["race-lupo:F01", "race-lupo:F02", "race-lupo:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "race-liberi",
+      "category": "race",
+      "zh": "黎博利",
+      "description_zh": "带羽毛等鸟类特征的族群。",
+      "scope_notes": "种族身份不等同伊比利亚或拉特兰国籍。",
+      "source_ids": ["WORLD-S26"],
+      "relations": [],
+      "form_ids": ["race-liberi:F01", "race-liberi:F02", "race-liberi:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "race-vulpo",
+      "category": "race",
+      "zh": "沃尔珀",
+      "description_zh": "以狐型耳尾特征辨识的族群。",
+      "scope_notes": "与鲁珀、佩洛分开。",
+      "source_ids": ["WORLD-S27"],
+      "relations": [],
+      "form_ids": ["race-vulpo:F01", "race-vulpo:F02", "race-vulpo:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "race-forte",
+      "category": "race",
+      "zh": "丰蹄",
+      "description_zh": "有角、体格较强的泰拉族群。",
+      "scope_notes": "不把现实希腊人或所有米诺斯人等同丰蹄。",
+      "source_ids": ["WORLD-S28"],
+      "relations": [],
+      "form_ids": ["race-forte:F01", "race-forte:F02", "race-forte:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "race-aslan",
+      "category": "race",
+      "zh": "阿斯兰",
+      "description_zh": "与菲林相关、具有狮型特征的族群。",
+      "scope_notes": "政治身份与生物分类并不完全重合；不把全部维多利亚居民称作阿斯兰。",
+      "source_ids": ["WORLD-S29"],
+      "relations": [
+        {
+          "type": "related_to",
+          "target": "race-feline"
+        }
+      ],
+      "form_ids": ["race-aslan:F01", "race-aslan:F02", "race-aslan:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "race-kuranta",
+      "category": "race",
+      "zh": "库兰塔",
+      "description_zh": "具有马型特征的泰拉族群。",
+      "scope_notes": "种族不等同卡西米尔国籍或骑士职业。",
+      "source_ids": ["WORLD-S30"],
+      "relations": [],
+      "form_ids": ["race-kuranta:F01", "race-kuranta:F02", "race-kuranta:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "race-elafia",
+      "category": "race",
+      "zh": "埃拉菲亚",
+      "description_zh": "常有分枝角等特征的族群。",
+      "scope_notes": "种族不等同萨米居民或萨米族文化身份。",
+      "source_ids": ["WORLD-S31"],
+      "relations": [],
+      "form_ids": ["race-elafia:F01", "race-elafia:F02", "race-elafia:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "race-zalak",
+      "category": "race",
+      "zh": "札拉克",
+      "description_zh": "常以小型兽类耳尾为特征的族群。",
+      "scope_notes": "不把个体外观推成唯一动物原型。",
+      "source_ids": ["WORLD-S32"],
+      "relations": [],
+      "form_ids": ["race-zalak:F01", "race-zalak:F02", "race-zalak:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "race-vouivre",
+      "category": "race",
+      "zh": "瓦伊凡",
+      "description_zh": "具有角与大型尾部的族群。",
+      "scope_notes": "与德拉克分开；ヴイーヴル的イ为大写片假名。",
+      "source_ids": ["WORLD-S33"],
+      "relations": [
+        {
+          "type": "distinct_from",
+          "target": "race-draco"
+        }
+      ],
+      "form_ids": ["race-vouivre:F01", "race-vouivre:F02", "race-vouivre:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "race-durin",
+      "category": "race",
+      "zh": "杜林",
+      "description_zh": "多生活于地下、身材较矮的族群。",
+      "scope_notes": "杜林种族、地下国家与同名干员必须用不同概念ID。",
+      "source_ids": ["WORLD-S34"],
+      "relations": [],
+      "form_ids": ["race-durin:F01", "race-durin:F02", "race-durin:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "race-oni",
+      "category": "race",
+      "zh": "鬼",
+      "description_zh": "常有额角的泰拉族群。",
+      "scope_notes": "不是通用幽灵，也不能用日本国籍替代。日文字面保留鬼，读音不并入标准显示。",
+      "source_ids": ["WORLD-S35"],
+      "relations": [],
+      "form_ids": ["race-oni:F01", "race-oni:F02", "race-oni:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "race-cautus",
+      "category": "race",
+      "zh": "卡特斯",
+      "description_zh": "具有长耳与短尾等特征的族群。",
+      "scope_notes": "不是所有长耳角色的泛称。",
+      "source_ids": ["WORLD-S36"],
+      "relations": [],
+      "form_ids": ["race-cautus:F01", "race-cautus:F02", "race-cautus:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "race-perro",
+      "category": "race",
+      "zh": "佩洛",
+      "description_zh": "具有犬型耳尾特征的族群。",
+      "scope_notes": "与鲁珀、沃尔珀分开。",
+      "source_ids": ["WORLD-S37"],
+      "relations": [],
+      "form_ids": ["race-perro:F01", "race-perro:F02", "race-perro:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "race-draco",
+      "category": "race",
+      "zh": "德拉克",
+      "description_zh": "具龙型特征、与火焰技艺相关的族群。",
+      "scope_notes": "与瓦伊凡及龙族分开，不把英文dragon一律归入本概念。",
+      "source_ids": ["WORLD-S38"],
+      "relations": [
+        {
+          "type": "distinct_from",
+          "target": "race-vouivre"
+        }
+      ],
+      "form_ids": ["race-draco:F01", "race-draco:F02", "race-draco:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "race-aegir",
+      "category": "race",
+      "zh": "阿戈尔",
+      "description_zh": "具有多种水生特征的泰拉族群。",
+      "scope_notes": "种族与同名海底国家分开；不等于海嗣。",
+      "source_ids": ["WORLD-S39"],
+      "relations": [
+        {
+          "type": "distinct_from",
+          "target": "concept-seaborn"
+        }
+      ],
+      "form_ids": ["race-aegir:F01", "race-aegir:F02", "race-aegir:F03", "race-aegir:F04"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "race-ursus",
+      "category": "race",
+      "zh": "乌萨斯",
+      "description_zh": "以熊型耳尾和体格为特征的族群。",
+      "scope_notes": "种族与乌萨斯帝国、帝国公民身份分开。",
+      "source_ids": ["WORLD-S40"],
+      "relations": [],
+      "form_ids": ["race-ursus:F01", "race-ursus:F02", "race-ursus:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    },
+    {
+      "concept_id": "race-petram",
+      "category": "race",
+      "zh": "匹特拉姆",
+      "description_zh": "外表接近普通人形的稀少族群。",
+      "scope_notes": "不能仅凭角色动物原型推断身份。",
+      "source_ids": ["WORLD-S41"],
+      "relations": [],
+      "form_ids": ["race-petram:F01", "race-petram:F02", "race-petram:F03"],
+      "research_status": "source_reviewed_not_adopted",
+      "description_kind": "research_paraphrase",
+      "temporal_scope": "仅对应引证语境；没有统一有效起止日，不得视为1084或1102现场已知事实。"
+    }
+  ]
+}

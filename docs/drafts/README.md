@@ -17,6 +17,7 @@
 
 当前实际草稿：
 
+- [`recommendations/terminology-maintenance.md`](recommendations/terminology-maintenance.md)：时间敏感内容的长期维护触发条件、当前术语不足与后续受控接入建议；
 - [`creative/archive-anomalous-ticketing.md`](creative/archive-anomalous-ticketing.md)：延期的里站异常购票构想；
 - [`creative/performance-pricing-method.md`](creative/performance-pricing-method.md)：延期且未启用的正式定价候选。
 
