@@ -1,0 +1,1072 @@
+{
+  "schemaVersion": 1,
+  "status": "research_only_pending_human_review",
+  "eventCatalog": "events.csv",
+  "sourceCatalog": "../../sources/terra-chronology/sources.csv",
+  "closedWorldAssumption": false,
+  "interpretation": "不存在的关系与空日期表示未知，不表示否定；只有precedes参与严格事件顺序检查；任何建议节点均非运行时输入。",
+  "timeAxes": [
+    {
+      "id": "event_time",
+      "meaning": "世界中事件发生的时间或区间"
+    },
+    {
+      "id": "institution_known_at",
+      "meaning": "剧团或机构获得可行动信息的时间；不得自动等于事件发生时间"
+    },
+    {
+      "id": "published_at",
+      "meaning": "某版本公告或网页内容实际发布时点"
+    },
+    {
+      "id": "captured_at",
+      "meaning": "网页快照捕获时点；可包含当时已经公布的未来排期"
+    },
+    {
+      "id": "damaged_at",
+      "meaning": "这一副本实际受损的时点；未知时留空，不由灾害或捕获日期代填"
+    },
+    {
+      "id": "damage_discovered_at",
+      "meaning": "首次确认这一副本损坏的时点；不等同实际受损时间"
+    },
+    {
+      "id": "observed_at",
+      "meaning": "当前访问者看到快照或污染投影的时间层"
+    },
+    {
+      "id": "claimed_date",
+      "meaning": "物件自行声称的日期；污染下不必是真实发生时点"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "G001",
+      "kind": "event_reference",
+      "eventRef": "G001"
+    },
+    {
+      "id": "U001",
+      "kind": "event_reference",
+      "eventRef": "U001"
+    },
+    {
+      "id": "H001",
+      "kind": "event_reference",
+      "eventRef": "H001"
+    },
+    {
+      "id": "Y001",
+      "kind": "event_reference",
+      "eventRef": "Y001"
+    },
+    {
+      "id": "Y002",
+      "kind": "event_reference",
+      "eventRef": "Y002"
+    },
+    {
+      "id": "Y003",
+      "kind": "event_reference",
+      "eventRef": "Y003"
+    },
+    {
+      "id": "H002",
+      "kind": "event_reference",
+      "eventRef": "H002"
+    },
+    {
+      "id": "Y004",
+      "kind": "event_reference",
+      "eventRef": "Y004"
+    },
+    {
+      "id": "Y005",
+      "kind": "event_reference",
+      "eventRef": "Y005"
+    },
+    {
+      "id": "M001",
+      "kind": "event_reference",
+      "eventRef": "M001"
+    },
+    {
+      "id": "L001",
+      "kind": "event_reference",
+      "eventRef": "L001"
+    },
+    {
+      "id": "S001",
+      "kind": "event_reference",
+      "eventRef": "S001"
+    },
+    {
+      "id": "C001",
+      "kind": "event_reference",
+      "eventRef": "C001"
+    },
+    {
+      "id": "C002",
+      "kind": "event_reference",
+      "eventRef": "C002"
+    },
+    {
+      "id": "C003",
+      "kind": "event_reference",
+      "eventRef": "C003"
+    },
+    {
+      "id": "U002",
+      "kind": "event_reference",
+      "eventRef": "U002"
+    },
+    {
+      "id": "T003",
+      "kind": "event_reference",
+      "eventRef": "T003"
+    },
+    {
+      "id": "G002",
+      "kind": "event_reference",
+      "eventRef": "G002"
+    },
+    {
+      "id": "G003",
+      "kind": "event_reference",
+      "eventRef": "G003"
+    },
+    {
+      "id": "S002",
+      "kind": "event_reference",
+      "eventRef": "S002"
+    },
+    {
+      "id": "M002",
+      "kind": "event_reference",
+      "eventRef": "M002"
+    },
+    {
+      "id": "M003",
+      "kind": "event_reference",
+      "eventRef": "M003"
+    },
+    {
+      "id": "M004",
+      "kind": "event_reference",
+      "eventRef": "M004"
+    },
+    {
+      "id": "Y006",
+      "kind": "event_reference",
+      "eventRef": "Y006"
+    },
+    {
+      "id": "V001",
+      "kind": "event_reference",
+      "eventRef": "V001"
+    },
+    {
+      "id": "U003",
+      "kind": "event_reference",
+      "eventRef": "U003"
+    },
+    {
+      "id": "K001",
+      "kind": "event_reference",
+      "eventRef": "K001"
+    },
+    {
+      "id": "U004",
+      "kind": "event_reference",
+      "eventRef": "U004"
+    },
+    {
+      "id": "U005",
+      "kind": "event_reference",
+      "eventRef": "U005"
+    },
+    {
+      "id": "L002",
+      "kind": "event_reference",
+      "eventRef": "L002"
+    },
+    {
+      "id": "C004",
+      "kind": "event_reference",
+      "eventRef": "C004"
+    },
+    {
+      "id": "C005",
+      "kind": "event_reference",
+      "eventRef": "C005"
+    },
+    {
+      "id": "V002",
+      "kind": "event_reference",
+      "eventRef": "V002"
+    },
+    {
+      "id": "C006",
+      "kind": "event_reference",
+      "eventRef": "C006"
+    },
+    {
+      "id": "M005",
+      "kind": "event_reference",
+      "eventRef": "M005"
+    },
+    {
+      "id": "C007",
+      "kind": "event_reference",
+      "eventRef": "C007"
+    },
+    {
+      "id": "C008",
+      "kind": "event_reference",
+      "eventRef": "C008"
+    },
+    {
+      "id": "V003",
+      "kind": "event_reference",
+      "eventRef": "V003"
+    },
+    {
+      "id": "C009",
+      "kind": "event_reference",
+      "eventRef": "C009"
+    },
+    {
+      "id": "C010",
+      "kind": "event_reference",
+      "eventRef": "C010"
+    },
+    {
+      "id": "S003",
+      "kind": "event_reference",
+      "eventRef": "S003"
+    },
+    {
+      "id": "M006",
+      "kind": "event_reference",
+      "eventRef": "M006"
+    },
+    {
+      "id": "T001",
+      "kind": "event_reference",
+      "eventRef": "T001"
+    },
+    {
+      "id": "T002",
+      "kind": "event_reference",
+      "eventRef": "T002"
+    },
+    {
+      "id": "T004",
+      "kind": "event_reference",
+      "eventRef": "T004"
+    },
+    {
+      "id": "T005",
+      "kind": "event_reference",
+      "eventRef": "T005"
+    },
+    {
+      "id": "T006",
+      "kind": "event_reference",
+      "eventRef": "T006"
+    },
+    {
+      "id": "T007",
+      "kind": "event_reference",
+      "eventRef": "T007"
+    },
+    {
+      "id": "T008",
+      "kind": "event_reference",
+      "eventRef": "T008"
+    },
+    {
+      "id": "T009",
+      "kind": "event_reference",
+      "eventRef": "T009"
+    },
+    {
+      "id": "T010",
+      "kind": "event_reference",
+      "eventRef": "T010"
+    },
+    {
+      "id": "T011",
+      "kind": "event_reference",
+      "eventRef": "T011"
+    },
+    {
+      "id": "T012",
+      "kind": "event_reference",
+      "eventRef": "T012"
+    },
+    {
+      "id": "T013",
+      "kind": "event_reference",
+      "eventRef": "T013"
+    },
+    {
+      "id": "T014",
+      "kind": "event_reference",
+      "eventRef": "T014"
+    },
+    {
+      "id": "T015",
+      "kind": "event_reference",
+      "eventRef": "T015"
+    },
+    {
+      "id": "T016",
+      "kind": "event_reference",
+      "eventRef": "T016"
+    },
+    {
+      "id": "T017",
+      "kind": "event_reference",
+      "eventRef": "T017"
+    },
+    {
+      "id": "T018",
+      "kind": "event_reference",
+      "eventRef": "T018"
+    },
+    {
+      "id": "T019",
+      "kind": "event_reference",
+      "eventRef": "T019"
+    },
+    {
+      "id": "T020",
+      "kind": "event_reference",
+      "eventRef": "T020"
+    },
+    {
+      "id": "T021",
+      "kind": "event_reference",
+      "eventRef": "T021"
+    },
+    {
+      "id": "S004",
+      "kind": "event_reference",
+      "eventRef": "S004"
+    },
+    {
+      "id": "S005",
+      "kind": "event_reference",
+      "eventRef": "S005"
+    },
+    {
+      "id": "S006",
+      "kind": "event_reference",
+      "eventRef": "S006"
+    },
+    {
+      "id": "P001",
+      "kind": "event_reference",
+      "eventRef": "P001"
+    },
+    {
+      "id": "P002",
+      "kind": "event_reference",
+      "eventRef": "P002"
+    },
+    {
+      "id": "P003",
+      "kind": "event_reference",
+      "eventRef": "P003"
+    },
+    {
+      "id": "P004",
+      "kind": "event_reference",
+      "eventRef": "P004"
+    },
+    {
+      "id": "L003",
+      "kind": "event_reference",
+      "eventRef": "L003"
+    },
+    {
+      "id": "L004",
+      "kind": "event_reference",
+      "eventRef": "L004"
+    },
+    {
+      "id": "V004",
+      "kind": "event_reference",
+      "eventRef": "V004"
+    },
+    {
+      "id": "V005",
+      "kind": "event_reference",
+      "eventRef": "V005"
+    },
+    {
+      "id": "U006",
+      "kind": "event_reference",
+      "eventRef": "U006"
+    },
+    {
+      "id": "Y007",
+      "kind": "event_reference",
+      "eventRef": "Y007"
+    },
+    {
+      "id": "K002",
+      "kind": "event_reference",
+      "eventRef": "K002"
+    },
+    {
+      "id": "X001",
+      "kind": "event_reference",
+      "eventRef": "X001"
+    },
+    {
+      "id": "X002",
+      "kind": "event_reference",
+      "eventRef": "X002"
+    },
+    {
+      "id": "GATE-LUCIAN",
+      "label": "以卢西恩署名的具体场次",
+      "kind": "proposal_condition",
+      "eventRefs": ["T006", "T010"],
+      "sourceIds": ["S41", "S12"],
+      "condition": "证明入团不晚于演出，并核对角色形成与是否离团；入团不是每场实际参演的充分条件。"
+    },
+    {
+      "id": "GATE-NEW",
+      "label": "后继酒神时期对外营业",
+      "kind": "proposal_condition",
+      "eventRefs": ["T016", "T017"],
+      "sourceIds": ["S41", "S42"],
+      "condition": "晚于身份继承；具体组织重建、首演、许可和售票日期另需人工创作批准。"
+    },
+    {
+      "id": "GATE-NUOVA",
+      "label": "新沃尔西尼身份可用于场次",
+      "kind": "proposal_condition",
+      "eventRefs": ["S005", "S006"],
+      "sourceIds": ["S49", "S50"],
+      "condition": "不得早于该新城市成立；城市存在仍不证明某个场馆存在或接受剧团。"
+    },
+    {
+      "id": "GATE-PROP-FLOAT",
+      "label": "螺旋桨天堂原浮空层场地",
+      "kind": "proposal_condition",
+      "eventRefs": ["P002", "P003", "P004"],
+      "sourceIds": ["S44", "S45", "S46"],
+      "condition": "筹建前不可用；毁损后原场地不可用；残存底层不等于同一场馆已修复。"
+    },
+    {
+      "id": "GATE-REOPEN",
+      "label": "恢复普通公众演出",
+      "kind": "proposal_condition",
+      "eventRefs": ["P004", "V005", "L004", "X002"],
+      "sourceIds": [],
+      "condition": "场地、路线、主办方许可、人员和可公开通知均核实后才能从待评估转为排期。"
+    },
+    {
+      "id": "SNAP-LOSS",
+      "label": "旧团首次反抗附近的缺页候选",
+      "kind": "proposal_snapshot",
+      "eventRefs": ["T021"],
+      "sourceIds": ["S41"],
+      "condition": "官方事件存在但年与网页损坏因果未定；只能申请无确年候选，不能指定1093或1096。"
+    },
+    {
+      "id": "SNAP-PROP",
+      "label": "事故前园区专场页面的失效记录候选",
+      "kind": "proposal_snapshot",
+      "eventRefs": ["P002", "P003"],
+      "sourceIds": ["S44", "S45"],
+      "condition": "先批准原创签约和网页存在；原文生成早于事故，损坏被发现可晚于捕获；不称官方已有页面。"
+    },
+    {
+      "id": "SNAP-OLD-SIESTA",
+      "label": "旧汐斯塔地址失效但档案仍可读",
+      "kind": "proposal_snapshot",
+      "eventRefs": ["X001", "X002"],
+      "sourceIds": ["S53", "S54"],
+      "condition": "区分场地失效与文件损坏；可以保留旧地址记录，不要求乱码。"
+    },
+    {
+      "id": "SNAP-HANDOVER",
+      "label": "新旧团交接期馆藏版本候选",
+      "kind": "proposal_snapshot",
+      "eventRefs": ["T016", "T017"],
+      "sourceIds": ["S41", "S42"],
+      "condition": "只支持人物和组织断代；网址失效、域名接管和发布日均为待批准创作。"
+    }
+  ],
+  "edges": [
+    {
+      "from": "Y001",
+      "to": "Y002",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S33"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-001"
+    },
+    {
+      "from": "Y002",
+      "to": "Y003",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S33"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-002"
+    },
+    {
+      "from": "H001",
+      "to": "H002",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S32"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-003"
+    },
+    {
+      "from": "C002",
+      "to": "C003",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S01", "S34"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-004"
+    },
+    {
+      "from": "S001",
+      "to": "S002",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S01", "S25"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-005"
+    },
+    {
+      "from": "M001",
+      "to": "M002",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S01", "S27"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-006"
+    },
+    {
+      "from": "M002",
+      "to": "M003",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S01", "S27", "S28"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-007"
+    },
+    {
+      "from": "M003",
+      "to": "M004",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S01", "S27", "S28"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-008"
+    },
+    {
+      "from": "U004",
+      "to": "U005",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S23"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-009"
+    },
+    {
+      "from": "L001",
+      "to": "L002",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S29", "S30"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-010"
+    },
+    {
+      "from": "C004",
+      "to": "C005",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S35"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-011"
+    },
+    {
+      "from": "V001",
+      "to": "V002",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S20"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-012"
+    },
+    {
+      "from": "C005",
+      "to": "C006",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S35"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-013"
+    },
+    {
+      "from": "M004",
+      "to": "M005",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S01", "S03"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-014"
+    },
+    {
+      "from": "C009",
+      "to": "C010",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S35"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-015"
+    },
+    {
+      "from": "M005",
+      "to": "M006",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S03", "S28"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-016"
+    },
+    {
+      "from": "T005",
+      "to": "T006",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S10"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-017"
+    },
+    {
+      "from": "T006",
+      "to": "T007",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S10"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-018"
+    },
+    {
+      "from": "T006",
+      "to": "T008",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S10"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-019"
+    },
+    {
+      "from": "T008",
+      "to": "T009",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S10"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-020"
+    },
+    {
+      "from": "T021",
+      "to": "T010",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S10", "S12", "S41"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-021"
+    },
+    {
+      "from": "T010",
+      "to": "T011",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S12"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-022"
+    },
+    {
+      "from": "T011",
+      "to": "T012",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S03", "S15"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-023"
+    },
+    {
+      "from": "T016",
+      "to": "T017",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S42"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-024"
+    },
+    {
+      "from": "T016",
+      "to": "T018",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S09"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-025"
+    },
+    {
+      "from": "T016",
+      "to": "T019",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S13"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-026"
+    },
+    {
+      "from": "T006",
+      "to": "T020",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S41"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-027"
+    },
+    {
+      "from": "T020",
+      "to": "T021",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S41"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-028"
+    },
+    {
+      "from": "S004",
+      "to": "S005",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S48", "S49", "S50"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-029"
+    },
+    {
+      "from": "S005",
+      "to": "S006",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S49", "S61"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-030"
+    },
+    {
+      "from": "C010",
+      "to": "P001",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S03", "S43"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-031"
+    },
+    {
+      "from": "P001",
+      "to": "P002",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S44"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-032"
+    },
+    {
+      "from": "P002",
+      "to": "P003",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S03", "S45", "S47", "S62"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-033"
+    },
+    {
+      "from": "P003",
+      "to": "P004",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S46"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-034"
+    },
+    {
+      "from": "L003",
+      "to": "L004",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S55"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-035"
+    },
+    {
+      "from": "V002",
+      "to": "V005",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S57"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-036"
+    },
+    {
+      "from": "X001",
+      "to": "X002",
+      "relation": "precedes",
+      "basis": "source_supported_order",
+      "sourceIds": ["S54"],
+      "note": "只表示事件先后，不声明因果、相邻或绝对时间。",
+      "edgeId": "REL-037"
+    },
+    {
+      "from": "T012",
+      "to": "T015",
+      "relation": "narrative_precedes",
+      "basis": "secondary_inference",
+      "sourceIds": ["S08", "S15"],
+      "note": "作品叙事承接支持；不是从AD-8一次古堡回忆单句直接得出的确年。",
+      "edgeId": "REL-038"
+    },
+    {
+      "from": "T003",
+      "to": "T001",
+      "relation": "not_equivalent",
+      "basis": "source_limit",
+      "sourceIds": ["S40"],
+      "note": "子爵邀请未命名云游剧团，不能作为猩红剧团创立年。",
+      "edgeId": "REL-039"
+    },
+    {
+      "from": "T006",
+      "to": "GATE-LUCIAN",
+      "relation": "necessary_before",
+      "basis": "analytical_condition",
+      "sourceIds": ["S41"],
+      "note": "必要条件，不自动证明参演。",
+      "edgeId": "REL-040"
+    },
+    {
+      "from": "T016",
+      "to": "GATE-NEW",
+      "relation": "necessary_before",
+      "basis": "analytical_condition",
+      "sourceIds": ["S41", "S42"],
+      "note": "新身份起点不等于商业营业起点。",
+      "edgeId": "REL-041"
+    },
+    {
+      "from": "S005",
+      "to": "GATE-NUOVA",
+      "relation": "necessary_before",
+      "basis": "analytical_condition",
+      "sourceIds": ["S49", "S50"],
+      "note": "先有新城身份，后谈新城市政场馆。",
+      "edgeId": "REL-042"
+    },
+    {
+      "from": "P003",
+      "to": "GATE-PROP-FLOAT",
+      "relation": "disables_original_place",
+      "basis": "physical_consequence",
+      "sourceIds": ["S45"],
+      "note": "毁损浮空层，不向全国或幸存地块无条件传播。",
+      "edgeId": "REL-043"
+    },
+    {
+      "from": "P004",
+      "to": "GATE-REOPEN",
+      "relation": "does_not_prove",
+      "basis": "source_limit",
+      "sourceIds": ["S46"],
+      "note": "回收维修不构成复开证明。",
+      "edgeId": "REL-044"
+    },
+    {
+      "from": "T021",
+      "to": "SNAP-LOSS",
+      "relation": "motivates_candidate",
+      "basis": "project_proposal",
+      "sourceIds": ["S41"],
+      "note": "不是原作网页存在或损坏的证据。",
+      "edgeId": "REL-045"
+    },
+    {
+      "from": "P003",
+      "to": "SNAP-PROP",
+      "relation": "motivates_candidate",
+      "basis": "project_proposal",
+      "sourceIds": ["S44", "S45"],
+      "note": "不是原作网页存在或损坏的证据。",
+      "edgeId": "REL-046"
+    },
+    {
+      "from": "X002",
+      "to": "SNAP-OLD-SIESTA",
+      "relation": "motivates_candidate",
+      "basis": "project_proposal",
+      "sourceIds": ["S53", "S54"],
+      "note": "不是原作网页存在或损坏的证据。",
+      "edgeId": "REL-047"
+    },
+    {
+      "from": "T017",
+      "to": "SNAP-HANDOVER",
+      "relation": "motivates_candidate",
+      "basis": "project_proposal",
+      "sourceIds": ["S41", "S42"],
+      "note": "不是原作网页存在或损坏的证据。",
+      "edgeId": "REL-048"
+    }
+  ],
+  "constraints": [
+    {
+      "id": "TIME-01",
+      "severity": "hard_if_contemporary",
+      "rule": "同期公告必须 published_at <= captured_at；公告可含未来排期，但不得把尚未获知的未来事故写成当时确定事实。",
+      "eventRefs": [],
+      "sourceIds": [],
+      "basis": "research_proposal"
+    },
+    {
+      "id": "TIME-02",
+      "severity": "hard_if_original_place",
+      "rule": "毁损之后的原场地无法沿用原空间售票；迁至新场地需要新地点或版本关系，而非静默更名。",
+      "eventRefs": ["P003", "X002"],
+      "sourceIds": ["S45", "S54"],
+      "basis": "analytical_condition"
+    },
+    {
+      "id": "TIME-03",
+      "severity": "hard_identity",
+      "rule": "1084同期记录不能以约1099才成立的新沃尔西尼及其市政机构作为当年实体。",
+      "eventRefs": ["S005", "S006"],
+      "sourceIds": ["S49", "S50"],
+      "basis": "evidence_conflict"
+    },
+    {
+      "id": "TIME-04",
+      "severity": "requires_author_choice",
+      "rule": "1084是否有卢西恩参演仍未知；不能声称官方证实，也不能仅由未知宣布不可能。",
+      "eventRefs": ["T006", "T010", "T012"],
+      "sourceIds": ["S12", "S41"],
+      "basis": "source_limit"
+    },
+    {
+      "id": "TIME-05",
+      "severity": "requires_author_choice",
+      "rule": "中文与英文支持1101年末分支，日文列1102春；保留分歧，不取交集伪造唯一时点；P003不能保证已在1102-04-15之前发生。",
+      "eventRefs": ["P003"],
+      "sourceIds": ["S01", "S03", "S47", "S63"],
+      "basis": "date_dispute"
+    },
+    {
+      "id": "TIME-06",
+      "severity": "hard_model_boundary",
+      "rule": "城市所在地不等于语言版本；一城事故不自动关停全国，独立汐斯塔不归入哥伦比亚。",
+      "eventRefs": ["X001", "X002", "U006"],
+      "sourceIds": ["S54"],
+      "basis": "analytical_condition"
+    },
+    {
+      "id": "TIME-07",
+      "severity": "requires_author_choice",
+      "rule": "古堡事件无确年；邀请可能是事件前诱因或同期道具，不允许先验规定只有救援后才可存在。",
+      "eventRefs": ["T003", "T012"],
+      "sourceIds": ["S40"],
+      "basis": "source_limit"
+    },
+    {
+      "id": "TIME-08",
+      "severity": "hard_model_boundary",
+      "rule": "网页捕获早于事故，不排除文件在事故后损坏；必须区分captured_at与damaged_at，且另证损坏传播机制。",
+      "eventRefs": [],
+      "sourceIds": [],
+      "basis": "research_proposal"
+    },
+    {
+      "id": "TIME-09",
+      "severity": "requires_evidence",
+      "rule": "维修、停战或节庆活动只能触发重新评估，不自动满足场馆、许可、人员、道路和获知条件。",
+      "eventRefs": ["P004", "S006", "K002"],
+      "sourceIds": ["S46", "S49", "S60"],
+      "basis": "analytical_condition"
+    }
+  ],
+  "uncertaintyTests": [
+    {
+      "id": "CASE-NUOVA-1084",
+      "inputs": {
+        "eventRef": "S005",
+        "performanceYear": 1084,
+        "layer": "contemporary_capture"
+      },
+      "expected": "conflict",
+      "reason": "同期城市身份不成立。"
+    },
+    {
+      "id": "CASE-PHANTOM-1084",
+      "inputs": {
+        "eventRef": "T006",
+        "performanceYear": 1084
+      },
+      "expected": "unresolved",
+      "reason": "入团年未知，不能自动判真或假。"
+    },
+    {
+      "id": "CASE-PROP-FRONT-NOW",
+      "inputs": {
+        "eventRef": "P003",
+        "siteNow": "1102-04-15"
+      },
+      "expected": "unresolved",
+      "reason": "1102春的候选分支未给事故月日。"
+    },
+    {
+      "id": "CASE-PROP-REPAIR",
+      "inputs": {
+        "eventRef": "P004",
+        "action": "resume_ticket_sales"
+      },
+      "expected": "unresolved",
+      "reason": "检修没有给出复开证据。"
+    },
+    {
+      "id": "CASE-OLD-CAPTURE-LATER-DAMAGE",
+      "inputs": {
+        "capturedYear": 1096,
+        "possibleDamageYear": 1100
+      },
+      "expected": "chronologically_possible_causally_unproven",
+      "reason": "保存副本可后坏，仍须存储地点或技术因果。"
+    },
+    {
+      "id": "CASE-INVITATION-1084",
+      "inputs": {
+        "capturedAt": "1084-07-01",
+        "projectedPerformanceAt": "1084-11-11T23:49",
+        "layer": "current_anomaly_projection"
+      },
+      "expected": "not_a_calendar_conflict_by_itself",
+      "reason": "这是邀请指向的投影演出时点，不是邀请发出时点；不能把明确投影当1084同期业务事件。"
+    }
+  ]
+}

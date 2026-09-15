@@ -1,20 +1,32 @@
 ---
-import seal from '../../assets/brand/troupe-publication-seal.svg';
+import { Image } from 'astro:assets';
+import matteSeal from '../../assets/brand/troupe-logo-primary.png';
+import metallicSeal from '../../assets/brand/troupe-logo-metallic.png';
 
 interface Props {
   class?: string;
+  size?: 'standard' | 'home' | 'seal';
+  variant?: 'matte' | 'metallic';
+  loading?: 'eager' | 'lazy';
 }
 
-const { class: className } = Astro.props;
+const { class: className, size = 'standard', variant = 'matte', loading = 'eager' } = Astro.props;
+// 页头／页尾／海报小标上限为 76 CSS px；请柬的大印章独立取样，避免小标下载大图。
+const width = size === 'home' ? 320 : size === 'seal' ? 280 : 80;
+const seal = variant === 'metallic' ? metallicSeal : matteSeal;
 ---
 
-<img
+<Image
   class:list={['troupe-mark', className]}
-  src={seal.src}
-  width="128"
-  height="128"
+  data-troupe-mark-variant={variant}
+  src={seal}
+  width={width}
+  height={width}
+  densities={[1, 2, 3]}
+  format="webp"
+  quality={95}
   alt=""
   aria-hidden="true"
-  loading="eager"
+  loading={loading}
   decoding="async"
 />

@@ -3,8 +3,8 @@ import type { yanMessages } from '../yan/messages';
 import type { yanTicketingPlatforms } from '../yan/messages';
 
 export const kazimierzTicketingPlatforms = {
-  'rice-network': { displayName: 'Sieć Ryżowa', logoAlt: 'Tymczasowy znak Sieci Ryżowej' },
-  'drop-tower': { displayName: 'Wieża Spadku', logoAlt: 'Tymczasowy znak Wieży Spadku' },
+  'rice-network': { displayName: 'Sieć Ryżowa', logoAlt: 'Znak Sieci Ryżowej' },
+  'drop-tower': { displayName: 'Wieża Spadku', logoAlt: 'Znak Wieży Spadku' },
 } as const satisfies LocalizedShape<typeof yanTicketingPlatforms>;
 
 export const kazimierzMessages = {

@@ -1,0 +1,79 @@
+event_id,date_start,date_end,date_precision,date_status,countries,subjects,event_zh,source_ids,source_locator,date_note,after_event_ids
+G001,0001,,year,secondary,sargon,calendar,卢加萨尔古斯相关遗迹发现被用作通行纪元起点。,S01|S06,纪元起源,传统纪元基点；不等于各国在同一天同时改历。,
+U001,0031,,year,explicit,ursus,state,骏鹰相关国号改为乌萨斯。,S22,10-19国号对话,剧情人物明确给出泰拉历31年。,
+H001,0400,,circa_year,approximate,higashi,civil_war,东国中央秩序瓦解后进入长期武家纷争。,S32,History,约400年；误差宽度未知，不填虚构上下限。,
+Y001,0698,,year,secondary,yan,institutions,炎国推行天师相关改革。,S33,698年条目,百科对设定集的转述。,
+Y002,0713,,year,secondary,yan,infrastructure,炎国启动六十年基础设施规划。,S33,713年条目,计划起年，不据此假定所有工程773年竣工。,Y001
+Y003,0790,,year,secondary,yan,transport,炎国全国道路网络发展达到新的阶段。,S33,790年条目,记录交通史节点，不表示现代移动城市体系完全建成。,Y002
+H002,0807,,year,secondary,higashi,state,两国诏确立东国南北两方并立的格局。,S32,Two Nations Edict,停战与并立不等于永久和平或重新统一。,H001
+Y004,0845,,year,secondary,yan,diplomacy,炎国扩大对外开放与交流。,S01|S33,845年条目,不把开放年份当作炎国历法起点。,
+Y005,0855,,year,secondary,yan,frontier,炎国推进北境防御建设。,S01|S33,855年条目,国家防务背景。,
+M001,0917,,season,secondary,minos|sargon,occupation,萨尔贡入侵米诺斯，开启长期占领。,S27,History：917 spring,季节为春；没有换算成固定月份。,
+L001,0969,,year,secondary,leithanien,witch_king,巫王即位。,S01|S29,969年条目,与承认叙拉古独立同年；不推定两事同日。,
+S001,0969,,year,explicit,siracusa|leithanien,independence,修订金律承认叙拉古独立。,S24|S25,Bassline档案3；Siracusa历史,官方档案转载明确给出969年。,
+C001,1016,1019,year_range,secondary,columbia|victoria,independence_war,哥伦比亚独立战争。,S01,1016—1019年条目,战争区间与建国单年分别记录。,
+C002,1017,,year,secondary,columbia|victoria,independence,哥伦比亚脱离维多利亚统治。,S01,1017年条目,与1019年正式建国是不同阶段，不合并成冲突。,
+C003,1019,,year,secondary,columbia,state,哥伦比亚正式建国，建立宪制与选举安排。,S01|S34,1019年条目,不倒推出当年所有制度已成熟。,C002
+U002,1019,1062,year_range,secondary,ursus|kazimierz,war,第十次乌萨斯—卡西米尔战争。,S23,History：1019–1062,跨度不意味着持续保持同样强度的战斗。,
+T003,1020,1029,decade,explicit,gaul|victoria,calais_blason_castle,102X年子爵请柬称林地城堡已经竣工，并预告云游剧团演出。,S40,背景故事：克莱布拉松子爵的请柬,1020至1029是请柬落款范围，不是建成年范围；竣工不晚于请柬，可能早于1020；团体未指名。,
+G002,1029-08,1031-10-21,mixed_range,secondary,gaul|leithanien|victoria|ursus,four_nations_war,四皇会战。,S18,日期及参战阶段,起点精确至月，终点至日；不同国家参战时间不同。,
+G003,1031-10-21,,day,secondary,gaul|victoria|leithanien|ursus,lingones,高卢首都林贡陷落，高卢帝国终结。,S19,Lingones陷落日期,林贡与维多利亚首都伦蒂尼姆不可混同。,
+M002,1039,,year,secondary,minos|sargon,resistance,米诺斯反抗萨尔贡统治的行动扩大。,S01|S27,1039年条目,与1041解放及1042撤军区分。,M001
+S002,1039,,year,secondary,siracusa,sicilia,西西里夫人的灰厅与家族秩序形成关键转折。,S01|S25,1039年；独立后约70年,不把家族秩序称为现代法治统一。,S001
+M003,1041,,year,secondary,minos,liberation,圣山等解放行动取得决定性成果。,S01|S27|S28,1041年条目,事实上的解放节点，不取代次年的撤军节点。,M002
+M004,1042,,year,secondary,minos|sargon,withdrawal,萨尔贡撤出，米诺斯结束殖民统治。,S01|S27|S28,1042年条目,917至1042约125年。,M003
+Y006,1054,,year,secondary,yan,education,炎国实施教育制度改革。,S33,1054年条目,制度史锚点；不外推九国语言教育政策。,
+K001,1072,,year,secondary,kazimierz|ursus,golden_prairie,卡西米尔在金色原野相关战事中收复领土。,S31,Golden Prairie,不要与1062年结束的第十次战争混为同一日期。,
+U003,1072,,year,secondary,ursus|higashi,bloodpeak_campaign,乌萨斯与东国发生血峰战役。,S23|S32,1072年条目,两国同一事件仅保留一条，供横向对照。,
+V001,1072,,year,secondary,victoria,monarchy,阿斯兰国王遭处决，王权秩序发生断裂。,S01|S20,1072革命,仅取年份；不填未经本轮确认的月日。,
+U004,1073,,year,secondary,ursus,succession,乌萨斯皇帝弗拉基米尔去世，发生皇位更替。,S01|S23,1073年条目,年号与君主名不同于日历系统。,
+U005,1075,,year,secondary,ursus,rebellion,乌萨斯叛乱与镇压加剧统治集团冲突。,S23,1075年条目,事件概述不代替具体人物责任考据。,U004
+L002,1077-09,,month,secondary,leithanien,twin_empresses,九月起义推翻巫王统治，双子女皇时代开启。,S29|S30,Septemberaufstand,不采纳来源正文与969—1077不符的两世纪以上时长。,L001
+C004,1083,,year,explicit,columbia,rhine_lab,莱茵生命档案将克丽斯腾与塞雷娅早期合办实验室的材料列入1083年。,S35,Part 02：1083 COFOUNDING,这是档案分年，不能与公司正式登记日等同。,
+C005,1085,,year,explicit,columbia,rhine_lab,档案记录实验室转为商业机构的登记过程。,S35,Part 02：1085,与早期合办分开；未给出登记月日。,C004
+S004,1094,,circa_year,approximate,siracusa,nuova_volsinii,新沃尔西尼的建设方案约在此时完成。,S48,Nuova Volsinii建设背景,二手约年；不表示当年新城已正式运营。,
+V002,1094,,year,secondary,victoria,londinium,斯塔福德政变及随后引入萨卡兹力量改变伦蒂尼姆局势。,S20,1094年宫廷史,同年叙事，不补写各行动日期。,V001
+C006,1095,,year,explicit,columbia,rhine_lab,炎魔事件后塞雷娅离开莱茵生命。,S35,Part 01：1095；Part 02：DIABOLIC CRISIS,机构报告年度。,C005
+M005,1095,,year,inferred,minos|sargon,non_aggression_pact,米诺斯与萨尔贡缔结互不侵犯条约。,S01|S03,1095条目；ME-ST-1五年后线索,依赖1100文化交流事件及五年前表述倒推；不是本轮读到的条约落款。,M004
+C007,1096,,year,explicit,columbia,rhine_lab,多萝西加入莱茵生命并担任源石技艺科主任。,S35,Part 01：1096,机构报告年度。,
+U006,1096-12-23,1097-01-06,day_range,secondary,ursus|yan,chernobog|lungmen,切尔诺伯格危机与随后龙门相关战斗和碰撞威胁。,S58,危机阶段与日期,两城受到不同影响；不是两国全国同等关闭。,
+C008,1097,,year,explicit,columbia,rhine_lab,克丽斯腾淡出公开活动，工作转向军方合作的弧光计划。,S35,Part 01及Part 02：1097,消失不是死亡；不与1099离开泰拉事件合并。,
+L003,1097,,season,approximate,leithanien,wolumonde,大裂隙切断沃伦姆德商路，物资危机与起义影响聚落。,S55,Great Rift与起义,约秋；限制本镇和相关路线，不扩为全国禁演。,
+V005,1097,1098,year_range,secondary,victoria,londinium,伦蒂尼姆围城及城内战争使正常外来巡演条件恶化。,S57,围城至战后重建,此前占领见V002；战争完结不能直接推定所有剧场开门。,V002
+X001,1097,,year,explicit,siesta,old_siesta|new_siesta,汐斯塔因火山活动增强启动迁往移动城的计划。,S53|S54,SL-1广播,独立城邦；广播对1099初的迁出量是预计值。,
+K002,1097-06-10,1097-11-06,day_range,secondary,kazimierz,kawalerielki,大骑士领举行第24届锦标赛相关活动。,S03|S60,Kazimierz Major与城市接待,可见大型活动能力，不等于整个期间安全或剧团已获邀。,
+V004,1097-11,1097-12,month_range,secondary,victoria,caladon,卡拉顿局地火灾与治安案件影响相关街区。,S56,事件日期段落,仅用跨月概括；并非两个月全市连续封闭。,
+L004,1098,,season,inferred,leithanien,wolumonde,起义后的次年春，沃伦姆德人口并入其他聚落。,S55,起义后续,春季年份依赖L003约1097；旧址不等于新接收聚落。,L003
+V003,1098-07,,month,explicit,victoria,political_correspondence,卡斯特与惠灵顿相关秘密通信形成一项有月度标记的政治档案。,S21,1098/07/■■,原文日期中的日被遮盖。,
+S005,1099,,year,inferred,siracusa,nuova_volsinii,旧沃尔西尼事件后形成新沃尔西尼的新城及行政秩序。,S48|S49|S50,新城史；1100一周年；伺夜档案,从原作一周年与事件后行政安排互证约1099；不倒推出准确开城月日。,S004
+T015,1099,1100,year_range,disputed,columbia,phantom_lucian|tragodia_founder|crimson_troupe,蓝卡坞案件与红丝绒主线事件。,S01|S03|S16|S17,PRTS 1100；Timeline Act or Die及脚注11,这里是候选日期包络，不表示事件持续两年；英文限定为约1099至1100年初。,
+X002,1099,,year,secondary,siesta,old_siesta|new_siesta,火山覆盖汐斯塔部分旧址，居民转入新移动城。,S54,New Siesta,旧址失效不等于新城停止所有文娱；不编造剧团搬迁合同。,X001
+C009,1099-10,,month,explicit,columbia,site_359,发生359号基地事件。,S35,Part 01：1099 October,只保留报告给出的月精度。,
+C010,1099-11,,month,explicit,columbia,trimounts_arc,弧光计划引发特里蒙弧光事件。,S35,Part 01：1099 November,不将报告的月精度伪装成确日。,C009
+P001,1100,,circa_year,approximate,columbia,propeller_paradise,弧光之后提出螺旋桨天堂浮空科研园区方案。,S03|S43,Proposal,约年，不是对外开放日。,C010
+S003,1100,,year,secondary,siracusa,nuova_volsinii,新沃尔西尼恢复狂欢节。,S26,1100年狂欢节,不据此创造猩红剧团的参演记录。,
+M006,1100-08,1100-09,month_range,inferred,minos|sargon,cultural_exchange,米诺斯与萨尔贡开展文化交流。,S03|S28,Timeline脚注11；Athenius现代史,8—9月区间为英文年表的剧情定位；亦用于约束红丝绒先后。,M005
+S006,1100-11-05,,day,explicit,siracusa,nuova_volsinii,新沃尔西尼以建城一周年为背景迎来狂欢节。,S49|S61,PV-ST-1日期与市长讲话,活动能力与本地暴力同时存在；不等于本团取得演出许可。,S005
+P003,1101,1102,year_range,disputed,columbia,propeller_paradise,螺旋桨天堂浮空层在航空博览会前遭破坏坠落。,S01|S03|S45|S47|S62|S63,PRTS年表及莱茵生命史；Timeline脚注20；UR-8；日文简易年表,中文支持1101年末分支，英文约1101年12月下旬，日文约1102春；包络非持续两年，不能由展会名1102裁决。,P002
+Y007,1102-03,,month,secondary,yan,yumen,山海众等事件扰动玉门及周边。,S03|S59,Yumen unrest；WB-1时间线索,月份采用二手年表；未取得具体场馆恢复日期。,
+P002,,,relative,relative,columbia,propeller_paradise,博览会前园区已运作不足半年，并预告七日后对接首都。,S44,园区运营与对接对话,展会和园区门票不能证明本团租到舞台；运营起日未定。,P001
+P004,,,relative,relative,columbia,propeller_paradise,幸存底层板块返回麦克斯特区检修，园区并非全体永久消失。,S46,UR-ST-3谈判与回航,解除封锁不等于场馆复开；恢复演出日未知。,P003
+T001,,,unknown,undated,victoria,crimson_troupe|tragodia_founder,旧酒神创办猩红剧团。,S08|S09|S14,Origins；创办者,成立年未确认；私人组织，不是维多利亚政府成立的剧院。,
+T002,,,relative,relative,laterano,tragodia_founder,旧酒神曾干预拉特兰一位枢机的命运。,S01|S14,PRTS 9世纪；NPC的AD-8 After回溯,约两世纪前的相对说法与PRTS世纪归类不宜强行定为同一年；见Q02。,
+T004,,,unknown,undated,gaul|victoria,tragodia_founder|calais_border_city,旧酒神回溯曾操纵高卢军官在边城Calais的城门背叛。,S14|S41,AD-8 After：Calais城门背叛回溯,原文称Calais高卢边城；不能不经考证将边城、整个克莱布拉松地区与古堡视为同一地点。,
+T005,,,relative,relative,victoria,phantom_lucian,卢西恩童年经历天灾及失去原生家庭庇护。,S10,第1话童年段落,没有出生年或灾害确年。,
+T006,,,relative,relative,victoria,phantom_lucian|shalem|crimson_troupe,卢西恩与其他儿童被带入剧团训练体系。,S10,第1话收容与训练,不得换算入团年龄。,T005
+T007,,,relative,relative,victoria,phantom_lucian,卢西恩回忆排练中误伤老师白花的经历。,S10,第2话十四年前回忆,十四年前的参照是漫画该段叙事，不是现实2025年，也未等同红丝绒事件年。,T006
+T008,,,relative,relative,victoria,phantom_lucian,卢西恩主动使咽喉感染源石，声音成为力量与创伤来源。,S10,第1话源石与歌声,不凭漫画章节编号判定本事与第2话回忆的先后。,T006
+T009,,,relative,relative,victoria,phantom_lucian|miss_christine,住院期间克里斯汀帮助缓解卢西恩的症状。,S10,第1话住院段落,这是感染后的帮助，不是首次遇见克里斯汀；初遇发生在感染以前。,T008
+T010,,,relative,relative,victoria,phantom_lucian|crimson_troupe,第一次刺杀后卢西恩离开旧团，作为刺客活动。,S10|S12|S41,AD-8回顾；客观履历,第一次摧毁未使旧酒神永久退场，不能与蓝卡坞继承合并。,T021
+T011,,,relative,relative,victoria|rhodes_island,phantom_lucian,傀影与罗德岛合作并接受治疗。,S12,客观履历,履历不提供确定入职年。,T010
+T012,,,unknown,undated,victoria|rhodes_island,phantom_lucian|shalem|crimson_troupe,围绕傀影的古堡救援构成傀影与猩红孤钻的事件背景。,S03|S15,Undated events：Operator Phantom's Rescue Mission,不能因年表附近的1098条目或游戏上线年给该行动定年；各结局不自动排成连续史。,T011
+T013,,,relative,relative,leithanien,crimson_troupe,调查报告回顾剧团曾在莱塔尼亚留下异常演出记录。,S09,Previous Cases：Lupukarn,发生在报告以前；具体年份未明，照片与记录异常是调查叙述。,
+T014,,,relative,relative,columbia,crimson_troupe,报告提及此前哥伦比亚小城的调查人员失踪案。,S09,Previous Cases,不把此前数年自动换算成整数年份。,
+T016,,,relative,relative,columbia,phantom_lucian|tragodia_founder,卢西恩击败旧酒神并继承酒神身份。,S13|S41,AD-8 After：第二次对决与继承,属于T015内部；旧长生者与继承者是不同人；继承不等于新团当天已经开业。,
+T017,,,relative,relative,columbia,phantom_lucian|shalem|playwright|crimson_troupe,尾声影院中卢西恩提出新的剧团或主张，邀暮落和剧作家同行。,S42,Two months later；One day ago；影院对话,约两个月后的尾声；电影节是首幕探监前一天，不能写至少两个月；没有正式开业或首演确日。,T016
+T018,,,relative,relative,columbia,phantom_lucian|maylander_foundation,梅兰德相关调查以MLD-WW-035记录案件及剧团背景。,S09,报告编号与收件单位,报告没有本轮可核实的绝对落款；不能给报告套用游戏发布日期。,T016
+T019,,,relative,relative,rhodes_island,phantom_lucian,酒神档案记述蓝卡坞事件后罗德岛上的影片放映等后续。,S13,事件后数月的叙述,数月是相对区间；不编造首映日或返舰日。,T016
+T020,,,relative,relative,victoria,phantom_lucian|shalem|playwright,卢西恩、暮落与剧作家的逃脱计划失败；暮落逃离，卢西恩回到团长身边学习。,S41,AD-8 Before回溯,与后来的刺杀和离团分开；绝对年不明。,T006
+T021,,,relative,relative,victoria,phantom_lucian|tragodia_founder,卢西恩杀死导师并首次刺杀旧团长，以为毁掉旧团；旧酒神仍存续。,S41,AD-8 Before回溯,不是T016最终身份传承，也不是古堡救援。,T020

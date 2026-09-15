@@ -3,8 +3,8 @@ import type { yanMessages } from '../yan/messages';
 import type { yanTicketingPlatforms } from '../yan/messages';
 
 export const ursusTicketingPlatforms = {
-  'rice-network': { displayName: 'Рисовая сеть', logoAlt: 'Временный знак Рисовой сети' },
-  'drop-tower': { displayName: 'Башня падения', logoAlt: 'Временный знак Башни падения' },
+  'rice-network': { displayName: 'Рисовая сеть', logoAlt: 'Знак Рисовой сети' },
+  'drop-tower': { displayName: 'Башня падения', logoAlt: 'Знак Башни падения' },
 } as const satisfies LocalizedShape<typeof yanTicketingPlatforms>;
 
 export const ursusMessages = {

@@ -36,10 +36,6 @@ const featuredProduction = featuredPerformance
   ? getLocalizedProduction(localization, featuredPerformance.productionIds[0])
   : undefined;
 const projection = localization.archiveProjection.performance;
-const projectionProduction = getLocalizedProduction(
-  localization,
-  buildSnapshot.archiveProjectionProductionId,
-);
 ---
 
 <ArchiveLayout
@@ -53,7 +49,7 @@ const projectionProduction = getLocalizedProduction(
   <section class="archive-home page-width" aria-labelledby="archive-title">
     <div class="archive-home__copy" data-pollution-slot="invitation">
       <p class="archive-kicker">{localization.site.archive.register}</p>
-      <TroupeMark class="archive-ornament" />
+      <TroupeMark class="archive-ornament" size="home" variant="metallic" />
       <h1 id="archive-title">{copy.title}</h1>
       <p>{copy.introduction}</p>
       <div class="actions">
@@ -71,18 +67,21 @@ const projectionProduction = getLocalizedProduction(
           data-archive-invitation-trigger
         >
           <ArchivePoster
+            placement="home-feature"
             productionId={featuredProduction.productionId}
             visual={featuredProduction.visual}
             title={featuredProduction.title}
             subtitle={featuredProduction.kind}
             number={copy.featuredNumber}
-            projection={{
-              productionId: projectionProduction.productionId,
-              title: projection.title,
-              subtitle: projection.kind,
-              number: projection.registerCode,
-            }}
           />
+          <span class="archive-feature__caption">
+            <span class="archive-projection-source" data-archive-projection-source>
+              {featuredProduction.title}
+            </span>
+            <span class="archive-projection-level3" data-archive-projection-level3>
+              {projection.title}
+            </span>
+          </span>
         </a>
       )
     }

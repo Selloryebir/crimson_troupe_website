@@ -10,7 +10,7 @@ import { getArchiveSeatRegisterEntries } from '../src/data/archive-ticketing.ts'
 import { buildSnapshot, getWorldProductionIds } from '../src/data/content/resolve.ts';
 import { buildProfile } from '../src/data/editions.ts';
 import { formatMessage } from '../src/data/localized/format.ts';
-import { getLocalization } from '../src/data/localized/resolve.ts';
+import { getLocalization, getLocalizedProduction } from '../src/data/localized/resolve.ts';
 import {
   getArchiveSearchIndex,
   getFrontSearchIndex,
@@ -180,6 +180,39 @@ function decodeHtmlAttribute(value) {
     .replaceAll('&amp;', '&');
 }
 
+function preservedLinebreakTexts(html, tagName) {
+  const nodes = new RegExp(`<${tagName}\\b([^>]*)>([^<]*)<\\/${tagName}>`, 'gu');
+  return [...html.matchAll(nodes)]
+    .filter(([, attributes]) =>
+      /\bclass="[^"]*\barchive-source-linebreaks\b[^"]*"/u.test(attributes),
+    )
+    .map(([, , value]) => decodeHtmlAttribute(value));
+}
+
+const checkedLinebreakStyleRoutes = new Set();
+function assertPreservedLinebreakStyle(route, html) {
+  if (checkedLinebreakStyleRoutes.has(route)) {
+    return;
+  }
+  const styleSources = [...html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gu)].map(
+    ([, source]) => source,
+  );
+  for (const [link] of html.matchAll(/<link\b[^>]*>/gu)) {
+    const rel = link.match(/\brel="([^"]+)"/u)?.[1] ?? '';
+    const href = link.match(/\bhref="([^"]+)"/u)?.[1] ?? '';
+    if (rel.split(/\s+/u).includes('stylesheet') && href.startsWith('/')) {
+      styleSources.push(readFileSync(outputPathForUrl(decodeHtmlAttribute(href)), 'utf8'));
+    }
+  }
+  const declarations = styleSources
+    .join('\n')
+    .match(/\.archive-source-linebreaks[^{}]*\{([^{}]*)\}/u)?.[1];
+  assert.ok(declarations, `${route} 缺少来源描述的换行样式`);
+  assert.match(declarations, /\bwhite-space:\s*pre-line\b/u, `${route} 未保留来源换行`);
+  assert.match(declarations, /\boverflow-wrap:\s*anywhere\b/u, `${route} 未允许窄屏折行`);
+  checkedLinebreakStyleRoutes.add(route);
+}
+
 function editionForRoute(route) {
   return builtEditions.find((edition) => route.startsWith(`/${edition.routePrefix}/`));
 }
@@ -230,9 +263,29 @@ for (const [route, filePath] of routes) {
     assert.ok(html.includes('id="main-content"'), `${route} 缺少正文入口`);
     assert.match(html, /<nav\s+class="main-nav"/u, `${route} 缺少主导航`);
     const localization = getLocalization(edition);
+    const brand = html.match(/<span class="brand-name">([\s\S]*?)<\/span>/u)?.[1];
+    assert.ok(brand, `${route} 缺少页头文字标识`);
+    assert.match(brand, /<strong lang="en-GB">CRIMSON TROUPE<\/strong>/u);
+    assert.ok(
+      brand.includes(`<small>${localization.site.brand.name}</small>`),
+      `${route} 页头小字应为本地化团名`,
+    );
     assert.ok(html.includes(localization.site.shared.fanNotice), `${route} 缺少统一页脚声明`);
     if (builtEditions.length > 1) {
       assert.match(html, /<details[^>]*data-edition-selector/u, `${route} 缺少国家版本选择器`);
+      const selector = html.match(/<details[^>]*data-edition-selector[\s\S]*?<\/details>/u)?.[0];
+      const optionPrefixes = [...selector.matchAll(/<a\s[^>]*href="\/([^/]+)\//gu)].map(
+        (match) => match[1],
+      );
+      const expectedPrefixes = [
+        ...builtEditions.filter((item) => item.editionId === 'victoria'),
+        ...builtEditions
+          .filter((item) => item.editionId !== 'victoria')
+          .toSorted((left, right) =>
+            left.languageName.en.localeCompare(right.languageName.en, 'en-GB'),
+          ),
+      ].map((item) => item.routePrefix);
+      assert.deepEqual(optionPrefixes, expectedPrefixes, `${route} 国家版本选项顺序不正确`);
       for (const targetEdition of builtEditions) {
         const equivalent = `/${targetEdition.routePrefix}/${route.split('/').slice(2).join('/')}`;
         assert.ok(html.includes(`href="${equivalent}"`), `${route} 缺少等价版本链接 ${equivalent}`);
@@ -252,6 +305,12 @@ for (const [route, filePath] of routes) {
     if (isArchiveRoute) {
       assert.doesNotMatch(html, /class="archive-catalog"/u, `${route} 不应重复显示表站馆藏索引`);
       assert.match(html, /data-world-switch="front"/u, `${route} 缺少可靠的表站返回入口`);
+      assert.match(html, /data-archive-preservation/u, `${route} 缺少独立副本馆藏说明`);
+      assert.doesNotMatch(
+        html.match(/<main\b[\s\S]*?<\/main>/u)?.[0] ?? '',
+        /data-archive-preservation/u,
+        '保存说明不得进入1084同期正文',
+      );
     } else {
       assert.match(html, /class="archive-catalog"/u, `${route} 缺少低干扰馆藏索引`);
       assert.match(
@@ -261,13 +320,15 @@ for (const [route, filePath] of routes) {
       );
       for (const snapshot of archiveSnapshots) {
         assert.ok(
-          html.includes(snapshot.displayCapturedAt),
+          html.includes(
+            snapshot.state === 'available' ? snapshot.routeSegment : snapshot.displayCapturedAt,
+          ),
           `${route} 缺少馆藏记录 ${snapshot.snapshotId}`,
         );
       }
       assert.doesNotMatch(
         html,
-        /href="[^"]*\/archive\/site\/(?:1093|1096)/u,
+        /href="[^"]*\/archive\/site\/(?:1089|1093|1096|1098)/u,
         `${route} 不得把损坏快照渲染为链接`,
       );
     }
@@ -376,6 +437,7 @@ function readSearchScope(route) {
 }
 
 for (const edition of builtEditions) {
+  const localization = getLocalization(edition);
   const frontRoute = sitePath(edition, 'front', 'search');
   const archiveRoute = sitePath(edition, 'archive', 'search');
   const frontSearch = readSearchIndex(frontRoute);
@@ -429,6 +491,16 @@ for (const edition of builtEditions) {
   );
   const archiveSeatEntries = getArchiveSeatRegisterEntries(getLocalization(edition), buildSnapshot);
   assert.match(archiveTicketPage, /class="[^"]*\barchive-seat-register\b/u);
+  for (const select of archiveTicketPage.matchAll(/<select\b[^>]*>[\s\S]*?<\/select>/gu)) {
+    assert.match(select[0], /<select\b[^>]*\bdisabled\b/u);
+    assert.match(select[0], /<option value="" selected>-----------<\/option>/u);
+    assert.equal([...select[0].matchAll(/<option\b/gu)].length, 1);
+  }
+  assert.equal(
+    [...archiveTicketPage.matchAll(/\bdata-seat-zone=/gu)].length,
+    archiveSeatEntries.reduce((total, entry) => total + entry.offers.length, 0),
+    `${edition.editionId} 必须在禁用控件之外展示全部报价`,
+  );
   assert.equal(
     [...archiveTicketPage.matchAll(/<select\b/gu)].length,
     archiveSeatEntries.length,
@@ -445,6 +517,57 @@ for (const edition of builtEditions) {
     `${edition.editionId} 里站席位页不得接入表站票务状态机`,
   );
   assert.doesNotMatch(archiveTicketPage, /class="issued-ticket"|\bdownload=/u);
+
+  const archivePerformances = performanceEntries.filter(
+    ([, performance]) => performance.world === 'archive',
+  );
+  for (const [performanceId, performance] of performanceEntries.filter(
+    ([, entry]) => entry.world === 'front' && entry.status === 'cancelled',
+  )) {
+    const html = readFileSync(routes.get(performancePath(edition, 'front', performanceId)), 'utf8');
+    assert.ok(html.includes(localization.site.front.performanceDetail.cancelled));
+    assert.ok(
+      !html.includes(localization.site.front.performanceDetail.notOnSale),
+      `${performanceId} 已取消，不应暗示尚未开票`,
+    );
+    assert.match(html, /aria-labelledby="performance-notice"/u);
+    assert.doesNotMatch(html, /\{originalDate\}/u);
+    assert.equal(performance.ticketAvailability.state, 'not-on-sale');
+  }
+  const multilinePerformances = archivePerformances.filter(([, performance]) =>
+    getLocalizedProduction(localization, performance.productionIds[0]).tagline.includes('\n'),
+  );
+  for (const [performanceId, performance] of multilinePerformances) {
+    const tagline = getLocalizedProduction(localization, performance.productionIds[0]).tagline;
+    const detailRoute = performancePath(edition, 'archive', performanceId);
+    const listRoute = sitePath(
+      edition,
+      'archive',
+      performance.collection === 'history' ? 'performances/history' : 'performances',
+    );
+    for (const route of [detailRoute, listRoute]) {
+      const html = readFileSync(routes.get(route), 'utf8');
+      assert.ok(
+        preservedLinebreakTexts(html, 'span').includes(tagline),
+        `${route} 未在原文节点保留剧目摘要的换行`,
+      );
+      assertPreservedLinebreakStyle(route, html);
+    }
+  }
+  for (const productionId of getWorldProductionIds(buildSnapshot, 'archive')) {
+    const synopsis = getLocalizedProduction(localization, productionId).synopsis;
+    if (!synopsis.includes('\n')) {
+      continue;
+    }
+    const route = productionPath(edition, 'archive', productionId);
+    const html = readFileSync(routes.get(route), 'utf8');
+    assert.deepEqual(
+      preservedLinebreakTexts(html, 'p'),
+      synopsis.split('\n\n'),
+      `${route} 未按来源描述保留剧目简介的段落`,
+    );
+    assertPreservedLinebreakStyle(route, html);
+  }
 }
 
 assert.equal(
@@ -454,7 +577,7 @@ assert.equal(
 );
 for (const snapshot of archiveSnapshots) {
   if (snapshot.state === 'damaged') {
-    const damagedYear = snapshot.displayCapturedAt.slice(0, 4);
+    const damagedYear = snapshot.year;
     assert.equal(
       [...routes.keys()].some((route) => route.includes(`/archive/site/${damagedYear}`)),
       false,
@@ -463,8 +586,10 @@ for (const snapshot of archiveSnapshots) {
   }
 }
 
-for (const filePath of outputFiles.filter((entry) => entry.endsWith('.css'))) {
-  const source = readFileSync(filePath, 'utf8');
+const cssSources = outputFiles
+  .filter((entry) => entry.endsWith('.css'))
+  .map((filePath) => [filePath, readFileSync(filePath, 'utf8')]);
+for (const [filePath, source] of cssSources) {
   assertNoMatchFrom(source, remoteCssAutoLoadPatterns, `${filePath} 加载了远端 CSS 资源`);
 }
 

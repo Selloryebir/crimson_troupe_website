@@ -1,5 +1,5 @@
 export type TicketingPlatformId = 'rice-network' | 'drop-tower';
-export type TicketingPlatformLogoAssetId = 'rice-network-preview-logo' | 'drop-tower-preview-logo';
+export type TicketingPlatformLogoAssetId = 'rice-network-logo' | 'drop-tower-logo';
 
 export interface TicketingPlatformDefinition {
   platformId: TicketingPlatformId;
@@ -21,11 +21,11 @@ export const ticketingPlatforms = Object.freeze({
     platformId: 'rice-network',
     role: 'official-partner',
     logo: Object.freeze({
-      assetId: 'rice-network-preview-logo',
-      assetPath: 'src/assets/ticketing/rice-network-preview.svg',
-      sourceRevision: 'sha256:397203ac973b7f341471c536c78f906495f2789a87d8f4f592fe210baffd0c5b',
-      maturity: 'preview',
-      approvalStatus: 'preview-only',
+      assetId: 'rice-network-logo',
+      assetPath: 'src/assets/ticketing/rice-network.svg',
+      sourceRevision: 'sha256:e18b12d8e1d31ed36d517c0569b52742defc0133aedeb31288e39cb440e5541a',
+      maturity: 'formal',
+      approvalStatus: 'approved',
       rights: 'project-original',
     }),
   }),
@@ -33,11 +33,11 @@ export const ticketingPlatforms = Object.freeze({
     platformId: 'drop-tower',
     role: 'resale-channel',
     logo: Object.freeze({
-      assetId: 'drop-tower-preview-logo',
-      assetPath: 'src/assets/ticketing/drop-tower-preview.svg',
-      sourceRevision: 'sha256:7caa700377b1554b94374eb2831dbc7783398f758b77389a1aab47a10618e710',
-      maturity: 'preview',
-      approvalStatus: 'preview-only',
+      assetId: 'drop-tower-logo',
+      assetPath: 'src/assets/ticketing/drop-tower.svg',
+      sourceRevision: 'sha256:497df703d070a024e44e43a95cb4838bea8d34a6328825b2e6684a5aec642dae',
+      maturity: 'formal',
+      approvalStatus: 'approved',
       rights: 'project-original',
     }),
   }),

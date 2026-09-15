@@ -7,7 +7,7 @@ export const kazimierzArchiveProjection = {
     'Wszystkie zapisy na stronie wskazują teraz ten sam cel.',
   ],
   performance: {
-    title: 'Karnawał',
+    title: 'Kołysanka',
     kind: 'Końcowy występ',
     tagline: 'Miejsce pozostaje zarezerwowane dla okaziciela',
     dateTime: '1084-11-11 23:49:00 · przed trzecim dzwonkiem',
@@ -27,7 +27,7 @@ export const kazimierzArchiveProjection = {
     venueLabel: 'Miejsce',
     attendanceLabel: 'Obecność',
     role: 'Nosiciel tego zaproszenia',
-    production: 'Karnawał',
+    production: 'Kołysanka',
     venue: 'Zamek Calais-Blason Woodland',
     attendance: 'Przed trzecim dzwonkiem',
     closing:

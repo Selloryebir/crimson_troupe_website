@@ -3,8 +3,8 @@ import type { yanMessages } from '../yan/messages.ts';
 import type { yanTicketingPlatforms } from '../yan/messages.ts';
 
 export const higashiTicketingPlatforms = {
-  'rice-network': { displayName: '稲穂ネット', logoAlt: '稲穂ネットの仮マーク' },
-  'drop-tower': { displayName: 'ドロップタワー', logoAlt: 'ドロップタワーの仮マーク' },
+  'rice-network': { displayName: '稲穂ネット', logoAlt: '稲穂ネットのマーク' },
+  'drop-tower': { displayName: 'ドロップタワー', logoAlt: 'ドロップタワーのマーク' },
 } as const satisfies LocalizedShape<typeof yanTicketingPlatforms>;
 
 export const higashiMessages = {

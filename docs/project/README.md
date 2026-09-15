@@ -4,6 +4,8 @@
 
 ## 当前记录
 
+- [`temporal-context.md`](temporal-context.md)：已采纳的双站年代、档案存续与取消演出的原创前提，和官方证据分开；
+
 - [`performance-location-catalog.md`](performance-location-catalog.md)：非排他的演出地点候选、跨语言显示形式与内部创作备注；
 - [`realm-badge-color-previews/`](realm-badge-color-previews/)：九枚国家版本徽章的非运行时上色比较样张。
 

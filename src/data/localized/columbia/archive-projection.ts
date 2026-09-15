@@ -7,7 +7,7 @@ export const columbiaArchiveProjection = {
     'Every record on the page now points to the same destination.',
   ],
   performance: {
-    title: 'The Carnival',
+    title: 'The Lullaby',
     kind: 'Final performance',
     tagline: 'A seat remains reserved for the bearer',
     dateTime: '1084-11-11 23:49:00 · before the third bell',
@@ -27,7 +27,7 @@ export const columbiaArchiveProjection = {
     venueLabel: 'Venue',
     attendanceLabel: 'Attendance',
     role: 'Bearer of this invitation',
-    production: 'The Carnival',
+    production: 'The Lullaby',
     venue: 'Calais-Blason Woodland Castle',
     attendance: 'Before the third bell',
     closing:

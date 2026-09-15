@@ -9,7 +9,7 @@ export const leithanienOriginalProductions = {
       'Wenn die Krone auf den Boden fällt, wer kann dann beweisen, dass es jemals einen König gab?',
     duration: '125 Minuten, inklusive einer Pause',
     durationShort: '125 Min',
-    language: 'Aufgeführt in viktorianischen · kolumbianischen Untertiteln',
+    language: 'Aufgeführt auf Viktorianisch · Projizierte yanesische Übertitel',
     heading: 'Eine moderne Tragödie über Macht, Erinnerung und den letzten Zeugen.',
     synopsis:
       'Eine mobile Stadt erwacht nach einem Fest, doch niemand erinnert sich an den König, der am Abend zuvor gekrönt wurde. Der einsame Herold, der die Zeremonie fortsetzt, beginnt, in den Träumen des Publikums nach einer Krone zu suchen, die nie existiert hat.',
@@ -28,7 +28,7 @@ export const leithanienOriginalProductions = {
     tagline: 'Die Flamme kann ihren Käfig nicht verlassen. Das Lied kann.',
     duration: '90 Minuten, keine Pause',
     durationShort: '90 Min',
-    language: 'Gesungen in Leithanian · Kolumbianische und viktorianische Untertitel',
+    language: 'Gesungen auf Leithanisch · Yanesische und viktorianische Übertitel',
     heading: 'Eine Kammeroper, geschrieben für einen stillen Turm.',
     synopsis:
       'Ein Hüter muss eine Flamme bewachen, die niemals erlischt und niemals ihren Turm verlässt. Im Laufe von sieben Jahren lernt er die Sprache des Landes, nur um am Tag seiner Abreise zu hören, wie es seinen Namen singt.',
@@ -67,7 +67,7 @@ export const leithanienOriginalProductions = {
       'Hinterlassen Sie Ihren Namen draußen. Das Bankett kennt nur diejenigen, die ankommen.',
     duration: 'Ungefähr 140 Minuten, mit zwei Intervallen',
     durationShort: 'Ungefähr 140 Min',
-    language: 'Aufgeführt auf Yanese · Handkopiertes Programm verfügbar',
+    language: 'Aufgeführt auf Yanesisch · Handkopiertes Programm verfügbar',
     heading:
       'Ein zeremonielles Theaterstück für eine lange Nacht, einen freien Platz und einen verspäteten Ehrengast.',
     synopsis:
@@ -106,7 +106,7 @@ export const leithanienOriginalProductions = {
     tagline: 'Nachdem die Prozession vorbei ist, zählen Sie nicht die zurückgebliebenen Gesichter.',
     duration: 'Ungefähr 60 Minuten, ohne Pause',
     durationShort: 'Ungefähr 60 Min',
-    language: 'Kein Dialog · Reihenfolge beim Einlass angegeben',
+    language: 'Kein Dialog · Szenenfolge beim Einlass erhältlich',
     heading: 'Eine Pantomime aus Masken, Trommeln und einer Straße, die für immer umkehrt.',
     synopsis:
       'Eine führerlose Prozession durchsucht die Stadt nach ihrem Festplatz. Jedes Mal, wenn es das gleiche Tor überquert, tragen die Spieler Masken, die eher denen des Publikums ähneln, bis der Trommler die Marschierenden nicht mehr von den Zuschauern unterscheiden kann.',

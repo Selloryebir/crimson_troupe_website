@@ -5,6 +5,14 @@ import { higashiMessages } from './messages.ts';
 export const higashiSite = {
   brand: { name: '猩紅劇団', latinName: 'CRIMSON TROUPE' },
   shared: {
+    archiveSnapshot: 'スナップショット {date}',
+    archiveDamageDescription:
+      'この写しは本文の一部を判読できません。現存する索引だけでは、破損の原因を特定できません。',
+    archiveWarDamageDescription:
+      'この写しはロンディニウムの記録保管拠点に保存されていました。拠点は1098年の戦闘中に損傷し、現存する目録だけではページ全体を復元できません。取得と損傷の正確な月日は、いずれも確認できていません。',
+    archivePreservation:
+      'このページは別途保存された独立の写しに基づいて表示されており、ロンディニウムの損傷した拠点には依存していません。',
+    archiveDamageClose: 'スナップショット目録に戻る',
     skipToContent: '本文へ移動',
     mainNavigation: 'メインナビゲーション',
     brandHome: '猩紅劇団ホーム',
@@ -18,7 +26,7 @@ export const higashiSite = {
     chooseEdition: '現在の版：{language}。国別版を選択',
     frontFooter: '巡演・演目・観劇案内',
     archiveFooter: '収蔵スナップショット・{date}',
-    archiveCatalog: '収蔵目録',
+    archiveCatalog: '過去のサイト',
     frontToArchive: '収蔵記録を開く',
     archiveDamaged: '記録破損・閲覧不可',
     archiveToFront: '現在の劇団サイトへ戻る',
@@ -296,9 +304,10 @@ export const higashiSite = {
       title: '座席受付',
       introduction: '公演ごとの座席区分と受付価格を確認できます。入場規定は各巡演告示に従います。',
       registerEyebrow: '今季座席簿',
-      registerTitle: '公演と座席区分を選ぶ',
-      registerIntroduction:
-        '以下は今季座席簿の記載です。公演ごとに一つの座席区分をお選びください。',
+      registerTitle: '公演と座席区分',
+      registerIntroduction: '今季の座席簿に記載された区分と料金を閲覧できます。',
+      selectionUnavailable:
+        '座席選択・受付窓口から応答がありません。区分と料金は閲覧できますが、選択と送信はできません。',
       zone: '座席区分',
       empty: '今季は受付中の座席がありません。',
       settlementTitle: '座席受付を送る',

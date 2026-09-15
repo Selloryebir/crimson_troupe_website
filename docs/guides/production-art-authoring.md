@@ -1,6 +1,6 @@
 # 剧目视觉创作指南
 
-本指南把 [`BP-CNT-PRODUCTION-VISUAL`](../blueprint/content/production-visual-language.md) 转化为一次可执行的创作流程。长期出版与污染结果由该蓝图负责，十三项已采纳题义位于 [`BP-CNT-PRODUCTION-VISUAL-CATALOG`](../blueprint/content/production-visual-catalog.md)；本指南只帮助人工或智能体为一个具体标题形成原创方案、生成或绘制资产并完成网页交付，不建立评分数据库或循环审批。
+本指南把 [`BP-CNT-PRODUCTION-VISUAL`](../blueprint/content/production-visual-language.md) 的原创剧目视觉部分转化为一次可执行的创作流程。长期出版与污染结果由该蓝图负责，十三项已采纳题义位于 [`BP-CNT-PRODUCTION-VISUAL-CATALOG`](../blueprint/content/production-visual-catalog.md)；本指南只帮助人工或智能体为一个具体标题形成原创方案、生成或绘制资产并完成网页交付，不建立评分数据库或循环审批。经人工指定的里站官方活页修复资源由蓝图及 [`素材来源记录`](../sources/folio-cover-restoration.md) 单独约束，不作为本指南的原创案例。
 
 ## 八步创作流程
 
@@ -87,7 +87,7 @@
 
 ## 参考与权利边界
 
-本地参考图只供人工分析和生成后对照，不得提交到运行时、作为网页背景或裁切后使用，也不得作为图生图输入。生成提示只使用正式蓝图和本指南的文字要求，不直接要求再现某张参考图。
+原创视觉制作所用的本地参考图只供人工分析和生成后对照，不得提交到运行时、作为网页背景或裁切后使用，也不得作为图生图输入。生成提示只使用正式蓝图和本指南的文字要求，不直接要求再现某张参考图。里站官方活页修复资源的来源、处理链和使用范围另按其专属来源记录处理，不能反推成原创资产可复制参考图的通则。
 
 交付前检查：
 

@@ -7,7 +7,7 @@ export const minosArchiveProjection = {
     'Όλες οι εγγραφές της σελίδας δείχνουν πλέον στον ίδιο προορισμό.',
   ],
   performance: {
-    title: 'Η Γιορτή',
+    title: 'Το Νανούρισμα',
     kind: 'Τελική παράσταση',
     tagline: 'Η θέση παραμένει κρατημένη για τον κομιστή',
     dateTime: '1084-11-11 23:49:00 · πριν από την τρίτη καμπάνα',
@@ -27,7 +27,7 @@ export const minosArchiveProjection = {
     venueLabel: 'Χώρος',
     attendanceLabel: 'Παρουσία',
     role: 'Κομιστής της πρόσκλησης',
-    production: 'Η Γιορτή',
+    production: 'Το Νανούρισμα',
     venue: 'Δασικό Κάστρο Calais-Blason',
     attendance: 'Πριν από την τρίτη καμπάνα',
     closing:

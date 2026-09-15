@@ -16,13 +16,15 @@ export interface AvailableArchiveSnapshot extends ArchiveSnapshotBase {
 
 export interface DamagedArchiveSnapshot extends ArchiveSnapshotBase {
   state: 'damaged';
+  damageReason: 'unknown' | 'londinium-war';
+  year: number;
   capturedAt: null;
   routeSegment: null;
 }
 
 export type ArchiveSnapshot = AvailableArchiveSnapshot | DamagedArchiveSnapshot;
 
-export const archiveSnapshots = Object.freeze([
+const registeredSnapshots = [
   Object.freeze({
     snapshotId: '1084-07-01T00:00:00',
     state: 'available',
@@ -37,20 +39,42 @@ export const archiveSnapshots = Object.freeze([
     routeSegment: '1084-07-01',
   }),
   Object.freeze({
-    snapshotId: '1093-damaged',
+    snapshotId: '1089-damaged',
     state: 'damaged',
+    damageReason: 'unknown',
+    year: 1089,
     capturedAt: null,
-    displayCapturedAt: '1093-██-██ --:--:--',
+    displayCapturedAt: '▓�╳█-▒#-�░',
     routeSegment: null,
   }),
   Object.freeze({
-    snapshotId: '1096-damaged',
+    snapshotId: '1093-damaged',
     state: 'damaged',
+    damageReason: 'unknown',
+    year: 1093,
     capturedAt: null,
-    displayCapturedAt: '1096-██-██ --:--:--',
+    displayCapturedAt: '�█▒%-░�-█╳',
     routeSegment: null,
   }),
-] as const satisfies readonly ArchiveSnapshot[]);
+  Object.freeze({
+    snapshotId: '1098-damaged',
+    state: 'damaged',
+    damageReason: 'londinium-war',
+    year: 1098,
+    capturedAt: null,
+    displayCapturedAt: '╳�▓▒-█�-░#',
+    routeSegment: null,
+  }),
+] as const satisfies readonly ArchiveSnapshot[];
+
+// 损坏记录只剩年份可考；乱码是显示材料，不参与时间比较。
+export const archiveSnapshots = Object.freeze(
+  registeredSnapshots.toSorted((left, right) => {
+    const leftYear = left.state === 'available' ? left.capturedAt.year : left.year;
+    const rightYear = right.state === 'available' ? right.capturedAt.year : right.year;
+    return rightYear - leftYear;
+  }),
+);
 
 const availableSnapshots = archiveSnapshots.filter(
   (snapshot): snapshot is (typeof archiveSnapshots)[number] & AvailableArchiveSnapshot =>

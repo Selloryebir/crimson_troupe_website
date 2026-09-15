@@ -66,7 +66,13 @@ const canPurchase =
         <dt>{copy.place}</dt><dd>{performance.place}</dd>
       </div><div><dt>{copy.status}</dt><dd>{copy[performance.status]}</dd></div><div>
         <dt>{copy.ticketStatus}</dt><dd>
-          {performance.ticketAvailability.state === 'on-sale' ? copy.onSale : copy.notOnSale}
+          {
+            performance.status === 'cancelled'
+              ? copy.cancelled
+              : performance.ticketAvailability.state === 'on-sale'
+                ? copy.onSale
+                : copy.notOnSale
+          }
         </dd>
       </div>
     </dl>

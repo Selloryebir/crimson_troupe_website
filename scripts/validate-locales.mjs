@@ -141,6 +141,54 @@ function assertSnapshotKeysPresent(actual, expected, label) {
   }
 }
 
+// 语法可以随语言变化，参数身份和条目结构不能变化；这不是翻译准确率评分。
+function assertTranslationStructure(source, target, path) {
+  if (typeof source === 'string') {
+    assert.equal(typeof target, 'string', `${path} 应为文本`);
+    const parameters = (text) =>
+      [...new Set(text.match(/\{[a-zA-Z][a-zA-Z0-9]*\}/gu) ?? [])].sort();
+    assert.deepEqual(parameters(target), parameters(source), `${path} 插值参数与炎语不一致`);
+    return;
+  }
+  if (Array.isArray(source)) {
+    assert.ok(Array.isArray(target), `${path} 应保留列表结构`);
+    assert.equal(target.length, source.length, `${path} 条目数量不一致`);
+  }
+  if (source && typeof source === 'object') {
+    assert.ok(target && typeof target === 'object', `${path} 缺少记录`);
+    assert.deepEqual(Object.keys(target).sort(), Object.keys(source).sort(), `${path} 字段不一致`);
+    for (const [key, value] of Object.entries(source)) {
+      assertTranslationStructure(value, target[key], `${path}.${key}`);
+    }
+  }
+}
+
+const sourceLocalization = getLocalization(editions.yan);
+
+// 演出服务的语种是稳定事实，不得随网站显示语言改为当地语言。
+const yaneseLanguagePatterns = {
+  yan: /炎语|中文|中维/u,
+  victoria: /Yanese/u,
+  columbia: /Yanese/u,
+  higashi: /炎語/u,
+  ursus: /янском/u,
+  siracusa: /yanese/u,
+  minos: /Yanese/u,
+  leithanien: /yanesisch/iu,
+  kazimierz: /yanese/u,
+};
+const yaneseServiceProductions = [
+  'uncrowned',
+  'caged-fire',
+  'der-ring',
+  'one-hundred-and-one-days',
+  'ode-au-triomphe',
+  'lone-wander',
+  'wonderland-in-dream',
+  'frost-deer-and-snow-doe',
+  'light-of-heria',
+];
+
 assert.equal(Object.keys(editions).length, 9, '国家版本注册应包含当前九个实体');
 assert.equal(new Set(Object.values(editions).map((edition) => edition.routePrefix)).size, 9);
 assert.equal(new Set(Object.values(editions).map((edition) => edition.badgeCode)).size, 9);
@@ -188,12 +236,7 @@ const archiveStaticScheduledPerformances = archiveScheduledPerformances.filter(
 );
 assert.ok(archiveOpenRegistrationPerformances.length > 0, '1084 里站应保留开放登记样本');
 assert.ok(archiveStaticScheduledPerformances.length > 0, '1084 里站应保留静态待演样本');
-for (const performanceId of [
-  'lone-wander-linqu-1084-0719',
-  'wonderland-in-dream-qingsui-1084-1116',
-  'frost-deer-and-snow-doe-jiangdu-1085-0122',
-  'light-of-heria-trimount-1085-0530',
-]) {
+for (const performanceId of ['light-of-heria-trimount-1085-0530']) {
   assert.equal(
     performances[performanceId].ticketAvailability.state,
     'not-on-sale',
@@ -219,9 +262,18 @@ const frontTicketingPerformances = Object.values(performances).filter(
 );
 assert.ok(frontTicketingPerformances.length > 0, '表站当前快照没有可售场次');
 assert.deepEqual(
-  frontTicketingPerformances.map(({ performanceId }) => performanceId),
-  buildSnapshot.homepagePerformanceIds.front,
-  '当前表站首页策展场次与票务候选必须保持相同顺序',
+  new Set(frontTicketingPerformances.map(({ performanceId }) => performanceId)),
+  new Set(
+    buildSnapshot.performanceEntries
+      .filter(
+        ([, performance]) =>
+          performance.world === 'front' &&
+          performance.collection === 'current' &&
+          performance.ticketAvailability.state === 'on-sale',
+      )
+      .map(([performanceId]) => performanceId),
+  ),
+  '票务候选从场次资格派生，不以首页策展作为第二份开票清单',
 );
 for (const performance of frontTicketingPerformances) {
   const { seatingPlanId, offers } = performance.ticketAvailability;
@@ -268,6 +320,8 @@ for (const zone of ['C', 'B', 'A']) {
   );
 }
 const seatingPlanExpectations = {
+  'volsinii-courtyard': { levels: 1, zones: ['C', 'B', 'A'] },
+  'nuova-volsinii-civic': { levels: 2, zones: ['C', 'B', 'A', 'S', 'BOX'] },
   'trimount-grand-fan': { levels: 3, zones: ['C', 'B', 'A', 'S', 'BOX'] },
   'wiesheim-mirror-horseshoe': { levels: 3, zones: ['C', 'B', 'A', 'S', 'BOX'] },
   'norport-temporary-stand': { levels: 1, zones: ['C', 'B', 'A'] },
@@ -297,6 +351,56 @@ for (const [seatingPlanId, expectation] of Object.entries(seatingPlanExpectation
 
 for (const edition of builtEditions) {
   const localization = getLocalization(edition);
+  const localizedEntries = getLocalizedPerformanceEntries(localization);
+  const oldCity = localization.programs.locations.volsinii;
+  assert.ok(oldCity.archiveCityLabel, `${edition.editionId} 缺少沃尔西尼时代名`);
+  for (const [, performance] of localizedEntries.filter(
+    ([, entry]) => entry.locationId === 'volsinii',
+  )) {
+    assert.equal(
+      performance.cityLabel,
+      performance.world === 'archive' ? oldCity.archiveCityLabel : oldCity.cityLabel,
+    );
+  }
+  assert.ok(
+    !localizedEntries.some(
+      ([, entry]) => entry.world === 'archive' && entry.locationId === 'nuova-volsinii',
+    ),
+    '1084不得采用新沃尔西尼',
+  );
+  const oldVenue = localization.programs.performances['volsinii-courtyard-1102'].venue;
+  const newVenue = localization.programs.performances['nuova-volsinii-civic-1102'].venue;
+  assert.notEqual(oldVenue, newVenue, `${edition.editionId} 新旧城剧场不得混用`);
+  for (const id of yaneseServiceProductions) {
+    assert.match(
+      localization.programs.productions[id].language,
+      yaneseLanguagePatterns[edition.editionId],
+      `${edition.editionId}.${id} 不得改变字幕或场序单的炎语语种`,
+    );
+  }
+  for (const group of ['site', 'programs', 'messages', 'archiveProjection', 'platforms']) {
+    assertTranslationStructure(
+      sourceLocalization[group],
+      localization[group],
+      `${edition.editionId}.${group}`,
+    );
+  }
+  for (const world of ['front', 'archive']) {
+    const indices = buildSnapshot.performanceEntries
+      .filter(([, performance]) => performance.world === world)
+      .map(([id]) => localization.programs.performances[id].index);
+    assert.equal(new Set(indices).size, indices.length, `${edition.editionId}.${world} 簿号重复`);
+  }
+  for (const [id, content] of Object.entries(localization.programs.productions)) {
+    if (productions[id].sourceKind !== 'folio') continue;
+    const expected = sourceLocalization.programs.productions[id].synopsis;
+    assert.equal(content.tagline, content.synopsis, `${edition.editionId}.${id} 摘要与简介不同`);
+    assert.deepEqual(
+      content.synopsis.split('\n\n').map((paragraph) => paragraph.split('\n').length),
+      expected.split('\n\n').map((paragraph) => paragraph.split('\n').length),
+      `${edition.editionId}.${id} 丢失来源段落或换行`,
+    );
+  }
   const expectedTicketArtifact = ticketArtifactExpectations[edition.editionId];
   const exampleTerraDateTime = {
     calendar: 'terra',
@@ -329,6 +433,16 @@ for (const edition of builtEditions) {
     localization,
     buildSnapshot,
   )) {
+    assert.match(
+      performance.index,
+      /^(?:0[1-9]|[1-9]\d+)$/u,
+      `${edition.editionId}.${performanceId} 簿号应使用至少两位阿拉伯数字`,
+    );
+    assert.equal(
+      performance.index,
+      sourceLocalization.programs.performances[performanceId].index,
+      `${edition.editionId}.${performanceId} 簿号身份与炎语不一致`,
+    );
     assert.equal(
       performance.dateTime.display,
       formatTerraDateTime(performances[performanceId].effectiveDateTime, edition.locale),

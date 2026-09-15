@@ -108,6 +108,8 @@ Astro 只负责构建期组件化和静态生成；客户端默认使用原生 T
 
 自动修复只使用仓库定义的 `npm run lint:code:fix`、`npm run lint:styles:fix` 或 `npm run format`，执行后必须检查 diff，并针对实际改动路径重新运行最小相关检查；只有达到上述完整门禁条件时才运行 `npm run verify`。若环境缺少浏览器或 JavaScript 运行时，应完成仍可执行的检查，并在交付中明确说明未验证部分，不以人工推断代替运行结果。未来调整正式工具链时，应在本节、`README.md` 与 `docs/guides/development.md` 同步记录唯一推荐命令。
 
+开发服务器、框架依赖或热更新相关变更另运行 `npm run validate:dev:hmr`，同时检查服务端错误日志与浏览器更新，不以静态构建或 `pageerror` 为空代替 HMR 验收。该命令仅触碰双站 CSS 和海报组件的修改时间并核对内容摘要，不得与这些文件的写操作并行执行；依赖升级后重启旧开发进程。
+
 ## 9. Git 与提交规范
 
 - 完整分支职责、同步方向与人工门禁以 `docs/guides/git-branch-workflow.md` 为准；执行任何 commit、push、创建合并请求或合并前必须先核对当前分支和该指南。

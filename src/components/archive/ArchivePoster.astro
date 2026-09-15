@@ -1,7 +1,11 @@
 ---
-import { Image } from 'astro:assets';
+import { getImage, Image } from 'astro:assets';
 import { buildSnapshot, getSnapshotProductionArtwork } from '../../data/content/resolve.ts';
-import { getSnapshotProductionArtworkAsset } from '../../data/production-artwork-assets.ts';
+import {
+  getSnapshotArchiveFolioCrimsonAsset,
+  getSnapshotProductionArtworkAsset,
+} from '../../data/production-artwork-assets.ts';
+import type { ArchiveFolioCrimsonId } from '../../data/production-artwork-manifest.ts';
 import type { ProductionId, ProductionVisual } from '../../data/productions/index.ts';
 import TroupeMark from '../shared/TroupeMark.astro';
 
@@ -12,12 +16,7 @@ interface Props {
   subtitle?: string;
   number?: string;
   compact?: boolean;
-  projection?: {
-    productionId: ProductionId;
-    title: string;
-    subtitle?: string;
-    number: string;
-  };
+  placement?: 'default' | 'home-editorial' | 'home-feature';
 }
 
 const {
@@ -27,15 +26,49 @@ const {
   subtitle,
   number = 'CT / 1084',
   compact = false,
-  projection,
+  placement = 'default',
 } = Astro.props;
 const artwork = getSnapshotProductionArtwork(buildSnapshot, productionId, 'archive');
 const artworkAsset = getSnapshotProductionArtworkAsset(buildSnapshot, productionId, 'archive');
-const projectionArtwork = projection
-  ? getSnapshotProductionArtwork(buildSnapshot, projection.productionId, 'archive')
+const isFolioCover = artwork?.rights === 'local-folio-restoration-preview';
+const isHomepage = placement !== 'default';
+const widths = isHomepage
+  ? [240, 480, 640, 960]
+  : isFolioCover && !compact
+    ? [240, 480, 768, 1200]
+    : [240, 480, 768];
+// 首页尺寸与 archive.css 的封面上限一致，不沿用目录缩略图的 180px。
+const sizes =
+  placement === 'home-editorial'
+    ? '(max-width: 620px) min(260px, calc(100vw - 28px)), (max-width: 960px) 280px, 320px'
+    : placement === 'home-feature'
+      ? 'min(300px, calc(100vw - 102px))'
+      : compact
+        ? '(max-width: 620px) calc(100vw - 28px), (max-width: 960px) 160px, 180px'
+        : '(max-width: 620px) calc(100vw - 48px), (max-width: 960px) min(590px, calc(100vw - 36px)), 590px';
+const quality = isHomepage ? 95 : undefined;
+// 回退 src 也按展示职责输出；高 DPR 仍由原有 srcset 选择，不生成无用途的全尺寸回退。
+const imageOptions = { widths, sizes, quality, width: isHomepage ? 640 : compact ? 480 : 1200 };
+const normalImage = artworkAsset
+  ? await getImage({ src: artworkAsset, ...imageOptions })
   : undefined;
-const projectionArtworkAsset = projection
-  ? getSnapshotProductionArtworkAsset(buildSnapshot, projection.productionId, 'archive')
+const crimsonImage = isFolioCover
+  ? await getImage({
+      src: getSnapshotArchiveFolioCrimsonAsset(
+        buildSnapshot,
+        productionId as ArchiveFolioCrimsonId,
+      ),
+      ...imageOptions,
+    })
+  : undefined;
+const lullabyImage = isFolioCover
+  ? await getImage({
+      src: getSnapshotArchiveFolioCrimsonAsset(
+        buildSnapshot,
+        buildSnapshot.archiveProjectionSourceId,
+      ),
+      ...imageOptions,
+    })
   : undefined;
 ---
 
@@ -43,88 +76,45 @@ const projectionArtworkAsset = projection
   class:list={[
     'archive-poster',
     `archive-poster--${visual}`,
-    { 'is-compact': compact, 'has-artwork': artwork && artworkAsset },
+    {
+      'is-compact': compact,
+      'has-artwork': artwork && artworkAsset,
+      'has-folio-cover': isFolioCover,
+    },
   ]}
   data-pollution-slot="poster"
-  data-archive-projection-poster={projection ? true : undefined}
+  data-folio-cover={isFolioCover ? productionId : undefined}
+  data-folio-edition={isFolioCover ? 'normal' : undefined}
+  data-folio-catalog={isFolioCover ? buildSnapshot.archiveFolioProductionIds.join(',') : undefined}
   data-title-tone={artwork?.titleTone}
   style={artwork
     ? `--art-focus: ${artwork.focalPoint}; --poster-memory: ${artwork.memoryColor}`
     : undefined}
 >
+  {isFolioCover && <span data-folio-placeholder aria-hidden="true" />}
   {
-    artwork && artworkAsset && (
+    artwork && artworkAsset && normalImage && (
       <Image
-        class:list={['archive-poster__image', { 'archive-projection-source': projection }]}
-        data-archive-projection-source={projection ? true : undefined}
+        class="archive-poster__image"
+        data-folio-image={isFolioCover ? true : undefined}
+        data-normal-src={isFolioCover ? normalImage.src : undefined}
+        data-normal-srcset={isFolioCover ? normalImage.srcSet.attribute : undefined}
+        data-crimson-src={crimsonImage?.src}
+        data-crimson-srcset={crimsonImage?.srcSet.attribute}
+        data-lullaby-src={lullabyImage?.src}
+        data-lullaby-srcset={lullabyImage?.srcSet.attribute}
         src={artworkAsset}
+        {...imageOptions}
         alt=""
-        widths={[240, 480, 768]}
-        sizes={
-          compact
-            ? '(max-width: 620px) calc(100vw - 28px), (max-width: 960px) 160px, 180px'
-            : '(max-width: 620px) calc(100vw - 48px), (max-width: 960px) min(590px, calc(100vw - 36px)), 590px'
-        }
         loading={compact ? 'lazy' : 'eager'}
         decoding="async"
       />
     )
   }
-  {
-    projection && projectionArtwork && projectionArtworkAsset && (
-      <Image
-        class="archive-poster__image archive-projection-level3"
-        data-archive-projection-level3
-        data-archive-projection-field="poster"
-        src={projectionArtworkAsset}
-        alt=""
-        widths={[240, 480, 640, 768]}
-        sizes={
-          compact
-            ? '(max-width: 620px) calc(100vw - 28px), (max-width: 960px) 160px, 180px'
-            : '(max-width: 620px) calc(100vw - 48px), (max-width: 960px) min(590px, calc(100vw - 36px)), 590px'
-        }
-        loading="lazy"
-        fetchpriority="low"
-        decoding="async"
-        style={`object-position: ${projectionArtwork.focalPoint}`}
-      />
-    )
-  }
   <div class="archive-poster__frame" aria-hidden="true"><i></i><b></b><em></em></div><span
-    class:list={['archive-poster__number', { 'archive-projection-source': projection }]}
-    data-archive-projection-source={projection ? true : undefined}>{number}</span
-  >{
-    projection && (
-      <span
-        class="archive-poster__number archive-projection-level3"
-        data-archive-projection-level3
-        data-archive-projection-field="register"
-      >
-        {projection.number}
-      </span>
-    )
-  }<div
-    class:list={['archive-poster__title', { 'archive-projection-source': projection }]}
-    data-archive-projection-source={projection ? true : undefined}
-  >
+    class:list={['archive-poster__number', { 'visually-hidden': isFolioCover }]}>{number}</span
+  ><div class:list={['archive-poster__title', { 'visually-hidden': isFolioCover }]}>
     <strong>{title}</strong>{subtitle && <small>{subtitle}</small>}
   </div>
-  {
-    projection && (
-      <div
-        class:list={[
-          'archive-poster__title',
-          'archive-projection-level3',
-          `archive-poster__title--${projectionArtwork?.titleTone ?? 'light'}`,
-        ]}
-        data-archive-projection-level3
-        data-archive-projection-field="poster-title"
-      >
-        <strong>{projection.title}</strong>
-        {projection.subtitle && <small>{projection.subtitle}</small>}
-      </div>
-    )
-  }
-  {artwork && artworkAsset && <TroupeMark class="archive-poster__mark" />}
+  {artwork && artworkAsset && !isFolioCover && <TroupeMark class="archive-poster__mark" />}
 </div>

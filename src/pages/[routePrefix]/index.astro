@@ -1,6 +1,7 @@
 ---
 import FrontPerformanceList from '../../components/front/FrontPerformanceList.astro';
 import ProductionVisual from '../../components/front/ProductionVisual.astro';
+import TroupeMark from '../../components/shared/TroupeMark.astro';
 import { buildSnapshot } from '../../data/content/resolve.ts';
 import type { BuiltEdition } from '../../data/editions';
 import { formatMessage } from '../../data/localized/format';
@@ -50,7 +51,10 @@ const featuredProduction = featuredPerformance
 >
   <section class="front-hero page-width" aria-labelledby="home-title">
     <div class="hero-copy">
-      <p class="eyebrow">{copy.seasonLabel}</p>
+      <div class="hero-season">
+        <TroupeMark class="hero-season__mark" size="home" variant="metallic" />
+        <p class="eyebrow">{copy.seasonLabel}</p>
+      </div>
       <h1 id="home-title">{copy.titleLead}<br /><em>{copy.titleEmphasis}</em></h1>
       <p>{copy.introduction}</p>
       <div class="actions">
@@ -71,6 +75,7 @@ const featuredProduction = featuredPerformance
           })}
         >
           <ProductionVisual
+            placement="home-feature"
             productionId={featuredProduction.productionId}
             visual={featuredProduction.visual}
             title={featuredProduction.title}
@@ -123,6 +128,7 @@ const featuredProduction = featuredPerformance
     </div>
   </section>
   <section class="troupe-callout page-width" aria-labelledby="troupe-callout-title">
+    <TroupeMark class="troupe-callout__mark" size="home" variant="metallic" loading="lazy" />
     <p class="eyebrow">{copy.troupeEyebrow}</p>
     <h2 id="troupe-callout-title">{copy.troupeTitle}</h2>
     <p>{copy.troupeLead}</p>

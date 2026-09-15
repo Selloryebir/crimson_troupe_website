@@ -5,11 +5,17 @@ import { localizationPackages, type PartialLocalizationPackage } from '../locali
 import { getTicketArtifactEditionIds } from '../localized/ticket-artifact.ts';
 import type { PerformanceId } from '../performances.ts';
 import {
+  archiveFolioCrimsonManifest,
+  type ArchiveFolioCrimsonId,
+  type ProductionArtworkManifestEntry,
+} from '../production-artwork-manifest.ts';
+import {
   productionArtworkRegistry,
   type ProductionArtwork,
   type ProductionArtworkRegistry,
 } from '../production-artworks.ts';
 import { productions, type Production } from '../productions/index.ts';
+import { folioSourceRecords, type FolioSourceRecord } from '../productions/folio-source-records.ts';
 import {
   ticketSeatingPlans,
   type SeatingPlanDefinition,
@@ -48,6 +54,8 @@ export interface ApprovalDigestSources {
   locations: Readonly<Record<string, Location>>;
   localizations: Readonly<Record<string, PartialLocalizationPackage>>;
   artwork: ProductionArtworkRegistry;
+  folioCrimson: Readonly<Partial<Record<ArchiveFolioCrimsonId, ProductionArtworkManifestEntry>>>;
+  folioSources: Readonly<Record<string, FolioSourceRecord>>;
   seatingPlans: Readonly<Record<SeatingPlanId, SeatingPlanDefinition>>;
   ticketingPlatforms: Readonly<Record<TicketingPlatformId, TicketingPlatformDefinition>>;
   archiveProjection: ArchiveProjectionIdentity;
@@ -59,6 +67,8 @@ const defaultSources: ApprovalDigestSources = {
   locations,
   localizations: localizationPackages,
   artwork: productionArtworkRegistry,
+  folioCrimson: archiveFolioCrimsonManifest,
+  folioSources: folioSourceRecords,
   seatingPlans: ticketSeatingPlans,
   ticketingPlatforms,
   archiveProjection: archiveProjectionIdentity,
@@ -86,18 +96,8 @@ function createSiteApprovalDigest(
     ),
     archiveProjection: {
       identity: sources.archiveProjection,
-      production: sources.productions[sources.archiveProjection.productionId],
-      localization: Object.fromEntries(
-        editionIds.map((editionId) => [
-          editionId,
-          sources.localizations[editionId]?.programs?.productions?.[
-            sources.archiveProjection.productionId
-          ],
-        ]),
-      ),
-      artwork: artworkApprovalValue(
-        sources.artwork[sources.archiveProjection.productionId]?.archive,
-      ),
+      folioSource: sources.folioSources[sources.archiveProjection.sourceId],
+      crimson: folioCrimsonApprovalValue(sources.folioCrimson[sources.archiveProjection.sourceId]),
     },
     ticketingPlatforms: sources.ticketingPlatforms,
   });
@@ -124,6 +124,10 @@ function artworkApprovalValue(artwork: ProductionArtwork | undefined): unknown {
     altIntent: artwork.altIntent,
     pollution: artwork.pollution,
   };
+}
+
+function folioCrimsonApprovalValue(entry: ProductionArtworkManifestEntry | undefined): unknown {
+  return entry ? { sourceRevision: entry.sourceRevision, rights: entry.rights } : undefined;
 }
 
 function createPerformanceApprovalDigest(
@@ -158,7 +162,15 @@ function createPerformanceApprovalDigest(
   const artwork = Object.fromEntries(
     productionIds.map((productionId) => [
       productionId,
-      artworkApprovalValue(sources.artwork[productionId]?.[performance.world]),
+      performance.world === 'archive' &&
+      sources.artwork[productionId]?.archive?.rights === 'local-folio-restoration-preview'
+        ? {
+            normal: artworkApprovalValue(sources.artwork[productionId]?.archive),
+            crimson: folioCrimsonApprovalValue(
+              sources.folioCrimson[productionId as ArchiveFolioCrimsonId],
+            ),
+          }
+        : artworkApprovalValue(sources.artwork[productionId]?.[performance.world]),
     ]),
   );
   const seatingPlan =
