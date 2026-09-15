@@ -7,7 +7,7 @@ export const kazimierzFolioProductions = {
     kind: 'Zabawa fantasy · Trzy akty',
     duration: 'Około 110 minut, z jedną przerwą',
     durationShort: 'Około 110 min',
-    language: 'Wykonywane w języku leitańskim · Dostępny porządek kolumbijski',
+    language: 'Spektakl w języku leitańskim · Dostępna kolejność scen w języku yanese',
     heading: 'Fantastyczna gra refleksji, przysięg i skarbów bez właściciela.',
     guidance: 'Słabe oświetlenie, efekty odbitej wody, teatralna mgła i bliskie szepty.',
     creatives: [
@@ -24,7 +24,7 @@ export const kazimierzFolioProductions = {
       kind: 'Odtwarzanie kroniki · Pięć rozdziałów',
       duration: 'Około 135 minut, z dwiema przerwami',
       durationShort: 'Około 135 min',
-      language: 'Wykonywane w wiktoriańskim · kolumbijskim porządku wykonawczym',
+      language: 'Spektakl w języku wiktoriańskim · Dostępna kolejność scen w języku yanese',
       heading: 'Długa kronika złożona ze stu listów, które nigdy nie zostały wysłane.',
       guidance:
         'Zawiera dzwonki, symulowany płonący papier i przedłużoną ciszę. Spóźnione siedzenia czekają na następny rozdział.',
@@ -40,7 +40,7 @@ export const kazimierzFolioProductions = {
     kind: 'Spektakl festiwalowy · Siedem scen',
     duration: 'Około 95 minut, bez przerwy',
     durationShort: 'Około 95 min',
-    language: 'Wydajność w wielu językach · Brak napisów',
+    language: 'Spektakl wielojęzyczny · Bez napisów',
     heading: 'Bębny, papierowe serpentyny i procesja, której zakończenia nie można ogłosić.',
     guidance:
       'Wykonawcy wchodzą do alejek z widownią; obejmuje nagłe bębny, konfetti, słabe oświetlenie i bliską interakcję.',
@@ -56,7 +56,7 @@ export const kazimierzFolioProductions = {
     duration: 'Około 120 minut, z jedną przerwą',
     durationShort: 'Około 120 min',
     language:
-      'Śpiewane w języku syracuskim i leitańskim · Dostępna kolumbijska kolejność wykonywania',
+      'Śpiew w językach sirakusańskim i leitańskim · Dostępna kolejność scen w języku yanese',
     heading: 'Dramat chóralny przygotowany na triumf bez zwycięzcy.',
     guidance: 'Zawiera głośny refren, symulowane saluty, kadzidło i krótkie jasne światło.',
     creatives: [
@@ -70,7 +70,7 @@ export const kazimierzFolioProductions = {
     kind: 'Przypowieść sceniczna · trzy obrazy',
     duration: 'Około 105 minut, z jedną przerwą',
     durationShort: 'Około 105 min',
-    language: 'Repertuar objazdowy · dostępny program',
+    language: 'Repertuar objazdowy · dostępna kolejność scen w języku yanese',
     heading: 'Wędrowiec szuka ostatniej gospody przy pustej drodze.',
     guidance: 'Niskie światło, dym sceniczny i bliski dźwięk; prosimy podążać za bileterem.',
     creatives: [
@@ -82,7 +82,7 @@ export const kazimierzFolioProductions = {
     kind: 'Sztuka senna · cztery akty',
     duration: 'Około 105 minut, z jedną przerwą',
     durationShort: 'Około 105 min',
-    language: 'Repertuar objazdowy · dostępny program',
+    language: 'Repertuar objazdowy · dostępna kolejność scen w języku yanese',
     heading: 'Odwrócony ogród, papierowe drzwi i śpiący przewodnik tworzą pochód.',
     guidance: 'Niskie światło, dym sceniczny i bliski dźwięk; prosimy podążać za bileterem.',
     creatives: [
@@ -94,7 +94,7 @@ export const kazimierzFolioProductions = {
     kind: 'Opera zimowa · trzy akty',
     duration: 'Około 105 minut, z jedną przerwą',
     durationShort: 'Około 105 min',
-    language: 'Repertuar objazdowy · dostępny program',
+    language: 'Repertuar objazdowy · dostępna kolejność scen w języku yanese',
     heading: 'Zimowa opera o pościgu, czuwaniu i dwóch białych jeleniach.',
     guidance: 'Niskie światło, dym sceniczny i bliski dźwięk; prosimy podążać za bileterem.',
     creatives: [
@@ -106,7 +106,7 @@ export const kazimierzFolioProductions = {
     kind: 'Sztuka ikony · pięć rozdziałów',
     duration: 'Około 105 minut, z jedną przerwą',
     durationShort: 'Około 105 min',
-    language: 'Repertuar objazdowy · dostępny program',
+    language: 'Repertuar objazdowy · dostępna kolejność scen w języku yanese',
     heading: 'Złote ikony, długie schody i kolejno gasnące lampy tworzą obrzęd.',
     guidance: 'Niskie światło, dym sceniczny i bliski dźwięk; prosimy podążać za bileterem.',
     creatives: [

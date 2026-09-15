@@ -5,6 +5,14 @@ import { columbiaMessages } from './messages.ts';
 export const columbiaSite = {
   brand: { name: 'Crimson Troupe', latinName: 'CRIMSON TROUPE' },
   shared: {
+    archiveSnapshot: 'Snapshot {date}',
+    archiveDamageDescription:
+      'Parts of this copy’s text cannot be read. The surviving index is insufficient to establish the cause of the damage.',
+    archiveWarDamageDescription:
+      'This copy was held at the Londinium archive node. The node was damaged during the fighting in 1098, and the surviving catalog is insufficient to restore the complete page. The exact months and days of capture and damage could not be verified.',
+    archivePreservation:
+      'This page is presented from a separately preserved, independent copy and does not depend on the damaged Londinium node.',
+    archiveDamageClose: 'Return to snapshot catalog',
     skipToContent: 'Skip to main content',
     mainNavigation: 'Main navigation',
     brandHome: 'Crimson Troupe home',
@@ -18,7 +26,7 @@ export const columbiaSite = {
     chooseEdition: 'Current edition: {language}. Choose a national edition',
     frontFooter: 'Tours, productions, and visitor services',
     archiveFooter: 'Collection snapshot · {date}',
-    archiveCatalog: 'Collection index',
+    archiveCatalog: 'Historical snapshots',
     frontToArchive: 'Open collection record',
     archiveDamaged: 'Record damaged; unavailable',
     archiveToFront: 'Return to the current troupe website',
@@ -310,9 +318,11 @@ export const columbiaSite = {
       introduction:
         'Consult seat divisions and registration prices by performance. Admission rules follow each touring notice.',
       registerEyebrow: 'This Season’s Seat Book',
-      registerTitle: 'Choose a Performance and Division',
+      registerTitle: 'Performances and Seat Divisions',
       registerIntroduction:
-        'The divisions below follow the current seat book; choose one division for each performance.',
+        'The following zones and prices are listed in the season seat register for reference.',
+      selectionUnavailable:
+        'The seat selection and registration desk has not answered. Zones and prices remain available to read; selection and submission are unavailable.',
       zone: 'Seat Division',
       empty: 'No seat registrations are open this season.',
       settlementTitle: 'Submit Seat Registration',

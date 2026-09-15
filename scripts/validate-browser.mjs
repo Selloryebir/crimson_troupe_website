@@ -13,7 +13,9 @@ import { currentArchiveSnapshot } from '../src/data/archive-snapshots.ts';
 import { buildSnapshot } from '../src/data/content/resolve.ts';
 import { builtEditions, editions } from '../src/data/editions.ts';
 import { getLocalization } from '../src/data/localized/resolve.ts';
+import { getTicketingOptions } from '../src/data/ticketing.ts';
 import { derivePollutionComposition } from '../src/scripts/pollution-state.ts';
+import { selectCrimsonFolioIds } from '../src/scripts/archive-folio-effects.ts';
 
 const serverHost = '127.0.0.1';
 const browserEngine = process.env.BROWSER_ENGINE ?? 'chromium';
@@ -54,7 +56,7 @@ function archivePath(routePrefix, segment = '') {
 function pollutionStateForComposition(level, pageType, pathname, composition) {
   for (let eventCount = Math.max(3, level + 2); eventCount <= 30; eventCount += 1) {
     for (const variant of [0, 1, 2]) {
-      const state = { version: 2, level, eventCount, variant };
+      const state = { version: 2, level, eventCount, variant, seed: 42 };
       if (derivePollutionComposition(state, pageType, pathname) === composition) {
         return state;
       }
@@ -91,6 +93,57 @@ async function assertArchiveProjectionList(page, expectedCount, label) {
   );
 }
 
+async function assertFolioEditions(page, level) {
+  const state = await page.evaluate(() =>
+    JSON.parse(window.sessionStorage.getItem('crimson-troupe:archive-pollution:v2')),
+  );
+  const posters = page.locator('[data-folio-cover]');
+  assert.ok(await posters.count(), '封面检查必须拥有真实消费者');
+  for (const poster of await posters.all()) {
+    const id = await poster.getAttribute('data-folio-cover');
+    const catalog = (await poster.getAttribute('data-folio-catalog')).split(',');
+    const selected = selectCrimsonFolioIds(catalog, state.seed);
+    const expected =
+      level === 3
+        ? 'lullaby'
+        : level === 2 || (level === 1 && selected.has(id))
+          ? 'crimson'
+          : 'normal';
+    await poster.scrollIntoViewIfNeeded();
+    // 同一剧目可以在首页出现多次；另一张完成不能替代当前节点的换图验收。
+    await page.waitForFunction(
+      ({ element, expected }) => {
+        const image = element.querySelector('[data-folio-image]');
+        return (
+          element.dataset.folioEdition === expected &&
+          image.complete &&
+          image.naturalWidth > 0 &&
+          window.getComputedStyle(image).visibility === 'visible'
+        );
+      },
+      { element: await poster.elementHandle(), expected },
+    );
+    const proof = await poster.evaluate((element) => {
+      const image = element.querySelector('[data-folio-image]');
+      const edition = element.dataset.folioEdition;
+      return {
+        count: element.querySelectorAll('img').length,
+        edition,
+        requested: element.dataset.folioRequested,
+        src: image.getAttribute('src'),
+        expectedSrc: image.dataset[`${edition}Src`],
+        complete: image.complete && image.naturalWidth > 0,
+      };
+    });
+    assert.equal(proof.count, 1, '封面必须使用单一真实图像，不保留叠放影');
+    assert.equal(proof.edition, expected);
+    assert.equal(proof.requested, expected);
+    assert.equal(proof.src, proof.expectedSrc);
+    assert.equal(proof.complete, true);
+  }
+  await page.evaluate(() => window.scrollTo(0, 0));
+}
+
 async function assertArchiveVisualLayer(page, label, reducedMotion = false) {
   const layer = page.locator('[data-pollution-visual-layer]');
   assert.equal(await layer.count(), 1, `${label} 应且只应有一个污染装饰层`);
@@ -105,6 +158,15 @@ async function assertArchiveVisualLayer(page, label, reducedMotion = false) {
     'none',
     `${label} 装饰层不得截获指针`,
   );
+  assert.equal(
+    await layer.evaluate(
+      (element) =>
+        Number(window.getComputedStyle(element).zIndex) <
+        Number(window.getComputedStyle(document.querySelector('.site-main')).zIndex),
+    ),
+    true,
+    `${label} 大面积污染必须退至主内容后方`,
+  );
   const echoes = layer.locator('.archive-pollution-stage__echo:visible');
   assert.equal(await echoes.count(), 4, `${label} 应显示四个本地化档案视觉副本`);
   assert.equal(
@@ -116,12 +178,14 @@ async function assertArchiveVisualLayer(page, label, reducedMotion = false) {
   );
   const taskControls = page.locator('main a:visible, main button:visible, main select:visible');
   assert.ok(await taskControls.count(), `${label} 应保留可操作的任务层`);
-  assert.ok(
-    await taskControls.evaluateAll((elements) =>
-      elements.some((element) => window.getComputedStyle(element).transform !== 'none'),
-    ),
-    `${label} 的非保护叙事控件应参与有界空间失序`,
-  );
+  if (page.viewportSize().width > 620) {
+    assert.ok(
+      await taskControls.evaluateAll((elements) =>
+        elements.some((element) => window.getComputedStyle(element).transform !== 'none'),
+      ),
+      `${label} 的非保护叙事控件应参与有界空间失序`,
+    );
+  }
   assert.equal(
     await taskControls.evaluateAll((elements) =>
       elements.every((element) => {
@@ -455,6 +519,202 @@ function trackUnexpectedErrors(page, allowed = []) {
   return () => assert.deepEqual(errors, [], `浏览器页面出现未预期异常：${errors.join(' | ')}`);
 }
 
+async function assertEarlyFolioPaint(browser, origin) {
+  for (const { width, delay } of [
+    { width: 1280, delay: 450 },
+    { width: 320, delay: 450 },
+    { width: 1280, delay: 6500 },
+  ]) {
+    const context = await browser.newContext({
+      viewport: { width, height: 900 },
+      reducedMotion: 'reduce',
+    });
+    await context.addInitScript(() => {
+      Math.random = () => 0.99;
+      sessionStorage.setItem(
+        'crimson-troupe:archive-pollution:v2',
+        JSON.stringify({ version: 2, level: 3, eventCount: 8, variant: 1, seed: 42 }),
+      );
+      window.folioPaintAudit = { frames: 0, normalFrames: 0 };
+      const sample = () => {
+        for (const poster of document.querySelectorAll('[data-folio-cover]')) {
+          const image = poster.querySelector('[data-folio-image]');
+          if (image && image.complete && image.naturalWidth > 0) {
+            window.folioPaintAudit.frames += 1;
+            if (
+              window.getComputedStyle(image).visibility === 'visible' &&
+              (poster.dataset.folioEdition !== 'lullaby' ||
+                image.getAttribute('src') !== image.dataset.lullabySrc)
+            ) {
+              window.folioPaintAudit.normalFrames += 1;
+            }
+          }
+        }
+        window.requestAnimationFrame(sample);
+      };
+      window.requestAnimationFrame(sample);
+    });
+    // 主模块不可用时也应在解析阶段恢复正确首屏，不能只断言最终等级。
+    await context.route('**/*', async (route) => {
+      if (route.request().resourceType() === 'script') {
+        await route.abort();
+        return;
+      }
+      if (
+        route.request().resourceType() === 'image' &&
+        route.request().url().includes('the-lullaby')
+      ) {
+        await new Promise((resolve) => setTimeout(resolve, delay));
+      }
+      await route.continue();
+    });
+    const page = await context.newPage();
+    const assertErrors = trackUnexpectedErrors(page);
+    try {
+      for (const attempt of ['entry', 'reload']) {
+        if (attempt === 'entry') {
+          await page.goto(`${origin}${archivePath('yan')}`);
+        } else {
+          await page.reload();
+        }
+        await page.waitForFunction(() => {
+          const poster = document.querySelector('[data-folio-cover]');
+          const image = poster?.querySelector('[data-folio-image]');
+          return (
+            poster?.dataset.folioEdition === 'lullaby' &&
+            image?.complete &&
+            image.naturalWidth > 0 &&
+            window.getComputedStyle(image).visibility === 'visible'
+          );
+        });
+        await page.evaluate(() => new Promise((resolve) => window.requestAnimationFrame(resolve)));
+        assert.equal(
+          await page.locator('[data-folio-cover]').first().getAttribute('data-folio-fallback'),
+          null,
+          `${width}px ${attempt}：即使图片延迟 ${delay}ms，成功后也必须完成换图并清除回退`,
+        );
+        const frames = await page.evaluate(() => window.folioPaintAudit);
+        assert.ok(frames.frames > 0, `${width}px ${attempt} 必须采到已解码图像帧`);
+        assert.equal(
+          frames.normalFrames,
+          0,
+          `${width}px ${attempt} 包括超时后也不得显示非三级封面`,
+        );
+        // 即使网络加载器还没有开始工作，等级边界也必须同步撤下旧图。
+        const staleCovers = await page.evaluate(() => {
+          const root = document.documentElement;
+          root.dataset.pollutionLevel = '2';
+          const stale = [...document.querySelectorAll('[data-folio-cover]')].filter((poster) => {
+            const image = poster.querySelector('[data-folio-image]');
+            return (
+              image &&
+              poster.dataset.folioEdition !== 'crimson' &&
+              window.getComputedStyle(image).visibility === 'visible'
+            );
+          }).length;
+          root.dataset.pollutionLevel = '3';
+          return stale;
+        });
+        assert.equal(staleCovers, 0, `${width}px ${attempt} 等级边界不得受可见性过渡延迟`);
+        assertErrors();
+      }
+    } finally {
+      await context.close();
+    }
+  }
+}
+
+async function assertFolioRecovery(browser, origin) {
+  for (const width of [320, 1280]) {
+    for (const fault of ['decode-once', 'request-once', 'request-fails']) {
+      const context = await browser.newContext({ viewport: { width, height: 900 } });
+      await context.addInitScript((fault) => {
+        Math.random = () => 0.99;
+        if (!sessionStorage.getItem('crimson-troupe:archive-pollution:v2')) {
+          sessionStorage.setItem(
+            'crimson-troupe:archive-pollution:v2',
+            JSON.stringify({ version: 2, level: 2, eventCount: 8, variant: 1, seed: 42 }),
+          );
+        }
+        window.folioDecodeInterruptions = 0;
+        const decoded = new WeakSet();
+        const original = window.HTMLImageElement.prototype.decode;
+        window.HTMLImageElement.prototype.decode = function () {
+          if (
+            fault === 'decode-once' &&
+            this.hasAttribute('data-folio-image') &&
+            this.getAttribute('src') === this.dataset.lullabySrc &&
+            !decoded.has(this)
+          ) {
+            decoded.add(this);
+            window.folioDecodeInterruptions += 1;
+            return Promise.reject(
+              new window.DOMException('Interrupted responsive decode', 'EncodingError'),
+            );
+          }
+          return original.call(this);
+        };
+      }, fault);
+      let failedRequests = 0;
+      await context.route('**/*', async (route) => {
+        if (
+          route.request().resourceType() === 'image' &&
+          route.request().url().includes('the-lullaby') &&
+          (fault === 'request-fails' || (fault === 'request-once' && failedRequests === 0))
+        ) {
+          failedRequests += 1;
+          await route.abort();
+        } else {
+          await route.continue();
+        }
+      });
+      const page = await context.newPage();
+      const assertErrors = trackUnexpectedErrors(page);
+      try {
+        await page.goto(`${origin}${archivePath('yan', 'performances')}`);
+        assert.equal(await page.locator('html').getAttribute('data-pollution-level'), '2');
+        await page.evaluate(() => {
+          Math.random = () => 0;
+        });
+        await page.locator('.brand').click();
+        await page.waitForURL(`${origin}${archivePath('yan')}`);
+        assert.equal(await page.locator('html').getAttribute('data-pollution-level'), '3');
+        if (fault === 'request-fails') {
+          await page.waitForFunction(() => {
+            const poster = document.querySelector('[data-folio-cover]');
+            return poster?.dataset.folioFallback === 'lullaby' && !poster.dataset.folioLoading;
+          });
+          assert.equal(
+            await page
+              .locator('[data-folio-image]')
+              .first()
+              .evaluate((image) => window.getComputedStyle(image).visibility),
+            'hidden',
+            '持续断网不得显示错误等级的封面',
+          );
+          assert.ok(failedRequests <= (await page.locator('[data-folio-cover]').count()) * 3);
+          await page.locator('[data-world-switch="front"]').click();
+          await page.waitForURL(`${origin}/yan/`);
+        } else {
+          await assertFolioEditions(page, 3);
+          assert.equal(
+            await page.locator('[data-folio-fallback], [data-folio-concealed]').count(),
+            0,
+          );
+          if (fault === 'decode-once') {
+            assert.ok(await page.evaluate(() => window.folioDecodeInterruptions > 0));
+          } else {
+            assert.equal(failedRequests, 1);
+          }
+        }
+        assertErrors();
+      } finally {
+        await context.close();
+      }
+    }
+  }
+}
+
 const port = await getFreePort();
 const origin = `http://${serverHost}:${port}`;
 const preview = startPreviewServer(port);
@@ -464,6 +724,9 @@ try {
   await waitForHttp(`${origin}/yan/`, 'Astro preview');
   browserSession = await launchBrowser();
   const { browser } = browserSession;
+
+  await assertEarlyFolioPaint(browser, origin);
+  await assertFolioRecovery(browser, origin);
 
   const desktop = await browser.newContext({ viewport: { width: 1280, height: 900 } });
   const desktopPage = await desktop.newPage();
@@ -484,12 +747,69 @@ try {
     '表站首页应只装配显式策展集合',
   );
   const archiveCatalog = desktopPage.locator('.archive-catalog');
-  assert.equal(await archiveCatalog.locator('li').count(), 3, '表站页脚应显示三条馆藏记录');
-  assert.equal(await archiveCatalog.locator('a').count(), 1, '只有当前快照可以进入');
-  assert.equal(await archiveCatalog.locator('.archive-catalog__damaged').count(), 2);
+  const catalogDetails = archiveCatalog.locator('[data-archive-catalog]');
+  const catalogSummary = catalogDetails.locator(':scope > summary');
+  assert.equal(await catalogDetails.getAttribute('open'), null, '快照下拉默认收起');
+  await catalogSummary.scrollIntoViewIfNeeded();
+  const catalogBefore = await desktopPage.evaluate(() => ({
+    height: document.documentElement.scrollHeight,
+    scroll: window.scrollY,
+  }));
+  await catalogSummary.focus();
+  await desktopPage.keyboard.press('Enter');
+  assert.notEqual(await catalogDetails.getAttribute('open'), null, '键盘可以展开快照');
+  const catalogBounds = await catalogDetails.evaluate((details) => {
+    const summary = details.querySelector('summary').getBoundingClientRect();
+    const list = details.querySelector('ul').getBoundingClientRect();
+    return {
+      top: list.top,
+      bottom: list.bottom,
+      summaryTop: summary.top,
+      height: document.documentElement.scrollHeight,
+      scroll: window.scrollY,
+    };
+  });
+  assert.ok(catalogBounds.top >= 0 && catalogBounds.bottom <= catalogBounds.summaryTop);
+  assert.equal(catalogBounds.height, catalogBefore.height, '向上展开不增加页面高度');
+  assert.ok(Math.abs(catalogBounds.scroll - catalogBefore.scroll) < 2, '展开后无需重新滚动');
+  await desktopPage.keyboard.press('Escape');
+  assert.equal(await catalogDetails.getAttribute('open'), null);
   assert.equal(
+    await catalogSummary.evaluate((element) => element === document.activeElement),
+    true,
+  );
+  await catalogSummary.click();
+  assert.equal(await archiveCatalog.locator('li').count(), 4, '表站页脚应显示四条馆藏记录');
+  assert.equal(await archiveCatalog.locator('a').count(), 1, '只有当前快照可以进入');
+  assert.equal(await archiveCatalog.locator('.archive-catalog__damaged').count(), 3);
+  assert.deepEqual(
+    await archiveCatalog
+      .locator('[data-snapshot-id]')
+      .evaluateAll((items) => items.map((item) => item.dataset.snapshotId)),
+    ['1098-damaged', '1093-damaged', '1089-damaged', currentArchiveSnapshot.snapshotId],
+  );
+  for (const damaged of await archiveCatalog.locator('.archive-catalog__damaged').all()) {
+    const corruption = damaged.locator('.archive-catalog__corruption');
+    assert.match(await corruption.innerText(), /[█▓▒░]/u);
+    assert.match(await corruption.innerText(), /�/u);
+    assert.doesNotMatch(await corruption.innerText(), /\d/u);
+    assert.equal(await corruption.getAttribute('aria-hidden'), 'true');
+    assert.match(await damaged.locator('.visually-hidden').innerText(), /1089|1093|1098/u);
+    const trigger = damaged.locator('summary');
+    await trigger.click();
+    const dialog = desktopPage.locator('[data-archive-damage-dialog]');
+    assert.equal(await dialog.evaluate((element) => element.open), true);
+    assert.equal(
+      await dialog.locator('#archive-damage-description').innerText(),
+      await damaged.locator('p').textContent(),
+    );
+    await desktopPage.keyboard.press('Escape');
+    assert.equal(await dialog.evaluate((element) => element.open), false);
+    assert.equal(await trigger.evaluate((element) => element === document.activeElement), true);
+  }
+  assert.match(
     await archiveCatalog.locator('a').evaluate((link) => window.getComputedStyle(link).cursor),
-    'help',
+    /url\(.+\) 2 1, help/u,
   );
   assert.match(
     (await archiveCatalog.locator('a').getAttribute('href')) ?? '',
@@ -596,16 +916,17 @@ try {
     '里站完整本季列表不得被首页策展集合裁剪',
   );
   const yanLocalization = getLocalization(editions.yan, buildSnapshot);
+  await desktopPage.goto(`${origin}${archivePath('yan', 'performances/history')}`);
   const loneWanderPath = archivePath(
     editions.yan.routePrefix,
-    'performances/lone-wander-linqu-1084-0719',
+    'performances/lone-wander-wiesheim-1083-0814',
   );
   const expectedLoneWanderDescription =
     yanLocalization.programs.productions['lone-wander'].synopsis;
   const loneWanderCard = desktopPage.locator(
     `.archive-performance-list a[href="${loneWanderPath}"]`,
   );
-  assert.equal(await loneWanderCard.count(), 1, '里站本季列表应保留独行客场次');
+  assert.equal(await loneWanderCard.count(), 1, '里站历史列表应保留独行客场次');
   assert.equal(
     (
       await loneWanderCard
@@ -652,6 +973,7 @@ try {
   });
   await archiveVisualPage.reload();
   await archiveVisualPage.locator('html[data-pollution-level="0"]').waitFor();
+  await assertFolioEditions(archiveVisualPage, 0);
   assert.equal(
     await visualLayer.evaluate((element) => window.getComputedStyle(element).display),
     'none',
@@ -693,9 +1015,12 @@ try {
       assert.notEqual(stageProof.content, 'none', `污染等级 ${level} 应具有档案错版证明`);
       assert.ok(stageProof.width > 100, `污染等级 ${level} 的错版证明应清楚可见`);
       compositionTransforms[level].add(stageProof.transform);
+      await assertFolioEditions(archiveVisualPage, level);
       assert.notEqual(
         await archiveVisualPage
-          .locator('[data-pollution-slot="record-list"] > :nth-child(2)')
+          .locator(
+            '[data-pollution-slot="record-list"] > .archive-performance-list > li:nth-child(2)',
+          )
           .evaluate((element) => window.getComputedStyle(element).boxShadow),
         'none',
         `污染等级 ${level} 应在真实记录列表留下印版痕迹`,
@@ -743,7 +1068,7 @@ try {
     if (duty.pageType === 'performance-list') {
       assert.notEqual(
         await dutyTarget
-          .locator(':scope > :first-child')
+          .locator(':scope > .archive-performance-list > li:first-child')
           .evaluate((element) => window.getComputedStyle(element).transform),
         'none',
         '演出列表应在二级污染中形成记录间空间矛盾',
@@ -804,6 +1129,7 @@ try {
   for (const edition of builtEditions) {
     await archiveVisualPage.goto(`${origin}${archivePath(edition.routePrefix)}`);
     await archiveVisualPage.locator('html[data-pollution-level="3"]').waitFor();
+    await assertFolioEditions(archiveVisualPage, 3);
     const expectedLocalization = getLocalization(edition);
     const expectedProjection = expectedLocalization.archiveProjection.performance;
     const projectedTitles = await archiveVisualPage
@@ -956,6 +1282,8 @@ try {
   await ticketPage.locator('[data-ticketing-app]:not([hidden])').waitFor();
   await assertNoHorizontalLoss(ticketPage, '320px 炎国票务');
   const seatingPlans = [
+    { id: 'volsinii-courtyard', levels: 1, zones: ['C', 'B', 'A'] },
+    { id: 'nuova-volsinii-civic', levels: 2, zones: ['C', 'B', 'A', 'S', 'BOX'] },
     { id: 'trimount-grand-fan', levels: 3, zones: ['C', 'B', 'A', 'S', 'BOX'] },
     { id: 'wiesheim-mirror-horseshoe', levels: 3, zones: ['C', 'B', 'A', 'S', 'BOX'] },
     { id: 'norport-temporary-stand', levels: 1, zones: ['C', 'B', 'A'] },
@@ -968,6 +1296,34 @@ try {
     const details = ticketPage.locator(`[data-seating-plan="${expected.id}"]`);
     assert.equal(await details.count(), 1, `${expected.id} 应且只应出现一次`);
     await details.locator('summary').click();
+    for (const diagram of await details.locator('.ticket-seating__diagram').all()) {
+      const aligned = await diagram.evaluate((element) => {
+        const stage = element.querySelector('.ticket-seating__stage')?.getBoundingClientRect();
+        const label = element
+          .querySelector('.ticket-seating__stage-label')
+          ?.getBoundingClientRect();
+        return (
+          !stage ||
+          (label &&
+            Math.abs(stage.x + stage.width / 2 - label.x - label.width / 2) < 1 &&
+            Math.abs(stage.y + stage.height / 2 - label.y - label.height / 2) < 1)
+        );
+      });
+      assert.equal(aligned, true, `${expected.id} 舞台与文字坐标必须对齐`);
+      const contained = await diagram.evaluate((element) => {
+        const bounds = element.getBoundingClientRect();
+        return [...element.querySelectorAll('[data-ticket-zone-map]')].every((button) => {
+          const box = button.getBoundingClientRect();
+          return (
+            box.left >= bounds.left - 1 &&
+            box.right <= bounds.right + 1 &&
+            box.top >= bounds.top - 1 &&
+            box.bottom <= bounds.bottom + 1
+          );
+        });
+      });
+      assert.equal(contained, true, `${expected.id} 分区按钮不得被示意容器裁切`);
+    }
     assert.equal(
       await details.locator('[data-seating-level]').count(),
       expected.levels,
@@ -1036,8 +1392,10 @@ try {
   const ticketRows = ticketPage.locator('[data-ticket-option]');
   assert.deepEqual(
     await ticketRows.evaluateAll((rows) => rows.map((row) => row.dataset.ticketOption)),
-    buildSnapshot.homepagePerformanceIds.front,
-    '票务页场次应与表站首页策展顺序一致',
+    getTicketingOptions(getLocalization(editions.yan, buildSnapshot), buildSnapshot).map(
+      ({ performanceId }) => performanceId,
+    ),
+    '票务页应包含全部可售场次，独立于首页策展集合',
   );
   const firstTicketRow = ticketPage.locator('[data-ticket-option="uncrowned-trimount-1102"]');
   const firstTicketSelect = firstTicketRow.locator('[data-ticket-zone]');
@@ -1584,7 +1942,7 @@ try {
   );
   assert.notEqual(
     await archivePage
-      .locator('[data-pollution-slot="record-list"] > :first-child')
+      .locator('[data-pollution-slot="record-list"] > .archive-performance-list > li:first-child')
       .evaluate((element) => window.getComputedStyle(element).transform),
     'none',
     '三级污染演出列表应形成记录间空间失序',
@@ -1739,7 +2097,8 @@ try {
     '三级污染席位地点应逐项收束',
   );
   const projectedSeatSelect = projectedSeatEntries.locator('select').first();
-  assert.equal(await projectedSeatSelect.isEnabled(), true, '投影不得破坏静态分区选择');
+  assert.equal(await projectedSeatSelect.isDisabled(), true, '投影不得启用选席');
+  assert.equal(await projectedSeatSelect.inputValue(), '');
   assert.notEqual(
     await archivePage
       .locator('[data-pollution-slot="ticket-record"]')
@@ -1850,21 +2209,25 @@ try {
   for (const { performanceId, offers } of expectedArchiveSeats) {
     const select = noScriptPage.locator(`#archive-zone-${performanceId}`);
     assert.deepEqual(
-      await select.locator('option').evaluateAll((options) =>
-        options.map((option) => ({
-          zone: option.value,
-          text: option.textContent?.trim() ?? '',
-        })),
-      ),
+      await noScriptPage
+        .locator(`[data-archive-seat-offers="${performanceId}"] li`)
+        .evaluateAll((rows) =>
+          rows.map((row) => ({
+            zone: row.getAttribute('data-seat-zone'),
+            text: row.textContent?.trim() ?? '',
+          })),
+        ),
       offers.map(({ zone, basePrice }) => ({
         zone,
         text: `${getLocalization(editions.higashi, buildSnapshot).programs.ticketZones[zone]} · ${basePrice} LMD`,
       })),
       `${performanceId} 应显示唯一矩阵生成的分区和价格`,
     );
+    assert.equal(await select.isDisabled(), true);
+    assert.equal(await select.inputValue(), '');
+    assert.equal(await select.locator('option').count(), 1);
+    assert.equal(await select.locator('option').textContent(), '-----------');
   }
-  await archiveSeatSelects.first().selectOption({ index: 1 });
-  assert.notEqual(await archiveSeatSelects.first().inputValue(), 'C');
   assert.equal(
     await noScriptPage
       .locator('.archive-settlement[data-archive-projection-source] button')

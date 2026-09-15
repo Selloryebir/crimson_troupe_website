@@ -6,10 +6,12 @@
 
 剧目复杂中央图像位于 `images/productions/`，只保存已经通过艺术方向门且存在运行时消费者的原创压缩资产；本地参考图、过程稿和无消费者候选不得进入本目录。标题、正文、替代文本与交互仍由页面和类型化本地化内容承担。
 
-`brand/` 保存经过人工采纳、权利边界已记录且拥有明确运行时消费者的品牌母版。团标默认使用透明高分辨率 D 版凹印母版，由 Astro 在构建期生成 WebP 与双密度输出；剧目封面、站点页头及其他未明确指定变体的 `TroupeMark` 消费者必须复用该文件，不逐处复制近似轮廓。来源和人工授权边界见 `docs/sources/troupe-logo-provenance.md`；已保留但尚无运行时消费者的 A 版和 D 版环境光变体位于 `docs/project/troupe-logo-alternates/`，不得由构建器直接读取。
+`brand/` 保存经过人工采纳、权利边界已记录且拥有明确运行时消费者的品牌母版。团标保留两份真实透明 PNG：`troupe-logo-primary.png` 为 3072px 哑光版，`troupe-logo-metallic.png` 为 1254px 金属版。表站、里站页头、页尾、海报独立印记及邀请函等小型 `TroupeMark` 默认复用哑光版；首页大展示显式使用金属版，不因页面、国家版本或污染等级自动改变其他消费者的变体。已嵌入活页封面的团标不重绘。来源和人工授权边界见 `docs/sources/troupe-logo-provenance.md`；形状错误的 A 版和 D 版环境光衍生稿已从项目资料清除，不再作为可用备选。
+
+两份母版与用户选定的透明候选逐字节相同，不再重绘或放大；金属版只从原稿新增背景 Alpha，哑光版沿用原有 Alpha。Astro 构建期生成 WebP，首页使用 320/640/960px，其他消费者使用 270/540px；首屏正常加载，表站首页下部团标懒加载。金属版原始边缘只有二值透明，不冒充恢复了未知原生抗锯齿；应在实际输出背景上检查缩放边缘。使用规则遵循 `BP-CNT-PRODUCTION-VISUAL`；用户批准接入不构成权利方公开再分发许可，具体来源与权利边界见上述来源记录。
 
 `realm-badges/` 保存九个已注册国家版本的透明单色 SVG 母版。文件以稳定 `editionId` 命名，由语言选择器通过 CSS mask 和 `currentColor` 着色；选择器构建范围仍由国家版本注册决定。制作与复核规则见 `docs/guides/realm-badge-authoring.md`，非运行时上色候选只保存在 `docs/project/realm-badge-color-previews/`。
 
 `pollution/` 保存项目原创的污染环境视觉母版。纯装饰且不随内容变化的大型画板应优先合并为单一矢量资产，由 CSS 保留位置与显示状态，避免在滚动期间反复绘制多层渐变、裁切与模糊阴影；文本投影和可交互内容不得烧录进资产。
 
-`images/archive/folio/normal/` 与 `images/archive/folio/crimson/` 是归属里站的成对活页高清修复资源，各 13 张无损 WebP。它们保留官方参考原版的独特设计，不属于项目原创资产；仅 8 张普通版被当前里站内容快照引用，猩红版的页面使用策略待定。项目负责人已允许公开仓库存放与开发分支晋级，但未提供权利方发布许可；具体来源、SHA-256 和权利边界见 `docs/sources/folio-cover-restoration.md`。
+`images/archive/folio/normal/` 与 `images/archive/folio/crimson/` 是归属里站的成对活页高清修复资源，各 13 张无损 WebP。它们保留官方参考原版的独特设计，不属于项目原创资产。当前快照引用 8 个活页剧目的普通／猩红配对资源，并单独引用猩红版《摇篮曲》作为等级 3 投影；其余库存不生成页面。污染等级 0—3 的切换遵循 `BP-CNT-PRODUCTION-VISUAL`。项目负责人已允许公开仓库存放与开发分支晋级，但未提供权利方发布许可；具体来源、SHA-256 和权利边界见 `docs/sources/folio-cover-restoration.md`。

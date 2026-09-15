@@ -5,6 +5,14 @@ import { kazimierzMessages } from './messages.ts';
 export const kazimierzSite = {
   brand: { name: 'Karmazynowa Trupa', latinName: 'SZkarłatna trupa' },
   shared: {
+    archiveSnapshot: 'Migawka {date}',
+    archiveDamageDescription:
+      'Część tekstu tej kopii jest nieczytelna. Zachowany indeks nie pozwala ustalić przyczyny uszkodzenia.',
+    archiveWarDamageDescription:
+      'Ta kopia była przechowywana w węźle archiwalnym w Londinium. Węzeł został uszkodzony podczas walk w 1098 roku; zachowany katalog nie wystarcza do odtworzenia całej strony. Nie udało się potwierdzić dokładnych miesięcy ani dni wykonania kopii i powstania uszkodzeń.',
+    archivePreservation:
+      'Strona jest prezentowana na podstawie oddzielnie zachowanej, niezależnej kopii i nie zależy od uszkodzonego węzła w Londinium.',
+    archiveDamageClose: 'Powrót do katalogu migawek',
     skipToContent: 'Przejdź do głównej treści',
     mainNavigation: 'Główna nawigacja',
     brandHome: 'Dom Karmazynowej Trupy',
@@ -18,7 +26,7 @@ export const kazimierzSite = {
     chooseEdition: 'Aktualne wydanie: {language}. Wybierz wydanie krajowe',
     frontFooter: 'Wycieczki, produkcje i usługi dla gości',
     archiveFooter: 'Migawka kolekcji · {date}',
-    archiveCatalog: 'Indeks kolekcji',
+    archiveCatalog: 'Historyczne wersje strony',
     frontToArchive: 'Otwórz rekord kolekcji',
     archiveDamaged: 'Zapis uszkodzony; niedostępne',
     archiveToFront: 'Powrót do aktualnej strony internetowej zespołu',
@@ -315,9 +323,11 @@ export const kazimierzSite = {
       introduction:
         'Sprawdź podział miejsc i ceny rejestracyjne według wydajności. Zasady wstępu znajdują się w każdym zawiadomieniu o trasie zwiedzania.',
       registerEyebrow: 'Książka miejsc na ten sezon',
-      registerTitle: 'Wybierz wykonanie i dywizję',
+      registerTitle: 'Spektakle i strefy miejsc',
       registerIntroduction:
-        'Poniższe podziały odpowiadają aktualnej liczbie miejsc; wybierz jeden podział dla każdego występu.',
+        'Strefy i ceny z rejestru miejsc bieżącego sezonu są dostępne do wglądu.',
+      selectionUnavailable:
+        'Biuro wyboru miejsc i rejestracji nie odpowiada. Strefy i ceny pozostają dostępne do wglądu; wybór miejsca i przesłanie rejestracji są niedostępne.',
       zone: 'Podział siedzib',
       empty: 'W tym sezonie nie prowadzimy żadnych rejestracji miejsc.',
       settlementTitle: 'Prześlij rejestrację miejsca',

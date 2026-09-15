@@ -4,6 +4,8 @@
 
 ## 当前记录
 
+- [`terra-chronology/README.md`](terra-chronology/README.md)：泰拉历法、猩红剧团／傀影／酒神与九国历史的 CSV 对照，以及巡演地区窗口、身份链、类型化事件图和双站时间敏感度研究；保留推定日期、来源分歧与未定年事项；
+- [`archive-period-design.md`](archive-period-design.md)：早期文档式网页的抽象原则、旧剧场名录转译与明确排除项；
 - [`design-and-service.md`](design-and-service.md)：文化机构网站的信息架构、服务能力和泰拉化转译；
 - [`ticketing-gameplay.md`](ticketing-gameplay.md)：重复体验、现实票务、可访问性与《明日方舟》玩法语境分析；
 - [`ticketing-platform-logo-study.md`](ticketing-platform-logo-study.md)：现实票务平台 Logo 的视觉拆解，以及水稻网与跳楼机正式原创 SVG 的转译依据；

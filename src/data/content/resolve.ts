@@ -13,6 +13,11 @@ import { getTicketArtifactEditionIds } from '../localized/ticket-artifact.ts';
 import type { Performance, PerformanceCollection, PerformanceId } from '../performances.ts';
 import { productions, type Production, type ProductionId } from '../productions/index.ts';
 import { getRegisteredProductionArtwork, type ProductionArtwork } from '../production-artworks.ts';
+import {
+  archiveFolioCrimsonManifest,
+  type ArchiveFolioCrimsonId,
+  type ProductionArtworkManifestEntry,
+} from '../production-artwork-manifest.ts';
 import type { SiteWorld } from '../site-routes.ts';
 import { derivePerformanceCollection, getSiteTerraNow } from '../site-time.ts';
 import {
@@ -62,6 +67,10 @@ export interface ContentSnapshot {
   artworks: Readonly<
     Partial<Record<ProductionId, Readonly<Partial<Record<SiteWorld, Readonly<ProductionArtwork>>>>>>
   >;
+  archiveFolioCrimson: Readonly<
+    Partial<Record<ArchiveFolioCrimsonId, Readonly<ProductionArtworkManifestEntry>>>
+  >;
+  archiveFolioProductionIds: readonly ProductionId[];
   seatingPlanEntries: readonly (readonly [SeatingPlanId, Readonly<SeatingPlanDefinition>])[];
   seatingPlans: Readonly<Partial<Record<SeatingPlanId, Readonly<SeatingPlanDefinition>>>>;
   ticketingPlatformEntries: readonly (readonly [
@@ -73,7 +82,7 @@ export interface ContentSnapshot {
   >;
   featuredPerformanceIds: Readonly<Record<SiteWorld, PerformanceId>>;
   homepagePerformanceIds: Readonly<Record<SiteWorld, readonly PerformanceId[]>>;
-  archiveProjectionProductionId: ProductionId;
+  archiveProjectionSourceId: ArchiveFolioCrimsonId;
 }
 
 function cloneImmutable<T>(value: T): T {
@@ -140,10 +149,19 @@ export function resolveContent(
   assertContentContextEligible(context, rootSet);
 
   const productionIds = [
-    ...new Set([
-      ...performanceEntries.flatMap(([, performance]) => performance.productionIds),
-      archiveProjectionIdentity.productionId,
-    ]),
+    ...new Set([...performanceEntries.flatMap(([, performance]) => performance.productionIds)]),
+  ];
+  const archiveFolioProductionIds = [
+    ...new Set(
+      performanceEntries
+        .filter(([, performance]) => performance.world === 'archive')
+        .flatMap(([, performance]) => performance.productionIds)
+        .filter(
+          (productionId) =>
+            getRegisteredProductionArtwork(productionId, 'archive')?.rights ===
+            'local-folio-restoration-preview',
+        ),
+    ),
   ];
   const locationIds = [
     ...new Set(performanceEntries.map(([, performance]) => performance.locationId)),
@@ -183,7 +201,6 @@ export function resolveContent(
       ...performanceEntries.flatMap(([, performance]) =>
         performance.productionIds.map((productionId) => `${productionId}:${performance.world}`),
       ),
-      `${archiveProjectionIdentity.productionId}:archive`,
     ]),
   ];
   const artworkEntries = artworkKeys.map((key) => {
@@ -194,6 +211,20 @@ export function resolveContent(
     }
     return Object.freeze([productionId, world, Object.freeze(artwork)] as const);
   });
+  const crimsonIds = [
+    ...new Set([...archiveFolioProductionIds, archiveProjectionIdentity.sourceId]),
+  ];
+  const archiveFolioCrimson = Object.freeze(
+    Object.fromEntries(
+      crimsonIds.map((sourceId) => {
+        const entry = archiveFolioCrimsonManifest[sourceId as ArchiveFolioCrimsonId];
+        if (!entry) {
+          throw new Error(`活页 ${sourceId} 缺少猩红版封面。`);
+        }
+        return [sourceId, Object.freeze(entry)];
+      }),
+    ),
+  );
   const seatingPlanIds = [
     ...new Set(
       performanceEntries.flatMap(([, performance]) =>
@@ -231,6 +262,8 @@ export function resolveContent(
     localizationPackages: snapshotLocalizationPackages,
     artworkEntries: Object.freeze(artworkEntries),
     artworks: toArtworkRecord(artworkEntries),
+    archiveFolioCrimson,
+    archiveFolioProductionIds: Object.freeze(archiveFolioProductionIds),
     seatingPlanEntries: Object.freeze(seatingPlanEntries),
     seatingPlans: toReadonlyRecord(seatingPlanEntries),
     ticketingPlatformEntries: Object.freeze(ticketingPlatformEntries),
@@ -243,7 +276,7 @@ export function resolveContent(
       front: Object.freeze(rootSet.worlds.front.homepagePerformanceIds),
       archive: Object.freeze(rootSet.worlds.archive.homepagePerformanceIds),
     }),
-    archiveProjectionProductionId: archiveProjectionIdentity.productionId,
+    archiveProjectionSourceId: archiveProjectionIdentity.sourceId,
   });
 }
 

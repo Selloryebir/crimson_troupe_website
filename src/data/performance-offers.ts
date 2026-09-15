@@ -5,11 +5,7 @@ export type PriceBand = number | '-';
 export type PriceTuple = readonly [PriceBand, PriceBand, PriceBand, PriceBand, PriceBand];
 
 export type ArchiveVenuePricingKey =
-  | 'zwillingsturme-mirror-lake-hall'
-  | 'londinium-bell-hall'
-  | 'montelupe-banquet-hall'
-  | 'londinium-main-stage'
-  | 'zwillingsturme-golden-hall';
+  'zwillingsturme-mirror-lake-hall' | 'londinium-bell-hall' | 'londinium-main-stage';
 
 export type PerformanceOfferMatrix = Readonly<
   Partial<Record<ProductionId, Readonly<Partial<Record<ArchiveVenuePricingKey, PriceTuple>>>>>
@@ -25,11 +21,7 @@ export const performanceOfferMatrix = {
     'londinium-bell-hall': [150, 260, 430, 690, 1120],
   },
   'the-carnival': {
-    'montelupe-banquet-hall': [100, 170, 280, '-', '-'],
-    'londinium-main-stage': [130, 220, 360, 560, 920],
-  },
-  'ode-au-triomphe': {
-    'zwillingsturme-golden-hall': [180, 310, 500, 790, 1280],
+    'londinium-main-stage': [130, 220, 360, '-', '-'],
   },
 } as const satisfies PerformanceOfferMatrix;
 

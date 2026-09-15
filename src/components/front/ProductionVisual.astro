@@ -12,9 +12,19 @@ interface Props {
   index?: string;
   compact?: boolean;
   priority?: boolean;
+  placement?: 'default' | 'home-editorial' | 'home-feature';
 }
 
-const { productionId, visual, title, index, compact = false, priority = false } = Astro.props;
+const {
+  productionId,
+  visual,
+  title,
+  index,
+  compact = false,
+  priority = false,
+  placement = 'default',
+} = Astro.props;
+const isHomepage = placement !== 'default';
 const artwork = getSnapshotProductionArtwork(buildSnapshot, productionId, 'front');
 const artworkAsset = getSnapshotProductionArtworkAsset(buildSnapshot, productionId, 'front');
 const artworkStyle = artwork
@@ -36,11 +46,16 @@ const artworkStyle = artwork
         class="production-visual__image"
         src={artworkAsset}
         alt=""
-        widths={[240, 480, 768]}
+        widths={isHomepage ? [240, 480, 640, 960] : [240, 480, 768]}
+        quality={isHomepage ? 95 : undefined}
         sizes={
-          compact
-            ? '(max-width: 620px) calc(100vw - 28px), (max-width: 960px) 45vw, 30vw'
-            : '(max-width: 620px) calc(100vw - 28px), (max-width: 960px) min(620px, calc(100vw - 36px)), 42vw'
+          placement === 'home-editorial'
+            ? '(max-width: 620px) min(260px, calc(100vw - 28px)), (max-width: 960px) 280px, 320px'
+            : placement === 'home-feature'
+              ? 'min(320px, calc(100vw - 28px))'
+              : compact
+                ? '(max-width: 620px) calc(100vw - 28px), (max-width: 960px) 45vw, 30vw'
+                : '(max-width: 620px) calc(100vw - 28px), (max-width: 960px) min(620px, calc(100vw - 36px)), 42vw'
         }
         loading={priority || !compact ? 'eager' : 'lazy'}
         fetchpriority={priority ? 'high' : compact ? 'low' : undefined}

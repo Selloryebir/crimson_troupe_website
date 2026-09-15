@@ -27,6 +27,7 @@
 /{routePrefix}/troupe/
 /{routePrefix}/search/
 /{routePrefix}/tickets/
+/{routePrefix}/tickets/partner/
 /{routePrefix}/archive/site/1084-07-01/
 /{routePrefix}/archive/site/1084-07-01/performances/
 /{routePrefix}/archive/site/1084-07-01/performances/history/

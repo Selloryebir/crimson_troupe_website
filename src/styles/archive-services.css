@@ -1,0 +1,411 @@
+/* 旧站搜索与席位登记共用清晰可读的纸面事务样式。 */
+.search-workspace--archive {
+  max-width: min(880px, var(--page));
+  padding-block: clamp(38px, 6vw, 72px) clamp(76px, 9vw, 120px);
+}
+
+.search-workspace--archive::before {
+  display: block;
+  width: min(100%, 86px);
+  margin: 0 0 24px;
+  border-top: 3px double var(--archive-gold);
+  content: "";
+  pointer-events: none;
+}
+
+.search-workspace--archive .search-noscript,
+.search-workspace--archive .search-form,
+.search-workspace--archive .search-feedback,
+.search-workspace--archive .search-results {
+  color: var(--archive-ink);
+  background: var(--archive-paper);
+}
+
+.search-workspace--archive .search-noscript {
+  padding: clamp(20px, 4vw, 34px);
+  border: 1px solid var(--archive-gold);
+  border-left: 4px solid var(--archive-curtain);
+}
+
+.search-workspace--archive .search-noscript h2 {
+  margin-top: 0;
+  font-size: clamp(1.45rem, 2.8vw, 2rem);
+}
+
+.search-workspace--archive .search-noscript p {
+  color: var(--archive-ink);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.search-workspace--archive .search-form {
+  max-width: none;
+  padding: clamp(22px, 4vw, 42px);
+  border: 1px solid var(--archive-gold);
+  border-top: 4px double var(--archive-curtain);
+  box-shadow: none;
+}
+
+.search-workspace--archive .search-form > label {
+  margin-bottom: 16px;
+  color: var(--archive-ink);
+  font-size: clamp(1.4rem, 2.8vw, 2rem);
+  text-align: left;
+}
+
+.search-workspace--archive .search-form > div {
+  min-width: 0;
+}
+
+.search-workspace--archive .search-form input,
+.search-workspace--archive .search-form button {
+  min-height: 52px;
+  font-family: var(--sans);
+  font-size: 1rem;
+}
+
+.search-workspace--archive .search-form input {
+  border-color: var(--archive-ink);
+  color: var(--archive-ink);
+  background: #e8dcc4;
+}
+
+.search-workspace--archive .search-form input::placeholder {
+  color: #67584a;
+  opacity: 1;
+}
+
+.search-workspace--archive .search-form button {
+  border-color: var(--archive-ink);
+  color: var(--archive-paper);
+  background: var(--archive-ink);
+}
+
+.search-workspace--archive .search-form button:hover {
+  background: var(--archive-curtain);
+}
+
+.search-workspace--archive .search-form > p {
+  margin: 16px 0 0;
+  color: #514236;
+  font-family: var(--sans);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.search-workspace--archive .search-feedback {
+  min-height: 0;
+  margin-top: 22px;
+  padding: 18px clamp(22px, 4vw, 42px);
+  border: 1px solid var(--archive-gold);
+  border-left: 4px solid var(--archive-curtain);
+  font-family: var(--sans);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.search-workspace--archive .search-feedback p {
+  margin: 0;
+}
+
+.search-workspace--archive .search-results {
+  margin-top: 18px;
+  border: 1px solid var(--archive-gold);
+  border-top: 3px double var(--archive-curtain);
+}
+
+.search-workspace--archive .search-results:empty {
+  display: none;
+}
+
+.search-workspace--archive .search-results li {
+  border-bottom: 1px solid rgb(48 35 28 / 34%);
+}
+
+.search-workspace--archive .search-results li:last-child {
+  border-bottom: 0;
+}
+
+.search-workspace--archive .search-results li[data-search-group-start]:not(:first-child) {
+  border-top: 3px double var(--archive-gold);
+}
+
+.search-workspace--archive .search-results a {
+  grid-template-columns: minmax(100px, 0.28fr) minmax(0, 1fr);
+  gap: 5px 24px;
+  min-width: 0;
+  padding: 20px clamp(22px, 4vw, 42px);
+  color: var(--archive-ink);
+  text-decoration: none;
+}
+
+.search-workspace--archive .search-results a:hover {
+  background: rgb(116 24 34 / 8%);
+}
+
+.search-workspace--archive .search-results a > span {
+  padding-top: 4px;
+  color: #65323a;
+  font-family: var(--sans);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.search-workspace--archive .search-results strong {
+  color: var(--archive-ink);
+  font-size: clamp(1.2rem, 2.4vw, 1.55rem);
+  line-height: 1.35;
+  text-decoration: underline;
+  text-decoration-color: var(--archive-curtain);
+  text-underline-offset: 0.18em;
+}
+
+.search-workspace--archive .search-results p {
+  color: #514236;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.search-workspace--archive :is(input, button, a):focus-visible {
+  outline: 3px solid var(--archive-curtain);
+  outline-offset: 3px;
+}
+
+html[data-world="archive"] .archive-seat-register {
+  max-width: min(1040px, var(--page));
+  padding-block: clamp(40px, 6vw, 72px) 40px;
+}
+
+html[data-world="archive"] .archive-seat-register > header {
+  max-width: 760px;
+  margin-bottom: 32px;
+}
+
+html[data-world="archive"] .archive-seat-register > header .archive-kicker {
+  margin-bottom: 12px;
+  font-size: 0.875rem;
+  letter-spacing: 0.06em;
+}
+
+html[data-world="archive"] .archive-seat-register > header .archive-kicker::before,
+html[data-world="archive"] .archive-seat-register > header .archive-kicker::after {
+  display: none;
+}
+
+html[data-world="archive"] .archive-seat-register > header h2 {
+  margin: 0 0 12px;
+  color: var(--archive-paper);
+  font: 500 clamp(1.65rem, 3vw, 2.4rem) / 1.2 var(--serif);
+}
+
+html[data-world="archive"] .archive-seat-register > header > p:last-child {
+  margin: 0;
+  color: var(--archive-paper);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+html[data-world="archive"] .archive-seat-register > ol {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--archive-gold);
+  border-top: 4px double var(--archive-curtain);
+  color: var(--archive-ink);
+  background: var(--archive-paper);
+  list-style: none;
+}
+
+html[data-world="archive"] .archive-seat-register > ol > li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(190px, 0.38fr);
+  gap: 8px clamp(22px, 4vw, 48px);
+  align-items: end;
+  min-width: 0;
+  padding: clamp(22px, 3.5vw, 36px);
+  border: 0;
+  border-bottom: 1px solid rgb(48 35 28 / 35%);
+  color: var(--archive-ink);
+  background: transparent;
+}
+
+html[data-world="archive"] .archive-seat-register > ol > li:last-child {
+  border-bottom: 0;
+}
+
+html[data-world="archive"] .archive-seat-register > ol > li > div {
+  grid-row: span 2;
+  min-width: 0;
+  padding-left: 18px;
+  border-left: 3px solid var(--archive-curtain);
+}
+
+html[data-world="archive"] .archive-seat-register h3,
+html[data-world="archive"] .archive-seat-register p {
+  margin: 0;
+}
+
+html[data-world="archive"] .archive-seat-register h3 {
+  margin-bottom: 12px;
+  color: var(--archive-ink);
+  font-size: clamp(1.25rem, 2.3vw, 1.65rem);
+  line-height: 1.4;
+}
+
+html[data-world="archive"] .archive-seat-register li p,
+html[data-world="archive"] .archive-seat-register label {
+  color: #514236;
+  font-family: var(--sans);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+html[data-world="archive"] .archive-seat-register li p + p {
+  margin-top: 6px;
+}
+
+html[data-world="archive"] .archive-seat-register label {
+  align-self: end;
+  font-weight: 700;
+}
+
+html[data-world="archive"] .archive-seat-register select {
+  width: 100%;
+  max-width: 100%;
+  min-height: 52px;
+  padding: 10px 36px 10px 12px;
+  border: 1px solid var(--archive-ink);
+  border-radius: 0;
+  color: var(--archive-ink);
+  background: #e8dcc4;
+  font-family: var(--sans);
+  font-size: 1rem;
+}
+
+html[data-world="archive"] .archive-seat-register select:focus-visible {
+  outline: 3px solid var(--archive-curtain);
+  outline-offset: 3px;
+}
+
+html[data-world="archive"] .archive-seat-register select:disabled {
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+html[data-world="archive"] .archive-seat-offers {
+  display: flex;
+  grid-column: 1 / -1;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin: 12px 0 0;
+  padding: 0;
+  font-family: var(--sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  list-style: none;
+}
+
+html[data-world="archive"] .archive-seat-offers li {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+html[data-world="archive"] .archive-selection-status {
+  grid-column: 1 / -1;
+  overflow-wrap: anywhere;
+}
+
+html[data-world="archive"] .archive-seat-register > .empty-state {
+  padding: 24px;
+  border: 1px solid var(--archive-gold);
+  color: var(--archive-ink);
+  background: var(--archive-paper);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+html[data-world="archive"] .archive-seat-register .archive-settlement {
+  margin-top: 26px;
+  padding: clamp(22px, 4vw, 36px);
+  border: 1px solid var(--archive-gold);
+  border-left: 4px solid var(--archive-curtain);
+  color: var(--archive-ink);
+  background: var(--archive-paper);
+}
+
+html[data-world="archive"] .archive-seat-register .archive-settlement h2 {
+  margin: 0 0 12px;
+  color: var(--archive-ink);
+  font: 500 clamp(1.45rem, 2.7vw, 2rem) / 1.3 var(--serif);
+}
+
+html[data-world="archive"] .archive-seat-register .archive-settlement p {
+  color: #514236;
+  font-family: var(--sans);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+html[data-world="archive"] .archive-seat-register .archive-settlement button {
+  min-height: 48px;
+  margin-top: 20px;
+  padding: 10px 22px;
+  border: 1px solid var(--archive-ink);
+  border-radius: 0;
+  color: var(--archive-paper);
+  background: var(--archive-ink);
+  font-family: var(--sans);
+  font-size: 1rem;
+}
+
+html[data-world="archive"] .archive-seat-register .archive-settlement button:disabled {
+  border-style: dashed;
+  color: #514236;
+  background: #d0bfa2;
+  cursor: not-allowed;
+}
+
+html[data-world="archive"] .archive-seat-register .archive-settlement button:not(:disabled) {
+  cursor: pointer;
+}
+
+html[data-world="archive"] .archive-seat-register .archive-settlement button:not(:disabled):hover {
+  background: var(--archive-curtain);
+}
+
+html[data-world="archive"] .archive-seat-register .archive-settlement button:focus-visible {
+  outline: 3px solid var(--archive-curtain);
+  outline-offset: 3px;
+}
+
+@media (max-width: 720px) {
+  .search-workspace--archive .search-results a {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .search-workspace--archive .search-results a > span {
+    grid-row: auto;
+    padding-top: 0;
+  }
+
+  html[data-world="archive"] .archive-seat-register > ol > li {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  html[data-world="archive"] .archive-seat-register > ol > li > div {
+    grid-row: auto;
+    margin-bottom: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-workspace--archive .search-form > div {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .search-workspace--archive .search-form button {
+    border-top: 0;
+    border-left: 1px solid var(--archive-ink);
+  }
+}

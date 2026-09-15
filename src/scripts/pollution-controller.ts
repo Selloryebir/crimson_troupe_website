@@ -1,4 +1,5 @@
 import { currentArchiveSnapshot } from '../data/archive-snapshots.ts';
+import { createArchiveFolioEffects } from './archive-folio-effects.ts';
 import {
   advancePollution,
   createPollutionState,
@@ -15,7 +16,6 @@ import {
 
 const PENDING_KEY = 'crimson-troupe:archive-navigation:v2';
 const PENDING_LIFETIME_MS = 30_000;
-const PROJECTION_PRELOAD_DELAY_MS = 1_200;
 
 interface PendingNavigation {
   targetPath: string;
@@ -57,7 +57,16 @@ function readState(storage: Storage | null): PollutionState {
   if (!storage) {
     return createPollutionState();
   }
-  return parsePollutionState(storage.getItem(POLLUTION_STATE_STORAGE_KEY), randomVariant());
+  const state = parsePollutionState(storage.getItem(POLLUTION_STATE_STORAGE_KEY), randomVariant());
+  if (state.seed === undefined) {
+    try {
+      state.seed = crypto.getRandomValues(new Uint32Array(1))[0];
+    } catch {
+      state.seed = Math.floor(Math.random() * 4294967296);
+    }
+    writeState(storage, state);
+  }
+  return state;
 }
 
 function hasStoredState(storage: Storage | null): boolean {
@@ -120,98 +129,11 @@ function applyState(state: PollutionState): void {
 }
 
 function createProjectionPreloader(root: HTMLElement): ProjectionPreloader {
-  const posters = [...document.querySelectorAll<HTMLElement>('[data-archive-projection-poster]')];
-  let started = false;
-  let scheduled = false;
-  let observer: IntersectionObserver | undefined;
-
-  const updateProgressiveState = () => {
-    if (posters.every((poster) => poster.hasAttribute('data-archive-projection-ready'))) {
-      root.removeAttribute('data-pollution-projection-progressive');
-      observer?.disconnect();
-    }
-  };
-
-  const prepare = async (poster: HTMLElement) => {
-    if (poster.hasAttribute('data-archive-projection-ready')) {
-      return;
-    }
-    const image = poster.querySelector<HTMLImageElement>(
-      '.archive-projection-level3.archive-poster__image',
-    );
-    if (!image) {
-      poster.setAttribute('data-archive-projection-ready', '');
-      updateProgressiveState();
-      return;
-    }
-
-    image.loading = 'eager';
-    try {
-      await image.decode();
-      poster.setAttribute('data-archive-projection-ready', '');
-      updateProgressiveState();
-    } catch {
-      // Keep the readable source poster if the optional projection cannot be decoded.
-    }
-  };
-
-  const start = () => {
-    if (started || posters.length === 0) {
-      return;
-    }
-    started = true;
-    if (!('IntersectionObserver' in window)) {
-      for (const poster of posters) {
-        poster.setAttribute('data-archive-projection-ready', '');
-      }
-      return;
-    }
-
-    observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) {
-            continue;
-          }
-          observer?.unobserve(entry.target);
-          void prepare(entry.target as HTMLElement);
-        }
-      },
-      { rootMargin: '100% 0px' },
-    );
-    for (const poster of posters) {
-      observer.observe(poster);
-    }
-  };
-
-  const schedule = () => {
-    if (scheduled || started || posters.length === 0) {
-      return;
-    }
-    scheduled = true;
-    const defer = () => {
-      window.setTimeout(start, PROJECTION_PRELOAD_DELAY_MS);
-    };
-    if (document.readyState === 'complete') {
-      defer();
-    } else {
-      window.addEventListener('load', defer, { once: true });
-    }
-  };
-
+  const effects = createArchiveFolioEffects(root);
   return {
     apply(state) {
-      const enteringLevel3 = root.dataset.pollutionLevel !== '3' && state.level === 3;
-      if (enteringLevel3) {
-        start();
-      } else if (state.level === 2) {
-        schedule();
-      }
-      if (enteringLevel3 && observer) {
-        root.setAttribute('data-pollution-projection-progressive', '');
-      }
       applyState(state);
-      updateProgressiveState();
+      effects.apply(state);
     },
   };
 }
@@ -427,6 +349,7 @@ export function initPollutionController(): void {
       }
 
       if (anchor.dataset.worldSwitch === 'front') {
+        projectionPreloader.apply(createPollutionState());
         clearState(storage);
         return;
       }

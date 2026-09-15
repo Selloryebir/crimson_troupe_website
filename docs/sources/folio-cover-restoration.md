@@ -8,11 +8,12 @@
 - `local-reference-materials/normal-folio-sr/` 与 `local-reference-materials/crimson-folio-sr/` 为 DeepAI SRGAN 放大参考，不作为文字、Logo、撕口 Alpha 或其他语义真值。
 - 普通版经逐图与跨图审计的最终 RGBA 母版位于本地忽略目录 `.agent-work/folio-cover-restoration/optimized-normal-folio-v5/final/covers/`；猩红版母版位于 `.agent-work/folio-cover-restoration/optimized-crimson-folio-v1/final/covers/`。两套同名成对，最终 WebP 与母版解码后逐像素一致。
 - 2026-09-13，项目负责人明确要求将两套修复结果纳入项目文件、让里站当前剧目引用普通版，并允许上传到公开项目仓库及按 `dev_experiment → dev_code → dev` 流程晋级。普通版与猩红版均归里站；猩红版的页面使用时机留待后续开发策略决定。
+- 后续获准的里站污染设计将等级 0—3 分别对应普通版、约三分之一剧目的对应猩红版、全部对应猩红版及全部猩红版《摇篮曲》。配对图与投影专用图由当前快照显式引用，等级 3 投影不新建普通《摇篮曲》实体或路由；此次使用策略不改变图像母版及下述文件摘要。
 
 ## 仓库存放与使用
 
 - `src/assets/images/archive/folio/normal/<productionId>.webp`：13 张，`1344×1840 RGBA`；当前构建快照实际采用的 8 张由 `src/data/production-artwork-manifest.ts` 与 `production-artwork-assets.ts` 引入里站。
-- `src/assets/images/archive/folio/crimson/<productionId>.webp`：13 张，`1372×1880 RGBA`；目前仅为里站成对资源，不被页面导入或打包进网站产物。
+- `src/assets/images/archive/folio/crimson/<productionId>.webp`：13 张，`1372×1880 RGBA`；当前构建快照引入 8 张对应猩红版及等级 3 专用的猩红版《摇篮曲》，随里站封面组件进入产物，用于上述污染切换；其余文件仅保留在资源库。
 - 两套均为无损 WebP。原始低清图、SRGAN JPEG、PNG 母版、过程稿和审计证据继续只留在忽略目录，不进入运行时或版本控制。
 - 旧的原创里站预览图暂留在 `src/assets/images/productions/` 以便恢复；当前 8 个活页剧目不再引用它们。除这次显式实验外，其他剧目视觉仍遵守原创资产契约。
 

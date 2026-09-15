@@ -12,8 +12,11 @@ import {
 } from '../performance-offers.ts';
 import type { Performance, PerformanceId, TicketZone } from '../performances.ts';
 import {
+  archiveFolioCrimsonManifest,
   productionArtworkManifest,
+  type ArchiveFolioCrimsonId,
   type ProductionArtworkManifest,
+  type ProductionArtworkManifestEntry,
 } from '../production-artwork-manifest.ts';
 import { folioSourceRecords, type FolioSourceRecord } from '../productions/folio-source-records.ts';
 import { productions, type Production, type ProductionId } from '../productions/index.ts';
@@ -43,6 +46,7 @@ export interface ContentValidationSources {
   locations: Readonly<Record<string, Location>>;
   localizations: Readonly<Record<BuildEditionId, PartialLocalizationPackage>>;
   artwork: ProductionArtworkManifest;
+  folioCrimson: Readonly<Partial<Record<ArchiveFolioCrimsonId, ProductionArtworkManifestEntry>>>;
   seatingPlans: Readonly<Record<string, SeatingPlanDefinition>>;
   ticketingPlatforms: Readonly<Record<TicketingPlatformId, TicketingPlatformDefinition>>;
   offerMatrix: PerformanceOfferMatrix;
@@ -57,6 +61,7 @@ const defaultSources: ContentValidationSources = {
   locations,
   localizations: localizationPackages,
   artwork: productionArtworkManifest,
+  folioCrimson: archiveFolioCrimsonManifest,
   seatingPlans: ticketSeatingPlans,
   ticketingPlatforms,
   offerMatrix: performanceOfferMatrix,
@@ -251,7 +256,6 @@ export function assertContentBundle(
   const productionIds = new Set(
     selectedPerformances.flatMap((performance) => performance.productionIds),
   );
-  productionIds.add(sources.archiveProjection.productionId);
   const locationIds = new Set(selectedPerformances.map((performance) => performance.locationId));
   const ticketArtifactEditionIds = new Set<BuildEditionId>();
 
@@ -263,6 +267,15 @@ export function assertContentBundle(
         sources.artwork[productionId]?.[performance.world],
         `artwork.${productionId}.${performance.world}`,
       );
+      if (
+        performance.world === 'archive' &&
+        sources.artwork[productionId]?.archive?.rights === 'local-folio-restoration-preview'
+      ) {
+        assertPresent(
+          sources.folioCrimson[productionId as ArchiveFolioCrimsonId],
+          `folioCrimson.${productionId}`,
+        );
+      }
     }
     if (performance.world === 'front' && performance.ticketAvailability.state === 'on-sale') {
       const countryEditionId = sources.locations[performance.locationId].countryEditionId;
@@ -340,12 +353,12 @@ export function assertContentBundle(
   }
 
   assertPresent(
-    sources.productions[sources.archiveProjection.productionId],
-    `archiveProjection.production.${sources.archiveProjection.productionId}`,
+    sources.folioSources[sources.archiveProjection.sourceId],
+    `archiveProjection.folioSource.${sources.archiveProjection.sourceId}`,
   );
   assertPresent(
-    sources.artwork[sources.archiveProjection.productionId]?.archive,
-    `archiveProjection.artwork.${sources.archiveProjection.productionId}.archive`,
+    sources.folioCrimson[sources.archiveProjection.sourceId],
+    `archiveProjection.crimson.${sources.archiveProjection.sourceId}`,
   );
   for (const editionId of editionIds) {
     const package_ = sources.localizations[editionId];
@@ -355,10 +368,12 @@ export function assertContentBundle(
       assertPresent(package_?.platforms?.[platformId], `${editionId}.platforms.${platformId}`);
     }
     assertPresent(package_?.archiveProjection, `${editionId}.archiveProjection`);
-    assertPresent(
-      package_?.programs?.productions?.[sources.archiveProjection.productionId],
-      `${editionId}.archiveProjection.production.${sources.archiveProjection.productionId}`,
-    );
+    if (
+      package_?.archiveProjection?.performance.title !==
+      package_?.archiveProjection?.invitation.production
+    ) {
+      throw new Error(`${editionId}.archiveProjection 的剧目题名与请柬不一致。`);
+    }
   }
 
   assertLocalizationSourceFresh(

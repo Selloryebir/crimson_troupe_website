@@ -1,3 +1,5 @@
+import type { ArchiveFolioCrimsonId } from './production-artwork-manifest.ts';
+
 export type ArchivePageType =
   | 'home'
   | 'performance-list'
@@ -29,15 +31,14 @@ const archivePollutionProfiles = {
 } as const satisfies Record<ArchivePageType, ArchivePollutionProfile>;
 
 export interface ArchiveProjectionIdentity {
-  productionId: ProductionId;
+  sourceId: ArchiveFolioCrimsonId;
 }
 
-// 等级 3 的统一剧目身份属于构建闭包，不由页面或本地化文案各自猜测。
+// 等级 3 只借用活页来源身份；它不成为正常剧目、场次或路由。
 export const archiveProjectionIdentity: ArchiveProjectionIdentity = Object.freeze({
-  productionId: 'the-carnival',
+  sourceId: 'the-lullaby',
 });
 
 export function getArchivePollutionProfile(pageType: ArchivePageType): ArchivePollutionProfile {
   return archivePollutionProfiles[pageType];
 }
-import type { ProductionId } from './productions/index.ts';

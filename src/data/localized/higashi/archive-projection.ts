@@ -7,7 +7,7 @@ export const higashiArchiveProjection = {
     '頁上の記録がすべて同じ行き先を示しています。',
   ],
   performance: {
-    title: '歓喜',
+    title: '子守り歌',
     kind: '終演',
     tagline: '招待状の所持者の席はまだ保留されています',
     dateTime: '1084-11-11 23:49:00 ・ 第三の鐘が鳴る前',
@@ -27,7 +27,7 @@ export const higashiArchiveProjection = {
     venueLabel: '会場',
     attendanceLabel: '到着',
     role: '招待状の所持者',
-    production: '歓喜',
+    production: '子守り歌',
     venue: 'カレー＝ブラゾン林地城',
     attendance: '第三の鐘が鳴る前',
     closing:

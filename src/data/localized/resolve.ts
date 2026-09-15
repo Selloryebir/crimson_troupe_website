@@ -18,6 +18,7 @@ import type {
 } from '../performances.ts';
 import type { Production, ProductionId } from '../productions/index.ts';
 import type { SiteWorld } from '../site-routes';
+import { compareTerraDateTime } from '../site-time.ts';
 import type { TicketingPlatformId } from '../ticketing-platforms.ts';
 import type {
   ArchiveProjectionContent,
@@ -27,7 +28,7 @@ import type {
   ProductionContent,
   TicketingPlatformContent,
 } from './schema';
-import { formatTerraDateTime } from './format.ts';
+import { formatMessage, formatTerraDate, formatTerraDateTime } from './format.ts';
 import { sourceLocalizationPackage, type PartialLocalizationPackage } from './packages.ts';
 import type { WebsiteLocalizationPackage } from './yan/index.ts';
 
@@ -323,7 +324,22 @@ export function getLocalizedPerformance(
   return {
     ...performance,
     ...content,
-    cityLabel: location.cityLabel,
+    // 取消公告的原定演出日来自场次，不在各语言中另存一份日期。
+    operationalNotice: content.operationalNotice
+      ? {
+          ...content.operationalNotice,
+          text: formatMessage(content.operationalNotice.text, {
+            originalDate: formatTerraDate(
+              performance.effectiveDateTime,
+              localization.edition.locale,
+            ),
+          }),
+        }
+      : undefined,
+    cityLabel:
+      performance.world === 'archive'
+        ? (location.archiveCityLabel ?? location.cityLabel)
+        : location.cityLabel,
     dateTime: {
       ...performance.effectiveDateTime,
       display: formatTerraDateTime(performance.effectiveDateTime, localization.edition.locale),
@@ -372,5 +388,10 @@ export function getLocalizedPerformances(
 ): ResolvedPerformance[] {
   return getLocalizedPerformanceEntries(localization, snapshot)
     .map(([, performance]) => performance)
-    .filter((performance) => performance.world === world && performance.collection === collection);
+    .filter((performance) => performance.world === world && performance.collection === collection)
+    .sort((left, right) => {
+      // 两类列表均从最接近网站时间的场次开始；同一时刻保留根集合顺序。
+      const chronologicalOrder = compareTerraDateTime(left.dateTime, right.dateTime);
+      return collection === 'history' ? -chronologicalOrder : chronologicalOrder;
+    });
 }

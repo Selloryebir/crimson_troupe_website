@@ -42,7 +42,12 @@ const offerByZone = new Map(offers.map((offer) => [offer.zone, offer]));
               <li class="ticket-seating__level" data-seating-level={level.levelId}>
                 <p class="ticket-seating__level-label">{levelLabel}</p>
                 <div class="ticket-seating__diagram">
-                  <svg viewBox="0 0 640 240" aria-hidden="true" focusable="false">
+                  <svg
+                    viewBox="0 0 640 240"
+                    preserveAspectRatio="none"
+                    aria-hidden="true"
+                    focusable="false"
+                  >
                     {level.stage && (
                       <rect
                         class="ticket-seating__stage"

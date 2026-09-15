@@ -5,6 +5,14 @@ import { leithanienMessages } from './messages.ts';
 export const leithanienSite = {
   brand: { name: 'Crimson Troupe', latinName: 'CRIMSON TROUPE' },
   shared: {
+    archiveSnapshot: 'Momentaufnahme {date}',
+    archiveDamageDescription:
+      'Teile des Textes dieser Kopie sind unlesbar. Das erhaltene Verzeichnis reicht nicht aus, um die Ursache des Schadens festzustellen.',
+    archiveWarDamageDescription:
+      'Diese Kopie wurde im Archivknoten von Londinium aufbewahrt. Der Knoten wurde während der Kämpfe im Jahr 1098 beschädigt; der erhaltene Katalog reicht nicht aus, um die vollständige Seite wiederherzustellen. Die genauen Monate und Tage der Erfassung und der Beschädigung ließen sich nicht bestätigen.',
+    archivePreservation:
+      'Diese Seite wird anhand einer separat erhaltenen, unabhängigen Kopie dargestellt und ist nicht vom beschädigten Knoten in Londinium abhängig.',
+    archiveDamageClose: 'Zurück zum Verzeichnis',
     skipToContent: 'Zum Hauptinhalt springen',
     mainNavigation: 'Hauptnavigation',
     brandHome: 'Zuhause der Crimson Troupe',
@@ -18,7 +26,7 @@ export const leithanienSite = {
     chooseEdition: 'Aktuelle Ausgabe: {language}. Wählen Sie eine nationale Ausgabe',
     frontFooter: 'Führungen, Produktionen und Besucherdienste',
     archiveFooter: 'Sammlungsschnappschuss · {date}',
-    archiveCatalog: 'Sammlungsindex',
+    archiveCatalog: 'Historische Website-Stände',
     frontToArchive: 'Sammlungsdatensatz öffnen',
     archiveDamaged: 'Datensatz beschädigt; nicht verfügbar',
     archiveToFront: 'Zurück zur aktuellen Truppe-Website',
@@ -323,9 +331,11 @@ export const leithanienSite = {
       introduction:
         'Sehen Sie sich Sitzplatzaufteilungen und Registrierungspreise nach Leistung an. Die Einlassbestimmungen folgen den jeweiligen Tourausschreibungen.',
       registerEyebrow: 'Das Sitzbuch dieser Saison',
-      registerTitle: 'Wählen Sie eine Leistung und eine Division',
+      registerTitle: 'Vorstellungen und Sitzplatzbereiche',
       registerIntroduction:
-        'Die folgenden Divisionen folgen dem aktuellen Sitzbuch; Wählen Sie für jede Aufführung eine Abteilung.',
+        'Die Zonen und Preise aus dem Sitzplatzverzeichnis der Spielzeit stehen hier zur Einsicht.',
+      selectionUnavailable:
+        'Die Stelle für Platzauswahl und Registrierung antwortet nicht. Zonen und Preise bleiben einsehbar; Auswahl und Übermittlung sind nicht verfügbar.',
       zone: 'Sitzabteilung',
       empty: 'In dieser Saison sind keine Sitzplatzanmeldungen möglich.',
       settlementTitle: 'Sitzplatzregistrierung einreichen',

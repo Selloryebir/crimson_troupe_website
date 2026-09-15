@@ -86,6 +86,7 @@ const months = [...new Set(performances.map((item) => item.dateTime.month))];
                   title={leadProduction.title}
                   index={performance.index}
                   compact
+                  placement={variant === 'home-editorial' ? 'home-editorial' : 'default'}
                   priority={variant === 'catalog' && index === 0}
                 />
                 <span class="front-performance-card__copy">
@@ -98,7 +99,9 @@ const months = [...new Set(performances.map((item) => item.dateTime.month))];
                   <span>{performance.place}</span>
                   <small>{localization.site.front.performanceDetail[performance.status]}</small>
                   {performance.operationalNotice && (
-                    <small>{performance.operationalNotice.text}</small>
+                    <span class="front-performance-card__notice">
+                      {performance.operationalNotice.text}
+                    </span>
                   )}
                 </span>
               </a>
