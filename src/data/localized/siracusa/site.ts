@@ -257,7 +257,7 @@ export const siracusaSite = {
       noticeEyebrow: 'Avviso di tournée · N. 91',
       noticeTitle: 'Il registro delle tournée autunnali è completo',
       notice:
-        "Le date a Zwillingstürme, Londinium e Montelupe ora compaiono nel registro stagionale. Fare riferimento a ciascun avviso di esibizione per la data e l'orario di ammissione.",
+        "Le date a Zwillingstürme e Londinium ora compaiono nel registro stagionale. Fare riferimento a ciascun avviso di esibizione per la data e l'orario di ammissione.",
       registerEyebrow: 'REGISTRO STAGIONALE',
       seasonTitle: 'Questa stagione',
       fullRegister: 'Consulta il Registro Completo',

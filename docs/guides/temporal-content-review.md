@@ -2,6 +2,8 @@
 
 本指南用于依据已登记年鉴审查项目原创内容，不补写官方纪年，不参与运行时或自动排期。稳定内容边界由 BP-CNT-CORE 规定，网站固定时钟由 BP-MOD-TERRA-TIME 拥有。来源与分歧保留在 docs/research/terra-chronology 和 docs/sources/terra-chronology。
 
+变更后的主动触发、实际审查记录、演出信息替换与 AI 预览翻译按[演出创意审查与替换](creative-content-review.md)执行；本指南提供其中时间维度的判断方法。
+
 **一、保留精度与关系，而非补全日期。**
 
 | 原作时间表达                         | 候选范围或约束                                                                 | 不允许的推断                                                           |

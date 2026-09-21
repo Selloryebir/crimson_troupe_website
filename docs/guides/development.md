@@ -57,7 +57,7 @@ npm run quality -- --plan docs/blueprint/modules/search.md
 | `npm run quality:blueprint`                | 显式检查正式蓝图格式及追踪关系                           |
 | `npm run quality:code`                     | 显式检查全部 Astro/TypeScript、ESLint 与源码格式         |
 | `npm run quality:styles`                   | 显式检查全部 CSS                                         |
-| `npm run quality:full`                     | 执行一次蓝图、类型、代码、样式与全仓格式检查，不执行构建 |
+| `npm run quality:full`                     | 检查创意审查记录及触发测试，再执行完整静态检查；不构建   |
 | `npm run measure:performance`              | 对正在运行的本地站点执行限速、限频性能取样               |
 | `npm run build`                            | 只生成 `dist/`，不调用质量命令                           |
 | `npm run build:showcase`                   | 显式生成炎国未批准展示产物                               |
@@ -84,7 +84,7 @@ npm run quality -- --plan docs/blueprint/modules/search.md
 | `npm run format`                           | 格式化 Astro、TypeScript、配置和文档，不改手工组织的 CSS |
 | `npm run blueprint:check`                  | 检查蓝图 ID、依赖、路径和源码覆盖关系                    |
 
-`quality` 的最小调度规则如下：
+`quality` 每次先核对全局创意指纹（包括限定 CSS／文档路径及干净工作区）；无变化只做离线摘要比较。它再按以下规则调度其他检查：
 
 | 变更范围                       | 自动检查                                             |
 | ------------------------------ | ---------------------------------------------------- |
@@ -131,6 +131,8 @@ npm run blueprint:impact -- BP-MOD-SEARCH
 
 ## 扩展演出内容
 
+创意变化后，智能体主动执行[演出创意审查与替换](creative-content-review.md)，包括泰拉年鉴、官方设定、内部一致性、快照及 AI 预览翻译；无需再次请求审查授权。`npm run review:creative:plan` 输出待审范围及指纹；实际审查后执行 `npm run review:creative:record -- <报告.json>`。`quality`（任何限定路径）、`quality:full` 与 `verify` 均对完整输入自动检查记录；无变化只做离线比较，不重复 AI 审查。纯排版或等价重构须有明确的无创意变化判断，不能盲目更新指纹。`npm run test:creative-review`、`npm run test:quality` 与 `npm run test:content-lifecycle` 分别验证证据触发与显式消项、限定路径的全局检查、演出新增／撤选／删除边界，均已纳入完整质量门禁。
+
 剧目事实按来源位于 `src/data/productions/folio.ts` 与 `src/data/productions/original.ts`，并由 `src/data/productions/index.ts` 提供统一入口；场次和地点事实分别位于 `src/data/performances.ts` 与 `src/data/locations.ts`，面向访客的名称与正文位于 `src/data/localized/<editionId>/`。扩展内容时遵守 `BP-FND-DOMAIN`、`BP-I18N-CORE` 与 `BP-MOD-PROGRAMS`：
 
 1. 为剧目和场次分别使用稳定 ID，把日期、地点、场次状态、票务可用性、分区与基础价格保留在 `Performance`；
@@ -155,3 +157,11 @@ npm run blueprint:impact -- BP-MOD-SEARCH
 4. 检查受影响的生成 HTML、ID、锚点和本地资源；
 5. 视觉或交互发生变化时使用 `npm run preview`，按风险检查桌面、窄屏、控制台和相关用户流程；
 6. 达到完整门禁条件时，以一次 `npm run verify` 取代前述独立质量与构建命令，不重复相同步骤。
+
+## PR 自动检查
+
+`.github/workflows/quality.yml` 对目标为 `dev_code`、`dev`、`main` 的 PR、这些分支的 push 和手动触发执行 `verify` 作业：Node.js 24、锁定依赖安装、一次 `npm run verify`，再检查全部九版本 `validate:locales:preview`。PR 使用 GitHub 的合并候选与完整 Git 历史检出，通过 `CREATIVE_REVIEW_BASE_REF` 指定该 PR 的目标提交；同时核对目标记录到候选记录的发现闭环，防止直接编辑 JSON 静默清空旧问题。目标分支更新导致指纹变化时，应在工作分支正常同步并实际补审，不在 CI 中自动生成通过记录。工作流仅有 `contents: read`，不调用 AI、不使用发布凭据、不部署，也不定时抓取官方资料。行为依据见 [GitHub PR 事件说明](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#pull_request)。
+
+要由平台强制阻止失败合并，仓库管理者还须将该工作流的 `verify` 检查设为目标分支必需检查，并要求与目标分支保持最新；工作流文件本身不设置远端保护规则。该规则配置与真实 Git 晋级仍遵守人工授权边界。
+
+准备 PR 时，在本地将 `CREATIVE_REVIEW_BASE_REF` 设为实际目标提交或已更新的远端跟踪引用，并运行 `review:creative:plan`、实际补审、`review:creative:record` 和最终门禁。例如 `CREATIVE_REVIEW_BASE_REF=origin/dev_code npm run review:creative`。若目标分支尚未接入记录，允许建立首轮基线；已有记录则不能在候选中省略旧发现而不提供消项证据。多轮本地审查须保留针对目标记录仍然需要的消项说明，直到该目标已接收更改。

@@ -1,0 +1,40 @@
+name: Quality
+
+on:
+  pull_request:
+    branches: [dev_code, dev, main]
+  push:
+    branches: [dev_code, dev, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: verify
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      CREATIVE_REVIEW_BASE_REF: ${{ github.event.pull_request.base.sha || '' }}
+    steps:
+      - name: Checkout integration candidate
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Verify reviewed content and build
+        run: npm run verify
+      - name: Validate all preview translations
+        run: npm run validate:locales:preview

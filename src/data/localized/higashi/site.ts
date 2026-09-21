@@ -234,7 +234,7 @@ export const higashiSite = {
       noticeEyebrow: '巡演告示・第九十一号',
       noticeTitle: '秋季巡演名簿の清書が完了しました',
       notice:
-        'ツヴィリングシュトゥルメ、ロンディニウム、モンテルーペの公演を今季名簿に記載しました。日時は各公演の告示をご確認ください。',
+        'ツヴィリングシュトゥルメとロンディニウムの公演を今季名簿に記載しました。日時は各公演の告示をご確認ください。',
       registerEyebrow: 'SEASONAL REGISTER',
       seasonTitle: '今季の公演',
       fullRegister: '全名簿を見る',

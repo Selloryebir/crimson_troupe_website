@@ -166,7 +166,7 @@ function isContentSource(repositoryPath) {
   return (
     repositoryPath === 'scripts/validate-content.mjs' ||
     /^src\/data\/(?:content|localized|productions)\//u.test(repositoryPath) ||
-    /^src\/data\/(?:locations|performances|production-artwork-manifest|production-artworks)\.ts$/u.test(
+    /^src\/data\/(?:locations|performances|archive-snapshots|site-time|performance-offers|ticket-seating-plans|production-artwork-manifest|production-artworks)\.ts$/u.test(
       repositoryPath,
     ) ||
     repositoryPath.startsWith('src/assets/images/productions/')
@@ -190,7 +190,9 @@ function isStateSource(repositoryPath) {
     /^src\/scripts\/(?:pollution-state|ticketing-state|ticket-artifact)\.ts$/u.test(
       repositoryPath,
     ) ||
-    /^src\/data\/(?:site-time|ticketing|ticket-seating-plans)\.ts$/u.test(repositoryPath)
+    /^src\/data\/(?:site-time|archive-snapshots|performance-offers|ticketing|ticket-seating-plans)\.ts$/u.test(
+      repositoryPath,
+    )
   );
 }
 
@@ -208,6 +210,11 @@ function isToolchain(repositoryPath) {
     repositoryPath === '.prettierignore' ||
     /^(?:eslint|prettier|stylelint)\.config\.[cm]?[jt]s$/u.test(repositoryPath) ||
     repositoryPath === 'scripts/quality.mjs' ||
+    repositoryPath === 'scripts/creative-review.mjs' ||
+    repositoryPath === 'scripts/creative-review.test.mjs' ||
+    repositoryPath === 'scripts/quality.test.mjs' ||
+    repositoryPath === 'scripts/content-lifecycle.test.mjs' ||
+    repositoryPath.startsWith('scripts/fixtures/content-') ||
     repositoryPath === 'scripts/blueprint.mjs' ||
     repositoryPath === 'scripts/validate-build.mjs' ||
     repositoryPath === 'scripts/validate-browser.mjs' ||
@@ -277,6 +284,14 @@ function buildPlan(changeSet) {
     });
     return { paths, tasks };
   }
+
+  tasks.push({
+    id: 'creative-review',
+    reason: '先核对全局创意指纹，避免限定路径漏掉已提交的未审内容；无变化直接复用',
+    command: commandText('review:creative'),
+    script: 'review:creative',
+    files: [],
+  });
 
   if (hasBlueprintChanges || hasStructuralSourceChanges) {
     tasks.push({
@@ -415,9 +430,12 @@ const changeSet =
   pathArguments.length > 0 ? collectExplicitPaths(pathArguments, discovered) : discovered;
 
 if (changeSet.paths.size === 0) {
-  console.log(
-    'quality: 未发现工作区变更；没有需要执行的日常检查。完整门禁请显式运行 npm run verify。',
-  );
+  console.log('quality: 未发现工作区变更；仍核对创意审查指纹，避免已提交或切换分支后的内容漏审。');
+  if (planOnly) {
+    console.log('npm run review:creative');
+  } else {
+    run(npmCommand, ['run', '--silent', 'review:creative']);
+  }
   process.exit(0);
 }
 

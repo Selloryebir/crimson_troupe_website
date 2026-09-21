@@ -7,6 +7,10 @@ import { buildEditionIds, buildProfile, editions } from '../src/data/editions.ts
 import { formatTerraDateTime, formatTicketTerraDateTime } from '../src/data/localized/format.ts';
 import { getLocalization, getLocalizedPerformanceEntries } from '../src/data/localized/resolve.ts';
 import { ticketSeatingPlans } from '../src/data/ticket-seating-plans.ts';
+import {
+  assertSeatingPlanRegistry,
+  assertTicketingCapabilities,
+} from './fixtures/content-lifecycle-assertions.mjs';
 
 const { editions: builtEditions, locations, performances, productions } = buildSnapshot;
 
@@ -165,30 +169,6 @@ function assertTranslationStructure(source, target, path) {
 
 const sourceLocalization = getLocalization(editions.yan);
 
-// 演出服务的语种是稳定事实，不得随网站显示语言改为当地语言。
-const yaneseLanguagePatterns = {
-  yan: /炎语|中文|中维/u,
-  victoria: /Yanese/u,
-  columbia: /Yanese/u,
-  higashi: /炎語/u,
-  ursus: /янском/u,
-  siracusa: /yanese/u,
-  minos: /Yanese/u,
-  leithanien: /yanesisch/iu,
-  kazimierz: /yanese/u,
-};
-const yaneseServiceProductions = [
-  'uncrowned',
-  'caged-fire',
-  'der-ring',
-  'one-hundred-and-one-days',
-  'ode-au-triomphe',
-  'lone-wander',
-  'wonderland-in-dream',
-  'frost-deer-and-snow-doe',
-  'light-of-heria',
-];
-
 assert.equal(Object.keys(editions).length, 9, '国家版本注册应包含当前九个实体');
 assert.equal(new Set(Object.values(editions).map((edition) => edition.routePrefix)).size, 9);
 assert.equal(new Set(Object.values(editions).map((edition) => edition.badgeCode)).size, 9);
@@ -214,53 +194,10 @@ assert.ok(
   ),
   '1084 里站只能引用活页剧目',
 );
-const archiveCompletedPerformances = archivePerformances.filter(
-  (performance) => performance.status === 'completed',
-);
-const archiveScheduledPerformances = archivePerformances.filter(
-  (performance) => performance.status === 'scheduled',
-);
-assert.ok(archiveCompletedPerformances.length > 0, '1084 里站应保留同期历史场次');
-assert.ok(archiveScheduledPerformances.length > 0, '1084 里站应保留同期本季场次');
-assert.ok(
-  archiveCompletedPerformances.every(
-    (performance) => performance.ticketAvailability.state === 'not-on-sale',
-  ),
-  '1084 已闭幕场次不得保持开放登记',
-);
-const archiveOpenRegistrationPerformances = archiveScheduledPerformances.filter(
-  (performance) => performance.ticketAvailability.state === 'on-sale',
-);
-const archiveStaticScheduledPerformances = archiveScheduledPerformances.filter(
-  (performance) => performance.ticketAvailability.state === 'not-on-sale',
-);
-assert.ok(archiveOpenRegistrationPerformances.length > 0, '1084 里站应保留开放登记样本');
-assert.ok(archiveStaticScheduledPerformances.length > 0, '1084 里站应保留静态待演样本');
-for (const performanceId of ['light-of-heria-trimount-1085-0530']) {
-  assert.equal(
-    performances[performanceId].ticketAvailability.state,
-    'not-on-sale',
-    `${performanceId} 是静态待演样本，不应进入登记流程`,
-  );
-}
-for (const performance of archiveOpenRegistrationPerformances) {
-  assert.equal(
-    performance.ticketAvailability.seatingPlanId,
-    undefined,
-    `${performance.performanceId} 不应为静态登记虚构表站场馆图`,
-  );
-  assert.ok(performance.ticketAvailability.offers.length > 0);
-  assert.equal(
-    new Set(performance.ticketAvailability.offers.map(({ zone }) => zone)).size,
-    performance.ticketAvailability.offers.length,
-    `${performance.performanceId} 的登记分区重复`,
-  );
-}
 const frontTicketingPerformances = Object.values(performances).filter(
   (performance) =>
     performance.world === 'front' && performance.ticketAvailability.state === 'on-sale',
 );
-assert.ok(frontTicketingPerformances.length > 0, '表站当前快照没有可售场次');
 assert.deepEqual(
   new Set(frontTicketingPerformances.map(({ performanceId }) => performanceId)),
   new Set(
@@ -275,91 +212,23 @@ assert.deepEqual(
   ),
   '票务候选从场次资格派生，不以首页策展作为第二份开票清单',
 );
-for (const performance of frontTicketingPerformances) {
-  const { seatingPlanId, offers } = performance.ticketAvailability;
-  assert.ok(seatingPlanId, `${performance.performanceId} 缺少表站分区示意`);
-  const plan = ticketSeatingPlans[seatingPlanId];
-  const levelIds = plan.levels.map(({ levelId }) => levelId);
-  const regions = plan.levels.flatMap(({ regions: levelRegions }) => levelRegions);
-  const regionIds = regions.map(({ regionId }) => regionId);
-  const planZones = [...new Set(regions.map(({ zone }) => zone))].sort();
-  const offerZones = offers.map(({ zone }) => zone).sort();
-  assert.equal(new Set(levelIds).size, levelIds.length, `${seatingPlanId} 的楼层身份重复`);
-  assert.equal(new Set(regionIds).size, regionIds.length, `${seatingPlanId} 的空间区域身份重复`);
-  assert.deepEqual(planZones, offerZones, `${performance.performanceId} 的示意分区与报价不一致`);
-  assert.equal(
-    new Set(offers.map(({ basePrice }) => basePrice)).size,
-    offers.length,
-    `${performance.performanceId} 的候选分区价格应逐级区分`,
-  );
-}
-
-const frontOfferByPerformance = Object.fromEntries(
-  frontTicketingPerformances.map((performance) => [
-    performance.performanceId,
-    performance.ticketAvailability.offers,
-  ]),
-);
-const trimountOffers = frontOfferByPerformance['uncrowned-trimount-1102'];
-const wiesheimOffers = frontOfferByPerformance['caged-fire-wiesheim-1102'];
-const norportOffers = frontOfferByPerformance['second-snow-norport-1102'];
-assert.deepEqual(
-  norportOffers.map(({ zone }) => zone),
-  ['C', 'B', 'A'],
-  '诺伯特郡临时舞台只能提供 C / B / A',
-);
-assert.notDeepEqual(trimountOffers, wiesheimOffers, '两座正式剧院不得复用同一候选报价');
-for (const zone of ['C', 'B', 'A']) {
-  const norportPrice = norportOffers.find((offer) => offer.zone === zone)?.basePrice;
-  const formalPrices = [trimountOffers, wiesheimOffers].map(
-    (offers) => offers.find((offer) => offer.zone === zone)?.basePrice,
-  );
-  assert.ok(
-    formalPrices.every((price) => price !== undefined && norportPrice < price),
-    `诺伯特郡 ${zone} 区应低于两座正式剧院`,
-  );
-}
-const seatingPlanExpectations = {
-  'volsinii-courtyard': { levels: 1, zones: ['C', 'B', 'A'] },
-  'nuova-volsinii-civic': { levels: 2, zones: ['C', 'B', 'A', 'S', 'BOX'] },
-  'trimount-grand-fan': { levels: 3, zones: ['C', 'B', 'A', 'S', 'BOX'] },
-  'wiesheim-mirror-horseshoe': { levels: 3, zones: ['C', 'B', 'A', 'S', 'BOX'] },
-  'norport-temporary-stand': { levels: 1, zones: ['C', 'B', 'A'] },
-  'montelupe-banquet-horseshoe': { levels: 2, zones: ['C', 'B', 'A', 'S', 'BOX'] },
-  'linqu-courtyard-fan': { levels: 1, zones: ['C', 'B', 'A', 'S'] },
-  'londinium-grand-tiers': { levels: 3, zones: ['C', 'B', 'A', 'S', 'BOX'] },
-  'qingsui-opera-courtyard': { levels: 3, zones: ['C', 'B', 'A', 'S'] },
-};
-assert.equal(
-  Object.keys(ticketSeatingPlans).length,
-  Object.keys(seatingPlanExpectations).length,
-  '每张已注册分区示意都必须拥有结构预期',
-);
-for (const [seatingPlanId, expectation] of Object.entries(seatingPlanExpectations)) {
-  const plan = ticketSeatingPlans[seatingPlanId];
-  assert.ok(plan, `${seatingPlanId} 缺少分区示意`);
-  assert.equal(plan.levels.length, expectation.levels, `${seatingPlanId} 的楼层数量不符`);
-  const actualZones = [
-    ...new Set(plan.levels.flatMap(({ regions }) => regions.map(({ zone }) => zone))),
-  ].sort();
-  assert.deepEqual(
-    actualZones,
-    [...expectation.zones].sort(),
-    `${seatingPlanId} 的可见分区集合不符`,
-  );
-}
+assertTicketingCapabilities(performances, ticketSeatingPlans);
+assertSeatingPlanRegistry(ticketSeatingPlans, sourceLocalization.programs.ticketZones);
 
 for (const edition of builtEditions) {
   const localization = getLocalization(edition);
   const localizedEntries = getLocalizedPerformanceEntries(localization);
-  const oldCity = localization.programs.locations.volsinii;
-  assert.ok(oldCity.archiveCityLabel, `${edition.editionId} 缺少沃尔西尼时代名`);
-  for (const [, performance] of localizedEntries.filter(
-    ([, entry]) => entry.locationId === 'volsinii',
-  )) {
+  for (const [, performance] of localizedEntries) {
+    const location = localization.programs.locations[performance.locationId];
+    assert.ok(location, `${edition.editionId}.${performance.locationId} 缺少地点内容`);
+    const expectedCityLabel =
+      performance.world === 'archive' && location.archiveCityLabel
+        ? location.archiveCityLabel
+        : location.cityLabel;
     assert.equal(
       performance.cityLabel,
-      performance.world === 'archive' ? oldCity.archiveCityLabel : oldCity.cityLabel,
+      expectedCityLabel,
+      `${edition.editionId}.${performance.performanceId} 使用错误时代地点名`,
     );
   }
   assert.ok(
@@ -368,16 +237,6 @@ for (const edition of builtEditions) {
     ),
     '1084不得采用新沃尔西尼',
   );
-  const oldVenue = localization.programs.performances['volsinii-courtyard-1102'].venue;
-  const newVenue = localization.programs.performances['nuova-volsinii-civic-1102'].venue;
-  assert.notEqual(oldVenue, newVenue, `${edition.editionId} 新旧城剧场不得混用`);
-  for (const id of yaneseServiceProductions) {
-    assert.match(
-      localization.programs.productions[id].language,
-      yaneseLanguagePatterns[edition.editionId],
-      `${edition.editionId}.${id} 不得改变字幕或场序单的炎语语种`,
-    );
-  }
   for (const group of ['site', 'programs', 'messages', 'archiveProjection', 'platforms']) {
     assertTranslationStructure(
       sourceLocalization[group],
