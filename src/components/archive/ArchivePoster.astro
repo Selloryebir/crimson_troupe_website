@@ -51,7 +51,7 @@ const sizes =
       : compact
         ? '(max-width: 620px) calc(100vw - 28px), (max-width: 960px) 160px, 180px'
         : '(max-width: 620px) calc(100vw - 48px), (max-width: 960px) min(590px, calc(100vw - 36px)), 590px';
-const quality = isHomepage ? 95 : undefined;
+const quality = isHomepage ? 90 : undefined;
 // 回退 src 也按展示职责输出；高 DPR 仍由原有 srcset 选择，不生成无用途的全尺寸回退。
 const imageOptions = {
   widths,
