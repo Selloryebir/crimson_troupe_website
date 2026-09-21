@@ -57,19 +57,16 @@ export function getSiteTerraNow(
   return resolveFixedSiteTime(world);
 }
 
-function terraDateTimeKey(value: TerraDateTime): string {
-  return [
-    String(value.year).padStart(6, '0'),
-    String(value.month).padStart(2, '0'),
-    String(value.day).padStart(2, '0'),
-    value.time,
-  ].join('-');
-}
-
 export function compareTerraDateTime(left: TerraDateTime, right: TerraDateTime): number {
   assertTerraDateTime(left, 'left TerraDateTime');
   assertTerraDateTime(right, 'right TerraDateTime');
-  return terraDateTimeKey(left).localeCompare(terraDateTimeKey(right), 'en');
+  for (const field of ['year', 'month', 'day'] as const) {
+    const difference = left[field] - right[field];
+    if (difference !== 0) {
+      return Math.sign(difference);
+    }
+  }
+  return left.time < right.time ? -1 : left.time > right.time ? 1 : 0;
 }
 
 export interface TerraDateTimeWindow {
