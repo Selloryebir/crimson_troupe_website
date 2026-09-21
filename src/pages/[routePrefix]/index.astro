@@ -52,7 +52,7 @@ const featuredProduction = featuredPerformance
   <section class="front-hero page-width" aria-labelledby="home-title">
     <div class="hero-copy">
       <div class="hero-season">
-        <TroupeMark class="hero-season__mark" size="home" variant="metallic" />
+        <TroupeMark class="hero-season__mark" role="front-hero" variant="metallic" />
         <p class="eyebrow">{copy.seasonLabel}</p>
       </div>
       <h1 id="home-title">{copy.titleLead}<br /><em>{copy.titleEmphasis}</em></h1>
@@ -80,6 +80,7 @@ const featuredProduction = featuredPerformance
             visual={featuredProduction.visual}
             title={featuredProduction.title}
             index="CURRENT / 01"
+            priority
           />
           <span>
             <small>{featuredPerformance.dateTime.display}</small>
@@ -128,7 +129,7 @@ const featuredProduction = featuredPerformance
     </div>
   </section>
   <section class="troupe-callout page-width" aria-labelledby="troupe-callout-title">
-    <TroupeMark class="troupe-callout__mark" size="home" variant="metallic" loading="lazy" />
+    <TroupeMark class="troupe-callout__mark" role="callout" variant="metallic" loading="lazy" />
     <p class="eyebrow">{copy.troupeEyebrow}</p>
     <h2 id="troupe-callout-title">{copy.troupeTitle}</h2>
     <p>{copy.troupeLead}</p>

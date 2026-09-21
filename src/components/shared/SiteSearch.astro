@@ -41,8 +41,21 @@ const {
   data-pollution-slot={world === 'archive' ? 'search' : undefined}
 >
   <div class="search-noscript" data-search-fallback role="status">
-    <h2>{messages.noscriptTitle}</h2>
-    <p>{messages.unavailable}</p>
+    <div data-search-unavailable>
+      <h2>{messages.label}</h2>
+      <p>{messages.unavailable}</p>
+    </div>
+    <noscript>
+      <style is:inline>
+        [data-search-fallback] > [data-search-unavailable] {
+          display: none;
+        }
+      </style>
+      <div data-search-noscript>
+        <h2>{messages.noscriptTitle}</h2>
+        <p>{messages.noscriptCopy}</p>
+      </div>
+    </noscript>
   </div>
   <div data-search-enhanced hidden>
     <form class="search-form" action="" method="get" role="search" data-search-form>

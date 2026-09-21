@@ -24,6 +24,8 @@ npm run dev
 
 九版本 preview 构建后的默认浏览器冒烟为 `npm run validate:browser:preview`（Chromium）；需要品牌与跨引擎复核时，继续运行带 `:chrome`、`:firefox`、`:webkit` 与 `:edge` 后缀的同名命令。Playwright WebKit 是 Safari 的前置兼容代理，不等于真实 macOS Safari 验收。安装方式、品牌浏览器可执行文件覆盖和跨引擎性能取样参数见 [`docs/guides/development.md`](docs/guides/development.md)。
 
+性能改动使用 `npm run measure:performance` 对同一静态预览取样，记录视口、DPR、网络、CPU与重复次数，并区分初始和滚动后的传输。受控 Wi-Fi、移动网络和多语言代表场景的参数及指标边界见 [`docs/guides/development.md`](docs/guides/development.md)。
+
 演出创意新增、修改或删除后，智能体主动进行年鉴、设定、自洽性和多语言审查，不需逐次请求授权。`npm run review:creative:plan` 定位变化，`quality`（包括限定路径）／`verify` 检查全局输入对应的当前记录；内容与依据未变时直接复用。AI 译文用于预览，等待人工考据替换。替换入口、表里站与未来快照边界见[演出创意审查与替换](docs/guides/creative-content-review.md)，当前发现见[审查研究入口](docs/research/creative-content-review/README.md)。
 
 开发服务器或热更新相关变更另运行 `npm run validate:dev:hmr`：该命令同时检查服务端日志、浏览器 HMR 消息与页面响应，不以静态预览成功代替热更新正常。依赖更新后应重启已有开发服务器，避免旧进程继续使用旧模块；排障步骤见开发指南。

@@ -27,7 +27,11 @@ import {
   getLocalizedPerformances,
 } from '../src/data/localized/resolve.ts';
 import { assertPerformanceOfferMatrix } from '../src/data/performance-offers.ts';
-import { formatTerraDate } from '../src/data/localized/format.ts';
+import {
+  formatTerraDate,
+  formatTerraDateTime,
+  formatTicketTerraDateTime,
+} from '../src/data/localized/format.ts';
 import { productions } from '../src/data/productions/index.ts';
 import { getMinimumSearchGraphemes } from '../src/data/search-policy.ts';
 import { getFrontSearchIndex, getSiteSearchScope } from '../src/data/site-search-index.ts';
@@ -731,6 +735,110 @@ for (const invalidDateTime of [
 ]) {
   assert.throws(() => assertTerraDateTime(invalidDateTime), /不是有效的泰拉时间结构/u);
   assert.throws(() => compareTerraDateTime(invalidDateTime, frontNow), /不是有效的泰拉时间结构/u);
+}
+assert.equal(
+  compareTerraDateTime({ ...frontNow, year: -1 }, { ...frontNow, year: 0 }),
+  -1,
+  '负年份必须按数值排在零年之前',
+);
+assert.equal(
+  compareTerraDateTime({ ...frontNow, year: 999_999 }, { ...frontNow, year: 1_000_000 }),
+  -1,
+  '超过六位的年份必须保持数值顺序',
+);
+const terraFebruary31 = {
+  calendar: 'terra',
+  year: 1102,
+  month: 2,
+  day: 31,
+  time: '19:30',
+};
+const terraYearZero = { ...terraFebruary31, year: 0 };
+const currentFormattingSnapshot = {
+  yan: ['1102年9月17日', '1102 · 09/17 · 19:30', '1102年9月17日 19:30'],
+  victoria: ['17 September 1102', '1102 · 17/09 · 19:30', '17 September 1102 at 19:30'],
+  ursus: ['17 сентября 1102 г.', '1102 · 17.09 · 19:30', '17 сентября 1102 г. в 19:30'],
+  siracusa: ['17 settembre 1102', '1102 · 17/09 · 19:30', '17 settembre 1102 alle ore 19:30'],
+  minos: ['17 Σεπτεμβρίου 1102', '1102 · 17/09 · 07:30 μ.μ.', '17 Σεπτεμβρίου 1102 στις 7:30 μ.μ.'],
+  leithanien: ['17. September 1102', '1102 · 17.09. · 19:30', '17. September 1102 um 19:30'],
+  kazimierz: ['17 września 1102', '1102 · 17.09 · 19:30', '17 września 1102 19:30'],
+  higashi: ['1102年9月17日', '1102 · 09/17 · 19:30', '1102年9月17日 19:30'],
+  columbia: ['September 17, 1102', '1102 · 09/17 · 07:30 PM', 'September 17, 1102 at 7:30 PM'],
+};
+const currentFormattingValue = {
+  calendar: 'terra',
+  year: 1102,
+  month: 9,
+  day: 17,
+  time: '19:30',
+};
+const edgeCaseFormattingSnapshot = {
+  yan: [
+    ['1102年2月31日', '1102 · 02/31 · 19:30', '1102年2月31日 19:30'],
+    ['0年2月31日', '0 · 02/31 · 19:30', '0年2月31日 19:30'],
+  ],
+  victoria: [
+    ['31 February 1102', '1102 · 31/02 · 19:30', '31 February 1102 at 19:30'],
+    ['31 February 0', '0 · 31/02 · 19:30', '31 February 0 at 19:30'],
+  ],
+  ursus: [
+    ['31 февраля 1102 г.', '1102 · 31.02 · 19:30', '31 февраля 1102 г. в 19:30'],
+    ['31 февраля 0 г.', '0 · 31.02 · 19:30', '31 февраля 0 г. в 19:30'],
+  ],
+  siracusa: [
+    ['31 febbraio 1102', '1102 · 31/02 · 19:30', '31 febbraio 1102 alle ore 19:30'],
+    ['31 febbraio 0', '0 · 31/02 · 19:30', '31 febbraio 0 alle ore 19:30'],
+  ],
+  minos: [
+    ['31 Φεβρουαρίου 1102', '1102 · 31/02 · 07:30 μ.μ.', '31 Φεβρουαρίου 1102 στις 7:30 μ.μ.'],
+    ['31 Φεβρουαρίου 0', '0 · 31/02 · 07:30 μ.μ.', '31 Φεβρουαρίου 0 στις 7:30 μ.μ.'],
+  ],
+  leithanien: [
+    ['31. Februar 1102', '1102 · 31.02. · 19:30', '31. Februar 1102 um 19:30'],
+    ['31. Februar 0', '0 · 31.02. · 19:30', '31. Februar 0 um 19:30'],
+  ],
+  kazimierz: [
+    ['31 lutego 1102', '1102 · 31.02 · 19:30', '31 lutego 1102 19:30'],
+    ['31 lutego 0', '0 · 31.02 · 19:30', '31 lutego 0 19:30'],
+  ],
+  higashi: [
+    ['1102年2月31日', '1102 · 02/31 · 19:30', '1102年2月31日 19:30'],
+    ['0年2月31日', '0 · 02/31 · 19:30', '0年2月31日 19:30'],
+  ],
+  columbia: [
+    ['February 31, 1102', '1102 · 02/31 · 07:30 PM', 'February 31, 1102 at 7:30 PM'],
+    ['February 31, 0', '0 · 02/31 · 07:30 PM', 'February 31, 0 at 7:30 PM'],
+  ],
+};
+for (const editionId of previewEditionIds) {
+  const { locale } = editions[editionId];
+  assert.deepEqual(
+    [
+      formatTerraDate(currentFormattingValue, locale),
+      formatTerraDateTime(currentFormattingValue, locale),
+      formatTicketTerraDateTime(currentFormattingValue, locale),
+    ],
+    currentFormattingSnapshot[editionId],
+    `${editionId} 现有泰拉日期输出必须保持不变`,
+  );
+  assert.deepEqual(
+    [
+      formatTerraDate(terraFebruary31, locale),
+      formatTerraDateTime(terraFebruary31, locale),
+      formatTicketTerraDateTime(terraFebruary31, locale),
+    ],
+    edgeCaseFormattingSnapshot[editionId][0],
+    `${editionId} 必须保留泰拉二月第 31 日`,
+  );
+  assert.deepEqual(
+    [
+      formatTerraDate(terraYearZero, locale),
+      formatTerraDateTime(terraYearZero, locale),
+      formatTicketTerraDateTime(terraYearZero, locale),
+    ],
+    edgeCaseFormattingSnapshot[editionId][1],
+    `${editionId} 必须保留泰拉零年`,
+  );
 }
 assert.equal(derivePerformanceCollection(frontNow, frontNow), 'current');
 assert.equal(derivePerformanceCollection({ ...frontNow, day: 14 }, frontNow), 'history');

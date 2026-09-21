@@ -106,6 +106,8 @@ Astro 只负责构建期组件化和静态生成；客户端默认使用原生 T
 - 工具链或质量配置变更、正式蓝图与运行时实现同时变更、运行时跨层集成、准备合并或发布、进入正式候选阶段：只运行一次 `npm run verify`。它依次执行完整质量、关键状态、一次构建和静态产物门禁，不得在同一轮前后重复运行这些子命令。
 - 创意内容及审查依据变更：`quality` 每次先执行全局 `review:creative`，限定 CSS／文档路径和干净工作区也不能跳过；完整质量与 `verify` 也检查当前审查记录。未变化只做离线指纹比对，过期由智能体主动补审；`test:creative-review`、`test:quality`、`test:content-lifecycle` 验证证据触发、显式消项、调度和演出增删边界，不代替语义判断。
 
+性能优化通过现有 `npm run measure:performance` 保留同条件前后样本，记录视口/DPR、网络、CPU、重复次数及图像就绪状态，并区分初始与滚动后传输；参数和指标边界统一见 `docs/guides/development.md`。本地限速、移动视口与 Playwright WebKit 不构成真实网络、实体手机或 macOS Safari 验收。
+
 `npm run quality -- --plan <路径...>` 只显示检查计划，可用于确认没有无关全局检查。`quality:docs`、`quality:blueprint`、`quality:code`、`quality:styles` 和 `quality:full` 是需要显式扩大范围时使用的责任命令；日常检查不默认调用它们的合集。
 
 构建后仅在运行时输出或用户体验可能变化时使用 `npm run preview -- --host 0.0.0.0`。视觉改动至少检查一个桌面视口和一个不大于 500px 的窄屏视口；交互改动按范围验证相关流程和可靠退出；无障碍改动验证键盘焦点、ARIA 状态与减少动态效果。纯文档任务不启动预览。

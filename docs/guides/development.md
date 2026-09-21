@@ -101,7 +101,29 @@ Astro/TypeScript 类型关系可能跨文件，因此代码变更仍使用项目
 
 浏览器冒烟命令不自行构建，也不生成截图或报告；应在一次 preview 构建及产物检查后运行。首次使用 Playwright 的环境可执行 `npx playwright install --with-deps chromium chrome firefox webkit msedge` 安装所需驱动与系统依赖。Chrome 与 Edge 默认使用系统品牌通道，也可分别用 `BROWSER_CHROME_EXECUTABLE_PATH` 与 `BROWSER_EDGE_EXECUTABLE_PATH` 指向已确认的稳定版可执行文件。五个命令复用同一组五项选择器、日/希/俄长文本、320px 票务与里站、搜索隔离、跨国家版本状态、下载与打印、三级污染与退出、减少动态效果、无脚本和搜索初始化失败等代表任务，不替代人工视觉验收。Playwright WebKit 可尽早发现 WebKit 问题，但不等于真实 macOS Safari；平台相关正式结论仍需在 Safari 当前稳定版复核。
 
-`measure:performance` 默认对 `http://127.0.0.1:4321` 的代表性表站、里站与污染 `0—3` 场景各取样五次，使用 Chromium 模拟四倍 CPU 限速、1.6 Mbps 下行与 150 ms RTT，并输出中位数、P95、滚动帧间隔、功能支持和原始样本 JSON。可用 `PERF_BASE_URL` 指向静态预览，以 `PERF_RUNS`、`PERF_CPU_RATE`、`PERF_FRAME_COUNT`、`PERF_NETWORK_PROFILE=mobile4g|none` 和逗号分隔的 `PERF_SCENARIOS` 控制复测；`PERF_BROWSERS=chromium,chrome,firefox,webkit,edge` 选择引擎，Chrome 与 Edge 路径可分别由 `PERF_CHROME_EXECUTABLE_PATH` 和 `PERF_EDGE_EXECUTABLE_PATH` 指定。跨引擎比较必须使用 `PERF_CPU_RATE=1 PERF_NETWORK_PROFILE=none`，因为 CDP 限频、限速与渲染指标只适用于 Chromium 系。该脚本提供版本间相对证据，不替代真实设备和 Safari 验收。
+`measure:performance` 对正在运行的静态预览取样，标准输出是含原始样本、中位数和样本 P95 的 JSON，标准错误显示场景进度。默认 `PERF_BASE_URL=http://127.0.0.1:4321`、每场景五次、Chromium 四倍 CPU 限速；桌面为 1440×900 / DPR1，移动视口为 390×844 / DPR2。它不是实体手机模拟或线上 Web Vitals，也不以滚动帧间隔代替 INP。
+
+使用 `PERF_RUNS`、`PERF_CPU_RATE`、`PERF_FRAME_COUNT` 和逗号分隔的 `PERF_SCENARIOS` 缩小复测；未知场景会报错，避免拼写错误导致漏测。默认场景覆盖炎国双站、票务和污染 0—3。可用 `PERF_SCENARIOS=higashi-front-mobile,minos-tickets-mobile,ursus-archive-mobile` 显式选择多语言代表；这些非炎语场景须先构建 `preview`。网络由 `PERF_NETWORK_PROFILE` 选择，仅 Chromium 系可限速：
+
+| 值                 | 延迟   | 下行 / 上行              | 用途                     |
+| ------------------ | ------ | ------------------------ | ------------------------ |
+| `mobile4g`（默认） | 150ms  | 1.6 / 0.75 Mbps，均取90% | 保留已有受控移动网络基线 |
+| `mobile3g`         | 400ms  | 0.4 / 0.4 Mbps，均取90%  | 较弱移动连接             |
+| `wifi`             | 20ms   | 40 / 10 Mbps             | 受控高速无线连接         |
+| `none`             | 不模拟 | 不模拟                   | 引擎间功能与渲染比较     |
+
+例如，对同一构建的两个首页在移动网络下取三次样本：
+
+```bash
+mkdir -p .agent-work
+PERF_BASE_URL=http://127.0.0.1:4321 PERF_RUNS=3 PERF_SCENARIOS=front-home-mobile,archive-home-l2-mobile npm run --silent measure:performance > .agent-work/performance.json
+```
+
+`pageTransfer` 包含导航 HTML 和初始采样时已经完成的子资源，`resourceTransfer` 只含子资源；固定滚动后的传输另记为 `scrollPageTransfer`，并报告资源是否已静止。Resource Timing 不保证包含被中止图片已传输的字节，因此保留 `imageRequestAborts`，不能把它解释成总线字节精确计数。图片被替换导致的中止与其他网络失败、HTTP错误和页面异常分别报告；后几项、首屏图像等待超时、目标污染等级未生效或滚动后资源未静止会让命令返回非零退出码，但仍输出诊断 JSON。滚动后最多等待60秒，超时的 `scrollPageTransfer` 输出 `null` 并从统计中排除。
+
+`stateApplied` 是首次观测到目标污染等级的时间上界，`stateSettleDuration` 是之后两个动画帧的间隔，不代表图像已经显示。首屏图像先确认已载入且与污染等级一致，再进行初始采样；`viewportImagesReadyAt` 是 `load` 后的就绪确认上界，不是新增的 Web Vital。CLS 按[最大会话窗口](https://web.dev/articles/cls)统计（相邻位移间隔少于1秒，窗口不超过5秒），只描述本次采样区间；不支持的指标输出 `null`。前后比较必须使用相同脚本、浏览器、构建预设、视口/DPR、网络、CPU与样本数，不用单次最快值代表改进。
+
+`PERF_BROWSERS=chromium,chrome,firefox,webkit,edge` 选择引擎；Chrome 与 Edge 路径分别由 `PERF_CHROME_EXECUTABLE_PATH` 和 `PERF_EDGE_EXECUTABLE_PATH` 指定。跨引擎比较使用 `PERF_CPU_RATE=1 PERF_NETWORK_PROFILE=none`，因为 Firefox/WebKit 没有相同的 CDP 限速与渲染指标。Playwright WebKit 不替代真实 Safari；缓存、CDN压缩和真实设备体验须在对应部署环境单独核验。
 
 只有工具链变更、跨层集成、准备合并或发布、进入正式候选阶段才执行完整门禁：
 

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "fingerprint": "sha256:4f9b9e4cb1aca6cb8621e5587b7e141dea93b8a9f33f4fdd0122cb7c384b7e0a",
-  "recordedAt": "2026-09-21T15:28:00.356Z",
+  "fingerprint": "sha256:930290d6b83765d35cc91732478439d04e3f7b5bc8dfe8f2a4d914704201fa45",
+  "recordedAt": "2026-09-21T19:39:19.225Z",
   "files": [
     {
       "path": "docs/blueprint/content/content-contract.md",
@@ -157,7 +157,7 @@
     },
     {
       "path": "src/components/archive/ArchiveInvitation.astro",
-      "sha256": "sha256:cd5c6b8f693b547793a47515b5a097c0606f413b28df7547ceee121e9267e99f"
+      "sha256": "sha256:d5677108d73853fa837feb86bd3440cf2e67eb687a3b7a4a9bd1d2de7cbee020"
     },
     {
       "path": "src/components/archive/ArchivePerformanceList.astro",
@@ -165,7 +165,7 @@
     },
     {
       "path": "src/components/archive/ArchivePoster.astro",
-      "sha256": "sha256:e35e7ec4c943e9dfb7d7b3f34c05ded4c78f8d642147379a3dc55f0afda9cfc7"
+      "sha256": "sha256:f92cf9290208744a041ba14b63acd9cb66b57cd41f48641984a620e301492431"
     },
     {
       "path": "src/components/archive/ArchiveSeatRegister.astro",
@@ -177,7 +177,7 @@
     },
     {
       "path": "src/components/front/ProductionVisual.astro",
-      "sha256": "sha256:6f30c048f348afd2de18391a4dfd110bb20cf212ee6d3edce0c3728ba161b161"
+      "sha256": "sha256:f7a1a4c3ff45120617792a3108835e3cf5c8cee202fd1e5770d80a1f11e4fcc4"
     },
     {
       "path": "src/components/front/TicketingExperience.astro",
@@ -205,19 +205,19 @@
     },
     {
       "path": "src/components/shared/SiteHeader.astro",
-      "sha256": "sha256:82ac2041fce4b39f8d889619795799c92d2569a2d894f72a86afef0d72793ddb"
+      "sha256": "sha256:bc54618d7eb37f272086b20da0f9c3912e3fa1c74812196e201c4196323eb6a4"
     },
     {
       "path": "src/components/shared/SiteSearch.astro",
-      "sha256": "sha256:9b903a1175a9ba00d658e2c586ed966fb20e8c823005a3027393ba2a71251b73"
+      "sha256": "sha256:d77ba80e0f92fb3e6d2adcd7cab64e5a74f60d5196c82edd9dca3bdddaaf4630"
     },
     {
       "path": "src/components/shared/TroupeMark.astro",
-      "sha256": "sha256:436214af9b3fec9618b1b3bb2d208982fc95281391becbd7d3344e1930476a7e"
+      "sha256": "sha256:084b42664e57245e992b04363c8c4926b3ec4b22f9720735a0329584cbb737f7"
     },
     {
       "path": "src/components/ticketing/PartnerTicketingExperience.astro",
-      "sha256": "sha256:ecb26def7f26ec44ee5dd807af90680a0956be7b430e1d19503a133d5329b6c8"
+      "sha256": "sha256:3c42a6398f74274f366212c9d80c63a569de2f168167f18334a7e7d4c5472dda"
     },
     {
       "path": "src/components/ticketing/TicketingPlatformBrand.astro",
@@ -313,7 +313,7 @@
     },
     {
       "path": "src/data/localized/format.ts",
-      "sha256": "sha256:10a808208911ab7f3bb5d7e2eb972a2f2b93ae38472f0b48f271fe4e6283ab09"
+      "sha256": "sha256:ba3f91b30df733b36548ab4d35fbd2fb843daf9579f2c4d4f9cb4c30d5de0a2a"
     },
     {
       "path": "src/data/localized/higashi/archive-projection.ts",
@@ -641,7 +641,7 @@
     },
     {
       "path": "src/data/site-time.ts",
-      "sha256": "sha256:80f109cab0abb48553cb0f14979595fd22925b5cf4944fa06a2042b90d3435fb"
+      "sha256": "sha256:e1fd2aa3d3296e1f8993a6dba8fe6b4d30937442f44c606fea7bb9ab22e1afd7"
     },
     {
       "path": "src/data/ticket-seating-plans.ts",
@@ -673,7 +673,7 @@
     },
     {
       "path": "src/pages/[routePrefix]/archive/site/1084-07-01/index.astro",
-      "sha256": "sha256:d2b1f72ebf8943c61925f71cc91b40473f3bd34d4be6010d639db2d308f1b51d"
+      "sha256": "sha256:d1d117478d7cf928189257c4f3912843e664912c3980861adfbc8be455b786ae"
     },
     {
       "path": "src/pages/[routePrefix]/archive/site/1084-07-01/performances/[performanceId].astro",
@@ -709,7 +709,7 @@
     },
     {
       "path": "src/pages/[routePrefix]/index.astro",
-      "sha256": "sha256:e67033db386170110cb17986cb9473612326a200226897a24a1402fd34fd66c3"
+      "sha256": "sha256:be881739dce9bc8e3cd29a92d9963519069775d5df1fc507a8a33fd5b61656b6"
     },
     {
       "path": "src/pages/[routePrefix]/performances/[performanceId].astro",
@@ -761,7 +761,7 @@
     },
     {
       "path": "src/scripts/partner-ticketing-controller.ts",
-      "sha256": "sha256:faa7bc6e9693307c7b8ea517f847cd95a07e0f705938185ccd46e2b4bed5255f"
+      "sha256": "sha256:b5b3b924893704c4728b2642fc9680510809e14cf6af9d3a426829ac9520075c"
     },
     {
       "path": "src/scripts/performance-filters.ts",
@@ -814,11 +814,12 @@
     "docs/sources/terra-chronology/README.md",
     "scripts/content-lifecycle.test.mjs",
     "scripts/creative-review.mjs",
-    "scripts/validate-content.mjs",
     "scripts/validate-states.mjs",
+    "src/components/shared/SiteSearch.astro",
     "src/data/archive-snapshots.ts",
     "src/data/content/localization-revisions.ts",
     "src/data/content/root-sets.ts",
+    "src/data/localized/format.ts",
     "src/data/localized/yan/productions/original.ts",
     "src/data/localized/yan/programs.ts",
     "src/data/localized/yan/site.ts",
@@ -827,29 +828,24 @@
   ],
   "report": {
     "schemaVersion": 1,
-    "fingerprint": "sha256:4f9b9e4cb1aca6cb8621e5587b7e141dea93b8a9f33f4fdd0122cb7c384b7e0a",
+    "fingerprint": "sha256:930290d6b83765d35cc91732478439d04e3f7b5bc8dfe8f2a4d914704201fa45",
     "classification": "semantic-review",
-    "summary": "在已完成基线审查上复核本轮变化：按人工选择修正九语言 archive 本季公告的蒙特卢佩偏差，只更新已核对的 site.archive 源摘要；修复证据目录覆盖、限定路径调度、显式消项与目标分支记录比对、合法内容维护被固定库存测试拦截等工程缺陷。新增覆盖的五份既有素材来源记录只扩展离线监测范围，不授予素材权利或改变官方事实；本轮未新增官方时间/人物断言，未重新联网阅读全部官方年鉴。保留其余四项待考据与一项译文精度建议，不批准正式内容或译文。研究分支仍未实际同步最新 dev_code，融合候选另在隔离工作区复核。",
+    "summary": "PR 工作分支同步复核：保留最新 dev_code 已验收的图片分尺寸与优先级、无脚本搜索反馈、当前页与票务焦点修复，以及泰拉日期数值比较／本地化格式修正。逐项检查导入的12个创意指纹路径，未改场次、地点、主创、排期或译文事实。当前9语言公告修正、流程与测试工具一并保留；五项原待处理发现继续保留，不授正式资格。当前工作分支已正常同步 dev_code；逐文件指纹与先前审查的融合候选完全一致，PR 前继续执行兼容性验证。",
     "scope": {
-      "reason": "复核本轮公告、翻译源摘要、流程及触发机制的全部变化；新增来源覆盖为既有来源文件，已核对其权利及事实边界。未变化的时间、设定、快照证据与待处理发现继承上次实际审查，不把无变化范围说成新研究。",
+      "reason": "目标主线已验收技术改动的融合复核；README两段合并保留，状态测试保留主线泰拉日期边界用例与本轮独立fixture。内容新增来源与公告修正沿用本轮实际审查。",
       "paths": [
-        "docs/sources/folio-cover-restoration.md",
-        "docs/sources/README.md",
-        "docs/sources/realm-badge-provenance.md",
-        "docs/sources/ticketing-platform-logo-provenance.md",
-        "docs/sources/troupe-logo-provenance.md",
-        "docs/guides/creative-content-review.md",
-        "scripts/creative-review.mjs",
-        "src/data/content/localization-revisions.ts",
-        "src/data/localized/columbia/site.ts",
-        "src/data/localized/higashi/site.ts",
-        "src/data/localized/kazimierz/site.ts",
-        "src/data/localized/leithanien/site.ts",
-        "src/data/localized/minos/site.ts",
-        "src/data/localized/siracusa/site.ts",
-        "src/data/localized/ursus/site.ts",
-        "src/data/localized/victoria/site.ts",
-        "src/data/localized/yan/site.ts"
+        "src/components/archive/ArchiveInvitation.astro",
+        "src/components/archive/ArchivePoster.astro",
+        "src/components/front/ProductionVisual.astro",
+        "src/components/shared/SiteHeader.astro",
+        "src/components/shared/SiteSearch.astro",
+        "src/components/shared/TroupeMark.astro",
+        "src/components/ticketing/PartnerTicketingExperience.astro",
+        "src/data/localized/format.ts",
+        "src/data/site-time.ts",
+        "src/pages/[routePrefix]/archive/site/1084-07-01/index.astro",
+        "src/pages/[routePrefix]/index.astro",
+        "src/scripts/partner-ticketing-controller.ts"
       ]
     },
     "axes": {
@@ -871,6 +867,10 @@
           {
             "path": "docs/research/terra-chronology/open-questions.csv",
             "note": "Q11已按当前字段纠正；源ID仍保留旧地名／旧日期片段是稳定身份约束，不应据此重造错置。"
+          },
+          {
+            "path": "src/data/localized/format.ts",
+            "note": "保留泰拉年、日字段，Intl仅提供各语格式，不将泰拉2月31日滚动为地球公历3月；未改已有演出排期。"
           }
         ]
       },
@@ -921,6 +921,10 @@
           {
             "path": "scripts/creative-review.mjs",
             "note": "文本来源全目录纳入；消项须理由与证据；可对照目标提交记录，防止直接编辑当前记录静默漏掉已有发现。"
+          },
+          {
+            "path": "src/components/shared/SiteSearch.astro",
+            "note": "仅完善无脚本和加载失败反馈，复用既有本地化正文，不生成新创意事实。"
           }
         ]
       },
@@ -999,40 +1003,6 @@
         "suggestion": "替换该场次本地化单元时优先保留已有项目地理精度，结合有证据的Maxter形式形成各语AI候选，完整句子检查后等待人工考据；不自动认定当前译文已批准。"
       }
     ],
-    "resolutions": [
-      {
-        "findingKey": "sha256:1980d89ea112690e87f4a766b6812d73c2234bff46b82f90d38b7459746dcac3",
-        "reason": "依据本季实际场次修正九语言公告，移除蒙特卢佩并仅刷新复核后的 site.archive 源修订；没有新增场次。",
-        "evidence": [
-          {
-            "path": "src/data/localized/yan/site.ts",
-            "line": 230,
-            "note": "九语言同一 notice 字段修正，炎语为源。"
-          },
-          {
-            "path": "src/data/content/localization-revisions.ts",
-            "note": "只更新已复核 site.archive。"
-          }
-        ]
-      },
-      {
-        "findingKey": "sha256:fb68275977a9cd7a2ceb4fedb60a5fd486a423595f518fccc7b752592cd8df59",
-        "reason": "内容、语言和状态验证器已改按根集合及真实依赖校验；固定目录数量和具名能力反例迁为独立测试数据，合法新增、撤选、删除与相应错误路径已定向实测。官方13项活页资料的明确来源完整性契约保留。",
-        "evidence": [
-          {
-            "path": "scripts/validate-content.mjs",
-            "note": "当前内容来源、引用闭包和快照冻结校验。"
-          },
-          {
-            "path": "scripts/content-lifecycle.test.mjs",
-            "note": "实际CLI生命周期与错误路径回归。"
-          },
-          {
-            "path": "scripts/validate-states.mjs",
-            "note": "动态闭包与隔离状态反例。"
-          }
-        ]
-      }
-    ]
+    "resolutions": []
   }
 }
