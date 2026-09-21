@@ -375,9 +375,18 @@ for (const [route, filePath] of routes) {
       }
     }
     if (route.endsWith('/search/')) {
-      assert.match(html, /data-search-fallback/u, `${route} 缺少唯一搜索降级内容`);
+      const fallbackRoots = [...html.matchAll(/\sdata-search-fallback(?:\s|=|>)/gu)];
+      const unavailableBlocks = [...html.matchAll(/\sdata-search-unavailable(?:\s|=|>)/gu)];
+      const noscriptBlocks = [...html.matchAll(/\sdata-search-noscript(?:\s|=|>)/gu)];
+      assert.equal(fallbackRoots.length, 1, `${route} 必须且只能输出一个搜索降级根`);
+      assert.equal(unavailableBlocks.length, 1, `${route} 必须且只能输出一个通用失败反馈`);
+      assert.equal(noscriptBlocks.length, 1, `${route} 必须且只能输出一个无脚本反馈`);
+      assert.match(
+        html,
+        /<div\b[^>]*data-search-fallback[^>]*>[\s\S]*?<div\b[^>]*data-search-unavailable[^>]*>[\s\S]*?<\/div>\s*<noscript>[\s\S]*?<style\b[^>]*>[\s\S]*?\[data-search-fallback\]\s*>\s*\[data-search-unavailable\]\s*\{\s*display:\s*none;?\s*\}[\s\S]*?<\/style>\s*<div\b[^>]*data-search-noscript[^>]*>[\s\S]*?<\/div>\s*<\/noscript>\s*<\/div>/u,
+        `${route} 的通用失败与无脚本反馈必须在同一根内互斥`,
+      );
       assert.match(html, /data-search-enhanced[^>]*hidden/u, `${route} 搜索不应默认伪启用`);
-      assert.doesNotMatch(html, /<noscript>/u, `${route} 不应重复输出第二份搜索降级内容`);
     }
   }
 

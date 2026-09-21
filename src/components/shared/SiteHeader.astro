@@ -15,6 +15,7 @@ const { localization, world, currentSection, currentPath } = Astro.props;
 const { edition } = localization;
 const copy = localization.site.shared;
 const ticketLabel = world === 'archive' ? copy.ticketsArchive : copy.ticketsFront;
+const ticketHref = sitePath(edition, world, 'tickets');
 const links = [
   {
     id: 'current',
@@ -51,7 +52,17 @@ const links = [
     </nav>
     <div class="header-tools" data-pollution-safe>
       <EditionSelector localization={localization} world={world} currentPath={currentPath} />
-      <a class="ticket-link" href={sitePath(edition, world, 'tickets')}>{ticketLabel}</a>
+      <a
+        class="ticket-link"
+        href={ticketHref}
+        aria-current={currentPath === ticketHref
+          ? 'page'
+          : currentSection === 'tickets'
+            ? 'true'
+            : undefined}
+      >
+        {ticketLabel}
+      </a>
     </div>
   </div>
 </header>

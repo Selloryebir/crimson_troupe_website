@@ -297,6 +297,9 @@ export function initPartnerTicketingExperience(
       progressValue.value = index + 1;
       progressLabel.textContent = labels[index];
       live.textContent = labels[index];
+      if (index === 0) {
+        progress.focus();
+      }
       await wait(delay);
     }
     processing = false;
