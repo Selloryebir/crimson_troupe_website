@@ -16,6 +16,7 @@ interface Props {
   subtitle?: string;
   number?: string;
   compact?: boolean;
+  priority?: boolean;
   placement?: 'default' | 'home-editorial' | 'home-feature';
 }
 
@@ -26,17 +27,21 @@ const {
   subtitle,
   number = 'CT / 1084',
   compact = false,
+  priority = false,
   placement = 'default',
 } = Astro.props;
 const artwork = getSnapshotProductionArtwork(buildSnapshot, productionId, 'archive');
 const artworkAsset = getSnapshotProductionArtworkAsset(buildSnapshot, productionId, 'archive');
 const isFolioCover = artwork?.rights === 'local-folio-restoration-preview';
 const isHomepage = placement !== 'default';
-const widths = isHomepage
-  ? [240, 480, 640, 960]
-  : isFolioCover && !compact
-    ? [240, 480, 768, 1200]
-    : [240, 480, 768];
+const widths =
+  placement === 'home-feature'
+    ? [240, 300, 600, 960]
+    : placement === 'home-editorial'
+      ? [240, 320, 520, 640, 960]
+      : isFolioCover && !compact
+        ? [240, 480, 768, 1200]
+        : [240, 480, 768];
 // 首页尺寸与 archive.css 的封面上限一致，不沿用目录缩略图的 180px。
 const sizes =
   placement === 'home-editorial'
@@ -48,7 +53,12 @@ const sizes =
         : '(max-width: 620px) calc(100vw - 48px), (max-width: 960px) min(590px, calc(100vw - 36px)), 590px';
 const quality = isHomepage ? 95 : undefined;
 // 回退 src 也按展示职责输出；高 DPR 仍由原有 srcset 选择，不生成无用途的全尺寸回退。
-const imageOptions = { widths, sizes, quality, width: isHomepage ? 640 : compact ? 480 : 1200 };
+const imageOptions = {
+  widths,
+  sizes,
+  quality,
+  width: placement === 'home-feature' ? 600 : isHomepage ? 640 : compact ? 480 : 1200,
+};
 const normalImage = artworkAsset
   ? await getImage({ src: artworkAsset, ...imageOptions })
   : undefined;
@@ -107,6 +117,7 @@ const lullabyImage = isFolioCover
         {...imageOptions}
         alt=""
         loading={compact ? 'lazy' : 'eager'}
+        fetchpriority={priority ? 'high' : undefined}
         decoding="async"
       />
     )

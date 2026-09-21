@@ -25,6 +25,12 @@ const {
   placement = 'default',
 } = Astro.props;
 const isHomepage = placement !== 'default';
+const widths =
+  placement === 'home-feature'
+    ? [240, 320, 640, 960]
+    : placement === 'home-editorial'
+      ? [240, 320, 520, 640, 960]
+      : [240, 480, 768];
 const artwork = getSnapshotProductionArtwork(buildSnapshot, productionId, 'front');
 const artworkAsset = getSnapshotProductionArtworkAsset(buildSnapshot, productionId, 'front');
 const artworkStyle = artwork
@@ -46,7 +52,7 @@ const artworkStyle = artwork
         class="production-visual__image"
         src={artworkAsset}
         alt=""
-        widths={isHomepage ? [240, 480, 640, 960] : [240, 480, 768]}
+        widths={widths}
         quality={isHomepage ? 95 : undefined}
         sizes={
           placement === 'home-editorial'

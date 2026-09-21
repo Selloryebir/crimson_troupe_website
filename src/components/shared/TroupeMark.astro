@@ -5,14 +5,41 @@ import metallicSeal from '../../assets/brand/troupe-logo-metallic.png';
 
 interface Props {
   class?: string;
-  size?: 'standard' | 'home' | 'seal';
+  role?: 'standard' | 'front-hero' | 'archive-home' | 'callout' | 'seal';
   variant?: 'matte' | 'metallic';
   loading?: 'eager' | 'lazy';
 }
 
-const { class: className, size = 'standard', variant = 'matte', loading = 'eager' } = Astro.props;
-// 页头／页尾／海报小标上限为 76 CSS px；请柬的大印章独立取样，避免小标下载大图。
-const width = size === 'home' ? 320 : size === 'seal' ? 280 : 80;
+const { class: className, role = 'standard', variant = 'matte', loading = 'eager' } = Astro.props;
+// sizes 对应各消费者的 CSS 展示宽度；候选只覆盖这些职责到 3x，避免通用大图。
+const responsiveImages = {
+  standard: {
+    width: 80,
+    widths: [80, 160, 240],
+    sizes: '80px',
+  },
+  'front-hero': {
+    width: 224,
+    widths: [160, 224, 320, 448, 480, 672],
+    sizes: 'clamp(160px, 16vw, 224px)',
+  },
+  'archive-home': {
+    width: 210,
+    widths: [176, 210, 360, 420, 640],
+    sizes: 'clamp(176px, 17vw, 210px)',
+  },
+  callout: {
+    width: 260,
+    widths: [260, 520, 780],
+    sizes: 'min(260px, calc(100vw - 48px))',
+  },
+  seal: {
+    width: 280,
+    widths: [160, 280, 320, 560, 840],
+    sizes: '(max-width: 620px) 280px, clamp(150px, 24vw, 270px)',
+  },
+};
+const image = responsiveImages[role];
 const seal = variant === 'metallic' ? metallicSeal : matteSeal;
 ---
 
@@ -20,9 +47,10 @@ const seal = variant === 'metallic' ? metallicSeal : matteSeal;
   class:list={['troupe-mark', className]}
   data-troupe-mark-variant={variant}
   src={seal}
-  width={width}
-  height={width}
-  densities={[1, 2, 3]}
+  width={image.width}
+  height={image.width}
+  widths={image.widths}
+  sizes={image.sizes}
   format="webp"
   quality={95}
   alt=""
