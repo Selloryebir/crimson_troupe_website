@@ -13,6 +13,7 @@ import { currentArchiveSnapshot } from '../src/data/archive-snapshots.ts';
 import { buildSnapshot } from '../src/data/content/resolve.ts';
 import { builtEditions, editions } from '../src/data/editions.ts';
 import { getLocalization } from '../src/data/localized/resolve.ts';
+import { getFrontSearchIndex } from '../src/data/site-search-index.ts';
 import { getTicketingOptions } from '../src/data/ticketing.ts';
 import { derivePollutionComposition } from '../src/scripts/pollution-state.ts';
 import { selectCrimsonFolioIds } from '../src/scripts/archive-folio-effects.ts';
@@ -453,6 +454,175 @@ async function assertNoHorizontalLoss(page, label) {
   assert.ok(result.main.right <= result.viewportWidth + 1, `${label} 的 main 右侧超出视口`);
 }
 
+async function assertResponsiveImage(page, selector, label) {
+  const image = page.locator(selector);
+  await image.waitFor();
+  const metrics = await image.evaluate(async (element) => {
+    await element.decode();
+    const bounds = element.getBoundingClientRect();
+    const probe = new window.Image();
+    probe.src = element.currentSrc;
+    await probe.decode();
+    return {
+      currentSrc: element.currentSrc,
+      selectedWidth: probe.naturalWidth,
+      renderedWidth: bounds.width,
+      dpr: window.devicePixelRatio,
+    };
+  });
+  const requiredWidth = metrics.renderedWidth * metrics.dpr;
+  assert.ok(metrics.currentSrc, `${label} 必须选择实际图片资源`);
+  assert.ok(metrics.renderedWidth > 0, `${label} 必须具有可见展示宽度`);
+  assert.ok(
+    metrics.selectedWidth + 1 >= requiredWidth,
+    `${label} 清晰度不足：${metrics.selectedWidth}px < ${requiredWidth}px`,
+  );
+  assert.ok(
+    metrics.selectedWidth <= requiredWidth * 1.3 + 2,
+    `${label} 过度下载：${metrics.selectedWidth}px > ${requiredWidth}px`,
+  );
+}
+
+async function assertResponsiveHomeImages(browser, origin) {
+  for (const viewport of [
+    { label: 'desktop', width: 1280, height: 900, deviceScaleFactor: 1 },
+    { label: 'mobile-dpr2', width: 390, height: 800, deviceScaleFactor: 2 },
+  ]) {
+    const context = await browser.newContext({
+      viewport: { width: viewport.width, height: viewport.height },
+      deviceScaleFactor: viewport.deviceScaleFactor,
+    });
+    const page = await context.newPage();
+    const assertErrors = trackUnexpectedErrors(page);
+    try {
+      await page.goto(`${origin}/yan/`);
+      await assertResponsiveImage(
+        page,
+        '.hero-feature .production-visual__image',
+        `${viewport.label} 表站首页封面`,
+      );
+      await assertResponsiveImage(page, '.hero-season__mark', `${viewport.label} 表站首页大徽章`);
+      await page.goto(`${origin}${archivePath('yan')}`);
+      await assertResponsiveImage(
+        page,
+        '.archive-feature [data-folio-image]',
+        `${viewport.label} 里站首页封面`,
+      );
+      await assertResponsiveImage(
+        page,
+        '.archive-home .archive-ornament',
+        `${viewport.label} 里站首页大徽章`,
+      );
+      assertErrors();
+    } finally {
+      await context.close();
+    }
+  }
+}
+
+async function assertEditionFiltersAndSearch(browser, origin) {
+  const context = await browser.newContext({ viewport: { width: 320, height: 800 } });
+  const page = await context.newPage();
+  const assertErrors = trackUnexpectedErrors(page);
+  try {
+    for (const edition of builtEditions) {
+      const label = edition.languageName.native;
+      await page.goto(`${origin}/${edition.routePrefix}/performances/`);
+      const city = page.locator('[data-performance-city]');
+      const month = page.locator('[data-performance-month]');
+      const reset = page.locator('[data-performance-reset]');
+      await city.waitFor();
+      await page.waitForFunction(
+        () => !document.querySelector('[data-performance-city]')?.disabled,
+      );
+      const expectedCount = buildSnapshot.performanceEntries.filter(
+        ([, performance]) => performance.world === 'front' && performance.collection === 'current',
+      ).length;
+      const items = page.locator('[data-performance-item]');
+      assert.equal(await items.count(), expectedCount, `${label} 本季列表必须读取完整构建快照`);
+      const firstCity = await city
+        .locator('option:not([value="all"])')
+        .first()
+        .getAttribute('value');
+      assert.ok(firstCity, `${label} 本季列表必须提供非空城市筛选值`);
+      await city.selectOption(firstCity);
+      assert.ok(
+        await page.locator('[data-performance-item]:visible').count(),
+        `${label} 非空城市筛选必须保留匹配场次`,
+      );
+      const missingCombination = await items.evaluateAll((elements) => {
+        const rows = elements.map((element) => ({
+          city: element.dataset.city,
+          month: element.dataset.month,
+        }));
+        const cities = [...new Set(rows.map(({ city }) => city))];
+        const months = [...new Set(rows.map(({ month }) => month))];
+        for (const city of cities) {
+          for (const month of months) {
+            if (!rows.some((row) => row.city === city && row.month === month)) {
+              return { city, month };
+            }
+          }
+        }
+        return null;
+      });
+      if (missingCombination) {
+        await city.selectOption(missingCombination.city);
+        await month.selectOption(missingCombination.month);
+        assert.equal(await page.locator('[data-performance-item]:visible').count(), 0);
+        assert.equal(await page.locator('[data-performance-empty]').isVisible(), true);
+      }
+      await reset.click();
+      assert.equal(await city.inputValue(), 'all');
+      assert.equal(await month.inputValue(), 'all');
+      assert.equal(await page.locator('[data-performance-item]:visible').count(), expectedCount);
+      assert.equal(
+        await city.evaluate((element) => element === document.activeElement),
+        true,
+        `${label} 重置后焦点必须返回城市筛选`,
+      );
+      await assertNoHorizontalLoss(page, `320px ${label}本季筛选`);
+
+      const query = getFrontSearchIndex(edition, buildSnapshot)[0]?.title;
+      assert.ok(query, `${label} 必须能从构建快照派生真实搜索词`);
+      await page.goto(`${origin}/${edition.routePrefix}/search/?q=${encodeURIComponent(query)}`);
+      await page.locator('[data-search-enhanced]:not([hidden])').waitFor();
+      assert.ok(
+        await page.locator('[data-search-result]').count(),
+        `${label} 真实查询必须返回结果`,
+      );
+      await assertNoHorizontalLoss(page, `320px ${label}真实搜索`);
+    }
+    assertErrors();
+  } finally {
+    await context.close();
+  }
+}
+
+async function assertPartnerProgress(page, messages, label) {
+  const progress = page.locator('[data-partner-progress]:not([hidden])');
+  await progress.waitFor();
+  const state = await progress.evaluate((element) => {
+    const labelId = element.getAttribute('aria-labelledby');
+    const meter = element.querySelector('[data-partner-progress-value]');
+    return {
+      labelId,
+      label: labelId ? document.getElementById(labelId)?.textContent?.trim() : '',
+      meterLabelId: meter?.getAttribute('aria-labelledby'),
+      focused: element === document.activeElement,
+    };
+  });
+  assert.ok(state.labelId, `${label} 缺少进度区域名称引用`);
+  assert.ok(
+    [messages.submitted, messages.standardAttemptTitle, messages.stateUpdated].includes(
+      state.label,
+    ),
+    `${label} 使用了未知进度名称：${state.label}`,
+  );
+  assert.equal(state.meterLabelId, state.labelId, `${label} 进度条必须复用可见进度名称`);
+  assert.equal(state.focused, true, `${label} 处理中焦点必须进入进度区域`);
+}
+
 async function assertControlsWithinViewport(page, selector, label) {
   const violations = await page.locator(selector).evaluateAll((elements) =>
     elements
@@ -727,6 +897,8 @@ try {
 
   await assertEarlyFolioPaint(browser, origin);
   await assertFolioRecovery(browser, origin);
+  await assertResponsiveHomeImages(browser, origin);
+  await assertEditionFiltersAndSearch(browser, origin);
 
   const desktop = await browser.newContext({ viewport: { width: 1280, height: 900 } });
   const desktopPage = await desktop.newPage();
@@ -1280,6 +1452,7 @@ try {
   const assertTicketErrors = trackUnexpectedErrors(ticketPage);
   await ticketPage.goto(`${origin}/yan/tickets/`);
   await ticketPage.locator('[data-ticketing-app]:not([hidden])').waitFor();
+  assert.equal(await ticketPage.locator('.ticket-link').getAttribute('aria-current'), 'page');
   await assertNoHorizontalLoss(ticketPage, '320px 炎国票务');
   const seatingPlans = [
     { id: 'volsinii-courtyard', levels: 1, zones: ['C', 'B', 'A'] },
@@ -1445,6 +1618,12 @@ try {
   await firstTicketCheckbox.check();
   await ticketPage.locator('[data-ticket-start]').click();
   await ticketPage.waitForURL(`${origin}/yan/tickets/partner/`);
+  assert.equal(await ticketPage.locator('.ticket-link').getAttribute('aria-current'), 'true');
+  await assertPartnerProgress(
+    ticketPage,
+    getLocalization(editions.yan, buildSnapshot).messages.ticketing,
+    '炎国标准票务处理',
+  );
   const partnerDialog = ticketPage.locator('[data-partner-dialog][open]');
   await partnerDialog.waitFor();
   assert.equal(
@@ -1659,6 +1838,20 @@ try {
   assert.ok(
     Math.abs(retryBox.height - offerBox.height) <= 1,
     '标准重试与加价方案控件应保持同等视觉高度',
+  );
+  await standardRetry.click();
+  await assertPartnerProgress(
+    partnerBranchPage,
+    getLocalization(editions.yan, buildSnapshot).messages.ticketing,
+    '炎国标准票务重试',
+  );
+  await branchDialog.waitFor();
+  assert.equal(
+    await partnerBranchPage
+      .locator('[data-partner-title]')
+      .evaluate((element) => element === document.activeElement),
+    true,
+    '重试完成后焦点必须进入最新结果标题',
   );
   await partnerBranchPage.locator('[data-partner-action="offer"]').click();
   await branchDialog.waitFor();
@@ -2194,12 +2387,25 @@ try {
   });
   const noScriptPage = await noScriptContext.newPage();
   await noScriptPage.goto(`${origin}/hig/search/`);
-  await noScriptPage.locator('[data-search-fallback]').waitFor();
+  const noScriptFallback = noScriptPage.locator('[data-search-fallback]');
+  const higashiSearchMessages = getLocalization(editions.higashi, buildSnapshot).messages.search;
+  await noScriptFallback.waitFor();
+  assert.equal(await noScriptFallback.locator('[data-search-unavailable]').isVisible(), false);
+  assert.equal(await noScriptFallback.locator('[data-search-noscript]').isVisible(), true);
+  assert.equal(
+    (await noScriptFallback.locator('[data-search-noscript] h2').textContent())?.trim(),
+    higashiSearchMessages.noscriptTitle,
+  );
+  assert.equal(
+    (await noScriptFallback.locator('[data-search-noscript] p').textContent())?.trim(),
+    higashiSearchMessages.noscriptCopy,
+  );
   await assertNoHorizontalLoss(noScriptPage, '390px 东国无脚本搜索');
   await noScriptPage.goto(`${origin}/hig/tickets/`);
   await noScriptPage.locator('[data-ticket-fallback]').waitFor();
   assert.equal(await noScriptPage.locator('[data-ticketing-app]').getAttribute('hidden'), '');
   await noScriptPage.goto(`${origin}${archivePath('hig', 'tickets')}`);
+  assert.equal(await noScriptPage.locator('.ticket-link').getAttribute('aria-current'), 'page');
   const archiveSeatSelects = noScriptPage.locator('.archive-seat-register select');
   assert.equal(
     await archiveSeatSelects.count(),
@@ -2254,14 +2460,55 @@ try {
     /intentional-search-initialization-failure/u,
   ]);
   await failedSearchPage.goto(`${origin}/col/search/`);
-  await failedSearchPage.locator('[data-search-fallback]').waitFor();
+  const failedSearchFallback = failedSearchPage.locator('[data-search-fallback]');
+  const columbiaSearchMessages = getLocalization(editions.columbia, buildSnapshot).messages.search;
+  await failedSearchFallback.waitFor();
+  assert.equal(await failedSearchFallback.locator('[data-search-unavailable]').isVisible(), true);
+  assert.equal(
+    (await failedSearchFallback.locator('[data-search-unavailable] h2').textContent())?.trim(),
+    columbiaSearchMessages.label,
+  );
+  assert.equal(
+    (await failedSearchFallback.locator('[data-search-unavailable] p').textContent())?.trim(),
+    columbiaSearchMessages.unavailable,
+  );
+  assert.equal(await failedSearchFallback.locator('[data-search-noscript]').count(), 0);
   assert.equal(await failedSearchPage.locator('[data-search-enhanced]').getAttribute('hidden'), '');
   await assertNoHorizontalLoss(failedSearchPage, '390px 哥伦比亚搜索初始化失败');
   assertFailedSearchErrors();
   await failedSearchContext.close();
 
+  const abortedSearchContext = await browser.newContext({ viewport: { width: 390, height: 800 } });
+  await abortedSearchContext.route('**/*', async (route) => {
+    if (route.request().resourceType() === 'script') {
+      await route.abort();
+      return;
+    }
+    await route.continue();
+  });
+  const abortedSearchPage = await abortedSearchContext.newPage();
+  await abortedSearchPage.goto(`${origin}/col/search/`);
+  const abortedSearchFallback = abortedSearchPage.locator('[data-search-fallback]');
+  await abortedSearchFallback.waitFor();
+  assert.equal(await abortedSearchFallback.locator('[data-search-unavailable]').isVisible(), true);
+  assert.equal(
+    (await abortedSearchFallback.locator('[data-search-unavailable] h2').textContent())?.trim(),
+    columbiaSearchMessages.label,
+  );
+  assert.equal(
+    (await abortedSearchFallback.locator('[data-search-unavailable] p').textContent())?.trim(),
+    columbiaSearchMessages.unavailable,
+  );
+  assert.equal(await abortedSearchFallback.locator('[data-search-noscript]').count(), 0);
+  assert.equal(
+    await abortedSearchPage.locator('[data-search-enhanced]').getAttribute('hidden'),
+    '',
+  );
+  await assertNoHorizontalLoss(abortedSearchPage, '390px 哥伦比亚搜索脚本中止');
+  await abortedSearchContext.close();
+
   console.log(
-    `browser validation passed (${browserEngine}): editorial home alternation/mobile order, full-list isolation, ranked/grouped search keyboard path, seven venue level maps/zones, build-scoped edition selector, long-script 320px headers, ticket focus/artifact, Minos search/download/print, Ursus search isolation/download/cross-edition state/archive exit, archive four-level visual escalation/cross-edition level 3/reduced motion, 320/768 protected controls, localized pollution live status, keyboard invitation exit/continue, no-JS fallback/static archive seats, search failure fallback`,
+    `browser validation passed (${browserEngine}): editorial home alternation/mobile order, full-list isolation, nine-edition 320px filters/search, responsive home images, ranked/grouped search keyboard path, seven venue level maps/zones, build-scoped edition selector, long-script 320px headers, ticket navigation/progress/focus/artifact, Minos search/download/print, Ursus search isolation/download/cross-edition state/archive exit, archive four-level visual escalation/cross-edition level 3/reduced motion, 320/768 protected controls, localized pollution live status, keyboard invitation exit/continue, no-JS fallback/static archive seats, search JSON/script failure fallback`,
   );
 } catch (error) {
   const serverOutput = preview.output.join('').trim();
