@@ -38,10 +38,18 @@ const messages = localization.messages.ticketing;
   data-ticketing-locale={localization.edition.locale}
   hidden
 >
-  <div class="partner-ticketing-progress" data-partner-progress hidden>
+  <div
+    class="partner-ticketing-progress"
+    data-partner-progress
+    role="region"
+    aria-labelledby="partner-progress-label"
+    tabindex="-1"
+    hidden
+  >
     <span class="partner-ticketing-progress__spinner" aria-hidden="true"></span>
-    <p data-partner-progress-label></p>
-    <progress max="3" value="0" data-partner-progress-value></progress>
+    <p id="partner-progress-label" data-partner-progress-label></p>
+    <progress max="3" value="0" data-partner-progress-value aria-labelledby="partner-progress-label"
+    ></progress>
   </div>
 
   <button class="button" type="button" data-partner-review hidden>{messages.submitRequest}</button>
