@@ -1,0 +1,1008 @@
+{
+  "schemaVersion": 1,
+  "fingerprint": "sha256:930290d6b83765d35cc91732478439d04e3f7b5bc8dfe8f2a4d914704201fa45",
+  "recordedAt": "2026-09-21T19:39:19.225Z",
+  "files": [
+    {
+      "path": "docs/blueprint/content/content-contract.md",
+      "sha256": "sha256:6a356b8590529b416dd1b45746270e2f03195b8996ee5e67fd7f0b0915f09a3e"
+    },
+    {
+      "path": "docs/blueprint/content/production-visual-catalog.md",
+      "sha256": "sha256:ff41e069bf96c4959dcb74cb843d62f93cd1c489929a9b684a21dca590844736"
+    },
+    {
+      "path": "docs/blueprint/content/production-visual-language.md",
+      "sha256": "sha256:20f79a0d547943bfec561565a109ce8f3893686abb4384f98f07ac847260ccaf"
+    },
+    {
+      "path": "docs/blueprint/foundation/domain-language.md",
+      "sha256": "sha256:00d454f6e22371a1b873bce3fe9410f85a454fbf24dfbfa9e0b863f703ea127d"
+    },
+    {
+      "path": "docs/blueprint/i18n/localization-contract.md",
+      "sha256": "sha256:1e0ca6f0c648d06b60378baf411b4772cf6e656f1e39989fef468ff5ee6fdf74"
+    },
+    {
+      "path": "docs/blueprint/i18n/terminology-contract.md",
+      "sha256": "sha256:6e95e518e0e69dfe4ef383477f740b89c9f67a0e2be7c28b8e7ac86c6bf88ca9"
+    },
+    {
+      "path": "docs/blueprint/modules/archive.md",
+      "sha256": "sha256:938dd64f220879a145e0c0f71b43d6768aba7609cc5ffc91d79f1ff63dfbe0bc"
+    },
+    {
+      "path": "docs/blueprint/modules/programs.md",
+      "sha256": "sha256:4da59b65c99791b2529207ac16c3976a6a091ab5a37b3c2f009c3960aae2e037"
+    },
+    {
+      "path": "docs/blueprint/modules/terra-time.md",
+      "sha256": "sha256:21de663c04a46dc64d5717d45c32ba96de510b7ab4180fc131a5adc561bf326e"
+    },
+    {
+      "path": "docs/blueprint/modules/ticketing.md",
+      "sha256": "sha256:a595e8ea742040263b3e871bbd33109dd34421b91ecca80e71d5f80a622d4cc8"
+    },
+    {
+      "path": "docs/guides/creative-content-review.md",
+      "sha256": "sha256:f6dc37e75276c9b3e74a48ef3c535fe7a312f374766b026b94ba18ead8980a1d"
+    },
+    {
+      "path": "docs/guides/temporal-content-review.md",
+      "sha256": "sha256:8814244770c1d2bfe6526b28eceebedea583ecf643620d63d8fea0fe09dd3b73"
+    },
+    {
+      "path": "docs/project/performance-location-catalog.md",
+      "sha256": "sha256:8443f851e8fbf497efb9d79705be2e5b429d417fb6d0c1d8e2448638db07cccc"
+    },
+    {
+      "path": "docs/project/temporal-context.md",
+      "sha256": "sha256:7834c549d5f8b60ba91990f51daacd99dcf669f6986e47400bff667a1ededc04"
+    },
+    {
+      "path": "docs/research/terra-chronology/calendar-rules.csv",
+      "sha256": "sha256:168d0cf0c9863d291e8638a5537d267714f3bcc6ab166658d430dee81e9a0e8c"
+    },
+    {
+      "path": "docs/research/terra-chronology/country-context.csv",
+      "sha256": "sha256:4e26a2d18a8d26011d0c6dafb4e28003003f126cc9d0b292924a7becc895c025"
+    },
+    {
+      "path": "docs/research/terra-chronology/date-claims.csv",
+      "sha256": "sha256:f34e09f3f20d26145811b313cf6d27fdc14af2e5fc0d83a1073fcf5df5ed37c1"
+    },
+    {
+      "path": "docs/research/terra-chronology/event-network.json",
+      "sha256": "sha256:14c5c88bc6db409c41d25ec5f34916812678d545bce3648b1f6f7a814b341987"
+    },
+    {
+      "path": "docs/research/terra-chronology/events.csv",
+      "sha256": "sha256:ef4e27b5702b0f352bea509e9bcfc5787cedd78d6a026cd19bd1533d429dda4d"
+    },
+    {
+      "path": "docs/research/terra-chronology/open-questions.csv",
+      "sha256": "sha256:aa7f1fe0feef8f445a137428803942cf7ebcb4ac97d8235db1691a5aecb09d7f"
+    },
+    {
+      "path": "docs/research/terra-chronology/README.md",
+      "sha256": "sha256:0d80d09b2dd9c13fab295aedda57c1022b924ca3b9d227e8ed04aba0926be503"
+    },
+    {
+      "path": "docs/research/terra-chronology/temporal-analysis.md",
+      "sha256": "sha256:39d6ec23ca3520136fa4a5baa343bdb2e7ae53e3892cea5925435420d8305794"
+    },
+    {
+      "path": "docs/research/terra-terminology/concepts.json",
+      "sha256": "sha256:af5b2becb28ebaf9b8f34b666a6e0d45565c69bce92b016666fae3e7912e49fb"
+    },
+    {
+      "path": "docs/research/terra-terminology/language-policy.md",
+      "sha256": "sha256:4a93f423c6787badd5ff1a02f0ad45478a2739912c9a90f4554b6f2471f6feec"
+    },
+    {
+      "path": "docs/research/terra-terminology/matrix.csv",
+      "sha256": "sha256:bf7e42012148946d3f7fb951d9685a0febb6d84ee7292c81b5e692d8945fef8f"
+    },
+    {
+      "path": "docs/research/terra-terminology/translation-candidates.json",
+      "sha256": "sha256:9c49780bc4e8c9299a696b65f62da5d863d6703053bf56e1f2094a64ac79c74e"
+    },
+    {
+      "path": "docs/sources/folio-cover-restoration.md",
+      "sha256": "sha256:80b1d63d3aa0638c365fd1f8678b06bdbe07b8a5b213fc1cd7445a1844643847"
+    },
+    {
+      "path": "docs/sources/official-folio-productions.md",
+      "sha256": "sha256:d971cb0c195a0cd664338b6ffea927d5f71894fa910ea238f872ae8cb049961d"
+    },
+    {
+      "path": "docs/sources/README.md",
+      "sha256": "sha256:dcd4b490ccd3eb37c3414f7f99eeb25f06cbf2e7fa8e62e9295523cc73dc08a7"
+    },
+    {
+      "path": "docs/sources/realm-badge-provenance.md",
+      "sha256": "sha256:263e5be9c7b6f9d7f9173f19eb3ddecbe856ad3986324391a9d593113fcf13c7"
+    },
+    {
+      "path": "docs/sources/terra-chronology/README.md",
+      "sha256": "sha256:0f57e61bf270370d18891a9345500ade4d694ecda170300684f6eb8732aff4ff"
+    },
+    {
+      "path": "docs/sources/terra-chronology/sources.csv",
+      "sha256": "sha256:b92e578f5eaf11cca4226fd7bd5b083e769ed5fe294e8dd18379e99027302ea0"
+    },
+    {
+      "path": "docs/sources/terra-terminology/attestations.json",
+      "sha256": "sha256:18d13853de2b538142a1d37906bf137985ebf7c5e6ca44e1952dec44a5417330"
+    },
+    {
+      "path": "docs/sources/terra-terminology/README.md",
+      "sha256": "sha256:37ed3ab8111acbcc09d3cebd39cee70687d5b890b145b412ae0f5aeefb59be99"
+    },
+    {
+      "path": "docs/sources/terra-terminology/sources.json",
+      "sha256": "sha256:315706645a286f1cd733a3db9e9f1827e1562382eee83f8dec027ee54e379347"
+    },
+    {
+      "path": "docs/sources/ticketing-platform-logo-provenance.md",
+      "sha256": "sha256:ef9ab8bcfb4e6c8e661cb9ac4b6ad29e17ad4ad19bfc1ccfba7a7655247f0f8e"
+    },
+    {
+      "path": "docs/sources/troupe-logo-provenance.md",
+      "sha256": "sha256:7ed19bbfd45ea577fb24368efc5cd1a8d8fca9666909e08ed0176b66b76982e7"
+    },
+    {
+      "path": "scripts/creative-review.mjs",
+      "sha256": "sha256:14953ff55af473864a14e8677e4e781c6c5fa07a5ef7be67b913eb3e561f2be0"
+    },
+    {
+      "path": "src/components/archive/ArchiveInvitation.astro",
+      "sha256": "sha256:d5677108d73853fa837feb86bd3440cf2e67eb687a3b7a4a9bd1d2de7cbee020"
+    },
+    {
+      "path": "src/components/archive/ArchivePerformanceList.astro",
+      "sha256": "sha256:56f365e0ca71e20c4d75f0b376b47099f83a05675f1e20cd72f7be385d86a55d"
+    },
+    {
+      "path": "src/components/archive/ArchivePoster.astro",
+      "sha256": "sha256:f92cf9290208744a041ba14b63acd9cb66b57cd41f48641984a620e301492431"
+    },
+    {
+      "path": "src/components/archive/ArchiveSeatRegister.astro",
+      "sha256": "sha256:b81cf913c41e151995c49dd38d56bc6f7a2779d3c45fbdf4a3a6d26c07d5e126"
+    },
+    {
+      "path": "src/components/front/FrontPerformanceList.astro",
+      "sha256": "sha256:d2daf52f154057b5f492202fe3d8ab4efd9cc68103103c86b808e315e2c5c5cc"
+    },
+    {
+      "path": "src/components/front/ProductionVisual.astro",
+      "sha256": "sha256:f7a1a4c3ff45120617792a3108835e3cf5c8cee202fd1e5770d80a1f11e4fcc4"
+    },
+    {
+      "path": "src/components/front/TicketingExperience.astro",
+      "sha256": "sha256:a47457be90e1c6b64f470851ad14b2d50d801632393d4fa698520fc8a66495c0"
+    },
+    {
+      "path": "src/components/front/TicketSeatingPlan.astro",
+      "sha256": "sha256:47e5a9c62cde95decf0391d4dfd8dc76376b2eb58eb4c47caed52f5b99a15e4e"
+    },
+    {
+      "path": "src/components/shared/EarlyPollutionState.astro",
+      "sha256": "sha256:022a498f636e2a1dc31643e5dcbabfdfaef9c03e50b601222c9ee3619ee018b9"
+    },
+    {
+      "path": "src/components/shared/EditionSelector.astro",
+      "sha256": "sha256:128ec19712f5752e8199dc8c8ff06c98b68fdf6735b5ee85688b0fa04431b2e8"
+    },
+    {
+      "path": "src/components/shared/PollutionController.astro",
+      "sha256": "sha256:5c92eecf95c61baa3cfd7adc676c26984abf212630e7021dc2ad8483664ac126"
+    },
+    {
+      "path": "src/components/shared/SiteFooter.astro",
+      "sha256": "sha256:dd6b299a74b9cb4a6968dc9b0f22093f376af6f4af4c79614da01c4686d21255"
+    },
+    {
+      "path": "src/components/shared/SiteHeader.astro",
+      "sha256": "sha256:bc54618d7eb37f272086b20da0f9c3912e3fa1c74812196e201c4196323eb6a4"
+    },
+    {
+      "path": "src/components/shared/SiteSearch.astro",
+      "sha256": "sha256:d77ba80e0f92fb3e6d2adcd7cab64e5a74f60d5196c82edd9dca3bdddaaf4630"
+    },
+    {
+      "path": "src/components/shared/TroupeMark.astro",
+      "sha256": "sha256:084b42664e57245e992b04363c8c4926b3ec4b22f9720735a0329584cbb737f7"
+    },
+    {
+      "path": "src/components/ticketing/PartnerTicketingExperience.astro",
+      "sha256": "sha256:3c42a6398f74274f366212c9d80c63a569de2f168167f18334a7e7d4c5472dda"
+    },
+    {
+      "path": "src/components/ticketing/TicketingPlatformBrand.astro",
+      "sha256": "sha256:2698a019e43e9565de0dac6d63c0a64c6a0fb65d53e20df1836b26c371ce86d1"
+    },
+    {
+      "path": "src/data/archive-pollution.ts",
+      "sha256": "sha256:392249a780d37094fef64488ac648ca2771cd425a09972a2f63d5f2b2fca3efc"
+    },
+    {
+      "path": "src/data/archive-snapshots.ts",
+      "sha256": "sha256:121a1c6b0572bf5a92c5839b7bfec4e057982c8e7dd77b81d344a41fc6041175"
+    },
+    {
+      "path": "src/data/archive-ticketing.ts",
+      "sha256": "sha256:d8efedd9bcd0d1599c808e967590cdbcce567590931f5cc7efd0502bb1e4b585"
+    },
+    {
+      "path": "src/data/content/approval-digests.ts",
+      "sha256": "sha256:99f59de2dbadc74f97ed8cdeda344b84322839e6099604c0942f1b3d182da40d"
+    },
+    {
+      "path": "src/data/content/build-context.ts",
+      "sha256": "sha256:76ae5edacb4f8cf36ea0ca181d21c8d97b5f25cd5035082fd933fa77c80747a3"
+    },
+    {
+      "path": "src/data/content/eligibility.ts",
+      "sha256": "sha256:228d81a14b86b0fcff66a74c0dacafa6e426bd76a468a369ff20053d7e428268"
+    },
+    {
+      "path": "src/data/content/fingerprint.ts",
+      "sha256": "sha256:7920efb0d828ef09d5ba94f8931cb8cc3ad865cc5fe85bc1e3aebd982eed9ce8"
+    },
+    {
+      "path": "src/data/content/localization-revisions.ts",
+      "sha256": "sha256:d2992f430d4233762946e39dbb8a63250d347ac1d4a2cde2ed746e49365b980b"
+    },
+    {
+      "path": "src/data/content/resolve.ts",
+      "sha256": "sha256:867313c6e4ff2ca1b5719856f44afc38c551c05a8753d13b8091588351dc1bc3"
+    },
+    {
+      "path": "src/data/content/root-sets.ts",
+      "sha256": "sha256:a5318c41b5d52bb3d5ea04f4180513be50cadbfcbeb52535f7b44247d9a24593"
+    },
+    {
+      "path": "src/data/content/validate.ts",
+      "sha256": "sha256:f53582761d0b371060cb008d29a4a03557483d216794398bda98e9c2d61d487f"
+    },
+    {
+      "path": "src/data/content/variants.ts",
+      "sha256": "sha256:a944922769076e764bf8b4067b2fa8ab5a31e0c220c2abdf1ba63bd1136083d4"
+    },
+    {
+      "path": "src/data/editions.ts",
+      "sha256": "sha256:6cbcb7cb10426b12b909bac5c7f4bfb7048b123bf6c801509bd99613015a1d54"
+    },
+    {
+      "path": "src/data/localized/columbia/archive-projection.ts",
+      "sha256": "sha256:f589a06d3f3584a2d1230ac63eb73d71dab30cd8b9474b0f9edf4d462e9c9464"
+    },
+    {
+      "path": "src/data/localized/columbia/index.ts",
+      "sha256": "sha256:078f80428b427f837a329060f437276cb7c175bd9fb77b74a9ba1a0945eb8a23"
+    },
+    {
+      "path": "src/data/localized/columbia/messages.ts",
+      "sha256": "sha256:cdfa8fc906f7d1670653039ae55315e2c1d9929ab33173e898ab004cb2602723"
+    },
+    {
+      "path": "src/data/localized/columbia/productions/folio.ts",
+      "sha256": "sha256:6538480cca37aaf66fef545d6f9c75b8229462ee27de7f141c74aa36095a9710"
+    },
+    {
+      "path": "src/data/localized/columbia/productions/index.ts",
+      "sha256": "sha256:e1b10a491e003b04833c6ecea6eefbf926352028ab14b4f4ec017a94bc122f37"
+    },
+    {
+      "path": "src/data/localized/columbia/productions/original.ts",
+      "sha256": "sha256:e4324d70f4da725c9f0dc19ceba86e91ee5758df2921d11d63520862ce1335df"
+    },
+    {
+      "path": "src/data/localized/columbia/programs.ts",
+      "sha256": "sha256:e31adc39335468ba9624044ffb90ce65854c1407a45fcd2fa96a4038f8469db0"
+    },
+    {
+      "path": "src/data/localized/columbia/site.ts",
+      "sha256": "sha256:68140b8d4f8fd852f50103177900c272e1cd78f49a31dde29149362d9242516c"
+    },
+    {
+      "path": "src/data/localized/folio-source-texts.ts",
+      "sha256": "sha256:3cbd1b237e930256d5d53cda71fc38d6fdbf2b1e1e35bcce91561aec7364f0ad"
+    },
+    {
+      "path": "src/data/localized/format.ts",
+      "sha256": "sha256:ba3f91b30df733b36548ab4d35fbd2fb843daf9579f2c4d4f9cb4c30d5de0a2a"
+    },
+    {
+      "path": "src/data/localized/higashi/archive-projection.ts",
+      "sha256": "sha256:742c3cb0fdabda635ba22192e11380a22bc9928180b056992b79e778903c0fc6"
+    },
+    {
+      "path": "src/data/localized/higashi/index.ts",
+      "sha256": "sha256:ac508c6a3c1ff4ee4f7153dc06b808f9fd5a462b8d83a73fa4b737d576f53df1"
+    },
+    {
+      "path": "src/data/localized/higashi/messages.ts",
+      "sha256": "sha256:00498f74176faeeb69c7f75bd61e01045e2e35ecb661efecb18bdf773bc0768b"
+    },
+    {
+      "path": "src/data/localized/higashi/productions/folio.ts",
+      "sha256": "sha256:e08f82f010385d7a55618305803cdb0ba30cf80fe03768b13886c7297489b9a0"
+    },
+    {
+      "path": "src/data/localized/higashi/productions/index.ts",
+      "sha256": "sha256:2d1af2d8a2e90302ab04c3a376c6fe1d79b57e2dedb94d9dc248dbfde2416952"
+    },
+    {
+      "path": "src/data/localized/higashi/productions/original.ts",
+      "sha256": "sha256:714c9e3be25840a353fdf4e2c728f915b46d84efc0591bb5633761a569e5bd41"
+    },
+    {
+      "path": "src/data/localized/higashi/programs.ts",
+      "sha256": "sha256:e0e991709b8f14dc2686688a39b7b6bf46649b0f10516b452f8d5f9ef7f08c7a"
+    },
+    {
+      "path": "src/data/localized/higashi/site.ts",
+      "sha256": "sha256:9784ab63cd4dabb4bf36c7b61508312702bafecd9cb18720d717807b8cfefb2c"
+    },
+    {
+      "path": "src/data/localized/kazimierz/archive-projection.ts",
+      "sha256": "sha256:8306ace53d84812639ea7fb6c704e017b285bbd7b34bc28d1c0f131fb9003a1b"
+    },
+    {
+      "path": "src/data/localized/kazimierz/index.ts",
+      "sha256": "sha256:2eeb99372bda009b7a138b232b5e07e7cb338076a18feeb51d7ec06dfae8daac"
+    },
+    {
+      "path": "src/data/localized/kazimierz/messages.ts",
+      "sha256": "sha256:ea7ad12d8b46553e9b0bc51ba0bc195d0257a0d3902fecac649204febeabc006"
+    },
+    {
+      "path": "src/data/localized/kazimierz/productions/folio.ts",
+      "sha256": "sha256:7740c94b4448035a8892c0425343aa7af007d02d622223e26a1a8d26b2b46531"
+    },
+    {
+      "path": "src/data/localized/kazimierz/productions/index.ts",
+      "sha256": "sha256:338a918f15abdb1fce0eb552be0a63115320932fa85d167baeac537db557ff36"
+    },
+    {
+      "path": "src/data/localized/kazimierz/productions/original.ts",
+      "sha256": "sha256:a67a26e01716c753cc99767d6d6a006faf40fc34939ee1c39bd6fd5ea72e30ec"
+    },
+    {
+      "path": "src/data/localized/kazimierz/programs.ts",
+      "sha256": "sha256:a282513430cbaca0c582783f27ab6605b47e9fb03435bcb2fedc43f353022d45"
+    },
+    {
+      "path": "src/data/localized/kazimierz/site.ts",
+      "sha256": "sha256:1c8b6e00cdd619608f3b7ed94c3ab674e4bd4dd95f209bcb6e8095471cb3c343"
+    },
+    {
+      "path": "src/data/localized/leithanien/archive-projection.ts",
+      "sha256": "sha256:15b1e27e7010f255d928ac46011249d40c257240d1beee9e56b4cba64749071c"
+    },
+    {
+      "path": "src/data/localized/leithanien/index.ts",
+      "sha256": "sha256:93e15d68e629f850c92d33fdf92352b8eb841b15b88e7536b2365af64688c4c8"
+    },
+    {
+      "path": "src/data/localized/leithanien/messages.ts",
+      "sha256": "sha256:f86762b01f546cba92b498a7c98b2e450845d8601e5e8a69524e43f397a6f403"
+    },
+    {
+      "path": "src/data/localized/leithanien/productions/folio.ts",
+      "sha256": "sha256:bfdbc396d4914bf6241ea37e5fb13a269347998a46d6b7482a0b89eef796a5d5"
+    },
+    {
+      "path": "src/data/localized/leithanien/productions/index.ts",
+      "sha256": "sha256:d548fc211bf094dbea825c6266e8a38028d9d171aa0dab9d1f8151b7502301bb"
+    },
+    {
+      "path": "src/data/localized/leithanien/productions/original.ts",
+      "sha256": "sha256:f8390f8702e8fc9360c4a6ef2371b6cc1c47cd9290486edb8a309e45fb5d0c63"
+    },
+    {
+      "path": "src/data/localized/leithanien/programs.ts",
+      "sha256": "sha256:ff5ca8542986fad0cc19ce044c62ee5ddaeb707101ecd86d57422784720296c2"
+    },
+    {
+      "path": "src/data/localized/leithanien/site.ts",
+      "sha256": "sha256:577bbc34283b368e324251463fd362f0455fad46d4b6d923592e542896f6c396"
+    },
+    {
+      "path": "src/data/localized/minos/archive-projection.ts",
+      "sha256": "sha256:7b30abd152ffa0456984ac9607ce3507a3a693346d7bfdf8645623f05e2e89f5"
+    },
+    {
+      "path": "src/data/localized/minos/index.ts",
+      "sha256": "sha256:8f79803324ef9b24508bda6c0c6ccd02424897c8dde3de84ccad98b62260ce04"
+    },
+    {
+      "path": "src/data/localized/minos/messages.ts",
+      "sha256": "sha256:6f299e997213a54726c3e234510d97086aed00d126778cc6f2b5194d3ea1239d"
+    },
+    {
+      "path": "src/data/localized/minos/productions/folio.ts",
+      "sha256": "sha256:78ba9818bd36e64ae52be789ee004de5953726e2aafc9587467d2b423d5687c1"
+    },
+    {
+      "path": "src/data/localized/minos/productions/index.ts",
+      "sha256": "sha256:6c1fc49880172799073ee290adc24ea7a072e2c0f48926fe270c3be7869fa194"
+    },
+    {
+      "path": "src/data/localized/minos/productions/original.ts",
+      "sha256": "sha256:dec8b3f2759b17119ad36610e52d8ddc900e90ac00aaf9ed1f7a6eacb976c3bf"
+    },
+    {
+      "path": "src/data/localized/minos/programs.ts",
+      "sha256": "sha256:ee75f69af42a1eed1e4e0c8fa6c8e063084187ac075eee3ae32e26a6b744e1b4"
+    },
+    {
+      "path": "src/data/localized/minos/site.ts",
+      "sha256": "sha256:cc91ef7b82e156db344dbc3c1fa6e773843c39852f40f39221587d26fc63195d"
+    },
+    {
+      "path": "src/data/localized/packages.ts",
+      "sha256": "sha256:35108b3475acb0be177fd8c8258d7c9a6f51de2730d35f8a00f05564bf97c9b5"
+    },
+    {
+      "path": "src/data/localized/resolve.ts",
+      "sha256": "sha256:ea3a9c7dac240739917e110813a81fa9ccca8c309e5b8809acb11c14f36f7866"
+    },
+    {
+      "path": "src/data/localized/schema.ts",
+      "sha256": "sha256:6e606f81d63862be1e8ad1f1733f47be2d93d47fbffcb4255ef186c1c7a930bf"
+    },
+    {
+      "path": "src/data/localized/siracusa/archive-projection.ts",
+      "sha256": "sha256:2f1359789ae450f276a49a5069d6aa1e07271e9b1a2913231f0f8810f375ec5b"
+    },
+    {
+      "path": "src/data/localized/siracusa/index.ts",
+      "sha256": "sha256:adbbc7ccb17eb54cbec59fbe3e89c4a8ac4d227c162c61b7589f3248d328f41c"
+    },
+    {
+      "path": "src/data/localized/siracusa/messages.ts",
+      "sha256": "sha256:d210f614e67c1dcd1f01d6343ee87fcff501de5a7b0bea509e12904f03f7bbcb"
+    },
+    {
+      "path": "src/data/localized/siracusa/productions/folio.ts",
+      "sha256": "sha256:a084f0c8f7cf73deb51c094762e68e61c07d92591f24d98386360344985f7daa"
+    },
+    {
+      "path": "src/data/localized/siracusa/productions/index.ts",
+      "sha256": "sha256:a9fae37048ec9df2b75de19b942dd0a1e03621a9b1b7f8f758136059d8bc7977"
+    },
+    {
+      "path": "src/data/localized/siracusa/productions/original.ts",
+      "sha256": "sha256:2fbcf164a6073298b1580b0713bf6d966a62b5e22cb9f15cc2d64738fd614607"
+    },
+    {
+      "path": "src/data/localized/siracusa/programs.ts",
+      "sha256": "sha256:2243b0ac16a5efa0ada38c480bbaccb4f20738d4519fe941f18f7a4bef701515"
+    },
+    {
+      "path": "src/data/localized/siracusa/site.ts",
+      "sha256": "sha256:7358636389b755098b8a3217bb00446edf8ea7c1a87d9836dcf9a2bf2c788b1e"
+    },
+    {
+      "path": "src/data/localized/ticket-artifact.ts",
+      "sha256": "sha256:688c48a2dba600534a928d68cb2de8542f48f09e942e11c0dbdc95d71b2f4474"
+    },
+    {
+      "path": "src/data/localized/ursus/archive-projection.ts",
+      "sha256": "sha256:8dda6eac032647b10933300f880dacce905ab90081df1b8c099c5cfe640c3fc8"
+    },
+    {
+      "path": "src/data/localized/ursus/index.ts",
+      "sha256": "sha256:4a15cef5f5316f6c1b36de63201de0ec4c79fd2958b6630c3830ef2388f910e5"
+    },
+    {
+      "path": "src/data/localized/ursus/messages.ts",
+      "sha256": "sha256:02f7ff22a7438fd27e94fac17247f584202a0d6c66aed7a4feaf3875142c480c"
+    },
+    {
+      "path": "src/data/localized/ursus/productions/folio.ts",
+      "sha256": "sha256:af40673f2c9b854f26b510324d035d158e9ab9c2dd2426de4d27330a94d8237c"
+    },
+    {
+      "path": "src/data/localized/ursus/productions/index.ts",
+      "sha256": "sha256:0a560a05fbc4addd25242cdc63c7c0443773f40c968b873a1bfccaa27815fdb8"
+    },
+    {
+      "path": "src/data/localized/ursus/productions/original.ts",
+      "sha256": "sha256:2d612d57af1d1bdb0019ce80b0ed68e7e61b91a642966d0a8ccfd5c5fe3f6745"
+    },
+    {
+      "path": "src/data/localized/ursus/programs.ts",
+      "sha256": "sha256:d5f3874210f3c890defa30b1045d435ee3c1e9702cb07e9a7dd097eca1e81831"
+    },
+    {
+      "path": "src/data/localized/ursus/site.ts",
+      "sha256": "sha256:776e1a24dda44ec2216d2d16852bd23ea85ce7cbf4c1c69296db3df7bd9e890e"
+    },
+    {
+      "path": "src/data/localized/victoria/archive-projection.ts",
+      "sha256": "sha256:4a4f34c47ff360374f622cccd92dd2f3eec3411b3524369de86dd452bcf5d811"
+    },
+    {
+      "path": "src/data/localized/victoria/index.ts",
+      "sha256": "sha256:b365f6e42b5bf7b8e4b62f690d518fe89050860ea319c30b47f1dcc7ab3e5c03"
+    },
+    {
+      "path": "src/data/localized/victoria/messages.ts",
+      "sha256": "sha256:123365327245204a66f374e68661e85927c79a14fba1dcf8f40fd3f6fff238ec"
+    },
+    {
+      "path": "src/data/localized/victoria/productions/folio.ts",
+      "sha256": "sha256:8bccc5c6763f6a48196d21dabd0d4b8f22c85d1a08971215a4bc9ee6cc72cd98"
+    },
+    {
+      "path": "src/data/localized/victoria/productions/index.ts",
+      "sha256": "sha256:fed18e1675f5d62e39db1a7cbd633cf5a5010e37e8bd7497941b6e64b256a1f7"
+    },
+    {
+      "path": "src/data/localized/victoria/productions/original.ts",
+      "sha256": "sha256:2b2847a424e56071df538f93f1acc5fb4e8b2a7a31452593c0541e9fc773d51b"
+    },
+    {
+      "path": "src/data/localized/victoria/programs.ts",
+      "sha256": "sha256:8989b6e818c8c8b756811900d05cd88e127d6ab706cfe29376c862045275e9bc"
+    },
+    {
+      "path": "src/data/localized/victoria/site.ts",
+      "sha256": "sha256:f20e8bbfd8a9ef08e9c8a08f767d5fae87083d95735b6402ce92a4451854b455"
+    },
+    {
+      "path": "src/data/localized/yan/archive-projection.ts",
+      "sha256": "sha256:6fa73e277a1c5d5c43911292bcb8fdf2dfd72fa24e5f843d43ab22c28552472a"
+    },
+    {
+      "path": "src/data/localized/yan/index.ts",
+      "sha256": "sha256:fc9c090a77823b21e1fe3237e429f35f14aed023465d509cd9570e246fc19bfb"
+    },
+    {
+      "path": "src/data/localized/yan/messages.ts",
+      "sha256": "sha256:269ac2c6da37fdc4e0ba0ba3b86d8f1ecb5d3390417d736d2abfcb4ae49b1d2b"
+    },
+    {
+      "path": "src/data/localized/yan/productions/folio.ts",
+      "sha256": "sha256:b8606223a2ba94e7166db55425da86ba139ba9759b1aa4b0187a45b02dff1326"
+    },
+    {
+      "path": "src/data/localized/yan/productions/index.ts",
+      "sha256": "sha256:b006924a54f79d82ce18e05a0cef5ed0af60bcdb144213da29d3c18296ddee5a"
+    },
+    {
+      "path": "src/data/localized/yan/productions/original.ts",
+      "sha256": "sha256:3bfbb9c9c2c3d7f460aee96522d071ad9579223810ccbbd51758b15090887f77"
+    },
+    {
+      "path": "src/data/localized/yan/programs.ts",
+      "sha256": "sha256:67968a093f06c3f9041c5a55d6a0d4823e11193d92d5cf5ec67c210653dcc1f8"
+    },
+    {
+      "path": "src/data/localized/yan/site.ts",
+      "sha256": "sha256:e3c676e433da2c5ec47d462f9b1790718b8f8b521ea10317331246b8ebda9d7c"
+    },
+    {
+      "path": "src/data/locations.ts",
+      "sha256": "sha256:bc2cb88aa1d59b6d7a0c9bec10242fe0089096999f25de65a87f42f01b9b1ac8"
+    },
+    {
+      "path": "src/data/performance-offers.ts",
+      "sha256": "sha256:b689c6369f18510e4a98eee35098faf7b629ec8276c1b8850992079b66d807f1"
+    },
+    {
+      "path": "src/data/performances.ts",
+      "sha256": "sha256:b21fa36c875ca62afc5be72718a7b0e47da5fd8228fe666247683fecdd8b334a"
+    },
+    {
+      "path": "src/data/production-artwork-assets.ts",
+      "sha256": "sha256:8195e664ec4aab161db8f8c59ddc58152b53422af2b4a845ce2fa4e5e3c60384"
+    },
+    {
+      "path": "src/data/production-artwork-manifest.ts",
+      "sha256": "sha256:1e8f5c44dec9160870c334feb398a8e1cada111e995f4d400b00d5d3c588ff29"
+    },
+    {
+      "path": "src/data/production-artworks.ts",
+      "sha256": "sha256:bfe6f18340f9067b045df1f1c9fe8dd3697bdcb500f53b1ef8c91fda973b9216"
+    },
+    {
+      "path": "src/data/productions/folio-source-records.ts",
+      "sha256": "sha256:f4b9457568fdff8c0f60e8e182868ae6445f6e92fe9e98eaf2a22085d980d770"
+    },
+    {
+      "path": "src/data/productions/folio.ts",
+      "sha256": "sha256:7d717d7dcac10d13e6b0f8c8e7aaa6b8298c017ccf82ab7e228e352db6a1d749"
+    },
+    {
+      "path": "src/data/productions/index.ts",
+      "sha256": "sha256:4ad67a0460d06f0e3fa1ca2ddab36003235c8ed6d028273a9837b9d3d1ea1cf1"
+    },
+    {
+      "path": "src/data/productions/original.ts",
+      "sha256": "sha256:1fa376568261b338f389841bd0232a24d09a3c0b000332b50cf875f880d79f83"
+    },
+    {
+      "path": "src/data/search-policy.ts",
+      "sha256": "sha256:0228f3f3e257a9a7c3d37a56d5f6cb1f86d9ae4ca723e4f12b8e10d40a939a89"
+    },
+    {
+      "path": "src/data/site-routes.ts",
+      "sha256": "sha256:5db27a06d7489eb9dd178c90a60cb45a7c58313f465dc3011e8d0e4acce1f5f0"
+    },
+    {
+      "path": "src/data/site-search-index.ts",
+      "sha256": "sha256:aea66ce4091020e065c1c1c8c19378bcdd1fad7171eaed942d2839889c46645a"
+    },
+    {
+      "path": "src/data/site-time.ts",
+      "sha256": "sha256:e1fd2aa3d3296e1f8993a6dba8fe6b4d30937442f44c606fea7bb9ab22e1afd7"
+    },
+    {
+      "path": "src/data/ticket-seating-plans.ts",
+      "sha256": "sha256:d4156372189f7c057580ab55518a849b841bdfc96043c943dabe6d4ed532fca9"
+    },
+    {
+      "path": "src/data/ticketing-platform-assets.ts",
+      "sha256": "sha256:8f6b07e4057a593df3cb70ccc91756895c88404114eb29509aa5947b29b6cc6b"
+    },
+    {
+      "path": "src/data/ticketing-platforms.ts",
+      "sha256": "sha256:4882b94059e52f46ee76541718514929af76a4c36703aa4e9ef2fbf01aa9dfa7"
+    },
+    {
+      "path": "src/data/ticketing.ts",
+      "sha256": "sha256:dd584fbf8caccd164909aa58ac7a9a30122f3fbd9a9adfd29e0a3d0de93b3e76"
+    },
+    {
+      "path": "src/layouts/ArchiveLayout.astro",
+      "sha256": "sha256:f87ee7e75128a5cfb70be2407e305610c8d63d75662bee3a3b216c3a5d81125f"
+    },
+    {
+      "path": "src/layouts/BaseLayout.astro",
+      "sha256": "sha256:babea700564b8c6c065c80d72327d6e540758c72f1728a6dcba2515412e74805"
+    },
+    {
+      "path": "src/layouts/FrontLayout.astro",
+      "sha256": "sha256:5fbbadef9a99b5d66099fb934ea353cd4cb0265583cc753a6a30ae28c62f9b8a"
+    },
+    {
+      "path": "src/pages/[routePrefix]/archive/site/1084-07-01/index.astro",
+      "sha256": "sha256:d1d117478d7cf928189257c4f3912843e664912c3980861adfbc8be455b786ae"
+    },
+    {
+      "path": "src/pages/[routePrefix]/archive/site/1084-07-01/performances/[performanceId].astro",
+      "sha256": "sha256:1e39b380fd36effe4e11b31e1129e2b2a2d962fe8007647e5da17e2d34610ff3"
+    },
+    {
+      "path": "src/pages/[routePrefix]/archive/site/1084-07-01/performances/history/index.astro",
+      "sha256": "sha256:328964a6db19b8e810d266f8072ceb92fdba6f502055bec5856ce3bd4dfeea7a"
+    },
+    {
+      "path": "src/pages/[routePrefix]/archive/site/1084-07-01/performances/index.astro",
+      "sha256": "sha256:7c516fa9f28f9929bd68051e67360ab9f636c04b15272367976a6a30805eddcb"
+    },
+    {
+      "path": "src/pages/[routePrefix]/archive/site/1084-07-01/productions/[productionId].astro",
+      "sha256": "sha256:604523868eebb8bc2d5691335b412b86736db08a324449fdd5d4240ce6d82ec4"
+    },
+    {
+      "path": "src/pages/[routePrefix]/archive/site/1084-07-01/search/index.astro",
+      "sha256": "sha256:c0e619a0a98f04f2d4eaac9649d2db4d916f3556cf7538f7ccfb8e0289572fa5"
+    },
+    {
+      "path": "src/pages/[routePrefix]/archive/site/1084-07-01/tickets/index.astro",
+      "sha256": "sha256:b9e874e24a0a0634ed4ee22626a241350c8f93825caa286b298571a9c8df89da"
+    },
+    {
+      "path": "src/pages/[routePrefix]/archive/site/1084-07-01/troupe/index.astro",
+      "sha256": "sha256:463c254bb7f033b157995a42d4cc6036c6a8b709036617687c54ea10e3926d31"
+    },
+    {
+      "path": "src/pages/[routePrefix]/archive/site/1084/[...legacy].astro",
+      "sha256": "sha256:1d15b4a6515db0ed5d6fd7f83f39cc6d419eef2c3534d2e09dbed37ce11241dd"
+    },
+    {
+      "path": "src/pages/[routePrefix]/index.astro",
+      "sha256": "sha256:be881739dce9bc8e3cd29a92d9963519069775d5df1fc507a8a33fd5b61656b6"
+    },
+    {
+      "path": "src/pages/[routePrefix]/performances/[performanceId].astro",
+      "sha256": "sha256:357cbc00e199f244f77237873cd9b48ce7a965b19bc9477097c8393bc6f1a246"
+    },
+    {
+      "path": "src/pages/[routePrefix]/performances/history/index.astro",
+      "sha256": "sha256:df21ea970ca152d2d48710c96d9be5accd061578bc9536834da1ed4fcd199141"
+    },
+    {
+      "path": "src/pages/[routePrefix]/performances/index.astro",
+      "sha256": "sha256:4186a297389512fd6744551c45efe67fe763275ddf7e654048fb0123452afd9c"
+    },
+    {
+      "path": "src/pages/[routePrefix]/productions/[productionId].astro",
+      "sha256": "sha256:5b38336c5546eeb21f7a5afdc79227d8c9d928ee4d5fb6b89d10e451bdc7cacb"
+    },
+    {
+      "path": "src/pages/[routePrefix]/search/index.astro",
+      "sha256": "sha256:558bd18cd2380407af86d1f373382c69b793233f7ad099757312e5511cd35ee0"
+    },
+    {
+      "path": "src/pages/[routePrefix]/tickets/index.astro",
+      "sha256": "sha256:0b9d8b80c7f5cac3d2e1ed781f39138f3552d1592ddafabd05e33f8b303c4a3a"
+    },
+    {
+      "path": "src/pages/[routePrefix]/tickets/partner/index.astro",
+      "sha256": "sha256:b6481f0c9eb993cee4c2c0465d10e7569e32d1b8a723802c7b0620a755817dfd"
+    },
+    {
+      "path": "src/pages/[routePrefix]/troupe/index.astro",
+      "sha256": "sha256:7c12c1d8e1795d4ec8368d88da13813165619b3a64e9cab798e57badee84a9bb"
+    },
+    {
+      "path": "src/pages/index.astro",
+      "sha256": "sha256:fb404b0140e78ab51797ee64f58230e2806ab876f8ec77de52961f7ec348feb1"
+    },
+    {
+      "path": "src/scripts/archive-folio-effects.ts",
+      "sha256": "sha256:609bcc6327e3212f583a2d9685aeed0848ebc19cd1433a463f370bed0f0f2129"
+    },
+    {
+      "path": "src/scripts/archive-folio-loading.ts",
+      "sha256": "sha256:02062418f9cee0e8301e8f5c23f5b176bd01e10dd0a3fd9eb42846fcd456736a"
+    },
+    {
+      "path": "src/scripts/archive-invitation.ts",
+      "sha256": "sha256:d43a916d4a73d30226794e38d8a9b31db1cb14026081e18deb551c67f2524ef8"
+    },
+    {
+      "path": "src/scripts/partner-ticketing-controller.ts",
+      "sha256": "sha256:b5b3b924893704c4728b2642fc9680510809e14cf6af9d3a426829ac9520075c"
+    },
+    {
+      "path": "src/scripts/performance-filters.ts",
+      "sha256": "sha256:9d948a4206ba5dc41dbb995a06f99458ea930bdc57f3e792faf2f7baf0d00abc"
+    },
+    {
+      "path": "src/scripts/pollution-controller.ts",
+      "sha256": "sha256:540c404702de3f7bba86fba1fac23c9bc07b29c98d05504002c9793701761d93"
+    },
+    {
+      "path": "src/scripts/pollution-state.ts",
+      "sha256": "sha256:a223870e99846fe1162deb978dfbc41bfda846546784178a51b28f5d7dc115cd"
+    },
+    {
+      "path": "src/scripts/site-search.ts",
+      "sha256": "sha256:4a93b78008741b146f52966ac53fe7b70ffcc1255e3b92cb6456d4bc7afa8ee9"
+    },
+    {
+      "path": "src/scripts/ticket-artifact.ts",
+      "sha256": "sha256:fdd74c5230d5f39856a32571ff487214713067356e8130ee9519be0bf7bd244c"
+    },
+    {
+      "path": "src/scripts/ticket-result-renderer.ts",
+      "sha256": "sha256:4162f51fb886a41d6e63aa1818fd57aaea0f79b45678b910ccb8b49b76c7e5cf"
+    },
+    {
+      "path": "src/scripts/ticketing-controller.ts",
+      "sha256": "sha256:c8fd318b246a434a30f70e7ad37c652f76983010ca33ea26b0ac5f784c698d1a"
+    },
+    {
+      "path": "src/scripts/ticketing-session.ts",
+      "sha256": "sha256:f1c9800734f719ae1c14566d1153ca41d11e310428604e3593f96283b417a6c3"
+    },
+    {
+      "path": "src/scripts/ticketing-state.ts",
+      "sha256": "sha256:2e04d40e07baee9158febb5b82a424160b37694f2c931716d9a99aaf497fb597"
+    }
+  ],
+  "locatorPaths": [
+    "docs/blueprint/modules/archive.md",
+    "docs/guides/creative-content-review.md",
+    "docs/project/temporal-context.md",
+    "docs/research/terra-chronology/date-claims.csv",
+    "docs/research/terra-chronology/event-network.json",
+    "docs/research/terra-chronology/open-questions.csv",
+    "docs/research/terra-terminology/language-policy.md",
+    "docs/research/terra-terminology/translation-candidates.json",
+    "docs/sources/official-folio-productions.md",
+    "docs/sources/README.md",
+    "docs/sources/terra-chronology/README.md",
+    "scripts/content-lifecycle.test.mjs",
+    "scripts/creative-review.mjs",
+    "scripts/validate-states.mjs",
+    "src/components/shared/SiteSearch.astro",
+    "src/data/archive-snapshots.ts",
+    "src/data/content/localization-revisions.ts",
+    "src/data/content/root-sets.ts",
+    "src/data/localized/format.ts",
+    "src/data/localized/yan/productions/original.ts",
+    "src/data/localized/yan/programs.ts",
+    "src/data/localized/yan/site.ts",
+    "src/data/performances.ts",
+    "src/data/site-time.ts"
+  ],
+  "report": {
+    "schemaVersion": 1,
+    "fingerprint": "sha256:930290d6b83765d35cc91732478439d04e3f7b5bc8dfe8f2a4d914704201fa45",
+    "classification": "semantic-review",
+    "summary": "PR 工作分支同步复核：保留最新 dev_code 已验收的图片分尺寸与优先级、无脚本搜索反馈、当前页与票务焦点修复，以及泰拉日期数值比较／本地化格式修正。逐项检查导入的12个创意指纹路径，未改场次、地点、主创、排期或译文事实。当前9语言公告修正、流程与测试工具一并保留；五项原待处理发现继续保留，不授正式资格。当前工作分支已正常同步 dev_code；逐文件指纹与先前审查的融合候选完全一致，PR 前继续执行兼容性验证。",
+    "scope": {
+      "reason": "目标主线已验收技术改动的融合复核；README两段合并保留，状态测试保留主线泰拉日期边界用例与本轮独立fixture。内容新增来源与公告修正沿用本轮实际审查。",
+      "paths": [
+        "src/components/archive/ArchiveInvitation.astro",
+        "src/components/archive/ArchivePoster.astro",
+        "src/components/front/ProductionVisual.astro",
+        "src/components/shared/SiteHeader.astro",
+        "src/components/shared/SiteSearch.astro",
+        "src/components/shared/TroupeMark.astro",
+        "src/components/ticketing/PartnerTicketingExperience.astro",
+        "src/data/localized/format.ts",
+        "src/data/site-time.ts",
+        "src/pages/[routePrefix]/archive/site/1084-07-01/index.astro",
+        "src/pages/[routePrefix]/index.astro",
+        "src/scripts/partner-ticketing-controller.ts"
+      ]
+    },
+    "axes": {
+      "chronology": {
+        "conclusion": "pass-with-findings",
+        "evidence": [
+          {
+            "path": "docs/research/terra-chronology/date-claims.csv",
+            "note": "T015相关D01-D03及P003相关D10-D12/D15保留竞争日期主张，不以交集或票数裁成唯一官方日期。"
+          },
+          {
+            "path": "docs/project/temporal-context.md",
+            "note": "1101年末事故分支和1102-01-04原演出日属于已采纳作者前提；事故、获知、公告、演出和捕获不能混成同一时间。"
+          },
+          {
+            "path": "src/data/performances.ts",
+            "note": "复核1084旧城locationId、当前场次排期和取消／售票配合；跨国移动缺乏速度与路线证据，无法判已验证可行。"
+          },
+          {
+            "path": "docs/research/terra-chronology/open-questions.csv",
+            "note": "Q11已按当前字段纠正；源ID仍保留旧地名／旧日期片段是稳定身份约束，不应据此重造错置。"
+          },
+          {
+            "path": "src/data/localized/format.ts",
+            "note": "保留泰拉年、日字段，Intl仅提供各语格式，不将泰拉2月31日滚动为地球公历3月；未改已有演出排期。"
+          }
+        ]
+      },
+      "worldview": {
+        "conclusion": "pass-with-findings",
+        "evidence": [
+          {
+            "path": "docs/sources/terra-chronology/README.md",
+            "note": "区分官方正文转载、社区年表和索引；本轮只用仓库已登记证据，未声称读到全部原始官方画面。"
+          },
+          {
+            "path": "docs/research/terra-chronology/event-network.json",
+            "note": "旧团长与卢西恩／后继酒神分开，城堡、旧团建立、救援和新团运营并非同一事件；未定年人物不能机械加入1084。"
+          },
+          {
+            "path": "src/data/localized/yan/productions/original.ts",
+            "note": "原创剧目和主创保持项目补写身份；旧剧团编演室的遗产／现任机构歧义列为建议，不自行决定故事身份。"
+          },
+          {
+            "path": "docs/sources/official-folio-productions.md",
+            "note": "活页标题与简介是受保护来源入口，新增AI译文及原创扩写不能改写其归因。"
+          },
+          {
+            "path": "docs/sources/README.md",
+            "note": "本轮新增指纹覆盖的五份既有来源说明已读取：素材权利未决项仍未获新授权，项目原创票务图形与官方参考的身份保持分离；未新增或采纳世界观事实。"
+          }
+        ]
+      },
+      "consistency": {
+        "conclusion": "pass-with-findings",
+        "evidence": [
+          {
+            "path": "src/data/content/root-sets.ts",
+            "note": "公告所述崔林特尔梅与伦蒂尼姆均在当前 archive 本季实际集合；删除原来无对应场次的蒙特卢佩断言，没有新造演出。"
+          },
+          {
+            "path": "src/data/localized/yan/site.ts",
+            "note": "炎语及另八版本只移除错误城市列举并修正连接语法，日期与入场时刻说明保持原样。"
+          },
+          {
+            "path": "scripts/content-lifecycle.test.mjs",
+            "note": "真实 CLI 验证完整候选、九版本选入、撤选和无引用清理；缺引用、缺译和旧译仍拒绝。能力反例与生产数量解耦。"
+          },
+          {
+            "path": "scripts/validate-states.mjs",
+            "note": "真实根集合的完整变体与依赖闭包动态校验；状态、票务和排序能力使用隔离样本或实际获选集合。"
+          },
+          {
+            "path": "scripts/creative-review.mjs",
+            "note": "文本来源全目录纳入；消项须理由与证据；可对照目标提交记录，防止直接编辑当前记录静默漏掉已有发现。"
+          },
+          {
+            "path": "src/components/shared/SiteSearch.astro",
+            "note": "仅完善无脚本和加载失败反馈，复用既有本地化正文，不生成新创意事实。"
+          }
+        ]
+      },
+      "snapshots": {
+        "conclusion": "pass-with-findings",
+        "evidence": [
+          {
+            "path": "src/data/archive-snapshots.ts",
+            "note": "仅一个可访问1084快照；1089/1093损坏原因未知，1098馆藏战损是作者前提。当前实现不支持任意多个可访问时点。"
+          },
+          {
+            "path": "src/data/site-time.ts",
+            "note": "表站固定1102-04-15、里站使用捕获时间；运营状态和本季／历史分类不能互相替代。"
+          },
+          {
+            "path": "docs/blueprint/modules/archive.md",
+            "note": "同期等级0正文、现代档案目录说明和等级1-3可逆投影分离；历史售票事实不赋予当前结算能力。"
+          },
+          {
+            "path": "docs/guides/creative-content-review.md",
+            "note": "未来时点先定义显式捕获上下文及根集合，复用身份和完整变体，不能覆盖旧快照或声称当前已有通用时间引擎。"
+          }
+        ]
+      },
+      "localization": {
+        "conclusion": "pass-with-findings",
+        "evidence": [
+          {
+            "path": "src/data/content/localization-revisions.ts",
+            "note": "九语言完整 site.archive 单元对照复核后，只将其共享中文源摘要更新为 fnv1a64:a50f69a167f6771c。炎语及八个AI预览版本均仅删除无实际本季场次支持的城市列举；未批量刷新其他单元，不构成人工译审。"
+          },
+          {
+            "path": "docs/research/terra-terminology/language-policy.md",
+            "note": "译名先确认实体身份与时代，区分意译、音译、保护原名；九网站版本不等于九份官方游戏译文。新增内容默认AI预览、保留证据和不确定性。"
+          },
+          {
+            "path": "docs/research/terra-terminology/translation-candidates.json",
+            "note": "既有候选继续未批准，不全局替换品牌、人物或地点；用户本次认可工作方法并不等于认可每项具体拼写。"
+          },
+          {
+            "path": "src/data/localized/yan/programs.ts",
+            "note": "螺旋桨天堂中文包含麦克斯特区外缘，非中文部分简化为首都外缘；应在后续该单元替换时补足或明确译法依据。"
+          }
+        ]
+      }
+    },
+    "findings": [
+      {
+        "path": "docs/project/temporal-context.md",
+        "level": "needs-research",
+        "judgment": "E-01：1098馆藏前提提到GO-8、GO-1，但年鉴sources.csv没有对应定位。S57支持战事背景，不能证明原创档案节点存在。",
+        "suggestion": "需要引用这两段为官方依据时，先读取并登记来源ID、访问方式及段落；取得前维持作者前提身份，不补具体月日、街区、责任方或武器。"
+      },
+      {
+        "path": "docs/research/terra-chronology/date-claims.csv",
+        "level": "needs-research",
+        "judgment": "D-01：红丝绒T015的1100与约1099至1100年初、螺旋桨天堂P003的1101年末与1102年春存在来源分歧。当前遵守已采纳事故分支不等于官方定年已唯一确定。",
+        "suggestion": "保留来源分层与竞争主张；获得更强原文证据后重新审查因果链，尤其取消时间、机构获知和原演出日。不要自动改写既有作者前提。"
+      },
+      {
+        "path": "src/data/performances.ts",
+        "level": "needs-research",
+        "judgment": "F-01：1102-08-24新沃尔西尼至09-17特里蒙、10-03维谢海姆、10-29诺伯特段较密集。年鉴不提供本团运输速度和过境条件，无法证明可行或不可能。",
+        "suggestion": "下一次调整相关编排时评估真实间隔和运输假设，提出延长间隔、调整地点等候选；不自行创造分团或把现实交通时长当作官方泰拉事实。"
+      },
+      {
+        "path": "src/data/localized/yan/productions/original.ts",
+        "level": "needs-research",
+        "judgment": "F-02：《无声巡游》主创中的旧剧团编演室可能指旧稿遗产，也可能被读为新团当前机构；现有资料不足以唯一判断作者意图。",
+        "suggestion": "若表达旧稿遗产，候选为“场序｜据旧团编演室存本整理”；若指现任机构，候选为去掉“旧”。作者选定后同步九版本，不混同旧团长与后继身份。"
+      },
+      {
+        "path": "src/data/localized/yan/programs.ts",
+        "level": "advisory",
+        "judgment": "F-03：螺旋桨天堂场地的麦克斯特区专名在部分非中文预览中被概括为首都外缘；没有移到特里蒙，但跨语言信息精度不等价。",
+        "suggestion": "替换该场次本地化单元时优先保留已有项目地理精度，结合有证据的Maxter形式形成各语AI候选，完整句子检查后等待人工考据；不自动认定当前译文已批准。"
+      }
+    ],
+    "resolutions": []
+  }
+}

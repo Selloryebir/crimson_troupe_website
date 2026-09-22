@@ -251,7 +251,7 @@ export const kazimierzSite = {
       noticeEyebrow: 'Zawiadomienie o trasie · Nr 91',
       noticeTitle: 'Lista jesiennych tras koncertowych jest kompletna',
       notice:
-        'Daty w Zwillingstürme, Londinium i Montelupe pojawiają się teraz w rejestrze sezonowym. W każdym zawiadomieniu o występie można znaleźć datę i godzinę wstępu.',
+        'Daty w Zwillingstürme i Londinium pojawiają się teraz w rejestrze sezonowym. W każdym zawiadomieniu o występie można znaleźć datę i godzinę wstępu.',
       registerEyebrow: 'REJESTR SEZONOWY',
       seasonTitle: 'W tym sezonie',
       fullRegister: 'Zapoznaj się z pełnym rejestrem',

@@ -4,6 +4,9 @@
 
 ## 当前记录
 
+- [`creative-content-review/README.md`](creative-content-review/README.md)：当前创意内容的年鉴／设定审查发现与可失效的单次审查记录；仅用于开发复核，不参与构建，不授予内容或翻译资格；
+
+- [`terra-terminology/README.md`](terra-terminology/README.md)：地理、剧团人物、公司机构和通用世界观概念的多语言矩阵、语义关联、未批准翻译候选及时间使用边界；
 - [`terra-chronology/README.md`](terra-chronology/README.md)：泰拉历法、猩红剧团／傀影／酒神与九国历史的 CSV 对照，以及巡演地区窗口、身份链、类型化事件图和双站时间敏感度研究；保留推定日期、来源分歧与未定年事项；
 - [`archive-period-design.md`](archive-period-design.md)：早期文档式网页的抽象原则、旧剧场名录转译与明确排除项；
 - [`design-and-service.md`](design-and-service.md)：文化机构网站的信息架构、服务能力和泰拉化转译；

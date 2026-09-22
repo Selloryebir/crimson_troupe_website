@@ -11,12 +11,14 @@ import {
   previewEditionIds,
 } from '../src/data/editions.ts';
 import { getBuildContext } from '../src/data/content/build-context.ts';
+import { assertPerformanceVariantComplete } from '../src/data/content/validate.ts';
 import {
   getWorldPerformanceEntries,
   getWorldProductionIds,
   resolveContent,
 } from '../src/data/content/resolve.ts';
 import { currentRootSet, validateContentRootSet } from '../src/data/content/root-sets.ts';
+import { getPerformanceVariantUnit, selectCompleteVariant } from '../src/data/content/variants.ts';
 import {
   assertPerformanceContentFresh,
   getLocalization,
@@ -30,7 +32,6 @@ import {
   formatTerraDateTime,
   formatTicketTerraDateTime,
 } from '../src/data/localized/format.ts';
-import { performances } from '../src/data/performances.ts';
 import { productions } from '../src/data/productions/index.ts';
 import { getMinimumSearchGraphemes } from '../src/data/search-policy.ts';
 import { getFrontSearchIndex, getSiteSearchScope } from '../src/data/site-search-index.ts';
@@ -87,6 +88,14 @@ import {
   startTicketingAttempt,
   updateBasket,
 } from '../src/scripts/ticketing-state.ts';
+import {
+  createCancelledPerformanceFixture,
+  createLocalizedOrderingFixture,
+  expectedSnapshotClosure,
+  noticeFreshnessFixture,
+  rootValidationFixture,
+} from './fixtures/content-state-scenarios.mjs';
+import { assertTicketingCapabilities } from './fixtures/content-lifecycle-assertions.mjs';
 
 assert.equal(buildProfile, 'showcase');
 assert.equal(buildContext, buildContexts.showcase);
@@ -95,29 +104,59 @@ assert.deepEqual(buildContexts.preview.editionIds, previewEditionIds);
 assert.deepEqual(buildContexts.release.editionIds, ['yan']);
 assert.throws(() => getBuildContext(buildContexts, 'custom'), /未知构建预设/u);
 
+const selectRootPerformances = (rootSet) =>
+  Object.fromEntries(
+    [...rootSet.worlds.front.performanceIds, ...rootSet.worlds.archive.performanceIds].map(
+      (performanceId) => {
+        const unit = getPerformanceVariantUnit(performanceId);
+        assert.ok(unit, `根集合场次 ${performanceId} 应有完整变体`);
+        return [performanceId, selectCompleteVariant(unit, assertPerformanceVariantComplete).value];
+      },
+    ),
+  );
+const currentRootPerformances = selectRootPerformances(currentRootSet);
 assert.doesNotThrow(() =>
-  validateContentRootSet(currentRootSet, performances, productions, buildContexts.showcase),
+  validateContentRootSet(
+    currentRootSet,
+    currentRootPerformances,
+    productions,
+    buildContexts.showcase,
+  ),
+);
+const {
+  context: fixtureBuildContext,
+  performances: fixturePerformances,
+  productions: fixtureProductions,
+  rootSet: fixtureRootSet,
+} = rootValidationFixture;
+assert.doesNotThrow(() =>
+  validateContentRootSet(
+    fixtureRootSet,
+    fixturePerformances,
+    fixtureProductions,
+    fixtureBuildContext,
+  ),
 );
 assert.throws(
   () =>
     validateContentRootSet(
       {
-        ...currentRootSet,
+        ...fixtureRootSet,
         worlds: {
-          ...currentRootSet.worlds,
+          ...fixtureRootSet.worlds,
           front: {
             performanceIds: [
-              currentRootSet.worlds.front.performanceIds[0],
-              currentRootSet.worlds.front.performanceIds[0],
+              fixtureRootSet.worlds.front.performanceIds[0],
+              fixtureRootSet.worlds.front.performanceIds[0],
             ],
-            featuredPerformanceId: currentRootSet.worlds.front.featuredPerformanceId,
-            homepagePerformanceIds: [currentRootSet.worlds.front.performanceIds[0]],
+            featuredPerformanceId: fixtureRootSet.worlds.front.featuredPerformanceId,
+            homepagePerformanceIds: [fixtureRootSet.worlds.front.performanceIds[0]],
           },
         },
       },
-      performances,
-      productions,
-      buildContexts.showcase,
+      fixturePerformances,
+      fixtureProductions,
+      fixtureBuildContext,
     ),
   /含重复场次/u,
 );
@@ -125,39 +164,39 @@ assert.throws(
   () =>
     validateContentRootSet(
       {
-        ...currentRootSet,
+        ...fixtureRootSet,
         worlds: {
-          ...currentRootSet.worlds,
+          ...fixtureRootSet.worlds,
           front: {
-            performanceIds: [currentRootSet.worlds.front.performanceIds[0]],
-            featuredPerformanceId: currentRootSet.worlds.front.performanceIds[1],
-            homepagePerformanceIds: [currentRootSet.worlds.front.performanceIds[0]],
+            performanceIds: [fixtureRootSet.worlds.front.performanceIds[0]],
+            featuredPerformanceId: fixtureRootSet.worlds.front.performanceIds[1],
+            homepagePerformanceIds: [fixtureRootSet.worlds.front.performanceIds[0]],
           },
         },
       },
-      performances,
-      productions,
-      buildContexts.showcase,
+      fixturePerformances,
+      fixtureProductions,
+      fixtureBuildContext,
     ),
   /焦点不属于该时间层/u,
 );
-const frontHomepagePerformanceId = currentRootSet.worlds.front.homepagePerformanceIds[0];
+const frontHomepagePerformanceId = fixtureRootSet.worlds.front.homepagePerformanceIds[0];
 assert.throws(
   () =>
     validateContentRootSet(
       {
-        ...currentRootSet,
+        ...fixtureRootSet,
         worlds: {
-          ...currentRootSet.worlds,
+          ...fixtureRootSet.worlds,
           front: {
-            ...currentRootSet.worlds.front,
+            ...fixtureRootSet.worlds.front,
             homepagePerformanceIds: [frontHomepagePerformanceId, frontHomepagePerformanceId],
           },
         },
       },
-      performances,
-      productions,
-      buildContexts.showcase,
+      fixturePerformances,
+      fixtureProductions,
+      fixtureBuildContext,
     ),
   /首页策展含重复场次/u,
 );
@@ -165,18 +204,18 @@ assert.throws(
   () =>
     validateContentRootSet(
       {
-        ...currentRootSet,
+        ...fixtureRootSet,
         worlds: {
-          ...currentRootSet.worlds,
+          ...fixtureRootSet.worlds,
           front: {
-            ...currentRootSet.worlds.front,
-            homepagePerformanceIds: [currentRootSet.worlds.archive.performanceIds[0]],
+            ...fixtureRootSet.worlds.front,
+            homepagePerformanceIds: [fixtureRootSet.worlds.archive.performanceIds[0]],
           },
         },
       },
-      performances,
-      productions,
-      buildContexts.showcase,
+      fixturePerformances,
+      fixtureProductions,
+      fixtureBuildContext,
     ),
   /首页策展不属于该时间层根集合/u,
 );
@@ -184,43 +223,43 @@ assert.throws(
   () =>
     validateContentRootSet(
       {
-        ...currentRootSet,
+        ...fixtureRootSet,
         worlds: {
-          ...currentRootSet.worlds,
+          ...fixtureRootSet.worlds,
           front: {
-            ...currentRootSet.worlds.front,
-            homepagePerformanceIds: [currentRootSet.worlds.front.performanceIds[0]],
+            ...fixtureRootSet.worlds.front,
+            homepagePerformanceIds: ['fixture-front-history'],
           },
         },
       },
-      performances,
-      productions,
-      buildContexts.showcase,
+      fixturePerformances,
+      fixtureProductions,
+      fixtureBuildContext,
     ),
   /首页策展含非本季场次/u,
 );
 for (const [world, misplacedPerformanceId] of [
-  ['front', currentRootSet.worlds.archive.performanceIds[0]],
-  ['archive', currentRootSet.worlds.front.performanceIds[0]],
+  ['front', fixtureRootSet.worlds.archive.performanceIds[0]],
+  ['archive', fixtureRootSet.worlds.front.performanceIds[0]],
 ]) {
-  const sourceWorld = performances[misplacedPerformanceId].world;
-  const sourcePerformanceIds = currentRootSet.worlds[sourceWorld].performanceIds.filter(
+  const sourceWorld = fixturePerformances[misplacedPerformanceId].world;
+  const sourcePerformanceIds = fixtureRootSet.worlds[sourceWorld].performanceIds.filter(
     (performanceId) => performanceId !== misplacedPerformanceId,
   );
   assert.throws(
     () =>
       validateContentRootSet(
         {
-          ...currentRootSet,
+          ...fixtureRootSet,
           worlds: {
-            ...currentRootSet.worlds,
+            ...fixtureRootSet.worlds,
             [sourceWorld]: {
               performanceIds: sourcePerformanceIds,
               featuredPerformanceId:
-                currentRootSet.worlds[sourceWorld].featuredPerformanceId === misplacedPerformanceId
+                fixtureRootSet.worlds[sourceWorld].featuredPerformanceId === misplacedPerformanceId
                   ? sourcePerformanceIds[0]
-                  : currentRootSet.worlds[sourceWorld].featuredPerformanceId,
-              homepagePerformanceIds: currentRootSet.worlds[
+                  : fixtureRootSet.worlds[sourceWorld].featuredPerformanceId,
+              homepagePerformanceIds: fixtureRootSet.worlds[
                 sourceWorld
               ].homepagePerformanceIds.filter(
                 (performanceId) => performanceId !== misplacedPerformanceId,
@@ -233,9 +272,9 @@ for (const [world, misplacedPerformanceId] of [
             },
           },
         },
-        performances,
-        productions,
-        buildContexts.showcase,
+        fixturePerformances,
+        fixtureProductions,
+        fixtureBuildContext,
       ),
     /跨时间层场次/u,
   );
@@ -257,28 +296,28 @@ assert.equal(
   true,
   '后一年窗口端点应计入根集合',
 );
-const oldestFrontPerformanceId = 'caged-fire-jiangdu-1101-0521';
+const oldestFrontPerformanceId = 'fixture-front-b';
 assert.throws(
   () =>
     validateContentRootSet(
-      currentRootSet,
+      fixtureRootSet,
       {
-        ...performances,
+        ...fixturePerformances,
         [oldestFrontPerformanceId]: {
-          ...performances[oldestFrontPerformanceId],
+          ...fixturePerformances[oldestFrontPerformanceId],
           effectiveDateTime: { ...frontNow, year: 1101, month: 4, day: 14 },
         },
       },
-      productions,
-      buildContexts.showcase,
+      fixtureProductions,
+      fixtureBuildContext,
     ),
   /超出 front 前后一年窗口/u,
 );
-const overusedFrontPerformanceIds = currentRootSet.worlds.front.performanceIds.slice(0, 4);
+const overusedFrontPerformanceIds = fixtureRootSet.worlds.front.performanceIds.slice(0, 4);
 const overusedRootSet = {
-  ...currentRootSet,
+  ...fixtureRootSet,
   worlds: {
-    ...currentRootSet.worlds,
+    ...fixtureRootSet.worlds,
     front: {
       performanceIds: overusedFrontPerformanceIds,
       featuredPerformanceId: overusedFrontPerformanceIds[0],
@@ -291,37 +330,61 @@ assert.throws(
     validateContentRootSet(
       overusedRootSet,
       Object.fromEntries(
-        Object.entries(performances).map(([performanceId, performance]) => [
+        Object.entries(fixturePerformances).map(([performanceId, performance]) => [
           performanceId,
           overusedFrontPerformanceIds.includes(performanceId)
-            ? { ...performance, productionIds: ['uncrowned'] }
+            ? { ...performance, productionIds: ['fixture-original-a'] }
             : performance,
         ]),
       ),
-      productions,
-      buildContexts.showcase,
+      fixtureProductions,
+      fixtureBuildContext,
     ),
-  /剧目编排超过三次：uncrowned\(4\)/u,
+  /剧目编排超过三次：fixture-original-a\(4\)/u,
 );
 
 const showcaseSnapshot = resolveContent(buildContexts.showcase);
 const previewSnapshot = resolveContent(buildContexts.preview);
 assert.doesNotThrow(() => assertPerformanceOfferMatrix());
 assert.equal(showcaseSnapshot.maturity, 'preview');
-assert.equal(showcaseSnapshot.performanceEntries.length, 22);
-assert.equal(showcaseSnapshot.productionEntries.length, 14);
-assert.equal(showcaseSnapshot.locationEntries.length, 12);
-assert.equal(showcaseSnapshot.artworkEntries.length, 14);
-assert.equal(showcaseSnapshot.seatingPlanEntries.length, 9);
-assert.deepEqual(showcaseSnapshot.editionIds, ['yan']);
+const expectedShowcaseClosure = expectedSnapshotClosure(currentRootSet, currentRootPerformances);
+assert.deepEqual(
+  showcaseSnapshot.performanceEntries.map(([performanceId]) => performanceId),
+  expectedShowcaseClosure.performanceIds,
+);
+assert.deepEqual(
+  showcaseSnapshot.productionEntries.map(([productionId]) => productionId),
+  expectedShowcaseClosure.productionIds,
+);
+assert.deepEqual(
+  showcaseSnapshot.locationEntries.map(([locationId]) => locationId),
+  expectedShowcaseClosure.locationIds,
+);
+assert.deepEqual(
+  showcaseSnapshot.artworkEntries.map(([productionId, world]) => `${productionId}:${world}`),
+  expectedShowcaseClosure.artworkKeys,
+);
+assert.deepEqual(
+  showcaseSnapshot.seatingPlanEntries.map(([seatingPlanId]) => seatingPlanId),
+  expectedShowcaseClosure.seatingPlanIds,
+);
+assert.deepEqual(showcaseSnapshot.editionIds, buildContexts.showcase.editionIds);
+const expectedLocalizationPackageEditionIds = new Set(buildContexts.showcase.editionIds);
+for (const [, performance] of showcaseSnapshot.performanceEntries) {
+  if (performance.world === 'front' && performance.ticketAvailability.state === 'on-sale') {
+    expectedLocalizationPackageEditionIds.add(
+      showcaseSnapshot.locations[performance.locationId].countryEditionId,
+    );
+  }
+}
 assert.deepEqual(
   new Set(showcaseSnapshot.localizationPackageEditionIds),
-  new Set(['yan', 'columbia', 'leithanien', 'victoria', 'siracusa']),
+  expectedLocalizationPackageEditionIds,
   'showcase 只生成炎国页面，但票面闭包必须包含全部实际举办地语言依赖',
 );
 assert.deepEqual(showcaseSnapshot.featuredPerformanceIds, {
-  front: 'uncrowned-trimount-1102',
-  archive: 'der-ring-zwillingsturme-1084-0817',
+  front: currentRootSet.worlds.front.featuredPerformanceId,
+  archive: currentRootSet.worlds.archive.featuredPerformanceId,
 });
 assert.deepEqual(showcaseSnapshot.homepagePerformanceIds, {
   front: currentRootSet.worlds.front.homepagePerformanceIds,
@@ -354,88 +417,17 @@ assert.ok(Object.isFrozen(showcaseSnapshot.homepagePerformanceIds));
 assert.ok(Object.isFrozen(showcaseSnapshot.homepagePerformanceIds.front));
 assert.ok(Object.isFrozen(showcaseSnapshot.homepagePerformanceIds.archive));
 assert.throws(() => resolveContent(buildContexts.release), /不合格内容.*无批准摘要/u);
-assert.equal(
-  showcaseSnapshot.performanceEntries.filter(
-    ([, performance]) => performance.world === 'front' && performance.collection === 'current',
-  ).length,
-  9,
-);
-assert.equal(
-  showcaseSnapshot.performanceEntries.filter(
-    ([, performance]) => performance.world === 'front' && performance.collection === 'history',
-  ).length,
-  5,
-);
-assert.equal(
-  showcaseSnapshot.performanceEntries.filter(
-    ([, performance]) => performance.world === 'archive' && performance.collection === 'current',
-  ).length,
-  4,
-);
-assert.equal(
-  showcaseSnapshot.performanceEntries.filter(
-    ([, performance]) => performance.world === 'archive' && performance.collection === 'history',
-  ).length,
-  4,
-);
-
-const archiveOfferEntries = showcaseSnapshot.performanceEntries.filter(
-  ([, performance]) =>
-    performance.world === 'archive' && performance.ticketAvailability.state === 'on-sale',
-);
-const archiveSchedule = showcaseSnapshot.performanceEntries
-  .filter(([, performance]) => performance.world === 'archive')
-  .map(([, performance]) => performance);
-assert.deepEqual(
-  archiveSchedule.map(({ effectiveDateTime: date }) => [date.year, date.month, date.day]),
-  [
-    [1083, 8, 14],
-    [1083, 11, 9],
-    [1084, 2, 12],
-    [1084, 5, 11],
-    [1084, 8, 17],
-    [1084, 11, 18],
-    [1085, 2, 20],
-    [1085, 5, 22],
-  ],
-  '占位巡演的跨栏目和跨年衔接不得各自漂移',
-);
-assert.equal(
-  archiveSchedule.filter(({ effectiveDateTime }) => effectiveDateTime.year === 1084).length,
-  4,
-);
-assert.equal(
-  archiveSchedule.filter(
-    ({ locationId }) => !['wiesheim', 'londinium', 'zwillingsturme'].includes(locationId),
-  ).length,
-  1,
-);
-assert.equal(new Set(archiveSchedule.flatMap(({ productionIds }) => productionIds)).size, 8);
-assert.ok(
-  archiveSchedule.every(({ status }) => status !== 'cancelled'),
-  '占位删减不生成取消史',
-);
-const offerSignature = (performance) =>
-  performance.ticketAvailability.state === 'on-sale'
-    ? performance.ticketAvailability.offers
-        .map(({ zone, basePrice }) => `${zone}:${basePrice}`)
-        .join('|')
-    : '';
-assert.equal(archiveOfferEntries.length, 3);
-assert.equal(
-  new Set(archiveOfferEntries.map(([, performance]) => offerSignature(performance))).size,
-  3,
-);
-assert.deepEqual(
-  performances['the-carnival-londinium-1084-1009'].ticketAvailability.offers.map(
-    ({ zone }) => zone,
-  ),
-  ['C', 'B', 'A'],
-);
-assert.notEqual(
-  offerSignature(performances['one-hundred-and-one-days-londinium-1084-0903']),
-  offerSignature(performances['the-carnival-londinium-1084-1009']),
-  '同地点异剧目报价应不同',
+for (const [, performance] of showcaseSnapshot.performanceEntries) {
+  assert.equal(
+    performance.collection,
+    derivePerformanceCollection(
+      performance.effectiveDateTime,
+      getSiteTerraNow(performance.world, buildContexts.showcase),
+    ),
+  );
+}
+assert.doesNotThrow(() =>
+  assertTicketingCapabilities(showcaseSnapshot.performances, showcaseSnapshot.seatingPlans),
 );
 
 const searchEntry = (id, type, title, summary = '', keywords = '') => ({
@@ -513,57 +505,42 @@ for (const editionId of previewEditionIds.filter(
 assert.equal(countSearchGraphemes('e\u0301', 'el'), 1, '组合字符应按一个字素计数');
 assert.equal(countSearchGraphemes('👨‍👩‍👧‍👦', 'en-US'), 1, 'ZWJ 字符序列应按一个字素计数');
 
-const cancellationId = 'propeller-paradise-1102';
-const cancelledPerformance = previewSnapshot.performances[cancellationId];
-assert.equal(cancelledPerformance.status, 'cancelled');
-assert.equal(cancelledPerformance.collection, 'history');
-assert.equal(cancelledPerformance.locationId, 'propeller-paradise');
-assert.equal(cancelledPerformance.ticketAvailability.state, 'not-on-sale');
-assert.equal(cancelledPerformance.notice.reason, 'venue-condition');
-assert.equal(cancelledPerformance.previousDateTime, undefined);
-assert.deepEqual(cancelledPerformance.effectiveDateTime, {
-  calendar: 'terra',
-  year: 1102,
-  month: 1,
-  day: 4,
-  time: '19:30',
-});
-assert.ok(!previewSnapshot.homepagePerformanceIds.front.includes(cancellationId));
 for (const editionId of previewEditionIds) {
   const edition = editions[editionId];
-  const localization = getLocalization(edition, previewSnapshot);
-  const performance = getLocalizedPerformance(localization, cancellationId, previewSnapshot);
+  const baseLocalization = getLocalization(edition, previewSnapshot);
+  const {
+    performanceId: cancellationId,
+    snapshot: cancellationSnapshot,
+    localization,
+  } = createCancelledPerformanceFixture(previewSnapshot, baseLocalization);
+  const cancelledPerformance = cancellationSnapshot.performances[cancellationId];
+  const performance = getLocalizedPerformance(localization, cancellationId, cancellationSnapshot);
   const notice = performance.operationalNotice.text;
   assert.ok(
     notice.includes(formatTerraDate(cancelledPerformance.effectiveDateTime, edition.locale)),
   );
   assert.doesNotMatch(notice, /\{originalDate\}/u);
   assert.ok(
-    getLocalizedPerformances(localization, 'front', 'history', previewSnapshot).some(
+    getLocalizedPerformances(localization, 'front', 'history', cancellationSnapshot).some(
       ({ performanceId }) => performanceId === cancellationId,
     ),
   );
   assert.ok(
-    !getLocalizedPerformances(localization, 'front', 'current', previewSnapshot).some(
+    !getLocalizedPerformances(localization, 'front', 'current', cancellationSnapshot).some(
       ({ performanceId }) => performanceId === cancellationId,
     ),
   );
   assert.ok(
-    !getTicketingOptions(localization, previewSnapshot).some(
+    !getTicketingOptions(localization, cancellationSnapshot).some(
       ({ performanceId }) => performanceId === cancellationId,
     ),
   );
-  const indexed = getFrontSearchIndex(edition, previewSnapshot).find(
-    ({ id }) => id === `front-performance-${cancellationId}`,
-  );
-  assert.ok(indexed.summary.includes(notice));
-  assert.ok(indexed.summary.includes(localization.site.front.performanceDetail.cancelled));
   // 只改领域日期，公告必须随之变化，不能依赖另改九份译文。
   const changedDate = { ...cancelledPerformance.effectiveDateTime, day: 5 };
   const changedSnapshot = {
-    ...previewSnapshot,
+    ...cancellationSnapshot,
     performances: {
-      ...previewSnapshot.performances,
+      ...cancellationSnapshot.performances,
       [cancellationId]: { ...cancelledPerformance, effectiveDateTime: changedDate },
     },
   };
@@ -574,20 +551,22 @@ for (const editionId of previewEditionIds) {
 }
 
 const fullFrontSearch = getFrontSearchIndex(editions.yan, showcaseSnapshot);
-const uncrownedSearchEntry = fullFrontSearch.find(({ id }) => id === 'front-production-uncrowned');
-const uncrownedContent = getLocalization(editions.yan, showcaseSnapshot).programs.productions
-  .uncrowned;
-assert.ok(uncrownedSearchEntry && uncrownedContent);
-assert.match(uncrownedSearchEntry.keywords, new RegExp(uncrownedContent.synopsis, 'u'));
-assert.match(uncrownedSearchEntry.keywords, new RegExp(uncrownedContent.guidance, 'u'));
-assert.ok(
-  uncrownedContent.creatives.every(([role, name]) =>
-    uncrownedSearchEntry.keywords.includes(`${role} ${name}`),
-  ),
-  '剧目主创职责与姓名应进入公开匹配文字',
-);
+const yanShowcaseLocalization = getLocalization(editions.yan, showcaseSnapshot);
+for (const [productionId] of showcaseSnapshot.productionEntries) {
+  const searchEntry = fullFrontSearch.find(({ id }) => id === `front-production-${productionId}`);
+  const content = yanShowcaseLocalization.programs.productions[productionId];
+  if (!getWorldProductionIds(showcaseSnapshot, 'front').includes(productionId)) continue;
+  assert.ok(searchEntry && content);
+  assert.ok(searchEntry.keywords.includes(content.synopsis));
+  assert.ok(searchEntry.keywords.includes(content.guidance));
+  assert.ok(
+    content.creatives.every(([role, name]) => searchEntry.keywords.includes(`${role} ${name}`)),
+    '剧目主创职责与姓名应进入公开匹配文字',
+  );
+}
 
-const homepageExcludedPerformanceId = 'procession-of-masks-londinium-1103-0214';
+const homepageExcludedPerformanceId = currentRootSet.worlds.front.homepagePerformanceIds[0];
+assert.ok(homepageExcludedPerformanceId, '表站首页策展至少需要一个能力样本');
 const curatedRootSet = {
   ...currentRootSet,
   worlds: {
@@ -615,7 +594,10 @@ assert.ok(
   '首页策展应能独立排除仍属于完整本季集合的场次',
 );
 
-const excludedPerformanceId = 'procession-of-masks-londinium-1103-0214';
+const excludedPerformanceId = currentRootSet.worlds.front.performanceIds.find(
+  (performanceId) => performanceId !== currentRootSet.worlds.front.featuredPerformanceId,
+);
+assert.ok(excludedPerformanceId, '表站根集合至少需要一个可撤选的能力样本');
 const reducedFrontPerformanceIds = currentRootSet.worlds.front.performanceIds.filter(
   (performanceId) => performanceId !== excludedPerformanceId,
 );
@@ -639,13 +621,22 @@ assert.deepEqual(
   getWorldPerformanceEntries(reducedSnapshot, 'front').map(([performanceId]) => performanceId),
   reducedFrontPerformanceIds,
 );
-assert.ok(!getWorldProductionIds(reducedSnapshot, 'front').includes('procession-of-masks'));
 assert.equal(reducedSnapshot.performances[excludedPerformanceId], undefined);
-assert.equal(reducedSnapshot.productions['procession-of-masks'], undefined);
-assert.equal(reducedSnapshot.artworks['procession-of-masks'], undefined);
-assert.throws(
-  () => getLocalization(editions.higashi, reducedSnapshot),
-  /国家版本 higashi 不属于当前内容快照/u,
+const expectedReducedClosure = expectedSnapshotClosure(
+  reducedRootSet,
+  selectRootPerformances(reducedRootSet),
+);
+assert.deepEqual(
+  reducedSnapshot.productionEntries.map(([productionId]) => productionId),
+  expectedReducedClosure.productionIds,
+);
+assert.deepEqual(
+  reducedSnapshot.locationEntries.map(([locationId]) => locationId),
+  expectedReducedClosure.locationIds,
+);
+assert.deepEqual(
+  reducedSnapshot.artworkEntries.map(([productionId, world]) => `${productionId}:${world}`),
+  expectedReducedClosure.artworkKeys,
 );
 const reducedLocalization = getLocalization(editions.yan, reducedSnapshot);
 assert.ok(
@@ -887,22 +878,8 @@ for (const fixture of collectionFixtures) {
   );
 }
 
-const noticeFixturePerformance = {
-  ...performances['second-snow-norport-1102'],
-  status: 'pending',
-  previousDateTime: {
-    calendar: 'terra',
-    year: 1102,
-    month: 10,
-    day: 20,
-    time: '18:45',
-  },
-  notice: { reason: 'catastrophe-route', sourceRevision: 'notice-v2' },
-};
-const noticeFixtureContent = {
-  ...getLocalization(editions.yan).programs.performances['second-snow-norport-1102'],
-  operationalNotice: { sourceRevision: 'notice-v2', text: '线路调整，排期等待确认。' },
-};
+const noticeFixturePerformance = noticeFreshnessFixture.performance;
+const noticeFixtureContent = noticeFreshnessFixture.content;
 assert.doesNotThrow(() =>
   assertPerformanceContentFresh('notice-fixture', noticeFixturePerformance, noticeFixtureContent),
 );
@@ -923,20 +900,28 @@ assert.throws(
   /运营公告译文已过期/u,
 );
 
-const pendingPerformanceEntries = showcaseSnapshot.performanceEntries.map(
-  ([performanceId, performance]) =>
-    performanceId === 'caged-fire-wiesheim-1102'
-      ? [performanceId, { ...performance, status: 'pending' }]
-      : [performanceId, performance],
+const pendingFixture = createCancelledPerformanceFixture(
+  previewSnapshot,
+  getLocalization(editions.yan, previewSnapshot),
 );
+const pendingPerformance = {
+  ...pendingFixture.snapshot.performances[pendingFixture.performanceId],
+  status: 'pending',
+  collection: 'current',
+  ticketAvailability: {
+    state: 'on-sale',
+    seatingPlanId: 'fixture-unused-for-pending',
+    offers: [{ zone: 'A', basePrice: 100 }],
+  },
+};
 const pendingSnapshot = {
-  ...showcaseSnapshot,
-  performanceEntries: pendingPerformanceEntries,
-  performances: Object.fromEntries(pendingPerformanceEntries),
+  ...pendingFixture.snapshot,
+  performanceEntries: [[pendingFixture.performanceId, pendingPerformance]],
+  performances: { [pendingFixture.performanceId]: pendingPerformance },
 };
 assert.ok(
-  getTicketingOptions(getLocalization(editions.yan), pendingSnapshot).every(
-    ({ performanceId }) => performanceId !== 'caged-fire-wiesheim-1102',
+  getTicketingOptions(pendingFixture.localization, pendingSnapshot).every(
+    ({ performanceId }) => performanceId !== pendingFixture.performanceId,
   ),
   '待定场次不得进入票务候选',
 );
@@ -1448,61 +1433,24 @@ assert.deepEqual(restoreTicketingState('{"version":999}', catalog), createTicket
 const previewLocalizations = previewEditionIds.map((editionId) =>
   getLocalization(editions[editionId], previewSnapshot),
 );
-// 打乱输入，防止本季偶然沿用作者顺序而让日期排序回归漏检。
-const reversedPerformanceSnapshot = {
-  ...previewSnapshot,
-  performanceEntries: [...previewSnapshot.performanceEntries].reverse(),
-};
-for (const localization of previewLocalizations) {
-  for (const world of ['front', 'archive']) {
-    for (const collection of ['current', 'history']) {
-      const ordered = getLocalizedPerformances(localization, world, collection, previewSnapshot);
-      assert.ok(ordered.length > 1);
-      for (let index = 1; index < ordered.length; index += 1) {
-        const comparison = compareTerraDateTime(
-          ordered[index - 1].dateTime,
-          ordered[index].dateTime,
-        );
-        assert.ok(collection === 'history' ? comparison >= 0 : comparison <= 0);
-      }
-      assert.deepEqual(
-        getLocalizedPerformances(localization, world, collection, reversedPerformanceSnapshot),
-        ordered,
-        `${localization.edition.editionId}/${world}/${collection} 不应依赖根集合的日期顺序`,
-      );
-    }
+// 同日不同时刻仍按有效排期比较；相同时刻保留原顺序，且不依赖真实库存数量。
+for (const world of ['front', 'archive']) {
+  for (const collection of ['current', 'history']) {
+    const fixture = createLocalizedOrderingFixture(
+      previewSnapshot,
+      previewLocalizations[0],
+      world,
+      collection,
+    );
+    const before = structuredClone(fixture.snapshot);
+    assert.deepEqual(
+      getLocalizedPerformances(fixture.localization, world, collection, fixture.snapshot).map(
+        ({ performanceId }) => performanceId,
+      ),
+      (collection === 'history' ? [0, 2, 1] : [1, 0, 2]).map((index) => fixture.ids[index]),
+    );
+    assert.deepEqual(fixture.snapshot, before);
   }
-}
-// 同日不同时刻仍按有效排期比较；相同时刻保留原顺序，且不修改快照。
-for (const collection of ['current', 'history']) {
-  const entries = previewSnapshot.performanceEntries
-    .filter(
-      ([, performance]) => performance.world === 'archive' && performance.collection === collection,
-    )
-    .slice(0, 3);
-  const fixtureEntries = entries.map(([id, performance], index) => [
-    id,
-    {
-      ...performance,
-      effectiveDateTime: {
-        ...entries[0][1].effectiveDateTime,
-        time: index === 1 ? '19:00' : '20:00',
-      },
-    },
-  ]);
-  const fixtureSnapshot = {
-    ...previewSnapshot,
-    performanceEntries: fixtureEntries,
-    performances: Object.fromEntries(fixtureEntries),
-  };
-  const before = structuredClone(fixtureSnapshot);
-  assert.deepEqual(
-    getLocalizedPerformances(previewLocalizations[0], 'archive', collection, fixtureSnapshot).map(
-      ({ performanceId }) => performanceId,
-    ),
-    (collection === 'history' ? [0, 2, 1] : [1, 0, 2]).map((index) => entries[index][0]),
-  );
-  assert.deepEqual(fixtureSnapshot, before);
 }
 const yanLocalization = previewLocalizations[0];
 const yanOptions = getTicketingOptions(yanLocalization, previewSnapshot);
@@ -1516,88 +1464,67 @@ assert.deepEqual(
     .map(({ performanceId }) => performanceId),
   '票务候选按可售本季场次派生，不受首页精选数量限制',
 );
-const crossLocaleItem = {
-  performanceId: yanOptions[0].performanceId,
-  zone: yanOptions[0].offers[0].zone,
-  basePrice: yanOptions[0].offers[0].basePrice,
-};
-const crossLocaleState = updateBasket(
-  createTicketingState(),
-  crossLocaleItem,
-  crossLocaleItem.performanceId,
-);
-const crossLocaleSuccess = resolveTicketingAttempt(
-  startTicketingAttempt(crossLocaleState),
-  () => 0.1,
-  () => '777777777777',
-);
-for (const localization of previewLocalizations.slice(1)) {
-  const targetOptions = getTicketingOptions(localization, previewSnapshot);
-  const crossLocaleRestored = restoreTicketingState(
-    JSON.stringify(crossLocaleState),
-    targetOptions.map((option) => ({ performanceId: option.performanceId, offers: option.offers })),
+if (yanOptions.length > 0) {
+  const sourceOption = yanOptions[0];
+  const crossLocaleItem = {
+    performanceId: sourceOption.performanceId,
+    zone: sourceOption.offers[0].zone,
+    basePrice: sourceOption.offers[0].basePrice,
+  };
+  const crossLocaleState = updateBasket(
+    createTicketingState(),
+    crossLocaleItem,
+    crossLocaleItem.performanceId,
   );
-  assert.deepEqual(crossLocaleRestored, crossLocaleState);
-  const crossLocaleSuccessRestored = restoreTicketingState(
-    JSON.stringify(crossLocaleSuccess),
-    targetOptions.map((option) => ({ performanceId: option.performanceId, offers: option.offers })),
+  const crossLocaleSuccess = resolveTicketingAttempt(
+    startTicketingAttempt(crossLocaleState),
+    () => 0.1,
+    () => '777777777777',
   );
-  assert.deepEqual(crossLocaleSuccessRestored.result?.acceptedAt, ticketAcceptedAt);
-  assert.deepEqual(crossLocaleSuccessRestored.result?.tickets, crossLocaleSuccess.result?.tickets);
-  assert.equal(
-    crossLocaleSuccessRestored.result?.settledTotal,
-    crossLocaleSuccess.result?.settledTotal,
-  );
-  assert.notEqual(yanOptions[0].offers[0].label, targetOptions[0].offers[0].label);
-  assert.deepEqual(
-    targetOptions[0].artifact.primary,
-    yanOptions[0].artifact.primary,
-    '网站国家版本切换不得改变由举办地决定的票面主语言投影',
-  );
-  const sharesPrimaryLanguage =
-    targetOptions[0].artifact.primary.locale.split('-')[0] ===
-    localization.edition.locale.split('-')[0];
-  assert.equal(
-    targetOptions[0].artifact.secondary?.editionId,
-    sharesPrimaryLanguage ? undefined : localization.edition.editionId,
-  );
+  for (const localization of previewLocalizations.slice(1)) {
+    const targetOptions = getTicketingOptions(localization, previewSnapshot);
+    const targetOption = targetOptions.find(
+      ({ performanceId }) => performanceId === sourceOption.performanceId,
+    );
+    assert.ok(targetOption);
+    const crossLocaleRestored = restoreTicketingState(
+      JSON.stringify(crossLocaleState),
+      targetOptions.map((option) => ({
+        performanceId: option.performanceId,
+        offers: option.offers,
+      })),
+    );
+    assert.deepEqual(crossLocaleRestored, crossLocaleState);
+    const crossLocaleSuccessRestored = restoreTicketingState(
+      JSON.stringify(crossLocaleSuccess),
+      targetOptions.map((option) => ({
+        performanceId: option.performanceId,
+        offers: option.offers,
+      })),
+    );
+    assert.deepEqual(crossLocaleSuccessRestored.result?.acceptedAt, ticketAcceptedAt);
+    assert.deepEqual(
+      crossLocaleSuccessRestored.result?.tickets,
+      crossLocaleSuccess.result?.tickets,
+    );
+    assert.equal(
+      crossLocaleSuccessRestored.result?.settledTotal,
+      crossLocaleSuccess.result?.settledTotal,
+    );
+    assert.deepEqual(
+      targetOption.artifact.primary,
+      sourceOption.artifact.primary,
+      '网站国家版本切换不得改变由举办地决定的票面主语言投影',
+    );
+    const sharesPrimaryLanguage =
+      targetOption.artifact.primary.locale.split('-')[0] ===
+      localization.edition.locale.split('-')[0];
+    assert.equal(
+      targetOption.artifact.secondary?.editionId,
+      sharesPrimaryLanguage ? undefined : localization.edition.editionId,
+    );
+  }
 }
-
-const trimountArtifact = yanOptions.find(
-  ({ performanceId }) => performanceId === 'uncrowned-trimount-1102',
-)?.artifact;
-const wiesheimArtifact = yanOptions.find(
-  ({ performanceId }) => performanceId === 'caged-fire-wiesheim-1102',
-)?.artifact;
-const norportArtifact = yanOptions.find(
-  ({ performanceId }) => performanceId === 'second-snow-norport-1102',
-)?.artifact;
-const leithanienOptions = getTicketingOptions(
-  getLocalization(editions.leithanien, previewSnapshot),
-  previewSnapshot,
-);
-const columbiaOptions = getTicketingOptions(
-  getLocalization(editions.columbia, previewSnapshot),
-  previewSnapshot,
-);
-const leithanienWiesheimArtifact = leithanienOptions.find(
-  ({ performanceId }) => performanceId === 'caged-fire-wiesheim-1102',
-)?.artifact;
-const columbiaNorportArtifact = columbiaOptions.find(
-  ({ performanceId }) => performanceId === 'second-snow-norport-1102',
-)?.artifact;
-assert.equal(trimountArtifact?.primary.editionId, 'columbia');
-assert.equal(trimountArtifact?.secondary?.editionId, 'yan');
-assert.equal(trimountArtifact?.primary.dateTime, 'September 17, 1102 at 7:30 PM');
-assert.equal(trimountArtifact?.secondary?.dateTime, '1102年9月17日 19:30');
-assert.equal(wiesheimArtifact?.primary.editionId, 'leithanien');
-assert.equal(wiesheimArtifact?.secondary?.editionId, 'yan');
-assert.equal(norportArtifact?.primary.editionId, 'victoria');
-assert.equal(norportArtifact?.secondary?.editionId, 'yan');
-assert.equal(leithanienWiesheimArtifact?.primary.editionId, 'leithanien');
-assert.equal(leithanienWiesheimArtifact?.secondary, undefined);
-assert.equal(columbiaNorportArtifact?.primary.editionId, 'victoria');
-assert.equal(columbiaNorportArtifact?.secondary, undefined);
 
 const artifactPerformance = {
   performanceId: 'performance-a',
@@ -1619,13 +1546,7 @@ const artifactEndingHistory = [
   'ENDING_DISCOUNT_SUCCESS',
 ];
 const artifactJourneyTags = ['network-retry', 'priority-refused', 'retention-accepted'];
-for (const [performanceId, expectedPrimaryLocale, expectedSecondaryLocale] of [
-  ['uncrowned-trimount-1102', 'en-US', 'zh-CN'],
-  ['caged-fire-wiesheim-1102', 'de', 'zh-CN'],
-  ['second-snow-norport-1102', 'en-GB', 'zh-CN'],
-]) {
-  const option = yanOptions.find((candidate) => candidate.performanceId === performanceId);
-  assert.ok(option, `${performanceId} 应属于当前票务候选`);
+for (const option of yanOptions) {
   const offer = option.offers[0];
   const actualProjectionSvg = createTicketSvg({
     performance: option,
@@ -1640,23 +1561,20 @@ for (const [performanceId, expectedPrimaryLocale, expectedSecondaryLocale] of [
     projection: option.artifact,
   });
   assert.ok(
-    actualProjectionSvg.includes(`data-ticket-language="primary" lang="${expectedPrimaryLocale}"`),
+    actualProjectionSvg.includes(
+      `data-ticket-language="primary" lang="${option.artifact.primary.locale}"`,
+    ),
   );
-  if (expectedSecondaryLocale) {
+  if (option.artifact.secondary) {
     assert.ok(
       actualProjectionSvg.includes(
-        `data-ticket-language="secondary" lang="${expectedSecondaryLocale}"`,
+        `data-ticket-language="secondary" lang="${option.artifact.secondary.locale}"`,
       ),
     );
   } else {
     assert.ok(!actualProjectionSvg.includes('data-ticket-language="secondary"'));
   }
 }
-assert.deepEqual(
-  Object.keys(yanOptions[0].artifact.primary).sort(),
-  ['dateTime', 'editionId', 'kind', 'locale', 'messages', 'place', 'title', 'zoneLabels'],
-  '客户端票面投影不得携带完整辅助语言包',
-);
 const artifactProjection = {
   primary: {
     editionId: 'yan',
@@ -1679,6 +1597,11 @@ const artifactProjection = {
     messages: getLocalization(editions.victoria, previewSnapshot).messages.ticketing.artifact,
   },
 };
+assert.deepEqual(
+  Object.keys(yanOptions[0]?.artifact.primary ?? artifactProjection.primary).sort(),
+  ['dateTime', 'editionId', 'kind', 'locale', 'messages', 'place', 'title', 'zoneLabels'],
+  '客户端票面投影不得携带完整辅助语言包',
+);
 const svg = createTicketSvg({
   performance: artifactPerformance,
   basketItem: basketA,

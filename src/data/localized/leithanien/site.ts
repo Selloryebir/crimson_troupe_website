@@ -258,7 +258,7 @@ export const leithanienSite = {
       noticeEyebrow: 'Tourhinweis · Nr. 91',
       noticeTitle: 'Das Herbsttourenregister ist vollständig',
       notice:
-        'Termine in Zwillingstürmen, Londinium und Montelupe erscheinen jetzt im Saisonregister. Das Datum und die Eintrittszeiten finden Sie in der jeweiligen Aufführungsmitteilung.',
+        'Termine in Zwillingstürmen und Londinium erscheinen jetzt im Saisonregister. Das Datum und die Eintrittszeiten finden Sie in der jeweiligen Aufführungsmitteilung.',
       registerEyebrow: 'SAISONREGISTER',
       seasonTitle: 'Diese Saison',
       fullRegister: 'Konsultieren Sie das vollständige Register',

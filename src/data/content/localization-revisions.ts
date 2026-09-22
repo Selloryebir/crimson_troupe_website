@@ -60,7 +60,7 @@ const acceptedYanSourceRevision: LocalizationSourceRevision = Object.freeze({
   'site.brand': 'fnv1a64:03d196aa49398779',
   'site.shared': 'fnv1a64:81b0ea3fa261693a',
   'site.front': 'fnv1a64:cfe2fbfc3c6353ec',
-  'site.archive': 'fnv1a64:457c2b9d4ca6b8c8',
+  'site.archive': 'fnv1a64:a50f69a167f6771c',
   'messages.filters': 'fnv1a64:d98c683356dc4246',
   'messages.search': 'fnv1a64:c3b686630f9f3028',
   'messages.ticketing': 'fnv1a64:ebfc32f871a7aace',

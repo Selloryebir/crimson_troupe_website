@@ -26,6 +26,8 @@ npm run dev
 
 性能改动使用 `npm run measure:performance` 对同一静态预览取样，记录视口、DPR、网络、CPU与重复次数，并区分初始和滚动后的传输。受控 Wi-Fi、移动网络和多语言代表场景的参数及指标边界见 [`docs/guides/development.md`](docs/guides/development.md)。
 
+演出创意新增、修改或删除后，智能体主动进行年鉴、设定、自洽性和多语言审查，不需逐次请求授权。`npm run review:creative:plan` 定位变化，`quality`（包括限定路径）／`verify` 检查全局输入对应的当前记录；内容与依据未变时直接复用。AI 译文用于预览，等待人工考据替换。替换入口、表里站与未来快照边界见[演出创意审查与替换](docs/guides/creative-content-review.md)，当前发现见[审查研究入口](docs/research/creative-content-review/README.md)。
+
 开发服务器或热更新相关变更另运行 `npm run validate:dev:hmr`：该命令同时检查服务端日志、浏览器 HMR 消息与页面响应，不以静态预览成功代替热更新正常。依赖更新后应重启已有开发服务器，避免旧进程继续使用旧模块；排障步骤见开发指南。
 
 构建只使用三个命名预设：默认 `showcase` 构建炎国预览，`preview` 构建国家版本矩阵，`release` 只接受摘要匹配的人工批准内容。九版本开发使用 `npm run dev`，静态验收依次使用 `npm run build:preview` 与 `npm run validate:build:preview`；`npm run preview` 只服务最近一次生成的 `dist/`。发布资格由内容门禁报告，不在 README 保存批准现状。

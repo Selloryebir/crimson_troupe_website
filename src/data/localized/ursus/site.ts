@@ -242,7 +242,7 @@ export const ursusSite = {
       noticeEyebrow: 'Гастрольное уведомление · № 91',
       noticeTitle: 'Осенний гастрольный реестр завершён',
       notice:
-        'Даты в Zwillingstürme, Londinium и Montelupe внесены в реестр. Сверяйтесь с каждым уведомлением о дате и времени входа.',
+        'Даты в Zwillingstürme и Londinium внесены в реестр. Сверяйтесь с каждым уведомлением о дате и времени входа.',
       registerEyebrow: 'СЕЗОННЫЙ РЕЕСТР',
       seasonTitle: 'Текущий сезон',
       fullRegister: 'Полный реестр',
